@@ -1,5 +1,9 @@
 # Architecture
 
+![Architecture diagram](architecture.svg)
+
+The same flow as text:
+
 ```
 Google Sheet (master sports list) ─┐
 OpenStreetMap courts (Overpass) ───┼─► RAW ─► STAGING ─► INTERMEDIATE ─► CORE ─► MARTS ─► app / dashboard

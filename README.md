@@ -7,12 +7,15 @@
 > it, cleans it, checks it, and tells you honestly how complete it is.
 
 ## What works today (Phase 1)
-- A cleaned reference list of **75 racket sports** (from the [master Google Sheet](https://docs.google.com/spreadsheets/d/REDACTED_SHEET_ID/edit?gid=0), full of typos and mixed units, now typed and validated). The sheet is meant to list 76; a warning test flags the gap until it does.
+- A cleaned reference list of **75 racket sports** (from a hand-maintained master list, full of typos and mixed units, now typed and validated). The sheet is meant to list 76; a warning test flags the gap until it does.
 - **All of California from OpenStreetMap: 25,971 court and facility records, grouped into 9,490 venues** by proximity (a 28-court club is one row, not 28), for tennis, pickleball, padel, table tennis, badminton, squash and more
 - **Venue names:** 3,787 of 9,490 venues have a name; 249 are confirmed (tagged on the court) and the rest are inferred from the park, school or club the court sits inside, labelled as such
 - **Courts by surface and indoor/outdoor** (`mart_sport_surface_coverage`), and an honest **gaps report** for all 75 sports (`mart_sport_gaps`, snapshot in [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md)): 9 sports well covered, 13 tagged but empty in California, 53 with no OpenStreetMap tag at all
 - **31 automated tests** across 15 models (all passing, plus one deliberate warning on the sport count) that catch bad data before anyone sees it
 - The same project runs on **local DuckDB and Snowflake** with identical results, including a geospatial search ("padel within 12 miles of downtown")
+
+## How it fits together
+![Architecture: sources, Python ingestion, a dbt project on DuckDB or Snowflake, and the planned map app](docs/architecture.svg)
 
 ## 60-second demo
 ```bash

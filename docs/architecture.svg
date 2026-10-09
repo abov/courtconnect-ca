@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 430" width="1040" height="430" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>CourtConnect California architecture</title>
+  <desc>Sources flow through Python ingestion into a dbt project on DuckDB or Snowflake, layered raw, staging, intermediate, core and marts.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <rect x="0.5" y="0.5" width="1039" height="429" rx="10" fill="#ffffff" stroke="#d0d7de"/>
+
+  <text x="20" y="30" font-size="16" font-weight="700" fill="#1f2328">CourtConnect California: where the data comes from and how it flows</text>
+  <text x="20" y="62" font-size="11" font-weight="700" fill="#57606a" letter-spacing="1">SOURCES</text>
+  <text x="250" y="62" font-size="11" font-weight="700" fill="#57606a" letter-spacing="1">PYTHON INGESTION</text>
+  <text x="500" y="62" font-size="11" font-weight="700" fill="#57606a" letter-spacing="1">WAREHOUSE (dbt)</text>
+
+  <!-- sources -->
+  <g font-size="13" fill="#1f2328">
+    <rect x="20" y="78" width="190" height="62" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
+    <text x="115" y="104" text-anchor="middle" font-weight="600">Master sports list</text>
+    <text x="115" y="123" text-anchor="middle" font-size="12" fill="#57606a">75 racket sports</text>
+
+    <rect x="20" y="163" width="190" height="62" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+    <text x="115" y="189" text-anchor="middle" font-weight="600">OpenStreetMap courts</text>
+    <text x="115" y="208" text-anchor="middle" font-size="12" fill="#57606a">25,971 records, statewide</text>
+
+    <rect x="20" y="248" width="190" height="62" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+    <text x="115" y="274" text-anchor="middle" font-weight="600">OSM parks, schools, clubs</text>
+    <text x="115" y="293" text-anchor="middle" font-size="12" fill="#57606a">31,000 named areas</text>
+
+    <rect x="20" y="333" width="190" height="62" rx="8" fill="#ffffff" stroke="#8c959f" stroke-dasharray="5 4"/>
+    <text x="115" y="359" text-anchor="middle" font-weight="600" fill="#57606a">Second source</text>
+    <text x="115" y="378" text-anchor="middle" font-size="12" fill="#57606a">planned: 53 untagged sports</text>
+  </g>
+
+  <!-- ingestion -->
+  <g font-size="13" fill="#1f2328">
+    <rect x="250" y="78" width="190" height="62" rx="8" fill="#fff8c5" stroke="#d4a72c"/>
+    <text x="345" y="104" text-anchor="middle" font-weight="600">sync_sports_sheet.py</text>
+    <text x="345" y="123" text-anchor="middle" font-size="12" fill="#57606a">CSV export, blank rows dropped</text>
+
+    <rect x="250" y="163" width="190" height="62" rx="8" fill="#fff8c5" stroke="#d4a72c"/>
+    <text x="345" y="189" text-anchor="middle" font-weight="600">extract_osm_courts.py</text>
+    <text x="345" y="208" text-anchor="middle" font-size="12" fill="#57606a">30 tiles, clipped to CA border</text>
+
+    <rect x="250" y="248" width="190" height="62" rx="8" fill="#fff8c5" stroke="#d4a72c"/>
+    <text x="345" y="274" text-anchor="middle" font-weight="600">extract_osm_parents.py</text>
+    <text x="345" y="293" text-anchor="middle" font-size="12" fill="#57606a">bounding boxes of named areas</text>
+
+    <rect x="250" y="333" width="190" height="62" rx="8" fill="#ffffff" stroke="#8c959f" stroke-dasharray="5 4"/>
+    <text x="345" y="359" text-anchor="middle" font-weight="600" fill="#57606a">places extractor</text>
+    <text x="345" y="378" text-anchor="middle" font-size="12" fill="#57606a">planned</text>
+  </g>
+
+  <!-- source -> ingestion arrows -->
+  <g stroke="#57606a" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+    <line x1="210" y1="109" x2="248" y2="109"/>
+    <line x1="210" y1="194" x2="248" y2="194"/>
+    <line x1="210" y1="279" x2="248" y2="279"/>
+    <line x1="210" y1="364" x2="248" y2="364" stroke-dasharray="5 4"/>
+  </g>
+  <!-- ingestion -> warehouse arrows (load_raw.py, idempotent) -->
+  <g stroke="#57606a" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+    <line x1="440" y1="109" x2="498" y2="150"/>
+    <line x1="440" y1="194" x2="498" y2="170"/>
+    <line x1="440" y1="279" x2="498" y2="190"/>
+    <line x1="440" y1="364" x2="498" y2="210" stroke-dasharray="5 4"/>
+  </g>
+  <text x="466" y="352" text-anchor="middle" font-size="11" fill="#57606a" transform="rotate(-62 466 352)">load_raw.py</text>
+
+  <!-- warehouse -->
+  <rect x="500" y="72" width="525" height="268" rx="10" fill="#f6f8fa" stroke="#8c959f"/>
+  <text x="512" y="94" font-size="12" fill="#57606a">One dbt project. Runs on DuckDB (dev, CI) and Snowflake with identical results.</text>
+
+  <g font-size="12" font-weight="700" fill="#1f2328" text-anchor="middle">
+    <rect x="510" y="108" width="94" height="38" rx="6" fill="#ffffff" stroke="#8c959f"/><text x="557" y="131">RAW</text>
+    <rect x="614" y="108" width="94" height="38" rx="6" fill="#ffffff" stroke="#8c959f"/><text x="661" y="131">STAGING</text>
+    <rect x="718" y="108" width="94" height="38" rx="6" fill="#ffffff" stroke="#8c959f"/><text x="765" y="131">INTERMEDIATE</text>
+    <rect x="822" y="108" width="94" height="38" rx="6" fill="#ffffff" stroke="#8c959f"/><text x="869" y="131">CORE</text>
+    <rect x="926" y="108" width="94" height="38" rx="6" fill="#ddf4ff" stroke="#54aeff"/><text x="973" y="131">MARTS</text>
+  </g>
+  <g stroke="#57606a" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+    <line x1="604" y1="127" x2="612" y2="127"/>
+    <line x1="708" y1="127" x2="716" y2="127"/>
+    <line x1="812" y1="127" x2="820" y2="127"/>
+    <line x1="916" y1="127" x2="924" y2="127"/>
+  </g>
+
+  <g font-size="11" fill="#57606a" text-anchor="middle">
+    <text x="557" y="168">osm_courts</text><text x="557" y="184">osm_parents</text><text x="557" y="200">all_racquet</text><text x="557" y="216">osm_sport_map</text>
+    <text x="661" y="168">typed, cleaned</text><text x="661" y="184">surface type</text><text x="661" y="200">indoor / outdoor</text><text x="661" y="216">kept: racket only</text>
+    <text x="765" y="168">court pairs</text><text x="765" y="184">venue clusters</text><text x="765" y="200">enclosing park,</text><text x="765" y="216">school or club</text>
+    <text x="869" y="168">dim_sport</text><text x="869" y="184">dim_court</text><text x="869" y="200">dim_venue</text><text x="869" y="216">bridge</text>
+    <text x="973" y="168">venue finder</text><text x="973" y="184">sport coverage</text><text x="973" y="200">surface coverage</text><text x="973" y="216">sport gaps</text>
+  </g>
+
+  <g font-size="12" fill="#1f2328">
+    <text x="512" y="258" font-weight="600">9,490 venues from 25,971 records</text>
+    <text x="512" y="278" fill="#57606a">3,787 named (249 confirmed, the rest inferred from the park or school)</text>
+    <text x="512" y="298" fill="#57606a">31 dbt tests; GitHub Actions rebuilds the whole project on every push</text>
+    <text x="512" y="318" fill="#57606a">Snowflake adds a GEOGRAPHY column for "courts within N miles" queries</text>
+  </g>
+
+  <!-- output -->
+  <line x1="973" y1="340" x2="973" y2="361" stroke="#57606a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="860" y="363" width="165" height="44" rx="8" fill="#ffffff" stroke="#8c959f" stroke-dasharray="5 4"/>
+  <text x="942" y="381" text-anchor="middle" font-size="13" font-weight="600" fill="#57606a">Map app</text>
+  <text x="942" y="398" text-anchor="middle" font-size="11" fill="#57606a">planned</text>
+</svg>
