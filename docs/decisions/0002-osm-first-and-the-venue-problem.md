@@ -1,6 +1,6 @@
 # ADR 0002: OpenStreetMap as the first court source, and the "venue problem"
 
-**Status:** accepted, with a known gap
+**Status:** accepted; venue grouping delivered in ADR 0003, naming still open
 
 ## Context
 We need statewide court coverage with a free, redistributable source. OpenStreetMap (OSM) fits, with tags for sport, surface, lighting, access and fee.
