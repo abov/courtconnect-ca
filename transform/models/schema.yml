@@ -4,10 +4,8 @@ seeds:
   - name: all_racquet
     description: >
       Master list of racket sports the platform supports, one row per sport. Synced from the Google Sheet
-      (tab "All Raquet", https://docs.google.com/spreadsheets/d/REDACTED_SHEET_ID/edit?gid=0)
+      (tab "All Raquet"; its location is kept in .env, not in the repo)
       by ingestion/sync_sports_sheet.py. Values are raw; cleaning happens in stg_sports.
-    meta:
-      source_sheet: https://docs.google.com/spreadsheets/d/REDACTED_SHEET_ID/edit?gid=0
     columns:
       - name: sport
         description: The racket sport. Every non-blank value must become a row in dim_sport.

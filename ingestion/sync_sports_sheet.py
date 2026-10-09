@@ -15,11 +15,16 @@ import io
 import sys
 from pathlib import Path
 
-import requests
+import os
 
-SHEET_ID = "REDACTED_SHEET_ID"
-SHEET_GID = 0  # tab "All Raquet"
-SHEET_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit?gid={SHEET_GID}"
+import requests
+from dotenv import load_dotenv
+
+# The sheet's location lives in .env (gitignored), not in the repo:
+#   SPORTS_SHEET_ID=<the long id in the sheet's URL>     SPORTS_SHEET_GID=0   (the tab; 0 = "All Raquet")
+load_dotenv()
+SHEET_ID = os.environ.get("SPORTS_SHEET_ID", "").strip()
+SHEET_GID = os.environ.get("SPORTS_SHEET_GID", "0").strip() or "0"
 EXPORT_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={SHEET_GID}"
 EXPECTED_SPORTS = 76  # keep in sync with var `expected_racket_sports` in transform/dbt_project.yml
 
@@ -33,6 +38,8 @@ OUT = Path("transform/seeds/all_racquet.csv")
 
 
 def main() -> None:
+    if not SHEET_ID:
+        sys.exit("SPORTS_SHEET_ID is not set. Add it to .env (see .env.example). It is the long id in the sheet's URL.")
     r = requests.get(EXPORT_URL, timeout=60, headers={"User-Agent": "courtconnect-ca/0.1"})
     r.raise_for_status()
     if "text/csv" not in r.headers.get("content-type", ""):
@@ -55,7 +62,7 @@ def main() -> None:
         w.writeheader()
         w.writerows(rows)
 
-    print(f"Wrote {len(rows)} sports to {OUT}  (source: {SHEET_URL})")
+    print(f"Wrote {len(rows)} sports to {OUT}  (source: your Google Sheet, id kept in .env)")
     if len(rows) != EXPECTED_SPORTS:
         print(f"WARNING: expected {EXPECTED_SPORTS} sports, found {len(rows)}. "
               f"Add the missing sport(s) to the sheet or update EXPECTED_SPORTS.", file=sys.stderr)

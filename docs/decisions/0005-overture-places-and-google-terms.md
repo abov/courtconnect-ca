@@ -32,12 +32,12 @@ Places results, published in a public repo, is exactly what those terms are writ
 | Venues with a name | 3,787 | 4,343 |
 | Venues with a **confirmed** name | 249 | 1,112 |
 | Table Tennis / Badminton / Racquetball venues | 79 / 52 / 7 | 131 / 97 / 21 |
-| Sports with a confirmed venue | 9 | 9 (5 more have weak matches awaiting review) |
+| Sports with a confirmed venue | 9 | 10 (Beach Tennis added after review; 2 weak matches still pending) |
 
 Identical results on DuckDB and Snowflake, checked row by row.
 
 ## Known gaps
-- **This did not solve the niche sports.** Business names mention only 12 of 75 sports. 51 still have nothing in either source:
+- **This did not solve the niche sports.** Business names mention only 12 of 75 sports. 53 still have nothing in either source:
   these are mostly informal games with no clubs. Realistic sources are governing-body and club directories, and community
   groups, not a places dataset.
 - Overture categories exist only for tennis, pickleball, badminton, racquetball, squash and table tennis. Padel, beach tennis and
