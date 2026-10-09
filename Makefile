@@ -34,3 +34,6 @@ docs:
 snowflake-build:  ## run the same project on Snowflake
 	$(PY) ingestion/load_raw.py --target snowflake
 	$(DBT) build --target snowflake
+
+report:           ## regenerate docs/coverage_snapshot.md and docs/sport_name_review.md
+	$(PY) ingestion/export_coverage_report.py

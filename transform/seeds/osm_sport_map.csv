@@ -1,27 +1,27 @@
 osm_sport_key,sport,confidence
 tennis,Tennis,high
-table_tennis,Table Tennis (ping pong),high
-tennis_table,Table Tennis (ping pong),high
+table_tennis,Table Tennis,high
+tennis_table,Table Tennis,high
 pickleball,Pickleball,high
 padel,Padel,high
 padel_tennis,Padel,high
 badminton,Badminton,high
 squash,Squash,high
 racquetball,Racquetball,high
-outdoor_racquetball,Outdoor Racquetball (1-3 wall),high
-paddle_tennis,Pop Tennis/Paddle Tennis,medium
-platform_tennis,Platform Tennis/Paddle,high
+outdoor_racquetball,Outdoor Racquetball,high
+paddle_tennis,Pop Tennis,medium
+platform_tennis,Platform Tennis,high
 beach_tennis,Beach Tennis,high
 beachtennis,Beach Tennis,high
-pelota,Paleta frontón (pelota vasca),medium
-fronton,Paleta frontón (pelota vasca),medium
-basque_pelota,Paleta Cuero (Basque Pelota),medium
+pelota,Paleta frontón,medium
+fronton,Paleta frontón,medium
+basque_pelota,Basque Pelota,medium
 frontenis,Frontenis,high
 paddleball,4-wall Paddle,medium
 tamburello,Tamburello,high
-real_tennis,"Real Tennis (Court Tennis, Sim to Rackets/Hard Rackets)",high
-jai_alai,"Jai alai (Trac ball, sim.)",high
-jeu_de_paume,Hand Tennis on Tennis Court (Jeu de Paume - FR),medium
+real_tennis,Real Tennis,high
+jai_alai,Jai alai,high
+jeu_de_paume,Hand Tennis,medium
 soft_tennis,Soft Tennis,high
-swingball,"Totem Tennis (Tether Tennis, swingball)",medium
+swingball,Totem Tennis,medium
 touchtennis,Touchtennis,high
