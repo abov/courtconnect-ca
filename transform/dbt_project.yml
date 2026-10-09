@@ -22,9 +22,15 @@ models:
     staging:
       +materialized: view
       +schema: staging
+    intermediate:
+      +materialized: table
+      +schema: intermediate
     core:
       +materialized: table
       +schema: core
     marts:
       +materialized: table
       +schema: marts
+
+vars:
+  venue_radius_m: 75   # courts closer than this are treated as the same facility

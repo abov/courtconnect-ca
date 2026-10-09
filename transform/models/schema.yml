@@ -49,3 +49,14 @@ models:
           - not_null
           - relationships:
               arguments: {to: "ref('dim_sport')", field: sport_id}
+
+  - name: dim_venue
+    description: One row per facility, built by clustering nearby courts (see ADR 0003).
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: name_source
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['court_name', 'operator', 'unnamed']
