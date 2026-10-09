@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: stg_sports
+    description: Cleaned sports reference data (typos fixed, text parsed into typed columns, de-duplicated).
+    columns:
+      - name: sport_id
+        tests: [unique, not_null]
+      - name: competitive_status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Competitive', 'Non-Competitive', 'Unknown']
+
+  - name: dim_sport
+    description: One row per racket sport. The reference dimension for the whole platform.
+    columns:
+      - name: sport_id
+        tests: [unique, not_null]
+      - name: sport_name
+        tests: [not_null]
+
+  - name: dim_court
+    description: One row per physical court / sports-centre record from OpenStreetMap.
+    columns:
+      - name: court_id
+        tests: [unique, not_null]
+      - name: surface_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['hard', 'clay', 'grass', 'turf', 'sand', 'other', 'unknown']
+      - name: access_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['public', 'customers', 'private', 'members', 'unknown']
+
+  - name: bridge_court_sport
+    description: Many-to-many between courts and sports.
+    columns:
+      - name: court_id
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('dim_court')", field: court_id}
+      - name: sport_id
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('dim_sport')", field: sport_id}

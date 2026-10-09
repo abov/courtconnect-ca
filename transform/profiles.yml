@@ -1,0 +1,19 @@
+# Local dev uses DuckDB (free, no cloud). Flip to Snowflake with:  dbt build --target snowflake
+courtconnect:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: courtconnect.duckdb   # relative to where you run dbt (repo root)
+      threads: 4
+
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'COURTCONNECT_DEV') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'COURTCONNECT_WH') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'COURTCONNECT') }}"
+      schema: dev
+      threads: 4

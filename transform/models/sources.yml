@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: Landing zone. Loaded by ingestion/load_raw.py (DuckDB locally, Snowflake in the cloud).
+    tables:
+      - name: osm_courts
+        description: One row per OpenStreetMap court/sports-centre element in the extracted area.
+        loaded_at_field: extracted_at
+        freshness:
+          warn_after: {count: 7, period: day}

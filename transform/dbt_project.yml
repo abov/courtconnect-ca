@@ -1,0 +1,30 @@
+name: courtconnect
+version: "0.1.0"
+config-version: 2
+profile: courtconnect
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+
+seeds:
+  courtconnect:
+    +schema: raw
+    raw_sports:
+      +column_types:
+        year_origin: varchar   # intentionally raw: values like '1500/1700'
+    osm_sport_map:
+      +schema: raw
+
+models:
+  courtconnect:
+    staging:
+      +materialized: view
+      +schema: staging
+    core:
+      +materialized: table
+      +schema: core
+    marts:
+      +materialized: table
+      +schema: marts

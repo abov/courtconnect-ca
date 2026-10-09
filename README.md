@@ -1,0 +1,40 @@
+# CourtConnect California
+
+**Find where to play, who to play with, and where to watch, for every racket sport in California.**
+
+> Plain-English summary: Pickleball, padel, tennis, squash, and 40+ lesser-known racket sports
+> are booming, but information about *where to play* is scattered and messy. This project collects
+> it, cleans it, checks it, and tells you honestly how complete it is.
+
+## What works today (Phase 1)
+- A cleaned reference list of **46 racket sports** (from a hand-built spreadsheet full of typos and mixed units, now typed and validated)
+- **3,253 real court records for Los Angeles** pulled from OpenStreetMap
+- A **coverage report**: courts found per sport, how many are confirmed public, how many have names
+- **25 automated checks** (all passing) that catch bad data before anyone sees it
+
+## 60-second demo
+```bash
+pip install -r requirements.txt
+make demo      # extract -> load -> build -> test
+```
+Then open `courtconnect.duckdb` and query `marts.mart_sport_coverage`.
+
+**The story to tell:** *"Here's the messy spreadsheet; here's the clean table. Here's LA, with 3,000 tennis courts but almost none confirmed public, so I built the coverage report to show the gap instead of hiding it."*
+
+## For engineers
+- dbt project runs unchanged on **DuckDB (dev/CI)** and **Snowflake** via `adapter.dispatch` macros
+- Idempotent loads, dbt tests (unique, not-null, accepted values, relationships, custom geo-bounds test)
+- Source freshness check, Snowflake resource monitor + least-privilege role (`infra/snowflake/00_setup.sql`)
+- Architecture decisions in [`docs/decisions`](docs/decisions); layout in [`docs/architecture.md`](docs/architecture.md)
+
+## Run on Snowflake
+1. Run `infra/snowflake/00_setup.sql` in Snowsight as ACCOUNTADMIN
+2. `cp .env.example .env` and add your credentials
+3. `make snowflake-build`
+
+## Roadmap
+- [ ] `dim_venue`: cluster individual courts into facilities (ADR 0002)
+- [ ] Statewide extract, S3 landing zone, Snowpipe, Terraform
+- [ ] Events and ticketing (pro/amateur matches, watch parties)
+- [ ] Synthetic social layer (groups, sessions) with PII masking policies
+- [ ] Map app / Streamlit front end

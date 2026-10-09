@@ -1,0 +1,13 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  dbt-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install dbt-core dbt-duckdb duckdb pandas requests python-dotenv
+      # CI builds only the reference data + tests (no network dependency on Overpass).
+      - run: dbt seed --project-dir transform --profiles-dir transform
+      - run: dbt build --project-dir transform --profiles-dir transform --select stg_sports+ dim_sport

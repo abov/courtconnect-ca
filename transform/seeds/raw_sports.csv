@@ -1,0 +1,47 @@
+sport_type,sport,players,popularity_class,org,year_origin,active_loc,court_dim,court_surface,base_gear,net_type,net_ht,gear_avail_ao,competing,url
+Racket,Badminton,2-4,World Official,BWF,1873,Worldwide,44x20,"Concrete, grass, sand","Racket, birdie",High,5ft,Y,Competitive,https://bwfbadminton.com/
+Racket,Beach Tennis,2-4,World Official,ITF,1972,Worldwide,52.5x26.3,Sand,"Paddle, felt rubber ball",High,5ft 7in / 5ft 11in,Y,Competitive,https://www.itftennis.com/en/
+Racket,Padel,2-4,World Official,FIP,1969,Worldwide,65x32,Turf,"Paddle, felt rubber ball",Low,2ft 11in,Y,Competitive,https://www.padelfip.com/
+Racket,Pickleball,2-4,World Official,IPF,1965,Worldwide,44x20,Concrete,"Paddle, plastic ball",Low,3ft,Y,Competitive,https://theipf.org/
+Racket,Racquetball,2-4,World Official,IRF,1950,Worldwide,40x20,Indoor flooring,"Racket, rubber ball",,,Y,Competitive,https://www.internationalracquetball.com/
+Racket,Squash,2-4,World Official,WSF,1830,Worldwide,32x21,Indoor flooring,"Racket, rubber ball",,,Y,Competitive,https://www.worldsquash.sport/
+Racket,Table Tennis (ping pong),2-4,World Official,ITTF,1880,Worldwide,9x5,Tabletop,"Paddle, plastic ball",Low,3in,Y,Competitive,https://www.ittf.com/
+Racket,Tennis,2-4,World Official,ATP/ITF,1396,Worldwide,78x36,"Concrete, Clay, Grass, turf","Racket, felt rubber ball",Low,3ft,Y,Competitive,https://www.itftennis.com/en/
+Racket,Crossminton/Speedminton,2-4,Growing,ICO,1985,Germany,42 - 18x18 blocks,"Concrete, grass, sand","Racket, birdie",,,Y,Competitive,https://crossminton.org/
+Racket,Platform Tennis/Paddle,2-4,Growing,APTA,1928,US/Chi/Philly/North,50x20,Aluminum,"Paddle, felt rubber ball",Low,34in,Y,Competitive,https://www.platformtennis.org/
+Racket,Pop Tennis/Paddle Tennis,2-4,Growing,IPTA,1898,"US-Socal/Florida, GE, AUS",60x27,Concrete,"Paddle, felt rubber ball",Low,31in,Y,Competitive,
+Racket,Teqis (bt/curved table),2,Growing,,2010,Hungary/Worldwide,9.8x5,Curved Table,"Paddle, small plastiic ball",Low,,Y,Competitive,
+Racket,Teqpong (tt/curved table),2,Growing,,,Hungary/Worldwide,9.8x5,Curved Table,"Paddle, felt rubber ball",Low,,Y,Competitive,
+Racket,Typti,2-4,Growing,,2024,US,44x20,Concrete,"Racket, felt ball",Low,3ft,Y,Competitive,
+Racket,1-wall Paddle (alt 3-wall/handball courts),2-4,Subculture,APA (defunct?),1850,NY/FL,34x20,Concrete,"Paddle, rubber ball",,,Y,Competitive,
+Racket,4-wall Paddle,2-4,Subculture,NPA,1930,US/MI,40x20,Indoor flooring,"Paddle, rubber ball",,,Y,Competitive,https://npa.paddleball.org/
+Racket,Frescoball,2+,Subculture,BRWL?,1945,Brazil/NoCal,user descretion,Sand,"Paddle, rubber ball",,,Y,Non-Competitve,
+Racket,Kadima/Matkot (Isreal); Smashball (US); Raketa (Greece),2+,Subculture,BRWL,1920,Isreal/Greece/US,10-15ft apart,Sand,"Paddle, rubber ball",,,Y,Non-Competitve,
+Racket,Road Tennis,2,Subculture,PRTA,1930,Barbados/Cali,19.6x9.8,"Concrete, Indoor, grass","Paddle, rubber ball",Low,8in,N,Competitive,
+Racket,Spec Tennis,2-4,Subculture,USSPTA,2016,US/CA,44x20,Concrete,"Paddle, felt rubber ball",Low,3ft,Y,Competitive,https://spectennis.com/pages/usspta
+Racket,Touchtennis,2-4,Subculture,,2002,US,39x16,"Concrete, Grass","Racket, foam ball",Low,3ft,Y,Competitive,
+Racket,Riftball,2-4,Rec/College,,,US,,"Concrete, grass, sand","Paddle, plastic ball",Low,,N,Competitive,
+Racket,Goodminton,2-4,Rec,,2010,US,N/a,Various,"Paddle, birdie",,,N,Non-Competitive,
+Racket,Jazzminton,,Rec,,2015,US,,,"Paddle, birdie/ball",,,N,,
+Racket,Sandball (Beach Pickleball),2-4,Rec,,2025,"LA, CA",44x20,Sand,"Paddle, plastic ball",Low,3ft,Y,Competitive,
+Racket,Skyball,2-4,Rec,,2022,,44x20,Concrete,"Racket, foam ball",Low,3ft,Y,Competitive,
+Racket,Lite Tennis,2-4,Rec,,2025,US,44x20,Concrete,"Racket, foam ball",Low,3ft,Y,Competitive,
+Racket,Tennis Baseball,18,Rec,,,US,,Grass,"Racket, felt rubber ball",,,Y,Competitive,
+Racket,Paleta fronton (pelota vasca),2-4,Subculture,FDPPF(FIPV),1945,Peru,39x25,Concrete,"Paddle, rubber ball",,,N,Competitive,
+Racket,Paleta Cuero (Basque Pelota),2-4,Subculture,FIPV,1200,Argentina,,Leather,"Paddle, ball",,,N,Competitive,https://www.fipv.net/
+Racket,Xare (Similar to Basque Pelota),2-4,Subculture,,1700,Argentina,,,Racket,,,N,,
+Racket,Jai alai (Trac ball; sim.),2-4,Subculture,WJAL,1875 - official name,Worldwide - select,,Indoor flooring,"Curved Wicker Basket, rubber ball",,,N,Competitive,https://jaialaiworld.com/about
+Racket,Real Tennis (Court Tennis),2-4,World Official,USCTA,1500/1700,Worldwide - select,,Indoor,"Racket, rubber ball",Low,,N,Competitive,https://uscourttennis.org/
+Racket,Tamburello,3-8,Subculture,FIBAT,1500,Italy,,,"Paddle, ball",,,N,Competitive,https://www.fibat.info/
+Racket,Naked Tennis,2-4,Subculture,,2020,,,,"Racket, rubber ball",,,Y,,
+Racket,Downside Ball Game,,Subculture,,1814,UK,,,Paddle,,,N,,
+Racket,Ball Badminton,10,Subculture,BBFI,1856,India,,,"Racket, wool ball",High,,N,Competitive,https://tnbba.org/bbfi.php
+Racket,Soft Tennis,4,Rec,,1890,East Asia,,Concrete,"Paddle, rubber ball",Low,,N,Competitive,
+Racket,Totem Tennis (Tether Tennis; swingball),2,Rec,,1904,,,,"Paddle, rubber ball",,,N,,
+Racket,Frontenis,2,Rec,,1916,,,,,,,N,,
+Racket,String Paddleball,1,Rec,,1920,Worldwide,,Various,"Paddle, rubber ball",,,N,Non-Competitive,
+Racket,Pang Pong,2,Rec,,1922,Japan,,Concrete,"Paddle, felt rubber ball",Low,,N,Competitive,
+Racket,Frescotennis,2-4,Rec,,2019,,,Concrete,"Paddle, rubber ball",Low,3ft,Y,Competitive,
+Racket,Miniten Thug,2-4,Rec,,1930,,,Concrete,"Box, felt rubber ball'",Low,3ft,N,Competitive,
+Racket,Jokari,1-2,Rec,,1938,,,Various,Box,,,N,Non-Competitive,
+Racket,Speedball (similar tether tennis),1,Rec,,1962,,,,"Paddle, ball",,,N,Non-Competitive,
