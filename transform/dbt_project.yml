@@ -11,7 +11,7 @@ test-paths: ["tests"]
 seeds:
   courtconnect:
     +schema: raw
-    raw_sports:
+    all_racquet:   # master sports list, synced from the Google Sheet (tab 'All Raquet')
       +column_types:
         year_origin: varchar   # intentionally raw: values like '1500/1700'
     osm_sport_map:
@@ -33,4 +33,5 @@ models:
       +schema: marts
 
 vars:
+  expected_racket_sports: 76   # the sheet should list 76 racket sports; a warn-level test flags any gap
   venue_radius_m: 75   # courts closer than this are treated as the same facility

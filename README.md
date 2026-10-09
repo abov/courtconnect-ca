@@ -7,10 +7,10 @@
 > it, cleans it, checks it, and tells you honestly how complete it is.
 
 ## What works today (Phase 1)
-- A cleaned reference list of **46 racket sports** (from a hand-built spreadsheet full of typos and mixed units, now typed and validated)
+- A cleaned reference list of **75 racket sports** (from the [master Google Sheet](https://docs.google.com/spreadsheets/d/REDACTED_SHEET_ID/edit?gid=0), full of typos and mixed units, now typed and validated). The sheet is meant to list 76; a warning test flags the gap until it does.
 - **3,253 real court records for Los Angeles** pulled from OpenStreetMap, grouped into **1,354 venues** by proximity (a 28-court club is one row, not 28)
 - A **coverage report**: venues and courts per sport, how many are confirmed public, how many still lack a name
-- **34 automated checks** (all passing) that catch bad data before anyone sees it
+- **36 automated checks** (all passing, plus one deliberate warning on the sport count) that catch bad data before anyone sees it
 - The same project runs on **local DuckDB and Snowflake** with identical results, including a geospatial search ("padel within 12 miles of downtown")
 
 ## 60-second demo
@@ -21,6 +21,16 @@ make demo      # extract -> load -> build -> test
 Then open `courtconnect.duckdb` and query `marts.mart_sport_coverage`.
 
 **The story to tell:** *"Here's the messy spreadsheet; here's the clean table. Here's LA: 3,253 anonymous map points became 1,354 places, but only 23 have names, so I built the coverage report to show that gap instead of hiding it."*
+
+## The sports list: `all_racquet`
+The sheet tab **All Raquet** is the source of truth for which sports the platform supports. It is loaded as the
+`raw.all_racquet` table (a dbt seed), then cleaned into `dim_sport`.
+
+```bash
+make sync-sports   # re-pull the sheet -> transform/seeds/all_racquet.csv
+make build         # reload and re-test
+```
+Add a sport by adding a row to the sheet and re-running the two commands. The sheet must stay shared as "anyone with the link can view".
 
 ## For engineers
 - dbt project runs unchanged on **DuckDB (dev/CI)** and **Snowflake** via `adapter.dispatch` macros

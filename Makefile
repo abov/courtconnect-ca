@@ -8,6 +8,9 @@ setup:            ## one-time: create venv and install deps
 extract:          ## pull LA courts from OpenStreetMap
 	$(PY) ingestion/extract_osm_courts.py --area la
 
+sync-sports:    ## refresh the sports list from the Google Sheet
+	$(PY) ingestion/sync_sports_sheet.py
+
 load:             ## load raw CSV into DuckDB
 	$(PY) ingestion/load_raw.py
 

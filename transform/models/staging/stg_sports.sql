@@ -1,7 +1,7 @@
 -- Cleans the hand-maintained sports spreadsheet: fixes typos, parses messy
 -- text (ranges, mixed units) into typed columns, and removes duplicates.
 with src as (
-    select * from {{ ref('raw_sports') }}
+    select * from {{ ref('all_racquet') }}
 ),
 
 cleaned as (

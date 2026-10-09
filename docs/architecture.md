@@ -9,7 +9,7 @@ Ticketing + events APIs ───┘   (landing)  (clean)   (dims, bridges) (cou
 
 | Layer | Objects | Purpose |
 |---|---|---|
-| raw | `osm_courts`, `raw_sports`, `osm_sport_map` | Untouched source data |
+| raw | `osm_courts`, `all_racquet`, `osm_sport_map` | Untouched source data. `all_racquet` is synced from the Google Sheet. |
 | staging | `stg_sports`, `stg_osm_courts` | Typed, standardised, de-duplicated |
 | core | `dim_sport`, `dim_court`, `bridge_court_sport` | Business entities |
 | marts | `mart_court_finder`, `mart_sport_coverage` | What users and dashboards read |

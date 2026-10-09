@@ -15,6 +15,6 @@ left join (
     from {{ ref('dim_court') }} ct
     join {{ ref('dim_venue') }} v on v.venue_id = ct.venue_id
 ) c on c.court_id = b.court_id
-where s.sport_family = 'Racket'
+where s.sport_family like 'Racket%'
 group by 1, 2
 order by courts_found desc
