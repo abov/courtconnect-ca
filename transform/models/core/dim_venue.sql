@@ -87,6 +87,7 @@ osm_final as (
         v.opening_hours,
         coalesce(v.address_line, pl.address_line)             as address_line,
         coalesce(v.city, pl.city)                             as city,
+        cast(null as varchar)                                 as offerings,
         v.has_lit_courts, v.is_confirmed_public, v.has_free_courts,
         v.has_indoor, v.has_outdoor,
         v.has_hard, v.has_clay, v.has_grass, v.has_turf, v.has_sand, v.has_indoor_floor
@@ -108,6 +109,7 @@ places_only as (
         p.website, p.phone,
         cast(null as varchar)                                 as opening_hours,
         p.address_line, p.city,
+        cast(null as varchar)                                 as offerings,
         false as has_lit_courts, false as is_confirmed_public, false as has_free_courts,
         false as has_indoor, false as has_outdoor,
         false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor
@@ -115,10 +117,43 @@ places_only as (
     where p.matched_venue_id is null and p.has_strong_sport
 ),
 
+-- Hand-curated venues (seeds/manual_venues.csv): one row per venue, with what it offers.
+manual_final as (
+    select
+        venue_id,
+        min(venue_name)                                       as venue_name,
+        'manual'                                              as name_source,
+        cast(null as varchar)                                 as name_feature_kind,
+        'manual'                                              as venue_source,
+        0                                                     as court_records,
+        1                                                     as facility_records,
+        min(lat)                                              as lat,
+        min(lon)                                              as lon,
+        min(website)                                          as website,
+        cast(null as varchar)                                 as phone,
+        cast(null as varchar)                                 as opening_hours,
+        cast(null as varchar)                                 as address_line,
+        min(city)                                             as city,
+        min(offerings)                                        as offerings,
+        false as has_lit_courts, false as is_confirmed_public, false as has_free_courts,
+        max(case when setting = 'indoor' then 1 else 0 end) = 1                               as has_indoor,
+        max(case when setting in ('outdoor', 'likely_outdoor', 'covered') then 1 else 0 end) = 1 as has_outdoor,
+        max(case when surface_type = 'hard' then 1 else 0 end) = 1    as has_hard,
+        max(case when surface_type = 'clay' then 1 else 0 end) = 1    as has_clay,
+        max(case when surface_type = 'grass' then 1 else 0 end) = 1   as has_grass,
+        max(case when surface_type = 'turf' then 1 else 0 end) = 1    as has_turf,
+        max(case when surface_type = 'sand' then 1 else 0 end) = 1    as has_sand,
+        false as has_indoor_floor
+    from {{ ref('stg_manual_venues') }}
+    group by venue_id
+),
+
 unioned as (
     select * from osm_final
     union all
     select * from places_only
+    union all
+    select * from manual_final
 )
 
 select

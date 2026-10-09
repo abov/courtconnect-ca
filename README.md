@@ -47,6 +47,13 @@ Some business names look like a sport but may not be ("Camino Real Tennis Center
 totals and listed in `marts.mart_places_to_review`. To confirm or reject one, add a row to
 [`transform/seeds/place_sport_overrides.csv`](transform/seeds/place_sport_overrides.csv) (`place_id,sport,confirm` or `reject`) and run `make build`.
 
+## Adding a venue the data doesn't know about
+Local clubs that no dataset lists (beach tennis clubs, community groups) go in
+[`transform/seeds/manual_venues.csv`](transform/seeds/manual_venues.csv): one row per venue and sport, with coordinates, surface
+(`sand`, `clay`, ...), setting (`indoor` / `outdoor`), what it offers (`open_play`, `clinics`, `private_lessons`, `group_classes`,
+`drop_in`, `tournaments`) and an `evidence` note saying how well the entry is backed up. Then `make build`. These venues show up as
+`venue_source = 'manual'`, so they are never mistaken for verified data, and a test fails the build if a coordinate is mistyped.
+
 ## For engineers
 - dbt project runs unchanged on **DuckDB (dev/CI)** and **Snowflake** via `adapter.dispatch` macros
 - Idempotent loads, dbt tests (unique, not-null, accepted values, relationships, custom geo-bounds test)

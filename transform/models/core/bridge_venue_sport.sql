@@ -1,6 +1,6 @@
 -- Which sports are played at which venue, and which source says so.
--- OpenStreetMap contributes court counts; places contribute only STRONG evidence (a racket category or a distinctive sport word).
--- Weak name matches stay in bridge_place_sport and mart_places_to_review.
+-- OSM contributes court counts; places contribute only STRONG evidence (a racket category or a distinctive sport word);
+-- manual venues are hand-curated entries. Weak name matches stay in bridge_place_sport and mart_places_to_review.
 with osm as (
     select
         c.venue_id,
@@ -12,17 +12,31 @@ with osm as (
 ),
 
 places as (
-    select p.venue_id, bp.sport_id, count(distinct p.place_id) as places
+    select distinct p.venue_id, bp.sport_id
     from {{ ref('dim_place') }} p
     join {{ ref('bridge_place_sport') }} bp on bp.place_id = p.place_id and bp.evidence = 'strong'
-    group by 1, 2
+),
+
+manual as (
+    select distinct m.venue_id, s.sport_id
+    from {{ ref('stg_manual_venues') }} m
+    join {{ ref('dim_sport') }} s on s.sport_name = m.sport_name
+),
+
+unioned as (
+    select venue_id, sport_id, courts, 1 as in_osm, 0 as in_places, 0 as in_manual from osm
+    union all
+    select venue_id, sport_id, 0, 0, 1, 0 from places
+    union all
+    select venue_id, sport_id, 0, 0, 0, 1 from manual
 )
 
 select
-    coalesce(o.venue_id, p.venue_id)                          as venue_id,
-    coalesce(o.sport_id, p.sport_id)                          as sport_id,
-    coalesce(o.courts, 0)                                     as courts,
-    o.venue_id is not null                                    as in_osm,
-    p.venue_id is not null                                    as in_places
-from osm o
-full outer join places p on p.venue_id = o.venue_id and p.sport_id = o.sport_id
+    venue_id,
+    sport_id,
+    sum(courts)                                               as courts,
+    max(in_osm) = 1                                           as in_osm,
+    max(in_places) = 1                                        as in_places,
+    max(in_manual) = 1                                        as in_manual
+from unioned
+group by 1, 2

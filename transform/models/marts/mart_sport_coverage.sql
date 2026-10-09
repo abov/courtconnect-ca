@@ -13,6 +13,7 @@ select
     count(distinct bvs.venue_id)                                                       as venues_found,
     count(distinct case when bvs.in_osm then bvs.venue_id end)                         as osm_venues,
     count(distinct case when bvs.in_places then bvs.venue_id end)                      as places_venues,
+    count(distinct case when bvs.in_manual then bvs.venue_id end)                      as manual_venues,
     count(distinct case when bvs.in_osm and bvs.in_places then bvs.venue_id end)       as venues_in_both,
     coalesce(sum(bvs.courts), 0)                                                       as courts_found,
     count(distinct case when v.is_confirmed_public then bvs.venue_id end)              as public_venues,

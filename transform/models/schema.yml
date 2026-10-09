@@ -11,6 +11,29 @@ seeds:
         description: The racket sport. Every non-blank value must become a row in dim_sport.
         tests: [not_null]
 
+  - name: manual_venues
+    description: >
+      Venues no data source knows about, added by hand, one row per (venue, sport), with what the venue offers
+      (open_play, clinics, private_lessons, group_classes, drop_in, tournaments). `evidence` records how well each entry is backed up.
+    columns:
+      - name: venue_key
+        tests: [not_null]
+      - name: sport
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('all_racquet')", field: sport}
+      - name: surface_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['hard', 'clay', 'grass', 'turf', 'sand', 'carpet', 'wood', 'other', 'unknown']
+      - name: setting
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['indoor', 'covered', 'outdoor', 'likely_outdoor', 'unknown']
+
   - name: place_sport_overrides
     description: >
       Human review of weak place-to-sport matches (see mart_places_to_review). One row per decision:
@@ -104,12 +127,12 @@ models:
         tests:
           - accepted_values:
               arguments:
-                values: ['osm', 'osm+places', 'places_only']
+                values: ['osm', 'osm+places', 'places_only', 'manual']
       - name: name_source
         tests:
           - accepted_values:
               arguments:
-                values: ['court_name', 'operator', 'places_directory', 'enclosing_feature', 'unnamed']
+                values: ['court_name', 'operator', 'places_directory', 'manual', 'enclosing_feature', 'unnamed']
 
   - name: stg_overture_places
     description: Racket-related places from Overture Maps, closed businesses removed.
