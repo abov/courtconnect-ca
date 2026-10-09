@@ -8,10 +8,10 @@
 
 ## What works today (Phase 1)
 - A cleaned reference list of **75 racket sports** (from a hand-maintained master list, full of typos and mixed units, now typed and validated). The sheet is meant to list 76; a warning test flags the gap until it does.
-- **All of California from OpenStreetMap: 25,971 court and facility records, grouped into 9,490 venues** by proximity (a 28-court club is one row, not 28), for tennis, pickleball, padel, table tennis, badminton, squash and more
-- **Venue names:** 3,787 of 9,490 venues have a name; 249 are confirmed (tagged on the court) and the rest are inferred from the park, school or club the court sits inside, labelled as such
-- **Courts by surface and indoor/outdoor** (`mart_sport_surface_coverage`), and an honest **gaps report** for all 75 sports (`mart_sport_gaps`, snapshot in [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md)): 9 sports well covered, 13 tagged but empty in California, 53 with no OpenStreetMap tag at all
-- **31 automated tests** across 15 models (all passing, plus one deliberate warning on the sport count) that catch bad data before anyone sees it
+- **All of California from two open sources: 25,971 OpenStreetMap court records plus Overture Maps places, grouped into 9,925 venues** by proximity (a 28-court club is one row, not 28), for tennis, pickleball, padel, table tennis, badminton, squash and more
+- **Venue names:** 4,343 of 9,925 venues have a name; 1,112 are confirmed (tagged on the court, or from a business listing) and the rest are inferred from the park, school or club the court sits inside, labelled as such. Overture places added 435 venues OpenStreetMap had no court for (clubs, indoor facilities) plus websites and phone numbers
+- **Courts by surface and indoor/outdoor** (`mart_sport_surface_coverage`), and an honest **gaps report** for all 75 sports (`mart_sport_gaps`, snapshot in [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md)): 9 sports well covered, 5 with only weak name matches awaiting your review, 10 tagged but empty in California, 51 with nothing found in either source
+- **46 automated tests** across 21 models (all passing, plus one deliberate warning on the sport count) that catch bad data before anyone sees it
 - The same project runs on **local DuckDB and Snowflake** with identical results, including a geospatial search ("padel within 12 miles of downtown")
 
 ## How it fits together
@@ -24,7 +24,7 @@ make demo      # extract -> load -> build -> test
 ```
 Then open `courtconnect.duckdb` and query `marts.mart_sport_coverage`.
 
-**The story to tell:** *"Here's the messy spreadsheet; here's the clean table. Here's California: 26,000 anonymous map points became 9,500 places, and naming them took the share with a name from 2% to 40%. But 53 of the 75 sports can't be found in this source at all, so I built the gaps report to show exactly where the data is thin instead of hiding it."*
+**The story to tell:** *"Here's the messy spreadsheet; here's the clean table. Here's California: 26,000 anonymous map points plus a business directory became about 9,900 places, and the share with a name went from 2% to 44%. But 51 of the 75 sports can't be found in either source, so I built the gaps report to show exactly where the data is thin instead of hiding it. And I chose the open Overture dataset over Google Places because Google's terms don't allow storing its data."*
 
 ## The sports list: `all_racquet`
 The sheet tab **All Raquet** is the source of truth for which sports the platform supports. It is loaded as the
@@ -40,7 +40,12 @@ account edit, the owner shares the sheet with it as *Editor*. Never edit `transf
 Snowflake `RAW.ALL_RACQUET` table by hand: the next sync overwrites both.
 
 Alternate names for a sport (e.g. "Frescobol" for Frescoball) go in [`transform/seeds/sport_aliases.csv`](transform/seeds/sport_aliases.csv).
-Sports that OpenStreetMap cannot find, and why, are listed in [`docs/sport_name_review.md`](docs/sport_name_review.md).
+Sports that OpenStreetMap cannot find, and why, are listed in [`docs/sport_name_review.md`](docs/sport_name_review.md). Data licenses and attribution: [`NOTICE.md`](NOTICE.md).
+
+## Reviewing uncertain matches
+Some business names look like a sport but may not be ("Camino Real Tennis Center" is not Real Tennis). Those are kept out of the
+totals and listed in `marts.mart_places_to_review`. To confirm or reject one, add a row to
+[`transform/seeds/place_sport_overrides.csv`](transform/seeds/place_sport_overrides.csv) (`place_id,sport,confirm` or `reject`) and run `make build`.
 
 ## For engineers
 - dbt project runs unchanged on **DuckDB (dev/CI)** and **Snowflake** via `adapter.dispatch` macros
@@ -56,7 +61,9 @@ Sports that OpenStreetMap cannot find, and why, are listed in [`docs/sport_name_
 ## Roadmap
 - [x] `dim_venue`: cluster individual courts into facilities ([ADR 0003](docs/decisions/0003-venue-clustering-by-proximity.md))
 - [x] Statewide extract and venue naming from enclosing parks / schools / clubs ([ADR 0004](docs/decisions/0004-statewide-extract-and-venue-naming.md))
-- [ ] Second source (Google Places + club directories) for the 53 untagged sports, surfaces, indoor and beach courts, and confirmed names
+- [x] Second source: Overture Maps places, with graded evidence and a human review file ([ADR 0005](docs/decisions/0005-overture-places-and-google-terms.md))
+- [ ] Google place IDs for live lookup (built, dry-run only; needs an API key)
+- [ ] Governing-body and club directories for the 51 sports neither source finds
 - [ ] S3 landing zone, Snowpipe, Terraform
 - [ ] Events and ticketing (pro/amateur matches, watch parties)
 - [ ] Synthetic social layer (groups, sessions) with PII masking policies

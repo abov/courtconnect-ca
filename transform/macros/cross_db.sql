@@ -20,3 +20,17 @@
        + coalesce(try_cast({{ regex_extract(col, '([0-9.]+)in') }} as double), 0)
   end
 {% endmacro %}
+
+{# Lowercase, non-alphanumerics -> single spaces, padded with spaces: ' pacific beach tennis club '.
+   Lets us match whole words/phrases with  LIKE '% term %'  on both engines. #}
+{% macro normalize_name(col) %}
+  {{ return(adapter.dispatch('normalize_name', 'courtconnect')(col)) }}
+{% endmacro %}
+
+{% macro default__normalize_name(col) -%}
+  ' ' || trim(regexp_replace(lower({{ col }}), '[^a-z0-9]+', ' ')) || ' '
+{%- endmacro %}
+
+{% macro duckdb__normalize_name(col) -%}
+  ' ' || trim(regexp_replace(lower({{ col }}), '[^a-z0-9]+', ' ', 'g')) || ' '
+{%- endmacro %}

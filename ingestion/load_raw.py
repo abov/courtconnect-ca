@@ -18,7 +18,13 @@ from dotenv import load_dotenv
 TABLES = {
     "osm_courts": ("osm_courts.csv", ["osm_id", "lat", "lon"]),
     "osm_parents": ("osm_parents.csv", ["osm_id", "minlat", "minlon", "maxlat", "maxlon"]),
+    "overture_places": ("overture_places.csv", ["lat", "lon", "confidence"]),
+    "google_place_ids": ("google_place_ids.csv", []),
 }
+
+# Tables that may legitimately have no file yet (the Google lookup is opt-in). They load as empty tables with
+# these columns, so dbt models that read them still build.
+OPTIONAL = {"google_place_ids": ["venue_id", "google_place_id", "resolved_at"]}
 
 
 def load_duckdb(table: str, df: pd.DataFrame, db_path: str) -> None:
@@ -73,9 +79,12 @@ def main() -> None:
     try:
         for table, (csv_name, numeric) in TABLES.items():
             csv_path = str(Path(args.data_dir) / csv_name)
-            if not Path(csv_path).exists():
-                raise SystemExit(f"{csv_path} not found - run the matching extract_osm_*.py first")
-            df = pd.read_csv(csv_path, dtype=str)
+            if Path(csv_path).exists():
+                df = pd.read_csv(csv_path, dtype=str)
+            elif table in OPTIONAL:
+                df = pd.DataFrame(columns=OPTIONAL[table], dtype=str)
+            else:
+                raise SystemExit(f"{csv_path} not found - run the matching extract_*.py first")
             for col in df.columns:
                 if col in numeric:
                     df[col] = pd.to_numeric(df[col])

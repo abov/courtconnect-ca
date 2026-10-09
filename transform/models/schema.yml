@@ -13,6 +13,21 @@ seeds:
         description: The racket sport. Every non-blank value must become a row in dim_sport.
         tests: [not_null]
 
+  - name: place_sport_overrides
+    description: >
+      Human review of weak place-to-sport matches (see mart_places_to_review). One row per decision:
+      place_id, sport (exact name from the master list), verdict ('confirm' or 'reject').
+    columns:
+      - name: verdict
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['confirm', 'reject']
+      - name: place_id
+        tests:
+          - relationships:
+              arguments: {to: "ref('stg_overture_places')", field: place_id}
+
   - name: sport_aliases
     description: Alternate names for sports (editable). Used to search other sources when a sport has no OSM tag.
     columns:
@@ -83,15 +98,57 @@ models:
               arguments: {to: "ref('dim_sport')", field: sport_id}
 
   - name: dim_venue
-    description: One row per facility, built by clustering nearby courts (see ADR 0003).
+    description: One row per facility, from OSM courts grouped by proximity (ADR 0003) plus Overture places (ADR 0005).
     columns:
       - name: venue_id
         tests: [unique, not_null]
+      - name: venue_source
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['osm', 'osm+places', 'places_only']
       - name: name_source
         tests:
           - accepted_values:
               arguments:
-                values: ['court_name', 'operator', 'enclosing_feature', 'unnamed']
+                values: ['court_name', 'operator', 'places_directory', 'enclosing_feature', 'unnamed']
+
+  - name: stg_overture_places
+    description: Racket-related places from Overture Maps, closed businesses removed.
+    columns:
+      - name: place_id
+        tests: [unique, not_null]
+
+  - name: dim_place
+    description: One row per Overture place, linked to an OSM venue when one is within place_match_radius_m metres.
+    columns:
+      - name: place_id
+        tests: [unique, not_null]
+      - name: venue_id
+        tests: [not_null]
+
+  - name: bridge_place_sport
+    description: Sports a place offers, with 'strong' or 'weak' evidence.
+    columns:
+      - name: evidence
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['strong', 'weak']
+
+  - name: bridge_venue_sport
+    description: Which sports are played at which venue, and which source (OSM, places, or both) says so.
+    columns:
+      - name: venue_id
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('dim_venue')", field: venue_id}
+      - name: sport_id
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('dim_sport')", field: sport_id}
 
   - name: mart_sport_gaps
     description: One row per racket sport with an honest coverage status and the recommended next data source.
@@ -102,4 +159,4 @@ models:
         tests:
           - accepted_values:
               arguments:
-                values: ['covered', 'sparse', 'tagged_none_found', 'no_osm_tag']
+                values: ['covered', 'sparse', 'possible_only', 'tagged_none_found', 'not_found']

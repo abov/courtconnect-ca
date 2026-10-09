@@ -16,6 +16,11 @@ seeds:
         year_origin: varchar   # intentionally raw: values like '1500/1700'
     osm_sport_map:
       +schema: raw
+    place_sport_overrides:   # starts empty: pin the types so an empty file is not guessed as INTEGER
+      +column_types:
+        place_id: varchar
+        sport: varchar
+        verdict: varchar
 
 models:
   courtconnect:
@@ -34,4 +39,5 @@ models:
 
 vars:
   expected_racket_sports: 76   # the sheet should list 76 racket sports; a warn-level test flags any gap
+  place_match_radius_m: 100    # an Overture place within this distance of an OSM court is part of that venue
   venue_radius_m: 75   # courts closer than this are treated as the same facility
