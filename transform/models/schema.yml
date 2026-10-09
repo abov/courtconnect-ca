@@ -13,6 +13,15 @@ seeds:
         description: The racket sport. Every non-blank value must become a row in dim_sport.
         tests: [not_null]
 
+  - name: sport_aliases
+    description: Alternate names for sports (editable). Used to search other sources when a sport has no OSM tag.
+    columns:
+      - name: sport
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('all_racquet')", field: sport}
+
 models:
   - name: stg_sports
     description: Cleaned sports reference data (typos fixed, text parsed into typed columns, de-duplicated).
@@ -42,7 +51,17 @@ models:
         tests:
           - accepted_values:
               arguments:
-                values: ['hard', 'clay', 'grass', 'turf', 'sand', 'other', 'unknown']
+                values: ['hard', 'clay', 'grass', 'turf', 'sand', 'carpet', 'wood', 'other', 'unknown']
+      - name: setting
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['indoor', 'covered', 'outdoor', 'likely_outdoor', 'unknown']
+      - name: record_kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['court', 'facility']
       - name: access_type
         tests:
           - accepted_values:
@@ -72,4 +91,15 @@ models:
         tests:
           - accepted_values:
               arguments:
-                values: ['court_name', 'operator', 'unnamed']
+                values: ['court_name', 'operator', 'enclosing_feature', 'unnamed']
+
+  - name: mart_sport_gaps
+    description: One row per racket sport with an honest coverage status and the recommended next data source.
+    columns:
+      - name: sport_name
+        tests: [unique, not_null]
+      - name: coverage_status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['covered', 'sparse', 'tagged_none_found', 'no_osm_tag']

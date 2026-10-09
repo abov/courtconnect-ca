@@ -7,7 +7,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: pip install dbt-core dbt-duckdb duckdb pandas requests python-dotenv
-      # CI builds only the reference data + tests (no network dependency on Overpass).
-      - run: dbt seed --project-dir transform --profiles-dir transform
-      - run: dbt build --project-dir transform --profiles-dir transform --select stg_sports+ dim_sport
+      - run: pip install dbt-core dbt-duckdb duckdb pandas python-dotenv
+      # CI never calls OpenStreetMap or Snowflake: it loads a small committed sample of real OSM data
+      # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
+      - run: python ingestion/load_raw.py --data-dir ci/fixtures
+      - run: dbt build --project-dir transform --profiles-dir transform

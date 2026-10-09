@@ -10,3 +10,5 @@ sources:
         loaded_at_field: extracted_at
         freshness:
           warn_after: {count: 7, period: day}
+      - name: osm_parents
+        description: Named parks, schools, clubs and sports centres (with bounding boxes) used to name unnamed courts.

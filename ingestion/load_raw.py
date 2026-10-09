@@ -1,9 +1,9 @@
-"""Load data/raw/osm_courts.csv into the RAW layer of DuckDB (default) or Snowflake.
+"""Load the extracted CSVs into the RAW layer of DuckDB (default) or Snowflake.
 
     python ingestion/load_raw.py                      # DuckDB (local)
     python ingestion/load_raw.py --target snowflake   # Snowflake (needs .env)
 
-The load is a full refresh of one landing table, so re-running is safe (idempotent).
+Each load is a full refresh of its landing table, so re-running is safe (idempotent).
 """
 from __future__ import annotations
 
@@ -14,25 +14,29 @@ from pathlib import Path
 import pandas as pd
 from dotenv import load_dotenv
 
-TABLE = "osm_courts"
+# landing table -> source csv name, and the numeric columns to cast
+TABLES = {
+    "osm_courts": ("osm_courts.csv", ["osm_id", "lat", "lon"]),
+    "osm_parents": ("osm_parents.csv", ["osm_id", "minlat", "minlon", "maxlat", "maxlon"]),
+}
 
 
-def load_duckdb(df: pd.DataFrame, db_path: str) -> None:
+def load_duckdb(table: str, df: pd.DataFrame, db_path: str) -> None:
     import duckdb
 
     con = duckdb.connect(db_path)
     con.execute("create schema if not exists raw")
     con.register("df", df)
-    con.execute(f"create or replace table raw.{TABLE} as select * from df")
-    n = con.execute(f"select count(*) from raw.{TABLE}").fetchone()[0]
-    print(f"DuckDB: raw.{TABLE} now has {n:,} rows")
+    con.execute(f"create or replace table raw.{table} as select * from df")
+    n = con.execute(f"select count(*) from raw.{table}").fetchone()[0]
+    print(f"DuckDB: raw.{table} now has {n:,} rows")
+    con.close()
 
 
-def load_snowflake(df: pd.DataFrame) -> None:
+def snowflake_connection():
     import snowflake.connector
-    from snowflake.connector.pandas_tools import write_pandas
 
-    conn = snowflake.connector.connect(
+    return snowflake.connector.connect(
         account=os.environ["SNOWFLAKE_ACCOUNT"],
         user=os.environ["SNOWFLAKE_USER"],
         password=os.environ["SNOWFLAKE_PASSWORD"],
@@ -40,34 +44,52 @@ def load_snowflake(df: pd.DataFrame) -> None:
         warehouse=os.environ.get("SNOWFLAKE_WAREHOUSE", "COURTCONNECT_WH"),
         database=os.environ.get("SNOWFLAKE_DATABASE", "COURTCONNECT"),
     )
-    try:
-        conn.cursor().execute("create schema if not exists RAW")
-        df.columns = [c.upper() for c in df.columns]
-        ok, _, nrows, _ = write_pandas(
-            conn, df, TABLE.upper(), schema="RAW",
-            auto_create_table=True, overwrite=True, quote_identifiers=False,
-        )
-        print(f"Snowflake: RAW.{TABLE.upper()} loaded ({nrows:,} rows, ok={ok})")
-    finally:
-        conn.close()
+
+
+def load_snowflake(conn, table: str, df: pd.DataFrame) -> None:
+    from snowflake.connector.pandas_tools import write_pandas
+
+    df = df.copy()
+    df.columns = [c.upper() for c in df.columns]
+    ok, _, nrows, _ = write_pandas(
+        conn, df, table.upper(), schema="RAW",
+        auto_create_table=True, overwrite=True, quote_identifiers=False,
+    )
+    print(f"Snowflake: RAW.{table.upper()} loaded ({nrows:,} rows, ok={ok})")
 
 
 def main() -> None:
     load_dotenv()
     ap = argparse.ArgumentParser()
     ap.add_argument("--target", choices=["duckdb", "snowflake"], default="duckdb")
-    ap.add_argument("--csv", default="data/raw/osm_courts.csv")
     ap.add_argument("--duckdb-path", default="courtconnect.duckdb")
+    ap.add_argument("--data-dir", default="data/raw", help="folder holding the extracted CSVs (CI uses ci/fixtures)")
     args = ap.parse_args()
 
-    if not Path(args.csv).exists():
-        raise SystemExit(f"{args.csv} not found - run extract_osm_courts.py first")
-    df = pd.read_csv(args.csv, dtype=str)
-    df["lat"] = pd.to_numeric(df["lat"])
-    df["lon"] = pd.to_numeric(df["lon"])
-    df["osm_id"] = pd.to_numeric(df["osm_id"])
-
-    load_duckdb(df, args.duckdb_path) if args.target == "duckdb" else load_snowflake(df)
+    conn = None
+    if args.target == "snowflake":
+        conn = snowflake_connection()
+        conn.cursor().execute("create schema if not exists RAW")
+    try:
+        for table, (csv_name, numeric) in TABLES.items():
+            csv_path = str(Path(args.data_dir) / csv_name)
+            if not Path(csv_path).exists():
+                raise SystemExit(f"{csv_path} not found - run the matching extract_osm_*.py first")
+            df = pd.read_csv(csv_path, dtype=str)
+            for col in df.columns:
+                if col in numeric:
+                    df[col] = pd.to_numeric(df[col])
+                else:
+                    # Pin text columns to a string type: a column that is empty in this batch (say, no court
+                    # tagged `covered`) must not be guessed as INTEGER by the warehouse and break lower().
+                    df[col] = df[col].astype("string")
+            if conn is None:
+                load_duckdb(table, df, args.duckdb_path)
+            else:
+                load_snowflake(conn, table, df)
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 if __name__ == "__main__":
