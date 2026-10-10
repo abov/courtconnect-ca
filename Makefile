@@ -53,3 +53,6 @@ app:             ## serve the map at http://localhost:8765
 
 report:           ## regenerate docs/coverage_snapshot.md and docs/sport_name_review.md
 	$(PY) ingestion/export_coverage_report.py
+
+check-links:      ## verify every link-out in venue_actions.csv still loads
+	$(PY) ingestion/check_action_links.py

@@ -41,6 +41,20 @@ or service to watch or play. It is not a booking system. Two things follow:
   `verified_on` date. We do not collect its player leaderboards (named individuals).
 - **Next step:** ask MetaPaddles (the contact is on its terms page) whether it offers a feed or partner access for California events.
 
+## Clubs' own sites (read 2026-10-10)
+Beach Tennis Santa Monica and BT Cali Club publish their programs on their own sites, so those are the sources for 18 more link-outs
+(open play, drop-in and group classes, kids classes, semi-private training, a league, tournaments). Findings worth knowing:
+- **BTCC's site lists no open play, clinics or private lessons.** Its Yelp listing mentions private classes; the owner reported open play and
+  clinics. None of that is on the club's own pages, so it is not shown. The site does list a $10 trial class, class matching, a league and a
+  Halloween tournament (Oct 25, Hermosa Beach, $50 / $40 members).
+- **Both clubs use the same public beach courts** (7th St Manhattan Beach, 14th St / The Strand Hermosa Beach), so those two venues are now
+  named by place and each club's programs appear under them with the club named in the title. Before, the venue carried one club's name.
+- **BTSM's own pages disagree with themselves** on Hermosa open play (free first-come courts vs a $10 walk-in price); the row shows both
+  and says to confirm. Its league page still shows sign-up open two months into the season.
+- **Not found:** SoCal Pickleball (Burbank), Hélio Amorim Beach Tennis (San Diego), San Francisco Beach Tennis and Ricardinho BT have no
+  findable website, program or court location, and Pop Paddle Venice's open-play details exist only on third-party aggregators. Nothing was
+  guessed; they are not on the map beyond what is already there.
+
 ## Hand-added venues are merged, not duplicated
 A hand-added venue within 150 m (`manual_match_radius_m`) of a court or place we already hold is **merged into it**
 (`int_manual_venue_match`), enriching its name, access and offerings; otherwise it stands alone. A test fails the build if an entry
