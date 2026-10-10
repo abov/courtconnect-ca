@@ -2,6 +2,8 @@
 
 **Find where to play, who to play with, and where to watch, for every racket sport in California.**
 
+**[Open the live map](https://abov.github.io/courtconnect-ca/)**: 9,927 venues across California, with an honest panel showing which of the 75 sports have no data yet.
+
 > Plain-English summary: Pickleball, padel, tennis, squash, and 40+ lesser-known racket sports
 > are booming, but information about *where to play* is scattered and messy. This project collects
 > it, cleans it, checks it, and tells you honestly how complete it is.
