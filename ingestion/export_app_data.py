@@ -9,6 +9,8 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, a, w, o, f, p:[[sportIndex, courts, flagMask], ...]}]
+  events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
+              t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
      s source: o OpenStreetMap, p places, b both, m hand-curated
      f venue bits: 1 lit, 2 public, 4 free      p[i][2] sport bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf
@@ -74,6 +76,16 @@ def main() -> None:
         out_venues.append(v)
     out_venues.sort(key=lambda v: (v["y"], v["x"]))
 
+    # Watch events: link-out discovery only (nothing is sold or booked here). Dates stay ISO strings; the page hides past events itself.
+    events = []
+    for (name, sport, level, fmt, venue, city, lat, lon, prec, start, end, dstat, tix, info, tickets, verified) in con.execute("""
+            select event_name, sport_name, level, watch_format, venue_name, city, lat, lon, location_precision,
+                   start_date, end_date, date_status, ticket_info, info_url, tickets_url, verified_on
+            from marts.mart_watch_events order by coalesce(start_date, date '2999-01-01'), event_name""").fetchall():
+        events.append({"n": name, "sp": sport, "l": level, "f": fmt, "v": venue, "c": city, "y": round(float(lat), 5), "x": round(float(lon), 5),
+                       "pr": prec or "", "s": str(start) if start else "", "e": str(end) if end else "", "d": dstat,
+                       "t": tix or "", "u": info or "", "k": tickets or "", "vo": str(verified)})
+
     named = sum(1 for v in out_venues if v["q"] != "u")
     meta = {
         "generated": date.today().isoformat(),
@@ -82,10 +94,11 @@ def main() -> None:
         "confirmed": sum(1 for v in out_venues if v["q"] in ("c", "p")),
         "sports_total": len(sports),
         "sports_with_venues": sum(1 for s in sports if s["v"] > 0),
+        "events": len(events),
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues}, ensure_ascii=False, separators=(",", ":")),
+    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events}, ensure_ascii=False, separators=(",", ":")),
                    encoding="utf-8")
     size = OUT.stat().st_size / 1e6
     print(f"Wrote {OUT}: {len(out_venues):,} venues, {len(sports)} sports, {size:.2f} MB  (named {named:,}; confirmed {meta['confirmed']:,})")

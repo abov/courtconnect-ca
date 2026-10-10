@@ -34,6 +34,34 @@ seeds:
               arguments:
                 values: ['indoor', 'covered', 'outdoor', 'likely_outdoor', 'unknown']
 
+  - name: watch_events
+    description: >
+      Pro and amateur events people can go and watch, curated by hand, one row per event. A discovery list only:
+      every row links out to the organizer; nothing is sold or booked here. `verified_on` records when the facts were last checked.
+    columns:
+      - name: event_key
+        tests: [unique, not_null]
+      - name: sport
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('all_racquet')", field: sport}
+      - name: level
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['pro', 'college', 'amateur', 'junior', 'exhibition']
+      - name: watch_format
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['in_person_ticketed', 'in_person_free', 'in_person_unconfirmed', 'watch_party', 'dome_screening', 'broadcast_only']
+      - name: date_status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['confirmed', 'dates_not_confirmed']
+
   - name: place_sport_overrides
     description: >
       Human review of weak place-to-sport matches (see mart_places_to_review). One row per decision:

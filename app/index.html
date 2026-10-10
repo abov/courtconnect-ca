@@ -47,6 +47,18 @@
   .badge { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
   .badge.i { color: var(--warn); border-color: var(--warn); }
+  .seg { display: flex; gap: 6px; margin-top: 10px; }
+  .seg .chip { flex: 1; text-align: center; padding: 6px 8px; border-radius: 8px; font-weight: 600; }
+  body:not(.watch) .watchonly { display: none; }
+  body.watch .playonly, body.watch .legend.playlegend { display: none; }
+  summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
+  summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; }
+  .badge.ev { color: #8250df; border-color: #8250df; }
+  .maplibregl-popup-content .badge.ev { color: #8250df; }
+  .maplibregl-popup-content .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .maplibregl-popup-content a.btn { display: inline-block; padding: 4px 10px; border-radius: 6px; border: 1px solid #0969da; color: #0969da; text-decoration: none; font-weight: 600; }
+  .maplibregl-popup-content a.btn.primary { background: #0969da; color: #fff; }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); padding: 6px 16px 10px; }
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid #fff; box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
@@ -87,6 +99,10 @@
       <button class="link" id="openCoverage" type="button">How complete is this data?</button>
       <button class="link" id="nearMe" type="button">Near me</button>
     </div>
+    <div class="seg" role="group" aria-label="What are you looking for?">
+      <button class="chip" id="modePlay" type="button" aria-pressed="true">Find a place to play</button>
+      <button class="chip" id="modeWatch" type="button" aria-pressed="false">Watch a match</button>
+    </div>
   </header>
 
   <div class="controls">
@@ -94,10 +110,14 @@
       <label class="l" for="sport">Sport</label>
       <select id="sport"></select>
     </div>
-    <div>
+    <div class="watchonly note">CourtConnect doesn't sell tickets or book anything. Every event links to the organizer's own page: check dates, seating and prices there.</div>
+    <div class="playonly">
       <label class="l" for="q">Search name or city</label>
       <input id="q" type="search" placeholder="e.g. Manhattan Beach" autocomplete="off">
     </div>
+    <details class="playonly" id="moreFilters">
+    <summary id="moreSummary">More filters: surface, access, what they offer</summary>
+    <div style="display:grid; gap:10px; margin-top:10px">
     <div>
       <span class="l">Setting and surface</span>
       <div class="chips" id="chipsPlay">
@@ -129,12 +149,14 @@
         <button class="chip" data-o="T" aria-pressed="false">Tournaments</button>
       </div>
     </div>
-    <div class="row"><button class="link" id="reset" type="button">Clear filters</button></div>
+    </div>
+    </details>
+    <div class="row playonly"><button class="link" id="reset" type="button">Clear filters</button></div>
   </div>
 
   <div id="count" aria-live="polite"></div>
   <ul id="list"></ul>
-  <div class="legend" aria-label="Map legend">
+  <div class="legend playlegend" aria-label="Map legend">
     <span><span class="dot" style="background:#1a7f37"></span>Confirmed name</span>
     <span><span class="dot" style="background:#0969da"></span>Business listing</span>
     <span><span class="dot" style="background:#d4a72c"></span>Name inferred from park/school</span>
@@ -164,8 +186,8 @@ const QSHORT = {c: "Confirmed", p: "Listing", i: "Inferred", u: "Unnamed"};
 const SRC = {o: "OpenStreetMap", p: "Places directory", b: "OpenStreetMap + places directory", m: "Hand-curated"};
 const OFFER = {O: "Open play", C: "Clinics", L: "Private lessons", G: "Group classes", D: "Drop-in", T: "Tournaments"};
 
-let DATA, sports, venues;
-const state = {sport: -1, text: "", on: new Set(), offers: new Set()};
+let DATA, sports, venues, events = [];
+const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
 const $ = id => document.getElementById(id);
 
 function el(tag, props, ...kids) {
@@ -198,8 +220,66 @@ function filtered() {
   return venues.filter(v => matches(v, sm, tm, vf));
 }
 
+// ---------- watch events (link-out discovery, never booking) ----------
+const FORMAT = {in_person_ticketed: "Tickets required", in_person_free: "Free to watch", in_person_unconfirmed: "Check ticket access",
+                watch_party: "Watch party", dome_screening: "Dome screening", broadcast_only: "Broadcast only"};
+const LEVEL = {pro: "Pro", college: "College", amateur: "Amateur", junior: "Junior", exhibition: "Exhibition"};
+function todayIso() { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+const isUpcoming = ev => !ev.e || ev.e >= todayIso();                   // recomputed in the browser, so a stale deploy still hides past events
+function upcomingEvents() { return events.filter(isUpcoming); }
+function eventsFiltered() {
+  const name = state.sport >= 0 ? sports[state.sport].n : null;
+  return upcomingEvents().filter(ev => !name || ev.sp === name).sort((a, b) => (a.s || "9999").localeCompare(b.s || "9999") || a.n.localeCompare(b.n));
+}
+function fmtDate(iso, o) { return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", Object.assign({timeZone: "UTC"}, o)); }
+function fmtRange(ev) {
+  if (!ev.s) return "Dates to be confirmed";
+  if (!ev.e || ev.e === ev.s) return fmtDate(ev.s, {month: "short", day: "numeric", year: "numeric"});
+  const a = new Date(ev.s + "T00:00:00Z"), b = new Date(ev.e + "T00:00:00Z");
+  if (a.getUTCFullYear() === b.getUTCFullYear() && a.getUTCMonth() === b.getUTCMonth()) return fmtDate(ev.s, {month: "short"}) + " " + a.getUTCDate() + " \u2013 " + b.getUTCDate() + ", " + a.getUTCFullYear();
+  if (a.getUTCFullYear() === b.getUTCFullYear()) return fmtDate(ev.s, {month: "short", day: "numeric"}) + " \u2013 " + fmtDate(ev.e, {month: "short", day: "numeric"}) + ", " + a.getUTCFullYear();
+  return fmtDate(ev.s, {month: "short", day: "numeric", year: "numeric"}) + " \u2013 " + fmtDate(ev.e, {month: "short", day: "numeric", year: "numeric"});
+}
+function eventGeojson(list) {
+  return {type: "FeatureCollection", features: list.map(ev => ({type: "Feature", properties: {k: events.indexOf(ev), name: ev.n}, geometry: {type: "Point", coordinates: [ev.x, ev.y]}}))};
+}
+function eventNode(ev) {
+  const box = el("div");
+  box.append(el("h2", {text: ev.n}));
+  box.append(el("div", {}, el("span", {class: "badge ev", text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
+  box.append(el("p", {}, el("b", {text: fmtRange(ev)})));
+  const cityPin = /city/.test(ev.pr);
+  box.append(el("p", {class: "meta", text: (cityPin ? ev.c + " (venue not yet listed; the pin is the city centre)" : ev.v + ", " + ev.c)}));
+  if (ev.t) box.append(el("p", {text: ev.t}));
+  const row = el("div", {class: "btnrow"});
+  const info = ev.u ? safeUrl(ev.u) : "", tix = ev.k ? safeUrl(ev.k) : "";
+  if (tix) row.append(el("a", {class: "btn primary", href: tix, target: "_blank", rel: "noopener noreferrer", text: "Tickets (organizer's site)"}));
+  if (info) row.append(el("a", {class: "btn", href: info, target: "_blank", rel: "noopener noreferrer", text: "Event page"}));
+  box.append(row);
+  box.append(el("p", {class: "meta", text: "Details checked " + ev.vo + ". CourtConnect sells nothing; confirm on the organizer's site."}));
+  return box;
+}
+function showEvent(ev, fly) {
+  if (!ev) return;
+  if (fly) map.flyTo({center: [ev.x, ev.y], zoom: Math.max(map.getZoom(), 9), essential: true});
+  popup.setLngLat([ev.x, ev.y]).setDOMContent(eventNode(ev)).addTo(map);
+}
+function renderEventList() {
+  const list = eventsFiltered(), ul = $("list"); ul.replaceChildren();
+  for (const ev of list) {
+    const btn = el("button", {type: "button"},
+      el("div", {class: "nm", text: ev.n}),
+      el("div", {class: "meta", text: fmtRange(ev) + " \u00b7 " + ev.c}),
+      el("div", {}, el("span", {class: "badge ev", text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
+    btn.addEventListener("click", () => showEvent(ev, true));
+    ul.append(el("li", {}, btn));
+  }
+  $("count").replaceChildren(el("b", {text: String(list.length)}), document.createTextNode(list.length === 1 ? " event to watch, soonest first" : " events to watch, soonest first"));
+  return list;
+}
+
 // ---------- map ----------
-let map, popup, current = [];
+let map, popup, current = [], mapReady = false;
 function geojson(list) {
   return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
@@ -207,9 +287,9 @@ function initMap() {
   map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: [[-124.6, 32.4], [-114.0, 42.2]],
                             fitBoundsOptions: {padding: 20}, attributionControl: false});
   map.addControl(new maplibregl.NavigationControl({showCompass: false}), "top-right");
-  map.addControl(new maplibregl.AttributionControl({compact: true, customAttribution: DATA.meta.attribution}));
+  map.addControl(new maplibregl.AttributionControl({compact: true, customAttribution: "Venues: OpenStreetMap, Overture Maps"}));
   popup = new maplibregl.Popup({closeButton: true, maxWidth: "300px", offset: 10});
-  map.on("load", () => {
+  map.once("style.load", () => {                                   // as soon as the style is ready, without waiting for every basemap tile
     map.resize();                                                  // the grid may not have settled when the map was created
     map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, animate: false});
     map.addSource("v", {type: "geojson", data: geojson(current), cluster: true, clusterRadius: 38, clusterMaxZoom: 13});
@@ -231,8 +311,18 @@ function initMap() {
       map.on("mouseenter", l, () => map.getCanvas().style.cursor = "pointer");
       map.on("mouseleave", l, () => map.getCanvas().style.cursor = "");
     }
+    map.addSource("e", {type: "geojson", data: eventGeojson([])});
+    map.addLayer({id: "ev-pts", type: "circle", source: "e", layout: {visibility: "none"},
+      paint: {"circle-radius": 10, "circle-color": "#8250df", "circle-stroke-color": "#fff", "circle-stroke-width": 2}});
+    map.addLayer({id: "ev-label", type: "symbol", source: "e", layout: {visibility: "none", "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"],
+      "text-size": 12, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 9},
+      paint: {"text-color": "#3b2a6b", "text-halo-color": "#fff", "text-halo-width": 1.5}});
+    map.on("click", "ev-pts", e => showEvent(events[e.features[0].properties.k], false));
+    map.on("mouseenter", "ev-pts", () => map.getCanvas().style.cursor = "pointer");
+    map.on("mouseleave", "ev-pts", () => map.getCanvas().style.cursor = "");
     map.on("moveend", debounce(renderList, 150));
-    refresh();
+    mapReady = true;
+    applyMode(false);
   });
 }
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
@@ -268,7 +358,22 @@ function showVenue(v, fly) {
 
 // ---------- list + counts ----------
 function dist2(v, c) { const dx = (v.x - c.lng) * Math.cos(c.lat * Math.PI / 180), dy = v.y - c.lat; return dx * dx + dy * dy; }
+function setLayersFor(mode) {
+  const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
+  show(["clusters", "cluster-count", "pts"], mode === "play");
+  show(["ev-pts", "ev-label"], mode === "watch");
+}
+function applyMode(fit) {
+  if (!mapReady) return;
+  setLayersFor(state.mode); popup.remove();
+  if (state.mode === "watch" && fit) {
+    const list = eventsFiltered();
+    if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(ev => b.extend([ev.x, ev.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
+  } else if (state.mode === "play" && fit) map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
+  refresh();
+}
 function renderList() {
+  if (state.mode === "watch") return;
   const c = map.getCenter(), b = map.getBounds();
   const inView = current.filter(v => b.contains([v.x, v.y]));
   const pool = inView.length ? inView : current;
@@ -287,6 +392,11 @@ function renderList() {
     (inView.length !== total ? " · " + fmt(inView.length) + " in view" : "") + (top.length ? " · nearest " + top.length + " to the map centre:" : "")));
 }
 function refresh() {
+  if (state.mode === "watch") {
+    const list = renderEventList();
+    if (map.getSource("e")) map.getSource("e").setData(eventGeojson(list));
+    writeHash(); return;
+  }
   current = filtered();
   if (map.getSource("v")) map.getSource("v").setData(geojson(current));
   renderList(); writeHash();
@@ -295,6 +405,7 @@ function refresh() {
 // ---------- controls, hash state ----------
 function writeHash() {
   const p = new URLSearchParams();
+  if (state.mode === "watch") p.set("mode", "watch");
   if (state.sport >= 0) p.set("sport", sports[state.sport].n);
   if (state.on.size) p.set("on", [...state.on].join(","));
   if (state.offers.size) p.set("offer", [...state.offers].join(""));
@@ -303,6 +414,7 @@ function writeHash() {
 }
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
+  if (p.get("mode") === "watch") state.mode = "watch";
   const s = p.get("sport"); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
   for (const k of (p.get("on") || "").split(",")) if (k) state.on.add(k);
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
@@ -310,14 +422,38 @@ function readHash() {
 }
 function syncControls() {
   $("sport").value = String(state.sport); $("q").value = state.text;
+  document.body.classList.toggle("watch", state.mode === "watch");
+  const nOn = state.on.size + state.offers.size;
+  $("moreSummary").textContent = nOn ? "Filters on: " + nOn + " (tap to change)" : "More filters: surface, access, what they offer";
+  if (nOn) $("moreFilters").open = true;
+  $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode === "watch");
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
   for (const b of document.querySelectorAll("[data-o]")) b.setAttribute("aria-pressed", state.offers.has(b.dataset.o));
 }
+function populateSports() {
+  const sel = $("sport"); sel.replaceChildren();
+  if (state.mode === "watch") {
+    const up = upcomingEvents(), counts = {};
+    up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
+    sel.append(el("option", {value: "-1", text: "All sports (" + up.length + " events)"}));
+    sports.forEach((s, i) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[s.n] + ")"})); });
+    if (state.sport >= 0 && !counts[sports[state.sport].n]) state.sport = -1;
+  } else {
+    sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(venues.length) + " venues)"}));
+    sports.forEach((s, i) => { if (s.v > 0) sel.append(el("option", {value: String(i), text: s.n + " (" + fmt(s.v) + ")"})); });
+  }
+  sel.value = String(state.sport);
+}
+function setMode(m) {
+  if (state.mode === m) return;
+  state.mode = m; populateSports(); syncControls(); applyMode(true);
+}
 function initControls() {
   const sel = $("sport");
-  sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(venues.length) + " venues)"}));
-  sports.forEach((s, i) => { if (s.v > 0) sel.append(el("option", {value: String(i), text: s.n + " (" + fmt(s.v) + ")"})); });
-  sel.addEventListener("change", () => { state.sport = +sel.value; refresh(); });
+  populateSports();
+  $("modePlay").addEventListener("click", () => setMode("play"));
+  $("modeWatch").addEventListener("click", () => setMode("watch"));
+  sel.addEventListener("change", () => { state.sport = +sel.value; refresh(); if (state.mode === "watch") applyMode(true); });
   $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); refresh(); }, 200));
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
     const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();
@@ -353,7 +489,7 @@ function initCoverage() {
 // ---------- boot ----------
 let byKey = {};
 fetch("data/venues.json").then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(d => {
-  DATA = d; sports = d.sports; venues = d.venues;
+  DATA = d; sports = d.sports; venues = d.venues; events = d.events || [];
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
     v.m = v.p.reduce((a, p) => a | p[2], 0);
@@ -361,6 +497,7 @@ fetch("data/venues.json").then(r => { if (!r.ok) throw new Error("HTTP " + r.sta
   });
   readHash(); initControls(); initCoverage(); syncControls();
   initMap();
+  if (state.mode === "watch") renderEventList();      // the event list must not wait for map tiles to finish loading
   $("loading").remove();
 }).catch(err => { $("loading").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });
 </script>

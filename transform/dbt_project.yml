@@ -16,6 +16,13 @@ seeds:
         year_origin: varchar   # intentionally raw: values like '1500/1700'
     osm_sport_map:
       +schema: raw
+    watch_events:            # dates stay text in the seed; the staging model casts them (same on DuckDB and Snowflake)
+      +column_types:
+        start_date: varchar
+        end_date: varchar
+        verified_on: varchar
+        lat: varchar
+        lon: varchar
     place_sport_overrides:   # starts empty: pin the types so an empty file is not guessed as INTEGER
       +column_types:
         place_id: varchar

@@ -2,7 +2,13 @@
 
 **Find where to play, who to play with, and where to watch, for every racket sport in California.**
 
-**[Open the live map](https://abov.github.io/courtconnect-ca/)**: 9,927 venues across California, with an honest panel showing which of the 75 sports have no data yet.
+**[Open the live map](https://abov.github.io/courtconnect-ca/)**: 9,927 venues across California, with an honest panel showing which of the 75 sports have no data yet, and a **Watch a match** mode for events you can go and see.
+
+| Find a place to play | Watch a match |
+|---|---|
+| ![Pickleball venues across LA and Orange County, clustered, with filters](docs/screenshots/map-play.png) | ![Six upcoming pro events across California, with dates and organizer links](docs/screenshots/map-watch.png) |
+
+*CourtConnect is a discovery tool: it helps you find where to play or watch, then sends you to the venue's or organizer's own site. It doesn't sell tickets or take bookings.*
 
 > Plain-English summary: Pickleball, padel, tennis, squash, and 40+ lesser-known racket sports
 > are booming, but information about *where to play* is scattered and messy. This project collects
@@ -62,6 +68,13 @@ make app-data   # export from the warehouse
 make app        # open http://localhost:8765
 ```
 
+## Watch a match
+**Watch a match** mode lists events you can go and see, soonest first, with the organizer's link. Today: the BNP Paribas Open (tennis, Indian Wells)
+and five PPA Tour pickleball stops (Malibu, Rancho Mirage, Newport Beach, Sacramento, San Clemente). Every entry carries its source and a
+`verified_on` date, and past events hide themselves. Add one by adding a row to
+[`transform/seeds/watch_events.csv`](transform/seeds/watch_events.csv) (tests reject bad coordinates, backwards dates and non-https links), then
+`make build && make app-data`. Why events are link-outs, and what I found about Playtomic, PlayByPoint and others: [ADR 0006](docs/decisions/0006-watch-events-and-link-out-discovery.md).
+
 ## Reviewing uncertain matches
 Some business names look like a sport but may not be ("Camino Real Tennis Center" is not Real Tennis). Those are kept out of the
 totals and listed in `marts.mart_places_to_review`. To confirm or reject one, add a row to
@@ -89,6 +102,8 @@ Local clubs that no dataset lists (beach tennis clubs, community groups) go in
 - [x] `dim_venue`: cluster individual courts into facilities ([ADR 0003](docs/decisions/0003-venue-clustering-by-proximity.md))
 - [x] Statewide extract and venue naming from enclosing parks / schools / clubs ([ADR 0004](docs/decisions/0004-statewide-extract-and-venue-naming.md))
 - [x] Second source: Overture Maps places, with graded evidence and a human review file ([ADR 0005](docs/decisions/0005-overture-places-and-google-terms.md))
+- [x] Watch a match: curated events with organizer link-outs ([ADR 0006](docs/decisions/0006-watch-events-and-link-out-discovery.md))
+- [ ] Link-outs for booking, clinics, private lessons, open play and social events (needs provider partnerships or permitted feeds; Playtomic Connect, PlayByPoint)
 - [ ] Google place IDs for live lookup (built, dry-run only; needs an API key)
 - [ ] Governing-body and club directories for the 53 sports neither source finds
 - [ ] S3 landing zone, Snowpipe, Terraform
