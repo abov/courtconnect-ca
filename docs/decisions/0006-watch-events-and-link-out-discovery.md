@@ -1,6 +1,6 @@
 # ADR 0006: "Watch a match" events, and a link-out model for booking, clinics and open play
 
-**Status:** watch events built; link-outs to BracketSync built (hand-curated); Playtomic and PlayByPoint researched, not built
+**Status:** watch events built; link-outs built for 2 beach tennis clubs and 6 padel clubs (hand-curated from the clubs' own sites); Playtomic and PlayByPoint read, link-out only
 
 ## Context
 The product is a **discovery tool**: it helps people find what they want, then sends them to the venue's or organizer's own site
@@ -54,6 +54,32 @@ Beach Tennis Santa Monica and BT Cali Club publish their programs on their own s
 - **Not found:** SoCal Pickleball (Burbank), Hélio Amorim Beach Tennis (San Diego), San Francisco Beach Tennis and Ricardinho BT have no
   findable website, program or court location, and Pop Paddle Venice's open-play details exist only on third-party aggregators. Nothing was
   guessed; they are not on the map beyond what is already there.
+
+## Playtomic and PlayByPoint (read 2026-10-10)
+- **Playtomic:** its `robots.txt` disallows crawling `/api`, `/tournaments/*`, `/activities/*`, search pages and query-string listings, which are exactly
+  the open-play, class and tournament pages. Club pages (`/clubs/...`) are not disallowed. Playtomic Connect is for companies integrating with club
+  systems under a certification agreement; its page does not say whether discovery sites qualify. So: no crawling; we link to a club's Playtomic page only
+  when the club's own site links there.
+- **PlayByPoint:** `robots.txt` blocks only reservations and user pages. Its Terms of Use are short, govern its users and the clubs on it, and restrict
+  copying or reverse-engineering the *software*; they do not mention scraping or an API. No ban, but no grant, so the same rule applies: read a club's pages
+  one at a time as a visitor, store only links and the facts the club itself publishes, never bulk-crawl.
+- **Where padel programs really come from:** the clubs' own sites. Padel Up books on its own subdomain; Pura Padel and Padel California link to Playtomic;
+  The Padel Courts links to PlayByPoint; Park Padel and Bay Padel use their own booking pages. 41 link-outs were added from those sites.
+- **Gaps:** Padel Up's site lists no clinics, classes or open play. Bay Padel has more clubs (Dogpatch, Sunnyvale, San Jose) and Padel Up has a Culver City
+  club that are not on the map yet. San Diego NOX Padel Club has no usable website (see below). Other tennis clubs with a few padel courts were not read.
+
+## Data-quality finds from this pass
+- **Parked domain:** `sandiegopadelclub.com` (our San Diego NOX Padel Club listing) is a GoDaddy parked page. DNS resolves, so the website check could not
+  see it. `seeds/website_overrides.csv` now lets a person flag such sites as dead; the override wins over the automatic check.
+- **Bad place record:** "Sunset Padel Sports Club" (Los Angeles) carried a Miami Beach club's website and sits at the same address as The Padel Courts. Rejected for
+  Padel in `place_sport_overrides.csv`.
+
+## Platform tennis in California
+No source we hold (OpenStreetMap, Overture) lists a platform tennis court in California. A Platform Tennis Hall of Fame article (Platform Tennis Magazine, Vol. 16
+Issue 2, 2014) says all of California's platform tennis courts are in **Ross, Marin County**: three at **Lagunitas Country Club**, one public court in town and
+a couple of private courts. Lagunitas Country Club (205 Lagunitas Rd, Ross) is on the map as an **unconfirmed lead**: the 2014 court count is not shown as
+current, public access is marked not confirmed, and the club's site (a members' site) says nothing about platform tennis. To confirm, call the club, the Town of
+Ross, or APTA.
 
 ## Hand-added venues are merged, not duplicated
 A hand-added venue within 150 m (`manual_match_radius_m`) of a court or place we already hold is **merged into it**

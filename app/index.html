@@ -196,7 +196,7 @@ const SRC = {o: "OpenStreetMap", p: "Places directory", b: "OpenStreetMap + plac
 const OFFER = {O: "Open play", C: "Clinics", L: "Private lessons", G: "Group classes", D: "Drop-in", T: "Tournaments", E: "Leagues", S: "Social events"};
 const ACTION = {league: "League", tournament: "Tournament", clinic: "Clinic", private_lesson: "Private lessons", group_class: "Group classes",
                 open_play: "Open play", drop_in: "Drop-in", social_event: "Social event", court_booking: "Court booking", club_page: "Club page"};
-const PROVIDER = {btsm_site: "Beach Tennis Santa Monica", btcc_site: "BT Cali Club", bracketsync: "BracketSync", playtomic: "Playtomic", playbypoint: "PlayByPoint", pickleballbrackets: "PickleballBrackets"};
+const PROVIDER = {lagunitas_site: "Lagunitas Country Club", padelup_site: "Padel Up", purapadel_site: "Pura Padel", thepadelcourts_site: "The Padel Courts", padelcalifornia_site: "Padel California", parkpadel_site: "Park Padel", baypadel_site: "Bay Padel", btsm_site: "Beach Tennis Santa Monica", btcc_site: "BT Cali Club", bracketsync: "BracketSync", playtomic: "Playtomic", playbypoint: "PlayByPoint", pickleballbrackets: "PickleballBrackets"};
 
 let DATA, sports, venues, events = [];
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
@@ -358,7 +358,7 @@ function venueNode(v) {
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
   if (f.length) box.append(el("p", {text: f.join(" · ")}));
   if (v.o) box.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
-  if (v.ru) box.append(el("p", {}, el("b", {text: "Court rules (from the project's paddle tennis map): "}), document.createTextNode(v.ru)));
+  if (v.ru) box.append(el("p", {}, el("b", {text: "Notes: "}), document.createTextNode(v.ru)));
   const url = v.w ? safeUrl(v.w) : "";
   if (url) box.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
   if (v.ac && v.ac.length) {

@@ -39,6 +39,17 @@ seeds:
               arguments:
                 values: ['public', 'unknown', 'club']   # club = a club or program, where access works through the club
 
+  - name: website_overrides
+    description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
+    columns:
+      - name: domain
+        tests: [unique, not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['dead']
+
   - name: venue_actions
     description: >
       What you can do at a venue (join a league, take a clinic, find open play, book a lesson), as link-outs to the provider's own page.

@@ -83,8 +83,8 @@ and five PPA Tour pickleball stops (Malibu, Rancho Mirage, Newport Beach, Sacram
   and `ingestion/import_paddle_tennis_map.py` refreshes the rows; review its output before committing.
 - **Ways to join (link-outs):** [`transform/seeds/venue_actions.csv`](transform/seeds/venue_actions.csv) lists what you can do at a venue
   (`open_play`, `clinic`, `private_lesson`, `group_class`, `drop_in`, `tournament`, `league`, `social_event`, `court_booking`, `club_page`),
-  each with the provider's own link, price note, dates and an `evidence` note. Today there are **22 link-outs** for two beach tennis clubs,
-  read from the clubs' own sites on 2026-10-10: open play, drop-in and group classes, kids classes, a semi-private training program, a league,
+  each with the provider's own link, price note, dates and an `evidence` note. Today there are **63 link-outs** for two beach tennis clubs and six padel clubs
+  (Padel Up, Pura Padel, The Padel Courts, Padel California, Park Padel, Bay Padel), read from the clubs' own sites on 2026-10-10. For beach tennis: open play, drop-in and group classes, kids classes, a semi-private training program, a league,
   tournaments (Vision BT10 on Oct 18, the Halloween tournament on Oct 25, the Winter Kickoff Classic on Nov 20-22), plus [BracketSync](https://bracketsync.com)
   pages for the clubs we know are on it. CourtConnect takes no registrations or payments; the provider does. `make check-links` confirms
   every link still loads. Prices and dates change: each row carries a `verified_on` date and a warning fires after 60 days. Details and what I found about BracketSync's terms: [ADR 0006](docs/decisions/0006-watch-events-and-link-out-discovery.md).

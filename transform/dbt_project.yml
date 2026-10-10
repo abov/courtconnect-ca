@@ -29,6 +29,12 @@ seeds:
         end_date: varchar
         verified_on: varchar
         price_info: varchar
+    website_overrides:       # all text
+      +column_types:
+        domain: varchar
+        status: varchar
+        reason: varchar
+        verified_on: varchar
     watch_events:            # dates stay text in the seed; the staging model casts them (same on DuckDB and Snowflake)
       +column_types:
         start_date: varchar
