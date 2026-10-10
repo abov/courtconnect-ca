@@ -16,5 +16,7 @@ select
     try_cast(nullif(trim(courts), '') as integer)             as courts_count,
     lower(coalesce(nullif(trim(access), ''), 'unknown'))      as access_type,
     nullif(trim(rules), '')                                   as rules_note,
+    lower(coalesce(nullif(trim(confirmation), ''), 'reported')) as confirmation_level,   -- visited | official | reported
+    cast(nullif(trim(confirmed_on), '') as date)              as confirmed_on,
     nullif(trim(evidence), '')                                as evidence
 from {{ ref('manual_venues') }}

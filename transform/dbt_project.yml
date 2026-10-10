@@ -23,6 +23,13 @@ seeds:
         rules: varchar
         website: varchar
         offerings: varchar
+        confirmation: varchar
+        confirmed_on: varchar
+    venue_leads:             # all text
+      +column_types:
+        noted_on: varchar
+        source_url: varchar
+        city: varchar
     venue_actions:           # dates stay text in the seed; the staging model casts them
       +column_types:
         start_date: varchar

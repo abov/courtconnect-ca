@@ -19,6 +19,7 @@ README.md has the full story; read it only if you need background. Decisions are
   - `watch_events.csv` (https links only), `place_sport_overrides.csv` (confirm/reject uncertain matches), `sport_aliases.csv`.
 - Models must run unchanged on DuckDB and Snowflake: use `adapter.dispatch` macros, no engine-specific SQL.
 - Honesty over polish: label inferred data as inferred, never present guesses as confirmed. CourtConnect links out; it takes no bookings or payments.
+- NEVER use the owner's logins (Playtomic, PlayByPoint, Padel Up, etc.) or read logged-in pages; use public pages and what the owner reports (ADR 0007).
 - Don't use Google Places data (terms forbid storing it); Overture + OSM only (ADR 0005).
 - Ignore generated/bulky paths when searching: `transform/target`, `transform/logs`, `courtconnect.duckdb`, `app/data/venues.json`.
 
@@ -36,7 +37,6 @@ README.md has the full story; read it only if you need background. Decisions are
 - `ci/fixtures`  small sample data for CI
 
 ## Current status
-Phase 1 done. Link-outs now cover 2 beach tennis clubs + 6 padel clubs (63 rows in venue_actions); Platform Tennis has 1 unconfirmed lead (Lagunitas CC, Ross).
-Platform rules read: Playtomic disallows crawling its tournaments/activities (link to club pages only); PlayByPoint terms don't ban or grant (see ADR 0006).
-Next up: Padel Up Culver City + Bay Padel's other clubs (not on the map), pickleball/tennis club link-outs, governing-body directories for the 53 sports with no data.
-Update this section at the end of each work session (2-3 lines: what changed, what's next).
+Phase 1 done, plus padel/beach tennis link-outs, platform tennis lead, confirmation levels (visited/official/reported) with map badges,
+a leads backlog (`venue_leads.csv`, `mart_venue_leads`), a "Report a venue" issue form, and table tennis/badminton additions (ADR 0007).
+Next: commit/deploy this step (CI + `gh workflow run pages.yml`), more link-outs, directories for the 53 no-data sports; MIT license and BracketSync outreach still undecided.

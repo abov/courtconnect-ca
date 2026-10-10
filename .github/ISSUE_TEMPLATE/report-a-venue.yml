@@ -1,0 +1,55 @@
+name: Report a venue or table
+description: Tell us about a place to play (a ping pong table, a badminton open play, a court we are missing).
+title: "Venue: "
+labels: ["venue-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks. Reports become leads, and a lead goes on the map only after it is located and its source is recorded.
+        Please do not include personal information (names or phone numbers of individuals).
+  - type: input
+    id: name
+    attributes:
+      label: Place name
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Address or cross streets, and city
+    validations:
+      required: true
+  - type: input
+    id: sport
+    attributes:
+      label: Sport
+      placeholder: Table tennis, badminton, pickleball...
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What is there?
+      description: Number of tables or courts, indoor or outdoor, when open play happens.
+  - type: dropdown
+    id: access
+    attributes:
+      label: Who can use it?
+      options: [Free and public, Public but paid, Members only, Not sure]
+  - type: dropdown
+    id: how
+    attributes:
+      label: How do you know?
+      options: [I played or saw it myself, The operator's own website or page, A review or article, Word of mouth]
+    validations:
+      required: true
+  - type: input
+    id: seen
+    attributes:
+      label: When did you last see it?
+      placeholder: YYYY-MM-DD
+  - type: input
+    id: source
+    attributes:
+      label: Link to a source (optional)

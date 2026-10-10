@@ -25,11 +25,11 @@ def main() -> None:
         try:
             r = requests.get(u, headers=UA, timeout=25, allow_redirects=True, stream=True)
             r.close()
-            ok, status = r.status_code == 200, str(r.status_code)
+            ok, status = r.status_code in (200, 403), str(r.status_code)      # 403 = reachable but blocks automated readers: warn, do not fail
         except requests.RequestException as err:
             ok, status = False, type(err).__name__
         bad += not ok
-        print(f"{'OK ' if ok else 'BAD'} {status:>4}  {u}")
+        print(f"{('WARN' if status == '403' else 'OK ') if ok else 'BAD'} {status:>4}  {u}")
     print(f"\n{len(urls)} unique links, {bad} failing")
     sys.exit(1 if bad else 0)
 

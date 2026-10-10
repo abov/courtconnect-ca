@@ -38,6 +38,15 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['public', 'unknown', 'club']   # club = a club or program, where access works through the club
+      - name: confirmation
+        description: >
+          How we know. visited = the project owner (or a named contributor) saw it in person; official = stated on the operator's or a
+          government page, read on confirmed_on; reported = a third party said so (article, map, review) and it is not independently confirmed.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['visited', 'official', 'reported']
 
   - name: website_overrides
     description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
@@ -49,6 +58,24 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['dead']
+
+  - name: venue_leads
+    description: >
+      The sleuthing backlog: venues and claims reported but not yet located or confirmed. Leads are not shown on the map.
+      status: new -> needs_location / needs_visit -> confirmed (added to manual_venues) | resolved | rejected.
+    columns:
+      - name: lead_id
+        tests: [unique, not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['new', 'needs_location', 'needs_visit', 'confirmed', 'resolved', 'rejected']
+      - name: source_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'other']
 
   - name: venue_actions
     description: >

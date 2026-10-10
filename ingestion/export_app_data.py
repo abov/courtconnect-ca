@@ -9,7 +9,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
-     ac link-outs [type,title,url,provider,start,end,price]; ru court rules (hand-curated map); xu 1 = public access not confirmed
+     ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
@@ -64,11 +64,14 @@ def main() -> None:
 
     # Notes from the hand-curated paddle tennis map: court rules, and whether public access is confirmed (merged venues included).
     manual = {}
-    for vid, rules, unconfirmed in con.execute("""
-            select mm.effective_venue_id, min(case when lower(m.rules_note) <> 'unknown' then m.rules_note end), max(case when m.access_type = 'unknown' then 1 else 0 end)
+    for vid, rules, unconfirmed, rank, cdate in con.execute("""
+            select mm.effective_venue_id, min(case when lower(m.rules_note) <> 'unknown' then m.rules_note end),
+                   max(case when m.access_type = 'unknown' then 1 else 0 end),
+                   min(case m.confirmation_level when 'visited' then 1 when 'official' then 2 else 3 end),
+                   max(m.confirmed_on)
             from staging.stg_manual_venues m join intermediate.int_manual_venue_match mm on mm.venue_key = m.venue_key
             group by 1""").fetchall():
-        manual[vid] = {"r": rules or "", "u": int(unconfirmed)}
+        manual[vid] = {"r": rules or "", "u": int(unconfirmed), "cf": {1: "v", 2: "o", 3: "r"}[rank], "cd": str(cdate) if cdate else ""}
 
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
@@ -104,6 +107,9 @@ def main() -> None:
         if vid in manual:
             if manual[vid]["r"]:
                 v["ru"] = manual[vid]["r"]       # court rules from the hand-curated map
+            v["cf"] = manual[vid]["cf"]          # confirmation: v visited in person, o stated by the operator, r reported only
+            if manual[vid]["cf"] == "v" and manual[vid]["cd"]:
+                v["cd"] = manual[vid]["cd"]
             if manual[vid]["u"]:
                 v["xu"] = 1                      # public access not confirmed on the source map
         out_venues.append(v)
