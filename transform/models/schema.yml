@@ -33,6 +33,31 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['indoor', 'covered', 'outdoor', 'likely_outdoor', 'unknown']
+      - name: access
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['public', 'unknown', 'club']   # club = a club or program, where access works through the club
+
+  - name: venue_actions
+    description: >
+      What you can do at a venue (join a league, take a clinic, find open play, book a lesson), as link-outs to the provider's own page.
+      CourtConnect books nothing. venue_ref_type is 'manual' (venue_ref = venue_key) or 'place' (venue_ref = an Overture place_id).
+    columns:
+      - name: action_key
+        tests: [unique, not_null]
+      - name: venue_ref_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['manual', 'place']
+      - name: action_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['open_play', 'clinic', 'private_lesson', 'group_class', 'drop_in', 'tournament', 'league', 'social_event', 'court_booking', 'club_page']
+      - name: provider
+        tests: [not_null]
 
   - name: watch_events
     description: >
@@ -173,6 +198,18 @@ models:
 
   - name: mart_website_quality
     description: Dead-website rate by source and Overture confidence band.
+
+  - name: int_manual_venue_match
+    description: Links each hand-added venue to the venue it was merged into (or to itself when nothing known is within manual_match_radius_m).
+    columns:
+      - name: venue_key
+        tests: [unique, not_null]
+      - name: effective_venue_id
+        description: The venue the hand-added entry ends up on. Must exist in dim_venue, or the entry would silently vanish from the map.
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('dim_venue')", field: venue_id}
 
   - name: stg_overture_places
     description: Racket-related places from Overture Maps, closed businesses removed.

@@ -104,8 +104,8 @@
   </g>
 
   <g font-size="12" fill="#1f2328">
-    <text x="512" y="258" font-weight="600">9,925 venues from OSM courts and Overture places</text>
-    <text x="512" y="278" fill="#57606a">4,343 named (1,112 confirmed, the rest inferred from the park or school)</text>
+    <text x="512" y="258" font-weight="600">9,935 venues from OSM courts, Overture places and hand-added entries</text>
+    <text x="512" y="278" fill="#57606a">4,354 named (1,128 confirmed, the rest inferred from the park or school)</text>
     <text x="512" y="298" fill="#57606a">46 dbt tests; GitHub Actions rebuilds the whole project on every push</text>
     <text x="512" y="318" fill="#57606a">Snowflake adds a GEOGRAPHY column for "courts within N miles" queries</text>
   </g>

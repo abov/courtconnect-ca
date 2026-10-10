@@ -1,5 +1,5 @@
--- Venues the data sources do not know about, added by hand (transform/seeds/manual_venues.csv).
--- One row per (venue, sport). `evidence` says how well each entry is backed up.
+-- Venues no data source knows about, added by hand (transform/seeds/manual_venues.csv).
+-- One row per (venue, sport). `evidence` says how well each entry is backed up; `access` is public / unknown / private.
 select
     md5('manual/' || trim(venue_key))                         as venue_id,
     trim(venue_key)                                           as venue_key,
@@ -13,5 +13,8 @@ select
     lower(trim(surface_type))                                 as surface_type,
     lower(trim(setting))                                      as setting,
     nullif(trim(offerings), '')                               as offerings,
+    try_cast(nullif(trim(courts), '') as integer)             as courts_count,
+    lower(coalesce(nullif(trim(access), ''), 'unknown'))      as access_type,
+    nullif(trim(rules), '')                                   as rules_note,
     nullif(trim(evidence), '')                                as evidence
 from {{ ref('manual_venues') }}

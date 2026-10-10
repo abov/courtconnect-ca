@@ -2,7 +2,7 @@
 
 **Find where to play, who to play with, and where to watch, for every racket sport in California.**
 
-**[Open the live map](https://abov.github.io/courtconnect-ca/)**: 9,927 venues across California, with an honest panel showing which of the 75 sports have no data yet, and a **Watch a match** mode for events you can go and see.
+**[Open the live map](https://abov.github.io/courtconnect-ca/)**: 9,935 venues across California, with an honest panel showing which of the 75 sports have no data yet, and a **Watch a match** mode for events you can go and see.
 
 | Find a place to play | Watch a match |
 |---|---|
@@ -74,6 +74,18 @@ and five PPA Tour pickleball stops (Malibu, Rancho Mirage, Newport Beach, Sacram
 `verified_on` date, and past events hide themselves. Add one by adding a row to
 [`transform/seeds/watch_events.csv`](transform/seeds/watch_events.csv) (tests reject bad coordinates, backwards dates and non-https links), then
 `make build && make app-data`. Why events are link-outs, and what I found about Playtomic, PlayByPoint and others: [ADR 0006](docs/decisions/0006-watch-events-and-link-out-discovery.md).
+
+## Paddle tennis courts and "ways to join"
+- **Paddle tennis (Pop Tennis) courts:** 15 public or "in question" courts from a hand-compiled West LA map are in the data, taking Pop Tennis from 7 to
+  **21 venues and 54 courts**. Private entries (clubs, apartment complexes and private homes) were left out on purpose. Where a court
+  sits within 150 m of a venue we already hold, it is **merged into that venue** instead of adding a second pin. Entries the map marks "?" show
+  **Public access not confirmed**, and the map's own court rules are shown verbatim. The map's ID lives in `.env` (`PADDLE_TENNIS_MAP_ID`),
+  and `ingestion/import_paddle_tennis_map.py` refreshes the rows; review its output before committing.
+- **Ways to join (link-outs):** [`transform/seeds/venue_actions.csv`](transform/seeds/venue_actions.csv) lists what you can do at a venue
+  (`open_play`, `clinic`, `private_lesson`, `group_class`, `drop_in`, `tournament`, `league`, `social_event`, `court_booking`, `club_page`),
+  each with the provider's own link, price note, dates and an `evidence` note. Today these point to [BracketSync](https://bracketsync.com):
+  Beach Tennis Cali Club's current league and club page, Beach Tennis Santa Monica, and Pop Paddle Venice. CourtConnect takes no
+  registrations or payments; the provider does. Details and what I found about BracketSync's terms: [ADR 0006](docs/decisions/0006-watch-events-and-link-out-discovery.md).
 
 ## Reviewing uncertain matches
 Some business names look like a sport but may not be ("Camino Real Tennis Center" is not Real Tennis). Those are kept out of the

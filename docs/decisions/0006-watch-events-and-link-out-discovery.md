@@ -1,6 +1,6 @@
 # ADR 0006: "Watch a match" events, and a link-out model for booking, clinics and open play
 
-**Status:** watch events built; provider integrations (booking, clinics, privates, open play, social) researched, not built
+**Status:** watch events built; link-outs to BracketSync built (hand-curated); Playtomic and PlayByPoint researched, not built
 
 ## Context
 The product is a **discovery tool**: it helps people find what they want, then sends them to the venue's or organizer's own site
@@ -31,12 +31,28 @@ or service to watch or play. It is not a booking system. Two things follow:
   Open's official site gives dates, venue and ticket types. Those six events are the seed. Pro Padel League's last California event (Santa Monica, Aug 2026) has passed.
   I found no verified "interactive dome" screenings, so `dome_screening` exists as a format but has no entries.
 
+## BracketSync (read 2026-10-10)
+- **What it is:** a tournament, league and classes app for racket and paddle sports, run by MetaPaddles, LLC. Its public pages list
+  clubs, tournaments and leagues; 10 California clubs are on it (beach tennis, paddle tennis, pickleball). The only California events listed
+  today are Beach Tennis Cali Club's leagues.
+- **Terms:** two short pages. They say nothing about reusing its data, document no API, and say people keep ownership of what they post.
+  Event pages are a JavaScript app with no sitemap or `robots.txt`. So nothing is copied in bulk, and no undocumented API is called.
+- **Decision:** link out. We store the provider, a deep link to the club or event page, the dates and price note shown there, and a
+  `verified_on` date. We do not collect its player leaderboards (named individuals).
+- **Next step:** ask MetaPaddles (the contact is on its terms page) whether it offers a feed or partner access for California events.
+
+## Hand-added venues are merged, not duplicated
+A hand-added venue within 150 m (`manual_match_radius_m`) of a court or place we already hold is **merged into it**
+(`int_manual_venue_match`), enriching its name, access and offerings; otherwise it stands alone. A test fails the build if an entry
+would vanish. Limit: a venue whose address is at the edge of a big park can land beyond 150 m and stay separate, so a park can still show
+two pins (for example a tennis court from OpenStreetMap and a hand-added paddle tennis court).
+
 ## Built
 Six California events (BNP Paribas Open; PPA stops in Malibu, Rancho Mirage, Newport Beach, Sacramento, San Clemente), a `mart_watch_events`
 model, and a **Watch a match** mode in the map app with date-ordered list, event pins, and link-outs.
 
 ## Not built (next)
-- **`venue_actions`**: per venue, links to book a court, join a clinic, take a private lesson, find open play, or sign up for a tournament,
-  each with provider, URL and `verified_on`. Fill it by hand first, then from partner APIs once access is granted.
+- **More `venue_actions`**: so far 4 BracketSync links. Next: clinics, private lessons and open play from each club's own site, and Playtomic / PlayByPoint
+  once a partner route exists. Clubs on BracketSync with no known court location (e.g. SoCal Pickleball in Burbank) cannot be pinned yet.
 - A broader events source (a ticketing-search API with a free key; check its caching and display terms before storing anything).
 - Event sources are thin on purpose: six confirmed events beat sixty unverified ones.

@@ -17,10 +17,18 @@ places as (
     join {{ ref('bridge_place_sport') }} bp on bp.place_id = p.place_id and bp.evidence = 'strong'
 ),
 
+-- A manual venue attaches to the venue it matched (see int_manual_venue_match). Its court count is per sport (a park's OSM
+-- courts may be tennis while the hand-added ones are paddle tennis), and where both sources count the same sport we take the
+-- larger number instead of adding them.
 manual as (
-    select distinct m.venue_id, s.sport_id
+    select
+        mm.effective_venue_id                                 as venue_id,
+        s.sport_id,
+        coalesce(max(m.courts_count), 0)                      as courts
     from {{ ref('stg_manual_venues') }} m
+    join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
     join {{ ref('dim_sport') }} s on s.sport_name = m.sport_name
+    group by mm.effective_venue_id, s.sport_id
 ),
 
 unioned as (
@@ -28,13 +36,13 @@ unioned as (
     union all
     select venue_id, sport_id, 0, 0, 1, 0 from places
     union all
-    select venue_id, sport_id, 0, 0, 0, 1 from manual
+    select venue_id, sport_id, courts, 0, 0, 1 from manual
 )
 
 select
     venue_id,
     sport_id,
-    sum(courts)                                               as courts,
+    max(courts)                                               as courts,
     max(in_osm) = 1                                           as in_osm,
     max(in_places) = 1                                        as in_places,
     max(in_manual) = 1                                        as in_manual

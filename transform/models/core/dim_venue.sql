@@ -35,6 +35,20 @@ best_place as (
     where rn = 1
 ),
 
+-- Hand-added venues that matched a venue we already hold (int_manual_venue_match): they enrich it, they do not duplicate it.
+best_manual as (
+    select
+        mm.effective_venue_id                                 as venue_id,
+        min(m.venue_name)                                     as venue_name,
+        min(m.website)                                        as website,
+        min(m.offerings)                                      as offerings,
+        max(case when m.access_type = 'public' then 1 else 0 end) = 1 as is_public
+    from {{ ref('stg_manual_venues') }} m
+    join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
+    where mm.is_matched
+    group by mm.effective_venue_id
+),
+
 osm_venues as (
     select
         venue_id,
@@ -67,33 +81,35 @@ osm_venues as (
 osm_final as (
     select
         v.venue_id,
-        coalesce(v.tagged_name, v.operator_name,
+        coalesce(v.tagged_name, v.operator_name, bm.venue_name,
                  case when pl.confidence >= 0.5 then pl.place_name end, pp.parent_name)   as venue_name,
         case
             when v.tagged_name is not null                      then 'court_name'
             when v.operator_name is not null                    then 'operator'
+            when bm.venue_name is not null                      then 'manual'
             when pl.confidence >= 0.5                           then 'places_directory'
             when pp.parent_name is not null                     then 'enclosing_feature'
             else 'unnamed'
         end                                                   as name_source,
-        case when v.tagged_name is null and v.operator_name is null
+        case when v.tagged_name is null and v.operator_name is null and bm.venue_name is null
                   and coalesce(pl.confidence, 0) < 0.5 then pp.parent_kind end            as name_feature_kind,
         case when pl.venue_id is not null then 'osm+places' else 'osm' end                as venue_source,
         v.court_records,
         v.facility_records,
         v.lat, v.lon,
-        coalesce(v.website, pl.website)                       as website,
+        coalesce(v.website, bm.website, pl.website)           as website,
         coalesce(v.phone, pl.phone)                           as phone,
         v.opening_hours,
         coalesce(v.address_line, pl.address_line)             as address_line,
         coalesce(v.city, pl.city)                             as city,
-        cast(null as varchar)                                 as offerings,
-        v.has_lit_courts, v.is_confirmed_public, v.has_free_courts,
+        bm.offerings                                          as offerings,
+        v.has_lit_courts, (v.is_confirmed_public or coalesce(bm.is_public, false)) as is_confirmed_public, v.has_free_courts,
         v.has_indoor, v.has_outdoor,
         v.has_hard, v.has_clay, v.has_grass, v.has_turf, v.has_sand, v.has_indoor_floor
     from osm_venues v
     left join best_parent pp on pp.venue_id = v.venue_id
     left join best_place pl on pl.venue_id = v.venue_id
+    left join best_manual bm on bm.venue_id = v.venue_id
 ),
 
 places_only as (
@@ -106,14 +122,16 @@ places_only as (
         0                                                     as court_records,
         1                                                     as facility_records,
         p.lat, p.lon,
-        p.website, p.phone,
+        coalesce(p.website, bm.website)                       as website,
+        p.phone,
         cast(null as varchar)                                 as opening_hours,
         p.address_line, p.city,
-        cast(null as varchar)                                 as offerings,
-        false as has_lit_courts, false as is_confirmed_public, false as has_free_courts,
+        bm.offerings                                          as offerings,
+        false as has_lit_courts, coalesce(bm.is_public, false) as is_confirmed_public, false as has_free_courts,
         false as has_indoor, false as has_outdoor,
         false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor
     from {{ ref('dim_place') }} p
+    left join best_manual bm on bm.venue_id = p.venue_id
     where p.matched_venue_id is null and p.has_strong_sport
 ),
 
@@ -125,7 +143,7 @@ manual_final as (
         'manual'                                              as name_source,
         cast(null as varchar)                                 as name_feature_kind,
         'manual'                                              as venue_source,
-        0                                                     as court_records,
+        coalesce(max(courts_count), 0)                        as court_records,
         1                                                     as facility_records,
         min(lat)                                              as lat,
         min(lon)                                              as lon,
@@ -135,7 +153,9 @@ manual_final as (
         cast(null as varchar)                                 as address_line,
         min(city)                                             as city,
         min(offerings)                                        as offerings,
-        false as has_lit_courts, false as is_confirmed_public, false as has_free_courts,
+        false as has_lit_courts,
+        max(case when access_type = 'public' then 1 else 0 end) = 1 as is_confirmed_public,
+        false as has_free_courts,
         max(case when setting = 'indoor' then 1 else 0 end) = 1                               as has_indoor,
         max(case when setting in ('outdoor', 'likely_outdoor', 'covered') then 1 else 0 end) = 1 as has_outdoor,
         max(case when surface_type = 'hard' then 1 else 0 end) = 1    as has_hard,
@@ -144,8 +164,10 @@ manual_final as (
         max(case when surface_type = 'turf' then 1 else 0 end) = 1    as has_turf,
         max(case when surface_type = 'sand' then 1 else 0 end) = 1    as has_sand,
         false as has_indoor_floor
-    from {{ ref('stg_manual_venues') }}
-    group by venue_id
+    from {{ ref('stg_manual_venues') }} m
+    join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
+    where not mm.is_matched
+    group by m.venue_id
 ),
 
 unioned as (

@@ -16,6 +16,19 @@ seeds:
         year_origin: varchar   # intentionally raw: values like '1500/1700'
     osm_sport_map:
       +schema: raw
+    manual_venues:           # keep text columns as text even when a column happens to be blank or numeric-looking
+      +column_types:
+        courts: varchar
+        access: varchar
+        rules: varchar
+        website: varchar
+        offerings: varchar
+    venue_actions:           # dates stay text in the seed; the staging model casts them
+      +column_types:
+        start_date: varchar
+        end_date: varchar
+        verified_on: varchar
+        price_info: varchar
     watch_events:            # dates stay text in the seed; the staging model casts them (same on DuckDB and Snowflake)
       +column_types:
         start_date: varchar
@@ -46,5 +59,6 @@ models:
 
 vars:
   expected_racket_sports: 76   # the sheet should list 76 racket sports; a warn-level test flags any gap
+  manual_match_radius_m: 150   # a hand-added venue within this distance of a known court/place is merged into it
   place_match_radius_m: 100    # an Overture place within this distance of an OSM court is part of that venue
   venue_radius_m: 75   # courts closer than this are treated as the same facility
