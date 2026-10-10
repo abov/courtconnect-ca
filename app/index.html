@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CourtConnect California</title>
+<meta name="description" content="Find where to play racket sports in California: tennis, pickleball, padel, beach tennis and more, with honest notes on how complete the data is.">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V" crossorigin="anonymous">
+<style>
+  :root {
+    --bg: #ffffff; --panel: #f6f8fa; --text: #1f2328; --muted: #59636e; --line: #d1d9e0; --accent: #0969da;
+    --ok: #1a7f37; --warn: #9a6700; --bad: #cf222e; --chip: #ffffff; --chip-on: #ddf4ff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0d1117; --panel: #151b23; --text: #e6edf3; --muted: #9198a1; --line: #3d444d; --accent: #4493f8;
+            --ok: #3fb950; --warn: #d29922; --bad: #f85149; --chip: #0d1117; --chip-on: #0c2d6b; }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font: 14px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--text); background: var(--bg);
+         display: grid; grid-template-columns: 390px 1fr; }
+  #panel { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+  #map { min-height: 0; }
+  header { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
+  h1 { font-size: 18px; margin: 0 0 2px; }
+  .sub { color: var(--muted); font-size: 12.5px; }
+  .controls { padding: 12px 16px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
+  label.l { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 3px; }
+  select, input[type=search] { width: 100%; padding: 7px 9px; font: inherit; color: var(--text); background: var(--bg);
+         border: 1px solid var(--line); border-radius: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font: inherit; font-size: 12.5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line);
+          background: var(--chip); color: var(--text); cursor: pointer; }
+  .chip[aria-pressed=true] { background: var(--chip-on); border-color: var(--accent); color: var(--text); font-weight: 600; }
+  .chip:focus-visible, select:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
+  button.link:hover { text-decoration: underline; }
+  #count { padding: 8px 16px; font-size: 12.5px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  #count b { color: var(--text); }
+  #list { overflow: auto; flex: 1; min-height: 0; margin: 0; padding: 0; list-style: none; }
+  #list li { border-bottom: 1px solid var(--line); }
+  #list button { all: unset; display: block; width: 100%; box-sizing: border-box; padding: 9px 16px; cursor: pointer; }
+  #list button:hover, #list button:focus-visible { background: var(--chip-on); }
+  .nm { font-weight: 600; }
+  .meta { color: var(--muted); font-size: 12.5px; }
+  .badge { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
+  .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
+  .badge.i { color: var(--warn); border-color: var(--warn); }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); padding: 6px 16px 10px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid #fff; box-shadow: 0 0 0 1px var(--line); }
+  footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
+  footer a { color: var(--accent); }
+  .maplibregl-popup-content { color: #1f2328; font: 13px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 290px; }
+  .maplibregl-popup-content h2 { font-size: 15px; margin: 0 0 4px; padding-right: 14px; }
+  .maplibregl-popup-content .badge { color: #59636e; }
+  .maplibregl-popup-content .badge.c { color: #1a7f37; } .maplibregl-popup-content .badge.p { color: #0969da; } .maplibregl-popup-content .badge.i { color: #9a6700; }
+  .maplibregl-popup-content p { margin: 5px 0; }
+  dialog { max-width: 760px; width: calc(100vw - 32px); max-height: 86vh; border: 1px solid var(--line); border-radius: 10px; padding: 0;
+           background: var(--bg); color: var(--text); }
+  dialog::backdrop { background: rgba(0,0,0,.45); }
+  .dlg-h { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .dlg-h h2 { margin: 0; font-size: 16px; }
+  .dlg-b { padding: 14px 18px 18px; overflow: auto; max-height: calc(86vh - 60px); }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-size: 12px; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .st { font-size: 11.5px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+  .st.covered { color: var(--ok); border-color: var(--ok); } .st.sparse { color: var(--warn); border-color: var(--warn); }
+  .st.tagged_none_found, .st.not_found, .st.possible_only { color: var(--bad); border-color: var(--bad); }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg); z-index: 5; color: var(--muted); }
+  @media (max-width: 800px) {
+    body { grid-template-columns: 1fr; grid-template-rows: 52vh 1fr; }
+    #map { order: -1; } #panel { border-right: 0; border-top: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<div id="loading" role="status">Loading venues...</div>
+
+<aside id="panel" aria-label="Filters and results">
+  <header>
+    <h1>CourtConnect California</h1>
+    <div class="sub" id="headline">&nbsp;</div>
+    <div class="row" style="margin-top:6px">
+      <button class="link" id="openCoverage" type="button">How complete is this data?</button>
+      <button class="link" id="nearMe" type="button">Near me</button>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div>
+      <label class="l" for="sport">Sport</label>
+      <select id="sport"></select>
+    </div>
+    <div>
+      <label class="l" for="q">Search name or city</label>
+      <input id="q" type="search" placeholder="e.g. Manhattan Beach" autocomplete="off">
+    </div>
+    <div>
+      <span class="l">Setting and surface</span>
+      <div class="chips" id="chipsPlay">
+        <button class="chip" data-k="indoor" aria-pressed="false">Indoor</button>
+        <button class="chip" data-k="outdoor" aria-pressed="false">Outdoor</button>
+        <button class="chip" data-k="sand" aria-pressed="false">Sand / beach</button>
+        <button class="chip" data-k="clay" aria-pressed="false">Clay</button>
+        <button class="chip" data-k="grass" aria-pressed="false">Grass</button>
+        <button class="chip" data-k="hard" aria-pressed="false">Hard</button>
+      </div>
+    </div>
+    <div>
+      <span class="l">Good to know</span>
+      <div class="chips" id="chipsInfo">
+        <button class="chip" data-k="public" aria-pressed="false">Public</button>
+        <button class="chip" data-k="free" aria-pressed="false">Free</button>
+        <button class="chip" data-k="lit" aria-pressed="false">Lights</button>
+        <button class="chip" data-k="web" aria-pressed="false">Has website</button>
+        <button class="chip" data-k="named" aria-pressed="false">Hide unnamed</button>
+      </div>
+    </div>
+    <div id="offerBox" hidden>
+      <span class="l">What they offer</span>
+      <div class="chips" id="chipsOffer">
+        <button class="chip" data-o="O" aria-pressed="false">Open play</button>
+        <button class="chip" data-o="C" aria-pressed="false">Clinics</button>
+        <button class="chip" data-o="L" aria-pressed="false">Private lessons</button>
+        <button class="chip" data-o="G" aria-pressed="false">Group classes</button>
+        <button class="chip" data-o="T" aria-pressed="false">Tournaments</button>
+      </div>
+    </div>
+    <div class="row"><button class="link" id="reset" type="button">Clear filters</button></div>
+  </div>
+
+  <div id="count" aria-live="polite"></div>
+  <ul id="list"></ul>
+  <div class="legend" aria-label="Map legend">
+    <span><span class="dot" style="background:#1a7f37"></span>Confirmed name</span>
+    <span><span class="dot" style="background:#0969da"></span>Business listing</span>
+    <span><span class="dot" style="background:#d4a72c"></span>Name inferred from park/school</span>
+    <span><span class="dot" style="background:#8c959f"></span>Unnamed courts</span>
+  </div>
+  <footer id="attr"></footer>
+</aside>
+
+<main id="map" aria-label="Map of racket-sport venues in California"></main>
+
+<dialog id="coverage" aria-labelledby="covTitle">
+  <div class="dlg-h"><h2 id="covTitle">How complete is this data?</h2><button class="link" id="closeCoverage" type="button">Close</button></div>
+  <div class="dlg-b">
+    <p id="covIntro"></p>
+    <table><thead><tr><th>Sport</th><th>Status</th><th class="n">Venues</th></tr></thead><tbody id="covBody"></tbody></table>
+    <p class="meta" style="margin-top:12px">Statuses: <b>covered</b> 5+ venues; <b>sparse</b> 1&ndash;4; <b>tagged_none_found</b> the map community has a tag for it but nothing is mapped here;
+    <b>not_found</b> nothing in either source. Missing is not the same as nonexistent: many of these are informal games with no clubs.</p>
+  </div>
+</dialog>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" integrity="sha384-SYKAG6cglRMN0RVvhNeBY0r3FYKNOJtznwA0v7B5Vp9tr31xAHsZC0DqkQ/pZDmj" crossorigin="anonymous"></script>
+<script>
+"use strict";
+const SURF = {indoor: 1, outdoor: 2, sand: 4, clay: 8, grass: 16, hard: 32, turf: 64};
+const QNAME = {c: "Confirmed name", p: "Business listing", i: "Name inferred from nearby park or school", u: "Unnamed courts"};
+const QSHORT = {c: "Confirmed", p: "Listing", i: "Inferred", u: "Unnamed"};
+const SRC = {o: "OpenStreetMap", p: "Places directory", b: "OpenStreetMap + places directory", m: "Hand-curated"};
+const OFFER = {O: "Open play", C: "Clinics", L: "Private lessons", G: "Group classes", D: "Drop-in", T: "Tournaments"};
+
+let DATA, sports, venues;
+const state = {sport: -1, text: "", on: new Set(), offers: new Set()};
+const $ = id => document.getElementById(id);
+
+function el(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) { if (k === "class") e.className = v; else if (k === "text") e.textContent = v; else e.setAttribute(k, v); }
+  for (const kid of kids) if (kid != null) e.append(kid);
+  return e;
+}
+function safeUrl(u) { try { const x = new URL(u.includes("//") ? u : "http://" + u); return /^https?:$/.test(x.protocol) ? x.href : ""; } catch { return ""; } }
+const fmt = n => n.toLocaleString("en-US");
+
+// ---------- filtering ----------
+function surfMask() { let m = 0; for (const k of ["sand", "clay", "grass", "hard"]) if (state.on.has(k)) m |= SURF[k]; return m; }
+function setMask() { let m = 0; for (const k of ["indoor", "outdoor"]) if (state.on.has(k)) m |= SURF[k]; return m; }
+function matches(v, sm, tm, vf) {
+  let mask;
+  if (state.sport >= 0) { const e = v.p.find(p => p[0] === state.sport); if (!e) return false; mask = e[2]; } else mask = v.m;
+  if (sm && !(mask & sm)) return false;
+  if (tm && !(mask & tm)) return false;
+  if (vf && (v.f & vf) !== vf) return false;
+  if (state.on.has("web") && !v.w) return false;
+  if (state.on.has("named") && v.q === "u") return false;
+  if (state.offers.size && ![...state.offers].some(c => v.o.includes(c))) return false;
+  if (state.text && !v.t.includes(state.text)) return false;
+  return true;
+}
+function filtered() {
+  const sm = surfMask(), tm = setMask();
+  const vf = (state.on.has("lit") ? 1 : 0) | (state.on.has("public") ? 2 : 0) | (state.on.has("free") ? 4 : 0);
+  return venues.filter(v => matches(v, sm, tm, vf));
+}
+
+// ---------- map ----------
+let map, popup, current = [];
+function geojson(list) {
+  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
+}
+function initMap() {
+  map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: [[-124.6, 32.4], [-114.0, 42.2]],
+                            fitBoundsOptions: {padding: 20}, attributionControl: false});
+  map.addControl(new maplibregl.NavigationControl({showCompass: false}), "top-right");
+  map.addControl(new maplibregl.AttributionControl({compact: true, customAttribution: DATA.meta.attribution}));
+  popup = new maplibregl.Popup({closeButton: true, maxWidth: "300px", offset: 10});
+  map.on("load", () => {
+    map.resize();                                                  // the grid may not have settled when the map was created
+    map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, animate: false});
+    map.addSource("v", {type: "geojson", data: geojson(current), cluster: true, clusterRadius: 38, clusterMaxZoom: 13});
+    map.addLayer({id: "clusters", type: "circle", source: "v", filter: ["has", "point_count"],
+      paint: {"circle-color": "#0969da", "circle-opacity": 0.78, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
+              "circle-radius": ["step", ["get", "point_count"], 14, 25, 18, 150, 23, 600, 29]}});
+    map.addLayer({id: "cluster-count", type: "symbol", source: "v", filter: ["has", "point_count"],
+      layout: {"text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Regular"], "text-size": 12},
+      paint: {"text-color": "#fff"}});
+    map.addLayer({id: "pts", type: "circle", source: "v", filter: ["!", ["has", "point_count"]],
+      paint: {"circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 4, 14, 8], "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
+              "circle-color": ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"]}});
+    map.on("click", "clusters", e => {
+      const f = map.queryRenderedFeatures(e.point, {layers: ["clusters"]})[0];
+      map.getSource("v").getClusterExpansionZoom(f.properties.cluster_id).then(z => map.easeTo({center: f.geometry.coordinates, zoom: z + 0.5}));
+    });
+    map.on("click", "pts", e => showVenue(byKey[e.features[0].properties.k], false));
+    for (const l of ["clusters", "pts"]) {
+      map.on("mouseenter", l, () => map.getCanvas().style.cursor = "pointer");
+      map.on("mouseleave", l, () => map.getCanvas().style.cursor = "");
+    }
+    map.on("moveend", debounce(renderList, 150));
+    refresh();
+  });
+}
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+// ---------- venue details ----------
+function sportLine(v) { return v.p.map(p => sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court)" : " courts)") : "")).join(", "); }
+function facts(v, entry) {
+  const out = [], m = entry ? entry[2] : v.m;
+  for (const [k, label] of [["indoor", "Indoor"], ["outdoor", "Outdoor"], ["sand", "Sand"], ["clay", "Clay"], ["grass", "Grass"], ["hard", "Hard court"]]) if (m & SURF[k]) out.push(label);
+  if (v.f & 1) out.push("Lights"); if (v.f & 2) out.push("Public"); if (v.f & 4) out.push("Free");
+  return out;
+}
+function venueNode(v) {
+  const box = el("div");
+  box.append(el("h2", {text: v.n || "Unnamed courts"}));
+  box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q]})));
+  const place = [v.a, v.c].filter(Boolean).join(", ");
+  if (place) box.append(el("p", {class: "meta", text: place}));
+  box.append(el("p", {}, el("b", {text: "Plays: "}), document.createTextNode(sportLine(v))));
+  const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
+  if (f.length) box.append(el("p", {text: f.join(" · ")}));
+  if (v.o) box.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].map(c => OFFER[c]).join(", "))));
+  const url = v.w ? safeUrl(v.w) : "";
+  if (url) box.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
+  box.append(el("p", {class: "meta", text: "Source: " + SRC[v.s] + (v.q === "i" ? ". Name is a guess from the park or school the courts sit inside." : "")}));
+  return box;
+}
+function showVenue(v, fly) {
+  if (!v) return;
+  if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true});
+  popup.setLngLat([v.x, v.y]).setDOMContent(venueNode(v)).addTo(map);
+}
+
+// ---------- list + counts ----------
+function dist2(v, c) { const dx = (v.x - c.lng) * Math.cos(c.lat * Math.PI / 180), dy = v.y - c.lat; return dx * dx + dy * dy; }
+function renderList() {
+  const c = map.getCenter(), b = map.getBounds();
+  const inView = current.filter(v => b.contains([v.x, v.y]));
+  const pool = inView.length ? inView : current;
+  const top = pool.map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).slice(0, 40).map(x => x[1]);
+  const ul = $("list"); ul.replaceChildren();
+  for (const v of top) {
+    const btn = el("button", {type: "button"},
+      el("div", {class: "nm", text: v.n || "Unnamed courts" + (v.c ? " in " + v.c : "")}),
+      el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}),
+      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q]}), v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null));
+    btn.addEventListener("click", () => showVenue(v, true));
+    ul.append(el("li", {}, btn));
+  }
+  const total = current.length;
+  $("count").replaceChildren(el("b", {text: fmt(total)}), document.createTextNode(" venues match" +
+    (inView.length !== total ? " · " + fmt(inView.length) + " in view" : "") + (top.length ? " · nearest " + top.length + " to the map centre:" : "")));
+}
+function refresh() {
+  current = filtered();
+  if (map.getSource("v")) map.getSource("v").setData(geojson(current));
+  renderList(); writeHash();
+}
+
+// ---------- controls, hash state ----------
+function writeHash() {
+  const p = new URLSearchParams();
+  if (state.sport >= 0) p.set("sport", sports[state.sport].n);
+  if (state.on.size) p.set("on", [...state.on].join(","));
+  if (state.offers.size) p.set("offer", [...state.offers].join(""));
+  if (state.text) p.set("q", state.text);
+  history.replaceState(null, "", p.toString() ? "#" + p : location.pathname + location.search);
+}
+function readHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const s = p.get("sport"); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
+  for (const k of (p.get("on") || "").split(",")) if (k) state.on.add(k);
+  for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
+  state.text = (p.get("q") || "").toLowerCase();
+}
+function syncControls() {
+  $("sport").value = String(state.sport); $("q").value = state.text;
+  for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
+  for (const b of document.querySelectorAll("[data-o]")) b.setAttribute("aria-pressed", state.offers.has(b.dataset.o));
+}
+function initControls() {
+  const sel = $("sport");
+  sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(venues.length) + " venues)"}));
+  sports.forEach((s, i) => { if (s.v > 0) sel.append(el("option", {value: String(i), text: s.n + " (" + fmt(s.v) + ")"})); });
+  sel.addEventListener("change", () => { state.sport = +sel.value; refresh(); });
+  $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); refresh(); }, 200));
+  for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
+    const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();
+  });
+  for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
+    const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); refresh();
+  });
+  $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
+  $("offerBox").hidden = !venues.some(v => v.o);
+  $("nearMe").addEventListener("click", () => {
+    if (!navigator.geolocation) return alert("Your browser does not support location.");
+    navigator.geolocation.getCurrentPosition(
+      pos => map.flyTo({center: [pos.coords.longitude, pos.coords.latitude], zoom: 12}),   // used only in your browser, never sent anywhere
+      () => alert("Could not get your location. You can still search by city."), {timeout: 8000});
+  });
+}
+function initCoverage() {
+  const m = DATA.meta;
+  $("headline").textContent = fmt(m.venues) + " venues · " + fmt(m.named) + " named (" + fmt(m.confirmed) + " confirmed) · " + m.sports_with_venues + " of " + m.sports_total + " sports found";
+  $("covIntro").textContent = "This map combines OpenStreetMap courts with the Overture Maps places dataset. " + fmt(m.named) + " of " + fmt(m.venues) +
+    " venues have a name, and only " + fmt(m.confirmed) + " of those names are confirmed; the rest are guessed from the park or school the courts sit in. " +
+    "Only " + m.sports_with_venues + " of " + m.sports_total + " racket sports have any venue here. Data as of " + m.generated + ".";
+  const body = $("covBody");
+  const order = {covered: 0, sparse: 1, possible_only: 2, tagged_none_found: 3, not_found: 4};
+  [...sports].sort((a, b) => (order[a.s] - order[b.s]) || (b.v - a.v)).forEach(s =>
+    body.append(el("tr", {}, el("td", {text: s.n}), el("td", {}, el("span", {class: "st " + s.s, text: s.s})), el("td", {class: "n", text: fmt(s.v)}))));
+  $("openCoverage").addEventListener("click", () => $("coverage").showModal());
+  $("closeCoverage").addEventListener("click", () => $("coverage").close());
+  $("attr").replaceChildren(document.createTextNode(m.attribution + " Map: OpenFreeMap, © OpenMapTiles. "),
+    el("a", {href: "https://github.com/abov/courtconnect-ca", target: "_blank", rel: "noopener noreferrer", text: "Source code"}));
+}
+
+// ---------- boot ----------
+let byKey = {};
+fetch("data/venues.json").then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(d => {
+  DATA = d; sports = d.sports; venues = d.venues;
+  venues.forEach((v, i) => {
+    v.k = i; byKey[i] = v;
+    v.m = v.p.reduce((a, p) => a | p[2], 0);
+    v.t = (v.n + " " + v.c).toLowerCase();
+  });
+  readHash(); initControls(); initCoverage(); syncControls();
+  initMap();
+  $("loading").remove();
+}).catch(err => { $("loading").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });
+</script>
+</body>
+</html>

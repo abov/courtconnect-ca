@@ -49,6 +49,17 @@ highest-confidence listings are dead about 1 time in 12 (8.5%; OpenStreetMap: 0 
 dead links. A site only counts as dead on a definitive "domain does not exist" answer, so a flaky network can't mislabel a good one.
 See `marts.mart_website_quality`.
 
+## The map app
+A static, no-server page in [`app/`](app): filter by sport, surface (sand, clay, grass, hard), indoor/outdoor, public/free/lights,
+what a club offers (lessons, open play, tournaments), or search by name or city. Pins are coloured by how much to trust the name
+(confirmed, business listing, inferred from the park, unnamed) and the **How complete is this data?** panel lists all 75 sports with
+their status. Filters live in the URL, so any view is shareable. It reads one 1.3 MB file and phone numbers are never exported.
+
+```bash
+make app-data   # export from the warehouse
+make app        # open http://localhost:8765
+```
+
 ## Reviewing uncertain matches
 Some business names look like a sport but may not be ("Camino Real Tennis Center" is not Real Tennis). Those are kept out of the
 totals and listed in `marts.mart_places_to_review`. To confirm or reject one, add a row to

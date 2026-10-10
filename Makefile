@@ -45,5 +45,11 @@ snowflake-build:  ## run the same project on Snowflake
 	$(PY) ingestion/load_raw.py --target snowflake
 	$(DBT) build --target snowflake
 
+app-data:        ## export the venue finder to app/data/venues.json for the map
+	$(PY) ingestion/export_app_data.py
+
+app:             ## serve the map at http://localhost:8765
+	$(PY) -m http.server 8765 --directory app
+
 report:           ## regenerate docs/coverage_snapshot.md and docs/sport_name_review.md
 	$(PY) ingestion/export_coverage_report.py
