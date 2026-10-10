@@ -32,6 +32,8 @@ select
     v.city,
     v.address_line,
     v.website,
+    v.website_status,
+    case when v.website_status = 'dead' then null else v.website end   as website_usable,   -- hides links to domains that no longer exist
     v.phone,
     v.opening_hours,
     v.google_place_id,

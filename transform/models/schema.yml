@@ -134,6 +134,18 @@ models:
               arguments:
                 values: ['court_name', 'operator', 'places_directory', 'manual', 'enclosing_feature', 'unnamed']
 
+  - name: stg_website_checks
+    description: Website domain checks (DNS only). 'dead' means the domain definitively does not exist; 'unknown' is inconclusive.
+    columns:
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['ok', 'dead', 'unknown']
+
+  - name: mart_website_quality
+    description: Dead-website rate by source and Overture confidence band.
+
   - name: stg_overture_places
     description: Racket-related places from Overture Maps, closed businesses removed.
     columns:

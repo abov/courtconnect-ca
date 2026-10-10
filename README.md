@@ -42,6 +42,13 @@ Snowflake `RAW.ALL_RACQUET` table by hand: the next sync overwrites both.
 Alternate names for a sport (e.g. "Frescobol" for Frescoball) go in [`transform/seeds/sport_aliases.csv`](transform/seeds/sport_aliases.csv).
 Sports that OpenStreetMap cannot find, and why, are listed in [`docs/sport_name_review.md`](docs/sport_name_review.md). Data licenses and attribution: [`NOTICE.md`](NOTICE.md).
 
+## Dead websites
+Listings go stale: about 10% of the websites in the open places data point at domains that no longer exist, and even its
+highest-confidence listings are dead about 1 time in 12 (8.5%; OpenStreetMap: 0 of 64). `make check-websites` runs a DNS-only check
+(no pages fetched), flags each venue's `website_status` (`ok`, `dead`, `unknown`) and the app-facing `website_usable` column hides
+dead links. A site only counts as dead on a definitive "domain does not exist" answer, so a flaky network can't mislabel a good one.
+See `marts.mart_website_quality`.
+
 ## Reviewing uncertain matches
 Some business names look like a sport but may not be ("Camino Real Tennis Center" is not Real Tennis). Those are kept out of the
 totals and listed in `marts.mart_places_to_review`. To confirm or reject one, add a row to

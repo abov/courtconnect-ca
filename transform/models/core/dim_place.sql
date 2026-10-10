@@ -15,6 +15,8 @@ select
     p.lon,
     p.confidence,
     p.website,
+    {{ website_domain('p.website') }}                         as website_domain,
+    {{ website_status('p.website', 'w.status') }}             as website_status,
     p.phone,
     p.address_line,
     p.city,
@@ -29,3 +31,4 @@ select
 from {{ ref('stg_overture_places') }} p
 left join {{ ref('int_place_venue_match') }} m on m.place_id = p.place_id
 left join strong s on s.place_id = p.place_id
+left join {{ ref('stg_website_checks') }} w on w.domain = {{ website_domain('p.website') }}

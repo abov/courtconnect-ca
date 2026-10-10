@@ -20,11 +20,13 @@ TABLES = {
     "osm_parents": ("osm_parents.csv", ["osm_id", "minlat", "minlon", "maxlat", "maxlon"]),
     "overture_places": ("overture_places.csv", ["lat", "lon", "confidence"]),
     "google_place_ids": ("google_place_ids.csv", []),
+    "website_checks": ("website_checks.csv", []),
 }
 
 # Tables that may legitimately have no file yet (the Google lookup is opt-in). They load as empty tables with
 # these columns, so dbt models that read them still build.
-OPTIONAL = {"google_place_ids": ["venue_id", "google_place_id", "resolved_at"]}
+OPTIONAL = {"google_place_ids": ["venue_id", "google_place_id", "resolved_at"],
+            "website_checks": ["domain", "status", "resolved_host", "checked_at"]}
 
 
 def load_duckdb(table: str, df: pd.DataFrame, db_path: str) -> None:

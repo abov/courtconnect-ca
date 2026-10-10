@@ -10,6 +10,8 @@ sources:
         loaded_at_field: extracted_at
         freshness:
           warn_after: {count: 7, period: day}
+      - name: website_checks
+        description: Does each listed website's domain still exist (DNS only)? Written by ingestion/check_websites.py; empty until it is run.
       - name: google_place_ids
         description: Venue to Google place ID, nothing else (ID-only storage is what Google's terms allow). Empty until ingestion/google_place_ids.py is run.
       - name: overture_places

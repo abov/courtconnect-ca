@@ -26,6 +26,9 @@ sport-map:        ## rebuild the OSM-tag -> sport mapping from the synced sheet
 sync-sports:    ## refresh the sports list from the Google Sheet
 	$(PY) ingestion/sync_sports_sheet.py
 
+check-websites: ## flag venue websites whose domain no longer exists (DNS only, ~1 min)
+	$(PY) ingestion/check_websites.py
+
 load:             ## load raw CSV into DuckDB
 	$(PY) ingestion/load_raw.py
 

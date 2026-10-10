@@ -36,6 +36,13 @@ Places results, published in a public repo, is exactly what those terms are writ
 
 Identical results on DuckDB and Snowflake, checked row by row.
 
+## Website check (added after finding a dead link)
+A place we nearly added (Playbt Beach Tennis Academy, confidence 0.85) had a website that no longer exists. Checking every listed
+website (DNS only, `ingestion/check_websites.py`) found: **Overture 10% dead** (8.5% at confidence 0.9+, 12-14% below), **OpenStreetMap 0 of 64**.
+Confidence is only a weak guide to staleness. Venues carry `website_status`; the venue finder exposes `website_usable`, which hides dead
+links. Only a definitive "domain does not exist" is `dead`; timeouts are `unknown`. Limit: a live domain can still be a parked or resold
+site, which DNS cannot detect. (My first quick check said 12% because it tested only the `www.` host; checking both fixed that.)
+
 ## Known gaps
 - **This did not solve the niche sports.** Business names mention only 12 of 75 sports. 53 still have nothing in either source:
   these are mostly informal games with no clubs. Realistic sources are governing-body and club directories, and community
