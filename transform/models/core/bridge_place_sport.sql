@@ -70,8 +70,26 @@ confirmed as (
     select place_id, sport_id, 'manual' as match_type, 'confirmed in review' as matched_term, 'strong' as evidence
     from overrides
     where verdict = 'confirm'
+),
+
+settled as (
+    select * from kept
+    union all
+    select * from confirmed
+),
+
+-- A place that offers sport A also offers sport B where sport_also_played.csv says so (racquetball courts host 4-wall paddle).
+-- The derived row keeps the evidence strength of the row it comes from, and its matched_term says why it is there.
+also_played as (
+    select s.place_id, d.sport_id, 'also_played' as match_type,
+           'also played on ' || lower(trim(a.sport)) || ' courts' as matched_term, s.evidence
+    from settled s
+    join {{ ref('dim_sport') }} f on f.sport_id = s.sport_id
+    join {{ ref('sport_also_played') }} a on trim(a.sport) = f.sport_name
+    join {{ ref('dim_sport') }} d on d.sport_name = trim(a.also_sport)
+    where not exists (select 1 from settled x where x.place_id = s.place_id and x.sport_id = d.sport_id)
 )
 
-select * from kept
+select * from settled
 union all
-select * from confirmed
+select * from also_played

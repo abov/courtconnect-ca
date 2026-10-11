@@ -463,11 +463,11 @@ function populateSports() {
     const up = upcomingEvents(), counts = {};
     up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
     sel.append(el("option", {value: "-1", text: "All sports (" + up.length + " events)"}));
-    sports.forEach((s, i) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[s.n] + ")"})); });
+    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[s.n] + ")"})); });
     if (state.sport >= 0 && !counts[sports[state.sport].n]) state.sport = -1;
   } else {
     sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(venues.length) + " venues)"}));
-    sports.forEach((s, i) => { if (s.v > 0) sel.append(el("option", {value: String(i), text: s.n + " (" + fmt(s.v) + ")"})); });
+    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (s.v > 0) sel.append(el("option", {value: String(i), text: s.n + " (" + fmt(s.v) + ")"})); });
   }
   sel.value = String(state.sport);
 }
