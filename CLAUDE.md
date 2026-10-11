@@ -39,4 +39,6 @@ README.md has the full story; read it only if you need background. Decisions are
 ## Current status
 Phase 1 done, plus padel/beach tennis link-outs, platform tennis lead, confirmation levels (visited/official/reported) with map badges,
 a leads backlog (`venue_leads.csv`, `mart_venue_leads`), a "Report a venue" issue form, and table tennis/badminton additions (ADR 0007).
-Next: commit/deploy this step (CI + `gh workflow run pages.yml`), more link-outs, directories for the 53 no-data sports; MIT license and BracketSync outreach still undecided.
+Committed (fd329db), CI green, and deployed via `pages.yml` on 2026-10-11.
+MIT `LICENSE` added (code only; data terms stay in NOTICE.md) and BracketSync message drafted in `docs/outreach/bracketsync.md` (unsent).
+Next: more link-outs, directories for the 53 no-data sports; send the BracketSync message.
