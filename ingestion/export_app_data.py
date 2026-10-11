@@ -14,7 +14,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
      s source: o OpenStreetMap, p places, b both, m hand-curated
-     f venue bits: 1 lit, 2 public, 4 free      p[i][2] sport bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf
+     f venue bits: 1 lit, 2 public, 4 free, 8 members-only (marked private/members, not marked public)      p[i][2] sport bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf
 """
 from __future__ import annotations
 
@@ -49,7 +49,7 @@ def main() -> None:
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, address_line,
                website_usable, offerings, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
-               has_lit_courts, is_confirmed_public, has_free_courts
+               has_lit_courts, is_confirmed_public, has_free_courts, is_members_only
         from marts.mart_venue_finder""").fetchall()
 
     # Things to do at a venue: link-outs to the provider's own page (CourtConnect books nothing). Current ones only.
@@ -84,7 +84,7 @@ def main() -> None:
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
     for (vid, name, nsrc, vsrc, sport, courts, lat, lon, city, addr, web, offers, indoor, outdoor, sand, clay, grass, hard, turf,
-         lit, public, free) in rows:
+         lit, public, free, members) in rows:
         if lat is None or lon is None:
             continue
         if vid not in venues:
@@ -99,7 +99,7 @@ def main() -> None:
                 "a": addr or "",
                 "w": web or "",
                 "o": "".join(OFFER_CODES[o] for o in (offers or "").split(";") if o in OFFER_CODES),
-                "f": (1 if lit else 0) | (2 if public else 0) | (4 if free else 0),
+                "f": (1 if lit else 0) | (2 if public else 0) | (4 if free else 0) | (8 if members else 0),
             }
         mask = sum(bit for flag, bit in ((indoor, 1), (outdoor, 2), (sand, 4), (clay, 8), (grass, 16), (hard, 32), (turf, 64)) if flag)
         entries[vid].append([sport_index[sport], int(courts or 0), mask])
