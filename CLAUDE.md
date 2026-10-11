@@ -37,9 +37,9 @@ README.md has the full story; read it only if you need background. Decisions are
 - `ci/fixtures`  small sample data for CI
 
 ## Current status
-Phase 1 done, plus padel/beach tennis link-outs, platform tennis lead, confirmation levels (visited/official/reported) with map badges,
-a leads backlog (`venue_leads.csv`, `mart_venue_leads`), a "Report a venue" issue form, and table tennis/badminton additions (ADR 0007).
-Committed (fd329db), CI green, and deployed via `pages.yml` on 2026-10-11.
-MIT `LICENSE` added (code only; data terms stay in NOTICE.md) and BracketSync message drafted in `docs/outreach/bracketsync.md` (unsent).
-Contributor workflow, `venue_confirmations.csv` and map counts are deployed (2026-10-10). Uncommitted: padel false positives rejected (`osm_court_sport_overrides.csv`), racquetball courts also count as 4-wall paddle (`sport_also_played.csv`), Calismash, Calabasas Pickleball Club (pickleball + Typti) and Padel Up Culver City added, sport dropdown sorted A-Z, CI evidence test. `main` is branch-protected (PR + `dbt-build` check; owner can bypass). Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash).
-Next: commit/deploy, Venice padel question, add reviewers as collaborators, more link-outs, directories for the 53 no-data sports; send the BracketSync message.
+Phase 1 done: link-outs, confirmation levels (visited/official/reported) with map badges, leads backlog (`venue_leads.csv`), contributor workflow (ADR 0008), table tennis/badminton (ADR 0007). `main` is branch-protected (PR + `dbt-build`; owner can bypass). Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash). Last session (2026-10-10): rejected padel tags at Fox Hills Park, the unnamed court beside it, and Mindanao Way; added lead `mindanao-way-paddle-tennis` (needs a look; paddle tennis = pop tennis).
+Next session, one task, in this order:
+1. **Private/member clubs** (use public pages only, ADR 0007; no Google Places, ADR 0005). Seed: South End Racquet Club, West End Racquet Club, Manhattan Country Club; check which Equinox locations list racket sports. Then widen to California clubs found via Overture/OSM (`leisure=sports_centre`, `club=sport`), densest areas first (LA, OC, Bay Area, San Diego). Label each as reported/official; say the list is incomplete.
+2. **Map access toggle:** three views, public only / private (members) only / both. Use the existing `access` field; keep models engine-neutral; update the app filter and counts.
+3. **Directories for the 53 no-data sports:** start with the ~10 most plausible; per sport add a `venue_actions.csv` link-out (keep `verified_on` + `evidence`), a lead, or note "no usable directory". Then refresh `docs/coverage_snapshot.md`.
+Other open items: add reviewers as collaborators (owner's call, placeholder wanted); owner to send BracketSync message (`docs/outreach/bracketsync.md`); optional OSM fixes by the owner for the six padel-tagged ways (changeset note: checked on the ground). Unchecked: deploy of `66f8a29`, and the `assert_all_racket_sports_loaded` warning.
