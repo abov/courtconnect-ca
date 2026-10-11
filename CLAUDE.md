@@ -41,4 +41,5 @@ Phase 1 done, plus padel/beach tennis link-outs, platform tennis lead, confirmat
 a leads backlog (`venue_leads.csv`, `mart_venue_leads`), a "Report a venue" issue form, and table tennis/badminton additions (ADR 0007).
 Committed (fd329db), CI green, and deployed via `pages.yml` on 2026-10-11.
 MIT `LICENSE` added (code only; data terms stay in NOTICE.md) and BracketSync message drafted in `docs/outreach/bracketsync.md` (unsent).
-Next: more link-outs, directories for the 53 no-data sports; send the BracketSync message.
+Contributor workflow drafted (ADR 0008, `CONTRIBUTING.md`, PR template, "Confirm a venue" form), uncommitted.
+Next: `confirmed_by` + confirmation count on `manual_venues`/map, CI evidence check, more link-outs, directories for the 53 no-data sports; send the BracketSync message.

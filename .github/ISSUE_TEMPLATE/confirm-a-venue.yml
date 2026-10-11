@@ -1,0 +1,52 @@
+name: Confirm a venue
+description: You visited a venue on the map, or you found the operator's own page that confirms it.
+title: "Confirm: "
+labels: ["venue-confirmation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks. A reviewer checks this and updates the venue's confirmation level. Please do not include personal information
+        (names or phone numbers of individuals), and do not copy text from sites that forbid it; a link is enough.
+  - type: input
+    id: venue
+    attributes:
+      label: Venue name as shown on the map
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: City
+    validations:
+      required: true
+  - type: dropdown
+    id: how
+    attributes:
+      label: How do you know?
+      options: [I visited and saw it myself, The operator's own website or page, A city or government page, A review or article]
+    validations:
+      required: true
+  - type: input
+    id: seen
+    attributes:
+      label: Date you saw or checked it
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: What did you find?
+      options: [It is there and details are right, It is there but something is wrong, It is closed or gone, I could not find it]
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: What did you see?
+      description: Sport, number of courts or tables, indoor or outdoor, access, and anything that differs from the map.
+  - type: input
+    id: source
+    attributes:
+      label: Link to a public source (optional)
