@@ -9,7 +9,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
-     ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date
+     ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
@@ -73,6 +73,14 @@ def main() -> None:
             group by 1""").fetchall():
         manual[vid] = {"r": rules or "", "u": int(unconfirmed), "cf": {1: "v", 2: "o", 3: "r"}[rank], "cd": str(cdate) if cdate else ""}
 
+    # How many different people confirmed each hand-added venue (venue_confirmations.csv; handles only, never shown).
+    confirmers: dict[str, int] = {}
+    for vid, n in con.execute("""
+            select mm.effective_venue_id, count(distinct c.confirmed_by)
+            from staging.stg_venue_confirmations c join intermediate.int_manual_venue_match mm on mm.venue_key = c.venue_key
+            group by 1""").fetchall():
+        confirmers[vid] = int(n)
+
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
     for (vid, name, nsrc, vsrc, sport, courts, lat, lon, city, addr, web, offers, indoor, outdoor, sand, clay, grass, hard, turf,
@@ -110,6 +118,8 @@ def main() -> None:
             v["cf"] = manual[vid]["cf"]          # confirmation: v visited in person, o stated by the operator, r reported only
             if manual[vid]["cf"] == "v" and manual[vid]["cd"]:
                 v["cd"] = manual[vid]["cd"]
+            if confirmers.get(vid):
+                v["cn"] = confirmers[vid]       # number of different people who confirmed it
             if manual[vid]["u"]:
                 v["xu"] = 1                      # public access not confirmed on the source map
         out_venues.append(v)

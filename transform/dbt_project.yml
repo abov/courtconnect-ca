@@ -25,6 +25,13 @@ seeds:
         offerings: varchar
         confirmation: varchar
         confirmed_on: varchar
+    venue_confirmations:     # all text; cast in staging
+      +column_types:
+        venue_key: varchar
+        confirmed_by: varchar
+        method: varchar
+        confirmed_on: varchar
+        evidence: varchar
     venue_leads:             # all text
       +column_types:
         noted_on: varchar

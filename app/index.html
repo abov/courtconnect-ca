@@ -352,7 +352,7 @@ function venueNode(v) {
   const box = el("div");
   box.append(el("h2", {text: v.n || "Unnamed courts"}));
   box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q]})));
-  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "")})));
+  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + v.cn + (v.cn === 1 ? " person" : " people") + " confirmed" : "")})));
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c].filter(Boolean).join(", ");
   if (place) box.append(el("p", {class: "meta", text: place}));
