@@ -42,7 +42,8 @@ best_manual as (
         min(m.venue_name)                                     as venue_name,
         min(m.website)                                        as website,
         min(m.offerings)                                      as offerings,
-        max(case when m.access_type = 'public' then 1 else 0 end) = 1 as is_public
+        max(case when m.access_type = 'public' then 1 else 0 end) = 1 as is_public,
+        max(case when m.access_type in ('private', 'members') then 1 else 0 end) = 1 as is_members
     from {{ ref('stg_manual_venues') }} m
     join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
     where mm.is_matched
@@ -65,6 +66,7 @@ osm_venues as (
         min(city)                                             as city,
         max(case when is_lit then 1 else 0 end) = 1                   as has_lit_courts,
         max(case when access_type = 'public' then 1 else 0 end) = 1   as is_confirmed_public,
+        max(case when access_type in ('private', 'members') then 1 else 0 end) = 1 as has_members_courts,
         max(case when is_free then 1 else 0 end) = 1                  as has_free_courts,
         max(case when setting = 'indoor' then 1 else 0 end) = 1       as has_indoor,
         max(case when setting in ('outdoor', 'likely_outdoor', 'covered') then 1 else 0 end) = 1 as has_outdoor,
@@ -104,6 +106,8 @@ osm_final as (
         coalesce(v.city, pl.city)                             as city,
         bm.offerings                                          as offerings,
         v.has_lit_courts, (v.is_confirmed_public or coalesce(bm.is_public, false)) as is_confirmed_public, v.has_free_courts,
+        -- members-only = marked private/members and nothing says public (the only access signal we hold; unmarked venues are NOT assumed public)
+        ((v.has_members_courts or coalesce(bm.is_members, false)) and not (v.is_confirmed_public or coalesce(bm.is_public, false))) as is_members_only,
         v.has_indoor, v.has_outdoor,
         v.has_hard, v.has_clay, v.has_grass, v.has_turf, v.has_sand, v.has_indoor_floor
     from osm_venues v
@@ -128,6 +132,7 @@ places_only as (
         p.address_line, p.city,
         bm.offerings                                          as offerings,
         false as has_lit_courts, coalesce(bm.is_public, false) as is_confirmed_public, false as has_free_courts,
+        (coalesce(bm.is_members, false) and not coalesce(bm.is_public, false)) as is_members_only,
         false as has_indoor, false as has_outdoor,
         false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor
     from {{ ref('dim_place') }} p
@@ -156,6 +161,8 @@ manual_final as (
         false as has_lit_courts,
         max(case when access_type = 'public' then 1 else 0 end) = 1 as is_confirmed_public,
         false as has_free_courts,
+        max(case when access_type in ('private', 'members') then 1 else 0 end) = 1
+            and max(case when access_type = 'public' then 1 else 0 end) = 0 as is_members_only,
         max(case when setting = 'indoor' then 1 else 0 end) = 1                               as has_indoor,
         max(case when setting in ('outdoor', 'likely_outdoor', 'covered') then 1 else 0 end) = 1 as has_outdoor,
         max(case when surface_type = 'hard' then 1 else 0 end) = 1    as has_hard,

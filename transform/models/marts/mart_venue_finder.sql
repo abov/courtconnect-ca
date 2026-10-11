@@ -47,7 +47,8 @@ select
     coalesce(f.has_turf, false)                               as has_turf,
     v.has_lit_courts,
     v.is_confirmed_public,
-    v.has_free_courts
+    v.has_free_courts,
+    v.is_members_only
 from {{ ref('bridge_venue_sport') }} bvs
 join {{ ref('dim_venue') }} v on v.venue_id = bvs.venue_id
 join {{ ref('dim_sport') }} s on s.sport_id = bvs.sport_id

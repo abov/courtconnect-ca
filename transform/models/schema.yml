@@ -37,7 +37,7 @@ seeds:
         tests:
           - accepted_values:
               arguments:
-                values: ['public', 'unknown', 'club']   # club = a club or program, where access works through the club
+                values: ['public', 'unknown', 'club', 'private', 'members']   # club = a club or program, where access works through the club; private/members = members only
       - name: confirmation
         description: >
           How we know. visited = the project owner (or a named contributor) saw it in person; official = stated on the operator's or a
