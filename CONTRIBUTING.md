@@ -7,7 +7,9 @@ polish: label what is guessed, and only mark something confirmed when you can sh
 1. **Report a venue** (no code needed): open an issue with the "Report a venue" form. A reviewer turns it into a lead.
 2. **Confirm a venue** (no code needed): open an issue with the "Confirm a venue" form to say you visited it, or to point to the
    operator's own page.
-3. **Edit the data** with a pull request (below). Approved reviewers merge.
+3. **Suggest a change** on the map: the "Suggest a change to this venue" link in a venue popup opens a prefilled form; a reviewer
+   approves it and a pull request is opened for you.
+4. **Edit the data** with a pull request (below). Approved reviewers merge.
 
 ## Editing data
 Data lives in CSV seeds in `transform/seeds/`. Edit these, never the files noted as generated:

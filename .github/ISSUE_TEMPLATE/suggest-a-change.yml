@@ -1,0 +1,78 @@
+name: Suggest a change to a venue
+description: Add a way to join or book, confirm a venue, or correct details. Opened for you by the "Suggest a change" link on the map.
+title: "Change: "
+labels: ["venue-change"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A reviewer checks this against your public source. If they approve it, a pull request that edits the data is opened
+        automatically and merged after review. Please do not include personal information, logins, or text copied from sites
+        that forbid it; a link is enough.
+  - type: input
+    id: venue
+    attributes:
+      label: Venue name as shown on the map
+    validations:
+      required: true
+  - type: input
+    id: city
+    attributes:
+      label: City
+    validations:
+      required: true
+  - type: input
+    id: map_id
+    attributes:
+      label: Map ID (filled in for you; leave as is)
+  - type: dropdown
+    id: change
+    attributes:
+      label: What are you suggesting?
+      options:
+        - Add a way to join or book (needs a public link)
+        - Confirm the venue (I visited, or the operator's page says so)
+        - Correct details or report that it is closed
+    validations:
+      required: true
+  - type: dropdown
+    id: link_type
+    attributes:
+      label: If adding a way to join or book, what kind?
+      options:
+        - Not applicable
+        - Open play
+        - Drop-in
+        - Clinic
+        - Group class
+        - Private lesson
+        - League
+        - Tournament
+        - Social event
+        - Court booking
+        - Club page
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Link to a public page (https)
+      description: Required when adding a way to join or book. The page must be viewable without logging in.
+  - type: input
+    id: price
+    attributes:
+      label: Price, if the public page shows one (optional)
+  - type: input
+    id: seen
+    attributes:
+      label: Date you saw or checked it
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: What did you see?
+      description: Days and times, courts, indoor or outdoor, access, and anything that differs from the map. Your own words, not copied text.
+    validations:
+      required: true
