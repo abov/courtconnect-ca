@@ -25,6 +25,12 @@ README.md has the full story; read it only if you need background. Decisions are
 
 ## Keeping usage low
 - Don't take browser screenshots unless I ask. Read pages as text (`get_page_text` / `read_page`) instead.
+- In auto mode (or whenever I haven't picked an approach), always choose the cheapest path that does the job, and say in one line what it is:
+  - Do it directly with Grep/Read/Edit; don't spawn subagents, run deep-research, or use extended web search unless I ask.
+  - Run the narrowest check (`dbt build --select <changed models>`, one test) before the full build; run the full build once at the end.
+  - Never start `make extract`/`make load`/`snowflake-build`, or loops/scheduled tasks, without asking.
+  - Prefer one batched tool call over many; stop once the task is done instead of extra "nice to have" work.
+  - If a task looks expensive (many pages to research, big refactor), propose the cheaper scoped version first and wait for my OK.
 - Read only the lines you need from big files; don't dump whole CSVs, logs or `venues.json`.
 - One task per session. Keep sessions small: when context passes ~200-300k tokens, update "Current status" below and tell me to start a fresh session.
 - At the end of a session, update "Current status" (2-3 lines) so the next session can pick up without a long history.
