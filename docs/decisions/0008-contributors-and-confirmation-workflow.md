@@ -24,5 +24,15 @@ them, without building accounts or a backend, and without weakening the confirma
 ## Not built yet
 - `confirmed_by` (a GitHub handle) and a confirmation count on `manual_venues`, shown on the map. This changes models and the app,
   so it gets its own step and a `make build`.
-- A CI check that fails a pull request when a confirmed row lacks `evidence` or a date.
 - An in-app reviewer queue with sign-in. Only worth building once GitHub review becomes the bottleneck.
+
+## Update 2026-10-11: Suggest a change
+- Every venue popup has a **Suggest a change** link that opens the `suggest-a-change` issue form with the venue prefilled.
+- A reviewer adds the `approved` label. `.github/workflows/issue-to-pr.yml` runs `ci/issue_to_pr.py`, which appends ONE row and opens a
+  pull request: a link-out (`venue_actions`) or a confirmation (`venue_confirmations`) when the name and city match a row in
+  `manual_venues`, otherwise a lead (`venue_leads`). Overture/OSM venues therefore become leads until a reviewer places them.
+  Issue text is untrusted: it is written only through the csv module, links must be https, and it never reaches a shell.
+- `ci/check_seed_evidence.py` runs first in CI: every hand-edited row needs its evidence and a date (a `reported` venue needs
+  evidence only), and links must be https. Two older rows are grandfathered in the script.
+- Pushes made with `GITHUB_TOKEN` do not start CI, so the action starts `ci.yml` by `workflow_dispatch` on the new branch so the required
+  `dbt-build` check reports. Untested until the first real issue; if the check does not appear, use a fine-grained token instead.
