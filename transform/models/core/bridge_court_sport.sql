@@ -5,6 +5,7 @@
 with tagged as (
     select distinct
         c.court_id,
+        c.access_type,
         s.sport_name
     from {{ ref('stg_osm_courts') }} c
     join {{ ref('osm_sport_map') }} m
@@ -19,6 +20,8 @@ with_also as (
     select t.court_id, trim(a.also_sport)
     from tagged t
     join {{ ref('sport_also_played') }} a on trim(a.sport) = t.sport_name
+    -- exclude_private_members = yes: private / members-only courts do not pass the sport on (Pitton on badminton courts)
+    where not (lower(trim(coalesce(a.exclude_private_members, ''))) = 'yes' and t.access_type in ('private', 'members'))
 )
 
 select distinct

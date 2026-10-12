@@ -1,2 +1,7 @@
-sport,also_sport,note
-Racquetball,4-wall Paddle,"4-wall paddle (paddleball) is played on racquetball courts (project owner, 2026-10-10)"
+sport,also_sport,note,exclude_private_members
+Racquetball,4-wall Paddle,"4-wall paddle (paddleball) is played on racquetball courts (project owner, 2026-10-10)",
+Pickleball,Typti,"Typti is played on pickleball courts (project owner, 2026-10-11)",
+Pickleball,Skyball,"Skyball is played on pickleball courts (project owner, 2026-10-11)",
+Pickleball,Spec Tennis,"Spec Tennis is played on pickleball courts (project owner, 2026-10-11)",
+Pickleball,Lite Tennis,"Lite Tennis is played on pickleball courts (project owner, 2026-10-11)",
+Badminton,Pitton,"Pitton is played on badminton courts (project owner, 2026-10-11). Private and members-only courts are left out because they probably do not allow it",yes
