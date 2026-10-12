@@ -51,6 +51,8 @@
   .seg .chip { flex: 1; text-align: center; padding: 6px 8px; border-radius: 8px; font-weight: 600; }
   body:not(.watch) .watchonly { display: none; }
   body.watch .playonly, body.watch .legend.playlegend { display: none; }
+  body:not(.walls) .wallonly { display: none; }
+  body.walls .playonly, body.walls .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; }
@@ -110,6 +112,7 @@
     <div class="seg" role="group" aria-label="What are you looking for?">
       <button class="chip" id="modePlay" type="button" aria-pressed="true">Find a place to play</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false">Watch a match</button>
+      <button class="chip" id="modeWalls" type="button" aria-pressed="false">Hitting walls</button>
     </div>
   </header>
 
@@ -126,6 +129,15 @@
         <button class="chip" data-acc="both" type="button" aria-pressed="true">Both</button>
       </div>
       <div class="note" id="accNote"></div>
+    </div>
+    <div class="wallonly">
+      <span class="l" id="wtLabel">Wall type</span>
+      <div class="seg" role="group" aria-labelledby="wtLabel" style="margin-top:4px">
+        <button class="chip" data-wt="" type="button" aria-pressed="true">All</button>
+        <button class="chip" data-wt="one_wall" type="button" aria-pressed="false">One-wall</button>
+        <button class="chip" data-wt="three_wall" type="button" aria-pressed="false">Three-wall</button>
+      </div>
+      <div class="note" style="margin-top:6px">Walls for hitting alone. Walls are rarely mapped, so this list is short and grows as people report them. Lights, hours and fees are shown only when known.</div>
     </div>
     <div class="watchonly note">CourtConnect doesn't sell tickets or book anything. Every event links to the organizer's own page: check dates, seating and prices there.</div>
     <div class="playonly">
@@ -208,8 +220,8 @@ const ACTION = {league: "League", tournament: "Tournament", clinic: "Clinic", pr
                 open_play: "Open play", drop_in: "Drop-in", social_event: "Social event", court_booking: "Court booking", club_page: "Club page"};
 const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach Badminton Club", lagunitas_site: "Lagunitas Country Club", padelup_site: "Padel Up", purapadel_site: "Pura Padel", thepadelcourts_site: "The Padel Courts", padelcalifornia_site: "Padel California", parkpadel_site: "Park Padel", baypadel_site: "Bay Padel", btsm_site: "Beach Tennis Santa Monica", btcc_site: "BT Cali Club", bracketsync: "BracketSync", playtomic: "Playtomic", playbypoint: "PlayByPoint", pickleballbrackets: "PickleballBrackets"};
 
-let DATA, sports, venues, events = [];
-const state = {mode: "play", sport: -1, text: "", access: "both", on: new Set(), offers: new Set()};
+let DATA, sports, venues, events = [], walls = [];
+const state = {mode: "play", sport: -1, text: "", access: "both", on: new Set(), offers: new Set(), wall: ""};
 const ACCESS_NOTE = {public: "Everything not marked members-only, including venues whose access is unknown. Check before you go.",
   members: "Venues marked private or members-only (OpenStreetMap tags, club pages, reports). Many are residential or club courts you cannot just walk onto. The list is incomplete.",
   both: "Public and private / members venues together."};
@@ -305,6 +317,46 @@ function renderEventList() {
   return list;
 }
 
+// ---------- hitting walls (solo practice) ----------
+const WALL_TYPE = {one_wall: "One-wall", three_wall: "Three-wall", backboard: "Backboard", other: "Wall"};
+const WALL_CONF = {reported: "Reported by a player, not independently verified", official: "Confirmed from an official source", tagged: "From OpenStreetMap tags", inferred: "Inferred"};
+function wallsFiltered() {
+  const name = state.sport >= 0 ? sports[state.sport].n : null;
+  return walls.filter(w => (!state.wall || w.t.includes(state.wall)) && (!name || w.sp.includes(name)));
+}
+function wallGeojson(list) {
+  return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
+}
+function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
+function wallNode(w) {
+  const box = el("div");
+  box.append(el("h2", {text: w.n}));
+  box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
+  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", w.c].filter(Boolean).join(" · ")}));
+  box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " · Free to use: " + triState(w.f) + (w.su ? " · Surface: " + w.su : "")}));
+  if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
+  box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). Sports listed are what the wall is thought to suit."}));
+  return box;
+}
+function showWall(w, fly) {
+  if (!w) return;
+  if (fly) map.flyTo({center: [w.x, w.y], zoom: Math.max(map.getZoom(), 15), essential: true});
+  popup.setLngLat([w.x, w.y]).setDOMContent(wallNode(w)).addTo(map);
+}
+function renderWallList() {
+  const list = wallsFiltered(), ul = $("list"); ul.replaceChildren();
+  for (const w of list) {
+    const btn = el("button", {type: "button"},
+      el("div", {class: "nm", text: w.n}),
+      el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
+      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t}))));
+    btn.addEventListener("click", () => showWall(w, true));
+    ul.append(el("li", {}, btn));
+  }
+  $("count").replaceChildren(el("b", {text: String(list.length)}), document.createTextNode(list.length === 1 ? " hitting wall" : " hitting walls"));
+  return list;
+}
+
 // ---------- map ----------
 let map, popup, current = [], mapReady = false;
 function geojson(list) {
@@ -347,6 +399,15 @@ function initMap() {
     map.on("click", "ev-pts", e => showEvent(events[e.features[0].properties.k], false));
     map.on("mouseenter", "ev-pts", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "ev-pts", () => map.getCanvas().style.cursor = "");
+    map.addSource("w", {type: "geojson", data: wallGeojson([])});
+    map.addLayer({id: "wall-pts", type: "circle", source: "w", layout: {visibility: "none"},
+      paint: {"circle-radius": 9, "circle-color": "#bc4c00", "circle-stroke-color": "#fff", "circle-stroke-width": 2}});
+    map.addLayer({id: "wall-label", type: "symbol", source: "w", layout: {visibility: "none", "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"],
+      "text-size": 12, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 9},
+      paint: {"text-color": "#7a3200", "text-halo-color": "#fff", "text-halo-width": 1.5}});
+    map.on("click", "wall-pts", e => showWall(walls[e.features[0].properties.k], false));
+    map.on("mouseenter", "wall-pts", () => map.getCanvas().style.cursor = "pointer");
+    map.on("mouseleave", "wall-pts", () => map.getCanvas().style.cursor = "");
     map.on("moveend", debounce(renderList, 150));
     mapReady = true;
     applyMode(false);
@@ -405,6 +466,7 @@ function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
   show(["clusters", "cluster-count", "pts"], mode === "play");
   show(["ev-pts", "ev-label"], mode === "watch");
+  show(["wall-pts", "wall-label"], mode === "walls");
 }
 function applyMode(fit) {
   if (!mapReady) return;
@@ -412,11 +474,14 @@ function applyMode(fit) {
   if (state.mode === "watch" && fit) {
     const list = eventsFiltered();
     if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(ev => b.extend([ev.x, ev.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
+  } else if (state.mode === "walls" && fit) {
+    const list = wallsFiltered();
+    if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
   } else if (state.mode === "play" && fit) map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
   refresh();
 }
 function renderList() {
-  if (state.mode === "watch") return;
+  if (state.mode !== "play") return;
   const c = map.getCenter(), b = map.getBounds();
   const inView = current.filter(v => b.contains([v.x, v.y]));
   const pool = inView.length ? inView : current;
@@ -435,6 +500,11 @@ function renderList() {
     (inView.length !== total ? " Â· " + fmt(inView.length) + " in view" : "") + (top.length ? " Â· nearest " + top.length + " to the map centre:" : "")));
 }
 function refresh() {
+  if (state.mode === "walls") {
+    const list = renderWallList();
+    if (map.getSource("w")) map.getSource("w").setData(wallGeojson(list));
+    writeHash(); return;
+  }
   if (state.mode === "watch") {
     const list = renderEventList();
     if (map.getSource("e")) map.getSource("e").setData(eventGeojson(list));
@@ -448,7 +518,8 @@ function refresh() {
 // ---------- controls, hash state ----------
 function writeHash() {
   const p = new URLSearchParams();
-  if (state.mode === "watch") p.set("mode", "watch");
+  if (state.mode !== "play") p.set("mode", state.mode);
+  if (state.mode === "walls" && state.wall) p.set("wall", state.wall);
   if (state.sport >= 0) p.set("sport", sports[state.sport].n);
   if (state.on.size) p.set("on", [...state.on].join(","));
   if (state.offers.size) p.set("offer", [...state.offers].join(""));
@@ -458,7 +529,8 @@ function writeHash() {
 }
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
-  if (p.get("mode") === "watch") state.mode = "watch";
+  if (p.get("mode") === "watch" || p.get("mode") === "walls") state.mode = p.get("mode");
+  const wt = p.get("wall"); if (wt === "one_wall" || wt === "three_wall") state.wall = wt;
   const s = p.get("sport"); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
   for (const k of (p.get("on") || "").split(",")) if (k) state.on.add(k);
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
@@ -467,7 +539,9 @@ function readHash() {
 }
 function syncControls() {
   $("sport").value = String(state.sport); $("q").value = state.text;
-  document.body.classList.toggle("watch", state.mode === "watch");
+  document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("walls", state.mode === "walls");
+  for (const b of document.querySelectorAll("[data-wt]")) b.setAttribute("aria-pressed", state.wall === b.dataset.wt);
+  $("modeWalls").setAttribute("aria-pressed", state.mode === "walls");
   const nOn = state.on.size + state.offers.size;
   $("moreSummary").textContent = nOn ? "Filters on: " + nOn + " (tap to change)" : "More filters: surface, access, what they offer";
   if (nOn) $("moreFilters").open = true;
@@ -479,7 +553,13 @@ function syncControls() {
 }
 function populateSports() {
   const sel = $("sport"); sel.replaceChildren();
-  if (state.mode === "watch") {
+  if (state.mode === "walls") {
+    const counts = {};
+    walls.forEach(w => w.sp.forEach(n => counts[n] = (counts[n] || 0) + 1));
+    sel.append(el("option", {value: "-1", text: "All sports (" + walls.length + " walls)"}));
+    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[s.n] + ")"})); });
+    if (state.sport >= 0 && !counts[sports[state.sport].n]) state.sport = -1;
+  } else if (state.mode === "watch") {
     const up = upcomingEvents(), counts = {};
     up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
     sel.append(el("option", {value: "-1", text: "All sports (" + up.length + " events)"}));
@@ -500,7 +580,9 @@ function initControls() {
   populateSports();
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));
-  sel.addEventListener("change", () => { state.sport = +sel.value; refresh(); if (state.mode === "watch") applyMode(true); });
+  $("modeWalls").addEventListener("click", () => setMode("walls"));
+  for (const b of document.querySelectorAll("[data-wt]")) b.addEventListener("click", () => { state.wall = b.dataset.wt; syncControls(); refresh(); if (state.mode === "walls") applyMode(true); });
+  sel.addEventListener("change", () => { state.sport = +sel.value; refresh(); if (state.mode !== "play") applyMode(true); });
   $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); refresh(); }, 200));
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
     const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();
@@ -509,7 +591,7 @@ function initControls() {
   for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
     const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); refresh();
   });
-  $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.access = "both"; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
+  $("reset").addEventListener("click", () => { state.wall = ""; state.sport = -1; state.text = ""; state.access = "both"; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   $("nearMe").addEventListener("click", () => {
     if (!navigator.geolocation) return alert("Your browser does not support location.");
@@ -537,7 +619,7 @@ function initCoverage() {
 // ---------- boot ----------
 let byKey = {};
 fetch("data/venues.json").then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(d => {
-  DATA = d; sports = d.sports; venues = d.venues; events = d.events || [];
+  DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; walls = d.walls || [];
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
     v.m = v.p.reduce((a, p) => a | p[2], 0);
@@ -545,7 +627,8 @@ fetch("data/venues.json").then(r => { if (!r.ok) throw new Error("HTTP " + r.sta
   });
   readHash(); initControls(); initCoverage(); syncControls();
   initMap();
-  if (state.mode === "watch") renderEventList();      // the event list must not wait for map tiles to finish loading
+  if (state.mode === "watch") renderEventList();
+  if (state.mode === "walls") renderWallList();      // the event list must not wait for map tiles to finish loading
   $("loading").remove();
 }).catch(err => { $("loading").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });
 </script>
