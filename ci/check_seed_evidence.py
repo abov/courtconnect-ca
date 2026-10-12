@@ -11,7 +11,7 @@ RULES = {  # file: (date column, columns that must be non-empty, columns that mu
     "watch_events.csv": ("verified_on", ["source_note"], ["info_url", "tickets_url"]),
 }
 # Older rows that predate this check and have no date. Date them (or lower them to reported) and delete the entry.
-GRANDFATHERED = {"btcc-manhattan-beach", "btcc-hermosa-beach"}
+GRANDFATHERED = set()
 errors = []
 for name, (datecol, required, https) in RULES.items():
     with (SEEDS / name).open(newline="", encoding="utf-8") as f:
