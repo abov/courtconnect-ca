@@ -8,6 +8,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: python ci/check_seed_evidence.py
+      - run: python ci/check_export_fresh.py
       - run: pip install dbt-core dbt-duckdb duckdb pandas python-dotenv
       # CI never calls OpenStreetMap or Snowflake: it loads a small committed sample of real OSM data
       # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
