@@ -26,7 +26,7 @@ load_dotenv()
 SHEET_ID = os.environ.get("SPORTS_SHEET_ID", "").strip()
 SHEET_GID = os.environ.get("SPORTS_SHEET_GID", "0").strip() or "0"
 EXPORT_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={SHEET_GID}"
-EXPECTED_SPORTS = 76  # keep in sync with var `expected_racket_sports` in transform/dbt_project.yml
+EXPECTED_SPORTS = 75  # keep in sync with var `expected_racket_sports` in transform/dbt_project.yml
 
 COLUMNS = {
     "Type": "sport_type", "Sport": "sport", "Players": "players", "Class": "popularity_class",
