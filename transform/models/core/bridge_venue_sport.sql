@@ -31,12 +31,25 @@ manual as (
     group by mm.effective_venue_id, s.sport_id
 ),
 
+-- Sports a hand-curated venue lists also pass on their also-played sports (a pickleball seed row makes the venue a Skyball venue, like
+-- an OSM pickleball court does). These rows are derived, so they carry no source flag; the finder mart drops the exclude_private_members
+-- ones at members-only venues.
+manual_also as (
+    select m.venue_id, d.sport_id, m.courts
+    from manual m
+    join {{ ref('dim_sport') }} f on f.sport_id = m.sport_id
+    join {{ ref('sport_also_played') }} a on trim(a.sport) = f.sport_name
+    join {{ ref('dim_sport') }} d on d.sport_name = trim(a.also_sport)
+),
+
 unioned as (
     select venue_id, sport_id, courts, 1 as in_osm, 0 as in_places, 0 as in_manual from osm
     union all
     select venue_id, sport_id, 0, 0, 1, 0 from places
     union all
     select venue_id, sport_id, courts, 0, 0, 1 from manual
+    union all
+    select venue_id, sport_id, courts, 0, 0, 0 from manual_also
 )
 
 select

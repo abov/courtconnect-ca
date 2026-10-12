@@ -53,3 +53,10 @@ from {{ ref('bridge_venue_sport') }} bvs
 join {{ ref('dim_venue') }} v on v.venue_id = bvs.venue_id
 join {{ ref('dim_sport') }} s on s.sport_id = bvs.sport_id
 left join osm_facts f on f.venue_id = bvs.venue_id and f.sport_id = bvs.sport_id
+-- exclude_private_members = yes (Pitton on badminton courts): a members-only venue does not get the sport by inference, even when its
+-- own court is unmarked; a seed row that lists the sport itself is kept.
+where not (
+    v.is_members_only
+    and not bvs.in_manual
+    and s.sport_name in (select trim(also_sport) from {{ ref('sport_also_played') }} where lower(trim(coalesce(exclude_private_members, ''))) = 'yes')
+)
