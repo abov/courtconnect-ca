@@ -30,3 +30,6 @@ Cost rules: no subagents, no screenshots, no extended web search. Read pages as 
 
 ## Known gaps
 Local club-run events that are not on a governing-body calendar (Meetup groups, city recreation departments, club ladders) are not covered. Lead rows belong in `venue_leads.csv` or `docs/tournament_sources.md`, not `watch_events.csv`.
+
+## Social links (ADR 0009)
+Rows in venue_actions.csv with action_type=social: check each link still loads (make check-links) and that the club's own site still links to the account; remove dead ones. Add new handles only when the club's own site shows them.

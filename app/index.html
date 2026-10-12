@@ -208,8 +208,8 @@ const CONFIRM = {v: "Confirmed in person", o: "Stated by the operator", r: "Repo
 const SRC = {o: "OpenStreetMap", p: "Places directory", b: "OpenStreetMap + places directory", m: "Hand-curated"};
 const OFFER = {O: "Open play", C: "Clinics", L: "Private lessons", G: "Group classes", D: "Drop-in", T: "Tournaments", E: "Leagues", S: "Social events"};
 const ACTION = {league: "League", tournament: "Tournament", clinic: "Clinic", private_lesson: "Private lessons", group_class: "Group classes",
-                open_play: "Open play", drop_in: "Drop-in", social_event: "Social event", court_booking: "Court booking", club_page: "Club page"};
-const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach Badminton Club", lagunitas_site: "Lagunitas Country Club", padelup_site: "Padel Up", purapadel_site: "Pura Padel", thepadelcourts_site: "The Padel Courts", padelcalifornia_site: "Padel California", parkpadel_site: "Park Padel", baypadel_site: "Bay Padel", btsm_site: "Beach Tennis Santa Monica", btcc_site: "BT Cali Club", bracketsync: "BracketSync", playtomic: "Playtomic", playbypoint: "PlayByPoint", pickleballbrackets: "PickleballBrackets"};
+                open_play: "Open play", drop_in: "Drop-in", social_event: "Social event", court_booking: "Court booking", club_page: "Club page", social: "Social media"};
+const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach Badminton Club", lagunitas_site: "Lagunitas Country Club", padelup_site: "Padel Up", purapadel_site: "Pura Padel", thepadelcourts_site: "The Padel Courts", padelcalifornia_site: "Padel California", parkpadel_site: "Park Padel", baypadel_site: "Bay Padel", btsm_site: "Beach Tennis Santa Monica", btcc_site: "BT Cali Club", bracketsync: "BracketSync", playtomic: "Playtomic", playbypoint: "PlayByPoint", pickleballbrackets: "PickleballBrackets", instagram: "Instagram", facebook: "Facebook"};
 
 let DATA, sports, venues, events = [], walls = [];
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set(), wall: ""};
@@ -426,7 +426,7 @@ function venueNode(v) {
   const url = v.w ? safeUrl(v.w) : "";
   if (url) box.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
   if (v.ac && v.ac.length) {
-    const join = el("div", {class: "join"}, el("h3", {text: "Ways to join (opens the organizer's site)"}));
+    const join = el("div", {class: "join"}, el("h3", {text: "Ways to join and follow (opens the club's or organizer's site)"}));
     for (const [type, title, aurl, provider, st, en, price] of v.ac) {
       const href = safeUrl(aurl); if (!href) continue;
       const when = st ? fmtRange({s: st, e: en}) : "";
@@ -478,7 +478,7 @@ function renderList() {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: v.n || "Unnamed courts" + (v.c ? " in " + v.c : "")}),
       el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}),
-      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q]}), v.ac && v.ac.length ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
+      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q]}), v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
   }

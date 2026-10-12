@@ -121,7 +121,7 @@ seeds:
         tests:
           - accepted_values:
               arguments:
-                values: ['open_play', 'clinic', 'private_lesson', 'group_class', 'drop_in', 'tournament', 'league', 'social_event', 'court_booking', 'club_page']
+                values: ['open_play', 'clinic', 'private_lesson', 'group_class', 'drop_in', 'tournament', 'league', 'social_event', 'court_booking', 'club_page', 'social']
       - name: provider
         tests: [not_null]
 

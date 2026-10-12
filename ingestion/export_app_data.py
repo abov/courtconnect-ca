@@ -64,7 +64,7 @@ def main() -> None:
             select venue_id, action_type, title, provider, url, price_info, start_date, end_date
             from marts.mart_venue_actions where is_current order by action_type, title""").fetchall():
         actions[vid].append([atype, title, url, provider, str(start) if start else "", str(end) if end else "", price or ""])
-    ORDER = ["open_play", "drop_in", "group_class", "clinic", "private_lesson", "court_booking", "league", "tournament", "social_event", "club_page"]
+    ORDER = ["open_play", "drop_in", "group_class", "clinic", "private_lesson", "court_booking", "league", "tournament", "social_event", "club_page", "social"]
     for lst in actions.values():                       # show ways to PLAY first, then dated events soonest first, then the general club page
         lst.sort(key=lambda x: (ORDER.index(x[0]) if x[0] in ORDER else 99, x[4] or "9999", x[1]))
 
