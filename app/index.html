@@ -122,15 +122,6 @@
       <select id="sport"></select>
       <p id="anywhere" class="note" hidden></p>
     </div>
-    <div class="playonly">
-      <span class="l" id="accLabel">Who can play</span>
-      <div class="seg" role="group" aria-labelledby="accLabel" style="margin-top:4px">
-        <button class="chip" data-acc="public" type="button" aria-pressed="false">Public</button>
-        <button class="chip" data-acc="members" type="button" aria-pressed="false">Private / members</button>
-        <button class="chip" data-acc="both" type="button" aria-pressed="true">Both</button>
-      </div>
-      <div class="note" id="accNote"></div>
-    </div>
     <div class="wallonly">
       <span class="l" id="wtLabel">Wall type</span>
       <div class="seg" role="group" aria-labelledby="wtLabel" style="margin-top:4px">
@@ -161,6 +152,7 @@
       <span class="l">Good to know</span>
       <div class="chips" id="chipsInfo">
         <button class="chip" data-k="public" aria-pressed="false">Public</button>
+        <button class="chip" data-k="members" aria-pressed="false">Private / members</button>
         <button class="chip" data-k="free" aria-pressed="false">Free</button>
         <button class="chip" data-k="web" aria-pressed="false">Has website</button>
         <button class="chip" data-k="named" aria-pressed="false">Hide unnamed</button>
@@ -219,10 +211,7 @@ const ACTION = {league: "League", tournament: "Tournament", clinic: "Clinic", pr
 const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach Badminton Club", lagunitas_site: "Lagunitas Country Club", padelup_site: "Padel Up", purapadel_site: "Pura Padel", thepadelcourts_site: "The Padel Courts", padelcalifornia_site: "Padel California", parkpadel_site: "Park Padel", baypadel_site: "Bay Padel", btsm_site: "Beach Tennis Santa Monica", btcc_site: "BT Cali Club", bracketsync: "BracketSync", playtomic: "Playtomic", playbypoint: "PlayByPoint", pickleballbrackets: "PickleballBrackets"};
 
 let DATA, sports, venues, events = [], walls = [];
-const state = {mode: "play", sport: -1, text: "", access: "both", on: new Set(), offers: new Set(), wall: ""};
-const ACCESS_NOTE = {public: "Everything not marked members-only, including venues whose access is unknown. Check before you go.",
-  members: "Venues marked private or members-only (OpenStreetMap tags, club pages, reports). Many are residential or club courts you cannot just walk onto. The list is incomplete.",
-  both: "Public and private / members venues together."};
+const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set(), wall: ""};
 const $ = id => document.getElementById(id);
 
 function el(tag, props, ...kids) {
@@ -243,8 +232,8 @@ function matches(v, sm, tm, vf) {
   if (sm && !(mask & sm)) return false;
   if (tm && !(mask & tm)) return false;
   if (vf && (v.f & vf) !== vf) return false;
-  if (state.access === "public" && (v.f & 8)) return false;
-  if (state.access === "members" && !(v.f & 8)) return false;
+  const wantPub = state.on.has("public"), wantMem = state.on.has("members");  // both on = either; one on = just that
+  if (wantPub !== wantMem && (wantPub ? !(v.f & 2) : !(v.f & 8))) return false;
   if (state.on.has("web") && !v.w) return false;
   if (state.on.has("named") && v.q === "u") return false;
   if (state.offers.size && ![...state.offers].some(c => v.o.includes(c))) return false;
@@ -253,7 +242,7 @@ function matches(v, sm, tm, vf) {
 }
 function filtered() {
   const sm = surfMask(), tm = setMask();
-  const vf = (state.on.has("lit") ? 1 : 0) | (state.on.has("public") ? 2 : 0) | (state.on.has("free") ? 4 : 0);
+  const vf = (state.on.has("lit") ? 1 : 0) | (state.on.has("free") ? 4 : 0);
   return venues.filter(v => matches(v, sm, tm, vf));
 }
 
@@ -522,7 +511,6 @@ function writeHash() {
   if (state.on.size) p.set("on", [...state.on].join(","));
   if (state.offers.size) p.set("offer", [...state.offers].join(""));
   if (state.text) p.set("q", state.text);
-  if (state.access !== "both") p.set("access", state.access);
   history.replaceState(null, "", p.toString() ? "#" + p : location.pathname + location.search);
 }
 function readHash() {
@@ -533,7 +521,7 @@ function readHash() {
   for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
   state.text = (p.get("q") || "").toLowerCase();
-  const a = p.get("access"); if (a === "members" || a === "public") state.access = a;
+  if (p.get("access") === "members") state.on.add("members");  // old links
 }
 function syncControls() {
   $("sport").value = String(state.sport); $("q").value = state.text;
@@ -544,8 +532,6 @@ function syncControls() {
   $("moreSummary").textContent = nOn ? "Filters on: " + nOn + " (tap to change)" : "More filters: surface, access, what they offer";
   if (nOn) $("moreFilters").open = true;
   $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode === "watch");
-  for (const b of document.querySelectorAll("[data-acc]")) b.setAttribute("aria-pressed", state.access === b.dataset.acc);
-  $("accNote").textContent = ACCESS_NOTE[state.access];
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
   for (const b of document.querySelectorAll("[data-o]")) b.setAttribute("aria-pressed", state.offers.has(b.dataset.o));
 }
@@ -591,11 +577,10 @@ function initControls() {
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
     const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();
   });
-  for (const b of document.querySelectorAll("[data-acc]")) b.addEventListener("click", () => { state.access = b.dataset.acc; syncControls(); refresh(); });
-  for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
+    for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
     const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); refresh();
   });
-  $("reset").addEventListener("click", () => { state.wall = ""; state.sport = -1; state.text = ""; state.access = "both"; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
+  $("reset").addEventListener("click", () => { state.wall = ""; state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   $("nearMe").addEventListener("click", () => {
     if (!navigator.geolocation) return alert("Your browser does not support location.");
