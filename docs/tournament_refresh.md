@@ -25,6 +25,7 @@ Cost rules: no subagents, no screenshots, no extended web search. Read pages as 
 | Squash | https://siliconvalleyopen.com/ and https://ussquash.org (junior calendar) | Club Locker is script-loaded and unread; the Silicon Valley Open (Redwood City) is the only California squash event found so far. |
 | Skyball | https://skyball.us/play | Browser pane, click "Show past"; the plain fetch shows "No tournaments currently scheduled". |
 | Paddle tennis | Search for the Venice Beach US Open of Paddle Tennis for this year; APTA platform tennis is not a California scene. | Standard web search. |
+| Dome screenings | https://www.cosm.com/los-angeles/events and https://www.cosm.com/categories/sports | Browser pane, JS: wait ~3s, then regex the page text for tennis/pickleball/padel/badminton/squash/Wimbledon/US Open. Cosm Los Angeles (Inglewood) is the only California venue. None found 2026-10-12; if one appears, add a `dome_screening` row. |
 | Pro (all sports) | PPA, Premier Padel, PSA squash, BNP Paribas Open, BWF/US Open badminton | Organizer sites. |
 
 ## Known gaps
