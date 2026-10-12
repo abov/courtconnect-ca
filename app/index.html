@@ -153,7 +153,6 @@
       <div class="chips" id="chipsInfo">
         <button class="chip" data-k="public" aria-pressed="false">Public</button>
         <button class="chip" data-k="members" aria-pressed="false">Private / members</button>
-        <button class="chip" data-k="free" aria-pressed="false">Free</button>
         <button class="chip" data-k="web" aria-pressed="false">Has website</button>
         <button class="chip" data-k="named" aria-pressed="false">Hide unnamed</button>
       </div>
@@ -242,7 +241,7 @@ function matches(v, sm, tm, vf) {
 }
 function filtered() {
   const sm = surfMask(), tm = setMask();
-  const vf = (state.on.has("lit") ? 1 : 0) | (state.on.has("free") ? 4 : 0);
+  const vf = (state.on.has("lit") ? 1 : 0);
   return venues.filter(v => matches(v, sm, tm, vf));
 }
 
@@ -407,8 +406,7 @@ function sportLine(v) { return v.p.map(p => sports[p[0]].n + (p[1] ? " (" + p[1]
 function facts(v, entry) {
   const out = [], m = entry ? entry[2] : v.m;
   for (const [k, label] of [["indoor", "Indoor"], ["outdoor", "Outdoor"], ["sand", "Sand"], ["clay", "Clay"], ["grass", "Grass"], ["hard", "Hard court"]]) if (m & SURF[k]) out.push(label);
-  if (v.f & 1) out.push("Lights"); if (v.f & 2) out.push("Public"); if (v.f & 8) out.push("Private / members"); if (v.f & 4) out.push("Free");
-  return out;
+  if (v.f & 1) out.push("Lights"); if (v.f & 2) out.push("Public"); if (v.f & 8) out.push("Private / members");  return out;
 }
 function venueNode(v) {
   const box = el("div");
