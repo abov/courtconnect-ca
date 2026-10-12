@@ -56,6 +56,16 @@ seeds:
         verified_on: varchar
         lat: varchar
         lon: varchar
+    manual_walls:            # all text; flags and dates are cast in stg_manual_walls
+      +column_types:
+        lat: varchar
+        lon: varchar
+        is_lit: varchar
+        free_to_use: varchar
+        access: varchar
+        surface: varchar
+        near_venue_name: varchar
+        reported_on: varchar
     place_sport_overrides:   # starts empty: pin the types so an empty file is not guessed as INTEGER
       +column_types:
         place_id: varchar

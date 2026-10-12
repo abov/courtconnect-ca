@@ -123,6 +123,22 @@ seeds:
       - name: provider
         tests: [not_null]
 
+  - name: manual_walls
+    description: >
+      Hitting walls for solo practice (one-wall, three-wall, backboards), curated by hand, one row per wall. Blank is_lit / free_to_use = unknown.
+      `confirmation` is reported (owner) or official; coordinates may be approximate (see location_precision).
+    columns:
+      - name: wall_key
+        tests: [unique, not_null]
+      - name: wall_type
+        tests: [not_null]
+      - name: confirmation
+        tests:
+          - accepted_values:
+              values: ['reported', 'official', 'tagged', 'inferred']
+      - name: evidence
+        tests: [not_null]
+
   - name: watch_events
     description: >
       Pro and amateur events people can go and watch, curated by hand, one row per event. A discovery list only:
