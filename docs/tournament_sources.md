@@ -39,3 +39,7 @@ Last run: 2026-10-12. Added 24 events (watch_events.csv now 43) and 1 lead. Repe
 - **Squash:** R2 Sports has none; Club Locker still unread. Only the Silicon Valley Open.
 - **Skyball:** skyball.us/play "Show past" lists 7 tournaments; the only California one is the San Diego Doubles at Chira Tennis Academy on July 9, 2026 (past; added as lead `skyball-chira-tennis-academy`). The others are in New York and Maryland. The page states "SkyBall plays on any pickleball court (44' x 20')", which backs the pickleball-court match.
 - **Still unread:** Club Locker (squash), USA Padel second-half calendar, USTA NorCal Level 6-7, Meetup and city recreation events.
+
+## Sweep B (2026-10-12): badminton 2027 and padel
+- **Badminton:** no 2027 California event is published. SoCal ORC (Pomona, mid-January in 2025 and 2026) and the NorCal ORC/OLC have no 2027 prospectus yet; the 2026 U.S. Open (Fullerton, June) and the 2025 Adult Nationals (Livermore, Dec 27-30) are past. Recheck usabadminton.org for the "2027 ... ORC Prospectus Released" posts in November-December. Pomona in January is an inference, not a date.
+- **Padel:** no 2027 California event. Pro Padel League Santa Monica was Aug 13-16, 2026 (past). The "USPA Master Finals, Taktika San Diego, Dec 15-17" article is from Nov 2023, so it is not a 2026 event. USA Padel is taking club applications for the 2027 Nox USA Padel Circuit, so California stops may appear on padelusa.org once chosen. Park Padel Open (South San Francisco) was Aug 2025.
