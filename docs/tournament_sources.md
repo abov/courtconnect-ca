@@ -8,7 +8,7 @@ Standard web search per sport. Only events whose organizer page I read went into
 
 ## Leads (found in search results only, not read at the organizer, so not added)
 - Pickleball, from a third-party list (mypickleballconnect.com, fetch was rate-limited): California Pickleball Classic, Fresno, Oct 16-18; Monterey Bay Pickleball Open, Oct 23-25; Palm Desert Classic, Oct 23-25; Coachella Valley Grand Prix (Palm Desert Nov 13-15, La Quinta Nov 14-16, Palm Desert Dec 11-13); San Diego Paddle Battle, Coronado, Oct 17-18.
-- PPA Malibu Cup: the seed says Dec 14-20 (ppatour.com/schedule); one search result said Nov 30 - Dec 6 at Pepperdine. Recheck ppatour.com before the date.
+- PPA Malibu Showcase: resolved 2026-10-12. Official event page says Dec 14-20 at Pepperdine Ralphs-Straus Tennis Center, tickets from $25 (Nov 30 - Dec 6 appears only on third-party pages).
 - USTA NorCal tri-level team event, Diamond Hills Sports Club, Oakley, Oct 16-18 (team play, little to watch).
 - Paddle tennis: the Venice Beach US Open article is from Sept 2025 (Oct 18-19, 2025), so 2026 is unknown.
 - USA Badminton: 2026 CA events (US Open Fullerton June, SoCal ORC Jan, Dave Freeman Open Feb, NorCal Mar/May) are all past; no fall 2026 or 2027 CA listing found. usabadminton.org/tournaments 404'd.
