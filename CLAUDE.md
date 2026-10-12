@@ -5,7 +5,7 @@ README.md has the full story; read it only if you need background. Decisions are
 
 ## Commands (run from Git Bash on Windows)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
-- `make app-data`   export `app/data/venues.json` for the map; `make app` serves it at localhost:8765
+- `make app-data`   export `app/data/venues.json` for the map (commit it after any seed change; CI runs `ci/check_export_fresh.py`); `make app` serves it at localhost:8765
 - `make extract` / `make load`   refresh raw data (extract takes ~15 min; don't run unless asked)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
 - `make report`     regenerate `docs/coverage_snapshot.md`
