@@ -1,0 +1,31 @@
+# Tournament refresh runbook (run every ~2 weeks)
+
+Goal: keep `transform/seeds/watch_events.csv` current for California. Only add events whose dates and venue you read at the organizer or governing body. Label anything inferred (see the `location_precision`, `date_status` and `source_note` columns). CourtConnect links out; no bookings or payments. Never use the owner's logins.
+
+Cost rules: no subagents, no screenshots, no extended web search. Read pages as text. One batched call beats many.
+
+## Steps
+1. Start from fresh `main` on a new branch `claude/tournaments-YYYY-MM-DD`. Read the last 30 lines of `docs/tournament_sources.md` for what was already covered and the "Last run" date.
+2. For each source below, collect California events dated today or later and not already in `watch_events.csv` (match on name + start_date). Add rows with the same columns as existing rows (`event_key` is a lowercase slug ending in the year). Use `level` pro / amateur / college / junior; `watch_format` `in_person_unconfirmed` unless the source states ticketing; `date_status` `dates_not_confirmed` if the source says tentative; `verified_on` = today.
+3. Update changed dates of existing rows (a source disagreeing with the seed is flagged in `source_note`, not silently overwritten when the seed came from the official page).
+4. Run `.venv/Scripts/dbt build --select stg_watch_events watch_events mart_watch_events --project-dir transform --profiles-dir transform` and `python ci/check_seed_evidence.py`, then the full `dbt build` once.
+5. Append a "Pass N (date)" section to `docs/tournament_sources.md` (added, changed, sources that failed) and set "Last run: date" at the top of that section. Update CLAUDE.md "Current status" with 2 lines.
+6. Commit, push, open a PR. Do not merge. Do not run `make extract`, `make load`, `snowflake-build`, or `pages.yml`.
+
+## Sources (what worked on 2026-10-12)
+| Sport | Source | How |
+|---|---|---|
+| Tennis, SoCal | https://playtennis.usta.com/tournaments?panel=section&level-category=adult&location=San%20Diego,%2092114&organisation-group=6f20620d-90b5-4a74-bf20-18b0cdd90f98 | Browser pane. Click the SEARCH button with JS, wait ~6 s, read `document.body.innerText` (results are listed ~2 months ahead). Keep Level 1-5 and prize-money Level 6 events; skip Level 7 round robins and WTN ladders. |
+| Tennis, NorCal | The Google Sheet linked from https://www.ustanorcal.com/adults/tournaments/ ("2026 TOURNAMENT CALENDAR"; find the current-year link on the page) | `curl -L "<sheet>/export?format=csv"`. Keep Level 4-5 and Open. The sheet's year changes: look for the new link in January. |
+| Pickleball | https://usapickleball.org/tournaments/?filter=true&tournament_state=California | Browser pane or WebFetch. The script-formatted page can show dates one day early; the server-rendered page and the event/news page are right. Also check https://usapickleball.org/goldenticket/ and the PPA schedule https://www.ppatour.com/schedule/ (the seed's PPA rows came from there). |
+| Padel | https://uspa-tournaments.worldpadelrating.com/tournaments?country=US | Browser pane `get_page_text`; lists only ~2 weeks ahead. Keep rows with a California city. Also read https://padelusa.org/calendar/ if it renders. |
+| Badminton | https://usabadminton.org/athletes/adults/adult-tournament-schedule/ and the junior schedule `.../athletes/juniors/junior-tournament-schedule/` | WebFetch. The schedule has no states; California clubs: Bintang (Fremont), Bay Badminton Center (Milpitas), Elite Badminton Center (Union City), San Gabriel Valley BC (El Monte), Arena (Pomona), San Diego BC, Titan Gym (Fullerton). Prospectus pages state the city. |
+| Racquetball, squash, table tennis, padel, paddle tennis (secondary) | https://www.r2sports.com/r2sports-event-search.asp?searchNow=YES | Browser pane. On the search page, in JS: take the form that has `stateID`, set `countryID` to United States (the page reloads once), then `fetch(form.action,{method:'POST',body:new URLSearchParams(formData)})` with `stateID=6` (California) and `sportID` Racquetball 1, Squash 4, Table Tennis 22, Padel 1122, Badminton 20, Paddle Tennis 55, Paddleball 57, Pickleball 64. Parse rows with a date. |
+| Table tennis | https://www.omnipong.com/t-tourney.asp | Browser pane on that page, then JS `fetch('https://www.omnipong.com/T-tourney.asp?t=9&e=0',{method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'Year=2026&Keyword=&=Search'})` (use the current year; `Year=Current` returns nothing). Keep rows whose city ends `, CA`. Do not store contact names or phones. |
+| Squash | https://siliconvalleyopen.com/ and https://ussquash.org (junior calendar) | Club Locker is script-loaded and unread; the Silicon Valley Open (Redwood City) is the only California squash event found so far. |
+| Skyball | https://skyball.us/play | Browser pane, click "Show past"; the plain fetch shows "No tournaments currently scheduled". |
+| Paddle tennis | Search for the Venice Beach US Open of Paddle Tennis for this year; APTA platform tennis is not a California scene. | Standard web search. |
+| Pro (all sports) | PPA, Premier Padel, PSA squash, BNP Paribas Open, BWF/US Open badminton | Organizer sites. |
+
+## Known gaps
+Local club-run events that are not on a governing-body calendar (Meetup groups, city recreation departments, club ladders) are not covered. Lead rows belong in `venue_leads.csv` or `docs/tournament_sources.md`, not `watch_events.csv`.

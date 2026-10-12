@@ -87,7 +87,14 @@ also_played as (
     join {{ ref('dim_sport') }} f on f.sport_id = s.sport_id
     join {{ ref('sport_also_played') }} a on trim(a.sport) = f.sport_name
     join {{ ref('dim_sport') }} d on d.sport_name = trim(a.also_sport)
+    join {{ ref('stg_overture_places') }} p on p.place_id = s.place_id
     where not exists (select 1 from settled x where x.place_id = s.place_id and x.sport_id = d.sport_id)
+      -- exclude_private_members = yes: Overture has no access tag, so a club-style name (country / athletic / racquet / tennis / golf /
+      -- swim club, "private", "members") counts as private or members-only and does not pass the sport on
+      and not (lower(trim(coalesce(a.exclude_private_members, ''))) = 'yes'
+               and (p.name_norm like '% country club %' or p.name_norm like '% athletic club %' or p.name_norm like '% racquet club %'
+                    or p.name_norm like '% tennis club %' or p.name_norm like '% golf club %' or p.name_norm like '% swim club %'
+                    or p.name_norm like '% private %' or p.name_norm like '% members %'))
 )
 
 select * from settled

@@ -150,8 +150,6 @@
     <div>
       <span class="l">Setting and surface</span>
       <div class="chips" id="chipsPlay">
-        <button class="chip" data-k="indoor" aria-pressed="false">Indoor</button>
-        <button class="chip" data-k="outdoor" aria-pressed="false">Outdoor</button>
         <button class="chip" data-k="sand" aria-pressed="false">Sand / beach</button>
         <button class="chip" data-k="clay" aria-pressed="false">Clay</button>
         <button class="chip" data-k="grass" aria-pressed="false">Grass</button>
@@ -163,7 +161,6 @@
       <div class="chips" id="chipsInfo">
         <button class="chip" data-k="public" aria-pressed="false">Public</button>
         <button class="chip" data-k="free" aria-pressed="false">Free</button>
-        <button class="chip" data-k="lit" aria-pressed="false">Lights</button>
         <button class="chip" data-k="web" aria-pressed="false">Has website</button>
         <button class="chip" data-k="named" aria-pressed="false">Hide unnamed</button>
       </div>
@@ -332,8 +329,8 @@ function wallNode(w) {
   const box = el("div");
   box.append(el("h2", {text: w.n}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
-  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", w.c].filter(Boolean).join(" · ")}));
-  box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " · Free to use: " + triState(w.f) + (w.su ? " · Surface: " + w.su : "")}));
+  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", w.c].filter(Boolean).join(" ï¿½ ")}));
+  box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " ï¿½ Free to use: " + triState(w.f) + (w.su ? " ï¿½ Surface: " + w.su : "")}));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). Sports listed are what the wall is thought to suit."}));
   return box;
@@ -348,7 +345,7 @@ function renderWallList() {
   for (const w of list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: w.n}),
-      el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
+      el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" ï¿½ ")}),
       el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t}))));
     btn.addEventListener("click", () => showWall(w, true));
     ul.append(el("li", {}, btn));
@@ -427,7 +424,7 @@ function venueNode(v) {
   const box = el("div");
   box.append(el("h2", {text: v.n || "Unnamed courts"}));
   box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q]})));
-  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + v.cn + (v.cn === 1 ? " person" : " people") + " confirmed" : "")})));
+  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " ï¿½ " + v.cn + (v.cn === 1 ? " person" : " people") + " confirmed" : "")})));
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c].filter(Boolean).join(", ");
   if (place) box.append(el("p", {class: "meta", text: place}));
@@ -532,7 +529,7 @@ function readHash() {
   if (p.get("mode") === "watch" || p.get("mode") === "walls") state.mode = p.get("mode");
   const wt = p.get("wall"); if (wt === "one_wall" || wt === "three_wall") state.wall = wt;
   const s = p.get("sport"); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
-  for (const k of (p.get("on") || "").split(",")) if (k) state.on.add(k);
+  for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
   state.text = (p.get("q") || "").toLowerCase();
   const a = p.get("access"); if (a === "members" || a === "public") state.access = a;
