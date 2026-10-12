@@ -5,3 +5,7 @@ Pickleball,Skyball,"Skyball is played on pickleball courts (project owner, 2026-
 Pickleball,Spec Tennis,"Spec Tennis is played on pickleball courts (project owner, 2026-10-11)",
 Pickleball,Lite Tennis,"Lite Tennis is played on pickleball courts (project owner, 2026-10-11)",
 Badminton,Pitton,"Pitton is played on badminton courts (project owner, 2026-10-11). Private and members-only courts are left out because they probably do not allow it",yes
+Tennis,Frescotennis,"Frescotennis is played on regular tennis courts (project owner, 2026-10-11). Public courts only: private and members-only courts are left out because they probably do not allow it",yes
+Tennis,Tennis Triples,"Tennis Triples is played on regular tennis courts (project owner, 2026-10-11). Public courts only: private and members-only courts are left out because they probably do not allow it",yes
+Tennis,Loboton,"Loboton is played on regular tennis courts (project owner, 2026-10-11). Public courts only: private and members-only courts are left out because they probably do not allow it",yes
+Pop Tennis,Tenis criollo,"Tenis criollo is played on pop (paddle) tennis courts (project owner, 2026-10-11). Public courts only: private and members-only courts are left out because they probably do not allow it",yes

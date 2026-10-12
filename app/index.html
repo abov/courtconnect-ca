@@ -120,6 +120,7 @@
     <div>
       <label class="l" for="sport">Sport</label>
       <select id="sport"></select>
+      <p id="anywhere" class="note" hidden></p>
     </div>
     <div class="playonly">
       <span class="l" id="accLabel">Who can play</span>
@@ -564,9 +565,15 @@ function populateSports() {
     if (state.sport >= 0 && !counts[sports[state.sport].n]) state.sport = -1;
   } else {
     sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(venues.length) + " venues)"}));
-    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (s.v > 0) sel.append(el("option", {value: String(i), text: s.n + " (" + fmt(s.v) + ")"})); });
+    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (s.v > 0 || s.w) sel.append(el("option", {value: String(i), text: s.n + " (" + [s.v > 0 ? fmt(s.v) : "", s.w || ""].filter(Boolean).join(" + ") + ")"})); });
   }
   sel.value = String(state.sport);
+  showAnywhere();
+}
+function showAnywhere() {
+  const n = $("anywhere"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
+  n.hidden = !(s && s.w);
+  if (s && s.w) n.textContent = s.wn + (s.v > 0 ? "" : ". No venue is listed because none is needed.");
 }
 function setMode(m) {
   if (state.mode === m) return;
@@ -579,7 +586,7 @@ function initControls() {
   $("modeWatch").addEventListener("click", () => setMode("watch"));
   $("modeWalls").addEventListener("click", () => setMode("walls"));
   for (const b of document.querySelectorAll("[data-wt]")) b.addEventListener("click", () => { state.wall = b.dataset.wt; syncControls(); refresh(); if (state.mode === "walls") applyMode(true); });
-  sel.addEventListener("change", () => { state.sport = +sel.value; refresh(); if (state.mode !== "play") applyMode(true); });
+  sel.addEventListener("change", () => { state.sport = +sel.value; showAnywhere(); refresh(); if (state.mode !== "play") applyMode(true); });
   $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); refresh(); }, 200));
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
     const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();

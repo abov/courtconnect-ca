@@ -47,6 +47,10 @@ def main() -> None:
         from marts.mart_sport_gaps g order by g.venues_found desc, g.sport_name""").fetchall()
     sport_index = {r[0]: i for i, r in enumerate(gaps)}
     sports = [{"n": r[0], "v": int(r[2]), "s": r[1], "r": r[3]} for r in gaps]
+    # sports that need no fixed court (any beach): w = where, wn = note; the map lists them without pinpointing a place
+    for name, where, note in con.execute("select trim(sport), trim(where_played), trim(note) from raw.sport_play_anywhere").fetchall():
+        if name in sport_index:
+            sports[sport_index[name]].update({"w": where, "wn": note})
 
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, address_line,
