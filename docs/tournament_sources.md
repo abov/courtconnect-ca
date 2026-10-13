@@ -43,3 +43,12 @@ Last run: 2026-10-12. Added 24 events (watch_events.csv now 43) and 1 lead. Repe
 ## Sweep B (2026-10-12): badminton 2027 and padel
 - **Badminton:** no 2027 California event is published. SoCal ORC (Pomona, mid-January in 2025 and 2026) and the NorCal ORC/OLC have no 2027 prospectus yet; the 2026 U.S. Open (Fullerton, June) and the 2025 Adult Nationals (Livermore, Dec 27-30) are past. Recheck usabadminton.org for the "2027 ... ORC Prospectus Released" posts in November-December. Pomona in January is an inference, not a date.
 - **Padel:** no 2027 California event. Pro Padel League Santa Monica was Aug 13-16, 2026 (past). The "USPA Master Finals, Taktika San Diego, Dec 15-17" article is from Nov 2023, so it is not a 2026 event. USA Padel is taking club applications for the 2027 Nox USA Padel Circuit, so California stops may appear on padelusa.org once chosen. Park Padel Open (South San Francisco) was Aug 2025.
+
+## Pass 4 (2026-10-13, scoped sweep)
+Last run: 2026-10-13. Added 0 events (watch_events.csv stays 43); changed 1 row.
+- **Table tennis:** the OmniPong entry form (`omnipong.com/EntryForms/1078-82.pdf`, linked from the tournament list) gives the venue for the USATT California State Championships: Orange County Table Tennis Academy, Fountain Valley CA 92708 (street printed as "18071 Mountain Washington"). Events run Nov 21-22 (form header says Nov 20-22). Row updated; the map point is still the city centre, not surveyed. A plain `curl` POST to `T-tourney.asp?t=9&e=0` works without the browser pane. OmniPong also lists the USATT California Open (Burlingame, Oct 9-11), which is past.
+- **PPA Malibu:** ppatour.com/events/2026/veolia-malibu-cup/ again says Dec 14-20, Pepperdine Ralphs-Straus Tennis Center; seed already correct (fixed in Sweep A). The Nov 30 - Dec 6 dates are not on the official page.
+- **Squash:** US Squash's 2026-27 junior calendar has no California event after the West Coast JCT (Redwood City, Oct 10-12, past). Club Locker is still script-loaded and unread, so adult/club events remain unchecked.
+- **Badminton:** usabadminton.org schedule (updated 2026-10-08, tentative) covers only Oct-Dec 2026; no 2027 ORC or any 2027 event. Recheck Nov-Dec.
+- **Padel:** uspa-tournaments.worldpadelrating.com lists only USA Padel 100 Pura Padel (Sherman Oaks, Oct 17-18, already in the seed). padelusa.org/calendar shows no individual events to a text fetch.
+- **Cosm Los Angeles:** cosm.com/los-angeles/events returned no events to a plain fetch (script-loaded), so nothing was verified; lead `cosm-los-angeles` stays open.
