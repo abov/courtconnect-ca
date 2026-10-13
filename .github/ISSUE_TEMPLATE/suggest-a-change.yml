@@ -51,6 +51,7 @@ body:
         - Social event
         - Court booking
         - Club page
+        - Social or WhatsApp link (public)
     validations:
       required: true
   - type: input

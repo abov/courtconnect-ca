@@ -23,8 +23,8 @@ for name, (datecol, required, https) in RULES.items():
             if not reported and not ISO.fullmatch((r.get(datecol) or "").strip()):
                 errors.append(f"{where}: {datecol} must be YYYY-MM-DD")
             errors += [f"{where}: {c} is empty" for c in required if not (r.get(c) or "").strip()]
-            if name == "venue_actions.csv" and (r.get("action_type") or "").strip() == "social" and not re.match(r"https://(www\.)?(instagram|facebook)\.com/\S+$", (r.get("url") or "").strip()):
-                errors.append(f"{where}: a social link must be an instagram.com or facebook.com https URL")
+            if name == "venue_actions.csv" and (r.get("action_type") or "").strip() == "social" and not re.match(r"https://((www\.)?(instagram|facebook)\.com|chat\.whatsapp\.com|(www\.)?whatsapp\.com/channel)/\S+$", (r.get("url") or "").strip()):
+                errors.append(f"{where}: a social link must be an instagram.com, facebook.com, chat.whatsapp.com or whatsapp.com/channel https URL")
             errors += [f"{where}: {c} must be an https link" for c in https if (r.get(c) or "").strip() and not r[c].strip().startswith("https://")]
 if errors:
     print("\n".join(errors))
