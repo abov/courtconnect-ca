@@ -438,7 +438,10 @@ function venueNode(v) {
   }
   const q = new URLSearchParams({template: "suggest-a-change.yml", title: "Change: " + (v.n || "Unnamed courts") + (v.c ? " (" + v.c + ")" : ""), venue: v.n || "", city: v.c || "", map_id: v.i});
   box.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change to this venue"}), document.createTextNode(" (opens a GitHub form; a reviewer approves it)")));
-  box.append(el("p", {class: "meta", text: "Source: " + SRC[v.s] + (v.q === "i" ? ". Name is a guess from the park or school the courts sit inside." : "")}));
+  if (v.s === "o" || v.s === "b") {
+    box.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (opens the OSM editor here; you need your own free OSM account, and only add what you have seen or the venue's own page says)")));
+  }
+  box.append(el("p", {class: "meta", text: "Source: " + SRC[v.s]+ (v.q === "i" ? ". Name is a guess from the park or school the courts sit inside." : "")}));
   return box;
 }
 function showVenue(v, fly) {
