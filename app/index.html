@@ -404,7 +404,22 @@ function initMap() {
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 
 // ---------- venue details ----------
-function sportLine(v) { return v.p.map(p => sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court)" : " courts)") : "")).join(", "); }
+function sportLine(v) {
+  const have = new Set(v.p.map(p => p[0])), extras = {}, plain = [];
+  for (const p of v.p) {
+    const bases = (sports[p[0]].b || []).filter(b => have.has(b));
+    if (bases.length) bases.forEach(b => (extras[b] = extras[b] || []).push(sports[p[0]].n));
+    else plain.push(p);
+  }
+  const cnt = c => c ? " (" + c + (c === 1 ? " court)" : " courts)") : "";
+  const parts = plain.map(p => {
+    const x = extras[p[0]];
+    if (!x) return sports[p[0]].n + cnt(p[1]);
+    return sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court" : " courts") : " (") + (p[1] ? "; " : "") + "also played on these courts: " + x.join(", ") + ")";
+  });
+  const total = plain.reduce((a, p) => a + (p[1] || 0), 0);
+  return parts.join(", ") + (plain.filter(p => p[1]).length > 1 ? " · " + total + " courts listed" : "");
+}
 function facts(v, entry) {
   const out = [], m = entry ? entry[2] : v.m;
   for (const [k, label] of [["indoor", "Indoor"], ["outdoor", "Outdoor"], ["sand", "Sand"], ["clay", "Clay"], ["grass", "Grass"], ["hard", "Hard court"]]) if (m & SURF[k]) out.push(label);
