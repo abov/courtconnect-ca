@@ -37,5 +37,8 @@ Rows in venue_actions.csv with action_type=social: check each link still loads (
 ## WhatsApp invite links (ADR 0010)
 Rows with provider whatsapp: check each link still loads and the club's own site still shows it; remove dead or revoked invites.
 
+## Meetup and Partiful links (ADR 0012)
+Rows with provider meetup or partiful: check each link still loads and the club's own site still links to it; remove dead ones. Add new ones only from a club's own site or a suggest-a-change submission. Never search behind a login, never copy descriptions or attendee lists.
+
 ## Beach tennis
 Recheck: olabeachtennis.com (open play times at Tower 26, leagues), sfbeachtennis.com (park locations, training tour 18 Oct, SFBT League page), and the San Diego beach tennis social links (leads `beach-tennis-mission-beach-tower-22`, `sfbt-*`). Promote a lead to `manual_venues` only once the club gives a court location.

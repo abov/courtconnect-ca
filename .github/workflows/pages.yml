@@ -13,6 +13,14 @@ jobs:
     environment: {name: github-pages, url: "${{ steps.deployment.outputs.page_url }}"}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      # dbt docs (lineage + data dictionary) built from the small CI fixture data; structure only, no venue data is published here.
+      - run: pip install dbt-core dbt-duckdb duckdb pandas python-dotenv
+      - run: python ingestion/load_raw.py --data-dir ci/fixtures
+      - run: dbt build --project-dir transform --profiles-dir transform
+      - run: dbt docs generate --project-dir transform --profiles-dir transform
+      - run: mkdir -p app/dbt-docs && cp transform/target/index.html transform/target/manifest.json transform/target/catalog.json app/dbt-docs/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: {path: app}
