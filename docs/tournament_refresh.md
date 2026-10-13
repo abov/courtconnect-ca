@@ -33,3 +33,6 @@ Local club-run events that are not on a governing-body calendar (Meetup groups, 
 
 ## Social links (ADR 0009)
 Rows in venue_actions.csv with action_type=social: check each link still loads (make check-links) and that the club's own site still links to the account; remove dead ones. Add new handles only when the club's own site shows them.
+
+## Beach tennis
+Recheck: olabeachtennis.com (open play times at Tower 26, leagues), sfbeachtennis.com (park locations, training tour 18 Oct, SFBT League page), and the San Diego beach tennis social links (leads `beach-tennis-mission-beach-tower-22`, `sfbt-*`). Promote a lead to `manual_venues` only once the club gives a court location.
