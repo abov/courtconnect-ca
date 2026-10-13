@@ -52,6 +52,11 @@ def main() -> None:
         if name in sport_index:
             sports[sport_index[name]].update({"w": where, "wn": note})
 
+    # sports played on another sport's courts: b = indexes of the court sports they share (the panel groups them, not counts them again)
+    for name, base in con.execute("select trim(also_sport), trim(sport) from raw.sport_also_played").fetchall():
+        if name in sport_index and base in sport_index:
+            sports[sport_index[name]].setdefault("b", []).append(sport_index[base])
+
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, address_line,
                website_usable, offerings, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
