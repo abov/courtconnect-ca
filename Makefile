@@ -56,3 +56,6 @@ report:           ## regenerate docs/coverage_snapshot.md and docs/sport_name_re
 
 check-links:      ## verify every link-out in venue_actions.csv still loads
 	$(PY) ingestion/check_action_links.py
+
+quality:          ## regenerate docs/data_quality.md and append to the trend CSV
+	$(PY) ingestion/export_quality_scorecard.py

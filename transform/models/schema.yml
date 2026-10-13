@@ -340,3 +340,46 @@ models:
           - accepted_values:
               arguments:
                 values: ['covered', 'sparse', 'possible_only', 'tagged_none_found', 'not_found']
+
+  - name: mart_venue_finder
+    description: >
+      The table behind the map. One row per venue and sport (a venue with tennis and pickleball has two rows). Venues are clusters of nearby
+      OpenStreetMap courts merged with Overture places and hand-curated entries (ADR 0002, 0003). Exported to app/data/venues.json by
+      ingestion/export_app_data.py.
+    columns:
+      - name: venue_id
+        description: Stable id of the venue cluster (dim_venue).
+      - name: venue_name
+        description: Best available name. See name_source for how trustworthy it is.
+      - name: name_source
+        description: "How the name was found: court_name, operator, manual and places_directory are confirmed; enclosing_feature is a guess from the park or school the courts sit in; unnamed has none."
+      - name: venue_source
+        description: "Where the venue comes from: osm, osm+places, places_only or manual."
+      - name: sport_name
+        description: Racket sport from the owner's sheet (the sheet is the source; never hand-edited).
+      - name: courts_for_sport
+        description: Number of mapped courts for that sport. Sports that share physical courts (see sport_also_played) are not extra courts.
+      - name: is_confirmed_public
+        description: True only when the data marks the courts public. False means unknown, not private.
+      - name: is_members_only
+        description: True when the courts are marked private or members and not marked public. Incomplete by design; an unmarked club is not flagged.
+      - name: website_usable
+        description: Website that passed the liveness check; dead links never reach the map.
+
+  - name: mart_venue_actions
+    description: >
+      Link-outs for a venue (open play, clinics, tournaments, social accounts). CourtConnect takes no bookings or payments; every row links
+      to the provider's own page and carries verified_on and evidence (ADR 0007, 0009).
+    columns:
+      - name: venue_id
+        description: Venue the link belongs to.
+      - name: action_type
+        description: open_play, drop_in, clinic, league, tournament, social, club_page and so on.
+      - name: is_current
+        description: False once end_date has passed.
+
+  - name: mart_watch_events
+    description: Events to watch (pro and amateur tournaments, dome screenings). Link-out only, with date_status and location_precision saying how certain the data is (ADR 0006).
+
+  - name: mart_venue_leads
+    description: Open research leads (claims we have not confirmed, such as whether a club is members only). Leads are never shown as facts on the map.
