@@ -56,7 +56,7 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 **Open, in order**
 1. CalNeva (ADR 0014): steps 2-4 done (525 NV venues live). First NV seeds done (8 venues, 1 event). Next: more NV link-outs (Reno/Henderson parks, Life Time, Sun City Summerlin), NV manual venues if any; repo/Pages rename to `courtconnect` after the beta, target 2026-12-01, TBD (keep a redirect stub for the old Pages URL).
 2. Beta round (docs/feedback_round.md): replies due 10-28, findings 10-29..11-01, then fill case study + docs/feedback_findings.md (RICE). Owner: exclude own IP in GoatCounter.
-3. Accuracy: (band counts done 10-14j) Overture/OSM match gold set, clear the 249-row review queue from public pages.
+3. Accuracy: (band counts done 10-14j) Overture/OSM match gold set, clear the review queue from public pages (247 left after batch 1; ~25 per session).
 4. Small: owner to confirm Basque Pelota (Chino trinquet, South SF center) by 2026-11-16; owner review of UX live.
 5. Coverage: `*-access` leads, ~440 club-named venues (pass 2 parked), beach tennis court locations from clubs, statewide walls (parked), NorCal Equinox, OSM fix list (optional).
 6. Recheck: Club Locker (squash), Cosm events, badminton 2027 ORCs (Nov-Dec).
@@ -72,3 +72,4 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-14j: map sport dropdown counts now follow the location/filters (Padel (1) for "las vegas"; `sportCounts()` in app/index.html). Snowflake retired, DuckDB only; owner is new to DuckDB (explain access simply).
 - 2026-10-14i: Nevada seeds: 28 link-outs on 8 NV venues (P1 Padel, Vegas Indoor Pickleball, Darling TC, Dill Dinkers Henderson, Pickleball Universe, Vegas Badminton Academy, Incline Village, Washoe TC) + PickleX K-Pop show (Darling, 2026-11-14) watch event; new providers in app `PROVIDER`; dropped unused `dim_sport.likely_in_california`. Leads: LV Badminton Club site says closed; 3rd Shot Reno page 404; vegasttc.com no DNS. Seeds must keep CRLF (mixed endings break DuckDB's sniffer). DuckDB + Snowflake green.
 - 2026-10-14j: `make quality` shows confidence band counts (rules_v2, all/CA/NV via `dim_venue.region`; script only, not exported): high 75, medium 724, low 9,667. Next for item 3: Overture/OSM gold set, review queue.
+- 2026-10-14k: review queue batch 1 (`mart_sport_evidence.needs_review`, was 272 not 249): 22 confirms + 3 rejects (equipment stores) from venues' own pages in `place_sport_overrides.csv` (new `evidence`, `verified_on` columns); queue 272 -> 247. Dead/unclear pages listed in the PR; places added to `ci/fixtures/overture_places.csv`. DuckDB only.

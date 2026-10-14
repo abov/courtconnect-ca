@@ -73,6 +73,8 @@ seeds:
         place_id: varchar
         sport: varchar
         verdict: varchar
+        evidence: varchar
+        verified_on: varchar
 
 models:
   courtconnect:
