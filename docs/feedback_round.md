@@ -4,6 +4,7 @@ Goal: learn whether CourtConnect helps people find a place to play and what is m
 
 ## Before you start (owner, one-time)
 1. Analytics (ADR 0013) are live: site code `courts`, dashboard https://courts.goatcounter.com (confirmed 2026-10-13). Record the start date; counts before it do not exist.
+- [ ] **Owner to-do (deferred, set a date):** in GoatCounter go to Settings > Ignore IPs and add your own IP (or use the "Don't count my visits" option in the site settings), so your visits are excluded. Until it is done, your own visits are in the counts, so do not quote usage numbers from before this is set; note the date you set it here: ____.
 2. Note the baseline from `docs/data_quality.md` (venues, named %, events) so you can say what changed during the round.
 
 ## Who (6 to 10 people)
