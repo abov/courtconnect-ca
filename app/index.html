@@ -56,8 +56,6 @@
   .seg .short { display: none; }
   body:not(.watch) .watchonly { display: none; }
   body.watch .playonly, body.watch .legend.playlegend { display: none; }
-  body:not(.walls) .wallonly { display: none; }
-  body.walls .playonly, body.walls .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; }
@@ -138,7 +136,6 @@
     <div class="seg" role="group" aria-label="What are you looking for?">
       <button class="chip" id="modePlay" type="button" aria-pressed="true" aria-label="Find a place to play" title="Find a place to play"><span class="full">Find a place to play</span><span class="short">Play</span></button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" aria-label="Watch a match" title="Watch a match"><span class="full">Watch a match</span><span class="short">Watch</span></button>
-      <button class="chip" id="modeWalls" type="button" aria-pressed="false" aria-label="Hitting walls" title="Hitting walls"><span class="full">Hitting walls</span><span class="short">Walls</span></button>
     </div>
   </header>
 
@@ -149,15 +146,7 @@
       <label class="l" for="sport">Sport</label>
       <select id="sport"></select>
       <p id="anywhere" class="note" hidden></p>
-    </div>
-    <div class="wallonly">
-      <span class="l" id="wtLabel">Wall type</span>
-      <div class="seg" role="group" aria-labelledby="wtLabel" style="margin-top:4px">
-        <button class="chip" data-wt="" type="button" aria-pressed="true">All</button>
-        <button class="chip" data-wt="one_wall" type="button" aria-pressed="false">One-wall</button>
-        <button class="chip" data-wt="three_wall" type="button" aria-pressed="false">Three-wall</button>
-      </div>
-      <div class="note" style="margin-top:6px">Walls for hitting alone. Most pins are handball and wall courts mapped in OpenStreetMap (type and condition not checked); a few are reported by players. Only Los Angeles, San Diego and the Bay Area have been searched, so this is not the full set of California walls. Tennis backboards are rarely mapped, so even those areas are incomplete. Lights, hours and fees are shown only when known.</div>
+      <p id="wallnote" class="note" hidden></p>
     </div>
     <div class="watchonly note">CourtConnect doesn't sell tickets or book anything. Every event links to the organizer's own page: check dates, seating and prices there.</div>
     <div class="playonly">
@@ -266,7 +255,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno"};
 
 let DATA, sports, venues, events = [], walls = [];
-const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set(), wall: ""};
+const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
 const $ = id => document.getElementById(id);
 
 function el(tag, props, ...kids) {
@@ -372,10 +361,10 @@ function renderEventList() {
 // ---------- hitting walls (solo practice) ----------
 const WALL_TYPE = {one_wall: "One-wall", three_wall: "Three-wall", backboard: "Backboard", other: "Wall"};
 const WALL_CONF = {reported: "Reported by a player, not independently verified", official: "Confirmed from an official source", tagged: "From OpenStreetMap tags", inferred: "Inferred"};
-function wallsFiltered() {
-  const name = state.sport >= 0 ? sports[state.sport].n : null;
-  return walls.filter(w => (!state.wall || w.t.includes(state.wall)) && (!name || w.sp.includes(name)));
-}
+// Walls double as solo courts for the wall sports. Only walls whose type is known qualify: OSM handball/wall courts of unchecked type ("other") never do.
+const WALL_SPORT = {"1-wall Paddleball": ["one_wall", "backboard"], "3-wall Paddleball": ["three_wall"]};
+function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t))) : []; }
+function wallsFiltered() { return state.mode === "play" && state.sport >= 0 ? wallsFor(sports[state.sport].n) : []; }
 function wallGeojson(list) {
   return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
 }
@@ -396,18 +385,17 @@ function showWall(w, fly) {
   if (fly) map.flyTo({center: [w.x, w.y], zoom: Math.max(map.getZoom(), 15), essential: true});
   popup.setLngLat([w.x, w.y]).setDOMContent(wallNode(w)).addTo(map);
 }
-function renderWallList() {
-  const list = wallsFiltered(), ul = $("list"); ul.replaceChildren();
+function wallItems(list) {
+  const out = [];
   for (const w of list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: w.n}),
       el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" � ")}),
       el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t}))));
     btn.addEventListener("click", () => showWall(w, true));
-    ul.append(el("li", {}, btn));
+    out.push(el("li", {}, btn));
   }
-  viewList = list; updateCount();
-  return list;
+  return out;
 }
 
 // ---------- map ----------
@@ -539,18 +527,19 @@ function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
   show(["clusters", "cluster-count", "pts"], mode === "play");
   show(["ev-pts", "ev-label"], mode === "watch");
-  show(["wall-pts", "wall-label"], mode === "walls");
+  show(["wall-pts", "wall-label"], mode === "play" && wallsFiltered().length > 0);
 }
+function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
 function applyMode(fit) {
   if (!mapReady) return;
   setLayersFor(state.mode); popup.remove();
   if (state.mode === "watch" && fit) {
     const list = eventsFiltered();
     if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(ev => b.extend([ev.x, ev.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
-  } else if (state.mode === "walls" && fit) {
+  } else if (state.mode === "play" && fit) {
     const list = wallsFiltered();
-    if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
-  } else if (state.mode === "play" && fit) map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
+    if (list.length) fitWalls(list); else map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
+  }
   refresh();
 }
 function renderList() {
@@ -559,7 +548,7 @@ function renderList() {
   const inView = current.filter(v => b.contains([v.x, v.y]));
   const pool = inView.length ? inView : current;
   const top = pool.map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).slice(0, 40).map(x => x[1]);
-  const ul = $("list"); ul.replaceChildren();
+  const ul = $("list"); ul.replaceChildren(...wallItems(wallsFiltered()));
   for (const v of top) {
     const btn = el("button", {type: "button", class: "q" + v.q},
       el("div", {class: "nm", text: v.n || "Unnamed courts" + (v.c ? " in " + v.c : "")}),
@@ -588,20 +577,18 @@ function updateCount() {
     const kids = [el("b", {text: fmt(inView.length)}), document.createTextNode(noun(inView.length, " venue", " venues") + " in view" + (inView.length !== current.length ? " of " + fmt(current.length) : ""))];
     if (known) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === inView.length ? " (all venues list a count)" : " (" + fmt(known) + " venues list a count)")));
     else if (inView.length) kids.push(document.createTextNode(" · no court counts listed here"));
-    box.replaceChildren(...kids);
+    const ws = wallsFiltered();
+    if (ws.length) {
+      const wn = ws.filter(pin).length, wt = [el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + " in view" + (wn !== ws.length ? " of " + fmt(ws.length) : "") + " for solo practice")];
+      box.replaceChildren(...(current.length ? [...kids, document.createTextNode(" · "), ...wt] : wt));
+    } else box.replaceChildren(...kids);
     return;
   }
-  const n = viewList.filter(pin).length, all = viewList.length, watch = state.mode === "watch";
-  const label = watch ? noun(n, " event", " events") : noun(n, " hitting wall", " hitting walls");
-  box.replaceChildren(el("b", {text: fmt(n)}), document.createTextNode(label + " in view" + (n !== all ? " of " + fmt(all) : "") + (watch ? ", soonest first in the list" : "")));
+  const n = viewList.filter(pin).length, all = viewList.length;
+  box.replaceChildren(el("b", {text: fmt(n)}), document.createTextNode(noun(n, " event", " events") + " in view" + (n !== all ? " of " + fmt(all) : "") + ", soonest first in the list"));
 }
 function refresh() {
   renderActive();
-  if (state.mode === "walls") {
-    const list = renderWallList();
-    if (map.getSource("w")) map.getSource("w").setData(wallGeojson(list));
-    writeHash(); return;
-  }
   if (state.mode === "watch") {
     const list = renderEventList();
     if (map.getSource("e")) map.getSource("e").setData(eventGeojson(list));
@@ -609,6 +596,9 @@ function refresh() {
   }
   current = filtered();
   if (map.getSource("v")) map.getSource("v").setData(geojson(current));
+  if (map.getSource("w")) map.getSource("w").setData(wallGeojson(wallsFiltered()));
+  if (mapReady) setLayersFor(state.mode);
+  showWallNote();
   populateSports(); renderList(); writeHash();
 }
 
@@ -616,7 +606,6 @@ function refresh() {
 function writeHash() {
   const p = new URLSearchParams();
   if (state.mode !== "play") p.set("mode", state.mode);
-  if (state.mode === "walls" && state.wall) p.set("wall", state.wall);
   if (state.sport >= 0) p.set("sport", sports[state.sport].n);
   if (state.on.size) p.set("on", [...state.on].join(","));
   if (state.offers.size) p.set("offer", [...state.offers].join(""));
@@ -625,9 +614,9 @@ function writeHash() {
 }
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
-  if (p.get("mode") === "watch" || p.get("mode") === "walls") state.mode = p.get("mode");
-  const wt = p.get("wall"); if (wt === "one_wall" || wt === "three_wall") state.wall = wt;
-  const s = p.get("sport"); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
+  if (p.get("mode") === "watch") state.mode = "watch";
+  // old #mode=walls links land on the wall sport
+  const s = p.get("sport") || (p.get("mode") === "walls" ? "1-wall Paddleball" : ""); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
   for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
   state.text = (p.get("q") || "").toLowerCase();
@@ -654,9 +643,7 @@ function renderActive() {
 function syncControls() {
   renderActive();
   $("sport").value = String(state.sport); $("q").value = state.text;
-  document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("walls", state.mode === "walls");
-  for (const b of document.querySelectorAll("[data-wt]")) b.setAttribute("aria-pressed", state.wall === b.dataset.wt);
-  $("modeWalls").setAttribute("aria-pressed", state.mode === "walls");
+  document.body.classList.toggle("watch", state.mode === "watch");
   const nOn = state.on.size + state.offers.size;
   $("moreSummary").textContent = nOn ? "Filters on: " + nOn + " (tap to change)" : "More filters: surface, access, what they offer";
   if (nOn && !matchMedia("(max-width: 800px)").matches) $("moreFilters").open = true;
@@ -666,13 +653,7 @@ function syncControls() {
 }
 function populateSports() {
   const sel = $("sport"); sel.replaceChildren();
-  if (state.mode === "walls") {
-    const counts = {};
-    walls.forEach(w => w.sp.forEach(n => counts[n] = (counts[n] || 0) + 1));
-    sel.append(el("option", {value: "-1", text: "All sports (" + walls.length + " walls)"}));
-    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[s.n] + ")"})); });
-    if (state.sport >= 0 && !counts[sports[state.sport].n]) state.sport = -1;
-  } else if (state.mode === "watch") {
+  if (state.mode === "watch") {
     const up = upcomingEvents(), counts = {};
     up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
     sel.append(el("option", {value: "-1", text: "All sports (" + up.length + " events)"}));
@@ -682,9 +663,10 @@ function populateSports() {
     const sc = sportCounts(), narrowed = !!(state.text || state.on.size || state.offers.size);
     sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(sc.all) + " venues)"}));
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => {
-      if (!(s.v > 0 || s.w)) return;
+      const wc = narrowed ? 0 : wallsFor(s.n).length;
+      if (!(s.v > 0 || s.w || wc)) return;
       const n = sc[i] || 0;
-      sel.append(el("option", {value: String(i), text: s.n + " (" + [n > 0 || s.v > 0 ? fmt(n) : "", narrowed ? "" : (s.w || "")].filter(Boolean).join(" + ") + ")"}));
+      sel.append(el("option", {value: String(i), text: s.n + " (" + [n > 0 || s.v > 0 ? fmt(n) : "", wc ? wc + (wc === 1 ? " wall" : " walls") : "", narrowed ? "" : (s.w || "")].filter(Boolean).join(" + ") + ")"}));
     });
   }
   sel.value = String(state.sport);
@@ -695,6 +677,14 @@ function showAnywhere() {
   n.hidden = !(s && s.w);
   if (s && s.w) n.textContent = s.wn + (s.v > 0 ? "" : ". No venue is listed because none is needed.");
 }
+function showWallNote() {
+  const n = $("wallnote"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
+  n.hidden = !(s && WALL_SPORT[s.n]);
+  if (!n.hidden) {
+    const shown = wallsFor(s.n).length, unknown = walls.filter(w => w.t.every(t => t === "other")).length;
+    n.textContent = "Orange pins are hitting walls you can also use alone, shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Only Los Angeles, San Diego and the Bay Area have been searched.";
+  }
+}
 function setMode(m) {
   if (state.mode === m) return;
   state.mode = m; populateSports(); syncControls(); applyMode(true);
@@ -704,9 +694,7 @@ function initControls() {
   populateSports();
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));
-  $("modeWalls").addEventListener("click", () => setMode("walls"));
-  for (const b of document.querySelectorAll("[data-wt]")) b.addEventListener("click", () => { state.wall = b.dataset.wt; syncControls(); refresh(); if (state.mode === "walls") applyMode(true); });
-  sel.addEventListener("change", () => { state.sport = +sel.value; if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); refresh(); if (state.mode !== "play") applyMode(true); });
+  sel.addEventListener("change", () => { state.sport = +sel.value; if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); refresh(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); });
   $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); refresh(); }, 200));
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
     const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();
@@ -714,7 +702,7 @@ function initControls() {
     for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
     const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); refresh();
   });
-  $("reset").addEventListener("click", () => { state.wall = ""; state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
+  $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   $("nearMe").addEventListener("click", () => {
     if (!navigator.geolocation) return alert("Your browser does not support location.");
@@ -753,7 +741,6 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   readHash(); initControls(); initCoverage(); syncControls();
   initMap();
   if (state.mode === "watch") renderEventList();
-  if (state.mode === "walls") renderWallList();      // the event list must not wait for map tiles to finish loading
   $("loading").remove();
 }).catch(err => { $("loading").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });
 </script>

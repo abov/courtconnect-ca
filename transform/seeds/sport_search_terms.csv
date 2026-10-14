@@ -1,7 +1,8 @@
 term,sport,reliability
-1 wall paddle,1-wall Paddle,ambiguous
+1 wall paddleball,1-wall Paddleball,ambiguous
+3 wall paddleball,3-wall Paddleball,ambiguous
 360ball,360Ball,ambiguous
-4 wall paddle,4-wall Paddle,ambiguous
+4 wall paddleball,4-wall Paddleball,ambiguous
 australian racquetball,Australian Racquetball,ambiguous
 badminton,Badminton,distinctive
 ball badminton,Ball Badminton,ambiguous
@@ -32,7 +33,7 @@ micro pickleball,Micro Pickleball,ambiguous
 miniten thug,Miniten Thug,ambiguous
 naked tennis,Naked Tennis,ambiguous
 outdoor racquetball,Outdoor Racquetball,ambiguous
-paddleball,4-wall Paddle,distinctive
+paddleball,4-wall Paddleball,distinctive
 padel,Padel,distinctive
 paleta front n,Paleta frontón,ambiguous
 paleta fronton,Paleta frontón,ambiguous

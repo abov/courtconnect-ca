@@ -13,8 +13,9 @@ Racket,Pop Tennis,2-4,Growing,IPTA,1898,"US-Socal/Florida, GE, AUS",60x27,Concre
 Racket,Teqis,2,Growing,,2010,Hungary/Worldwide,9.8x5,Curved Table,"Paddle, small plastiic ball",Low,,Y,Competitive,
 Racket,Teqpong,2,Growing,,,Hungary/Worldwide,9.8x5,Curved Table,"Paddle, felt rubber ball",Low,,Y,Competitive,
 Racket,Typti,2-4,Growing,,2024,US,44x20,Concrete,"Racket, felt ball",Low,3ft,Y,Competitive,
-Racket,1-wall Paddle,2-4,Subculture,APA (defunct?),1850,NY/FL,34x20,Concrete,"Paddle, rubber ball",,,Y,Competitive,
-Racket,4-wall Paddle,2-4,Subculture,NPA,1930,US/MI,40x20,Indoor flooring,"Paddle, rubber ball",,,Y,Competitive,https://npa.paddleball.org/
+Racket,1-wall Paddleball,2-4,Subculture,APA (defunct?),1850,NY/FL,34x20,Concrete,"Paddle, rubber ball",,,Y,Competitive,
+Racket,3-wall Paddleball,2-4,Subculture,,,,,Concrete,"Paddle, rubber ball",,,Y,Competitive,
+Racket,4-wall Paddleball,2-4,Subculture,NPA,1930,US/MI,40x20,Indoor flooring,"Paddle, rubber ball",,,Y,Competitive,https://npa.paddleball.org/
 Racket,Frescoball,2+,Subculture,BRWL?,1945,Brazil/NoCal,user descretion,Sand,"Paddle, rubber ball",,,Y,Non-Competitve,
 Racket,Kadima,2+,Subculture,BRWL,1920,Isreal/Greece/US,10-15ft apart,Sand,"Paddle, rubber ball",,,Y,Non-Competitve,
 Racket,Road Tennis,2,Subculture,PRTA,1930,Barbados/Cali,19.6x9.8,"Concrete, Indoor, grass","Paddle, rubber ball",Low,8in,N,Competitive,
@@ -72,5 +73,5 @@ Racket,Pitton,2-4,Rec,,2011,,44x20,,"Paddle, birdie",High,5ft,Y,Competitive,
 Racket,Wall Pong,2+,Rec,,2015,,,Indoor,"Paddle, plastic ball",Low,,Y,Competitive,
 Racket,Racket Hockey,4,Rec,,2016,,,Indoor,"Racket, rubber ball",,,N,Competitive,
 Racket,Micro Pickleball,2-4,Rec,APBA (Asia PB Alliance),2026,China,9x5,Indoor/Outdoor,"Paddle, plastic ball",Low,3in,N,Competitive,
-Racket,Tenis criollo,2-4,Rec,,1940,Argentina,60x27,Indoor/Outdoor,"Paddle, felt rubber ball",Low,3ft,N,Competitive,
+Racket,Tenis criollo,2-4,Rec,CATP (Arg),1940,Argentina,60x27,Indoor/Outdoor,"Paddle, felt rubber ball",Low,3ft,N,Competitive,https://www.tenispaleta.com.ar/
 Racket/Hand,Hand Tennis,2-4,Rec,,,,78x36,Indoor/Outdoor,"Hand Paddle, felt rubber ball",Low,3ft,N,Competitive,https://www.handtennis.com/
