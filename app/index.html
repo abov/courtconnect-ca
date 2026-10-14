@@ -19,19 +19,19 @@
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
-  body { font: 14px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--text); background: var(--bg);
+  body { font: 15px/1.5 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--text); background: var(--bg);
          display: grid; grid-template-columns: 390px 1fr; }
   #panel { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
   #map { min-height: 0; }
   header { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
   h1 { font-size: 18px; margin: 0 0 2px; }
-  .sub { color: var(--muted); font-size: 12.5px; }
+  .sub { color: var(--muted); font-size: 13px; }
   .controls { padding: 12px 16px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
   label.l { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 3px; }
   select, input[type=search] { width: 100%; padding: 7px 9px; font: inherit; color: var(--text); background: var(--bg);
          border: 1px solid var(--line); border-radius: 6px; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip { font: inherit; font-size: 12.5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line);
+  .chip { font: inherit; font-size: 13.5px; padding: 6px 12px; min-height: 34px; border-radius: 999px; border: 1px solid var(--line);
           background: var(--chip); color: var(--text); cursor: pointer; }
   .chip[aria-pressed=true] { background: var(--chip-on); border-color: var(--accent); color: var(--text); font-weight: 600; }
   .chip:focus-visible, select:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
@@ -42,11 +42,13 @@
   #count b { color: var(--text); }
   #list { overflow: auto; flex: 1; min-height: 0; margin: 0; padding: 0; list-style: none; }
   #list li { border-bottom: 1px solid var(--line); }
-  #list button { all: unset; display: block; width: 100%; box-sizing: border-box; padding: 9px 16px; cursor: pointer; }
+  #list button { all: unset; display: block; width: 100%; box-sizing: border-box; padding: 10px 16px 10px 13px; cursor: pointer; border-left: 3px solid transparent; }
+  #list button.qc { border-left-color: #1a7f37; } #list button.qp { border-left-color: #0969da; }
+  #list button.qi { border-left-color: #d4a72c; } #list button.qu { border-left-color: #8c959f; }
   #list button:hover, #list button:focus-visible { background: var(--chip-on); }
   .nm { font-weight: 600; }
-  .meta { color: var(--muted); font-size: 12.5px; }
-  .badge { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
+  .meta { color: var(--muted); font-size: 13px; }
+  .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
   .badge.i { color: var(--warn); border-color: var(--warn); }
   .seg { display: flex; gap: 6px; margin-top: 10px; }
@@ -74,6 +76,10 @@
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid #fff; box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
+  footer { display: grid; gap: 4px; }
+  details.srcs { margin-top: 8px; padding-top: 6px; border-top: 1px solid #d1d9e0; }
+  details.srcs summary { color: #0969da; }
+  @media (pointer: coarse) { .chip, select, input[type=search] { min-height: 44px; } #list button { padding-top: 13px; padding-bottom: 13px; } }
   .maplibregl-popup-content { color: #1f2328; font: 13px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 290px; }
   .maplibregl-popup-content { max-height: min(55vh, 470px); overflow-y: auto; }
   .maplibregl-popup-content h2 { font-size: 15px; margin: 0 0 4px; padding-right: 14px; }
@@ -108,7 +114,6 @@
     <h1><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect California</h1>
     <div class="sub" id="headline">&nbsp;</div>
     <div class="row" style="margin-top:6px">
-      <button class="link" id="openCoverage" type="button">How complete is this data?</button>
       <button class="link" id="nearMe" type="button">Near me</button>
     </div>
     <div class="seg" role="group" aria-label="What are you looking for?">
@@ -183,7 +188,7 @@
     <span><span class="dot" style="background:#d4a72c"></span>Name inferred from park/school</span>
     <span><span class="dot" style="background:#8c959f"></span>Unnamed courts</span>
   </div>
-  <footer id="attr"></footer>
+  <footer><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
 
 <main id="map" aria-label="Map of racket-sport venues in California"></main>
@@ -226,6 +231,7 @@ document.addEventListener("click", ev => {
 });
 const SURF = {indoor: 1, outdoor: 2, sand: 4, clay: 8, grass: 16, hard: 32, turf: 64};
 const QNAME = {c: "Confirmed name", p: "Business listing", i: "Name inferred from nearby park or school", u: "Unnamed courts"};
+const QTIP = {c: "The name comes from a source that names this place.", p: "Listed in a business places directory.", i: "Inferred: the name is a guess from the park or school the courts sit inside, not confirmed.", u: "Courts are mapped but no name is known."};
 const QSHORT = {c: "Confirmed", p: "Listing", i: "Inferred", u: "Unnamed"};
 const CONFIRM = {v: "Confirmed in person", o: "Stated by the operator", r: "Reported, not independently confirmed"};
 const SRC = {o: "OpenStreetMap", p: "Places directory", b: "OpenStreetMap + places directory", m: "Hand-curated"};
@@ -454,7 +460,7 @@ function facts(v, entry) {
 function venueNode(v) {
   const box = el("div");
   box.append(el("h2", {text: v.n || "Unnamed courts"}));
-  box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q]})));
+  box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})));
   if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " � " + v.cn + (v.cn === 1 ? " person" : " people") + " confirmed" : "")})));
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c].filter(Boolean).join(", ");
@@ -477,12 +483,14 @@ function venueNode(v) {
     join.append(el("p", {class: "meta", text: "CourtConnect doesn't take registrations or payments; the provider does."}));
     box.append(join);
   }
+  const src = el("details", {class: "srcs"}, el("summary", {text: "Details, sources and corrections"}));
   const q = new URLSearchParams({template: "suggest-a-change.yml", title: "Change: " + (v.n || "Unnamed courts") + (v.c ? " (" + v.c + ")" : ""), venue: v.n || "", city: v.c || "", map_id: v.i});
-  box.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change to this venue"}), document.createTextNode(" (opens a GitHub form; a reviewer approves it)")));
+  src.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change to this venue"}), document.createTextNode(" (opens a GitHub form; a reviewer approves it)")));
   if (v.s === "o" || v.s === "b") {
-    box.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (opens the OSM editor here; you need your own free OSM account, and only add what you have seen or the venue's own page says)")));
+    src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (opens the OSM editor here; you need your own free OSM account, and only add what you have seen or the venue's own page says)")));
   }
-  box.append(el("p", {class: "meta", text: "Source: " + SRC[v.s]+ (v.q === "i" ? ". Name is a guess from the park or school the courts sit inside." : "")}));
+  src.append(el("p", {class: "meta", text: "Source: " + SRC[v.s]+ (v.q === "i" ? ". Name is a guess from the park or school the courts sit inside." : "")}));
+  box.append(src);
   return box;
 }
 function showVenue(v, fly) {
@@ -520,16 +528,16 @@ function renderList() {
   const top = pool.map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).slice(0, 40).map(x => x[1]);
   const ul = $("list"); ul.replaceChildren();
   for (const v of top) {
-    const btn = el("button", {type: "button"},
+    const btn = el("button", {type: "button", class: "q" + v.q},
       el("div", {class: "nm", text: v.n || "Unnamed courts" + (v.c ? " in " + v.c : "")}),
       el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}),
-      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q]}), v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
+      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
   }
   const total = current.length;
-  $("count").replaceChildren(el("b", {text: fmt(total)}), document.createTextNode(" venues match" +
-    (inView.length !== total ? " · " + fmt(inView.length) + " in view" : "") + (top.length ? " · nearest " + top.length + " to the map centre:" : "")));
+  $("count").replaceChildren(el("b", {text: fmt(total)}), document.createTextNode(" venues" +
+    (inView.length !== total ? " · " + fmt(inView.length) + " in view" : "") + (top.length ? " · showing the nearest " + top.length : "")));
 }
 function refresh() {
   if (state.mode === "walls") {
