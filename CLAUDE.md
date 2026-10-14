@@ -57,7 +57,7 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 1. CalNeva (ADR 0014): steps 2-3 done; next Nevada metro extracts (step 4, ask first), then Nevada seeds/runbook rows. Kept CA-only on purpose until step 4: Makefile extract help, `extract_overture_places.py` messages, `dim_sport.likely_in_california` (no readers).
 2. Beta round (docs/feedback_round.md): replies due 10-28, findings 10-29..11-01, then fill case study + docs/feedback_findings.md (RICE). Owner: exclude own IP in GoatCounter.
 3. Accuracy: confidence band counts in `make quality`, Overture/OSM match gold set, clear the 249-row review queue from public pages.
-4. Small: Sunset Padel LA website -> `website_overrides`; owner to confirm Basque Pelota (Chino trinquet, South SF center); owner review of UX live.
+4. Small: owner to confirm Basque Pelota (Chino trinquet, South SF center); owner review of UX live.
 5. Coverage: `*-access` leads, ~440 club-named venues (pass 2 parked), beach tennis court locations from clubs, statewide walls (parked), NorCal Equinox, OSM fix list (optional).
 6. Recheck: Club Locker (squash), Cosm events, badminton 2027 ORCs (Nov-Dec).
 7. LATER (after beta): optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
@@ -66,4 +66,5 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-14c: CalNeva step 2 merged (#67, Pages redeployed): `region` CA/NV through raw -> dims -> mart -> export `r`; Overture's address state is `address_region`; bbox tests are `assert_*_inside_region`. All 9,941 venues CA. A parallel duplicate (#70) was closed.
 - 2026-10-14d: status log moved to docs/status_history.md (this section trimmed).
 - 2026-10-14e: CalNeva step 3 (labels): app/README/CONTRIBUTING/case study/architecture/exposures say CalNeva; the app headline adds "California only so far; Nevada coming next" until any NV venue exists; watch-events coordinate test accepts CA or NV boxes; coverage snapshot (regenerated, was 10-10) lists venues by region. Historical docs (ADRs 0001-0013, outreach email, feedback invite, roadmap) left as is. Re-run pages.yml after merge.
-Session 2026-10-14: phone header mode buttons now show Play / Watch / Walls on one line (<=800px; full label kept as aria-label/title; 44px on touch, checked at 375 and 320px). Desktop unchanged. Re-run pages.yml after merge.
+- 2026-10-14f: Sunset Padel LA: `sunsetpadel.com` (Miami Beach club) flagged in `website_overrides`, lead resolved; map no longer links it. Snowflake not yet synced.
+- 2026-10-14g: phone header mode buttons now show Play / Watch / Walls on one line (<=800px; full label kept as aria-label/title; 44px on touch, checked at 375 and 320px). Desktop unchanged. Re-run pages.yml after merge.
