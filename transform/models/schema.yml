@@ -372,6 +372,22 @@ models:
               arguments:
                 values: ['high', 'medium', 'low']
 
+  - name: mart_sport_evidence
+    description: >
+      Sport-evidence ladder: per (venue, sport) the strongest evidence rung (1 confirmed ... 7 derived), how many rungs agree, and whether the
+      label needs review (rung 4 loose OSM tag or rung 6 name-only). Our ranking, not a claim by the venue. Not exported to the map yet.
+    columns:
+      - name: venue_id
+        tests: [not_null]
+      - name: sport_id
+        tests: [not_null]
+      - name: best_rung
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7]
+                quote: false
+
   - name: mart_venue_finder
     description: >
       The table behind the map. One row per venue and sport (a venue with tennis and pickleball has two rows). Venues are clusters of nearby
