@@ -86,6 +86,9 @@ def main() -> None:
             csv_path = str(Path(args.data_dir) / csv_name)
             if Path(csv_path).exists():
                 df = pd.read_csv(csv_path, dtype=str)
+                # Per-region extras (e.g. osm_courts_nv.csv from `--area nevada`) are appended (ADR 0014).
+                for extra in sorted(Path(args.data_dir).glob(Path(csv_name).stem + "_nv.csv")):
+                    df = pd.concat([df, pd.read_csv(extra, dtype=str)], ignore_index=True)
             elif table in OPTIONAL:
                 df = pd.DataFrame(columns=OPTIONAL[table], dtype=str)
             else:

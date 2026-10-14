@@ -1,6 +1,6 @@
 # CourtConnect CalNeva
 
-Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014; Nevada data not loaded yet): Python ingestion -> dbt (DuckDB dev/CI, Snowflake prod) -> static MapLibre map in `app/`.
+Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB dev/CI, Snowflake prod) -> static MapLibre map in `app/`.
 README.md has the full story; read it only if you need background. Decisions are in `docs/decisions/` (ADRs 0001-0014, all accepted; one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
@@ -54,7 +54,7 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 **Done (summary):** CA map with link-outs, confirmation levels, leads, suggest-a-change form -> PR workflow (ADR 0008), social/WhatsApp/Meetup/Partiful link-outs (ADR 0009/0010/0012), OSM edit link (ADR 0011), GoatCounter analytics (ADR 0013, site `courts`), logo C, UX Option A PRs 1-3, 43 tournament events, 265 hitting walls (LA/SD/Bay OSM + 2 owner), private-club passes 1-2 (partial), `ref_sport_fit`, `mart_sport_evidence`, `mart_venue_confidence` rules_v2 (not exported), `make quality` scorecard incl. 35-day freshness SLA, monthly runbook, ADR 0014 CalNeva step 1 (`REGIONS` in `ingestion/overpass.py`, `ci/check_regions.py`).
 
 **Open, in order**
-1. CalNeva (ADR 0014): steps 2-3 done; next Nevada metro extracts (step 4, ask first), then Nevada seeds/runbook rows. Kept CA-only on purpose until step 4: Makefile extract help, `extract_overture_places.py` messages, `dim_sport.likely_in_california` (no readers).
+1. CalNeva (ADR 0014): steps 2-4 done (525 NV venues live). Next: Nevada seeds/runbook rows (manual venues, link-outs, watch events), `dim_sport.likely_in_california` (no readers); repo/Pages rename to `courtconnect` after the beta (keep a redirect stub for the old Pages URL).
 2. Beta round (docs/feedback_round.md): replies due 10-28, findings 10-29..11-01, then fill case study + docs/feedback_findings.md (RICE). Owner: exclude own IP in GoatCounter.
 3. Accuracy: confidence band counts in `make quality`, Overture/OSM match gold set, clear the 249-row review queue from public pages.
 4. Small: owner to confirm Basque Pelota (Chino trinquet, South SF center); owner review of UX live.
@@ -67,3 +67,4 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-14d: status log moved to docs/status_history.md (this section trimmed).
 - 2026-10-14e: CalNeva step 3 (labels): app/README/CONTRIBUTING/case study/architecture/exposures say CalNeva; the app headline adds "California only so far; Nevada coming next" until any NV venue exists; watch-events coordinate test accepts CA or NV boxes; coverage snapshot (regenerated, was 10-10) lists venues by region. Historical docs (ADRs 0001-0013, outreach email, feedback invite, roadmap) left as is. Re-run pages.yml after merge.
 - 2026-10-14f: Sunset Padel LA: `sunsetpadel.com` (Miami Beach club) flagged in `website_overrides`, lead resolved; map no longer links it. Snowflake not yet synced.
+- 2026-10-14g: CalNeva step 4: statewide Nevada OSM extract into `data/raw/*_nv.csv` (`load_raw.py` appends them; `make extract` runs both states), Overture keeps CA+NV (same 2026-09-23.1 release). 525 NV venues on the map; CA unchanged at 9,941. DuckDB + Snowflake green. Re-run pages.yml after merge.
