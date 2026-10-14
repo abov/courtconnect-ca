@@ -1,4 +1,4 @@
-"""Extract racket-sport-related places in California from the Overture Maps places dataset.
+"""Extract racket-sport-related places in California and Nevada (CalNeva, ADR 0014) from the Overture Maps places dataset.
 
 Overture publishes a global places dataset (businesses, clubs, venues) as GeoParquet on S3. Its places data is licensed
 CDLA-Permissive-2.0 / Apache-2.0 / CC0, so unlike Google Places it may be stored and republished (with attribution; see NOTICE.md).
@@ -23,7 +23,7 @@ from pathlib import Path
 
 import duckdb
 
-import overpass  # reused for the California border clip
+import overpass  # reused for the CA/NV border clip
 
 BUCKET = "overturemaps-us-west-2"
 SEEDS = Path("transform/seeds")
@@ -75,18 +75,19 @@ def main() -> None:
                or regexp_matches(coalesce(taxonomy.primary, ''),
                     'tennis|pickle|padel|squash|badminton|racquet|racket|recreation|athletic|country_club|community_center|sports'))
     """).fetchall()
-    print(f"{len(rows):,} candidate places in sports/recreation categories (CA bounding box)")
+    print(f"{len(rows):,} candidate places in sports/recreation categories (CA+NV bounding box)")
 
     keep, outside = [], 0
     for r in rows:
         name_n = norm(r[1])
         if not (r[2] in cats or any(n in name_n for n in needles)):
             continue
-        if not overpass.in_region(r[5], r[6], "CA"):
+        region = overpass.region_at(r[5], r[6])
+        if region is None:
             outside += 1
             continue
-        keep.append((*r, release, overpass.region_at(r[5], r[6])))   # address_region = Overture's address text; region = border polygon (ADR 0014)
-    print(f"kept {len(keep):,} (racket category or sport word in the name); {outside:,} dropped outside the California border")
+        keep.append((*r, release, region))   # address_region = Overture's address text; region = border polygon (ADR 0014)
+    print(f"kept {len(keep):,} (racket category or sport word in the name); {outside:,} dropped outside the CA/NV borders")
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

@@ -5,12 +5,14 @@ DBT = dbt --project-dir transform --profiles-dir transform
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
 
-extract:          ## pull ALL California courts + named parent features from OpenStreetMap, then places from Overture (~15 min)
+extract:          ## pull ALL CalNeva courts + named parent features from OpenStreetMap, then places from Overture (~20 min)
 	$(PY) ingestion/extract_osm_courts.py --area california
 	$(PY) ingestion/extract_osm_parents.py --area california
+	$(PY) ingestion/extract_osm_courts.py --area nevada --out data/raw/osm_courts_nv.csv
+	$(PY) ingestion/extract_osm_parents.py --area nevada --out data/raw/osm_parents_nv.csv
 	$(PY) ingestion/extract_overture_places.py
 
-extract-places:   ## pull racket-related California places from Overture Maps (reads S3 directly, ~1 min)
+extract-places:   ## pull racket-related CalNeva places from Overture Maps (reads S3 directly, ~1 min)
 	$(PY) ingestion/extract_overture_places.py
 
 search-terms:     ## rebuild the sport name-keyword list (used to find places by business name)
