@@ -1,0 +1,33 @@
+# Monthly refresh runbook (run once a month)
+
+Goal: every venue on the map has been seen by some source in the last 35 days, and the scorecard says so. `make quality` measures it as the service level "Venues seen in the last 35 days" (target >= 99%), from `mart_venue_confidence.last_seen_on`: the newest of the OSM extract date, the Overture release date, a hand-added `confirmed_on` and a link-out `verified_on`. Events age faster and keep their own bi-weekly runbook (`docs/tournament_refresh.md`); private-club events are not checked (parked).
+
+Rules: public pages only, no owner logins (ADR 0007), no Google Places data (ADR 0005), label inferred data as inferred. Cost rules: no subagents, no screenshots, narrow checks before the full build.
+
+## Steps
+Run from Git Bash in the main checkout (where `courtconnect.duckdb` is). `make` is not available in Git Bash on this machine; each step shows the target and the command it runs.
+
+1. **Branch.** Fresh `main`, new branch `claude/monthly-YYYY-MM`. Note the last scorecard line in `docs/data_quality_trend.csv`.
+2. **Sports sheet.** `make sync-sports` (`python ingestion/sync_sports_sheet.py`), then `make sport-map` and `make search-terms` if the sheet changed. Never hand-edit `all_racquet.csv` or the generated `osm_sport_map.csv` / `sport_search_terms.csv`.
+3. **Extract (ask the owner first, ~15 min).** `make extract` (OSM courts + parents, then Overture places). Overture only: `make extract-places` (~1 min); it picks the newest Overture release, which is what moves the Overture-only venues' `last_seen_on`. Walls (optional, metros only): `python ingestion/extract_osm_walls.py --area metros`.
+4. **Load.** `make load` (`python ingestion/load_raw.py`), and for Snowflake `python ingestion/load_raw.py --target snowflake`.
+5. **Link checks.** `make check-links` (link-outs in `venue_actions.csv`; re-date `verified_on` only for rows you re-read) and `make check-websites` (DNS check of venue sites, ~1 min).
+6. **Build.** Narrow first if seeds changed (`dbt build --select <changed>+`), then the full `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` once. Then `make snowflake-build` (add `--full-refresh` where a seed gained a column).
+7. **Scorecard and reports.** `make quality` and `make report`. Look at "Stale or undated venues" in `docs/data_quality.md`: give undated hand-added rows a `confirmed_on` only when you re-read their source, otherwise leave them stale (the breach is the honest result) or turn them into a lead.
+8. **Export.** `make app-data`, commit `app/data/venues.json` (CI runs `ci/check_export_fresh.py`).
+9. **Ship.** Commit, push, open a PR titled `Monthly refresh YYYY-MM`. After it merges, re-run `pages.yml`. Add 2 lines to CLAUDE.md "Current status": date, venues, freshness %, SLAs met.
+
+## What each source contributes to freshness
+| Source | Date used | Moves when |
+|---|---|---|
+| OpenStreetMap courts | `raw.osm_courts.extracted_at` | `make extract` |
+| Overture places | `raw.overture_places.release` | `make extract` / `make extract-places` (monthly Overture release) |
+| Hand-added venues | `manual_venues.confirmed_on` | someone re-reads the source and re-dates the row |
+| Link-outs | `venue_actions.verified_on` | `make check-links` plus a re-read |
+
+A venue known only from an undated reported row has no date and counts as stale until someone confirms it.
+
+## Log
+| Month | Venues | Seen in 35 days | SLAs met | Notes |
+|---|---|---|---|---|
+| 2026-10 (baseline, no refresh run) | 9,941 | 99.9% (9 undated reported rows) | 6 of 7 | OSM extract 2026-10-09, Overture release 2026-09-23 |

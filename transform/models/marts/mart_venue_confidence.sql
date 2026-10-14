@@ -7,8 +7,11 @@
 --   fresh     0-15  newest dated check (hand-added confirmation or link-out verification): <=35 days 15, <=90 days 8
 --   sport penalty 0 to -15 (added in rules_v2): 15 x the weighted share of the venue's directly evidenced sports that rest only on a loose OSM tag (weight 1) or a
 --                 business-name word (weight 0.5; a distinctive word like "padel" is usually right) (mart_sport_evidence.needs_review). Derived sports (sport_also_played) are rule outputs and not counted.
+-- last_seen_on: newest date any source saw the venue (OSM extract, Overture release, hand-added confirmation, link-out check); the 35-day
+--   freshness SLA in `make quality` reads it. Nulls are coalesced to 1900-01-01 first because Snowflake's greatest() returns null if any input is null.
 -- confidence_score_v1 keeps the old score so the effect of the penalty stays visible.
 -- Bands: high >= 60, medium 30-59, low < 30.
+{% set d0 = "cast('1900-01-01' as date)" %}
 with src as (
     select
         venue_id,
@@ -26,6 +29,19 @@ manual_ev as (
         max(m.confirmed_on) as newest_confirmed
     from {{ ref('stg_manual_venues') }} m
     join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
+    group by 1
+),
+
+seen as (
+    select venue_id, max(cast(extracted_at as date)) as osm_seen_on
+    from {{ ref('dim_court') }}
+    group by 1
+),
+
+place_seen as (
+    select venue_id, max(cast(left(release, 10) as date)) as places_seen_on
+    from {{ ref('dim_place') }}
+    where venue_id is not null
     group by 1
 ),
 
@@ -58,11 +74,12 @@ scored as (
          + case when v.opening_hours is not null then 4 else 0 end
          + case when v.address_line is not null then 4 else 0 end)                              as contact_pts,
         case
-            when greatest(me.newest_confirmed, ae.newest_verified) is null then 0
-            when greatest(me.newest_confirmed, ae.newest_verified) >= current_date - 35 then 15
-            when greatest(me.newest_confirmed, ae.newest_verified) >= current_date - 90 then 8
+            when greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }})) >= current_date - 35 then 15
+            when greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }})) >= current_date - 90 then 8
             else 0
         end                                                                                     as fresh_pts,
+        nullif(greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }}),
+                        coalesce(os.osm_seen_on, {{ d0 }}), coalesce(ps.places_seen_on, {{ d0 }})), {{ d0 }}) as last_seen_on,
         coalesce(sr.direct_sports, 0)                                                           as direct_sports,
         coalesce(sr.review_sports, 0)                                                           as review_sports,
         case when coalesce(sr.direct_sports, 0) = 0 then 0
@@ -71,6 +88,8 @@ scored as (
     left join src s on s.venue_id = v.venue_id
     left join manual_ev me on me.venue_id = v.venue_id
     left join action_ev ae on ae.venue_id = v.venue_id
+    left join seen os on os.venue_id = v.venue_id
+    left join place_seen ps on ps.venue_id = v.venue_id
     left join sport_roll sr on sr.venue_id = v.venue_id
 )
 
