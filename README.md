@@ -30,7 +30,7 @@
 pip install -r requirements.txt
 make demo      # extract -> load -> build -> test
 ```
-Then open `courtconnect.duckdb` and query `marts.mart_sport_coverage`.
+Then open `courtconnect.duckdb` and query `marts.mart_sport_coverage`. On Windows, double-click `view_db.bat` to browse it read-only in the DuckDB UI (close it before running dbt).
 
 **The story to tell:** *"Here's the messy spreadsheet; here's the clean table. Here's California: 26,000 anonymous map points plus a business directory became about 9,900 places, and the share with a name went from 2% to 44%. But 53 of the 75 sports can't be found in either source, so I built the gaps report to show exactly where the data is thin instead of hiding it. And I chose the open Overture dataset over Google Places because Google's terms don't allow storing its data."*
 
