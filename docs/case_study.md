@@ -1,4 +1,4 @@
-# CourtConnect California: case study
+# CourtConnect CalNeva: case study
 
 A free map of racket-sport venues in California (tennis, pickleball, padel, squash, badminton, beach tennis and about 70 more), built end to end as a solo project: ingestion, a tested dbt warehouse, and a static map. Live map and code: https://github.com/abov/courtconnect-ca. Data model and lineage: `/dbt-docs/` on the Pages site.
 

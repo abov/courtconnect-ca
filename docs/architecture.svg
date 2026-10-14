@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 490" width="1040" height="490" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
-  <title>CourtConnect California architecture</title>
+  <title>CourtConnect CalNeva architecture</title>
   <desc>Sources flow through Python ingestion into a dbt project on DuckDB or Snowflake, layered raw, staging, intermediate, core and marts.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -8,7 +8,7 @@
   </defs>
   <rect x="0.5" y="0.5" width="1039" height="489" rx="10" fill="#ffffff" stroke="#d0d7de"/>
 
-  <text x="20" y="30" font-size="16" font-weight="700" fill="#1f2328">CourtConnect California: where the data comes from and how it flows</text>
+  <text x="20" y="30" font-size="16" font-weight="700" fill="#1f2328">CourtConnect CalNeva: where the data comes from and how it flows</text>
   <text x="20" y="62" font-size="11" font-weight="700" fill="#57606a" letter-spacing="1">SOURCES</text>
   <text x="250" y="62" font-size="11" font-weight="700" fill="#57606a" letter-spacing="1">PYTHON INGESTION</text>
   <text x="500" y="62" font-size="11" font-weight="700" fill="#57606a" letter-spacing="1">WAREHOUSE (dbt)</text>

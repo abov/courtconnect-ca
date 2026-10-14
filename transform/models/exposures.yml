@@ -2,12 +2,12 @@ version: 2
 
 exposures:
   - name: courtconnect_map
-    label: CourtConnect California map
+    label: CourtConnect CalNeva map
     type: application
     maturity: medium
     url: https://abov.github.io/courtconnect-ca/
     description: >
-      Static MapLibre map of racket-sport venues in California. Reads app/data/venues.json, exported from the marts by
+      Static MapLibre map of racket-sport venues in California and Nevada (CalNeva; Nevada data not loaded yet). Reads app/data/venues.json, exported from the marts by
       ingestion/export_app_data.py (checked fresh in CI by ci/check_export_fresh.py).
     depends_on:
       - ref('mart_venue_finder')
