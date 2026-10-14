@@ -356,6 +356,22 @@ models:
               arguments:
                 values: ['covered', 'sparse', 'possible_only', 'tagged_none_found', 'not_found']
 
+  - name: mart_venue_confidence
+    description: >
+      Rule-based confidence score per venue (0-100, method rules_v1, INFERRED): sources, hand-added evidence, real name, contact details and
+      freshness, each a visible column. A heuristic for ranking what to verify next, not a probability and not shown to players yet.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: confidence_score
+        tests:
+          - not_null
+      - name: confidence_band
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['high', 'medium', 'low']
+
   - name: mart_venue_finder
     description: >
       The table behind the map. One row per venue and sport (a venue with tennis and pickleball has two rows). Venues are clusters of nearby
