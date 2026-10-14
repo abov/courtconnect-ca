@@ -51,12 +51,11 @@ def to_row(el: dict, ts: str) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--area", choices=[*overpass.BBOXES, "metros", "california"], default="la")
+    ap.add_argument("--area", choices=[*overpass.BBOXES, "metros", "california", "nevada"], default="la")
     ap.add_argument("--out", default="data/raw/osm_walls.csv")
     args = ap.parse_args()
 
-    tiles = (overpass.california_tiles() if args.area == "california" else METROS if args.area == "metros"
-             else [overpass.BBOXES[args.area]])
+    tiles = (METROS if args.area == "metros" else overpass.area_tiles(args.area))
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     seen: dict[tuple, dict] = {}
     failed: list = []
@@ -64,7 +63,7 @@ def main() -> None:
         els = overpass.fetch_adaptive(build_query, bbox, f"tile {i}/{len(tiles)}", failed)
         for e in els:
             row = to_row(e, ts)
-            if overpass.in_california(row["lat"], row["lon"]):
+            if overpass.keep(row["lat"], row["lon"], "california" if args.area == "metros" else args.area):
                 seen[(e["type"], e["id"])] = row
         print(f"tile {i}/{len(tiles)} {bbox}: {len(els):>6,} elements (running unique: {len(seen):,})", flush=True)
         time.sleep(2)
