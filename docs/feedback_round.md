@@ -3,7 +3,7 @@
 Goal: learn whether CourtConnect helps people find a place to play and what is missing, before deciding between open source and a paid layer. Output: a ranked backlog and real numbers for `docs/case_study.md`.
 
 ## Before you start (owner, one-time)
-1. Turn on analytics (ADR 0013): set `GOATCOUNTER_CODE`, merge, re-run `pages.yml`. Record the start date; counts before it do not exist.
+1. Analytics (ADR 0013) are live: site code `courts`, dashboard https://courts.goatcounter.com (confirmed 2026-10-13). Record the start date; counts before it do not exist.
 2. Note the baseline from `docs/data_quality.md` (venues, named %, events) so you can say what changed during the round.
 
 ## Who (6 to 10 people)
@@ -27,6 +27,34 @@ Send this, in your own words:
 - What would you use it for weekly? What would make you open it instead of Google Maps?
 - Would you pay for anything here (for example club-managed listings, alerts for open play)? How much, honestly?
 - Who else would use it?
+
+## Invite message
+Send individually, not in a group chat. Swap in their sport in task 1 and a place they know in task 2.
+
+> Hey [name]! I built a free map of racket-sport spots in California (tennis, pickleball, padel, beach tennis, squash and more) and I'd love your honest take before I decide what to do with it.
+>
+> Link: https://abov.github.io/courtconnect-ca/
+>
+> Over the next two weeks, could you try these? It's about 10 minutes total, and you can do it on your phone:
+> 1. Find a place near you to play [their sport] this week. Is there one you didn't already know?
+> 2. Look up a club or court you already know. Is it there and correct?
+> 3. Open a place and tap one of the links (website, open play, a club's Instagram). Did it go where you expected?
+> 4. Optional: if something is wrong, tap "Suggest a change" on that place.
+>
+> What I'd like back (a text is fine):
+> - Did you find what you wanted? What was missing or wrong?
+> - Would you use it again, and for what?
+> - Anything confusing, like the labels "confirmed", "inferred" or "members only"?
+>
+> Heads up: it's early, so coverage is thin in some areas. Gaps and mistakes are exactly what I want to hear about. It only counts anonymous visits (no accounts, no cookies, no names), and I won't share anything you tell me with your name on it.
+>
+> Thank you! It would help a lot if you could get back to me by [date, two weeks from now].
+
+Follow-up (day 7 to 10):
+
+> Quick check-in on the map: have you had a chance to try it? Even one thing that was missing or wrong is useful. Did you actually use it to decide where to play this week?
+
+When they reply, ask what they did, not whether they liked it ("What did you search for first?"). Log each reply with initials only (see Capture).
 
 ## What the data will say (GoatCounter, ADR 0013)
 | Question | Measure | First targets (adjust after week 1) |
