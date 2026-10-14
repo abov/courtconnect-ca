@@ -27,7 +27,7 @@ TABLES = {
 # Tables that may legitimately have no file yet (the Google lookup is opt-in). They load as empty tables with
 # these columns, so dbt models that read them still build.
 OPTIONAL = {"osm_walls": ["osm_type", "osm_id", "lat", "lon", "name", "sport", "surface", "lit", "access", "fee", "operator", "leisure",
-                         "tennis", "addr_city", "extracted_at"],
+                         "tennis", "addr_city", "extracted_at", "region"],
             "google_place_ids": ["venue_id", "google_place_id", "resolved_at"],
             "website_checks": ["domain", "status", "resolved_host", "checked_at"]}
 

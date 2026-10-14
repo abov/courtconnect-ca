@@ -283,6 +283,13 @@ models:
           - accepted_values:
               arguments:
                 values: ['court_name', 'operator', 'places_directory', 'manual', 'enclosing_feature', 'unnamed']
+      - name: region
+        description: CA or NV (ADR 0014), from the state border polygon at extract time, or the seed's region column for hand-added venues.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CA', 'NV']
 
   - name: stg_website_checks
     description: Website domain checks (DNS only). 'dead' means the domain definitively does not exist; 'unknown' is inconclusive.
@@ -389,6 +396,16 @@ models:
               arguments:
                 values: [1, 2, 3, 4, 5, 6, 7]
                 quote: false
+
+  - name: dim_wall
+    description: One row per hitting wall (hand-curated plus OSM-mapped), kept apart from venues.
+    columns:
+      - name: region
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CA', 'NV']
 
   - name: mart_venue_finder
     description: >

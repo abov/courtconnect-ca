@@ -64,6 +64,7 @@ osm_venues as (
         min(opening_hours)                                    as opening_hours,
         min(address_line)                                     as address_line,
         min(city)                                             as city,
+        min(region)                                           as region,   -- one venue, one region (a cluster on the border takes the first code)
         max(case when is_lit then 1 else 0 end) = 1                   as has_lit_courts,
         max(case when access_type = 'public' then 1 else 0 end) = 1   as is_confirmed_public,
         max(case when access_type in ('private', 'members') then 1 else 0 end) = 1 as has_members_courts,
@@ -104,6 +105,7 @@ osm_final as (
         v.opening_hours,
         coalesce(v.address_line, pl.address_line)             as address_line,
         coalesce(v.city, pl.city)                             as city,
+        v.region,
         bm.offerings                                          as offerings,
         v.has_lit_courts, (v.is_confirmed_public or coalesce(bm.is_public, false)) as is_confirmed_public, v.has_free_courts,
         -- members-only = marked private/members and nothing says public (the only access signal we hold; unmarked venues are NOT assumed public)
@@ -130,6 +132,7 @@ places_only as (
         p.phone,
         cast(null as varchar)                                 as opening_hours,
         p.address_line, p.city,
+        p.region,
         bm.offerings                                          as offerings,
         false as has_lit_courts, coalesce(bm.is_public, false) as is_confirmed_public, false as has_free_courts,
         (coalesce(bm.is_members, false) and not coalesce(bm.is_public, false)) as is_members_only,
@@ -157,6 +160,7 @@ manual_final as (
         cast(null as varchar)                                 as opening_hours,
         cast(null as varchar)                                 as address_line,
         min(city)                                             as city,
+        min(region)                                           as region,
         min(offerings)                                        as offerings,
         false as has_lit_courts,
         max(case when access_type = 'public' then 1 else 0 end) = 1 as is_confirmed_public,
