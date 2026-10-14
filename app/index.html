@@ -131,7 +131,7 @@
         <button class="chip" data-wt="one_wall" type="button" aria-pressed="false">One-wall</button>
         <button class="chip" data-wt="three_wall" type="button" aria-pressed="false">Three-wall</button>
       </div>
-      <div class="note" style="margin-top:6px">Walls for hitting alone. Walls are rarely mapped, so this list is short and grows as people report them. Lights, hours and fees are shown only when known.</div>
+      <div class="note" style="margin-top:6px">Walls for hitting alone. Most pins are handball and wall courts mapped in OpenStreetMap (type and condition not checked); a few are reported by players. Only Los Angeles, San Diego and the Bay Area have been searched, so this is not the full set of California walls. Tennis backboards are rarely mapped, so even those areas are incomplete. Lights, hours and fees are shown only when known.</div>
     </div>
     <div class="watchonly note">CourtConnect doesn't sell tickets or book anything. Every event links to the organizer's own page: check dates, seating and prices there.</div>
     <div class="playonly">
@@ -325,7 +325,8 @@ function wallNode(w) {
   box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", w.c].filter(Boolean).join(" � ")}));
   box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " � Free to use: " + triState(w.f) + (w.su ? " � Surface: " + w.su : "")}));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
-  box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). Sports listed are what the wall is thought to suit."}));
+  box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
+  if (w.cf === "tagged") box.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
   return box;
 }
 function showWall(w, fly) {

@@ -33,6 +33,7 @@ body:
         - Add a way to join or book (needs a public link)
         - Confirm the venue (I visited, or the operator's page says so)
         - Correct details or report that it is closed
+        - Add a hitting wall for solo practice (give the park, wall type and a public source or photo link in the details)
     validations:
       required: true
   - type: dropdown
