@@ -213,6 +213,21 @@ models:
       - name: sport_name
         tests: [not_null]
 
+  - name: ref_sport_fit
+    description: >
+      Physical sport-fit reference (INFERRED, not a venue claim): guest sport's court rectangle fits inside the host sport's
+      (rotation allowed, shared surface), from the sheet's court dimensions. Not yet exported to the map.
+    columns:
+      - name: host_sport
+        tests: [not_null]
+      - name: guest_sport
+        tests: [not_null]
+      - name: confirmation
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['inferred']
+
   - name: dim_court
     description: One row per physical court / sports-centre record from OpenStreetMap.
     columns:
