@@ -52,7 +52,7 @@
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
   .badge.i { color: var(--warn); border-color: var(--warn); }
   .seg { display: flex; gap: 6px; margin-top: 10px; }
-  .seg .chip { flex: 1; text-align: center; padding: 6px 8px; border-radius: 8px; font-weight: 600; }
+  .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: 8px; font-weight: 600; font-size: 13px; white-space: nowrap; }
   .seg .short { display: none; }
   body:not(.watch) .watchonly { display: none; }
   body.watch .playonly, body.watch .legend.playlegend { display: none; }
@@ -114,7 +114,7 @@
     #panel { overflow-y: auto; }
     #list { overflow: visible; flex: none; }
     .controls { padding: 10px 14px; gap: 8px; }
-    .seg .chip { padding: 6px 4px; font-size: 13px; white-space: nowrap; }
+    .seg .chip { flex: 1; padding: 6px 4px; font-size: 13px; white-space: nowrap; }
     .seg .full { display: none; } .seg .short { display: inline; }
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
