@@ -18,7 +18,5 @@ select
     gear_on_amazon_or_online,
     competitive_status,
     year_origin,
-    -- crude California-relevance flag from free-text location; refined later with real venue counts
-    (loc_lc like '%ca%' or loc_lc like '%worldwide%' or loc_lc = 'us')  as likely_in_california,
     official_url
 from {{ ref('stg_sports') }}
