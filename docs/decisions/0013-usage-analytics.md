@@ -1,6 +1,6 @@
 # 0013. Anonymous usage analytics (GoatCounter)
 
-Date: 2026-10-13. Status: accepted (2026-10-13), off until the owner sets the site code.
+Date: 2026-10-13. Status: accepted (2026-10-13); live since 2026-10-13 (GoatCounter site code `courts`).
 
 ## Context
 We need real usage numbers (for deciding what to build, for the feedback round, and for the case study) without tracking people.

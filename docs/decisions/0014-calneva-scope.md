@@ -1,6 +1,6 @@
 # 0014. CalNeva scope: California + Nevada
 
-Date: 2026-10-14. Status: accepted (2026-10-14), implementation starts the week of 2026-10-19.
+Date: 2026-10-14. Status: accepted (2026-10-14); steps 1 (regions table, #65) and 2 (region column, #67) done 2026-10-14.
 
 ## Context
 CourtConnect covers California only. The owner wants the same coverage for Nevada (Las Vegas/Henderson, Reno/Sparks, Carson City, Lake Tahoe) and the product to be called "CalNeva". `docs/calneva_audit.md` lists every hard-coded California assumption (extract borders and boxes, two bbox tests, the `likely_in_california` flag, map bounds, labels). Nothing in the models or export carries a state today.
