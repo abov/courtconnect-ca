@@ -1,7 +1,7 @@
 # CourtConnect California
 
 Racket-sport venue finder for California: Python ingestion -> dbt (DuckDB dev/CI, Snowflake prod) -> static MapLibre map in `app/`.
-README.md has the full story; read it only if you need background. Decisions are in `docs/decisions/` (ADRs 0001-0006).
+README.md has the full story; read it only if you need background. Decisions are in `docs/decisions/` (ADRs 0001-0014, all accepted; one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
