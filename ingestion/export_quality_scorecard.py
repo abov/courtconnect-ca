@@ -73,6 +73,10 @@ def main() -> None:
         select coalesce(venue_name, '(no name)'), venue_source, coalesce(cast(last_seen_on as varchar), 'undated')
         from marts.mart_venue_confidence where last_seen_on is null or last_seen_on < current_date - {SLA_SEEN_DAYS}
         order by last_seen_on nulls first, venue_name limit 25""")
+    band_rows = q("""
+        select coalesce(v.region, '?'), c.confidence_band, count(*)
+        from marts.mart_venue_confidence c left join core.dim_venue v on v.venue_id = c.venue_id
+        group by 1, 2""")
     extract_age = days_since(q("select max(extracted_at) from raw.osm_courts")[0][0])
     link_age = days_since(q("select max(checked_at) from raw.website_checks")[0][0])
     checked, dead = q("select coalesce(sum(checked),0), coalesce(sum(dead),0) from marts.mart_website_quality where source in ('osm','manual')")[0]
@@ -115,7 +119,18 @@ def main() -> None:
           "| Confirmation | Venues |", "|---|---|"]
     L += [f"| {k} | {v} |" for k, v in sorted(conf.items(), key=lambda kv: -kv[1])]
     L += ["", "Visited = seen in person; official = stated on the operator's own page; reported = told to us, not verified. "
-          "Inferred data is labeled inferred on the map and never counted as confirmed.", "",
+          "Inferred data is labeled inferred on the map and never counted as confirmed.", ""]
+    regions = sorted({r for r, _, _ in band_rows})
+    band_n = {(r, b): n for r, b, n in band_rows}
+    L += ["## Confidence bands (all venues, inferred)", "",
+          "Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-59, low < 30. "
+          "It is an inferred heuristic for prioritizing review, not a probability; it is not shown on the map.", "",
+          "| Band | All | " + " | ".join(regions) + " |", "|---" * (len(regions) + 2) + "|"]
+    for b in ("high", "medium", "low"):
+        tot = sum(band_n.get((r, b), 0) for r in regions)
+        L.append(f"| {b} | {tot:,} | " + " | ".join(f"{band_n.get((r, b), 0):,}" for r in regions) + " |")
+    L.append("| total | " + f"{sum(band_n.values()):,} | " + " | ".join(f"{sum(band_n.get((r, b), 0) for b in ('high', 'medium', 'low')):,}" for r in regions) + " |")
+    L += ["",
           "## Freshness", "",
           f"- OSM extract: {extract_age if extract_age is not None else 'unknown'} days old.",
           f"- Current link-outs: {actions_cur}; {actions_old} older than {SLA_ACTIONS_DAYS} days.",
