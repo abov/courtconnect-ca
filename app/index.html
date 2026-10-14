@@ -365,7 +365,7 @@ function renderEventList() {
     btn.addEventListener("click", () => showEvent(ev, true));
     ul.append(el("li", {}, btn));
   }
-  $("count").replaceChildren(el("b", {text: String(list.length)}), document.createTextNode(list.length === 1 ? " event to watch, soonest first" : " events to watch, soonest first"));
+  viewList = list; updateCount();
   return list;
 }
 
@@ -406,12 +406,12 @@ function renderWallList() {
     btn.addEventListener("click", () => showWall(w, true));
     ul.append(el("li", {}, btn));
   }
-  $("count").replaceChildren(el("b", {text: String(list.length)}), document.createTextNode(list.length === 1 ? " hitting wall" : " hitting walls"));
+  viewList = list; updateCount();
   return list;
 }
 
 // ---------- map ----------
-let map, popup, current = [], mapReady = false;
+let map, popup, current = [], mapReady = false, viewList = [];
 function geojson(list) {
   return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
@@ -461,7 +461,7 @@ function initMap() {
     map.on("click", "wall-pts", e => showWall(walls[e.features[0].properties.k], false));
     map.on("mouseenter", "wall-pts", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "wall-pts", () => map.getCanvas().style.cursor = "");
-    map.on("moveend", debounce(renderList, 150));
+    map.on("moveend", debounce(() => state.mode === "play" ? renderList() : updateCount(), 150));
     mapReady = true;
     applyMode(false);
   });
@@ -568,9 +568,32 @@ function renderList() {
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
   }
-  const total = current.length;
-  $("count").replaceChildren(el("b", {text: fmt(total)}), document.createTextNode(" venues" +
-    (inView.length !== total ? " · " + fmt(inView.length) + " in view" : "") + (top.length ? " · showing the nearest " + top.length : "")));
+  updateCount();
+}
+// Courts a venue lists for the active sport; with all sports, courts that also host another sport (pickleball lines on tennis) are counted once.
+function venueCourts(v) {
+  if (state.sport >= 0) { const e = v.p.find(p => p[0] === state.sport); return e && e[1] ? e[1] : 0; }
+  const have = new Set(v.p.map(p => p[0]));
+  return v.p.reduce((a, p) => a + ((sports[p[0]].b || []).some(b => have.has(b)) ? 0 : (p[1] || 0)), 0);
+}
+// "In view" uses the data (not rendered clusters), so it is exact for the current filters and mode.
+function updateCount() {
+  if (!map) return;
+  const b = map.getBounds(), box = $("count"), pin = x => b.contains([x.x, x.y]);
+  const noun = (n, one, many) => n === 1 ? one : many;
+  if (state.mode === "play") {
+    const inView = current.filter(pin);
+    let courts = 0, known = 0;
+    for (const v of inView) { const c = venueCourts(v); if (c) { courts += c; known++; } }
+    const kids = [el("b", {text: fmt(inView.length)}), document.createTextNode(noun(inView.length, " venue", " venues") + " in view" + (inView.length !== current.length ? " of " + fmt(current.length) : ""))];
+    if (known) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === inView.length ? " (all venues list a count)" : " (" + fmt(known) + " venues list a count)")));
+    else if (inView.length) kids.push(document.createTextNode(" · no court counts listed here"));
+    box.replaceChildren(...kids);
+    return;
+  }
+  const n = viewList.filter(pin).length, all = viewList.length, watch = state.mode === "watch";
+  const label = watch ? noun(n, " event", " events") : noun(n, " hitting wall", " hitting walls");
+  box.replaceChildren(el("b", {text: fmt(n)}), document.createTextNode(label + " in view" + (n !== all ? " of " + fmt(all) : "") + (watch ? ", soonest first in the list" : "")));
 }
 function refresh() {
   renderActive();
