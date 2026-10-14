@@ -1,4 +1,4 @@
-# Monthly refresh runbook (run once a month)
+# Refresh runbook (run twice a month)
 
 Goal: every venue on the map has been seen by some source in the last 35 days, and the scorecard says so. `make quality` measures it as the service level "Venues seen in the last 35 days" (target >= 99%), from `mart_venue_confidence.last_seen_on`: the newest of the OSM extract date, the Overture release date, a hand-added `confirmed_on` and a link-out `verified_on`. Events age faster and keep their own bi-weekly runbook (`docs/tournament_refresh.md`); private-club events are not checked (parked).
 
@@ -8,7 +8,7 @@ Rules: public pages only, no owner logins (ADR 0007), no Google Places data (ADR
 Run from Git Bash in the main checkout (where `courtconnect.duckdb` is). `make` is not available in Git Bash on this machine; each step shows the target and the command it runs.
 
 1. **Branch.** Fresh `main`, new branch `claude/monthly-YYYY-MM`. Note the last scorecard line in `docs/data_quality_trend.csv`.
-2. **Sports sheet.** `make sync-sports` (`python ingestion/sync_sports_sheet.py`), then `make sport-map` and `make search-terms` if the sheet changed. Never hand-edit `all_racquet.csv` or the generated `osm_sport_map.csv` / `sport_search_terms.csv`.
+2. **Sports sheet (every sync, twice a month).** The Google Sheet and the project must always agree: the sheet is the source of the sports list, so a renamed, added or removed sport lands in the project at each sync, never later. A sport the project needs that the sheet lacks is added to the sheet first (owner), then synced. After syncing, update every place that names a sport (`EXPECTED_SPORTS` in `ingestion/sync_sports_sheet.py` and `expected_racket_sports` in `transform/dbt_project.yml` must equal the sheet count, plus names in `manual_walls.csv`, `sport_also_played.csv` and the generator scripts). `make sync-sports` (`python ingestion/sync_sports_sheet.py`), then `make sport-map` and `make search-terms` if the sheet changed. Never hand-edit `all_racquet.csv` or the generated `osm_sport_map.csv` / `sport_search_terms.csv`.
 3. **Extract (ask the owner first, ~15 min).** `make extract` (OSM courts + parents, then Overture places). Overture only: `make extract-places` (~1 min); it picks the newest Overture release, which is what moves the Overture-only venues' `last_seen_on`. Walls (optional, metros only): `python ingestion/extract_osm_walls.py --area metros`.
 4. **Load.** `make load` (`python ingestion/load_raw.py`), and for Snowflake `python ingestion/load_raw.py --target snowflake`.
 5. **Link checks.** `make check-links` (link-outs in `venue_actions.csv`; re-date `verified_on` only for rows you re-read) and `make check-websites` (DNS check of venue sites, ~1 min).

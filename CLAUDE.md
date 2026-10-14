@@ -14,6 +14,7 @@ README.md has the full story; read it only if you need background. Decisions are
 ## Rules
 - NEVER read, print or commit `.env` (credentials). `.env.example` shows the keys.
 - Never hand-edit `transform/seeds/all_racquet.csv` or Snowflake `RAW.ALL_RACQUET`: the Google Sheet is the source, `make sync-sports` overwrites them.
+  The sheet must stay in sync with the project: run `make sync-sports` at every project sync (twice a month, `docs/monthly_refresh.md` step 2) and carry renames/new sports through seeds, scripts and the app.
 - Data edits go in seeds, then `make build`:
   - `manual_venues.csv` (venues no dataset knows), `venue_actions.csv` (link-outs; keep `verified_on` + `evidence`),
   - `watch_events.csv` (https links only), `place_sport_overrides.csv` (confirm/reject uncertain matches), `sport_aliases.csv`.
@@ -74,3 +75,4 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-14j: `make quality` shows confidence band counts (rules_v2, all/CA/NV via `dim_venue.region`; script only, not exported): high 75, medium 724, low 9,667. Next for item 3: Overture/OSM gold set, review queue.
 - 2026-10-14k: review queue batch 1 (`mart_sport_evidence.needs_review`, was 272 not 249): 22 confirms + 3 rejects (equipment stores) from venues' own pages in `place_sport_overrides.csv` (new `evidence`, `verified_on` columns); queue 272 -> 247. Dead/unclear pages listed in the PR; places added to `ci/fixtures/overture_places.csv`. DuckDB only.
 - 2026-10-14k: map count line follows the view (`updateCount()` in app/index.html): venues in view of filtered total + "at least N courts (M venues list a count)"; walls/events in view too. Counts data in bounds, not clusters; courts are only the ones listed.
+- 2026-10-14l: sports sheet renamed 1-/4-wall Paddle to Paddleball and added 3-wall Paddleball (76 sports); synced + renamed through seeds/scripts/app. Hitting walls are no longer a mode: picking 1-wall or 3-wall Paddleball shows walls of known type (one-wall + backboards / three-wall) as orange pins; 261 unchecked-type walls stay out. Sheet must sync with the project at every twice-monthly sync (runbook step 2). Work is in worktree ../courtconnect-ca-paddleball (branch paddleball-sports, uncommitted). Another session stashed this work once (stash@{0}); same-checkout sessions collide.

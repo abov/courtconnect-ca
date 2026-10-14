@@ -27,7 +27,7 @@ DISTINCTIVE = {
 
 # Extra spellings people use in business names; (term, sport on the sheet)
 EXTRA = [("pickle ball", "Pickleball"), ("racquet club", "Tennis"), ("racket club", "Tennis"),
-         ("ping pong", "Table Tennis"), ("paddleball", "4-wall Paddle")]
+         ("ping pong", "Table Tennis"), ("paddleball", "4-wall Paddleball")]
 
 
 def main() -> None:
