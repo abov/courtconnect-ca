@@ -9,7 +9,7 @@ README.md has the full story; read it only if you need background. Decisions are
 - `make extract` / `make load`   refresh raw data (extract takes ~15 min; don't run unless asked)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
 - `make report`     regenerate `docs/coverage_snapshot.md`
-- `make snowflake-build`   same project on Snowflake (needs credentials in `.env`)
+- `make snowflake-build`   RETIRED (2026-10-14): do not run; DuckDB is the only warehouse
 
 ## Rules
 - NEVER read, print or commit `.env` (credentials). `.env.example` shows the keys.
@@ -47,7 +47,7 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 
 **Working practices**
 - Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash). A worktree needs a copy of `courtconnect.duckdb`.
-- Seed column changes need `--full-refresh` (Snowflake too). New raw tables need `load_raw.py --target snowflake`. Sync Snowflake after every DuckDB change.
+- Seed column changes need `--full-refresh`. **Snowflake is retired as of 2026-10-14 (access may be gone): DuckDB only, never build or sync Snowflake.** Its code stays until an ADR removes it.
 - Commit `app/data/venues.json` after `make app-data`. Re-run `pages.yml` after merging any app/export change; check the latest run (another session's run cancels yours). Confirm a PR is MERGED before calling it shipped.
 - Dirty main checkout: `git worktree add ../x -b branch origin/main`, use the main `.venv`, copy `.env` only for the Snowflake build, then delete it.
 
@@ -69,4 +69,5 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-14f: Sunset Padel LA: `sunsetpadel.com` (Miami Beach club) flagged in `website_overrides`, lead resolved; map no longer links it. Snowflake not yet synced.
 - 2026-10-14g: header mode buttons fit one line (PRs #73, #75 merged, Pages redeployed, checked live): phones (<=800px) show Play / Watch / Walls (full label as aria-label/title, 44px on touch, 375/320px); desktop shows full labels, content-sized + nowrap, 34px tall (was 55px). Pages caches up to 10 min (hard refresh if stale).
 - 2026-10-14h: CalNeva step 4: statewide Nevada OSM extract into `data/raw/*_nv.csv` (`load_raw.py` appends them; `make extract` runs both states), Overture keeps CA+NV (same 2026-09-23.1 release). 525 NV venues on the map; CA unchanged at 9,941. DuckDB + Snowflake green. Re-run pages.yml after merge.
+- 2026-10-14j: map sport dropdown counts now follow the location/filters (Padel (1) for "las vegas"; `sportCounts()` in app/index.html). Snowflake retired, DuckDB only; owner is new to DuckDB (explain access simply).
 - 2026-10-14i: Nevada seeds: 28 link-outs on 8 NV venues (P1 Padel, Vegas Indoor Pickleball, Darling TC, Dill Dinkers Henderson, Pickleball Universe, Vegas Badminton Academy, Incline Village, Washoe TC) + PickleX K-Pop show (Darling, 2026-11-14) watch event; new providers in app `PROVIDER`; dropped unused `dim_sport.likely_in_california`. Leads: LV Badminton Club site says closed; 3rd Shot Reno page 404; vegasttc.com no DNS. Seeds must keep CRLF (mixed endings break DuckDB's sniffer). DuckDB + Snowflake green.
