@@ -1,6 +1,6 @@
-# CourtConnect California
+# CourtConnect CalNeva
 
-**Find where to play, who to play with, and where to watch, for every racket sport in California.**
+**Find where to play, who to play with, and where to watch, for every racket sport in California and Nevada.** Nevada is being added now ([ADR 0014](docs/decisions/0014-calneva-scope.md)); today's data covers California only.
 
 **[Open the live map](https://abov.github.io/courtconnect-ca/)**: 9,935 venues across California, with an honest panel showing which of the 75 sports have no data yet, and a **Watch a match** mode for events you can go and see.
 

@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CourtConnect California</title>
+<title>CourtConnect CalNeva</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
-<meta name="description" content="Find where to play racket sports in California: tennis, pickleball, padel, beach tennis and more, with honest notes on how complete the data is.">
+<meta name="description" content="Find where to play racket sports in California and Nevada (Nevada data coming soon): tennis, pickleball, padel, beach tennis and more, with honest notes on how complete the data is.">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V" crossorigin="anonymous">
 <style>
   :root {
@@ -128,7 +128,7 @@
 
 <aside id="panel" aria-label="Filters and results">
   <header>
-    <h1><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect California</h1>
+    <h1><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1>
     <div class="sub" id="headline">&nbsp;</div>
     <div class="row" style="margin-top:6px">
       <button class="link" id="nearMe" type="button">Near me</button>
@@ -210,7 +210,7 @@
   <footer><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
 
-<main id="map" aria-label="Map of racket-sport venues in California"></main>
+<main id="map" aria-label="Map of racket-sport venues in California and Nevada"></main>
 
 <dialog id="coverage" aria-labelledby="covTitle">
   <div class="dlg-h"><h2 id="covTitle">How complete is this data?</h2><button class="link" id="closeCoverage" type="button">Close</button></div>
@@ -683,7 +683,8 @@ function initControls() {
 }
 function initCoverage() {
   const m = DATA.meta;
-  $("headline").textContent = fmt(m.venues) + " venues · " + fmt(m.named) + " named (" + fmt(m.confirmed) + " confirmed) · " + m.sports_with_venues + " of " + m.sports_total + " sports found";
+  $("headline").textContent = fmt(m.venues) + " venues · " + fmt(m.named) + " named (" + fmt(m.confirmed) + " confirmed) · " + m.sports_with_venues + " of " + m.sports_total + " sports found"
+    + (DATA.venues.some(v => v.r === "NV") ? "" : " · California only so far; Nevada coming next");   // honest until Nevada data loads (ADR 0014)
   $("covIntro").textContent = "This map combines OpenStreetMap courts with the Overture Maps places dataset. " + fmt(m.named) + " of " + fmt(m.venues) +
     " venues have a name, and only " + fmt(m.confirmed) + " of those names are confirmed; the rest are guessed from the park or school the courts sit in. " +
     "Only " + m.sports_with_venues + " of " + m.sports_total + " racket sports have any venue here. Data as of " + m.generated + ".";

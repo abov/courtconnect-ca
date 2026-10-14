@@ -2,7 +2,7 @@
 --   covered            : 5+ venues found
 --   sparse             : 1-4 venues found
 --   possible_only      : no confirmed venue, but some business names mention it (weak matches, review them)
---   tagged_none_found  : OpenStreetMap has a tag for it, but nothing is mapped in California
+--   tagged_none_found  : OpenStreetMap has a tag for it, but nothing is mapped in California or Nevada
 --   not_found          : no OpenStreetMap tag and no place found: needs a club / governing-body directory
 with tags as (
     select sport, count(*) as osm_tag_count, min(confidence) as worst_confidence
@@ -37,7 +37,7 @@ select
         when coalesce(cov.venues_found, 0) >= 5               then 'OpenStreetMap and the places directory are sufficient; enrich names and hours'
         when coalesce(cov.venues_found, 0) >= 1               then 'Supplement with club directories and the governing-body list'
         when coalesce(cov.weak_name_matches, 0) > 0           then 'Review the weak name matches in mart_places_to_review'
-        when coalesce(t.osm_tag_count, 0) > 0                 then 'Nothing mapped in California yet: check governing-body and club directories'
+        when coalesce(t.osm_tag_count, 0) > 0                 then 'Nothing mapped in California or Nevada yet: check governing-body and club directories'
         else 'Governing-body or club directory, Meetup groups; Google place IDs for live lookup'
     end                                                       as recommended_next_source
 from {{ ref('dim_sport') }} s
