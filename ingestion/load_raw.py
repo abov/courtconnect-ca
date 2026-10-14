@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 # landing table -> source csv name, and the numeric columns to cast
 TABLES = {
     "osm_courts": ("osm_courts.csv", ["osm_id", "lat", "lon"]),
+    "osm_walls": ("osm_walls.csv", ["osm_id", "lat", "lon"]),
     "osm_parents": ("osm_parents.csv", ["osm_id", "minlat", "minlon", "maxlat", "maxlon"]),
     "overture_places": ("overture_places.csv", ["lat", "lon", "confidence"]),
     "google_place_ids": ("google_place_ids.csv", []),
@@ -25,7 +26,9 @@ TABLES = {
 
 # Tables that may legitimately have no file yet (the Google lookup is opt-in). They load as empty tables with
 # these columns, so dbt models that read them still build.
-OPTIONAL = {"google_place_ids": ["venue_id", "google_place_id", "resolved_at"],
+OPTIONAL = {"osm_walls": ["osm_type", "osm_id", "lat", "lon", "name", "sport", "surface", "lit", "access", "fee", "operator", "leisure",
+                         "tennis", "addr_city", "extracted_at"],
+            "google_place_ids": ["venue_id", "google_place_id", "resolved_at"],
             "website_checks": ["domain", "status", "resolved_host", "checked_at"]}
 
 

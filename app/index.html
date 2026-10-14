@@ -131,7 +131,7 @@
         <button class="chip" data-wt="one_wall" type="button" aria-pressed="false">One-wall</button>
         <button class="chip" data-wt="three_wall" type="button" aria-pressed="false">Three-wall</button>
       </div>
-      <div class="note" style="margin-top:6px">Walls for hitting alone. Walls are rarely mapped, so this list is short and grows as people report them. Lights, hours and fees are shown only when known.</div>
+      <div class="note" style="margin-top:6px">Walls for hitting alone. Most pins are handball and wall courts mapped in OpenStreetMap (type and condition not checked); a few are reported by players. Only Los Angeles, San Diego and the Bay Area have been searched, so this is not the full set of California walls. Tennis backboards are rarely mapped, so even those areas are incomplete. Lights, hours and fees are shown only when known.</div>
     </div>
     <div class="watchonly note">CourtConnect doesn't sell tickets or book anything. Every event links to the organizer's own page: check dates, seating and prices there.</div>
     <div class="playonly">
@@ -201,6 +201,29 @@
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" integrity="sha384-SYKAG6cglRMN0RVvhNeBY0r3FYKNOJtznwA0v7B5Vp9tr31xAHsZC0DqkQ/pZDmj" crossorigin="anonymous"></script>
 <script>
 "use strict";
+// ---------- anonymous usage counts (ADR 0013) ----------
+// GoatCounter: no cookies, no personal data, honours Do Not Track. OFF until the owner sets the site code (the part before .goatcounter.com).
+const GOATCOUNTER_CODE = "courts";
+const ANALYTICS_ON = !!GOATCOUNTER_CODE && navigator.doNotTrack !== "1" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+if (ANALYTICS_ON) {
+  const sc = document.createElement("script");
+  sc.async = true; sc.src = "https://gc.zgo.at/count.js";
+  sc.dataset.goatcounter = "https://" + GOATCOUNTER_CODE + ".goatcounter.com/count";
+  document.head.appendChild(sc);
+}
+// Events carry a short name only: never a venue name, location, search text or anything a visitor typed.
+function track(name, title) {
+  try { if (ANALYTICS_ON && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: "event/" + name, title: title || name, event: true}); } catch (e) { /* analytics must never break the map */ }
+}
+document.addEventListener("click", ev => {
+  const a = ev.target.closest && ev.target.closest("a[href]");
+  if (!a || !/^https?:/.test(a.href)) return;
+  const u = new URL(a.href);
+  if (u.hostname === location.hostname) return;
+  if (u.hostname === "github.com" && u.pathname.includes("/issues/new")) track("suggest-change");
+  else if (u.hostname.endsWith("openstreetmap.org")) track("osm-edit");
+  else track("linkout", u.hostname.replace(/^www\./, ""));   // domain only, so we learn which providers get used
+});
 const SURF = {indoor: 1, outdoor: 2, sand: 4, clay: 8, grass: 16, hard: 32, turf: 64};
 const QNAME = {c: "Confirmed name", p: "Business listing", i: "Name inferred from nearby park or school", u: "Unnamed courts"};
 const QSHORT = {c: "Confirmed", p: "Listing", i: "Inferred", u: "Unnamed"};
@@ -325,7 +348,8 @@ function wallNode(w) {
   box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", w.c].filter(Boolean).join(" � ")}));
   box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " � Free to use: " + triState(w.f) + (w.su ? " � Surface: " + w.su : "")}));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
-  box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). Sports listed are what the wall is thought to suit."}));
+  box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
+  if (w.cf === "tagged") box.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
   return box;
 }
 function showWall(w, fly) {
@@ -464,6 +488,7 @@ function venueNode(v) {
 function showVenue(v, fly) {
   if (!v) return;
   if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: [0, Math.round(map.getContainer().clientHeight * 0.22)]});   // leave room above the pin for the popup
+  track("venue-open");
   popup.setLngLat([v.x, v.y]).setDOMContent(venueNode(v)).addTo(map);
 }
 
@@ -592,7 +617,7 @@ function initControls() {
   $("modeWatch").addEventListener("click", () => setMode("watch"));
   $("modeWalls").addEventListener("click", () => setMode("walls"));
   for (const b of document.querySelectorAll("[data-wt]")) b.addEventListener("click", () => { state.wall = b.dataset.wt; syncControls(); refresh(); if (state.mode === "walls") applyMode(true); });
-  sel.addEventListener("change", () => { state.sport = +sel.value; showAnywhere(); refresh(); if (state.mode !== "play") applyMode(true); });
+  sel.addEventListener("change", () => { state.sport = +sel.value; if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); refresh(); if (state.mode !== "play") applyMode(true); });
   $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); refresh(); }, 200));
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
     const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();
@@ -622,7 +647,8 @@ function initCoverage() {
   $("openCoverage").addEventListener("click", () => $("coverage").showModal());
   $("closeCoverage").addEventListener("click", () => $("coverage").close());
   $("attr").replaceChildren(document.createTextNode(m.attribution + " Map: OpenFreeMap, © OpenMapTiles. "),
-    el("a", {href: "https://github.com/abov/courtconnect-ca", target: "_blank", rel: "noopener noreferrer", text: "Source code"}));
+    el("a", {href: "https://github.com/abov/courtconnect-ca", target: "_blank", rel: "noopener noreferrer", text: "Source code"}),
+    document.createTextNode(ANALYTICS_ON ? " Anonymous visit counts via GoatCounter (no cookies, no personal data)." : ""));
 }
 
 // ---------- boot ----------
