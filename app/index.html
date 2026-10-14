@@ -117,6 +117,7 @@
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
     .legend { display: none; }
+    .maplibregl-popup-content { max-height: calc(42vh - 110px); max-height: calc(42dvh - 110px); }
     footer { padding: 6px 14px; }
     #map { order: -1; } #panel { border-right: 0; border-top: 1px solid var(--line); }
   }
@@ -138,6 +139,8 @@
       <button class="chip" id="modeWalls" type="button" aria-pressed="false">Hitting walls</button>
     </div>
   </header>
+
+  <div id="active" class="chips playonly" role="group" aria-label="Active filters" hidden></div>
 
   <div class="controls">
     <div>
@@ -196,7 +199,6 @@
     <div class="row playonly"><button class="link" id="reset" type="button">Clear filters</button></div>
   </div>
 
-  <div id="active" class="chips playonly" role="group" aria-label="Active filters" hidden></div>
   <div id="count" aria-live="polite"></div>
   <ul id="list"></ul>
   <div class="legend playlegend" aria-label="Map legend">
@@ -512,7 +514,7 @@ function venueNode(v) {
 }
 function showVenue(v, fly) {
   if (!v) return;
-  if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: [0, Math.round(map.getContainer().clientHeight * 0.22)]});   // leave room above the pin for the popup
+  if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: [0, Math.round(map.getContainer().clientHeight * (matchMedia("(max-width: 800px)").matches ? 0.47 : 0.22))]});   // leave room above the pin for the popup
   track("venue-open");
   popup.setLngLat([v.x, v.y]).setDOMContent(venueNode(v)).addTo(map);
 }
@@ -620,7 +622,7 @@ function syncControls() {
   $("modeWalls").setAttribute("aria-pressed", state.mode === "walls");
   const nOn = state.on.size + state.offers.size;
   $("moreSummary").textContent = nOn ? "Filters on: " + nOn + " (tap to change)" : "More filters: surface, access, what they offer";
-  if (nOn) $("moreFilters").open = true;
+  if (nOn && !matchMedia("(max-width: 800px)").matches) $("moreFilters").open = true;
   $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode === "watch");
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
   for (const b of document.querySelectorAll("[data-o]")) b.setAttribute("aria-pressed", state.offers.has(b.dataset.o));
