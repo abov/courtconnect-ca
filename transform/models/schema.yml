@@ -358,8 +358,8 @@ models:
 
   - name: mart_venue_confidence
     description: >
-      Rule-based confidence score per venue (0-100, method rules_v1, INFERRED): sources, hand-added evidence, real name, contact details and
-      freshness, each a visible column. A heuristic for ranking what to verify next, not a probability and not shown to players yet.
+      Rule-based confidence score per venue (0-100, method rules_v2, INFERRED): sources, hand-added evidence, real name, contact details and
+      freshness, minus a penalty when sports rest on weak evidence (mart_sport_evidence), each a visible column; v1 score kept for comparison. A heuristic for ranking what to verify next, not a probability and not shown to players yet.
     columns:
       - name: venue_id
         tests: [unique, not_null]
