@@ -652,7 +652,7 @@ function initCoverage() {
 
 // ---------- boot ----------
 let byKey = {};
-fetch("data/venues.json").then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(d => {
+fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(d => {
   DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; walls = d.walls || [];
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
