@@ -28,7 +28,7 @@ import overpass  # reused for the California border clip
 BUCKET = "overturemaps-us-west-2"
 SEEDS = Path("transform/seeds")
 FIELDS = ["place_id", "name", "category", "top_category", "sub_category", "lat", "lon", "confidence", "operating_status",
-          "website", "phone", "address", "city", "postcode", "region", "license", "source_dataset", "release"]
+          "website", "phone", "address", "city", "postcode", "address_region", "license", "source_dataset", "release", "region"]
 
 
 def latest_release() -> str:
@@ -85,7 +85,7 @@ def main() -> None:
         if not overpass.in_region(r[5], r[6], "CA"):
             outside += 1
             continue
-        keep.append((*r, release))
+        keep.append((*r, release, overpass.region_at(r[5], r[6])))   # address_region = Overture's address text; region = border polygon (ADR 0014)
     print(f"kept {len(keep):,} (racket category or sport word in the name); {outside:,} dropped outside the California border")
 
     out = Path(args.out)

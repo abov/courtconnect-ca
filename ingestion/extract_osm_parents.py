@@ -23,7 +23,7 @@ KINDS = [
     ("club", "sport"),
     ("tourism", "resort|hotel|camp_site"),
 ]
-FIELDS = ["osm_type", "osm_id", "name", "kind", "minlat", "minlon", "maxlat", "maxlon", "extracted_at"]
+FIELDS = ["osm_type", "osm_id", "name", "kind", "minlat", "minlon", "maxlat", "maxlon", "extracted_at", "region"]
 
 
 def build_query(bbox) -> str:
@@ -64,6 +64,7 @@ def main() -> None:
                 "osm_type": e["type"], "osm_id": e["id"], "name": e["tags"]["name"], "kind": kind_of(e["tags"]),
                 "minlat": b["minlat"], "minlon": b["minlon"], "maxlat": b["maxlat"], "maxlon": b["maxlon"],
                 "extracted_at": ts,
+                "region": overpass.region_at((b["minlat"] + b["maxlat"]) / 2, (b["minlon"] + b["maxlon"]) / 2),   # ADR 0014
             }
         print(f"tile {i}/{len(tiles)} {bbox}: {len(els):>6,} features (running unique: {len(seen):,})", flush=True)
         time.sleep(2)

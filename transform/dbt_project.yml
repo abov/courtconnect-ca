@@ -25,6 +25,7 @@ seeds:
         offerings: varchar
         confirmation: varchar
         confirmed_on: varchar
+        region: varchar
     venue_confirmations:     # all text; cast in staging
       +column_types:
         venue_key: varchar
@@ -64,6 +65,7 @@ seeds:
         free_to_use: varchar
         access: varchar
         surface: varchar
+        region: varchar
         near_venue_name: varchar
         reported_on: varchar
     place_sport_overrides:   # starts empty: pin the types so an empty file is not guessed as INTEGER

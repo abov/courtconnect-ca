@@ -23,6 +23,7 @@ select
     p.postcode,
     p.license,
     p.release,
+    p.region,
     m.venue_id                                                as matched_venue_id,
     m.distance_m                                              as match_distance_m,
     coalesce(m.venue_id, md5('place/' || p.place_id))         as venue_id,

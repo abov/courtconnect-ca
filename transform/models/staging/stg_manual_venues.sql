@@ -18,5 +18,6 @@ select
     nullif(trim(rules), '')                                   as rules_note,
     lower(coalesce(nullif(trim(confirmation), ''), 'reported')) as confirmation_level,   -- visited | official | reported
     cast(nullif(trim(confirmed_on), '') as date)              as confirmed_on,
-    nullif(trim(evidence), '')                                as evidence
+    nullif(trim(evidence), '')                                as evidence,
+    {{ region_code('region') }}                               as region
 from {{ ref('manual_venues') }}
