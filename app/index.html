@@ -203,7 +203,7 @@
 "use strict";
 // ---------- anonymous usage counts (ADR 0013) ----------
 // GoatCounter: no cookies, no personal data, honours Do Not Track. OFF until the owner sets the site code (the part before .goatcounter.com).
-const GOATCOUNTER_CODE = "";
+const GOATCOUNTER_CODE = "courts";
 const ANALYTICS_ON = !!GOATCOUNTER_CODE && navigator.doNotTrack !== "1" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 if (ANALYTICS_ON) {
   const sc = document.createElement("script");
