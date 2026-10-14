@@ -12,6 +12,8 @@ Mix on purpose: 2 tennis, 2 pickleball, 1 padel, 1 beach tennis or squash, 1 bad
 ## How long
 Two weeks: days 1-2 invite, days 3-12 use, days 13-14 wrap-up call or message.
 
+**Schedule:** invites go out Wed 2026-10-14 (day 1); follow-up message Wed 2026-10-21 to Sat 10-24; replies due Wed 2026-10-28; wrap-up and findings (`docs/feedback_findings.md`) Thu 10-29 to Sun 11-01.
+
 ## What each person does
 Send this, in your own words:
 1. Find a place you could play your sport near you this week. Did you find one you did not already know?
@@ -48,7 +50,7 @@ Send individually, not in a group chat. Swap in their sport in task 1 and a plac
 >
 > Heads up: it's early, so coverage is thin in some areas. Gaps and mistakes are exactly what I want to hear about. It only counts anonymous visits (no accounts, no cookies, no names), and I won't share anything you tell me with your name on it.
 >
-> Thank you! It would help a lot if you could get back to me by [date, two weeks from now].
+> Thank you! It would help a lot if you could get back to me by Wed Oct 28.
 
 Follow-up (day 7 to 10):
 
