@@ -28,7 +28,7 @@ LEISURE = "pitch|sports_centre|sports_hall|fitness_centre|stadium"
 
 FIELDS = ["osm_type", "osm_id", "lat", "lon", "name", "sport", "surface", "lit", "access", "fee", "operator",
           "courts", "leisure", "indoor", "covered", "building", "website", "phone", "opening_hours",
-          "addr_housenumber", "addr_street", "addr_city", "extracted_at"]
+          "addr_housenumber", "addr_street", "addr_city", "extracted_at", "region"]
 
 
 def build_query(bbox) -> str:
@@ -77,6 +77,7 @@ def main() -> None:
         for e in els:
             row = to_row(e, ts)
             if overpass.keep(row["lat"], row["lon"], args.area):   # drop other states / Mexico / ocean
+                row["region"] = overpass.region_at(row["lat"], row["lon"])   # CA / NV from the border polygon (ADR 0014)
                 seen[(e["type"], e["id"])] = row
         print(f"tile {i}/{len(tiles)} {bbox}: {len(els):>6,} elements (running unique: {len(seen):,})", flush=True)
         time.sleep(2)  # be polite to the free public API

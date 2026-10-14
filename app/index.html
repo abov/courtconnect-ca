@@ -370,7 +370,7 @@ function wallNode(w) {
   const box = el("div");
   box.append(el("h2", {text: w.n}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
-  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", w.c].filter(Boolean).join(" � ")}));
+  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" � ")}));
   box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " � Free to use: " + triState(w.f) + (w.su ? " � Surface: " + w.su : "")}));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
@@ -482,7 +482,7 @@ function venueNode(v) {
   box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})));
   if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " � " + v.cn + (v.cn === 1 ? " person" : " people") + " confirmed" : "")})));
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
-  const place = [v.a, v.c].filter(Boolean).join(", ");
+  const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014)
   if (place) box.append(el("p", {class: "meta", text: place}));
   box.append(el("p", {}, el("b", {text: "Plays: "}), document.createTextNode(sportLine(v))));
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);

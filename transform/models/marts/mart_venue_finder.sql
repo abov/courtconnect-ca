@@ -30,6 +30,7 @@ select
     v.lat,
     v.lon,
     v.city,
+    v.region,                                                 -- CA / NV (ADR 0014)
     v.address_line,
     v.website,
     v.website_status,
