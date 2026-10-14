@@ -20,7 +20,7 @@ import overpass
 METROS = [overpass.BBOXES["la"], overpass.BBOXES["sd"], overpass.BBOXES["sf"], (37.2, -122.3, 37.6, -121.7), (37.6, -122.35, 38.0, -122.0)]
 
 FIELDS = ["osm_type", "osm_id", "lat", "lon", "name", "sport", "surface", "lit", "access", "fee", "operator", "leisure",
-          "tennis", "addr_city", "extracted_at"]
+          "tennis", "addr_city", "region", "extracted_at"]
 
 
 def build_query(bbox) -> str:
@@ -64,6 +64,7 @@ def main() -> None:
         for e in els:
             row = to_row(e, ts)
             if overpass.keep(row["lat"], row["lon"], "california" if args.area == "metros" else args.area):
+                row["region"] = overpass.region_at(row["lat"], row["lon"])
                 seen[(e["type"], e["id"])] = row
         print(f"tile {i}/{len(tiles)} {bbox}: {len(els):>6,} elements (running unique: {len(seen):,})", flush=True)
         time.sleep(2)

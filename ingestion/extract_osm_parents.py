@@ -23,7 +23,7 @@ KINDS = [
     ("club", "sport"),
     ("tourism", "resort|hotel|camp_site"),
 ]
-FIELDS = ["osm_type", "osm_id", "name", "kind", "minlat", "minlon", "maxlat", "maxlon", "extracted_at"]
+FIELDS = ["osm_type", "osm_id", "name", "kind", "minlat", "minlon", "maxlat", "maxlon", "region", "extracted_at"]
 
 
 def build_query(bbox) -> str:
@@ -58,12 +58,13 @@ def main() -> None:
         els = overpass.fetch_adaptive(build_query, bbox, f"tile {i}/{len(tiles)}", failed)
         for e in els:
             b = e.get("bounds")
-            if not b or not overpass.keep((b["minlat"] + b["maxlat"]) / 2, (b["minlon"] + b["maxlon"]) / 2, args.area):
+            clat, clon = ((b["minlat"] + b["maxlat"]) / 2, (b["minlon"] + b["maxlon"]) / 2) if b else (None, None)
+            if not b or not overpass.keep(clat, clon, args.area):
                 continue
             seen[(e["type"], e["id"])] = {
                 "osm_type": e["type"], "osm_id": e["id"], "name": e["tags"]["name"], "kind": kind_of(e["tags"]),
                 "minlat": b["minlat"], "minlon": b["minlon"], "maxlat": b["maxlat"], "maxlon": b["maxlon"],
-                "extracted_at": ts,
+                "region": overpass.region_at(clat, clon), "extracted_at": ts,
             }
         print(f"tile {i}/{len(tiles)} {bbox}: {len(els):>6,} features (running unique: {len(seen):,})", flush=True)
         time.sleep(2)

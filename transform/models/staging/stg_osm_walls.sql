@@ -26,5 +26,6 @@ select
     'tagged'                                                                                  as confirmation,
     cast(extracted_at as date)                                                                as reported_on,
     'OpenStreetMap ' || osm_type || ' ' || cast(cast(osm_id as bigint) as varchar) || ', tagged sport=' || coalesce(sport, 'n/a')
-        || '. Only the tags are known: wall type, condition and whether it is open to the public were not checked.'      as evidence
+        || '. Only the tags are known: wall type, condition and whether it is open to the public were not checked.'      as evidence,
+    region                                                                                    as region
 from {{ source('raw', 'osm_walls') }}

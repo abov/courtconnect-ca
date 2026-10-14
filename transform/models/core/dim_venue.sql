@@ -75,7 +75,8 @@ osm_venues as (
         max(case when surface_type = 'grass' then 1 else 0 end) = 1   as has_grass,
         max(case when surface_type = 'turf' then 1 else 0 end) = 1    as has_turf,
         max(case when surface_type = 'sand' then 1 else 0 end) = 1    as has_sand,
-        max(case when surface_type in ('carpet', 'wood') then 1 else 0 end) = 1 as has_indoor_floor
+        max(case when surface_type in ('carpet', 'wood') then 1 else 0 end) = 1 as has_indoor_floor,
+        min(region)                                           as region   -- clusters are a few hundred metres wide; if one ever straddles the CA/NV line, min() picks one
     from courts
     group by venue_id
 ),
@@ -109,7 +110,8 @@ osm_final as (
         -- members-only = marked private/members and nothing says public (the only access signal we hold; unmarked venues are NOT assumed public)
         ((v.has_members_courts or coalesce(bm.is_members, false)) and not (v.is_confirmed_public or coalesce(bm.is_public, false))) as is_members_only,
         v.has_indoor, v.has_outdoor,
-        v.has_hard, v.has_clay, v.has_grass, v.has_turf, v.has_sand, v.has_indoor_floor
+        v.has_hard, v.has_clay, v.has_grass, v.has_turf, v.has_sand, v.has_indoor_floor,
+        v.region
     from osm_venues v
     left join best_parent pp on pp.venue_id = v.venue_id
     left join best_place pl on pl.venue_id = v.venue_id
@@ -134,7 +136,8 @@ places_only as (
         false as has_lit_courts, coalesce(bm.is_public, false) as is_confirmed_public, false as has_free_courts,
         (coalesce(bm.is_members, false) and not coalesce(bm.is_public, false)) as is_members_only,
         false as has_indoor, false as has_outdoor,
-        false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor
+        false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor,
+        p.region
     from {{ ref('dim_place') }} p
     left join best_manual bm on bm.venue_id = p.venue_id
     where p.matched_venue_id is null and p.has_strong_sport
@@ -170,7 +173,8 @@ manual_final as (
         max(case when surface_type = 'grass' then 1 else 0 end) = 1   as has_grass,
         max(case when surface_type = 'turf' then 1 else 0 end) = 1    as has_turf,
         max(case when surface_type = 'sand' then 1 else 0 end) = 1    as has_sand,
-        false as has_indoor_floor
+        false as has_indoor_floor,
+        min(m.region)                                         as region
     from {{ ref('stg_manual_venues') }} m
     join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
     where not mm.is_matched

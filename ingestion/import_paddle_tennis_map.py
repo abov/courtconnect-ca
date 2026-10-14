@@ -29,7 +29,7 @@ NS = {"k": "http://www.opengis.net/kml/2.2"}
 UA = {"User-Agent": "courtconnect-ca/0.1 (portfolio project)"}
 SEED = "transform/seeds/manual_venues.csv"
 COLS = ["venue_key", "venue_name", "sport", "city", "lat", "lon", "location_precision", "website", "surface_type", "setting", "offerings",
-        "courts", "access", "rules", "confirmation", "confirmed_on", "evidence"]
+        "courts", "access", "rules", "confirmation", "confirmed_on", "evidence", "region"]
 # map name -> OpenStreetMap park name, used when the geocoder could only place a street
 PARK_HINT = {"Glen Alla Park": "Glen Alla Park", "Fox Hills Park": "Fox Hills Park", "Oberrieder Park Paddle Tennis Courts": "Oberrieder Park",
              "Syd Kronenthal Park": "Syd Kronenthal Park", "Ladera Linda Community Park": "Ladera Linda Park"}
@@ -109,7 +109,8 @@ def main() -> None:
                     "setting": "unknown", "offerings": "", "courts": str(int(float(r["Count"]))) if r.get("Count") else "", "access": access,
                     "rules": r.get("Rules", "") or "", "confirmation": "reported", "confirmed_on": "",
                     "evidence": f"Pop Tennis West LA map (compiled by the project owner): {note}Address on the map: "
-                                f"{r['Address'].replace('CA CA', 'CA')}. Location placed with the OpenStreetMap geocoder: {precision}."})
+                                f"{r['Address'].replace('CA CA', 'CA')}. Location placed with the OpenStreetMap geocoder: {precision}.",
+                    "region": "CA"})
     for o in out:
         print(f'{o["access"]:8s} {o["venue_name"][:38]:38s} {o["lat"]},{o["lon"]}  {o["location_precision"]}')
     print(f"{len(out)} venues (Public + ? only)")

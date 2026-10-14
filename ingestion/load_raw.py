@@ -32,6 +32,22 @@ OPTIONAL = {"osm_walls": ["osm_type", "osm_id", "lat", "lon", "name", "sport", "
             "website_checks": ["domain", "status", "resolved_host", "checked_at"]}
 
 
+REGION_TABLES = {"osm_courts", "osm_walls", "osm_parents", "overture_places"}
+
+
+def add_region(table: str, df: pd.DataFrame) -> pd.DataFrame:
+    """Every geographic raw table carries `region` (CA / NV, set by the extractor from the state border, ADR 0014).
+    Files extracted before that (and the CI fixtures) were clipped to the California border, so they get 'CA'.
+    Old Overture files used `region` for the address state; it is renamed to `addr_region` first."""
+    if table not in REGION_TABLES:
+        return df
+    if table == "overture_places" and "addr_region" not in df.columns:
+        df = df.rename(columns={"region": "addr_region"})
+    if "region" not in df.columns:
+        df["region"] = "CA"
+    return df
+
+
 def load_duckdb(table: str, df: pd.DataFrame, db_path: str) -> None:
     import duckdb
 
@@ -90,6 +106,7 @@ def main() -> None:
                 df = pd.DataFrame(columns=OPTIONAL[table], dtype=str)
             else:
                 raise SystemExit(f"{csv_path} not found - run the matching extract_*.py first")
+            df = add_region(table, df)
             for col in df.columns:
                 if col in numeric:
                     df[col] = pd.to_numeric(df[col])

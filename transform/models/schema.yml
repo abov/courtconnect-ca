@@ -228,6 +228,17 @@ models:
               arguments:
                 values: ['inferred']
 
+  - name: dim_wall
+    description: One row per hitting wall, hand-curated (seeds/manual_walls.csv) plus OSM-mapped ones.
+    columns:
+      - name: region
+        description: State the wall is in (CA / NV), from the state border (ADR 0014).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CA', 'NV']
+
   - name: dim_court
     description: One row per physical court / sports-centre record from OpenStreetMap.
     columns:
@@ -278,6 +289,13 @@ models:
           - accepted_values:
               arguments:
                 values: ['osm', 'osm+places', 'places_only', 'manual']
+      - name: region
+        description: State the venue is in (CA / NV), set at the raw layer from the state border polygon, never from address text (ADR 0014).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CA', 'NV']
       - name: name_source
         tests:
           - accepted_values:

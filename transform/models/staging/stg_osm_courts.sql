@@ -67,5 +67,6 @@ select
     nullif(trim(opening_hours), '')                           as opening_hours,
     nullif(trim(concat_ws(' ', addr_housenumber, addr_street)), '') as address_line,
     nullif(trim(addr_city), '')                               as city,
+    region,                                                   -- CA / NV, from the state border (ADR 0014)
     extracted_at
 from src

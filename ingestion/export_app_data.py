@@ -8,12 +8,12 @@ Websites are exported only when `website_usable` is set, so dead links never rea
 File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
-  venues  : [{i, n, q, s, y, x, c, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
+  venues  : [{i, n, q, s, y, x, r, c, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]   r region CA/NV (state border, ADR 0014)
      ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
   walls   : [{n name, c city, y, x, pr location precision, t [wall types], sp [sports suited], nv near venue, su surface, l lit 1/0 (absent = unknown),
-              f free 1/0 (absent = unknown), ac access, cf confirmation, d reported on, ev evidence}]   (hitting walls for solo practice)
+              f free 1/0 (absent = unknown), ac access, cf confirmation, d reported on, ev evidence, r region}]   (hitting walls for solo practice)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
      s source: o OpenStreetMap, p places, b both, m hand-curated
      f venue bits: 1 lit, 2 public, 4 free, 8 members-only (marked private/members, not marked public)      p[i][2] sport bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf
@@ -58,7 +58,7 @@ def main() -> None:
             sports[sport_index[name]].setdefault("b", []).append(sport_index[base])
 
     rows = con.execute("""
-        select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, address_line,
+        select venue_id, venue_name, name_source, venue_source, region, sport_name, courts_for_sport, lat, lon, city, address_line,
                website_usable, offerings, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
                has_lit_courts, is_confirmed_public, has_free_courts, is_members_only
         from marts.mart_venue_finder""").fetchall()
@@ -94,7 +94,7 @@ def main() -> None:
 
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
-    for (vid, name, nsrc, vsrc, sport, courts, lat, lon, city, addr, web, offers, indoor, outdoor, sand, clay, grass, hard, turf,
+    for (vid, name, nsrc, vsrc, region, sport, courts, lat, lon, city, addr, web, offers, indoor, outdoor, sand, clay, grass, hard, turf,
          lit, public, free, members) in rows:
         if lat is None or lon is None:
             continue
@@ -106,6 +106,7 @@ def main() -> None:
                 "s": SOURCE.get(vsrc, "o"),
                 "y": round(float(lat), 5),
                 "x": round(float(lon), 5),
+                "r": region,
                 "c": city or "",
                 "a": addr or "",
                 "w": web or "",
@@ -148,12 +149,12 @@ def main() -> None:
 
     # Hitting walls: solo practice. Unknown lit / free flags are left out of the row, never exported as 0.
     walls = []
-    for (name, city, lat, lon, prec, wtype, suited, near, surf, lit, free, access, conf, rep, evid) in con.execute("""
+    for (name, city, lat, lon, prec, wtype, suited, near, surf, lit, free, access, conf, rep, evid, region) in con.execute("""
             select wall_name, city, lat, lon, location_precision, wall_type, sports_suited, near_venue_name, surface, is_lit, free_to_use,
-                   access, confirmation, reported_on, evidence
+                   access, confirmation, reported_on, evidence, region
             from core.dim_wall order by city, wall_name""").fetchall():
         w = {"n": name, "c": city, "y": round(float(lat), 5), "x": round(float(lon), 5), "pr": prec or "", "t": [x.strip() for x in wtype.split(";") if x.strip()],
-             "sp": [x.strip() for x in (suited or "").split(";") if x.strip()], "cf": conf, "d": str(rep), "ev": evid or ""}
+             "sp": [x.strip() for x in (suited or "").split(";") if x.strip()], "cf": conf, "d": str(rep), "ev": evid or "", "r": region}
         if near: w["nv"] = near
         if surf: w["su"] = surf
         if lit is not None: w["l"] = 1 if lit else 0
@@ -171,6 +172,7 @@ def main() -> None:
         "sports_with_venues": sum(1 for s in sports if s["v"] > 0),
         "events": len(events),
         "walls": len(walls),
+        "regions": {r: sum(1 for v in out_venues if v["r"] == r) for r in sorted({v["r"] for v in out_venues})},
         "link_outs": sum(len(v.get("ac", [])) for v in out_venues),
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }

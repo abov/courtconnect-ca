@@ -22,6 +22,7 @@ select
     p.parent_name,
     p.parent_kind,
     p.parent_area,
+    c.region,
     c.extracted_at
 from {{ ref('stg_osm_courts') }} c
 join {{ ref('int_court_clusters') }} k on k.court_id = c.court_id

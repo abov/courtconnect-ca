@@ -17,5 +17,6 @@ select
     nullif(lower(trim(access)), '')                           as access,
     lower(trim(confirmation))                                 as confirmation,
     cast(reported_on as date)                                 as reported_on,
-    nullif(trim(evidence), '')                                as evidence
+    nullif(trim(evidence), '')                                as evidence,
+    upper(trim(region))                                       as region      -- CA / NV
 from {{ ref('manual_walls') }}

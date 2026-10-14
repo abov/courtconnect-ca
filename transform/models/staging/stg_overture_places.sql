@@ -17,7 +17,8 @@ select
     nullif(trim(postcode), '')                                as postcode,
     license,
     source_dataset,
-    release
+    release,
+    region                                                    -- CA / NV, from the state border (ADR 0014)
 from {{ source('raw', 'overture_places') }}
 where lat is not null and lon is not null
   and coalesce(lower(operating_status), 'open') not in ('closed', 'permanently_closed')

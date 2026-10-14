@@ -21,6 +21,7 @@ select
     coalesce(v.venue_name, 'Unnamed courts')                  as venue_name,
     v.name_source,
     v.venue_source,
+    v.region,
     s.sport_name,
     bvs.courts                                                as courts_for_sport,
     bvs.in_osm,

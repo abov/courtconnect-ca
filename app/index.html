@@ -482,7 +482,7 @@ function venueNode(v) {
   box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})));
   if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " � " + v.cn + (v.cn === 1 ? " person" : " people") + " confirmed" : "")})));
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
-  const place = [v.a, v.c].filter(Boolean).join(", ");
+  const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // v.r = state (CA / NV), ADR 0014
   if (place) box.append(el("p", {class: "meta", text: place}));
   box.append(el("p", {}, el("b", {text: "Plays: "}), document.createTextNode(sportLine(v))));
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
@@ -705,7 +705,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
     v.m = v.p.reduce((a, p) => a | p[2], 0);
-    v.t = (v.n + " " + v.c).toLowerCase();
+    v.t = (v.n + " " + v.c + " " + (v.r || "")).toLowerCase();
   });
   readHash(); initControls(); initCoverage(); syncControls();
   initMap();
