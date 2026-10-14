@@ -172,7 +172,7 @@ seeds:
   - name: place_sport_overrides
     description: >
       Human review of weak place-to-sport matches (see mart_places_to_review). One row per decision:
-      place_id, sport (exact name from the master list), verdict ('confirm' or 'reject').
+      place_id, sport (exact name from the master list), verdict ('confirm' or 'reject'), evidence (what the venue's own public page says; blank on rows from before 2026-10-14), verified_on (date checked).
     columns:
       - name: verdict
         tests:
