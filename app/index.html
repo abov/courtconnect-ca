@@ -281,9 +281,9 @@ const fmt = n => n.toLocaleString("en-US");
 // ---------- filtering ----------
 function surfMask() { let m = 0; for (const k of ["sand", "clay", "grass", "hard"]) if (state.on.has(k)) m |= SURF[k]; return m; }
 function setMask() { let m = 0; for (const k of ["indoor", "outdoor"]) if (state.on.has(k)) m |= SURF[k]; return m; }
-function matches(v, sm, tm, vf) {
+function matches(v, sm, tm, vf, sport = state.sport) {
   let mask;
-  if (state.sport >= 0) { const e = v.p.find(p => p[0] === state.sport); if (!e) return false; mask = e[2]; } else mask = v.m;
+  if (sport >= 0) { const e = v.p.find(p => p[0] === sport); if (!e) return false; mask = e[2]; } else mask = v.m;
   if (sm && !(mask & sm)) return false;
   if (tm && !(mask & tm)) return false;
   if (vf && (v.f & vf) !== vf) return false;
@@ -299,6 +299,16 @@ function filtered() {
   const sm = surfMask(), tm = setMask();
   const vf = (state.on.has("lit") ? 1 : 0);
   return venues.filter(v => matches(v, sm, tm, vf));
+}
+
+// Dropdown counts: venues per sport under every filter except sport itself, so "Padel (1)" follows the typed location.
+function sportCounts() {
+  const sm = surfMask(), tm = setMask(), vf = (state.on.has("lit") ? 1 : 0), counts = {all: 0};
+  for (const v of venues) {
+    if (matches(v, sm, tm, vf, -1)) counts.all++;
+    for (const p of v.p) if (matches(v, sm, tm, vf, p[0])) counts[p[0]] = (counts[p[0]] || 0) + 1;
+  }
+  return counts;
 }
 
 // ---------- watch events (link-out discovery, never booking) ----------
@@ -576,7 +586,7 @@ function refresh() {
   }
   current = filtered();
   if (map.getSource("v")) map.getSource("v").setData(geojson(current));
-  renderList(); writeHash();
+  populateSports(); renderList(); writeHash();
 }
 
 // ---------- controls, hash state ----------
@@ -646,8 +656,13 @@ function populateSports() {
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[s.n] + ")"})); });
     if (state.sport >= 0 && !counts[sports[state.sport].n]) state.sport = -1;
   } else {
-    sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(venues.length) + " venues)"}));
-    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (s.v > 0 || s.w) sel.append(el("option", {value: String(i), text: s.n + " (" + [s.v > 0 ? fmt(s.v) : "", s.w || ""].filter(Boolean).join(" + ") + ")"})); });
+    const sc = sportCounts(), narrowed = !!(state.text || state.on.size || state.offers.size);
+    sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(sc.all) + " venues)"}));
+    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => {
+      if (!(s.v > 0 || s.w)) return;
+      const n = sc[i] || 0;
+      sel.append(el("option", {value: String(i), text: s.n + " (" + [n > 0 || s.v > 0 ? fmt(n) : "", narrowed ? "" : (s.w || "")].filter(Boolean).join(" + ") + ")"}));
+    });
   }
   sel.value = String(state.sport);
   showAnywhere();
