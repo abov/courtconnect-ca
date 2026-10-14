@@ -366,6 +366,8 @@ models:
       - name: confidence_score
         tests:
           - not_null
+      - name: last_seen_on
+        description: Newest date any source saw the venue (OSM extract, Overture release, hand-added confirmation, link-out check). Null when nothing dated backs the venue (e.g. an undated reported row). The 35-day freshness SLA in `make quality` reads it.
       - name: confidence_band
         tests:
           - accepted_values:
