@@ -46,11 +46,11 @@ def kind_of(tags: dict) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--area", choices=[*overpass.BBOXES, "california"], default="la")
+    ap.add_argument("--area", choices=[*overpass.BBOXES, "california", "nevada"], default="la")
     ap.add_argument("--out", default="data/raw/osm_parents.csv")
     args = ap.parse_args()
 
-    tiles = overpass.california_tiles() if args.area == "california" else [overpass.BBOXES[args.area]]
+    tiles = overpass.area_tiles(args.area)
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     seen: dict[tuple, dict] = {}
     failed: list = []
@@ -58,7 +58,7 @@ def main() -> None:
         els = overpass.fetch_adaptive(build_query, bbox, f"tile {i}/{len(tiles)}", failed)
         for e in els:
             b = e.get("bounds")
-            if not b or not overpass.in_california((b["minlat"] + b["maxlat"]) / 2, (b["minlon"] + b["maxlon"]) / 2):
+            if not b or not overpass.keep((b["minlat"] + b["maxlat"]) / 2, (b["minlon"] + b["maxlon"]) / 2, args.area):
                 continue
             seen[(e["type"], e["id"])] = {
                 "osm_type": e["type"], "osm_id": e["id"], "name": e["tags"]["name"], "kind": kind_of(e["tags"]),

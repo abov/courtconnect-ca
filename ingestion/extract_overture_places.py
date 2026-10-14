@@ -82,7 +82,7 @@ def main() -> None:
         name_n = norm(r[1])
         if not (r[2] in cats or any(n in name_n for n in needles)):
             continue
-        if not overpass.in_california(r[5], r[6]):
+        if not overpass.in_region(r[5], r[6], "CA"):
             outside += 1
             continue
         keep.append((*r, release))
