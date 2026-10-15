@@ -315,16 +315,6 @@ function filtered() {
   return venues.filter(v => matches(v, sm, tm, vf));
 }
 
-// Dropdown counts: venues per sport under every filter except sport itself, so "Padel (1)" follows the typed location.
-function sportCounts() {
-  const sm = surfMask(), tm = setMask(), vf = (state.on.has("lit") ? 1 : 0), counts = {all: 0};
-  for (const v of venues) {
-    if (matches(v, sm, tm, vf, -1)) counts.all++;
-    for (const p of v.p) if (matches(v, sm, tm, vf, p[0])) counts[p[0]] = (counts[p[0]] || 0) + 1;
-  }
-  return counts;
-}
-
 // ---------- watch events (link-out discovery, never booking) ----------
 const FORMAT = {in_person_ticketed: "Tickets required", in_person_free: "Free to watch", in_person_unconfirmed: "Check ticket access",
                 watch_party: "Watch party", dome_screening: "Dome screening", broadcast_only: "Broadcast only"};
@@ -711,17 +701,15 @@ function populateSports() {
   if (state.mode === "watch") {
     const up = upcomingEvents(), counts = {};
     up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
-    sel.append(el("option", {value: "-1", text: "All sports (" + up.length + " events)"}));
-    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[s.n] + ")"})); });
+    sel.append(el("option", {value: "-1", text: "All sports"}));
+    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n})); });
     if (state.sport >= 0 && !counts[sports[state.sport].n]) state.sport = -1;
   } else {
-    const sc = sportCounts(), narrowed = !!(state.text || state.on.size || state.offers.size);
-    sel.append(el("option", {value: "-1", text: "All racket sports (" + fmt(sc.all) + " venues)"}));
+    const narrowed = !!(state.text || state.on.size || state.offers.size);
+    sel.append(el("option", {value: "-1", text: "All racket sports"}));
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => {
-      const wc = narrowed ? 0 : wallsFor(s.n).length;
-      if (!(s.v > 0 || s.w || wc)) return;
-      const n = sc[i] || 0;
-      sel.append(el("option", {value: String(i), text: s.n + " (" + [n > 0 || s.v > 0 ? fmt(n) : "", wc ? wc + (wc === 1 ? " wall" : " walls") : "", narrowed ? "" : (s.w || "")].filter(Boolean).join(" + ") + ")"}));
+      if (!(s.v > 0 || s.w || (!narrowed && wallsFor(s.n).length))) return;
+      sel.append(el("option", {value: String(i), text: s.n}));
     });
   }
   sel.value = String(state.sport); updateSportIcon();
