@@ -57,11 +57,12 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 **Open, in order**
 1. CalNeva (ADR 0014): steps 2-4 done (525 NV venues live). First NV seeds done (8 venues, 1 event). Next: more NV link-outs (Reno/Henderson parks, Life Time, Sun City Summerlin), NV manual venues if any; repo/Pages rename to `courtconnect` after the beta, target 2026-12-01, TBD (keep a redirect stub for the old Pages URL).
 2. Beta round (docs/feedback_round.md): replies due 10-28, findings 10-29..11-01, then fill case study + docs/feedback_findings.md (RICE). Owner: exclude own IP in GoatCounter.
-3. Accuracy: (band counts done 10-14j) Overture/OSM match gold set, clear the review queue from public pages (247 left after batch 1; ~25 per session).
-4. Small: owner to confirm Basque Pelota (Chino trinquet, South SF center) by 2026-11-16; owner review of UX live.
-5. Coverage: `*-access` leads, ~440 club-named venues (pass 2 parked), beach tennis court locations from clubs, statewide walls (parked), NorCal Equinox, OSM fix list (optional).
-6. Recheck: Club Locker (squash), Cosm events, badminton 2027 ORCs (Nov-Dec).
-7. LATER (after beta): optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
+3. Visual polish (front end only, no content lost): friendlier, warmer look on `app/index.html`: colour palette and logo C accents, spacing/typography, sport icons, clearer empty/loading states, nicer cards/popups, polished mobile. Keep every existing detail (confirmation levels, sources, link-outs, counts, honesty labels). Scope in a short `docs/ux_polish.md` first, owner picks from 2-3 mockups, then PRs of one area each; verify at 375/320px and dark/contrast.
+4. Accuracy: (band counts done 10-14j) Overture/OSM match gold set, clear the review queue from public pages (247 left after batch 1; ~25 per session).
+5. Small: owner to confirm Basque Pelota (Chino trinquet, South SF center) by 2026-11-16; owner review of UX live.
+6. Coverage: `*-access` leads, ~440 club-named venues (pass 2 parked), beach tennis court locations from clubs, statewide walls (parked), NorCal Equinox, OSM fix list (optional).
+7. Recheck: Club Locker (squash), Cosm events, badminton 2027 ORCs (Nov-Dec).
+8. LATER (after beta): optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
 
 **Sessions**
 - 2026-10-14c: CalNeva step 2 merged (#67, Pages redeployed): `region` CA/NV through raw -> dims -> mart -> export `r`; Overture's address state is `address_region`; bbox tests are `assert_*_inside_region`. All 9,941 venues CA. A parallel duplicate (#70) was closed.
@@ -76,3 +77,4 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-14k: review queue batch 1 (`mart_sport_evidence.needs_review`, was 272 not 249): 22 confirms + 3 rejects (equipment stores) from venues' own pages in `place_sport_overrides.csv` (new `evidence`, `verified_on` columns); queue 272 -> 247. Dead/unclear pages listed in the PR; places added to `ci/fixtures/overture_places.csv`. DuckDB only.
 - 2026-10-14k: map count line follows the view (`updateCount()` in app/index.html): venues in view of filtered total + "at least N courts (M venues list a count)"; walls/events in view too. Counts data in bounds, not clusters; courts are only the ones listed.
 - 2026-10-14l: sports sheet renamed 1-/4-wall Paddle to Paddleball and added 3-wall Paddleball (76 sports); synced + renamed through seeds/scripts/app. Hitting walls are no longer a mode: picking 1-wall or 3-wall Paddleball shows walls of known type (one-wall + backboards / three-wall) as orange pins; 261 unchecked-type walls stay out. Sheet must sync with the project at every twice-monthly sync (runbook step 2). Work is in worktree ../courtconnect-ca-paddleball (branch paddleball-sports, uncommitted). Another session stashed this work once (stash@{0}); same-checkout sessions collide.
+- 2026-10-14m: visual polish scoped in `docs/ux_polish.md` (options A fresh court / B court-colour cards / C playful; recommend A then parts of B after beta). No code changed; waiting for owner's pick.
