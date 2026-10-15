@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 490" width="1040" height="490" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
   <title>CourtConnect CalNeva architecture</title>
-  <desc>Sources flow through Python ingestion into a dbt project on DuckDB or Snowflake, layered raw, staging, intermediate, core and marts.</desc>
+  <desc>Sources flow through Python ingestion into a dbt project on DuckDB, layered raw, staging, intermediate, core and marts.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
@@ -17,23 +17,23 @@
   <g font-size="13" fill="#1f2328">
     <rect x="20" y="78" width="190" height="62" rx="8" fill="#ddf4ff" stroke="#54aeff"/>
     <text x="115" y="104" text-anchor="middle" font-weight="600">Master sports list</text>
-    <text x="115" y="123" text-anchor="middle" font-size="12" fill="#57606a">75 racket sports</text>
+    <text x="115" y="123" text-anchor="middle" font-size="12" fill="#57606a">racket sports sheet</text>
 
     <rect x="20" y="163" width="190" height="62" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
     <text x="115" y="189" text-anchor="middle" font-weight="600">OpenStreetMap courts</text>
-    <text x="115" y="208" text-anchor="middle" font-size="12" fill="#57606a">25,971 records, statewide</text>
+    <text x="115" y="208" text-anchor="middle" font-size="12" fill="#57606a">CA + NV, statewide</text>
 
     <rect x="20" y="248" width="190" height="62" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
     <text x="115" y="274" text-anchor="middle" font-weight="600">OSM parks, schools, clubs</text>
-    <text x="115" y="293" text-anchor="middle" font-size="12" fill="#57606a">31,000 named areas</text>
+    <text x="115" y="293" text-anchor="middle" font-size="12" fill="#57606a">named areas</text>
 
     <rect x="20" y="333" width="190" height="62" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
     <text x="115" y="359" text-anchor="middle" font-weight="600">Overture Maps places</text>
-    <text x="115" y="378" text-anchor="middle" font-size="12" fill="#57606a">1,142 racket-related places</text>
+    <text x="115" y="378" text-anchor="middle" font-size="12" fill="#57606a">racket-related places</text>
 
     <rect x="20" y="413" width="190" height="56" rx="8" fill="#ffffff" stroke="#8c959f" stroke-dasharray="5 4"/>
     <text x="115" y="437" text-anchor="middle" font-weight="600" fill="#57606a">Google Places</text>
-    <text x="115" y="455" text-anchor="middle" font-size="12" fill="#57606a">planned: place IDs only</text>
+    <text x="115" y="455" text-anchor="middle" font-size="12" fill="#57606a">not used: terms forbid storing</text>
   </g>
 
   <!-- ingestion -->
@@ -44,7 +44,7 @@
 
     <rect x="250" y="163" width="190" height="62" rx="8" fill="#fff8c5" stroke="#d4a72c"/>
     <text x="345" y="189" text-anchor="middle" font-weight="600">extract_osm_courts.py</text>
-    <text x="345" y="208" text-anchor="middle" font-size="12" fill="#57606a">30 tiles, clipped to CA border</text>
+    <text x="345" y="208" text-anchor="middle" font-size="12" fill="#57606a">tiles, clipped to CA and NV</text>
 
     <rect x="250" y="248" width="190" height="62" rx="8" fill="#fff8c5" stroke="#d4a72c"/>
     <text x="345" y="274" text-anchor="middle" font-weight="600">extract_osm_parents.py</text>
@@ -56,7 +56,7 @@
 
     <rect x="250" y="413" width="190" height="56" rx="8" fill="#ffffff" stroke="#8c959f" stroke-dasharray="5 4"/>
     <text x="345" y="437" text-anchor="middle" font-weight="600" fill="#57606a">place-ID lookup</text>
-    <text x="345" y="455" text-anchor="middle" font-size="12" fill="#57606a">planned (needs an API key)</text>
+    <text x="345" y="455" text-anchor="middle" font-size="12" fill="#57606a">not built (see ADR 0005)</text>
   </g>
 
   <!-- source -> ingestion arrows -->
@@ -79,7 +79,7 @@
 
   <!-- warehouse -->
   <rect x="500" y="72" width="525" height="268" rx="10" fill="#f6f8fa" stroke="#8c959f"/>
-  <text x="512" y="94" font-size="12" fill="#57606a">One dbt project. Runs on DuckDB (dev, CI) and Snowflake with identical results.</text>
+  <text x="512" y="94" font-size="12" fill="#57606a">One dbt project. Runs on DuckDB (dev, CI); Snowflake was retired 2026-10-14.</text>
 
   <g font-size="12" font-weight="700" fill="#1f2328" text-anchor="middle">
     <rect x="510" y="108" width="94" height="38" rx="6" fill="#ffffff" stroke="#8c959f"/><text x="557" y="131">RAW</text>
@@ -104,15 +104,15 @@
   </g>
 
   <g font-size="12" fill="#1f2328">
-    <text x="512" y="258" font-weight="600">9,935 venues from OSM courts, Overture places and hand-added entries</text>
-    <text x="512" y="278" fill="#57606a">4,354 named (1,128 confirmed, the rest inferred from the park or school)</text>
-    <text x="512" y="298" fill="#57606a">46 dbt tests; GitHub Actions rebuilds the whole project on every push</text>
-    <text x="512" y="318" fill="#57606a">Snowflake adds a GEOGRAPHY column for "courts within N miles" queries</text>
+    <text x="512" y="258" font-weight="600">Venues from OSM courts, Overture places, manual entries</text>
+    <text x="512" y="278" fill="#57606a">Names are confirmed or inferred from the park or school, and labelled</text>
+    <text x="512" y="298" fill="#57606a">dbt tests; GitHub Actions rebuilds the whole project on every push</text>
+    <text x="512" y="318" fill="#57606a">Output: app/data/venues.json, exported by make app-data</text>
   </g>
 
   <!-- output -->
   <line x1="973" y1="340" x2="973" y2="361" stroke="#57606a" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <rect x="860" y="363" width="165" height="44" rx="8" fill="#ffffff" stroke="#8c959f" stroke-dasharray="5 4"/>
+  <rect x="860" y="363" width="165" height="44" rx="8" fill="#ffffff" stroke="#57606a"/>
   <text x="942" y="381" text-anchor="middle" font-size="13" font-weight="600" fill="#57606a">Map app</text>
-  <text x="942" y="398" text-anchor="middle" font-size="11" fill="#57606a">planned</text>
+  <text x="942" y="398" text-anchor="middle" font-size="11" fill="#57606a">static MapLibre page</text>
 </svg>
