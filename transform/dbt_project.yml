@@ -44,6 +44,11 @@ seeds:
         end_date: varchar
         verified_on: varchar
         price_info: varchar
+    manual_venue_no_merge:   # all text
+      +column_types:
+        venue_key: varchar
+        reason: varchar
+        verified_on: varchar
     website_overrides:       # all text
       +column_types:
         domain: varchar
