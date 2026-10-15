@@ -4,7 +4,8 @@ The map's owner shares it as a link; its KML export lists each court's Type (Pub
 but NO coordinates (Google places the pins at display time). So positions come from OpenStreetMap's geocoder (Nominatim),
 refined to the OpenStreetMap park outline when the geocoder only found a street, and every row records how it was placed.
 
-Only Public and "?" (access in question) entries are imported. Private entries, including private homes, are deliberately skipped.
+Public, "?" (access in question) and Private entries are imported (private clubs and apartment complexes, shown as members-only/private).
+Private HOMES (Rules = "Private Home") are skipped on purpose: their addresses are people's homes. Owner decision 2026-10-14.
 
     python ingestion/import_paddle_tennis_map.py            # dry run: print what would be written
     python ingestion/import_paddle_tennis_map.py --write    # replace the 'pt-*' rows in manual_venues.csv
@@ -29,10 +30,11 @@ NS = {"k": "http://www.opengis.net/kml/2.2"}
 UA = {"User-Agent": "courtconnect-ca/0.1 (portfolio project)"}
 SEED = "transform/seeds/manual_venues.csv"
 COLS = ["venue_key", "venue_name", "sport", "city", "lat", "lon", "location_precision", "website", "surface_type", "setting", "offerings",
-        "courts", "access", "rules", "confirmation", "confirmed_on", "evidence"]
+        "courts", "access", "rules", "confirmation", "confirmed_on", "evidence", "region"]
 # map name -> OpenStreetMap park name, used when the geocoder could only place a street
 PARK_HINT = {"Glen Alla Park": "Glen Alla Park", "Fox Hills Park": "Fox Hills Park", "Oberrieder Park Paddle Tennis Courts": "Oberrieder Park",
              "Syd Kronenthal Park": "Syd Kronenthal Park", "Ladera Linda Community Park": "Ladera Linda Park"}
+SKIP_NAMES = {"South End Racquet Club"}                                   # already a hand-made venue (southend-racquet-club) with its own Pop Tennis row
 NAME_FIX = {"Tennis Courts": "Tennis Courts (49 Seawall Rd)"}
 
 
@@ -47,7 +49,8 @@ def fetch_selected(map_id: str) -> list[dict]:
     rows = []
     for pm in doc.iter("{http://www.opengis.net/kml/2.2}Placemark"):
         ext = {d.get("name"): (d.findtext("k:value", namespaces=NS) or "").strip() for d in pm.findall(".//k:Data", NS)}
-        if ext.get("Type") in ("Public", "?"):
+        if ext.get("Type") in ("Public", "?", "Private") and "private home" not in ext.get("Rules", "").lower() \
+                and (pm.findtext("k:name", namespaces=NS) or "").strip() not in SKIP_NAMES:
             rows.append({"name": (pm.findtext("k:name", namespaces=NS) or "").strip(), **ext})
     return rows
 
@@ -102,24 +105,28 @@ def main() -> None:
                 precision = "place name (OpenStreetMap geocoder)"
             else:
                 precision = "street only (approximate)"
-        access = "public" if r["Type"] == "Public" else "unknown"
-        note = ("Type = Public. " if access == "public" else "Type marked '?', so public access is NOT confirmed. ")
+        if r["Type"] == "Private":
+            access = "members" if "members" in r.get("Rules", "").lower() else "private"
+            note = "Type = Private (" + (r.get("Rules", "") or "no rules given") + "), so it is not open to the public. "
+        else:
+            access = "public" if r["Type"] == "Public" else "unknown"
+            note = ("Type = Public. " if access == "public" else "Type marked '?', so public access is NOT confirmed. ")
         out.append({"venue_key": "pt-" + slug(r["name"]), "venue_name": NAME_FIX.get(r["name"], r["name"]), "sport": "Pop Tennis", "city": city,
                     "lat": f"{lat:.5f}", "lon": f"{lon:.5f}", "location_precision": precision, "website": "", "surface_type": "unknown",
                     "setting": "unknown", "offerings": "", "courts": str(int(float(r["Count"]))) if r.get("Count") else "", "access": access,
-                    "rules": r.get("Rules", "") or "", "confirmation": "reported", "confirmed_on": "",
+                    "rules": r.get("Rules", "") or "", "confirmation": "reported", "confirmed_on": "", "region": "CA",
                     "evidence": f"Pop Tennis West LA map (compiled by the project owner): {note}Address on the map: "
                                 f"{r['Address'].replace('CA CA', 'CA')}. Location placed with the OpenStreetMap geocoder: {precision}."})
     for o in out:
         print(f'{o["access"]:8s} {o["venue_name"][:38]:38s} {o["lat"]},{o["lon"]}  {o["location_precision"]}')
-    print(f"{len(out)} venues (Public + ? only)")
+    print(f"{len(out)} venues (Public, ? and Private clubs/apartments; no private homes)")
     if not args.write:
         print("dry run; add --write to update", SEED)
         return
     with open(SEED, encoding="utf-8", newline="") as f:
         keep = [r for r in csv.DictReader(f) if not r["venue_key"].startswith("pt-")]
     with open(SEED, "w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=COLS, lineterminator="\n")
+        w = csv.DictWriter(f, fieldnames=COLS, lineterminator="\r\n")
         w.writeheader()
         w.writerows(keep + out)
     print("wrote", SEED)

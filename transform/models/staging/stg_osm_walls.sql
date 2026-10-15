@@ -1,5 +1,6 @@
 -- Hitting walls mapped in OpenStreetMap (handball and wall courts, tennis backboards and practice walls). The wall type is not
--- known from the tags (one-, three- or four-wall), so it is 'other' unless the name or tags say backboard / practice wall.
+-- known from the tags, so it is 'other' unless the name or tags say backboard / practice wall. Owner decision 2026-10-14: every
+-- handball / wallball court here is treated as a three-wall court (so it counts for 3-wall Paddleball, never 1-wall).
 -- Blank lit / fee means unknown (never read as no). The pin is the mapped feature, so the location is exact.
 select
     'osm-' || osm_type || '-' || cast(cast(osm_id as bigint) as varchar)                      as wall_key,
@@ -11,7 +12,9 @@ select
     'exact: mapped feature in OpenStreetMap'                                                  as location_precision,
     case when lower(coalesce(name, '')) like '%backboard%' or lower(coalesce(name, '')) like '%practice wall%'
               or lower(coalesce(name, '')) like '%hitting wall%' or tennis = 'hitting_wall' or leisure = 'practice_wall'
-         then 'backboard' else 'other' end                                                    as wall_type,
+         then 'backboard'
+         when lower(sport) like '%handball%' or lower(sport) like '%wallball%' then 'three_wall'
+         else 'other' end                                                    as wall_type,
     concat_ws(';',
         case when lower(sport) like '%handball%' or lower(sport) like '%wallball%' then 'Handball' end,
         case when lower(sport) like '%racquetball%' then 'Racquetball' end,
