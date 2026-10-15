@@ -104,4 +104,5 @@ def main():
         print(f"venue_leads.csv: issue-{num}")
 
 
-main()
+if __name__ == "__main__":
+    main()

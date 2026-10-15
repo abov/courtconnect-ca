@@ -8,6 +8,7 @@ README.md has the full story; read it only if you need background. Decisions are
 - `make app-data`   export `app/data/venues.json` for the map (commit it after any seed change; CI runs `ci/check_export_fresh.py`); `make app` serves it at localhost:8765
 - `make extract` / `make load`   refresh raw data (extract takes ~15 min; don't run unless asked)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
+- `make issues`     read-only check of open GitHub issues (missing info, already in seeds, duplicates, waiting); runbook step 2b
 - `make report`     regenerate `docs/coverage_snapshot.md`
 - `make snowflake-build`   RETIRED (2026-10-14): do not run; DuckDB is the only warehouse
 
@@ -88,4 +89,5 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-14r: ML phase 1: review-queue ranker (`ingestion/rank_review_queue.py`, `make rank-review`, `requirements-ml.txt`): logistic regression on the 61 override labels orders the 233-row queue into `docs/review_priority.csv` (LOO accuracy 82%, AUC 0.88; reject side weak). Plan `docs/ml_plan.md` (phase 2 LLM page reading, phase 3 NAIP aerial courts, after beta). Ordering only; never on the map. Branch ml-review-ranker.
 - 2026-10-14r: racquetball sweep merged (#98-#102 plus round 3): 48+7 LA Fitness clubs from their own pages (members, inferred), Bay Club Redondo Beach + Pleasanton, Hawthorne Sports Center + 3 city parks, 5 Henderson rec centers (first NV public facilities, `public`, membership or daily pass). `scan_lafitness.py` + `docs/gym_scans/`. Same-checkout sessions collide: use a worktree (`../courtconnect-ca-round3`).
 - 2026-10-14s: 24 Hour Fitness scan (`ingestion/scan_24hour.py`, sitemap, coordinates on the page): 12 racquetball clubs; Chuck Minker Sports Complex (LV, 5 courts). Racquetball venues on the map: CA 90, NV 15. In a fresh worktree seeds check out LF: convert to CRLF before `dbt build`.
+- 2026-10-15: issue checker `ci/check_issues.py` / `make issues` (read-only; owner's own reports count as evidence, Google Maps links don't) at every twice-monthly sync (runbook step 2b). No auto-comment workflow (owner chose). Open: #99 Jim Gilliam Pop Tennis not Padel (owner report, do by hand).
 - 2026-10-15a: remaining chain checks: ClubSport Aliso Viejo added; Life Time (13 clubs), Equinox, Sports Club LA, N. Las Vegas/Sparks/Reno/Carson show no racquetball; 24 Hour Sunnyvale page gone (rejected lead); 3 new leads.
