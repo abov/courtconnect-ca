@@ -12,6 +12,11 @@
 
 Pickleball, padel, tennis, squash and dozens of lesser-known racket sports are booming, but information about *where to play* is scattered and messy. This project collects it, cleans it, checks it, and says honestly how complete it is.
 
+## Mission
+Help people in California and Nevada **find every place to play or watch racket sports, discover sports they haven't tried, and get together with others to play** ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md)).
+- **Every sport, not just the biggest:** pickleball is welcome, but tennis stays visible as a strong, established sport, and lesser-known sports (padel, squash, badminton, table tennis, racquetball, Pop Tennis, paddleball, Basque pelota and more) get room to be discovered.
+- **Play together:** after "where can I play?" comes "who can I play with?". The next phase links to groups that already exist (open play, clinics, ladders, Meetup/WhatsApp groups); any accounts or matching of our own would come later, and only with its own decision record.
+
 ## What it does
 - **Venue map** for California and Nevada from two open sources (OpenStreetMap and Overture Maps), with courts grouped into venues by proximity. Filter by sport, surface, indoor/outdoor, access, or search by name or city. Filters live in the URL, so any view is shareable.
 - **Honest about confidence:** pins show how much to trust each name and sport (confirmed, business listing, inferred), and a **How complete is this data?** panel lists every sport with its status, including those with no data yet.
@@ -59,6 +64,8 @@ Details, column meanings and rules: [`docs/data_guide.md`](docs/data_guide.md). 
 - [x] Venue clustering, statewide extract, Overture second source, watch events, link-outs, suggest-a-change flow, Nevada
 - [ ] More Nevada link-outs and venues
 - [ ] Beta feedback round, then visual polish ([`docs/ux_polish.md`](docs/ux_polish.md))
+- [ ] Sport discovery: "Try something new" cards, lesser-known sports given room, tennis kept visible next to pickleball
+- [ ] Social phase A: "Find people to play with" from existing groups (open play, clinics, ladders, Meetup/WhatsApp); own accounts only after a separate decision
 - [ ] Clear the human review queue for uncertain sport matches
 - [ ] Governing-body and club directories for sports neither source finds
 - [ ] Rename repo and Pages URL to `courtconnect` after the beta
