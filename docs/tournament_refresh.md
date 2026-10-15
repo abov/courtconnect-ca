@@ -30,6 +30,9 @@ Cost rules: no subagents, no screenshots, no extended web search. Read pages as 
 | Dome screenings | https://www.cosm.com/los-angeles/events and https://www.cosm.com/categories/sports | Browser pane, JS: wait ~3s, then regex the page text for tennis/pickleball/padel/badminton/squash/Wimbledon/US Open. Cosm Los Angeles (Inglewood) is the only California venue. None found 2026-10-12; if one appears, add a `dome_screening` row. |
 | Pro (all sports) | PPA, Premier Padel, PSA squash, BNP Paribas Open, BWF/US Open badminton | Organizer sites. |
 
+## Nevada (added 2026-10-15)
+Same governing-body steps, filtered to Nevada, plus: https://www.bounce.game/city/las-vegas-nevada-us and `/city/reno-nevada-us` (WebFetch; lists amateur pickleball with the venue on each event page; third-party, so label unconfirmed), OmniPong with `, NV` in the city (browser pane, same fetch as table tennis), https://www.thesphere.com/events (flag any racket sport or screening). R2 Sports: do NOT loop state/sport searches; one request per sport at most, because it IP-blocks for repeated reCAPTCHA pages. USTA Intermountain needs the section id in the playtennis.usta.com URL (find it by picking Intermountain once in the Section menu).
+
 ## Known gaps
 Local club-run events that are not on a governing-body calendar (Meetup groups, city recreation departments, club ladders) are not covered. Lead rows belong in `venue_leads.csv` or `docs/tournament_sources.md`, not `watch_events.csv`.
 
