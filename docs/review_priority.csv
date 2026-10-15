@@ -83,8 +83,8 @@ review_priority,model_guess,p_confirm,sport_name,venue_name,place_name,city,regi
 82,likely_confirm,0.78,Tennis,Talalay Tennis,Talalay Tennis,Corona,CA,fitness_trainer,talalaytennis.com,name_keyword,domain_has_sport (+); has_website (+); sport=Tennis (+),65e879e71b0ba6cbd59801e688955b2e,efd3704a-0cb8-462c-b378-4817f0f71d65
 83,likely_reject,0.22,Pop Tennis,Exeter City Athletic Park,Exeter City Athletic Park,,CA,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-); word=park (-),d66a630c74eab9c9193273b99cbcc35f,
 84,likely_reject,0.22,Pop Tennis,Frank F. Garside Junior High School,Frank F. Garside Junior High School,,NV,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),c0d580b5c1fdcb533e343b5ff726d535,
-85,likely_reject,0.22,Pop Tennis,,,,CA,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),45963850adf9a1d8588153c3008b4b27,
-86,likely_reject,0.22,Pop Tennis,,,,CA,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),c76050c0d05f29893df1ea574a89cfd5,
+85,likely_reject,0.22,Pop Tennis,,,,CA,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),c76050c0d05f29893df1ea574a89cfd5,
+86,likely_reject,0.22,Pop Tennis,,,,CA,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),45963850adf9a1d8588153c3008b4b27,
 87,likely_confirm,0.77,Pickleball,Paradise Pickleball,Paradise Pickleball,Palm Desert,CA,sport_league,linktr.ee,name_keyword,category=sport_league (+); has_website (+); osm_court_within_100m (-),7a6d2a831463bf9dca567c33186c6eea,08b1c358-9504-4016-9907-e4bc59cb99fe
 88,likely_confirm,0.77,Tennis,Court Couture Tennis,Court Couture Tennis,San Jose,CA,amateur_sport_team,courtcouturetennis.com,name_keyword,domain_has_sport (+); has_website (+); sport=Tennis (+),ef99d9f2420c1cf2c24b77433c47a70c,886ffdf4-b525-453c-93b9-f2b6a29889f3
 89,likely_confirm,0.77,Padel,Tennis Academy of California,Los Angeles Padel,Torrance,CA,gym,lapadel.com,name_keyword,domain_has_sport (+); has_website (+); osm_court_within_100m (-),b3923e2130cce4d07c47725b38875345,083bc40e-1304-4c2c-89ac-42b24ac6b9de
