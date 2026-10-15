@@ -65,7 +65,7 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 5c. Public facilities (city/county/park rec centers, all racket sports, CA + NV): plan in `docs/public_facility_scan.md`, pilot Hawthorne Sports Center (lead `hawthorne-sports-center`). Branch `public-facility-scan`.
 5d. ML, plan in `docs/ml_plan.md`: phase 1 review-queue ranker BUILT (`make rank-review` -> `docs/review_priority.csv`; use it to pick review batches); after beta (from 11-02): phase 2 LLM reads public pages (ADR first), phase 3 pilot detecting courts in NAIP aerial photos (Hawthorne, then one LV zip; new courts go to OSM).
 6. Coverage: `*-access` leads, ~440 club-named venues (pass 2 parked), beach tennis court locations from clubs, statewide walls (parked), NorCal Equinox, OSM fix list (optional).
-7. Recheck: Club Locker (squash), Cosm events, badminton 2027 ORCs (Nov-Dec).
+7. Recheck: Club Locker (squash), Cosm events, badminton 2027 ORCs (Nov-Dec). From ~2026-11-02: split watch events into on-site vs virtual (screenings such as Cosm showing tennis): new `watch_format` value `screening` (column exists; add accepted_values test), app popup label/filter "On-site" / "Screening (shown on screen, not played here)", then add Cosm events as screenings. Plan: `~/.claude/plans/i-wonder-if-we-dazzling-frog.md`.
 8. LATER (after beta): optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
 
 **Sessions**
@@ -106,3 +106,4 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-15j: YMCA Reno/Sparks: no Y operates there (Reno YMCA closed 2007, now Boys & Girls Club; ymca.org locator lists no NV Y within 175 mi of Reno). No seed change; logged in docs/gym_chain_scan.md row 5.
 - 2026-10-15k: YMCA of Superior California (Sacramento; 6 fitness branches, pickleball page + branch amenity lists): pickleball at Rollingwood, Sacramento Central, Yolo County; tennis at Rollingwood; racquetball at Capital. Rollingwood merged onto the pin at its own address (was 'JMG Tennis Academy', the Y's tennis program): correct. Gold Country, Oroville: no courts.
 - 2026-10-15l: YMCA of Orange County (7 fitness branches, ymcaoc.org): no racquetball/tennis/squash; pickleball at Laguna Niguel (gym schedule PDF), Fullerton (2025 schedule, Basketball Gym), Huntington Beach, Mission Viejo, Newport-Mesa (Active Older Adults lists it; setting/counts unknown). South Coast Metro, Rancho Mission Viejo none. No merges.
+- 2026-10-15m: planned on-site vs virtual watch events (Cosm screenings) as open item 7, start ~2026-11-02. Docs only.
