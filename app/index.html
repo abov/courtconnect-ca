@@ -10,12 +10,16 @@
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V" crossorigin="anonymous">
 <style>
   :root {
-    --bg: #ffffff; --panel: #f6f8fa; --text: #1f2328; --muted: #59636e; --line: #d1d9e0; --accent: #0969da;
-    --ok: #1a7f37; --warn: #9a6700; --bad: #cf222e; --chip: #ffffff; --chip-on: #ddf4ff;
+    /* Brand: logo blue #1F5FA8 + gold #F2B134 (favicon.svg). Pin colours carry meaning: keep them distinct. */
+    --bg: #fbfaf7; --panel: #ffffff; --text: #1f2328; --muted: #59636e; --line: #d6d1c4; --accent: #1F5FA8; --on-accent: #ffffff;
+    --ok: #1a7f37; --warn: #9a6700; --bad: #cf222e; --ev: #8250df; --chip: #ffffff; --chip-on: #e6eefa;
+    --hi: #F2B134; --on-hi: #3a2a00; --hover: #e6eefa;
+    --pin-c: #1a7f37; --pin-p: #0969da; --pin-i: #d4a72c; --pin-u: #8c959f;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #0d1117; --panel: #151b23; --text: #e6edf3; --muted: #9198a1; --line: #3d444d; --accent: #4493f8;
-            --ok: #3fb950; --warn: #d29922; --bad: #f85149; --chip: #0d1117; --chip-on: #0c2d6b; }
+    :root { --bg: #10151c; --panel: #171e27; --text: #e6edf3; --muted: #9aa3ad; --line: #3a424d; --accent: #6aa5ee; --on-accent: #0d1117;
+            --ok: #3fb950; --warn: #d29922; --bad: #f85149; --ev: #a371f7; --chip: #10151c; --chip-on: #1b3556;
+            --hi: #F2B134; --on-hi: #3a2a00; --hover: #1b3556; }
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
@@ -24,7 +28,8 @@
   #panel { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
   #map { min-height: 0; }
   header { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
-  h1 { font-size: 18px; margin: 0 0 2px; }
+  h1 { font-size: 18px; margin: 0 0 2px; color: var(--accent); }
+  header { border-bottom: 3px solid var(--hi); }
   .sub { color: var(--muted); font-size: 13px; }
   .controls { padding: 12px 16px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
   label.l { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 3px; }
@@ -34,6 +39,7 @@
   .chip { font: inherit; font-size: 13.5px; padding: 6px 12px; min-height: 34px; border-radius: 999px; border: 1px solid var(--line);
           background: var(--chip); color: var(--text); cursor: pointer; }
   .chip[aria-pressed=true] { background: var(--chip-on); border-color: var(--accent); color: var(--text); font-weight: 600; }
+  .seg .chip[aria-pressed=true] { background: var(--hi); border-color: var(--hi); color: var(--on-hi); }
   .chip:focus-visible, select:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
   button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
@@ -43,9 +49,9 @@
   #list { overflow: auto; flex: 1; min-height: 0; margin: 0; padding: 0; list-style: none; }
   #list li { border-bottom: 1px solid var(--line); }
   #list button { all: unset; display: block; width: 100%; box-sizing: border-box; padding: 10px 16px 10px 13px; cursor: pointer; border-left: 3px solid transparent; }
-  #list button.qc { border-left-color: #1a7f37; } #list button.qp { border-left-color: #0969da; }
-  #list button.qi { border-left-color: #d4a72c; } #list button.qu { border-left-color: #8c959f; }
-  #list button:hover, #list button:focus-visible { background: var(--chip-on); }
+  #list button.qc { border-left-color: var(--pin-c); } #list button.qp { border-left-color: var(--pin-p); }
+  #list button.qi { border-left-color: var(--pin-i); } #list button.qu { border-left-color: var(--pin-u); }
+  #list button:hover, #list button:focus-visible { background: var(--hover); }
   .nm { font-weight: 600; }
   .meta { color: var(--muted); font-size: 13px; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
@@ -59,20 +65,18 @@
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; }
-  .join { margin-top: 8px; padding-top: 6px; border-top: 1px solid #d1d9e0; }
-  .join h3 { font-size: 12px; margin: 0 0 4px; color: #59636e; text-transform: uppercase; letter-spacing: .04em; }
-  .join a.act { display: block; padding: 5px 9px; margin: 4px 0; border: 1px solid #0969da; border-radius: 6px; color: #0969da; text-decoration: none; font-weight: 600; }
-  .join a.act:hover { background: #ddf4ff; }
-  .join .sub { display: block; font-weight: 400; color: #59636e; font-size: 12px; }
-  .badge.warn { color: #9a6700; border-color: #9a6700; }
-  .maplibregl-popup-content .badge.warn { color: #9a6700; }
-  .badge.ev { color: #8250df; border-color: #8250df; }
-  .maplibregl-popup-content .badge.ev { color: #8250df; }
+  .join { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--line); }
+  .join h3 { font-size: 12px; margin: 0 0 4px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .join a.act { display: block; padding: 5px 9px; margin: 4px 0; border: 1px solid var(--accent); border-radius: 6px; color: var(--accent); text-decoration: none; font-weight: 600; }
+  .join a.act:hover { background: var(--hover); }
+  .join .sub { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+  .badge.warn { color: var(--warn); border-color: var(--warn); }
+  .badge.ev { color: var(--ev); border-color: var(--ev); }
   .maplibregl-popup-content .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
-  .maplibregl-popup-content a.btn { display: inline-block; padding: 4px 10px; border-radius: 6px; border: 1px solid #0969da; color: #0969da; text-decoration: none; font-weight: 600; }
-  .maplibregl-popup-content a.btn.primary { background: #0969da; color: #fff; }
+  .maplibregl-popup-content a.btn { display: inline-block; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-weight: 600; }
+  .maplibregl-popup-content a.btn.primary { background: var(--accent); color: var(--on-accent); }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); padding: 6px 16px 10px; }
-  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid #fff; box-shadow: 0 0 0 1px var(--line); }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
   #active { padding: 8px 16px 2px; border-bottom: 0; }
@@ -82,14 +86,16 @@
   #active .chip.clear { background: none; border-color: transparent; color: var(--accent); }
   #active .chip.clear::after { content: ""; }
   footer { display: grid; gap: 4px; }
-  details.srcs { margin-top: 8px; padding-top: 6px; border-top: 1px solid #d1d9e0; }
-  details.srcs summary { color: #0969da; }
+  details.srcs { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--line); }
+  details.srcs summary { color: var(--accent); }
   @media (pointer: coarse) { .chip, select, input[type=search] { min-height: 44px; } #list button { padding-top: 13px; padding-bottom: 13px; } }
-  .maplibregl-popup-content { color: #1f2328; font: 13px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 290px; }
+  .maplibregl-popup-content { background: var(--bg); color: var(--text); font: 13px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 290px; }
   .maplibregl-popup-content { max-height: min(55vh, 470px); overflow-y: auto; }
   .maplibregl-popup-content h2 { font-size: 15px; margin: 0 0 4px; padding-right: 14px; }
-  .maplibregl-popup-content .badge { color: #59636e; }
-  .maplibregl-popup-content .badge.c { color: #1a7f37; } .maplibregl-popup-content .badge.p { color: #0969da; } .maplibregl-popup-content .badge.i { color: #9a6700; }
+  .maplibregl-popup-close-button { color: var(--muted); }
+  .maplibregl-popup-anchor-bottom .maplibregl-popup-tip, .maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip, .maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip { border-top-color: var(--bg); }
+  .maplibregl-popup-anchor-top .maplibregl-popup-tip, .maplibregl-popup-anchor-top-left .maplibregl-popup-tip, .maplibregl-popup-anchor-top-right .maplibregl-popup-tip { border-bottom-color: var(--bg); }
+  .maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--bg); } .maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--bg); }
   .maplibregl-popup-content p { margin: 5px 0; }
   dialog { max-width: 760px; width: calc(100vw - 32px); max-height: 86vh; border: 1px solid var(--line); border-radius: 10px; padding: 0;
            background: var(--bg); color: var(--text); }
@@ -193,10 +199,10 @@
   <div id="count" aria-live="polite"></div>
   <ul id="list"></ul>
   <div class="legend playlegend" aria-label="Map legend">
-    <span><span class="dot" style="background:#1a7f37"></span>Name confirmed</span>
-    <span><span class="dot" style="background:#0969da"></span>Listed business</span>
-    <span><span class="dot" style="background:#d4a72c"></span>Name guessed from park/school</span>
-    <span><span class="dot" style="background:#8c959f"></span>Unnamed courts</span>
+    <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
+    <span><span class="dot" style="background:var(--pin-p)"></span>Listed business</span>
+    <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
+    <span><span class="dot" style="background:var(--pin-u)"></span>Unnamed courts</span>
   </div>
   <footer><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
