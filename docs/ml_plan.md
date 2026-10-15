@@ -11,6 +11,18 @@ Three steps, cheapest first. Each one only **suggests**; a person confirms befor
 - First run (61 labels: 37 confirm, 24 reject; queue 233): leave-one-out accuracy 82%, AUC 0.88; when it says "likely" it was right 85% (47 of 61). Queue split: likely_confirm 104, unclear 116, likely_reject 13. The top ~40 rows (club or association names whose website contains the sport, e.g. table tennis and pickleball clubs) are good first picks. The reject side is weak: most rejects so far are "X Beach Tennis" place names, so it has also learned odd rules ("OSM court within 100 m" counts against). Shop and apparel names are its reliable reject clue. More rejects from other sports will fix this; treat `likely_reject` as "check first", not "probably wrong".
 - Rules: the guess never goes into dbt, the export or the map. The rules_v2 confidence score is left out on purpose, because human overrides already feed it (that would leak the answer).
 
+## Addresses for pins without one (not ML; do before phase 2)
+On 2026-10-15 about 90% of venues had no street address (CA 9,010 of 9,991; NV 471 of 533), mostly OSM park and school courts. The owner asked for an address on every court.
+- This is a lookup, not a model: take the nearest **Overture addresses** point (open data, same release we already load; no API calls) or reverse-geocode with Nominatim (OSM; 1 request a second, so ~3 hours for both states, cache the results). Never Google (ADR 0005).
+- Show it as "Nearest address (inferred)", with the distance; skip it when the nearest address is more than ~150 m away, since park courts can sit far from the park's street address.
+- Directions don't need it: the popup's Google Maps / Apple Maps links already go to the pin's coordinates.
+- Where ML helps: phase 2 can read a park's own page for its street address (with a quote), which beats the nearest-point guess.
+
+## Missing courts at known parks (owner report, 2026-10-15)
+Manhattan Heights Park (Manhattan Beach) has at least 2 pickleball and 2 tennis courts; OSM tags only the 2 tennis courts, so pickleball was missing until the owner reported it (`manual_venues.csv`). A fresh `make extract` would not fix this: the data is not in OSM or Overture. Likely many parks look like this (pickleball lines painted on tennis courts, never tagged).
+- Phase 2 (city park pages, `docs/public_facility_scan.md`) and phase 3 (aerial photos) are the routes to these. Pickleball lines on a tennis court are hard to see at NAIP resolution, so pages come first.
+- Cheap check meanwhile: a city-by-city list of parks with OSM tennis courts but no pickleball tag, checked against each city's own park page (start with the South Bay cities).
+
 ## Phase 2: LLM reads public pages (ADR first)
 - Pages: Overture places with a website and no sport yet, `*-access` / club-named leads, city rec directories (`docs/public_facility_scan.md`), chain pages (`docs/gym_chain_scan.md`).
 - Public pages only, respect robots.txt, no logins (ADR 0007), no Google Places (ADR 0005).
