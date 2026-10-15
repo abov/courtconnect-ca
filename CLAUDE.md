@@ -61,6 +61,7 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 4. Accuracy: (band counts done 10-14j) Overture/OSM match gold set, clear the review queue from public pages (247 left after batch 1; ~25 per session).
 5. Small: owner to confirm Basque Pelota (Chino trinquet, South SF center) by 2026-11-16; owner review of UX live.
 5b. Gym chain courts (racquetball first), CA + NV: plan in `docs/gym_chain_scan.md`, one chain per session starting with LA Fitness (`ingestion/scan_lafitness.py`). Branch `racquetball-gyms`.
+5c. Public facilities (city/county/park rec centers, all racket sports, CA + NV): plan in `docs/public_facility_scan.md`, pilot Hawthorne Sports Center (lead `hawthorne-sports-center`). Branch `public-facility-scan`.
 6. Coverage: `*-access` leads, ~440 club-named venues (pass 2 parked), beach tennis court locations from clubs, statewide walls (parked), NorCal Equinox, OSM fix list (optional).
 7. Recheck: Club Locker (squash), Cosm events, badminton 2027 ORCs (Nov-Dec).
 8. LATER (after beta): optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
