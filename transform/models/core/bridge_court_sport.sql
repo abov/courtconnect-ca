@@ -20,8 +20,12 @@ with_also as (
     select t.court_id, trim(a.also_sport)
     from tagged t
     join {{ ref('sport_also_played') }} a on trim(a.sport) = t.sport_name
+    -- a rejected tag passes nothing on either (Venice Beach: Tennis rejected, so no Frescotennis / Loboton / Tennis Triples)
+    left join {{ ref('osm_court_sport_overrides') }} r
+        on trim(r.court_id) = t.court_id and trim(r.sport) = t.sport_name and lower(trim(r.verdict)) = 'reject'
     -- exclude_private_members = yes: private / members-only courts do not pass the sport on (Pitton on badminton courts)
-    where not (lower(trim(coalesce(a.exclude_private_members, ''))) = 'yes' and t.access_type in ('private', 'members'))
+    where r.court_id is null
+      and not (lower(trim(coalesce(a.exclude_private_members, ''))) = 'yes' and t.access_type in ('private', 'members'))
 )
 
 select distinct
