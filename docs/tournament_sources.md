@@ -53,8 +53,15 @@ Last run: 2026-10-13. Added 0 events (watch_events.csv stays 43); changed 1 row.
 - **Padel:** uspa-tournaments.worldpadelrating.com lists only USA Padel 100 Pura Padel (Sherman Oaks, Oct 17-18, already in the seed). padelusa.org/calendar shows no individual events to a text fetch.
 - **Cosm Los Angeles:** cosm.com/los-angeles/events returned no events to a plain fetch (script-loaded), so nothing was verified; lead `cosm-los-angeles` stays open.
 
-## Pass 5 (2026-10-15, first Nevada sweep + CA recheck)
-Last run: 2026-10-15. Added 5 events (watch_events.csv now 49): 4 Nevada, 1 California. Earlier passes were California only, so Nevada had just the PickleX show.
+## Pass 5 (2026-10-15, scheduled refresh)
+Last run: 2026-10-15. Added 2 events (watch_events.csv now 46); changed 0 rows.
+- **Table tennis:** OmniPong's 2027 list (curl POST, `Year=2027`) now shows California events. Added the 2027 USATT Pacific Championship (Milpitas, Jan 8-10, junior team selection) and the 2027 USATT California State Championship (Milpitas, May 7-9), both 4-Star. Venue is inferred (entry-form PDFs give an indiacc.org contact, so likely ICC Milpitas); the PDF text could not be read (no PDF text tool here), so the map point is the city centre. Leads, not added: ICC JOOLA Spring/Summer/Autumn/Winter Opens 2027 (Milpitas, Mar 6-7, Aug 21-22, Oct 23-24, Dec 4-5), OCTTA Butterfly Winter Open (Fountain Valley, Jan 9-10, 2-Star), PongPlanet Butterfly Championships (San Carlos, Mar 20-21, 3-Star). Skipped: non-sanctioned round robins and the Long Beach TTC anniversary event.
+- **No change:** USTA SoCal search (32 results to Nov 30 + La Jolla nationals; all Level 1-6 already in the seed), USTA NorCal sheet (Level 4-5 unchanged), USA Pickleball California list (same 7 events), USA Padel (only Pura Padel), USA Badminton adult schedule (updated 10-08, no 2027), R2 Sports (racquetball 4 events unchanged; squash, table tennis, padel, badminton, paddle tennis, paddleball none).
+- **Not rechecked this pass** (read 2026-10-12/13): PPA schedule, Golden Tickets page, USA Badminton junior schedule, Silicon Valley Open, US Squash, skyball.us, Cosm. Club Locker still unread.
+- **Failed:** usapickleball.org returns an empty page to WebFetch/curl (browser pane works); OmniPong entry-form PDFs not readable as text.
+
+## Pass 6 (2026-10-15, first Nevada sweep + CA recheck)
+Last run: 2026-10-15. Added 5 events (watch_events.csv now 51): 4 Nevada, 1 California. Earlier passes were California only, so Nevada had just the PickleX show.
 - **Added (NV):** 2026 U.S. Open Table Tennis (Mandalay Bay, Dec 16-21; USATT page + OmniPong, spectator passes sold online/at the door); three pickleball events from the Bounce listing, a third-party aggregator whose organizer pages were not read (Pictoberfest, Plaza Hotel, Oct 23-25; Silver State Games, Black Mountain Rec Center Henderson, Nov 16-18; Toys for Tots, Desert Vista Community Center, Dec 4-6, pin at city centre). All `in_person_unconfirmed` (spectator access not stated).
 - **Added (CA):** Laver Cup 2027, Intuit Dome Inglewood, Sept 24-26 2027 (official Laver Cup page; tickets later in 2026).
 - **Sphere (Las Vegas):** thesphere.com/events lists no racket sport or sports screening through 2027 (concerts, Wizard of Oz, F1 afterparty Nov 21). It showed a giant tennis ball for the U.S. Open finals in 2023: a visual display, not an event. Recheck for screenings when the `screening` format exists.
