@@ -390,6 +390,14 @@ function wallsFiltered() { return state.mode === "play" && state.sport >= 0 ? wa
 function wallGeojson(list) {
   return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
 }
+// Directions open the user's own maps app at the pin's coordinates (no address lookup, nothing stored; ADR 0005).
+function directionsNode(y, x, name, approx) {
+  const ll = y + "," + x, a = (href, text) => el("a", {href, target: "_blank", rel: "noopener noreferrer", text});
+  return el("p", {class: "meta"}, el("b", {text: "Directions: "}),
+    a("https://www.google.com/maps/dir/?api=1&destination=" + ll, "Google Maps"), document.createTextNode(" · "),
+    a("https://maps.apple.com/?daddr=" + ll + "&q=" + encodeURIComponent(name || "Courts"), "Apple Maps"),
+    document.createTextNode(approx ? " (to the pin, which is approximate)" : " (to the pin)"));
+}
 function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
 function wallNode(w) {
   const box = el("div");
@@ -397,6 +405,7 @@ function wallNode(w) {
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
   box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" � ")}));
   box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " � Free to use: " + triState(w.f) + (w.su ? " � Surface: " + w.su : "")}));
+  box.append(directionsNode(w.y, w.x, w.n, /approx/.test(w.pr)));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
   if (w.cf === "tagged") box.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
@@ -512,7 +521,7 @@ function sportLine(v) {
   const parts = plain.map(p => {
     const x = extras[p[0]];
     if (!x) return sports[p[0]].n + cnt(p[1]);
-    return sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court" : " courts") : " (") + (p[1] ? "; " : "") + "also played on these courts: " + x.join(", ") + ")";
+    return sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court" : " courts") : " (") + (p[1] ? "; " : "") + "optional: " + x.join(", ") + ")";
   });
   const total = plain.reduce((a, p) => a + (p[1] || 0), 0);
   return parts.join(", ") + (plain.filter(p => p[1]).length > 1 ? " · " + total + " courts listed" : "");
@@ -530,6 +539,7 @@ function venueNode(v) {
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014)
   if (place) box.append(el("p", {class: "meta", text: place}));
+  box.append(directionsNode(v.y, v.x, v.n, false));
   box.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sportLine(v))));
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
   if (f.length) box.append(el("p", {text: f.join(" · ")}));
