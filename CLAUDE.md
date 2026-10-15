@@ -1,7 +1,8 @@
 # CourtConnect CalNeva
 
 Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB dev/CI, Snowflake prod) -> static MapLibre map in `app/`.
-README.md has the full story; read it only if you need background. Decisions are in `docs/decisions/` (ADRs 0001-0014, all accepted; one file each, read only the one you need).
+README.md has the full story; read it only if you need background. Mission (ADR 0015): help people find every place to play or watch racket sports in CA + NV, discover sports beyond pickleball (tennis stays visible), and get together to play.
+Decisions are in `docs/decisions/` (ADRs 0001-0015, all accepted; one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
@@ -66,6 +67,8 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 5d. ML, plan in `docs/ml_plan.md`: phase 1 review-queue ranker BUILT (`make rank-review` -> `docs/review_priority.csv`; use it to pick review batches); after beta (from 11-02): phase 2 LLM reads public pages (ADR first), phase 3 pilot detecting courts in NAIP aerial photos (Hawthorne, then one LV zip; new courts go to OSM).
 6. Coverage: `*-access` leads, ~440 club-named venues (pass 2 parked), beach tennis court locations from clubs, statewide walls (parked), NorCal Equinox, OSM fix list (optional).
 7. Recheck: Club Locker (squash), Cosm events, badminton 2027 ORCs (Nov-Dec). From ~2026-11-02: split watch events into on-site vs virtual (screenings such as Cosm showing tennis): new `watch_format` value `screening` (column exists; add accepted_values test), app popup label/filter "On-site" / "Screening (shown on screen, not played here)", then add Cosm events as screenings. Plan: `~/.claude/plans/i-wonder-if-we-dazzling-frog.md`.
+7b. After beta (rank with beta findings, ADR 0015): sport discovery ("Try something new" card per sport, lesser-known sports given room, try-it events) and tennis visibility (own pin look, never hidden in a pickleball pin, shared courts show both sports, picker not ordered by count; plan with `docs/ux_polish.md` PR 6).
+7c. After beta: social phase A, "Find people to play with" from existing groups (open play, clinics, ladders, Meetup/WhatsApp/Partiful; public pages, `verified_on` + evidence). Phase B (own accounts/matching) only with its own ADR and if beta shows demand.
 8. LATER (after beta): optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
 
 **Sessions**
@@ -109,3 +112,4 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 - 2026-10-15k: YMCA of Superior California (Sacramento; 6 fitness branches, pickleball page + branch amenity lists): pickleball at Rollingwood, Sacramento Central, Yolo County; tennis at Rollingwood; racquetball at Capital. Rollingwood merged onto the pin at its own address (was 'JMG Tennis Academy', the Y's tennis program): correct. Gold Country, Oroville: no courts.
 - 2026-10-15l: YMCA of Orange County (7 fitness branches, ymcaoc.org): no racquetball/tennis/squash; pickleball at Laguna Niguel (gym schedule PDF), Fullerton (2025 schedule, Basketball Gym), Huntington Beach, Mission Viejo, Newport-Mesa (Active Older Adults lists it; setting/counts unknown). South Coast Metro, Rancho Mission Viejo none. No merges.
 - 2026-10-15m: planned on-site vs virtual watch events (Cosm screenings) as open item 7, start ~2026-11-02. Docs only.
+- 2026-10-15n: mission set (ADR 0015, README Mission + roadmap): every racket sport and court in CA + NV, sport discovery, tennis kept visible next to pickleball, social phase A (link-out groups) after beta; phase B (own accounts) needs its own ADR. Open items 7b/7c. Docs only.
