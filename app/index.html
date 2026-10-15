@@ -58,6 +58,11 @@
   #list button:hover, #list button:focus-visible { background: var(--hover); }
   .nm { font-weight: 600; }
   .meta { color: var(--muted); font-size: 13px; }
+  .sico { display: inline-flex; gap: 3px; vertical-align: -3px; margin-right: 6px; color: var(--accent); }
+  .sico[hidden], .sico:empty { display: none; }
+  .sico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .sico svg .f { fill: currentColor; stroke: none; }
+  .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
   .badge.i { color: var(--warn); border-color: var(--warn); }
@@ -156,7 +161,7 @@
   <div class="controls">
     <div>
       <label class="l" for="sport">Sport</label>
-      <select id="sport"></select>
+      <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
       <p id="anywhere" class="note" hidden></p>
       <p id="wallnote" class="note" hidden></p>
     </div>
@@ -469,6 +474,28 @@ function initMap() {
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 
 // ---------- venue details ----------
+// Sport icons: monoline, decorative (aria-hidden); the sport name is always shown as text next to them.
+const ICON = {
+  tennis: '<circle cx="8" cy="8" r="6.5"/><path d="M2.5 4.5C5 6 5 10 2.5 11.5M13.5 4.5C11 6 11 10 13.5 11.5"/>',
+  pickle: '<circle cx="8" cy="8" r="6.5"/><circle class="f" cx="6" cy="6" r=".8"/><circle class="f" cx="10" cy="6" r=".8"/><circle class="f" cx="8" cy="8.5" r=".8"/><circle class="f" cx="5.6" cy="10.2" r=".8"/><circle class="f" cx="10.4" cy="10.2" r=".8"/>',
+  padel: '<rect x="4.5" y="1.5" width="7" height="8.5" rx="3.5"/><path d="M8 10v4.5"/><circle class="f" cx="6.8" cy="4.2" r=".7"/><circle class="f" cx="9.2" cy="4.2" r=".7"/><circle class="f" cx="8" cy="6.6" r=".7"/>',
+  badminton: '<circle cx="8" cy="12.6" r="1.8"/><path d="M6.6 11.3L4.5 3M9.4 11.3L11.5 3M8 10.8V3M4.5 3Q8 1.4 11.5 3"/>',
+  tt: '<circle cx="6.5" cy="6.5" r="4.5"/><path d="M9.7 9.7l3.8 3.8"/><circle class="f" cx="12.6" cy="3.4" r="1.2"/>',
+  racquet: '<ellipse cx="8" cy="6" rx="4" ry="4.8"/><path d="M8 1.2v9.6M4 6h8M8 10.8v4"/>',
+  wall: '<rect x="2" y="3" width="12" height="10"/><path d="M2 6.3h12M2 9.7h12M8 3v3.3M5 6.3v3.4M11 6.3v3.4M8 9.7V13"/>',
+  other: '<circle cx="8" cy="8" r="6.5"/><circle class="f" cx="8" cy="8" r="1.6"/>'
+};
+const FAMILY = [[/pickleball/i, "pickle"], [/padel/i, "padel"], [/minton|shuttle|biraq|pitton/i, "badminton"], [/table tennis|pong/i, "tt"],
+  [/squash|racquetball/i, "racquet"], [/paddleball|pelota|paleta|frontenis|jai alai|xare|handball/i, "wall"], [/tenn?is|loboton|fresco/i, "tennis"]];
+const familyOf = n => (FAMILY.find(f => f[0].test(n)) || [0, "other"])[1];
+function iconSpan(fams) {
+  const sp = el("span", {class: "sico", "aria-hidden": "true"});
+  sp.innerHTML = [...new Set(fams)].slice(0, 4).map(f => '<svg viewBox="0 0 16 16">' + ICON[f] + '</svg>').join("");   // static strings above, no data
+  return sp;
+}
+const venueIcons = v => iconSpan(v.p.slice().sort((a, b) => (b[1] || 0) - (a[1] || 0)).map(p => familyOf(sports[p[0]].n)));
+function updateSportIcon() { const w = $("sporticon"), s = state.sport >= 0 ? sports[state.sport] : null; w.innerHTML = ""; w.hidden = !s; if (s) w.append(...iconSpan([familyOf(s.n)]).childNodes); }
+
 function sportLine(v) {
   const have = new Set(v.p.map(p => p[0])), extras = {}, plain = [];
   for (const p of v.p) {
@@ -498,7 +525,7 @@ function venueNode(v) {
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014)
   if (place) box.append(el("p", {class: "meta", text: place}));
-  box.append(el("p", {}, el("b", {text: "Plays: "}), document.createTextNode(sportLine(v))));
+  box.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sportLine(v))));
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
   if (f.length) box.append(el("p", {text: f.join(" · ")}));
   if (v.o) box.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
@@ -563,7 +590,7 @@ function renderList() {
   const ul = $("list"); ul.replaceChildren(...wallItems(wallsFiltered()));
   for (const v of top) {
     const btn = el("button", {type: "button", class: "q" + v.q},
-      el("div", {class: "nm", text: v.n || "Unnamed courts" + (v.c ? " in " + v.c : "")}),
+      el("div", {class: "nm"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
       el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}),
       el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
@@ -681,7 +708,7 @@ function populateSports() {
       sel.append(el("option", {value: String(i), text: s.n + " (" + [n > 0 || s.v > 0 ? fmt(n) : "", wc ? wc + (wc === 1 ? " wall" : " walls") : "", narrowed ? "" : (s.w || "")].filter(Boolean).join(" + ") + ")"}));
     });
   }
-  sel.value = String(state.sport);
+  sel.value = String(state.sport); updateSportIcon();
   showAnywhere();
 }
 function showAnywhere() {
@@ -706,7 +733,7 @@ function initControls() {
   populateSports();
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));
-  sel.addEventListener("change", () => { state.sport = +sel.value; if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); refresh(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); });
+  sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); refresh(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); });
   $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); refresh(); }, 200));
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
     const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();
