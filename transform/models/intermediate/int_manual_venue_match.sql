@@ -1,6 +1,7 @@
 -- A hand-added venue is often a place we already hold under another source (a park whose courts are in OpenStreetMap,
 -- a club Overture lists). Link it to the nearest such venue within `manual_match_radius_m` metres so the map shows ONE pin,
 -- enriched by the hand-added details, instead of two. Otherwise it stays a venue of its own.
+-- Venues listed in seeds/manual_venue_no_merge.csv never merge (a different business sits within the radius).
 {% set radius = var('manual_match_radius_m') %}
 {% set cell = radius / 80000.0 %}
 
@@ -10,6 +11,7 @@ with manual as (
         cast(floor(lat / {{ cell }}) as bigint) as cy,
         cast(floor(lon / {{ cell }}) as bigint) as cx
     from {{ ref('stg_manual_venues') }}
+    where venue_key not in (select venue_key from {{ ref('manual_venue_no_merge') }})
 ),
 
 known as (
@@ -55,5 +57,5 @@ select
     n.matched_venue_id is not null                            as is_matched,
     n.matched_source,
     n.distance_m
-from manual m
+from (select distinct venue_key, venue_id as own_venue_id from {{ ref('stg_manual_venues') }}) m
 left join nearest n on n.venue_key = m.venue_key
