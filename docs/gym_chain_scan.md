@@ -13,7 +13,7 @@ Goal: add courts that gyms and athletic clubs host (racquetball first; also squa
 ## Per-chain checklist (one chain per session)
 | # | Chain | Source to check | Status |
 |---|---|---|---|
-| 1 | LA Fitness | `lafitness.com/Pages/clubhome.aspx?clubid=N`; address in `#clubInfoAddress`, amenity list incl. `Racquetball*`. Scripted scan works (200 OK, no robots.txt). | scan started 2026-10-14 (`ingestion/scan_lafitness.py`); results not yet imported. Torrance 3550 W Carson St looks closed (Yelp), Harbor City (clubid 620) lists racquetball |
+| 1 | LA Fitness | `lafitness.com/Pages/clubhome.aspx?clubid=N`; address in `#clubInfoAddress`, amenity list incl. `Racquetball*`. Scripted scan works (200 OK, no robots.txt). | scan done 2026-10-14 (`ingestion/scan_lafitness.py`): 113 CA/NV clubs, 56 list racquetball, raw results in `docs/gym_scans/lafitness_ca_nv_2026-10-14.csv`, NOT yet imported. Torrance 3550 W Carson St looks closed (Yelp), Harbor City (clubid 620) lists racquetball |
 | 2 | 24 Hour Fitness (Super Sport) | club pages on 24hourfitness.com; many courts removed after 2020, so check each page | todo |
 | 3 | Bay Club | `bayclubs.com/amenity/racquetball` lists clubs (Pleasanton, Redondo Beach, Manhattan CC already on map, SF) | todo |
 | 4 | ClubSport (Aliso Viejo, Pleasanton), Life Time, Equinox, Sports Club LA, Gold's, Crunch, Town Sports | each chain's club pages | todo; Life Time CA clubs found so far list pickleball/tennis, not racquetball |
