@@ -64,3 +64,6 @@ rank-review:      ## order the sport review queue, clear-cut cases first -> docs
 
 quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 	$(PY) ingestion/export_quality_scorecard.py
+
+issues:           ## check open GitHub issues: what is missing, already done, duplicate or waiting (needs gh, read-only)
+	$(PY) ci/check_issues.py

@@ -521,7 +521,7 @@ function sportLine(v) {
   const parts = plain.map(p => {
     const x = extras[p[0]];
     if (!x) return sports[p[0]].n + cnt(p[1]);
-    return sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court" : " courts") : " (") + (p[1] ? "; " : "") + "also for " + x.join(", ") + ")";
+    return sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court" : " courts") : " (") + (p[1] ? "; " : "") + "optional: " + x.join(", ") + ")";
   });
   const total = plain.reduce((a, p) => a + (p[1] || 0), 0);
   return parts.join(", ") + (plain.filter(p => p[1]).length > 1 ? " · " + total + " courts listed" : "");
