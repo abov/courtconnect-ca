@@ -48,6 +48,20 @@ seeds:
               arguments:
                 values: ['visited', 'official', 'reported']
 
+  - name: manual_venue_no_merge
+    description: Hand-added venues that must stay their own pin because a different business sits within `manual_match_radius_m` (int_manual_venue_match skips them).
+    columns:
+      - name: venue_key
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('manual_venues')
+                field: venue_key
+      - name: reason
+        tests: [not_null]
+
   - name: website_overrides
     description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
     columns:
