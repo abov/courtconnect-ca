@@ -21,7 +21,7 @@ On 2026-10-15 about 90% of venues had no street address (CA 9,010 of 9,991; NV 4
 - Directions don't need it: the popup's Google Maps / Apple Maps links already go to the pin's coordinates.
 - Where ML helps: phase 2 can read a park's own page for its street address (with a quote), which beats the nearest-point guess.
 
-**Planned build (decided 2026-10-16, not started).** Fill only venues with no street address, first hit wins, never overwrite a real address:
+**Planned build (decided 2026-10-16). Step 1 (tiers 1-2 + home check) BUILT 2026-10-16, results below.** Fill only venues with no street address, first hit wins, never overwrite a real address:
 1. Address tags already in OSM (`addr:housenumber` + `addr:street` on the court, or its parent park/school). Free and exact.
 2. Nearest Overture address point within ~150 m (spatial join in DuckDB, no API calls). Farther = leave blank.
 3. Nominatim reverse geocode for the leftovers only, cached in a seed/CSV (1 request a second, proper User-Agent, never re-query).
@@ -33,6 +33,21 @@ On 2026-10-15 about 90% of venues had no street address (CA 9,010 of 9,991; NV 4
   - Unclear cases (e.g. unnamed private court in a residential area): fail safe, city only. City comes from OSM `addr:city`, the Overture locality, or the venue's existing city.
   - Gap to check: city-only text does not hide the pin, and the Directions links still use exact coordinates. The Pop Tennis importer already never imports private homes, so first count how many home-like pins are on the map today; if any, offset/round their coordinates or remove them.
 - First step when picked up: build tiers 1-2 + the home check, then report the count of flagged pins and how many pins are still blank before deciding whether tier 3 is worth running.
+
+**Step 1 results (2026-10-16; `int_venue_address`, `ingestion/extract_overture_addresses.py`, `make extract-addresses`).** Of 10,236 venues, 9,227 had no address.
+- Tier 2 (nearest Overture address within 150 m; the extract keeps address points within ~440 m of any pin, 5.4 M rows, ~35 s): 2,939 pins filled (median 55 m, 90th percentile 106 m), shown as "Nearest address (inferred)". Tier 1 for the court's own tags was already in `dim_venue` (102 pins, `address_source` osm); the Overture place address is `overture_place` (907). Tier 1 for the *parent* park/school is not possible yet: `osm_parents` has no `addr:*` columns (needs an Overpass re-extract).
+- Home check: 5,755 pins are home-like (1,224 with an access=private court, 20 customers/members, 4,511 unnamed with no access tag), because OSM `landuse`, building around the court and Overture residential categories are not in the data (only `building` on the court itself, none are houses). The rule is therefore the fail-safe one: an unnamed venue with no court tagged public = city only. 5,349 of them had a nearby address that was withheld; 548 other pins are blank (no address point within 150 m). 16 home-like pins already show a street today (tagged on the OSM court): proposal, not applied, is to drop the street for them too.
+- Still blank after step 1: 6,287 pins (5,739 home-like by design, 548 not). City filled for 8,010 pins that had none.
+- Directions links use the exact pin coordinates, so the home-like pins (unnamed courts, 1,224 of them tagged private) are still exactly locatable. Proposal, not applied: round their pin and Directions target to 3 decimals (~100 m) or hide the private-tagged ones.
+- Tier 3 (Nominatim) mostly adds nothing for the home-like pins (they must stay city only), and for the 548 others it covers the gap in rural spots; worth running only for those 548.
+
+## Business use case: venue demand and capacity (idea 2026-10-16, not started)
+Question: could the map help show where players and spectators are underserved, and predict whether a new venue nearby would ease the flow? That needs demand data (people counts, views, referrals, plays, ticket sales), and the constraint is that everything must be free.
+- Free signals we can already get or add without paying: GoatCounter page counts (ADR 0013; per-venue popup opens and Directions / link-out clicks as events, no personal data), the suggest-a-change and issue counts per venue, and the public court counts we hold.
+- Free public data that proxies demand: Census / ACS population by tract (age, density), OpenStreetMap park and school density, Strava Global Heatmap is not usable (terms), but city open-data portals sometimes publish court reservation counts, and national bodies publish club membership (USTA, USA Pickleball place-to-play counts).
+- Method (cheap first): courts per 10,000 residents within 2 km / 10 min drive by sport (supply ratio), then add observed interest (opens/clicks per venue) as a second signal; flag tracts with high population, no courts, and clicks from the area. A map-view count of searches in an area with no venue is a free "unmet demand" signal.
+- Not possible for free: ticket sales, foot traffic inside venues, individual player tracking (also a privacy line we should not cross: aggregate, anonymous counts only, ADR first).
+- Next step if wanted: ADR + a `mart_supply_gap` model (tract population from Census, no API key) and a GoatCounter events plan; plan only, no code.
 
 ## Missing courts at known parks (owner report, 2026-10-15)
 Manhattan Heights Park (Manhattan Beach) has at least 2 pickleball and 2 tennis courts; OSM tags only the 2 tennis courts, so pickleball was missing until the owner reported it (`manual_venues.csv`). A fresh `make extract` would not fix this: the data is not in OSM or Overture. Likely many parks look like this (pickleball lines painted on tennis courts, never tagged).

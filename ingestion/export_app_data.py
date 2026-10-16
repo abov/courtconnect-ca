@@ -59,7 +59,7 @@ def main() -> None:
 
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, region, address_line,
-               website_usable, offerings, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
+               website_usable, offerings, address_source, address_distance_m, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
                has_lit_courts, is_confirmed_public, has_free_courts, is_members_only, also_listed_as
         from marts.mart_venue_finder""").fetchall()
 
@@ -94,7 +94,7 @@ def main() -> None:
 
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
-    for (vid, name, nsrc, vsrc, sport, courts, lat, lon, city, region, addr, web, offers, indoor, outdoor, sand, clay, grass, hard, turf,
+    for (vid, name, nsrc, vsrc, sport, courts, lat, lon, city, region, addr, web, offers, asrc, adist, indoor, outdoor, sand, clay, grass, hard, turf,
          lit, public, free, members, also) in rows:
         if lat is None or lon is None:
             continue
@@ -108,11 +108,14 @@ def main() -> None:
                 "x": round(float(lon), 5),
                 "c": city or "",
                 "r": region,
-                "a": addr or "",
+                "a": (addr.title() if addr and asrc == "overture_nearest" and addr.isupper() else addr) or "",   # county point data is often ALL CAPS
                 "w": web or "",
                 "o": "".join(OFFER_CODES[o] for o in (offers or "").split(";") if o in OFFER_CODES),
                 "f": (1 if lit else 0) | (2 if public else 0) | (4 if free else 0) | (8 if members else 0),
             }
+            if asrc == "overture_nearest":   # inferred: nearest Overture address point, shown as "Nearest address (inferred)"
+                venues[vid]["ai"] = 1
+                venues[vid]["ad"] = int(adist)   # metres from the pin
             if also:
                 venues[vid]["al"] = also   # other listed names at the same address (merged duplicates)
         mask = sum(bit for flag, bit in ((indoor, 1), (outdoor, 2), (sand, 4), (clay, 8), (grass, 16), (hard, 32), (turf, 64)) if flag)

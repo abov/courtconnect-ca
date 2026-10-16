@@ -11,6 +11,10 @@ extract:          ## pull ALL CalNeva courts + named parent features from OpenSt
 	$(PY) ingestion/extract_osm_courts.py --area nevada --out data/raw/osm_courts_nv.csv
 	$(PY) ingestion/extract_osm_parents.py --area nevada --out data/raw/osm_parents_nv.csv
 	$(PY) ingestion/extract_overture_places.py
+	$(PY) ingestion/extract_overture_addresses.py
+
+extract-addresses: ## Overture address points near the pins, for the address fill (reads S3, ~1 min; run after the OSM/places extract, then make load)
+	$(PY) ingestion/extract_overture_addresses.py
 
 extract-places:   ## pull racket-related CalNeva places from Overture Maps (reads S3 directly, ~1 min)
 	$(PY) ingestion/extract_overture_places.py
