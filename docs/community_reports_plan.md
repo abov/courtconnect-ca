@@ -1,6 +1,6 @@
 # Community reports: plan (2026-10-16)
 
-Status: PLAN ONLY, nothing built. Waiting for the owner's OK.
+Status: step 1 BUILT (2026-10-16, waiting for owner review); steps 2-3 not started.
 
 ## Why
 The owner can't visit venues, and court-finder apps are off limits (Places2Play needs a sign-in; Pickleheads' terms forbid
@@ -24,7 +24,10 @@ this). So the script uses the map id only once, at approval time, to look up nam
 the stable key is the new `manual_venues.venue_key`.
 
 ## Steps (each its own small PR)
-**Step 1. Reports on existing venues reach the map** (~40 lines in `ci/issue_to_pr.py`, no model change)
+**Step 1. Reports on existing venues reach the map** (~40 lines in `ci/issue_to_pr.py`, no model change). BUILT: new form option
+"Report a sport played here" + "Sport played here" field; `venue_confirmations.method` accepts `reported` (not counted in the map's `cn`);
+warn test `assert_reported_pins_merged`; `venue_leads.source_type` accepts `issue` (the script always wrote it). Simulated 5 reports:
+both pins merged (venue count unchanged), badge 'Reported', Pickleball added at Willow Glen.
 - "Report a sport/courts here" or "Confirm" on a non-manual venue: look up the map id in `venues.json` and append a `manual_venues` row
   (name, sport, city, lat/lon from the pin, `location_precision = pin`, `confirmation = reported`, evidence = issue text + date).
   Also append a `venue_confirmations` row (`method = reported`) for the reporter.

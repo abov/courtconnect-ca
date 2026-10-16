@@ -89,6 +89,7 @@ seeds:
       A log of individual confirmations of venues in manual_venues, one row per person per check (ADR 0008). `confirmed_by` is a GitHub
       handle, never a real name or contact detail. The map shows how many different people confirmed a venue. A reviewer decides when
       the count justifies raising the venue's `confirmation` level in manual_venues; this file never changes it by itself.
+      `reported` rows are word-of-mouth reports (docs/community_reports_plan.md); the map does not count them as confirmations.
     columns:
       - name: venue_key
         tests: [not_null]
@@ -99,7 +100,7 @@ seeds:
           - not_null
           - accepted_values:
               arguments:
-                values: ['visited', 'official']
+                values: ['visited', 'official', 'reported']
 
   - name: venue_leads
     description: >
@@ -117,7 +118,7 @@ seeds:
         tests:
           - accepted_values:
               arguments:
-                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'other']
+                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'issue', 'other']   # issue = a GitHub issue (ci/issue_to_pr.py)
 
   - name: venue_actions
     description: >
