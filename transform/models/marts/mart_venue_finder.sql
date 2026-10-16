@@ -29,9 +29,11 @@ select
     v.offerings,
     v.lat,
     v.lon,
-    v.city,
+    a.city,                                                   -- venue city, else the nearest address point's city
     v.region,                                                 -- CA / NV (ADR 0014)
-    v.address_line,
+    a.address_line,                                           -- own address, else the nearest Overture address (inferred); never a street for home-like pins
+    a.address_source,
+    a.address_distance_m,
     v.website,
     v.website_status,
     case when v.website_status = 'dead' then null else v.website end   as website_usable,   -- hides links to domains that no longer exist
@@ -53,6 +55,7 @@ select
     v.also_listed_as
 from {{ ref('bridge_venue_sport') }} bvs
 join {{ ref('dim_venue') }} v on v.venue_id = bvs.venue_id
+join {{ ref('int_venue_address') }} a on a.venue_id = bvs.venue_id
 join {{ ref('dim_sport') }} s on s.sport_id = bvs.sport_id
 left join osm_facts f on f.venue_id = bvs.venue_id and f.sport_id = bvs.sport_id
 -- exclude_private_members = yes (Pitton on badminton courts): a members-only venue does not get the sport by inference, even when its
