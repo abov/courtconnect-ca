@@ -1,10 +1,11 @@
 """Phase 3 pilot (docs/ml_plan.md): find courts in NAIP aerial photos.
 
 Stages (run in order; each caches under data/aerial/):
-  osm     fetch OSM pitch polygons (training area + Hawthorne) and Hawthorne context areas
+  osm     fetch OSM pitch polygons + context areas for the test area (--train-area: also the training area)
   chips   read NAIP chips for training (outside Hawthorne) from Planetary Computer, and the Hawthorne mosaic
   train   fine-tune a small torchvision Faster R-CNN (MobileNetV3, BSD licence) on the chips
-  detect  run on Hawthorne, score against OSM, write docs/aerial_candidates_hawthorne.csv
+  mosaic  read the test-area NAIP mosaic (chips also does this)
+  detect  run on the test area, score against OSM, merge boxes into sites (40 m), write docs/aerial_candidates_<area>.csv + crop PNGs
 
 Imagery: NAIP 2022, 0.6 m, public domain, public STAC (no account). Labels: OSM leisure=pitch.
 Classes: 1 racket court (tennis, pickleball, padel, ...), 2 basketball, 3 other pitch (hard negatives).
@@ -23,12 +24,14 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "data" / "aerial" / "cache"
 OUT = ROOT / "data" / "aerial"
-CANDIDATES = ROOT / "docs" / "aerial_candidates_hawthorne.csv"
+KNOWN_NV = ROOT / "data" / "raw" / "osm_courts_nv.csv"   # optional: OSM court points already on the map
+SITE_GAP_M = 40      # detection boxes closer than this (edge to edge) are one site (one complex)
 UA = {"User-Agent": "courtconnect-ca/0.1 (portfolio project)"}
 OVERPASS = ["https://overpass-api.de/api/interpreter", "https://z.overpass-api.de/api/interpreter"]
 
 TRAIN_BBOX = (33.78, -118.47, 34.05, -118.22)   # south, west, north, east (LA basin around Hawthorne)
 HAWTHORNE = (33.893, -118.380, 33.934, -118.318)
+AREAS = {"hawthorne": HAWTHORNE}   # test areas by name; --area NAME --bbox S,W,N,E adds one (UTM 11N covers LA and Las Vegas)
 RES = 0.6
 CHIP = 256
 RACKET = {"tennis", "pickleball", "padel", "badminton", "squash", "racquetball", "paddle_tennis",
@@ -49,6 +52,16 @@ def overpass(q):
         except Exception as e:  # try next mirror
             last = e
     raise SystemExit(f"overpass failed: {last}")
+
+
+def area_of(a):
+    """-> (name, bbox) for the test area chosen on the command line."""
+    name = a.area
+    if a.bbox:
+        AREAS[name] = tuple(float(v) for v in a.bbox.split(","))
+    if name not in AREAS:
+        raise SystemExit(f"unknown area {name!r}: pass --bbox S,W,N,E")
+    return name, AREAS[name]
 
 
 def to_utm():
@@ -182,26 +195,29 @@ def boxes_in_chip(pitches, x_ul, y_ul, w, h):
 
 
 # ---------------------------------------------------------------- stages
-def stage_osm(_):
+def stage_osm(a):
     OUT.mkdir(parents=True, exist_ok=True)
-    s, w, n, e = TRAIN_BBOX
-    j = overpass(f'[out:json][timeout:240];way["leisure"="pitch"]({s},{w},{n},{e});out geom tags;')
-    json.dump(j, open(OUT / "osm_pitches_train_area.json", "w"))
-    s, w, n, e = HAWTHORNE
+    name, (s, w, n, e) = area_of(a)
+    if a.train_area:
+        ts, tw, tn, te = TRAIN_BBOX
+        j = overpass(f'[out:json][timeout:240];way["leisure"="pitch"]({ts},{tw},{tn},{te});out geom tags;')
+        json.dump(j, open(OUT / "osm_pitches_train_area.json", "w"))
     j = overpass(f'[out:json][timeout:120];way["leisure"="pitch"]({s},{w},{n},{e});out geom tags;')
-    json.dump(j, open(OUT / "osm_pitches_hawthorne.json", "w"))
+    json.dump(j, open(OUT / f"osm_pitches_{name}.json", "w"))
     # context areas, to tell public/institutional land from the rest (private homes are never candidates)
-    j = overpass(f'[out:json][timeout:120];(way["leisure"~"park|sports_centre|playground|recreation_ground|fitness_centre"]({s},{w},{n},{e});'
-                 f'way["amenity"~"school|college|university|community_centre"]({s},{w},{n},{e}););out geom tags;')
-    json.dump(j, open(OUT / "osm_context_hawthorne.json", "w"))
-    print("osm: saved")
+    j = overpass(f'[out:json][timeout:120];(way["leisure"~"park|sports_centre|playground|recreation_ground|fitness_centre|golf_course"]({s},{w},{n},{e});'
+                 f'way["amenity"~"school|college|university|community_centre"]({s},{w},{n},{e});'
+                 f'way["landuse"~"residential"]({s},{w},{n},{e}););out geom tags;')
+    json.dump(j, open(OUT / f"osm_context_{name}.json", "w"))
+    print(f"osm: saved ({name})")
 
 
 def stage_chips(a):
     rng = random.Random(SEED)
     CACHE.mkdir(parents=True, exist_ok=True)
     pitches = load_pitches(OUT / "osm_pitches_train_area.json")
-    hx0, hy0, hx1, hy1 = bbox_utm(HAWTHORNE)
+    name, bb = area_of(a)
+    hx0, hy0, hx1, hy1 = bbox_utm(bb)
     pad = CHIP * RES
     inside = lambda p: hx0 - pad < p["xs"].mean() < hx1 + pad and hy0 - pad < p["ys"].mean() < hy1 + pad
     train = [p for p in pitches if not inside(p)]
@@ -230,11 +246,21 @@ def stage_chips(a):
     np.save(CACHE / "train_imgs.npy", np.stack(imgs))
     json.dump(meta, open(CACHE / "train_meta.json", "w"))
     print(f"train chips: {len(imgs)}")
-    # Hawthorne mosaic for testing
-    mos, x_ul, y_ul = naip.mosaic(*bbox_utm(HAWTHORNE))
-    np.save(CACHE / "hawthorne.npy", mos)
-    json.dump([x_ul, y_ul], open(CACHE / "hawthorne_origin.json", "w"))
-    print("hawthorne mosaic", mos.shape)
+    mosaic_for(a)
+
+
+def mosaic_for(a):
+    """Read the test-area mosaic (own bbox, any quads) and cache it."""
+    name, bb = area_of(a)
+    mos, x_ul, y_ul = Naip(bb).mosaic(*bbox_utm(bb))
+    np.save(CACHE / f"{name}.npy", mos)
+    json.dump([x_ul, y_ul], open(CACHE / f"{name}_origin.json", "w"))
+    print(f"{name} mosaic", mos.shape)
+
+
+def stage_mosaic(a):
+    CACHE.mkdir(parents=True, exist_ok=True)
+    mosaic_for(a)
 
 
 def build_model(pretrained):
@@ -335,18 +361,71 @@ def nms_boxes(boxes, scores, thr=0.3):
     return keep
 
 
+def box_gap(a, b):
+    """Edge-to-edge distance between two boxes (same units as the boxes), 0 if they touch or overlap."""
+    dx = max(0, max(a[0], b[0]) - min(a[2], b[2]))
+    dy = max(0, max(a[1], b[1]) - min(a[3], b[3]))
+    return math.hypot(dx, dy)
+
+
+def cluster_sites(boxes, gap):
+    """Union boxes whose edges lie within `gap` of each other. -> list of index lists (one per site)."""
+    parent = list(range(len(boxes)))
+
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+    for i in range(len(boxes)):
+        for j in range(i + 1, len(boxes)):
+            if box_gap(boxes[i], boxes[j]) <= gap:
+                parent[find(i)] = find(j)
+    groups = {}
+    for i in range(len(boxes)):
+        groups.setdefault(find(i), []).append(i)
+    return list(groups.values())
+
+
+PUBLIC_CTX = ("park", "recreation_ground", "playground", "sports_centre", "school", "college", "university",
+              "community_centre", "fitness_centre", "golf_course")
+
+
+def context_of(cx, cy, ctx):
+    """Kind of the OSM area holding the point. Park/school/sports kinds win over a surrounding residential area."""
+    kinds = [k for (x0, y0, x1, y1, k) in ctx if x0 <= cx <= x1 and y0 <= cy <= y1]
+    for k in kinds:
+        if k in PUBLIC_CTX:
+            return k
+    return kinds[0] if kinds else "none"
+
+
+def load_known(tr):
+    """UTM points of OSM courts already extracted for the map (optional file)."""
+    import csv
+    if not KNOWN_NV.exists():
+        return []
+    rows = [(float(r["lon"]), float(r["lat"])) for r in csv.DictReader(open(KNOWN_NV, encoding="utf-8"))]
+    xs, ys = tr.transform([r[0] for r in rows], [r[1] for r in rows])
+    return list(zip(xs, ys))
+
+
 def stage_detect(a):
     import csv
+    from collections import Counter
     import torch
+    from PIL import Image, ImageDraw
     torch.set_num_threads(a.threads)
-    mos = np.load(CACHE / "hawthorne.npy")
-    x_ul, y_ul = json.load(open(CACHE / "hawthorne_origin.json"))
+    name, bb = area_of(a)
+    mos = np.load(CACHE / f"{name}.npy")
+    x_ul, y_ul = json.load(open(CACHE / f"{name}_origin.json"))
     model = build_model(pretrained=False)
-    model.load_state_dict(torch.load(CACHE / "model.pt"))
+    model.load_state_dict(torch.load(a.model or CACHE / "model.pt"))
     model.eval()
     H, W = mos.shape[:2]
     step = CHIP - 48
     allb, alls, allc = [], [], []
+    ntile = 0
     with torch.no_grad():
         for y in range(0, max(1, H - 48), step):
             for x in range(0, max(1, W - 48), step):
@@ -354,25 +433,31 @@ def stage_detect(a):
                 tile = mos[y0:y0 + CHIP, x0:x0 + CHIP]
                 if tile.max() == 0:
                     continue
+                ntile += 1
+                if ntile % 200 == 0:
+                    print(f"  tiles {ntile}", flush=True)
                 out = model([torch.from_numpy(np.ascontiguousarray(tile)).permute(2, 0, 1).float() / 255])[0]
                 for b, s, c in zip(out["boxes"].numpy(), out["scores"].numpy(), out["labels"].numpy()):
                     allb.append([b[0] + x0, b[1] + y0, b[2] + x0, b[3] + y0]); alls.append(s); allc.append(c)
-    allb, alls, allc = np.array(allb), np.array(alls), np.array(allc)
+    allb, alls, allc = np.array(allb).reshape(-1, 4), np.array(alls), np.array(allc)
     dets = []
     for c in (1, 2, 3):
         idx = np.where((allc == c) & (alls >= 0.2))[0]
         for k in nms_boxes(allb[idx], alls[idx]):
             dets.append((allb[idx][k], float(alls[idx][k]), c))
-    print(f"raw detections kept: {len(dets)}")
+    print(f"tiles {ntile}; raw detections kept: {len(dets)}")
 
-    pit = load_pitches(OUT / "osm_pitches_hawthorne.json")
     gt = []
-    for p in pit:
+    for p in load_pitches(OUT / f"osm_pitches_{name}.json"):
         gt.append(([(p["xs"].min() - x_ul) / RES, (y_ul - p["ys"].max()) / RES,
                     (p["xs"].max() - x_ul) / RES, (y_ul - p["ys"].min()) / RES], p["cls"], p["sport"]))
+    # only OSM pitches inside the mosaic can be scored
+    gt = [g for g in gt if 0 <= (g[0][0] + g[0][2]) / 2 <= W and 0 <= (g[0][1] + g[0][3]) / 2 <= H]
     gt_r = [g for g in gt if g[1] == 1]
-    print(f"OSM pitches in Hawthorne: {len(gt)}; racket courts: {len(gt_r)} ({[g[2] for g in gt_r]})")
+    print(f"OSM pitches in area: {len(gt)}; racket courts: {len(gt_r)} {dict(Counter(g[2] for g in gt_r))}")
 
+    gap_px = SITE_GAP_M / RES
+    osites = cluster_sites([g[0] for g in gt_r], gap_px)
     res = {}
     for thr in (0.3, 0.5, 0.7, 0.9):
         d = [x for x in dets if x[2] == 1 and x[1] >= thr]
@@ -381,52 +466,76 @@ def stage_detect(a):
             m = max(((iou(box, g[0]), k) for k, g in enumerate(gt_r) if k not in used), default=(0, -1))
             if m[0] >= 0.3:
                 tp += 1; used.add(m[1])
-        res[thr] = (len(d), tp, len(gt_r))
-        print(f"score>={thr}: detections {len(d)}, matched OSM {tp} -> precision vs OSM {tp / max(1, len(d)):.2f}, recall {tp / max(1, len(gt_r)):.2f}")
+        # site level: a detected site is right if one of its boxes overlaps an OSM court; an OSM site is found if any of its courts is overlapped
+        dsites = cluster_sites([x[0] for x in d], gap_px)
+        d_hit = sum(any(iou(d[i][0], g[0]) >= 0.1 for i in grp for g in gt_r) for grp in dsites)
+        o_hit = sum(any(iou(gt_r[i][0], x[0]) >= 0.1 for i in grp for x in d) for grp in osites)
+        res[thr] = {"boxes": len(d), "matched_osm": tp, "osm_courts": len(gt_r), "det_sites": len(dsites),
+                    "det_sites_on_osm": d_hit, "osm_sites": len(osites), "osm_sites_found": o_hit}
+        print(f"score>={thr}: boxes {len(d)}, matched OSM {tp} (precision vs OSM {tp / max(1, len(d)):.2f}, recall {tp / max(1, len(gt_r)):.2f}); "
+              f"sites: detected {len(dsites)}, on OSM courts {d_hit}; OSM sites {len(osites)}, found {o_hit}")
 
-    # candidates: racket detections matching no OSM pitch of any kind
+    # candidates: racket detections on no OSM pitch of any kind, merged into one row per site
     ctx = []
     tr = to_utm()
-    for e in json.load(open(OUT / "osm_context_hawthorne.json"))["elements"]:
+    for e in json.load(open(OUT / f"osm_context_{name}.json"))["elements"]:
         g = e.get("geometry")
         if g and len(g) >= 3:
             xs, ys = tr.transform([p["lon"] for p in g], [p["lat"] for p in g])
-            kind = e["tags"].get("leisure") or e["tags"].get("amenity")
+            kind = e["tags"].get("leisure") or e["tags"].get("amenity") or e["tags"].get("landuse")
             ctx.append((min(xs), min(ys), max(xs), max(ys), kind))
+    known = load_known(tr)
     to_ll = to_wgs()
-    rows = []
-    for box, s, c in dets:
-        if c != 1 or s < a.min_score:
-            continue
-        if any(iou(box, g[0]) >= 0.1 for g in gt):
-            continue
-        cx, cy = x_ul + (box[0] + box[2]) / 2 * RES, y_ul - (box[1] + box[3]) / 2 * RES
+    cand = [d for d in dets if d[2] == 1 and d[1] >= a.min_score and not any(iou(d[0], g[0]) >= 0.1 for g in gt)]
+    rows, groups = [], []
+    for grp in cluster_sites([c[0] for c in cand], gap_px):
+        bx = np.array([cand[i][0] for i in grp])
+        x0, y0, x1, y1 = bx[:, 0].min(), bx[:, 1].min(), bx[:, 2].max(), bx[:, 3].max()
+        cx, cy = x_ul + (x0 + x1) / 2 * RES, y_ul - (y0 + y1) / 2 * RES
         lon, lat = to_ll.transform(cx, cy)
-        wm, hm = (box[2] - box[0]) * RES, (box[3] - box[1]) * RES
-        where = next((k for (x0, y0, x1, y1, k) in ctx if x0 <= cx <= x1 and y0 <= cy <= y1), "")
-        rows.append({"lat": round(lat, 6), "lon": round(lon, 6), "score": round(s, 3),
-                     "long_side_m": round(max(wm, hm), 1), "short_side_m": round(min(wm, hm), 1),
-                     "osm_context": where or "none",
-                     "review_note": ("in park/school/sports area" if where else
-                                     "not in a mapped park/school: may be a private yard or complex, do NOT add to OSM without a public source"),
+        near = min((math.hypot(cx - kx, cy - ky) for kx, ky in known), default=None)
+        where = context_of(cx, cy, ctx)
+        rows.append({"lat": round(lat, 6), "lon": round(lon, 6), "n_boxes": len(grp),
+                     "max_score": round(max(cand[i][1] for i in grp), 3),
+                     "extent_long_m": round(max(x1 - x0, y1 - y0) * RES, 1), "extent_short_m": round(min(x1 - x0, y1 - y0) * RES, 1),
+                     "osm_context": where, "nearest_osm_court_m": "" if near is None else round(near),
+                     "review_note": ("in a mapped park/school/sports area: check the operator's public page" if where in PUBLIC_CTX else
+                                     "not in a mapped park/school (residential or unmapped land): may be a private yard, HOA or resort court, do NOT add to OSM without a public source"),
                      "status": "inferred", "sport": "unknown", "access": "unknown"})
-    rows.sort(key=lambda r: -r["score"])
-    CANDIDATES.parent.mkdir(exist_ok=True)
-    with open(CANDIDATES, "w", newline="", encoding="utf-8") as f:
-        wr = csv.DictWriter(f, fieldnames=list(rows[0].keys()) if rows else ["lat"])
+        groups.append((bx, (x0, y0, x1, y1)))
+    order = sorted(range(len(rows)), key=lambda i: -rows[i]["max_score"])
+    rows, groups = [rows[i] for i in order], [groups[i] for i in order]
+    crops = CACHE / f"crops_{name}"
+    crops.mkdir(exist_ok=True)
+    for old in crops.glob("*.png"):
+        old.unlink()
+    img = Image.fromarray(mos)
+    for i, (r, (bx, (x0, y0, x1, y1))) in enumerate(zip(rows, groups), 1):
+        r["site_id"] = f"{name}-{i:03d}"
+        pad = 40
+        ox, oy = int(max(0, x0 - pad)), int(max(0, y0 - pad))
+        crop = img.crop((ox, oy, int(min(W, x1 + pad)), int(min(H, y1 + pad))))
+        dr = ImageDraw.Draw(crop)
+        for b in bx:
+            dr.rectangle([b[0] - ox, b[1] - oy, b[2] - ox, b[3] - oy], outline=(255, 0, 0))
+        crop.save(crops / f"{r['site_id']}.png")
+    out_csv = ROOT / "docs" / f"aerial_candidates_{name}.csv"
+    out_csv.parent.mkdir(exist_ok=True)
+    cols = ["site_id", "lat", "lon", "n_boxes", "max_score", "extent_long_m", "extent_short_m", "osm_context",
+            "nearest_osm_court_m", "review_note", "status", "sport", "access"]
+    with open(out_csv, "w", newline="", encoding="utf-8") as f:
+        wr = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
         wr.writeheader(); wr.writerows(rows)
-    print(f"candidates (score>={a.min_score}, not near any OSM pitch): {len(rows)} -> {CANDIDATES}")
-    json.dump({str(k): v for k, v in res.items()}, open(OUT / "hawthorne_eval.json", "w"))
-    # export candidate pixel boxes for visual spot checks
-    json.dump([{"box": [float(v) for v in box], "score": s, "lat": r["lat"], "lon": r["lon"]}
-               for (box, s, c), r in zip([d for d in dets if d[2] == 1 and d[1] >= a.min_score and not any(iou(d[0], g[0]) >= 0.1 for g in gt)], rows)],
-              open(CACHE / "candidate_boxes.json", "w"))
+    print(f"candidate sites (score>={a.min_score}, on no OSM pitch): {len(rows)} from {len(cand)} boxes -> {out_csv}")
+    json.dump(res, open(OUT / f"{name}_eval.json", "w"))
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sp = ap.add_subparsers(dest="stage", required=True)
-    sp.add_parser("osm").set_defaults(f=stage_osm)
+    o = sp.add_parser("osm"); o.set_defaults(f=stage_osm)
+    o.add_argument("--train-area", action="store_true", help="also fetch the LA-basin training pitches")
+    m = sp.add_parser("mosaic"); m.set_defaults(f=stage_mosaic)
     c = sp.add_parser("chips"); c.set_defaults(f=stage_chips)
     c.add_argument("--n-racket", type=int, default=450); c.add_argument("--n-basket", type=int, default=120)
     c.add_argument("--n-other", type=int, default=100); c.add_argument("--n-random", type=int, default=150)
@@ -434,6 +543,10 @@ def main():
     t.add_argument("--epochs", type=int, default=8); t.add_argument("--threads", type=int, default=8)
     d = sp.add_parser("detect"); d.set_defaults(f=stage_detect)
     d.add_argument("--threads", type=int, default=8); d.add_argument("--min-score", type=float, default=0.5)
+    d.add_argument("--model", help="weights file (default data/aerial/cache/model.pt)")
+    for q in (sp.choices["osm"], sp.choices["mosaic"], c, d):
+        q.add_argument("--area", default="hawthorne", help="test-area name (files are keyed by it)")
+        q.add_argument("--bbox", help="S,W,N,E of the test area (WGS84); built-in for hawthorne")
     a = ap.parse_args()
     a.f(a)
 
