@@ -10,7 +10,7 @@ Source of truth for sports: the Google Sheet (synced into `transform/seeds/all_r
 
 ## Part 1: show all sports in the dropdown
 Cheapest honest version, no new venue data needed:
-1. Dropdown lists all 76 sports in two groups (`<optgroup>`): **"Places on the map"** (venues, walls, or play-anywhere) and **"Not mapped yet"** (zero venues). Keep alphabetical inside each group; keep the existing counts rule (counts follow the filters).
+1. Dropdown lists all 76 sports alphabetically; sports with zero venues are greyed out and marked "no places yet" (decided 2026-10-16); keep the existing counts rule (counts follow the filters).
 2. Picking a not-mapped sport shows an empty-state card instead of a blank map: "No place for X is listed in CA or NV yet", the sport details (Part 2), the closest sport that *is* mapped when one exists (via `sport_also_played.csv`, e.g. Micro Pickleball -> Pickleball), and a "Know a place? Suggest it" button that reuses the suggest-a-change form pre-filled with the sport.
 3. Play-anywhere sports (`sport_play_anywhere.csv`) keep their note.
 4. Map keeps showing nothing for them; never fake pins. The coverage dialog already lists status per sport (`covered`, `sparse`, `possible_only`, `tagged_none_found`, `not_found`).
@@ -41,7 +41,8 @@ UX notes: mobile 375/320px first (card collapsed by default on phones, expanded 
 5. Venue searches for not-mapped sports, one family per session (Part 1 step 5).
 6. Re-run `pages.yml` after merge; confirm PR MERGED before calling it shipped.
 
-## Open questions for the owner
-- Add the blurb/wiki columns to the Google Sheet, or keep them in a repo seed? (recommended: the sheet)
-- Show not-mapped sports in the main list (greyed, marked "no places yet") or in their own group? (recommended: own group)
-- Do the sheet's "popularity class" labels (World Official, Subculture, Rec) go on the card? They may read as judgement; could be shown only as "Olympic/world governing body" when `org` is set.
+## Decisions (owner, 2026-10-16)
+
+- Blurb and wiki columns live in the Google Sheet (synced by `make sync-sports`), not a repo seed. The `sport_details.csv` seed in Part 2 is dropped.
+- Unmapped sports stay in the main list, greyed out and marked "no places yet" (no separate group; supersedes the `<optgroup>` idea in Part 1).
+- No popularity-class labels on the card.
