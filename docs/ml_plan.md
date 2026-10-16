@@ -21,6 +21,19 @@ On 2026-10-15 about 90% of venues had no street address (CA 9,010 of 9,991; NV 4
 - Directions don't need it: the popup's Google Maps / Apple Maps links already go to the pin's coordinates.
 - Where ML helps: phase 2 can read a park's own page for its street address (with a quote), which beats the nearest-point guess.
 
+**Planned build (decided 2026-10-16, not started).** Fill only venues with no street address, first hit wins, never overwrite a real address:
+1. Address tags already in OSM (`addr:housenumber` + `addr:street` on the court, or its parent park/school). Free and exact.
+2. Nearest Overture address point within ~150 m (spatial join in DuckDB, no API calls). Farther = leave blank.
+3. Nominatim reverse geocode for the leftovers only, cached in a seed/CSV (1 request a second, proper User-Agent, never re-query).
+4. Official page with a quote, by hand in `manual_venues.csv` for high-value venues (parks, public facilities).
+- Store `address_source` (`osm`, `overture_nearest`, `nominatim`, `official_page`) and `address_distance_m`. The popup labels anything other than `osm` or `official_page` as "Nearest address (inferred)". Likely a new `int_venue_address` model plus an export field.
+- **Privacy rule (owner, 2026-10-16): residential homes show the city only, never the street address.** Check this before filling, so the street is never stored for those pins. Apartment complexes are fine (full address).
+  - Home signals (any one): OSM `building=house|detached|residential` on or around the court; `landuse=residential` with no name, operator or website; `access=private` on an unnamed court; the Pop Tennis import's private-home type; an Overture "residential" / "private residence" category.
+  - Apartment exceptions (full address): `building=apartments|dormitory`, `residential=apartments`, names containing Apartments / Villas / Condos / Townhomes / Residences / HOA / Community, clubhouse or amenity courts inside a complex.
+  - Unclear cases (e.g. unnamed private court in a residential area): fail safe, city only. City comes from OSM `addr:city`, the Overture locality, or the venue's existing city.
+  - Gap to check: city-only text does not hide the pin, and the Directions links still use exact coordinates. The Pop Tennis importer already never imports private homes, so first count how many home-like pins are on the map today; if any, offset/round their coordinates or remove them.
+- First step when picked up: build tiers 1-2 + the home check, then report the count of flagged pins and how many pins are still blank before deciding whether tier 3 is worth running.
+
 ## Missing courts at known parks (owner report, 2026-10-15)
 Manhattan Heights Park (Manhattan Beach) has at least 2 pickleball and 2 tennis courts; OSM tags only the 2 tennis courts, so pickleball was missing until the owner reported it (`manual_venues.csv`). A fresh `make extract` would not fix this: the data is not in OSM or Overture. Likely many parks look like this (pickleball lines painted on tennis courts, never tagged).
 - Phase 2 (city park pages, `docs/public_facility_scan.md`) and phase 3 (aerial photos) are the routes to these. Pickleball lines on a tennis court are hard to see at NAIP resolution, so pages come first.
