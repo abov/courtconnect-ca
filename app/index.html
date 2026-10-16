@@ -739,7 +739,7 @@ function showWallNote() {
   n.hidden = !(s && WALL_SPORT[s.n]);
   if (!n.hidden) {
     const shown = wallsFor(s.n).length, unknown = walls.filter(w => w.t.every(t => t === "other")).length;
-    n.textContent = "Orange pins are hitting walls you can also use alone, shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Only Los Angeles, San Diego and the Bay Area have been searched.";
+    n.textContent = "Orange pins are hitting walls you can also use alone, shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap across California and Nevada; ones nobody has mapped there are missing.";
   }
 }
 function setMode(m) {
