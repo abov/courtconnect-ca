@@ -8,9 +8,9 @@
 |---|---|
 | ![Pickleball venues across LA and Orange County, clustered, with filters](docs/screenshots/map-play.png) | ![Upcoming pro events across California, with dates and organizer links](docs/screenshots/map-watch.png) |
 
-*CourtConnect is a discovery tool: it finds where to play or watch, then sends you to the venue's or organizer's own site. It sells no tickets and takes no bookings or payments.*
+*CourtConnect is a discovery tool for all racket sports: it finds where to play or watch, then sends you to the venue's or organizer's own site. It sells no tickets and takes no bookings or payments.*
 
-Pickleball, padel, tennis, squash and dozens of lesser-known racket sports are booming, but information about *where to play* is scattered and messy. This project collects it, cleans it, checks it, and says honestly how complete it is.
+Tennis, padel, pickleball and squash and dozens of lesser-known and up-and-coming racket sports are booming, but information about *where to play* is scattered and messy. This project collects it, cleans it, checks it, and says honestly how complete it is.
 
 ## What it does
 - **Venue map** from two open sources (OpenStreetMap and Overture Maps), with courts grouped into venues by proximity. Filter by sport, surface, indoor/outdoor, access, or search by name or city. Filters live in the URL, so any view is shareable.
@@ -18,7 +18,7 @@ Pickleball, padel, tennis, squash and dozens of lesser-known racket sports are b
 - **Link-outs** to a venue's own pages for open play, lessons and leagues, each with a `verified_on` date and an evidence note. **Watch a match** mode and a hitting-wall map.
 - **Quality checks:** dbt tests, a coverage report and a `make quality` scorecard catch bad data and stale entries.
 
-Mission: every place to play or watch, sports beyond pickleball (tennis stays visible), and getting people together to play ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md)). Live counts: [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md).
+Mission: One map for every racket sport in California and Nevada: find a court, watch a match, try a new racket sport, and eventually find people to play with. Live counts: [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md).
 
 ## What the data showed
 Numbers are dated and come from the notes linked in each row.
