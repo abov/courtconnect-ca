@@ -1,0 +1,2 @@
+2026-10-16: bridge_place_sport drops an Overture category sport (and its also-played sports) when the name only names another distinctive sport (14 places, 7 map venues: table tennis, padel, pickleball-only names tagged Tennis). Generic (tennis, racquet club) and ambiguous terms (beach tennis) never trigger it; use overrides.
+Open: Playbt Beach Tennis Academy (Manhattan Beach, 7th St and The Strand; site playbtworld.com dead) still has a Beach Tennis reject with no evidence; needs owner or a live page.
