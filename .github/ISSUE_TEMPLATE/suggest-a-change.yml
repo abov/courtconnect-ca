@@ -31,7 +31,7 @@ body:
       label: What are you suggesting?
       options:
         - Add a way to join or book (needs a public link)
-        - Report a sport played here (you saw it, or someone told you; shown as reported)
+        - Report a racket sport played here (you saw it, or someone told you; shown as reported)
         - Confirm the venue (I visited, or the operator's page says so)
         - Correct details or report that it is closed
         - Add a hitting wall for solo practice (give the park, wall type and a public source or photo link in the details)

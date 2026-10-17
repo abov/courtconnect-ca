@@ -3,7 +3,7 @@
 Reads the issue form body from $ISSUE_BODY and writes:
   - a link-out to venue_actions.csv, or a confirmation to venue_confirmations.csv, when the venue name + city match a row in
     manual_venues.csv (the only venues the seeds can address by key);
-  - for "Report a sport" / "Confirm" on any other pin (found by its map id in app/data/venues.json): a manual_venues row at the
+  - for "Report a racket sport" / "Confirm" on any other pin (found by its map id in app/data/venues.json): a manual_venues row at the
     pin's coordinates with confirmation 'reported', which the build merges onto that pin (int_manual_venue_match), plus the
     reporter's row in venue_confirmations.csv. The map id is used once, here; the new venue_key is the stable key after that;
   - otherwise a lead in venue_leads.csv, so a reviewer can place it. Leads are not shown on the map. Corrections and closures
@@ -133,7 +133,7 @@ def main():
 
     if (reporting or confirming) and (key or pin):
         if confirming and not (source or "visited" in details.lower()):
-            fail("A confirmation needs a public link, or say that you visited. To pass on what you saw or heard, pick 'Report a sport played here'.")
+            fail("A confirmation needs a public link, or say that you visited. To pass on what you saw or heard, pick 'Report a racket sport played here'.")
         method = "reported" if reporting else ("official" if source else "visited")
         known = {r["sport"] for r in rows if r["venue_key"] == key}
         if not sport and (reporting or not key):           # only a one-sport pin can leave the sport out
