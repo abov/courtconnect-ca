@@ -31,8 +31,37 @@ name_matches_specific as (
     )
 ),
 
+-- Overture's category is dropped when the place's own name clearly says another sport: the name has a distinctive term for a
+-- different sport ("table tennis" on a tennis_court) and, once that term is removed, no standalone word of the category sport is
+-- left ("Anaheim Tennis and Pickleball Center" keeps Tennis; "Ararat Table Tennis" loses it). Ambiguous terms ("beach tennis") never
+-- trigger this (Newport Beach Tennis Club is a real tennis club): use place_sport_overrides.csv for those.
+-- "tennis", "racquet club" and "racket club" are generic (multi-sport tennis centres are common, and a pickleball_court inside a
+-- "Tennis Center" is real), so they never contradict a category.
+category_name_conflicts as (
+    select distinct c.place_id, c.sport_id
+    from category_matches c
+    join {{ ref('stg_overture_places') }} p on p.place_id = c.place_id
+    join {{ ref('dim_sport') }} cs on cs.sport_id = c.sport_id
+    join name_matches_specific n on n.place_id = c.place_id
+         and n.evidence = 'strong' and n.sport_id <> c.sport_id
+         and n.matched_term not in ('tennis', 'racquet club', 'racket club')
+    where not exists (
+        select 1
+        from {{ ref('sport_search_terms') }} own
+        where trim(own.sport) = cs.sport_name
+          and replace(p.name_norm, ' ' || n.matched_term || ' ', ' ') like '% ' || own.term || ' %'
+    )
+),
+
+category_kept as (
+    select c.*
+    from category_matches c
+    left join category_name_conflicts x on x.place_id = c.place_id and x.sport_id = c.sport_id
+    where x.place_id is null
+),
+
 unioned as (
-    select * from category_matches
+    select * from category_kept
     union all
     select * from name_matches_specific
 ),
