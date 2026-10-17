@@ -11,7 +11,7 @@ Usage (needs pillow: `pip install pillow`; run in a scratch folder, never commit
   python ingestion/imagery_crop.py OUT_DIR name:lat:lon [name:lat:lon ...]
 Then open the .jpg files and judge by size; record the imagery date and `viewed on` in the seed `evidence`.
 
-Imagery: Esri World Imagery tiles (zoom 19, about 0.25-0.3 m per pixel). Viewing for verification only: tiles are not
+Imagery: Esri World Imagery tiles (zoom 19 by default, about 0.25-0.3 m per pixel; set IMG_ZOOM=20 where it exists). Viewing for verification only: tiles are not
 stored in the repo and nothing is exported from them (docs/padel_scan.md). Look up the capture date with the layer's
 metadata query (World_Imagery/MapServer/<layer>/query, field SRC_DATE2) and quote it in the evidence.
 """
@@ -24,9 +24,9 @@ import urllib.request
 from PIL import Image, ImageDraw
 
 UA = "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"
-Z = 19
+Z = int(os.environ.get("IMG_ZOOM", 19))   # 19 everywhere; 20 exists in some cities (about 0.15 m per pixel)
 TILE = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-GROUND = 0.2986  # metres per pixel at the equator, zoom 19, 256 px tiles
+GROUND = 0.2986 * 2 ** (19 - Z)  # metres per pixel at the equator, 256 px tiles
 SCALE = 3        # output upscaling
 OUTLINES = ((10.0, 20.0, (255, 40, 40)), (6.1, 13.4, (255, 230, 0)), (10.97, 23.77, (255, 255, 255)))
 
