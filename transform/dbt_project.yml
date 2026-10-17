@@ -84,6 +84,12 @@ seeds:
         region: varchar
         near_venue_name: varchar
         reported_on: varchar
+    closed_places:   # Overture places that no longer exist; staging drops them (pin the types so an empty file is not guessed as INTEGER)
+      +column_types:
+        place_id: varchar
+        place_name: varchar
+        evidence: varchar
+        verified_on: varchar
     place_sport_overrides:   # starts empty: pin the types so an empty file is not guessed as INTEGER
       +column_types:
         place_id: varchar
