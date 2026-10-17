@@ -17,7 +17,7 @@ Data lives in CSV seeds in `transform/seeds/`. Edit these, never the files noted
 - `manual_venues.csv`: venues no dataset knows. Set `confirmation` to `visited`, `official` or `reported`, with `confirmed_on` and `evidence`.
 - `venue_actions.csv`: link-outs (booking, open play, classes). Keep `verified_on` and `evidence`.
 - `venue_leads.csv`: claims not yet placed or checked. Leads are not shown on the map.
-- `watch_events.csv` (https links only), `place_sport_overrides.csv`, `sport_aliases.csv`.
+- `watch_events.csv` (https links only), `place_sport_overrides.csv`, `sport_aliases.csv`, `closed_places.csv` (Overture places that no longer exist).
 
 Do not edit `transform/seeds/all_racquet.csv`; it is overwritten from the Google Sheet.
 
