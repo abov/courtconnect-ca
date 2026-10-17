@@ -73,6 +73,12 @@ def main() -> None:
         select coalesce(venue_name, '(no name)'), venue_source, coalesce(cast(last_seen_on as varchar), 'undated')
         from marts.mart_venue_confidence where last_seen_on is null or last_seen_on < current_date - {SLA_SEEN_DAYS}
         order by last_seen_on nulls first, venue_name limit 25""")
+    # Community reports (docs/community_reports_plan.md): venues by how many different people reported them by word of mouth.
+    rep_one, rep_more = q("""
+        select count(*) filter (where n = 1), count(*) filter (where n >= 2) from (
+            select mm.effective_venue_id, count(distinct c.confirmed_by) as n
+            from staging.stg_venue_confirmations c join intermediate.int_manual_venue_match mm on mm.venue_key = c.venue_key
+            where c.method = 'reported' group by 1) x""")[0]
     band_rows = q("""
         select coalesce(v.region, '?'), c.confidence_band, count(*)
         from marts.mart_venue_confidence c left join core.dim_venue v on v.venue_id = c.venue_id
@@ -119,7 +125,9 @@ def main() -> None:
           "| Confirmation | Venues |", "|---|---|"]
     L += [f"| {k} | {v} |" for k, v in sorted(conf.items(), key=lambda kv: -kv[1])]
     L += ["", "Visited = seen in person; official = stated on the operator's own page; reported = told to us, not verified. "
-          "Inferred data is labeled inferred on the map and never counted as confirmed.", ""]
+          "Inferred data is labeled inferred on the map and never counted as confirmed.", "",
+          f"Community reports: **{rep_one}** venues reported by 1 person, **{rep_more}** by 2 or more "
+          "(2+ independent reports let a reviewer consider raising the level; nothing is raised automatically).", ""]
     regions = sorted({r for r, _, _ in band_rows})
     band_n = {(r, b): n for r, b, n in band_rows}
     L += ["## Confidence bands (all venues, inferred)", "",

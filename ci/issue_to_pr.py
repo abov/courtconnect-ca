@@ -120,7 +120,8 @@ def main():
     sport = canonical_sport(sport_text) if sport_text else None
     if sport_text and not sport:
         fail(f"'{sport_text}' is not a sport we list; use the name the map's sport list shows.")
-    reporting, confirming = change.startswith("Report a sport"), change.startswith("Confirm")
+    reporting = change.lower().startswith("report a") and "sport" in change.lower().split("(")[0]   # tolerate wording edits ("Report a racket sport ...")
+    confirming = change.startswith("Confirm")
     map_id = clean(field(form, "Map ID"), 20).lower()
 
     rows = read_seed("manual_venues.csv")
