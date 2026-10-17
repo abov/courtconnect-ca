@@ -543,7 +543,7 @@ function venueNode(v) {
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014)
   if (place) box.append(el("p", {class: "meta", text: place}));
-  if (v.ai) box.append(el("p", {class: "meta", text: "Nearest address (inferred), about " + v.ad + " m from the pin: the street address above is the closest address point we know, not confirmed for these courts."}));
+  if (v.ai) box.append(el("p", {class: "meta", text: "Nearest address (inferred), " + (v.ad < 10 ? "at the pin" : "about " + v.ad + " m from the pin") + ": the street address above is the closest address point we know, not confirmed for these courts."}));
   if (v.al) box.append(el("p", {class: "meta", text: "Also listed as: " + v.al}));
   box.append(directionsNode(v.y, v.x, v.n, false));
   box.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sportLine(v))));
