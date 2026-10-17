@@ -15,6 +15,7 @@ exposures:
       - ref('mart_watch_events')
       - ref('mart_sport_gaps')
       - ref('dim_wall')
+      - ref('mart_wall_pins')
     owner:
       name: CourtConnect maintainer
   - name: data_quality_scorecard

@@ -444,6 +444,25 @@ models:
               arguments:
                 values: ['CA', 'NV']
 
+  - name: mart_wall_pins
+    description: >
+      One row per hitting-wall map pin (the app's walls). OSM walls of the same type within `wall_group_radius_m` of each other
+      (a row of handball courts at a school) share one pin at their centre; `wall_count` says how many walls stand there.
+    columns:
+      - name: wall_key
+        tests:
+          - unique
+          - not_null
+      - name: wall_count
+        tests:
+          - not_null
+      - name: region
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CA', 'NV']
+
   - name: mart_venue_finder
     description: >
       The table behind the map. One row per venue and sport (a venue with tennis and pickleball has two rows). Venues are clusters of nearby

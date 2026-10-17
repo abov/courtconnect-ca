@@ -104,3 +104,4 @@ vars:
   venue_radius_m: 75   # courts closer than this are treated as the same facility
   address_fill_radius_m: 150   # nearest Overture address point within this distance fills a pin that has no address (inferred)
   parent_merge_radius_m: 400   # courts inside the same named school/park/club closer than this are one facility
+  wall_group_radius_m: 50   # OSM walls of the same type closer than this (a row of handball courts) share one map pin
