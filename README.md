@@ -85,6 +85,7 @@ Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routi
 
 ## Roadmap
 - [x] Venue clustering, statewide extract, Overture second source, watch events, link-outs, suggest-a-change flow, Nevada, duplicate guard
+- [ ] Padel check: keep padel (walled glass court) and pop tennis / paddle tennis (open court, low net) apart, audit every Padel pin, and add missing padel clubs found via public padel directories; plan in [`docs/padel_scan.md`](docs/padel_scan.md)
 - [ ] Beta feedback round, then visual polish ([`docs/ux_polish.md`](docs/ux_polish.md))
 - [ ] Fill missing street addresses (OSM tags, nearest Overture address, labelled inferred; homes show city only)
 - [ ] Sport discovery ("Try something new") and tennis kept visible next to pickleball
