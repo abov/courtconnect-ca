@@ -2,3 +2,5 @@ venue_key,reason,verified_on
 ymca-berkeley,"Neighborhood Pickleball (2061 Allston Way, neighborhoodpickleball.com) is a separate business about 100 m away; the radius match would put the YMCA under its pin",2026-10-15
 ymca-durango-hills,"Durango Hills Park (City of Las Vegas, same address) has 7 public outdoor pickleball courts about 50 m away; merging would label the public park courts as YMCA members-only",2026-10-15
 ymca-southwest,"Unnamed OpenStreetMap tennis pitch (way/1178148783) on Quito Road about 130 m north, outside the OSM YMCA outline; nothing shows it belongs to the Y, so the radius match would rename an unconfirmed court as Southwest YMCA and label it members-only",2026-10-15
+sd-escondido-kit-carson-park-pickleball,"Kit Carson Park pickleball courts are elsewhere in the park; the Ray Love Tennis Center pin is about 120 m away and must not take the pickleball",2026-10-16
+sd-oceanside-jim-wood-park,"Oceanside Tennis (OceansideTennis.com, 65 m away at 4701 Rancho Del Oro Park) is a lessons business that runs classes on the city courts; the radius match would rename the city park courts after it and show its website",2026-10-16
