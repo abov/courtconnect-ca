@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import overpass
+from rawdir import raw_path
 
 # OSM `sport=` values we search for. Keep in sync with transform/seeds/osm_sport_map.csv.
 SPORT_KEYS = [
@@ -65,7 +66,7 @@ def to_row(el: dict, ts: str) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--area", choices=[*overpass.BBOXES, "california", "nevada"], default="la")
-    ap.add_argument("--out", default="data/raw/osm_courts.csv")
+    ap.add_argument("--out", default=raw_path("osm_courts.csv"))
     args = ap.parse_args()
 
     tiles = overpass.area_tiles(args.area)

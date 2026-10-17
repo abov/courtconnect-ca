@@ -19,6 +19,7 @@ from pathlib import Path
 import duckdb
 
 from extract_overture_places import BUCKET, latest_release
+from rawdir import raw_path
 
 CELLS_PER_DEGREE = 250   # 0.004 deg cells
 
@@ -27,18 +28,18 @@ def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--release", default=None)
-    ap.add_argument("--out", default="data/raw/overture_addresses.csv")
+    ap.add_argument("--out", default=raw_path("overture_addresses.csv"))
     args = ap.parse_args()
     release = args.release or latest_release()
     print(f"Overture release {release}")
 
     con = duckdb.connect()
     con.execute("install httpfs; load httpfs; set s3_region='us-west-2';")
-    con.execute("""create table pins as
-        select lat, lon from read_csv_auto('data/raw/osm_courts.csv') where lat is not null and lon is not null
-        union all select lat, lon from read_csv_auto('data/raw/overture_places.csv') where lat is not null and lon is not null
+    con.execute(f"""create table pins as
+        select lat, lon from read_csv_auto('{raw_path("osm_courts.csv")}') where lat is not null and lon is not null
+        union all select lat, lon from read_csv_auto('{raw_path("overture_places.csv")}') where lat is not null and lon is not null
         union all select lat, lon from read_csv_auto('transform/seeds/manual_venues.csv') where lat is not null and lon is not null""")
-    for extra in ("data/raw/osm_courts_nv.csv",):
+    for extra in (raw_path("osm_courts_nv.csv"),):
         if Path(extra).exists():
             con.execute(f"insert into pins select lat, lon from read_csv_auto('{extra}') where lat is not null and lon is not null")
     con.execute(f"""create table cells as

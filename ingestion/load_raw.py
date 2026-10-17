@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 from dotenv import load_dotenv
+from rawdir import raw_path
 
 # landing table -> source csv name, and the numeric columns to cast
 TABLES = {
@@ -34,11 +35,19 @@ OPTIONAL = {"overture_addresses": ["address_id", "house_number", "street", "unit
             "website_checks": ["domain", "status", "resolved_host", "checked_at"]}
 
 
-def load_duckdb(table: str, df: pd.DataFrame, db_path: str) -> None:
+def load_duckdb(table: str, df: pd.DataFrame, db_path: str, force: bool = False) -> None:
     import duckdb
 
     con = duckdb.connect(db_path)
     con.execute("create schema if not exists raw")
+    # Guard against loading a stale CSV over newer data (an old copy once cut raw.osm_walls from 888 to 263 rows).
+    exists = con.execute("select count(*) from information_schema.tables where table_schema = 'raw' and table_name = ?",
+                         [table]).fetchone()[0]
+    old = con.execute(f"select count(*) from raw.{table}").fetchone()[0] if exists else 0
+    if old >= 50 and len(df) < 0.9 * old and not force:
+        con.close()
+        raise SystemExit(f"raw.{table} would shrink from {old:,} to {len(df):,} rows: the CSV in the data folder looks "
+                         f"older than the database. Refresh the CSV, or pass --force if the drop is intended.")
     con.register("df", df)
     con.execute(f"create or replace table raw.{table} as select * from df")
     n = con.execute(f"select count(*) from raw.{table}").fetchone()[0]
@@ -76,7 +85,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--target", choices=["duckdb", "snowflake"], default="duckdb")
     ap.add_argument("--duckdb-path", default="courtconnect.duckdb")
-    ap.add_argument("--data-dir", default="data/raw", help="folder holding the extracted CSVs (CI uses ci/fixtures)")
+    ap.add_argument("--data-dir", default=raw_path(""), help="folder holding the extracted CSVs (CI uses ci/fixtures)")
+    ap.add_argument("--force", action="store_true", help="load even if a table would shrink by more than 10%")
     args = ap.parse_args()
 
     conn = None
@@ -103,7 +113,7 @@ def main() -> None:
                     # tagged `covered`) must not be guessed as INTEGER by the warehouse and break lower().
                     df[col] = df[col].astype("string")
             if conn is None:
-                load_duckdb(table, df, args.duckdb_path)
+                load_duckdb(table, df, args.duckdb_path, args.force)
             else:
                 load_snowflake(conn, table, df)
     finally:

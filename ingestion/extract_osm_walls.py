@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import overpass
+from rawdir import raw_path
 
 # LA, San Diego, San Francisco, and the south and east Bay (San Jose to Oakland): the boxes the metro pass used
 METROS = [overpass.BBOXES["la"], overpass.BBOXES["sd"], overpass.BBOXES["sf"], (37.2, -122.3, 37.6, -121.7), (37.6, -122.35, 38.0, -122.0)]
@@ -52,7 +53,7 @@ def to_row(el: dict, ts: str) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--area", choices=[*overpass.BBOXES, "metros", "california", "nevada"], default="la")
-    ap.add_argument("--out", default="data/raw/osm_walls.csv")
+    ap.add_argument("--out", default=raw_path("osm_walls.csv"))
     args = ap.parse_args()
 
     tiles = (METROS if args.area == "metros" else overpass.area_tiles(args.area))

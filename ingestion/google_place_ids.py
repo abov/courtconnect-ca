@@ -27,6 +27,7 @@ from pathlib import Path
 
 import duckdb
 import requests
+from rawdir import raw_path
 from dotenv import load_dotenv
 
 BASE_URL = os.environ.get("GOOGLE_PLACES_BASE_URL", "https://places.googleapis.com")  # overridable for tests
@@ -80,7 +81,7 @@ def main() -> None:
     ap.add_argument("--max-requests", type=int, default=100, help="hard ceiling on API calls, whatever --limit says")
     ap.add_argument("--scope", choices=["confirmed", "all-named"], default="confirmed")
     ap.add_argument("--db", default="courtconnect.duckdb")
-    ap.add_argument("--out", default="data/raw/google_place_ids.csv")
+    ap.add_argument("--out", default=raw_path("google_place_ids.csv"))
     ap.add_argument("--price-per-1000", type=float, default=None, help="USD per 1,000 requests, from Google's pricing page (for the estimate)")
     args = ap.parse_args()
 

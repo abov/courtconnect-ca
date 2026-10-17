@@ -24,6 +24,7 @@ from pathlib import Path
 import duckdb
 
 import overpass  # reused for the CA/NV border clip
+from rawdir import raw_path
 
 BUCKET = "overturemaps-us-west-2"
 SEEDS = Path("transform/seeds")
@@ -49,7 +50,7 @@ def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--release", default=None)
-    ap.add_argument("--out", default="data/raw/overture_places.csv")
+    ap.add_argument("--out", default=raw_path("overture_places.csv"))
     args = ap.parse_args()
     release = args.release or latest_release()
     print(f"Overture release {release}")

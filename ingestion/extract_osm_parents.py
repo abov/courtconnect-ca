@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import overpass
+from rawdir import raw_path
 
 # (osm key, value regex)
 KINDS = [
@@ -47,7 +48,7 @@ def kind_of(tags: dict) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--area", choices=[*overpass.BBOXES, "california", "nevada"], default="la")
-    ap.add_argument("--out", default="data/raw/osm_parents.csv")
+    ap.add_argument("--out", default=raw_path("osm_parents.csv"))
     args = ap.parse_args()
 
     tiles = overpass.area_tiles(args.area)

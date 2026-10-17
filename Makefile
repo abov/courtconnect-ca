@@ -1,6 +1,7 @@
 # Windows users: run these from Git Bash, or copy the commands.
 PY ?= python
 DBT = dbt --project-dir transform --profiles-dir transform
+RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -8,8 +9,8 @@ setup:            ## one-time: create venv and install deps
 extract:          ## pull ALL CalNeva courts + named parent features from OpenStreetMap, then places from Overture (~20 min)
 	$(PY) ingestion/extract_osm_courts.py --area california
 	$(PY) ingestion/extract_osm_parents.py --area california
-	$(PY) ingestion/extract_osm_courts.py --area nevada --out data/raw/osm_courts_nv.csv
-	$(PY) ingestion/extract_osm_parents.py --area nevada --out data/raw/osm_parents_nv.csv
+	$(PY) ingestion/extract_osm_courts.py --area nevada --out $(RAW)/osm_courts_nv.csv
+	$(PY) ingestion/extract_osm_parents.py --area nevada --out $(RAW)/osm_parents_nv.csv
 	$(PY) ingestion/extract_overture_places.py
 	$(PY) ingestion/extract_overture_addresses.py
 
