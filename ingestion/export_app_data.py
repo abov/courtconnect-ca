@@ -84,15 +84,20 @@ def main() -> None:
             group by 1""").fetchall():
         manual[vid] = {"r": rules or "", "u": int(unconfirmed), "cf": {1: "v", 2: "o", 3: "r"}[rank], "cd": str(cdate) if cdate else ""}
 
-    # How many different people confirmed each hand-added venue (venue_confirmations.csv; handles only, never shown).
-    # Word-of-mouth reports are not confirmations, so they are not counted here.
+    # How many different people confirmed (visited / official) and how many only reported (word of mouth) each hand-added venue
+    # (venue_confirmations.csv; handles only, never shown). Someone who also confirmed is not counted again as a reporter.
     confirmers: dict[str, int] = {}
-    for vid, n in con.execute("""
-            select mm.effective_venue_id, count(distinct c.confirmed_by)
-            from staging.stg_venue_confirmations c join intermediate.int_manual_venue_match mm on mm.venue_key = c.venue_key
-            where c.method <> 'reported'
-            group by 1""").fetchall():
-        confirmers[vid] = int(n)
+    reporters: dict[str, int] = {}
+    for vid, nconf, nrep in con.execute("""
+            with people as (
+                select mm.effective_venue_id as vid, c.confirmed_by, max(case when c.method <> 'reported' then 1 else 0 end) as confirmed
+                from staging.stg_venue_confirmations c join intermediate.int_manual_venue_match mm on mm.venue_key = c.venue_key
+                group by 1, 2)
+            select vid, sum(confirmed), sum(1 - confirmed) from people group by 1""").fetchall():
+        if nconf:
+            confirmers[vid] = int(nconf)
+        if nrep:
+            reporters[vid] = int(nrep)
 
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
@@ -139,6 +144,8 @@ def main() -> None:
                 v["cd"] = manual[vid]["cd"]
             if confirmers.get(vid):
                 v["cn"] = confirmers[vid]       # number of different people who confirmed it
+            if reporters.get(vid):
+                v["rn"] = reporters[vid]        # number of different people who reported it (word of mouth, not confirmed)
             if manual[vid]["u"]:
                 v["xu"] = 1                      # public access not confirmed on the source map
         out_venues.append(v)
