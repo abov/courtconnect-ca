@@ -35,8 +35,8 @@ review_priority,model_guess,p_confirm,sport_name,venue_name,place_name,city,regi
 34,likely_reject,0.3,Basque Pelota,Paakuma K-8 School,Paakuma K-8 School,,CA,,,,osm_tag_loose,sport=Basque Pelota (-); word=school (+),ff5a30ff571d7ce3f91db540189f4917,
 35,unclear,0.7,Table Tennis,Swan Ping Pong,Swan Ping Pong,Sunnyvale,CA,sport_or_fitness_facility,swanpingpong.com,,name_keyword,sport=Table Tennis (+); has_website (+); sport_contains_other_sport (-),8d2fa14bbe28b22e4cf628b0510b36c9,97e9f097-d1c0-4ed6-a006-dad659e02b79
 36,unclear,0.31,Tennis,Rancho Bernardo Swim & Tennis Club,Rancho Bernardo Swim & Tennis Club,San Diego,CA,swimming_pool,,,name_keyword,word=club (-); category=swimming_pool (+); word=swim (+),803b258afcabcf3d22ddf2a99e75f62b,22605256-5ded-4f4d-9821-d7df9a200d52
-37,unclear,0.31,Pop Tennis,,,,CA,,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),45963850adf9a1d8588153c3008b4b27,
-38,unclear,0.31,Pop Tennis,,,,CA,,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),c76050c0d05f29893df1ea574a89cfd5,
+37,unclear,0.31,Pop Tennis,,,,CA,,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),c76050c0d05f29893df1ea574a89cfd5,
+38,unclear,0.31,Pop Tennis,,,,CA,,,,osm_tag_loose,sport_contains_other_sport (-); sport=Pop Tennis (-),45963850adf9a1d8588153c3008b4b27,
 39,unclear,0.68,Tennis,Goleta Valley Tennis Academy,Goleta Valley Tennis Academy,Goleta,CA,sport_or_recreation_club,goletatennis.com,,name_keyword,osm_court_within_100m (-); category=sport_or_recreation_club (+); has_website (+),beb1c7ab2eb72d2c2e052f63547eeb47,efd828c0-0385-460b-9430-8c5229336016
 40,unclear,0.68,Pickleball,Pickleball Is Great,Pickleball Is Great,,CA,sports_and_recreation,pickleballisgreat.com,,name_keyword,category=sports_and_recreation (-); has_website (+); sport=Pickleball (+),f2fc4b04a250bd45b14a6c036cb2de85,13212aa7-9ef1-49d8-a440-9ea539b89ef4
 41,unclear,0.67,Pickleball,Pickleball Courts,Pickleball Courts,Canyon Lake,CA,sport_or_fitness_facility,,,name_keyword,sport=Pickleball (+); word=courts (+); name_starts_with_sport (+),232b7ef7f9cf741858828dd4fca9349f,73b7da16-80bc-46c4-a7fe-66665871fd6d
