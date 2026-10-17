@@ -403,6 +403,7 @@ function wallNode(w) {
   const box = el("div");
   box.append(el("h2", {text: w.n}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
+  if (w.wn) box.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)"}));
   box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" � ")}));
   box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " � Free to use: " + triState(w.f) + (w.su ? " � Surface: " + w.su : "")}));
   box.append(directionsNode(w.y, w.x, w.n, /approx/.test(w.pr)));
@@ -420,7 +421,7 @@ function wallItems(list) {
   const out = [];
   for (const w of list) {
     const btn = el("button", {type: "button"},
-      el("div", {class: "nm", text: w.n}),
+      el("div", {class: "nm", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
       el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" � ")}),
       el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t}))));
     btn.addEventListener("click", () => showWall(w, true));
@@ -639,7 +640,8 @@ function updateCount() {
     else if (inView.length) kids.push(document.createTextNode(" · no court counts listed here"));
     const ws = wallsFiltered();
     if (ws.length) {
-      const wn = ws.filter(pin).length, wt = [el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + " in view" + (wn !== ws.length ? " of " + fmt(ws.length) : "") + " for solo practice")];
+      const wsum = list => list.reduce((s, w) => s + (w.wn || 1), 0), wn = wsum(ws.filter(pin)), wall = wsum(ws);
+      const wt = [el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + " in view" + (wn !== wall ? " of " + fmt(wall) : "") + " for solo practice")];
       box.replaceChildren(...(current.length ? [...kids, document.createTextNode(" · "), ...wt] : wt));
     } else box.replaceChildren(...kids);
     return;
@@ -739,7 +741,7 @@ function showWallNote() {
   const n = $("wallnote"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
   n.hidden = !(s && WALL_SPORT[s.n]);
   if (!n.hidden) {
-    const shown = wallsFor(s.n).length, unknown = walls.filter(w => w.t.every(t => t === "other")).length;
+    const shown = wallsFor(s.n).reduce((n, w) => n + (w.wn || 1), 0), unknown = walls.filter(w => w.t.every(t => t === "other")).reduce((n, w) => n + (w.wn || 1), 0);
     n.textContent = "Orange pins are hitting walls you can also use alone, shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap across California and Nevada; ones nobody has mapped there are missing.";
   }
 }
