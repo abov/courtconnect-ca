@@ -9,6 +9,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, r, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
+     a street address; ai 1 + ad metres = nearest address point (inferred); ap 1 = address of the enclosing park/school/club (inferred); ns = nearest road name when no address (shown "Near <street>", inferred)
      r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet, or 'Reported: opening soon' with ul 1 = only a directory said so (ud = date checked)
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
@@ -60,7 +61,7 @@ def main() -> None:
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, region, address_line,
                website_usable, offerings, address_source, address_distance_m, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
-               has_lit_courts, is_confirmed_public, has_free_courts, is_members_only, also_listed_as
+               has_lit_courts, is_confirmed_public, has_free_courts, is_members_only, also_listed_as, near_street
         from marts.mart_venue_finder""").fetchall()
 
     # Things to do at a venue: link-outs to the provider's own page (CourtConnect books nothing). Current ones only.
@@ -107,7 +108,7 @@ def main() -> None:
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
     for (vid, name, nsrc, vsrc, sport, courts, lat, lon, city, region, addr, web, offers, asrc, adist, indoor, outdoor, sand, clay, grass, hard, turf,
-         lit, public, free, members, also) in rows:
+         lit, public, free, members, also, near) in rows:
         if lat is None or lon is None:
             continue
         if vid not in venues:
@@ -118,7 +119,7 @@ def main() -> None:
                 "s": SOURCE.get(vsrc, "o"),
                 "y": round(float(lat), 5),
                 "x": round(float(lon), 5),
-                "c": city or "",
+                "c": (city.title() if city and city.isupper() else city) or "",   # county point data gives ALL CAPS cities
                 "r": region,
                 "a": (addr.title() if addr and asrc == "overture_nearest" and addr.isupper() else addr) or "",   # county point data is often ALL CAPS
                 "w": web or "",
@@ -128,6 +129,10 @@ def main() -> None:
             if asrc in ("overture_nearest", "nominatim"):   # inferred: nearest Overture address point or cached Nominatim lookup, shown as "Nearest address (inferred)"
                 venues[vid]["ai"] = 1
                 venues[vid]["ad"] = int(adist)   # metres from the pin
+            if asrc == "osm_parent":   # address mapped on the enclosing park / school / club (inferred for these courts)
+                venues[vid]["ap"] = 1
+            if near and not addr:      # no address, but a named road: shown as "Near <street>", inferred
+                venues[vid]["ns"] = near
             if also:
                 venues[vid]["al"] = also   # other listed names at the same address (merged duplicates)
         mask = sum(bit for flag, bit in ((indoor, 1), (outdoor, 2), (sand, 4), (clay, 8), (grass, 16), (hard, 32), (turf, 64)) if flag)
