@@ -14,6 +14,9 @@ extract:          ## pull ALL CalNeva courts + named parent features from OpenSt
 	$(PY) ingestion/extract_overture_places.py
 	$(PY) ingestion/extract_overture_addresses.py
 
+fresh-db:         ## new worktree (or a stale/broken db): rebuild courtconnect.duckdb here from the shared raw CSVs + this branch's seeds (~1 min)
+	$(PY) ingestion/fresh_db.py
+
 extract-addresses: ## Overture address points near the pins, for the address fill (reads S3, ~1 min; run after the OSM/places extract, then make load)
 	$(PY) ingestion/extract_overture_addresses.py
 
