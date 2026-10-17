@@ -1,0 +1,3 @@
+# 2026-10-17: street address fill, finish + button rename
+Queried the last 22 non-home blanks (Nominatim, +16 addresses); `int_venue_address` now takes the city from any cached Nominatim row (non-home pins without a city 455 -> 53); `venues.json` re-exported (16 streets, 402 cities). Mode buttons are now "Play" / "Watch" (tooltips keep the long wording). Roadmap updated: README checked off, `CLAUDE.md` item 2, `docs/ml_plan.md`, `docs/status_history.md`.
+Next (owner picks): city for the last ~480 pins, parent park/school `addr:*` via Overpass re-extract (ask first), official-page addresses with phase 2. Owner to eyeball the buttons at 375/320px.
