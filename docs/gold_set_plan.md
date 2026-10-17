@@ -1,4 +1,4 @@
-# Overture/OSM match gold set: plan (proposal, nothing built yet)
+# Overture/OSM match gold set: plan (first slice built 2026-10-17, see "First slice: result")
 
 Written 2026-10-17. Goal: put a number on how often the pipeline links the wrong things (one pin that should be two, or two pins that should be one), so a change to a radius or a name rule can be judged by a score instead of by eye. Same idea as `ci/check_regions.py` and the review-queue leave-one-out check, aimed at the matching step.
 
@@ -44,3 +44,21 @@ The 20 unmatched places with an OSM court within 200 m plus the 20 matched at 75
 ## What this does not cover
 
 OSM-to-OSM clustering (75 m / 400 m) has its own gold need (a school with courts a few hundred metres apart); `assert_clusters_converged` only tests that the algorithm finishes, not that the groups are right. Add it as a second file once step 1 is in place. Sport assignment is separate and already has the review queue and `docs/review_priority.csv`.
+
+## First slice: result (2026-10-17)
+
+Built: `ci/gold/place_osm_pairs.csv` (40 hand-checked pairs), `ingestion/eval_match_gold.py` (`make eval-match`, local DuckDB, report only; CI runs only `--check`, which validates the file format). Labels come from OSM tags (parent polygon or court name, address tags) and public pages, with the evidence written on each row; pairs that could not be decided were left out, so the strata are smaller than planned (12 matched at 75-100 m instead of 20; 19 unmatched instead of 20).
+
+| Stratum | Pairs | Result |
+|---|---|---|
+| matched 75-100 m | 12 | 12 correct (no wrong merge found) |
+| name-radius matches (300 m rule) | 3 | 3 correct |
+| matched under 50 m (control) | 6 | 6 correct |
+| unmatched, OSM court within 200 m | 19 | **17 missed merges**, 2 correctly unmatched (a table tennis club and an online shop) |
+
+Reading it: no sign of wrong merges, so the 100 m radius is not too loose. The misses are the other direction: places named after the park, school or centre that holds the courts ("Memorial Park Tennis Courts", "Fresno City College Tennis Courts", the Cubberley address) sit 105-182 m from the OSM courts and stay separate pins. Caution: the 19 were picked because their name or address pointed at the facility, so 17 of 19 is not a rate across all unmatched places; it shows the miss is real and has a pattern.
+
+## Next slice
+
+1. Try the cheap rule the misses suggest: widen the radius to about 200 m when the place name or address contains the OSM parent's name (park, school, centre; the parent is already in `int_court_parent`) and nothing else is closer. Change it on a branch, run `make build` and `make eval-match`, and see if the 17 misses move without any of the 21 correct pairs breaking.
+2. Add the random sample of about 40 places (plan step 2) so a whole-table precision and recall can be stated, and about 10 deliberate `different` pairs for the new rule (two clubs in one park; the YMCA and Neighborhood Pickleball case).

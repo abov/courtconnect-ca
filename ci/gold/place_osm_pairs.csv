@@ -1,0 +1,41 @@
+place_id,osm_element,label,stratum,evidence,checked_on
+2154d09c-b50a-4540-8e1a-d03f6b395d87,way/1516161742,same,matched_75_100m,"OSM parent polygon is named Gerrish Swim and Tennis Club, identical to the place name",2026-10-17
+f6c3b74d-ae55-4161-bf11-8b679206db6f,relation/12187627,same,matched_75_100m,"OSM court is named Vermont Canyon Tennis Courts, identical to the place name",2026-10-17
+ca814484-5987-43a3-8fa7-e09094a76e2c,way/316236603,same,matched_75_100m,OSM parent is Bret Harte Middle School; the place name and address (7050 Bret Harte Dr) are that school's courts,2026-10-17
+4f60a1c8-39cf-4e0f-856a-f2c191512f3a,way/56645380,same,matched_75_100m,OSM parent is Mission Creek Park; the place name is the park's tennis court,2026-10-17
+4f74972c-576c-403d-8fdf-9e8c1c41284d,way/39912343,same,matched_75_100m,OSM parent is Skypark (Scotts Valley); the place name is Sky Park Tennis Courts,2026-10-17
+64a4dd43-121e-42bf-87a4-e3780033ab1d,way/593223551,same,matched_75_100m,"OSM court is named Cornishon Pickleball Courts and the place address is 4490 Cornishon Ave, the same site",2026-10-17
+c1774595-6c45-4645-a011-58dc0e2758fc,node/13248963838,same,matched_75_100m,"OSM node The Hub carries the address 600 East Hamilton Avenue, identical to the place address (Bintang Badminton, Campbell)",2026-10-17
+597a2eaa-c7ad-4e3b-8b4c-75d3105e03cd,way/1016719098,same,matched_75_100m,OSM parent is Westchester Park; the place (Westchester Tennis Facility) is the tennis facility inside that park,2026-10-17
+f04667c4-dfcc-4aca-a6c4-49f1a75f8e63,way/618997230,same,matched_75_100m,"Oak Park Talon: pickleball courts at Deerhill Park, 6700 Doubletree Rd (the place address), converted from tennis courts (see batch 10 override)",2026-10-17
+cdb8f78e-6434-43aa-abc5-68f95c0cd09a,way/1420898669,same,matched_75_100m,OSM parent is El Cariso Park; the place (El Cariso Basketball Courts) is a court inside that park,2026-10-17
+fd7a2469-d149-4350-be22-e331a112e50f,way/860284690,same,matched_75_100m,Place address names Los Olivos Community Park; the OSM parent is Los Olivos Community Park,2026-10-17
+63724ade-c85f-4df9-b48f-b23797b7ac92,way/1420730744,same,matched_75_100m,"Place address 1835 Stoner Ave and OSM parent Stoner Recreation Center (same name, same street)",2026-10-17
+014225be-d39f-44a3-ba7b-b15125d19084,way/1418323253,same,unmatched_within_200m,"Willow Street Frank Bramhall Park: the place (Bramhall Park Pickleball Courts) and the OSM courts are in the same park, 105 m apart",2026-10-17
+155642e8-0fe9-42a4-a59e-0b5db5b82355,way/486292099,same,unmatched_within_200m,"rollinghillsestates.gov: eight courts at Ernie Howlett Park, 25851 Hawthorne Blvd; OSM parent Ernie J Howlett Park, 131 m from the pin",2026-10-17
+34b28915-f532-4afc-8cf5-2f6bf282e6ee,way/899908175,same,unmatched_within_200m,"OSM parent Bill Briare Family Park; the place is the pickleball courts of Bill Briare Park, 106 m apart",2026-10-17
+275bbdd9-3a0d-4270-9907-fb8e28267731,way/1413414885,same,unmatched_within_200m,"OSM parent Memorial Park (Hayward); the place is Memorial Park Tennis Courts, 110 m apart",2026-10-17
+851ce617-951b-49a7-9def-edcd0100bf3d,way/583464675,same,unmatched_within_200m,"OSM parent Chichibu Park; the place is Chichibu Park Tennis Court, 106 m apart",2026-10-17
+a87a17b2-c8dc-4f40-a7b5-885c4ca995b6,way/649804693,same,unmatched_within_200m,"OSM parent Tustin Sports Park; the place is Tustin Sports Park Tennis Courts, 171 m apart",2026-10-17
+830e5e93-7fd4-449e-aba6-df867f3869bd,way/424605572,same,unmatched_within_200m,"OSM parent Cubberley Community Center; the place address is 4000 Middlefield Rd (Cubberley), 182 m from the pin",2026-10-17
+d2839814-8630-4e52-81ba-dc880431f820,way/424605572,same,unmatched_within_200m,"Same address as Cubberley Community Center (4000 Middlefield Rd), where the OSM courts are; table tennis club in the same facility",2026-10-17
+e9f40b0a-1bee-46d5-8487-4eb391fc284d,way/173667242,same,unmatched_within_200m,"OSM parent McKinley Park (Sacramento); the place is McKinley Park - Tennis Courts, 167 m apart",2026-10-17
+dfed41a5-4310-4ac5-afbd-3b151b673a0b,way/1392334341,same,unmatched_within_200m,"Cuesta Park, 685 Cuesta Dr (city of Mountain View): the place address is the park, the OSM parent is Cuesta Park, 121 m apart",2026-10-17
+925e7d75-bcbd-4b5b-8ac7-638db577140f,way/1419147704,same,unmatched_within_200m,"OSM parent Fresno City College; the place is Fresno City College Tennis Courts, 116 m apart",2026-10-17
+afa9b070-0451-4ade-ab5c-09d8550c32b6,way/1418296486,same,unmatched_within_200m,"OSM parent Diamond Bar High School; the place is that school's tennis courts, 112 m apart",2026-10-17
+48ff5605-5224-4a5a-a89d-3447b2467129,way/396654242,same,unmatched_within_200m,"OSM parent Terra Nova High School; the place address is 1450 Terra Nova Blvd (the school), 123 m apart",2026-10-17
+adafbd65-94b9-4287-957f-bf92074c4b07,way/1423539759,same,unmatched_within_200m,"OSM parent Stanford University; the place is West Campus Tennis Courts on campus (Electioneer Rd), 107 m apart",2026-10-17
+3a37dfb4-282a-48b6-822a-15dd71927802,way/31478187,same,unmatched_within_200m,"OSM court Monte Vista Tennis Courts has address 3131 Stone Valley Road, identical to the place address, 148 m apart",2026-10-17
+510c2464-6113-40c8-9b4d-74d728ea9ec0,way/1415595544,same,unmatched_within_200m,"Place address names Veterans Memorial Park; the OSM parent is Veterans Memorial Park, 113 m apart",2026-10-17
+51fc1531-ef45-4d3a-a384-402cd804a9c6,way/1348381005,same,unmatched_within_200m,"Same address as South Bay Tennis Center (25924 Rolling Hills Rd), whose OSM node carries that address; courts 169 m from this pin",2026-10-17
+c699c600-ce2f-4735-bdd9-2561f669485e,way/1091858095,different,unmatched_within_200m,"amdtpingpong.com: its Clubhouse at 1968 Powell St is an indoor table tennis club (open play, coaching); the OSM court is an outdoor tennis court in Joe DiMaggio Playground, 105 m away",2026-10-17
+f95ca11f-a553-4eb4-949a-b02e3f5b9f70,way/1334247734,different,unmatched_within_200m,cutetennisstuff.com is an online shop with no street address; not a court or club,2026-10-17
+e0f36cdb-1fd7-4f28-a802-f2c76e56e380,way/1247446111,same,control_under_50m,"OSM court and parent are both named Newport Beach Tennis Club, identical to the place name",2026-10-17
+f4f72011-13e4-4f1d-99da-e3722d23fe59,way/1254521113,same,control_under_50m,"OSM court and parent are named Leonard Andrews Tennis Center; the place (Fullerton Tennis Center) is at 110 E Valencia Mesa Dr, the city's tennis center",2026-10-17
+85d371d2-aab0-4dfb-bce0-ce9787a5df65,way/1529280834,same,control_under_50m,"OSM parent is University of California, San Diego; the place (Northview Tennis Courts) is UCSD's campus courts, 15 m apart",2026-10-17
+fc7039e6-54c8-4645-91aa-b728f4c0b5a6,way/1327397125,same,control_under_50m,"OSM parent Catawba Park; the place is Catawba Tennis Courts, 16 m apart",2026-10-17
+410a3562-1314-4570-a10f-94785f572ef5,way/490370096,same,control_under_50m,"OSM parent Los Cerritos Park; the place is Los Cerritos Park Tennis Court, 7 m apart",2026-10-17
+c3320c8b-bb2e-4bf1-a41b-124a2b6dda0b,way/390986545,same,control_under_50m,"OSM parent Le Parc at Melrose; the place (Pickleball at Le Parc) is on the same property, 40 m apart",2026-10-17
+42495b76-0be7-4127-9ddf-9324f7204683,way/1348380998,same,name_radius_match,OSM node South Bay Tennis Center has the same name and address (25924 Rolling Hills Road) as the place; matched by the name radius at 215 m,2026-10-17
+e00bbf62-6b90-48a7-b65d-506326ecb7b3,way/1459722102,same,name_radius_match,"OSM court and parent are both named Palm Springs Tennis Club, identical to the place name; matched by the name radius at 149 m",2026-10-17
+5da652a5-3af7-4433-9657-260dbba2c2aa,node/11707546836,same,name_radius_match,OSM node California Badminton Academy has the same name as the place; matched by the name radius at 168 m,2026-10-17
