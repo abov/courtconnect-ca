@@ -20,11 +20,12 @@ import sys
 from pathlib import Path
 
 import numpy as np
+from rawdir import raw_path
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "data" / "aerial" / "cache"
 OUT = ROOT / "data" / "aerial"
-KNOWN_NV = ROOT / "data" / "raw" / "osm_courts_nv.csv"   # optional: OSM court points already on the map
+KNOWN_NV = Path(raw_path("osm_courts_nv.csv"))   # optional: OSM court points already on the map
 SITE_GAP_M = 40      # detection boxes closer than this (edge to edge) are one site (one complex)
 UA = {"User-Agent": "courtconnect-ca/0.1 (portfolio project)"}
 OVERPASS = ["https://overpass-api.de/api/interpreter", "https://z.overpass-api.de/api/interpreter"]

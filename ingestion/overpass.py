@@ -5,6 +5,7 @@ import sys
 import time
 
 import requests
+from rawdir import raw_path
 
 URLS = [  # ordered by observed reliability; the first healthy one wins
     "https://overpass.openstreetmap.fr/api/interpreter",
@@ -15,8 +16,8 @@ URLS = [  # ordered by observed reliability; the first healthy one wins
 # Regions we cover. bbox = south, west, north, east. The border relation is the real filter; the bbox only
 # bounds the tiles. Nevada relation 165473 checked on OSM (name=Nevada, admin_level=4, ISO3166-2=US-NV).
 REGIONS = {
-    "CA": {"bbox": (32.5, -124.5, 42.1, -114.0), "relation": 165475, "cache": "data/raw/ca_border.wkt"},
-    "NV": {"bbox": (35.0, -120.01, 42.0, -114.03), "relation": 165473, "cache": "data/raw/nv_border.wkt"},
+    "CA": {"bbox": (32.5, -124.5, 42.1, -114.0), "relation": 165475, "cache": raw_path("ca_border.wkt")},
+    "NV": {"bbox": (35.0, -120.01, 42.0, -114.03), "relation": 165473, "cache": raw_path("nv_border.wkt")},
 }
 
 # south, west, north, east

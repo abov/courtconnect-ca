@@ -16,6 +16,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent))
 import overpass  # noqa: E402
+from rawdir import raw_path
 
 FILES = {"osm_courts.csv": ("lat", "lon"), "osm_walls.csv": ("lat", "lon"), "overture_places.csv": ("lat", "lon"),
          "osm_parents.csv": None}   # parents: centre of the bounding box
@@ -23,7 +24,7 @@ FILES = {"osm_courts.csv": ("lat", "lon"), "osm_walls.csv": ("lat", "lon"), "ove
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data-dir", default="data/raw")
+    ap.add_argument("--data-dir", default=raw_path(""))
     raw = Path(ap.parse_args().data_dir)
     for name, cols in FILES.items():
         path = raw / name
