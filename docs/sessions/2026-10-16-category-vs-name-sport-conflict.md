@@ -1,2 +1,3 @@
 2026-10-16: bridge_place_sport drops an Overture category sport (and its also-played sports) when the name only names another distinctive sport (14 places, 7 map venues: table tennis, padel, pickleball-only names tagged Tennis). Generic (tennis, racquet club) and ambiguous terms (beach tennis) never trigger it; use overrides.
 Update: Playbt Beach Tennis Academy no longer exists (owner); Tennis rejected in place_sport_overrides, pin removed from the map. No open items.
+Parked (owner, 2026-10-16): popup shows derived sports as 'optional: Hand Tennis, ...' (sportLine in app/index.html), not labelled 'inferred'. Decide after the beta whether to add that wording; honesty rule says derived = inferred.
