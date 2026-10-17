@@ -2,6 +2,9 @@
 --   address_source 'osm'              : address tagged on the OSM court itself (kept as is)
 --   address_source 'overture_place'   : the Overture place record's address (kept as is)
 --   address_source 'overture_nearest' : INFERRED, the nearest Overture address point within `address_fill_radius_m` of the pin
+--   address_source 'nominatim'        : INFERRED, tier 3: OSM's Nominatim reverse geocode of the pin, cached in the nominatim_addresses
+--                                       seed (ingestion/reverse_geocode_blanks.py); only a house number + street within 150 m is used,
+--                                       and only for non-home pins that tiers 1-2 left blank
 -- A venue that already has an address is never overwritten. Privacy rule (owner, 2026-10-16): home-like pins get a city,
 -- never a street (`address_withheld` counts what was held back).
 --   home signals: OSM building = house / detached / residential / semidetached_house / bungalow on the court, or an unnamed
@@ -90,6 +93,15 @@ nearest as (
         where distance_m <= {{ radius }}
     ) x
     where rn = 1
+),
+
+-- a cached row counts only while the pin is still where it was queried (venue_id can shift when pins merge or split)
+nominatim as (
+    select m.venue_id, m.address_line, m.city, cast(m.distance_m as integer) as distance_m
+    from {{ ref('nominatim_addresses') }} m
+    join v on v.venue_id = m.venue_id
+    where m.status = 'address' and m.address_line is not null
+      and abs(v.lat - cast(m.lat as double)) < 0.0003 and abs(v.lon - cast(m.lon as double)) < 0.0003
 )
 
 select
@@ -97,19 +109,23 @@ select
     fl.is_home_like,
     case
         when v.address_line is not null then v.address_line
-        when not fl.is_home_like then n.address_line
+        when not fl.is_home_like then coalesce(n.address_line, nm.address_line)
     end                                                       as address_line,
     case
         when v.address_line is not null and coalesce(cf.court_has_address, false) then 'osm'
         when v.address_line is not null                                           then 'overture_place'
         when not fl.is_home_like and n.address_line is not null                  then 'overture_nearest'
+        when not fl.is_home_like and nm.address_line is not null                 then 'nominatim'
     end                                                       as address_source,
     case when v.address_line is null and not fl.is_home_like and n.address_line is not null
-         then cast(round(n.distance_m) as integer) end        as address_distance_m,
+         then cast(round(n.distance_m) as integer)
+         when v.address_line is null and not fl.is_home_like and nm.address_line is not null
+         then nm.distance_m end                               as address_distance_m,
     -- city for a pin with none (city is not sensitive: it never names a street); used by the map's location search
-    coalesce(v.city, n.city)                                  as city,
+    coalesce(v.city, n.city, nm.city)                         as city,
     (v.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld
 from v
 join flags fl on fl.venue_id = v.venue_id
 left join court_flags cf on cf.venue_id = v.venue_id
 left join nearest n on n.venue_id = v.venue_id
+left join nominatim nm on nm.venue_id = v.venue_id
