@@ -71,6 +71,7 @@ Full session log (2026-10-10 .. 10-14): `docs/status_history.md`. Plan: `~/.clau
 7b. After beta (rank with beta findings, ADR 0015): sport discovery ("Try something new" card per sport, lesser-known sports given room, try-it events) and tennis visibility (own pin look, never hidden in a pickleball pin, shared courts show both sports, picker not ordered by count; plan with `docs/ux_polish.md` PR 6).
 7b2. After beta (plan `docs/sport_discovery_plan.md`): show all 76 sheet sports in the dropdown (55 with no venue are hidden today: show greyed out "no places yet" + empty-state card; blurb/wiki columns go in the Google Sheet; no popularity labels) and an "About <sport>" card (blurb, quick facts from the sheet, wiki/official link); then search real venues for unmapped sports, one family per session.
 7c. After beta: social phase A, "Find people to play with" from existing groups (open play, clinics, ladders, Meetup/WhatsApp/Partiful; public pages, `verified_on` + evidence). Phase B (own accounts/matching) only with its own ADR and if beta shows demand. Competitor scan + why not Plei's hosted-games model: `docs/competitor_scan.md`.
+7d. LATER (parked 2026-10-16): community reports step 3, report without GitHub (Google Form -> sheet -> `make sync-reports`). Owner creates the form first (setup in `docs/community_reports_plan.md`). Steps 1-2 live (#149, #152).
 8. LATER (after beta): optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
 
 **Sessions**
