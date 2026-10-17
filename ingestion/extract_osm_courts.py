@@ -17,8 +17,8 @@ import overpass
 
 # OSM `sport=` values we search for. Keep in sync with transform/seeds/osm_sport_map.csv.
 SPORT_KEYS = [
-    "tennis", "table_tennis", "tennis_table", "pickleball", "padel", "padel_tennis", "badminton", "squash",
-    "racquetball", "outdoor_racquetball", "paddle_tennis", "platform_tennis", "beach_tennis", "beachtennis",
+    "tennis", "table_tennis", "tennis_table", "pickleball", "padel", "badminton", "squash",
+    "racquetball", "outdoor_racquetball", "paddle_tennis", "paddletennis", "pop_tennis", "poptennis", "platform_tennis", "beach_tennis", "beachtennis",
     "pelota", "fronton", "basque_pelota", "frontenis", "paddleball",
     "tamburello", "real_tennis", "jai_alai", "jeu_de_paume", "soft_tennis", "touchtennis", "swingball",
 ]
