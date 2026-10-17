@@ -69,6 +69,9 @@ check-links:      ## verify every link-out in venue_actions.csv still loads
 rank-review:      ## order the sport review queue, clear-cut cases first -> docs/review_priority.csv (needs requirements-ml.txt)
 	$(PY) ingestion/rank_review_queue.py
 
+eval-match:      ## score the Overture place -> OSM match against ci/gold/place_osm_pairs.csv (report only; docs/gold_set_plan.md)
+	$(PY) ingestion/eval_match_gold.py
+
 quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 	$(PY) ingestion/export_quality_scorecard.py
 
