@@ -1,6 +1,6 @@
 # Community reports: plan (2026-10-16)
 
-Status: step 1 BUILT and merged (#149); step 2 BUILT (2026-10-16); step 3 waiting for the owner to create the Google Form (setup below).
+Status: step 1 BUILT and merged (#149); step 2 BUILT (2026-10-16); step 3 PARKED by the owner (2026-10-16) for later; setup below is ready when picked up.
 
 ## Why
 The owner can't visit venues, and court-finder apps are off limits (Places2Play needs a sign-in; Pickleheads' terms forbid
