@@ -1,0 +1,26 @@
+venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
+163e86cb3f39556eb5caa4e4da82e7b4,36.076642,-115.303419,address,9665 West Patrick Lane,Las Vegas,0,way/1384672563,2026-10-16
+18b774d67aa4d7deda22ac844dfa15e2,32.868415,-116.918445,street_only,Ashwood Street,Lakeside,,way/102388107,2026-10-16
+215b4fab40f8026388ac258fd31bb682,35.399328,-119.002448,street_only,Manor Street,Bakersfield,,way/1498898845,2026-10-16
+297b4eda1b0de16a3dbe064cca802797,34.575314,-118.091184,street_only,20th Street East,Palmdale,,way/216243280,2026-10-16
+2adcaa5bf2455b6aa0b1232641759c57,39.422942,-119.710973,street_only,Gold Mine Drive,Reno,,node/13298777523,2026-10-16
+2b5e41b2c1713cc3f892311b7f4c73b3,38.088315,-122.161793,street_only,Benicia Community Park Loop,Benicia,,way/179780222,2026-10-16
+38e103e797abeaec140e614a5fa75ad7,36.089694,-115.325784,street_only,Mesa Park Drive,,,way/1560302518,2026-10-16
+48ff91f518935ad31978cc07c6c7f947,36.147141,-115.114712,street_only,Atlantic Street,Las Vegas,,way/1560296813,2026-10-16
+4ead3f5b7a9db2c4feda56299b4ecadd,36.139209,-115.119489,street_only,South Eastern Avenue,Winchester,,way/1064918833,2026-10-16
+574afc91e23538d7a814a6de6b91a8b3,36.035227,-114.958287,street_only,Burkholder Trail,Henderson,,way/1435102610,2026-10-16
+58ea393154fab3afa87d2dd2b30f5e42,36.058446,-115.111309,address,2890 Vista del Sol Avenue,,7,way/318140543,2026-10-16
+761b470c92301fadf9e3a0878cfedfe7,36.256616,-115.110344,street_only,Shadow Creek Drive,North Las Vegas,,way/136105445,2026-10-16
+770bd9911dd8da67dcd9191bab63ab04,33.94505,-117.381644,too_far,,Riverside,228,way/44486183,2026-10-16
+78c236cac3b5f0bde1de0390d09dfd19,39.47892,-119.780935,street_only,Neil Road,Reno,,way/538115748,2026-10-16
+8c489ab967a0a630228f1dcbcb1743b7,36.295275,-119.779045,street_only,South Lemoore Avenue,Lemoore,,way/1226558236,2026-10-16
+9189e6ed0a59d29c7871af0e3bc2511e,36.131916,-115.204219,street_only,Cameron Street,Spring Valley,,way/997769872,2026-10-16
+93c287201cdbc82f7b1f9066cf351c1f,35.417832,-119.149733,street_only,Dromore Court,Bakersfield,,way/167227570,2026-10-16
+96907126fac0306c17e8b92d136fe45e,38.419152,-122.660286,street_only,Bennett Valley Road,Santa Rosa,,way/687607876,2026-10-16
+9fa875d512a7c5cf35525c037760fbfa,36.150843,-115.180818,street_only,Bob Baskin Park fitness trail,Las Vegas,,way/897744264,2026-10-16
+aa2aa10dfcd3cca185f3e660db460755,36.085572,-115.262237,street_only,West Russell Road,Spring Valley,,way/1072948783,2026-10-16
+ad23ccb91df9c92b62655229dd2bb21a,36.060214,-119.550882,street_only,King Avenue,Corcoran,,way/299926201,2026-10-16
+b3b54389da6212c5da7f004b35bd60cb,38.01108,-121.340483,street_only,Alexandria Place,Stockton,,way/469619571,2026-10-16
+bad8d80c316e5baf5e4bcf00d5207f1e,36.241609,-115.30954,street_only,North Jensen Street,,,way/370192485,2026-10-16
+e2f3084d28b10f75f6976e9399726081,39.414876,-119.789526,street_only,Thomas Creek Road,,,way/553394212,2026-10-16
+e6fcddaca5fbd62057765e334d2aea6b,37.52476,-121.90676,street_only,Peak Trail,Fremont,,way/373412159,2026-10-16
