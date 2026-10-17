@@ -120,7 +120,7 @@ def main() -> None:
                 "o": "".join(OFFER_CODES[o] for o in (offers or "").split(";") if o in OFFER_CODES),
                 "f": (1 if lit else 0) | (2 if public else 0) | (4 if free else 0) | (8 if members else 0),
             }
-            if asrc == "overture_nearest":   # inferred: nearest Overture address point, shown as "Nearest address (inferred)"
+            if asrc in ("overture_nearest", "nominatim"):   # inferred: nearest Overture address point or cached Nominatim lookup, shown as "Nearest address (inferred)"
                 venues[vid]["ai"] = 1
                 venues[vid]["ad"] = int(adist)   # metres from the pin
             if also:
