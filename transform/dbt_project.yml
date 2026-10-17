@@ -49,6 +49,11 @@ seeds:
         venue_key: varchar
         reason: varchar
         verified_on: varchar
+    place_no_group:          # all text
+      +column_types:
+        place_id: varchar
+        reason: varchar
+        verified_on: varchar
     nominatim_addresses:     # cached Nominatim reverse geocodes (ingestion/reverse_geocode_blanks.py); text, cast in int_venue_address
       +column_types:
         venue_id: varchar

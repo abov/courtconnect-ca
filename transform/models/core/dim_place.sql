@@ -9,7 +9,8 @@ with strong as (
 
 -- Same street address (suite/unit stripped) in the same city = one facility: places Overture lists twice, or an academy
 -- sharing a club's building, get one venue_id (the smallest place_id of the group) so the map shows one pin.
--- Only strong-sport places that no OSM venue claimed take part; places without a street number are never grouped.
+-- Only strong-sport places that no OSM venue claimed take part; places without a street number are never grouped;
+-- places listed in seeds/place_no_group.csv (different organisations at one address) are never grouped.
 addr as (
     select
         p.place_id,
@@ -19,6 +20,7 @@ addr as (
     left join {{ ref('int_place_venue_match') }} m on m.place_id = p.place_id
     join strong s on s.place_id = p.place_id
     where m.place_id is null and p.address_line is not null
+      and p.place_id not in (select place_id from {{ ref('place_no_group') }})  -- separate businesses at one address stay separate pins
 ),
 
 place_group as (
