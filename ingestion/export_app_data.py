@@ -9,7 +9,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, r, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
-     r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet (ud = date checked)
+     r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet, or 'Reported: opening soon' with ul 1 = only a directory said so (ud = date checked)
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
   walls   : [{n name, c city, r region, y, x, pr location precision, t [wall types], sp [sports suited], nv near venue, su surface, l lit 1/0 (absent = unknown),
@@ -156,6 +156,8 @@ def main() -> None:
         if vid in opening:
             v["up"] = opening[vid][0]            # not open yet: the badge text; the popup adds the caveat
             v["ud"] = opening[vid][2]            # date the page was read
+            if opening[vid][0].startswith("Reported"):
+                v["ul"] = 1                      # only a directory / press listing says it is coming: lighter pin, softer caveat
         out_venues.append(v)
     out_venues.sort(key=lambda v: (v["y"], v["x"]))
 

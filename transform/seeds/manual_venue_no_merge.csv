@@ -12,3 +12,9 @@ univ-stanford-acsr,"Taube Tennis Center (about 70 m away) is a separate facility
 nv-club-tahoe-resort,"The 3 OSM tennis courts about 110 m away are mapped under the Incline Village golf course (Championship Course), a different operator; merging would put Club Tahoe's name and access on them",2026-10-17
 bay-padel-sunnyvale,"Bintang Badminton Academy lists the same address (1365 Geneva Dr, Sunnyvale) as a separate business; merging would show Bay Padel under a badminton academy name",2026-10-17
 los-angeles-padel-club,"The pin comes from a directory address (3801 Lenawee Ave) and lands on an unrelated nearby tennis venue; merging would label that venue as not open yet",2026-10-17
+oakland-padel,"Not-yet-open club pinned at an approximate point (directory address or city centre); it must not merge into a nearby unrelated venue",2026-10-17
+king-of-padel-west-harbor,"Not-yet-open club pinned at an approximate point (directory address or city centre); it must not merge into a nearby unrelated venue",2026-10-17
+conquer-padel-los-angeles,"Not-yet-open club pinned at an approximate point (directory address or city centre); it must not merge into a nearby unrelated venue",2026-10-17
+ballers-dtla,"Not-yet-open club pinned at an approximate point (directory address or city centre); it must not merge into a nearby unrelated venue",2026-10-17
+padel-n9ne-san-marcos,"Not-yet-open club pinned at an approximate point (directory address or city centre); it must not merge into a nearby unrelated venue",2026-10-17
+wynpadel-westin-rancho-mirage,"Not-yet-open club pinned at an approximate point (directory address or city centre); it must not merge into a nearby unrelated venue",2026-10-17
