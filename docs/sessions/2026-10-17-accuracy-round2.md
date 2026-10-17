@@ -1,0 +1,4 @@
+# 2026-10-17 accuracy round 2: ranker guard, batch 10, match gold set
+
+Ranker: the dead-domain sort was already in #189 (reads `website_overrides` through `stg_website_checks`); added `ci/check_review_priority.py` (CI) so dead-site rows cannot drift back to the top. Batch 10 (queue 137 -> 125): 10 confirms, 4 rejects, 2 dead domains from city, league, club and news pages; 25-30 was not reachable because most remaining rows are coaches with no court address or sites that block fetches.
+Gold set slice 1: `ci/gold/place_osm_pairs.csv` (40 pairs) + `make eval-match`: no wrong merges found, but 17 of 19 checked unmatched places (named after the park/school that holds the courts) are missed merges. Next: try a 200 m rule when the place name/address contains the OSM parent's name, scored with `make eval-match` (`docs/gold_set_plan.md`).
