@@ -79,6 +79,7 @@
   .join a.act:hover { background: var(--hover); }
   .join .sub { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
   .badge.warn { color: var(--warn); border-color: var(--warn); }
+  .dot.soon { background: #fff; border: 2px solid var(--pin-c); width: 8px; height: 8px; }   /* hollow ring = confirmed but not open yet */
   .badge.ev { color: var(--ev); border-color: var(--ev); }
   .maplibregl-popup-content .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
   .maplibregl-popup-content a.btn { display: inline-block; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); transition: background-color var(--ease), opacity var(--ease); color: var(--accent); text-decoration: none; font-weight: 600; }
@@ -220,6 +221,7 @@
     <span><span class="dot" style="background:var(--pin-p)"></span>Listed business</span>
     <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
     <span><span class="dot" style="background:var(--pin-u)"></span>Unnamed courts</span>
+    <span><span class="dot soon"></span>Opening soon (not open yet)</span>
   </div>
   <footer><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
@@ -436,7 +438,7 @@ function wallItems(list) {
 // ---------- map ----------
 let map, popup, current = [], mapReady = false, viewList = [];
 function geojson(list) {
-  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
+  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? 1 : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
 function initMap() {
   map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: [[-124.6, 32.4], [-114.0, 42.2]],
@@ -458,8 +460,10 @@ function initMap() {
       layout: {"text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Regular"], "text-size": 12},
       paint: {"text-color": "#fff"}});
     map.addLayer({id: "pts", type: "circle", source: "v", filter: ["!", ["has", "point_count"]],
-      paint: {"circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 4, 14, 8], "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
-              "circle-color": ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"]}});
+      paint: {"circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 4, 14, 8],
+              "circle-stroke-color": ["case", ["==", ["get", "up"], 1], ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"], "#fff"],
+              "circle-stroke-width": ["case", ["==", ["get", "up"], 1], 3, 1.5],
+              "circle-color": ["case", ["==", ["get", "up"], 1], "#fff", ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"]]}});   // up = confirmed but not open yet: hollow ring
     map.on("click", "clusters", e => {
       const f = map.queryRenderedFeatures(e.point, {layers: ["clusters"]})[0];
       map.getSource("v").getClusterExpansionZoom(f.properties.cluster_id).then(z => map.easeTo({center: f.geometry.coordinates, zoom: z + 0.5}));
@@ -524,7 +528,7 @@ function sportLine(v) {
     if (bases.length) bases.forEach(b => (extras[b] = extras[b] || []).push(sports[p[0]].n));
     else plain.push(p);
   }
-  const cnt = c => c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court
+  const cnt = c => v.up ? (c ? " (" + c + " courts planned)" : " (planned)") : c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court; not open yet: planned
   const parts = plain.map(p => {
     const x = extras[p[0]];
     if (!x) return sports[p[0]].n + cnt(p[1]);
@@ -543,6 +547,10 @@ function venueNode(v) {
   box.append(el("h2", {text: v.n || "Unnamed courts"}));
   box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})));
   if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "")})));
+  if (v.up) {
+    box.append(el("div", {}, el("span", {class: "badge warn", text: v.up})));
+    box.append(el("p", {class: "meta", text: "Not open yet. The club's own page (checked " + (v.ud || "recently") + ") says it is coming; court counts, address and opening date can change, and the pin may be approximate. Check the club before you go."}));
+  }
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014)
   if (place) box.append(el("p", {class: "meta", text: place}));
@@ -616,7 +624,7 @@ function renderList() {
     const btn = el("button", {type: "button", class: "q" + v.q},
       el("div", {class: "nm"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
       el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}),
-      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
+      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.up ? el("span", {class: "badge warn", text: v.up}) : null, v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
   }
