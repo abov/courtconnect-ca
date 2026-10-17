@@ -85,10 +85,12 @@ def main() -> None:
         manual[vid] = {"r": rules or "", "u": int(unconfirmed), "cf": {1: "v", 2: "o", 3: "r"}[rank], "cd": str(cdate) if cdate else ""}
 
     # How many different people confirmed each hand-added venue (venue_confirmations.csv; handles only, never shown).
+    # Word-of-mouth reports are not confirmations, so they are not counted here.
     confirmers: dict[str, int] = {}
     for vid, n in con.execute("""
             select mm.effective_venue_id, count(distinct c.confirmed_by)
             from staging.stg_venue_confirmations c join intermediate.int_manual_venue_match mm on mm.venue_key = c.venue_key
+            where c.method <> 'reported'
             group by 1""").fetchall():
         confirmers[vid] = int(n)
 
