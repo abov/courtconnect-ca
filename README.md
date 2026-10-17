@@ -89,6 +89,6 @@ Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routi
 - [ ] Fill missing street addresses (OSM tags, nearest Overture address, labelled inferred; homes show city only)
 - [ ] Sport discovery ("Try something new") and tennis kept visible next to pickleball
 - [ ] All 76 sports in the dropdown (55 have no venue yet and are hidden today) plus a short "about this sport" card; plan in [`docs/sport_discovery_plan.md`](docs/sport_discovery_plan.md)
-- [ ] Social phase A: "Find people to play with" from existing groups; own accounts only after a separate decision
+- [ ] Social phase A: "Find people to play with" from existing groups; own accounts only after a separate decision ([`docs/competitor_scan.md`](docs/competitor_scan.md))
 - [ ] More Nevada link-outs, review queue, ML phases 2-3
 - [ ] Rename repo and Pages URL to `courtconnect` after the beta
