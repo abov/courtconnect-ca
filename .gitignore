@@ -11,3 +11,5 @@ __pycache__/
 *.tfstate*
 transform/.user.yml
 .claude/
+.venv-aerial/
+data/aerial/

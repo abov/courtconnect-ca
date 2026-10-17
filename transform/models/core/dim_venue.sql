@@ -53,7 +53,8 @@ best_manual as (
 osm_venues as (
     select
         venue_id,
-        min(court_name)                                       as tagged_name,
+        -- digit-only court names ("1", "2") are court numbers, not venue names
+        min(case when translate(court_name, '0123456789 ', '') <> '' then court_name end) as tagged_name,
         min(operator_name)                                    as operator_name,
         sum(case when record_kind = 'court' then 1 else 0 end)    as court_records,
         sum(case when record_kind = 'facility' then 1 else 0 end) as facility_records,
@@ -111,11 +112,36 @@ osm_final as (
         -- members-only = marked private/members and nothing says public (the only access signal we hold; unmarked venues are NOT assumed public)
         ((v.has_members_courts or coalesce(bm.is_members, false)) and not (v.is_confirmed_public or coalesce(bm.is_public, false))) as is_members_only,
         v.has_indoor, v.has_outdoor,
-        v.has_hard, v.has_clay, v.has_grass, v.has_turf, v.has_sand, v.has_indoor_floor
+        v.has_hard, v.has_clay, v.has_grass, v.has_turf, v.has_sand, v.has_indoor_floor,
+        cast(null as varchar)                                 as also_listed_as
     from osm_venues v
     left join best_parent pp on pp.venue_id = v.venue_id
     left join best_place pl on pl.venue_id = v.venue_id
     left join best_manual bm on bm.venue_id = v.venue_id
+),
+
+-- Places that share an address are one venue (dim_place.venue_id): the best-confidence record names it, the others are
+-- kept as `also_listed_as`, and a website/phone missing on the best record is taken from the others.
+places_ranked as (
+    select
+        p.*,
+        row_number() over (
+            partition by p.venue_id
+            order by p.confidence desc, case when p.website is not null then 0 else 1 end, p.place_id
+        ) as rn
+    from {{ ref('dim_place') }} p
+    where p.matched_venue_id is null and p.has_strong_sport
+),
+
+place_group_extra as (
+    select
+        venue_id,
+        min(website)                                                          as any_website,
+        min(phone)                                                            as any_phone,
+        min(address_line)                                                     as any_address,
+        listagg(distinct case when rn > 1 then place_name end, ' | ') as also_listed_as
+    from places_ranked
+    group by 1
 ),
 
 places_only as (
@@ -128,19 +154,22 @@ places_only as (
         0                                                     as court_records,
         1                                                     as facility_records,
         p.lat, p.lon,
-        coalesce(p.website, bm.website)                       as website,
-        p.phone,
+        coalesce(p.website, x.any_website, bm.website)        as website,
+        coalesce(p.phone, x.any_phone)                        as phone,
         cast(null as varchar)                                 as opening_hours,
-        p.address_line, p.city,
+        coalesce(p.address_line, x.any_address)               as address_line,
+        p.city,
         p.region,
         bm.offerings                                          as offerings,
         false as has_lit_courts, coalesce(bm.is_public, false) as is_confirmed_public, false as has_free_courts,
         (coalesce(bm.is_members, false) and not coalesce(bm.is_public, false)) as is_members_only,
         false as has_indoor, false as has_outdoor,
-        false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor
-    from {{ ref('dim_place') }} p
+        false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor,
+        x.also_listed_as
+    from places_ranked p
+    join place_group_extra x on x.venue_id = p.venue_id
     left join best_manual bm on bm.venue_id = p.venue_id
-    where p.matched_venue_id is null and p.has_strong_sport
+    where p.rn = 1
 ),
 
 -- Hand-curated venues (seeds/manual_venues.csv): one row per venue, with what it offers.
@@ -174,7 +203,8 @@ manual_final as (
         max(case when surface_type = 'grass' then 1 else 0 end) = 1   as has_grass,
         max(case when surface_type = 'turf' then 1 else 0 end) = 1    as has_turf,
         max(case when surface_type = 'sand' then 1 else 0 end) = 1    as has_sand,
-        false as has_indoor_floor
+        false as has_indoor_floor,
+        cast(null as varchar)                                 as also_listed_as
     from {{ ref('stg_manual_venues') }} m
     join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
     where not mm.is_matched

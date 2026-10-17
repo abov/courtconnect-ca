@@ -8,7 +8,8 @@ polish: label what is guessed, and only mark something confirmed when you can sh
 2. **Confirm a venue** (no code needed): open an issue with the "Confirm a venue" form to say you visited it, or to point to the
    operator's own page.
 3. **Suggest a change** on the map: the "Suggest a change to this venue" link in a venue popup opens a prefilled form; a reviewer
-   approves it and a pull request is opened for you.
+   approves it and a pull request is opened for you. Pick **Report a racket sport played here** to pass on what you saw or were told
+   (no link needed): it shows on the map as "Reported, not independently confirmed" until more people or an official page back it.
 4. **Edit the data** with a pull request (below). Approved reviewers merge.
 
 ## Editing data

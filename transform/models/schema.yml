@@ -89,6 +89,7 @@ seeds:
       A log of individual confirmations of venues in manual_venues, one row per person per check (ADR 0008). `confirmed_by` is a GitHub
       handle, never a real name or contact detail. The map shows how many different people confirmed a venue. A reviewer decides when
       the count justifies raising the venue's `confirmation` level in manual_venues; this file never changes it by itself.
+      `reported` rows are word-of-mouth reports (docs/community_reports_plan.md); the map does not count them as confirmations.
     columns:
       - name: venue_key
         tests: [not_null]
@@ -99,7 +100,7 @@ seeds:
           - not_null
           - accepted_values:
               arguments:
-                values: ['visited', 'official']
+                values: ['visited', 'official', 'reported']
 
   - name: venue_leads
     description: >
@@ -117,7 +118,7 @@ seeds:
         tests:
           - accepted_values:
               arguments:
-                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'other']
+                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'issue', 'other']   # issue = a GitHub issue (ci/issue_to_pr.py)
 
   - name: venue_actions
     description: >
@@ -335,6 +336,28 @@ models:
       - name: place_id
         tests: [unique, not_null]
 
+  - name: stg_overture_addresses
+    description: Overture address points near map pins (house number + street), used only to fill pins that have no address.
+    columns:
+      - name: address_id
+        tests: [unique, not_null]
+
+  - name: int_venue_address
+    description: >
+      One row per venue: the street address to show and where it came from. Venues that already carry an address keep it
+      (address_source osm = tagged on the OSM court, overture_place = the Overture place record). Venues without one get the
+      nearest Overture address point within address_fill_radius_m (address_source overture_nearest, address_distance_m).
+      Home-like pins (is_home_like) never get a street, only a city.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: address_source
+        tests:
+          - accepted_values:
+              arguments: {values: [osm, overture_place, overture_nearest]}
+      - name: address_distance_m
+        description: Metres from the pin to the filled address point; only set when address_source is overture_nearest.
+
   - name: dim_place
     description: One row per Overture place, linked to an OSM venue when one is within place_match_radius_m metres.
     columns:
@@ -414,6 +437,25 @@ models:
   - name: dim_wall
     description: One row per hitting wall (hand-curated plus OSM-mapped), kept apart from venues.
     columns:
+      - name: region
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CA', 'NV']
+
+  - name: mart_wall_pins
+    description: >
+      One row per hitting-wall map pin (the app's walls). OSM walls of the same type within `wall_group_radius_m` of each other
+      (a row of handball courts at a school) share one pin at their centre; `wall_count` says how many walls stand there.
+    columns:
+      - name: wall_key
+        tests:
+          - unique
+          - not_null
+      - name: wall_count
+        tests:
+          - not_null
       - name: region
         tests:
           - not_null

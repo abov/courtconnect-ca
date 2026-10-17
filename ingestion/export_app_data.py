@@ -13,7 +13,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
   walls   : [{n name, c city, r region, y, x, pr location precision, t [wall types], sp [sports suited], nv near venue, su surface, l lit 1/0 (absent = unknown),
-              f free 1/0 (absent = unknown), ac access, cf confirmation, d reported on, ev evidence}]   (hitting walls for solo practice)
+              f free 1/0 (absent = unknown), ac access, cf confirmation, d reported on, ev evidence, wn walls at this pin (absent = 1)}]   (hitting walls for solo practice)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
      s source: o OpenStreetMap, p places, b both, m hand-curated
      f venue bits: 1 lit, 2 public, 4 free, 8 members-only (marked private/members, not marked public)      p[i][2] sport bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf
@@ -59,8 +59,8 @@ def main() -> None:
 
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, region, address_line,
-               website_usable, offerings, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
-               has_lit_courts, is_confirmed_public, has_free_courts, is_members_only
+               website_usable, offerings, address_source, address_distance_m, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
+               has_lit_courts, is_confirmed_public, has_free_courts, is_members_only, also_listed_as
         from marts.mart_venue_finder""").fetchall()
 
     # Things to do at a venue: link-outs to the provider's own page (CourtConnect books nothing). Current ones only.
@@ -84,18 +84,25 @@ def main() -> None:
             group by 1""").fetchall():
         manual[vid] = {"r": rules or "", "u": int(unconfirmed), "cf": {1: "v", 2: "o", 3: "r"}[rank], "cd": str(cdate) if cdate else ""}
 
-    # How many different people confirmed each hand-added venue (venue_confirmations.csv; handles only, never shown).
+    # How many different people confirmed (visited / official) and how many only reported (word of mouth) each hand-added venue
+    # (venue_confirmations.csv; handles only, never shown). Someone who also confirmed is not counted again as a reporter.
     confirmers: dict[str, int] = {}
-    for vid, n in con.execute("""
-            select mm.effective_venue_id, count(distinct c.confirmed_by)
-            from staging.stg_venue_confirmations c join intermediate.int_manual_venue_match mm on mm.venue_key = c.venue_key
-            group by 1""").fetchall():
-        confirmers[vid] = int(n)
+    reporters: dict[str, int] = {}
+    for vid, nconf, nrep in con.execute("""
+            with people as (
+                select mm.effective_venue_id as vid, c.confirmed_by, max(case when c.method <> 'reported' then 1 else 0 end) as confirmed
+                from staging.stg_venue_confirmations c join intermediate.int_manual_venue_match mm on mm.venue_key = c.venue_key
+                group by 1, 2)
+            select vid, sum(confirmed), sum(1 - confirmed) from people group by 1""").fetchall():
+        if nconf:
+            confirmers[vid] = int(nconf)
+        if nrep:
+            reporters[vid] = int(nrep)
 
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
-    for (vid, name, nsrc, vsrc, sport, courts, lat, lon, city, region, addr, web, offers, indoor, outdoor, sand, clay, grass, hard, turf,
-         lit, public, free, members) in rows:
+    for (vid, name, nsrc, vsrc, sport, courts, lat, lon, city, region, addr, web, offers, asrc, adist, indoor, outdoor, sand, clay, grass, hard, turf,
+         lit, public, free, members, also) in rows:
         if lat is None or lon is None:
             continue
         if vid not in venues:
@@ -108,11 +115,16 @@ def main() -> None:
                 "x": round(float(lon), 5),
                 "c": city or "",
                 "r": region,
-                "a": addr or "",
+                "a": (addr.title() if addr and asrc == "overture_nearest" and addr.isupper() else addr) or "",   # county point data is often ALL CAPS
                 "w": web or "",
                 "o": "".join(OFFER_CODES[o] for o in (offers or "").split(";") if o in OFFER_CODES),
                 "f": (1 if lit else 0) | (2 if public else 0) | (4 if free else 0) | (8 if members else 0),
             }
+            if asrc == "overture_nearest":   # inferred: nearest Overture address point, shown as "Nearest address (inferred)"
+                venues[vid]["ai"] = 1
+                venues[vid]["ad"] = int(adist)   # metres from the pin
+            if also:
+                venues[vid]["al"] = also   # other listed names at the same address (merged duplicates)
         mask = sum(bit for flag, bit in ((indoor, 1), (outdoor, 2), (sand, 4), (clay, 8), (grass, 16), (hard, 32), (turf, 64)) if flag)
         entries[vid].append([sport_index[sport], int(courts or 0), mask])
         venues[vid]["_o"] = venues[vid].get("_o", set()) | {c for c in (venues[vid]["o"] or "")}
@@ -132,6 +144,8 @@ def main() -> None:
                 v["cd"] = manual[vid]["cd"]
             if confirmers.get(vid):
                 v["cn"] = confirmers[vid]       # number of different people who confirmed it
+            if reporters.get(vid):
+                v["rn"] = reporters[vid]        # number of different people who reported it (word of mouth, not confirmed)
             if manual[vid]["u"]:
                 v["xu"] = 1                      # public access not confirmed on the source map
         out_venues.append(v)
@@ -147,12 +161,12 @@ def main() -> None:
                        "pr": prec or "", "s": str(start) if start else "", "e": str(end) if end else "", "d": dstat,
                        "t": tix or "", "u": info or "", "k": tickets or "", "vo": str(verified)})
 
-    # Hitting walls: solo practice. Unknown lit / free flags are left out of the row, never exported as 0.
+    # Hitting walls: solo practice, one row per map pin (walls side by side share a pin, wn = how many). Unknown lit / free flags are left out of the row, never exported as 0.
     walls = []
-    for (name, city, region, lat, lon, prec, wtype, suited, near, surf, lit, free, access, conf, rep, evid) in con.execute("""
+    for (name, city, region, lat, lon, prec, wtype, suited, near, surf, lit, free, access, conf, rep, evid, count) in con.execute("""
             select wall_name, city, region, lat, lon, location_precision, wall_type, sports_suited, near_venue_name, surface, is_lit, free_to_use,
-                   access, confirmation, reported_on, evidence
-            from core.dim_wall order by city, wall_name""").fetchall():
+                   access, confirmation, reported_on, evidence, wall_count
+            from marts.mart_wall_pins order by city, wall_name, wall_key""").fetchall():
         w = {"n": name, "c": city, "r": region, "y": round(float(lat), 5), "x": round(float(lon), 5), "pr": prec or "", "t": [x.strip() for x in wtype.split(";") if x.strip()],
              "sp": [x.strip() for x in (suited or "").split(";") if x.strip()], "cf": conf, "d": str(rep), "ev": evid or ""}
         if near: w["nv"] = near
@@ -160,6 +174,7 @@ def main() -> None:
         if lit is not None: w["l"] = 1 if lit else 0
         if free is not None: w["f"] = 1 if free else 0
         if access: w["ac"] = access
+        if count > 1: w["wn"] = int(count)
         walls.append(w)
 
     named = sum(1 for v in out_venues if v["q"] != "u")
@@ -171,7 +186,7 @@ def main() -> None:
         "sports_total": len(sports),
         "sports_with_venues": sum(1 for s in sports if s["v"] > 0),
         "events": len(events),
-        "walls": len(walls),
+        "walls": sum(w.get("wn", 1) for w in walls),
         "link_outs": sum(len(v.get("ac", [])) for v in out_venues),
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }

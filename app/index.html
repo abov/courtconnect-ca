@@ -277,7 +277,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   meetup: "Meetup",
   partiful: "Partiful", facebook: "Facebook",
   courtreserve: "CourtReserve", matchtime: "MatchTime", p1padel_site: "P1 Padel", vip_site: "Vegas Indoor Pickleball", darling_site: "Darling Tennis Center",
-  ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson"};
+  ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson", washoe_county: "Washoe County Regional Parks", clark_county: "Clark County Parks & Recreation", suncity_summerlin: "Sun City Summerlin", lifetime_site: "Life Time", nlv_gov: "City of North Las Vegas"};
 
 let DATA, sports, venues, events = [], walls = [];
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
@@ -403,8 +403,9 @@ function wallNode(w) {
   const box = el("div");
   box.append(el("h2", {text: w.n}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
-  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" � ")}));
-  box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " � Free to use: " + triState(w.f) + (w.su ? " � Surface: " + w.su : "")}));
+  if (w.wn) box.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)"}));
+  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
+  box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " · Free to use: " + triState(w.f) + (w.su ? " · Surface: " + w.su : "")}));
   box.append(directionsNode(w.y, w.x, w.n, /approx/.test(w.pr)));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
@@ -420,8 +421,8 @@ function wallItems(list) {
   const out = [];
   for (const w of list) {
     const btn = el("button", {type: "button"},
-      el("div", {class: "nm", text: w.n}),
-      el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" � ")}),
+      el("div", {class: "nm", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
+      el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
       el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t}))));
     btn.addEventListener("click", () => showWall(w, true));
     out.push(el("li", {}, btn));
@@ -443,6 +444,9 @@ function initMap() {
   map.once("style.load", () => {                                   // as soon as the style is ready, without waiting for every basemap tile
     map.resize();                                                  // the grid may not have settled when the map was created
     map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, animate: false});
+    map.addSource("calneva", {type: "geojson", data: "data/calneva_outline.json"});   // CA + NV state lines (US Census, simplified); drawn under the pins
+    map.addLayer({id: "calneva-line", type: "line", source: "calneva",
+                  paint: {"line-color": "#2f6f5e", "line-width": 1.25, "line-opacity": 0.75}});
     map.addSource("v", {type: "geojson", data: geojson(current), cluster: true, clusterRadius: 38, clusterMaxZoom: 13});
     map.addLayer({id: "clusters", type: "circle", source: "v", filter: ["has", "point_count"],
       paint: {"circle-color": "#0969da", "circle-opacity": 0.78, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
@@ -517,11 +521,11 @@ function sportLine(v) {
     if (bases.length) bases.forEach(b => (extras[b] = extras[b] || []).push(sports[p[0]].n));
     else plain.push(p);
   }
-  const cnt = c => c ? " (" + c + (c === 1 ? " court)" : " courts)") : "";
+  const cnt = c => c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court
   const parts = plain.map(p => {
     const x = extras[p[0]];
     if (!x) return sports[p[0]].n + cnt(p[1]);
-    return sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court" : " courts") : " (") + (p[1] ? "; " : "") + "optional: " + x.join(", ") + ")";
+    return sports[p[0]].n + " (" + (p[1] ? p[1] + (p[1] === 1 ? " court" : " courts") : "at least 1 court") + "; optional: " + x.join(", ") + ")";
   });
   const total = plain.reduce((a, p) => a + (p[1] || 0), 0);
   return parts.join(", ") + (plain.filter(p => p[1]).length > 1 ? " · " + total + " courts listed" : "");
@@ -535,10 +539,12 @@ function venueNode(v) {
   const box = el("div");
   box.append(el("h2", {text: v.n || "Unnamed courts"}));
   box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})));
-  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " � " + v.cn + (v.cn === 1 ? " person" : " people") + " confirmed" : "")})));
+  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "")})));
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014)
   if (place) box.append(el("p", {class: "meta", text: place}));
+  if (v.ai) box.append(el("p", {class: "meta", text: "Nearest address (inferred), about " + v.ad + " m from the pin: the street address above is the closest address point we know, not confirmed for these courts."}));
+  if (v.al) box.append(el("p", {class: "meta", text: "Also listed as: " + v.al}));
   box.append(directionsNode(v.y, v.x, v.n, false));
   box.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sportLine(v))));
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
@@ -628,13 +634,13 @@ function updateCount() {
   if (state.mode === "play") {
     const inView = current.filter(pin);
     let courts = 0, known = 0;
-    for (const v of inView) { const c = venueCourts(v); if (c) { courts += c; known++; } }
+    for (const v of inView) { const c = venueCourts(v); courts += c || 1; if (c) known++; }   // a venue with no listed count has at least 1 court
     const kids = [el("b", {text: fmt(inView.length)}), document.createTextNode(noun(inView.length, " venue", " venues") + " in view" + (inView.length !== current.length ? " of " + fmt(current.length) : ""))];
-    if (known) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === inView.length ? " (all venues list a count)" : " (" + fmt(known) + " venues list a count)")));
-    else if (inView.length) kids.push(document.createTextNode(" · no court counts listed here"));
+    if (inView.length) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === inView.length ? " (all venues list a count)" : " (" + fmt(known) + noun(known, " venue lists", " venues list") + " a count; the rest count as 1)")));
     const ws = wallsFiltered();
     if (ws.length) {
-      const wn = ws.filter(pin).length, wt = [el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + " in view" + (wn !== ws.length ? " of " + fmt(ws.length) : "") + " for solo practice")];
+      const wsum = list => list.reduce((s, w) => s + (w.wn || 1), 0), wn = wsum(ws.filter(pin)), wall = wsum(ws);
+      const wt = [el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + " in view" + (wn !== wall ? " of " + fmt(wall) : "") + " for solo practice")];
       box.replaceChildren(...(current.length ? [...kids, document.createTextNode(" · "), ...wt] : wt));
     } else box.replaceChildren(...kids);
     return;
@@ -734,8 +740,8 @@ function showWallNote() {
   const n = $("wallnote"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
   n.hidden = !(s && WALL_SPORT[s.n]);
   if (!n.hidden) {
-    const shown = wallsFor(s.n).length, unknown = walls.filter(w => w.t.every(t => t === "other")).length;
-    n.textContent = "Orange pins are hitting walls you can also use alone, shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Only Los Angeles, San Diego and the Bay Area have been searched.";
+    const shown = wallsFor(s.n).reduce((n, w) => n + (w.wn || 1), 0), unknown = walls.filter(w => w.t.every(t => t === "other")).reduce((n, w) => n + (w.wn || 1), 0);
+    n.textContent = "Orange pins are hitting walls you can also use alone, shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap across California and Nevada; ones nobody has mapped there are missing.";
   }
 }
 function setMode(m) {

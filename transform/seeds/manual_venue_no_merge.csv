@@ -2,3 +2,8 @@ venue_key,reason,verified_on
 ymca-berkeley,"Neighborhood Pickleball (2061 Allston Way, neighborhoodpickleball.com) is a separate business about 100 m away; the radius match would put the YMCA under its pin",2026-10-15
 ymca-durango-hills,"Durango Hills Park (City of Las Vegas, same address) has 7 public outdoor pickleball courts about 50 m away; merging would label the public park courts as YMCA members-only",2026-10-15
 ymca-southwest,"Unnamed OpenStreetMap tennis pitch (way/1178148783) on Quito Road about 130 m north, outside the OSM YMCA outline; nothing shows it belongs to the Y, so the radius match would rename an unconfirmed court as Southwest YMCA and label it members-only",2026-10-15
+ymca-los-altos,"Whaley Park (City of Long Beach, address 1720 N Bellflower Blvd per OSM) is a public park about 150 m away; merging would label the park as a YMCA",2026-10-16
+univ-ucla-wooden,"Billy Martin Tennis Camp (Overture place at 325 Westwood Plz) is a different business about 140 m away; the Wooden Center is UCLA Recreation's own facility",2026-10-16
+univ-berkeley-rsf,"Cal Table Tennis (an Overture place at the same address) is a student club; the RSF is the Recreation & Wellbeing facility, so its racquetball and squash courts should not appear under the club's name",2026-10-16
+ymca-uptown-whittier,"The geocoded point falls on Whittier High School's courts (OSM, 6538 Whittier Avenue); the YMCA is a separate site at 12510 Hadley Street",2026-10-16
+univ-stanford-acsr,"Taube Tennis Center (about 70 m away) is a separate facility; the squash courts are in the Arrillaga Center for Sports and Recreation at 341 Galvez St",2026-10-16

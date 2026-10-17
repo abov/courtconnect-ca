@@ -1,0 +1,6 @@
+lat,lon,score,long_side_m,short_side_m,osm_context,review_note,status,sport,access
+33.919115,-118.363392,0.946,27.4,23.9,school,in park/school/sports area,inferred,unknown,unknown
+33.918981,-118.363683,0.908,24.0,20.0,school,in park/school/sports area,inferred,unknown,unknown
+33.919048,-118.363538,0.821,24.9,22.8,school,in park/school/sports area,inferred,unknown,unknown
+33.918937,-118.363827,0.736,25.5,15.2,school,in park/school/sports area,inferred,unknown,unknown
+33.919522,-118.358575,0.567,26.2,12.7,none,"not in a mapped park/school: may be a private yard or complex, do NOT add to OSM without a public source",inferred,unknown,unknown
