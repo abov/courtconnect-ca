@@ -5,7 +5,9 @@
 --   address_source 'nominatim'        : INFERRED, tier 3: OSM's Nominatim reverse geocode of the pin, cached in the nominatim_addresses
 --                                       seed (ingestion/reverse_geocode_blanks.py); only a house number + street within 150 m is used,
 --                                       and only for non-home pins that tiers 1-2 left blank
--- A venue that already has an address is never overwritten. Privacy rule (owner, 2026-10-16): home-like pins get a city,
+--   address_source 'official'         : tier 4, the street printed on the venue's own official page (seeds/venue_address_official.csv, keyed by
+--                                       the hand-added venue_key; evidence + verified_on required). Beats the inferred tiers and is shown as fact.
+-- A venue that already has an address from OSM or Overture is never overwritten. Privacy rule (owner, 2026-10-16): home-like pins get a city,
 -- never a street (`address_withheld` counts what was held back).
 --   home signals: OSM building = house / detached / residential / semidetached_house / bungalow on the court, or an unnamed
 --   venue with no court marked public (an unnamed private court, or one nobody tagged, in a residential area: unclear = fail safe).
@@ -13,6 +15,9 @@
 --   HOA / community / clubhouse name.
 {% set radius = var('address_fill_radius_m') %}
 {% set cell = 0.004 %}
+-- city fallback for a pin with no city from anywhere else: the nearest Overture address WITH a city within this distance (own grid, 3x3 cells >= radius)
+{% set city_radius = 1000 %}
+{% set city_cell = 0.012 %}
 
 with v as (
     select venue_id, venue_name, name_source, lat, lon, address_line, city
@@ -95,6 +100,53 @@ nearest as (
     where rn = 1
 ),
 
+-- official street from the venue's own page; a hand-added venue may have merged into a known pin (effective_venue_id)
+official as (
+    select mm.effective_venue_id as venue_id, min(o.address_line) as address_line
+    from {{ ref('venue_address_official') }} o
+    join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = o.venue_key
+    group by 1
+),
+
+-- the hand-added row's own city (the page it was read from), for a pin whose other sources name none
+manual_city as (
+    select mm.effective_venue_id as venue_id, min(nullif(trim(m.city), '')) as city
+    from {{ ref('stg_manual_venues') }} m
+    join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
+    group by 1
+),
+
+city_probe as (
+    select venue_id, lat, lon,
+           cast(floor(lat / {{ city_cell }}) as bigint) + dy.d as ny,
+           cast(floor(lon / {{ city_cell }}) as bigint) + dx.d as nx
+    from v
+    cross join offsets dy
+    cross join offsets dx
+    where city is null and lat is not null and lon is not null
+),
+
+city_points as (
+    select city, lat, lon,
+           cast(floor(lat / {{ city_cell }}) as bigint) as cy,
+           cast(floor(lon / {{ city_cell }}) as bigint) as cx
+    from {{ ref('stg_overture_addresses') }}
+    where city is not null and city <> ''
+),
+
+nearby_city as (
+    select venue_id, city
+    from (
+        select p.venue_id, b.city,
+               row_number() over (partition by p.venue_id order by
+                   power((p.lat - b.lat) * 110540, 2) + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2)) as rn,
+               power((p.lat - b.lat) * 110540, 2) + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2) as d2
+        from city_probe p
+        join city_points b on b.cy = p.ny and b.cx = p.nx
+    ) x
+    where rn = 1 and d2 <= {{ city_radius }} * {{ city_radius }}
+),
+
 -- a cached row counts only while the pin is still where it was queried (venue_id can shift when pins merge or split)
 nominatim as (
     select m.venue_id, m.address_line, m.city, cast(m.distance_m as integer) as distance_m
@@ -119,24 +171,30 @@ select
     fl.is_home_like,
     case
         when v.address_line is not null then v.address_line
+        when o.address_line is not null then o.address_line
         when not fl.is_home_like then coalesce(n.address_line, nm.address_line)
     end                                                       as address_line,
     case
         when v.address_line is not null and coalesce(cf.court_has_address, false) then 'osm'
         when v.address_line is not null                                           then 'overture_place'
+        when o.address_line is not null                                           then 'official'
         when not fl.is_home_like and n.address_line is not null                  then 'overture_nearest'
         when not fl.is_home_like and nm.address_line is not null                 then 'nominatim'
     end                                                       as address_source,
-    case when v.address_line is null and not fl.is_home_like and n.address_line is not null
+    case when v.address_line is null and o.address_line is not null then null
+         when v.address_line is null and not fl.is_home_like and n.address_line is not null
          then cast(round(n.distance_m) as integer)
          when v.address_line is null and not fl.is_home_like and nm.address_line is not null
          then nm.distance_m end                               as address_distance_m,
     -- city for a pin with none (city is not sensitive: it never names a street); used by the map's location search
-    coalesce(v.city, n.city, nm.city, nc.city)                as city,
-    (v.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld
+    coalesce(v.city, n.city, nm.city, nc.city, mc.city, ny.city) as city,
+    (v.address_line is null and o.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld
 from v
 join flags fl on fl.venue_id = v.venue_id
 left join court_flags cf on cf.venue_id = v.venue_id
 left join nearest n on n.venue_id = v.venue_id
 left join nominatim nm on nm.venue_id = v.venue_id
 left join nominatim_city nc on nc.venue_id = v.venue_id
+left join official o on o.venue_id = v.venue_id
+left join manual_city mc on mc.venue_id = v.venue_id
+left join nearby_city ny on ny.venue_id = v.venue_id

@@ -65,6 +65,12 @@ seeds:
         distance_m: varchar
         osm_ref: varchar
         queried_on: varchar
+    venue_address_official:  # all text
+      +column_types:
+        venue_key: varchar
+        address_line: varchar
+        evidence: varchar
+        verified_on: varchar
     website_overrides:       # all text
       +column_types:
         domain: varchar
