@@ -53,7 +53,8 @@ best_manual as (
 osm_venues as (
     select
         venue_id,
-        min(court_name)                                       as tagged_name,
+        -- digit-only court names ("1", "2") are court numbers, not venue names
+        min(case when translate(court_name, '0123456789 ', '') <> '' then court_name end) as tagged_name,
         min(operator_name)                                    as operator_name,
         sum(case when record_kind = 'court' then 1 else 0 end)    as court_records,
         sum(case when record_kind = 'facility' then 1 else 0 end) as facility_records,
