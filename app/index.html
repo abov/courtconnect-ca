@@ -521,11 +521,11 @@ function sportLine(v) {
     if (bases.length) bases.forEach(b => (extras[b] = extras[b] || []).push(sports[p[0]].n));
     else plain.push(p);
   }
-  const cnt = c => c ? " (" + c + (c === 1 ? " court)" : " courts)") : "";
+  const cnt = c => c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court
   const parts = plain.map(p => {
     const x = extras[p[0]];
     if (!x) return sports[p[0]].n + cnt(p[1]);
-    return sports[p[0]].n + (p[1] ? " (" + p[1] + (p[1] === 1 ? " court" : " courts") : " (") + (p[1] ? "; " : "") + "optional: " + x.join(", ") + ")";
+    return sports[p[0]].n + " (" + (p[1] ? p[1] + (p[1] === 1 ? " court" : " courts") : "at least 1 court") + "; optional: " + x.join(", ") + ")";
   });
   const total = plain.reduce((a, p) => a + (p[1] || 0), 0);
   return parts.join(", ") + (plain.filter(p => p[1]).length > 1 ? " · " + total + " courts listed" : "");
@@ -634,10 +634,9 @@ function updateCount() {
   if (state.mode === "play") {
     const inView = current.filter(pin);
     let courts = 0, known = 0;
-    for (const v of inView) { const c = venueCourts(v); if (c) { courts += c; known++; } }
+    for (const v of inView) { const c = venueCourts(v); courts += c || 1; if (c) known++; }   // a venue with no listed count has at least 1 court
     const kids = [el("b", {text: fmt(inView.length)}), document.createTextNode(noun(inView.length, " venue", " venues") + " in view" + (inView.length !== current.length ? " of " + fmt(current.length) : ""))];
-    if (known) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === inView.length ? " (all venues list a count)" : " (" + fmt(known) + " venues list a count)")));
-    else if (inView.length) kids.push(document.createTextNode(" · no court counts listed here"));
+    if (inView.length) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === inView.length ? " (all venues list a count)" : " (" + fmt(known) + noun(known, " venue lists", " venues list") + " a count; the rest count as 1)")));
     const ws = wallsFiltered();
     if (ws.length) {
       const wsum = list => list.reduce((s, w) => s + (w.wn || 1), 0), wn = wsum(ws.filter(pin)), wall = wsum(ws);
