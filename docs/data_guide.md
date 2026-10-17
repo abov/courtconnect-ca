@@ -18,6 +18,7 @@ The Google Sheet tab **All Raquet** is the source of truth for the supported spo
 | `venue_actions.csv` | Link-outs: `open_play`, `clinic`, `private_lesson`, `group_class`, `drop_in`, `tournament`, `league`, `social_event`, `court_booking`, `club_page`. Provider's own link, price note, dates; keep `verified_on` + `evidence` (warning after 60 days). Overture places only. |
 | `watch_events.csv` | Events to watch. https links only; tests reject bad coordinates and backwards dates. Past events hide themselves. |
 | `place_sport_overrides.csv` | Confirm or reject uncertain matches ("Camino Real Tennis Center" is not Real Tennis). Queue: `marts.mart_places_to_review`. |
+| `closed_places.csv` | Overture places that no longer exist but are still listed as open (`stg_overture_places` drops them). Needs `evidence` (owner report or public page) + `verified_on`. |
 | `sport_aliases.csv` | Alternate sport names. |
 
 Seed files must keep CRLF line endings. Seed column changes need `dbt build --full-refresh`.
