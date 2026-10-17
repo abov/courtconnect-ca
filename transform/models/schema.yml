@@ -179,6 +179,12 @@ seeds:
         tests:
           - accepted_values:
               values: ['reported', 'official', 'tagged', 'inferred']
+      - name: access
+        description: public, restricted (campus, members or customers only) or blank = not known.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['public', 'restricted']
       - name: evidence
         tests: [not_null]
 

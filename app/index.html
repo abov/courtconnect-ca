@@ -383,12 +383,15 @@ function renderEventList() {
 // ---------- hitting walls (solo practice) ----------
 const WALL_TYPE = {one_wall: "One-wall", three_wall: "Three-wall", backboard: "Backboard", other: "Wall"};
 const WALL_CONF = {reported: "Reported by a player, not independently verified", official: "Confirmed from an official source", tagged: "From OpenStreetMap tags", inferred: "Inferred"};
+// Who may use a wall. manual_walls uses public / restricted; OSM tags use yes / permissive / private / customers / members / no. Anything else stays "not known".
+const WALL_ACCESS_PUBLIC = ["public", "yes", "permissive"], WALL_ACCESS_RESTRICTED = ["restricted", "private", "customers", "members", "no"];
+function wallAccess(w) { return WALL_ACCESS_PUBLIC.includes(w.ac) ? "public" : WALL_ACCESS_RESTRICTED.includes(w.ac) ? "restricted" : "unknown"; }
 // Walls double as solo courts for the wall sports. Only walls whose type is known qualify: OSM handball/wall courts of unchecked type ("other") never do.
 const WALL_SPORT = {"1-wall Paddleball": ["one_wall", "backboard"], "3-wall Paddleball": ["three_wall"]};
 function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t))) : []; }
 function wallsFiltered() { return state.mode === "play" && state.sport >= 0 ? wallsFor(sports[state.sport].n) : []; }
 function wallGeojson(list) {
-  return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
+  return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n, r: wallAccess(w) === "restricted" ? 1 : 0}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
 }
 // Directions open the user's own maps app at the pin's coordinates (no address lookup, nothing stored; ADR 0005).
 function directionsNode(y, x, name, approx) {
@@ -406,6 +409,8 @@ function wallNode(w) {
   if (w.wn) box.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)"}));
   box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
   box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " · Free to use: " + triState(w.f) + (w.su ? " · Surface: " + w.su : "")}));
+  const acc = wallAccess(w);
+  box.append(el("p", {class: "meta", text: "Access: " + (acc === "public" ? "Public" : acc === "restricted" ? "Restricted, not open to walk-up use" : "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (as tagged in OpenStreetMap, not checked)" : "")}));
   box.append(directionsNode(w.y, w.x, w.n, /approx/.test(w.pr)));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
@@ -423,7 +428,7 @@ function wallItems(list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
       el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
-      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t}))));
+      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : null));
     btn.addEventListener("click", () => showWall(w, true));
     out.push(el("li", {}, btn));
   }
@@ -477,7 +482,7 @@ function initMap() {
     map.on("mouseleave", "ev-pts", () => map.getCanvas().style.cursor = "");
     map.addSource("w", {type: "geojson", data: wallGeojson([])});
     map.addLayer({id: "wall-pts", type: "circle", source: "w", layout: {visibility: "none"},
-      paint: {"circle-radius": 9, "circle-color": "#bc4c00", "circle-stroke-color": "#fff", "circle-stroke-width": 2}});
+      paint: {"circle-radius": 9, "circle-color": ["case", ["==", ["get", "r"], 1], "#8b949e", "#bc4c00"], "circle-stroke-color": "#fff", "circle-stroke-width": 2}});
     map.addLayer({id: "wall-label", type: "symbol", source: "w", layout: {visibility: "none", "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"],
       "text-size": 12, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 9},
       paint: {"text-color": "#7a3200", "text-halo-color": "#fff", "text-halo-width": 1.5}});
