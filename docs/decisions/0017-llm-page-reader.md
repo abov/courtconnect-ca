@@ -1,0 +1,22 @@
+# 0017. An LLM reads public pages for candidate venue facts (phase 2)
+
+Date: 2026-10-17. Status: **proposed** (owner to accept; build waits for the December beta, `docs/ml_plan.md` phase 2).
+
+## Context
+Hand review of public pages is the bottleneck: review batches 10-11 settled 22 rows, the 116-row queue is parked, and several scans (`docs/public_facility_scan.md`, `docs/gym_chain_scan.md`, `*-access` leads, street addresses for parks) all come down to "read a page, find the sports, courts and address". The facts are on public pages, but reading them one at a time in a Claude Code session is slow and costs context. An LLM can do the first read; it must never become the source of truth, because a model can invent a court count or a sport that is not on the page.
+
+## Decision
+- **Pages in scope:** public pages only (ADR 0007). Fetch only URLs we already hold (venue websites, `venue_actions` / `venue_leads` links, city rec directories, chain location pages), respect `robots.txt`, one request per host every few seconds, the project User-Agent only (no personal contact, CLAUDE.md rule), no logins, no Google Places data (ADR 0005), no directory sites whose terms forbid reuse (Pickleheads, Places2Play, Bounce: leads by hand only).
+- **What the model returns:** fixed fields only: sports, court count per sport, indoor/outdoor, access (public / members / customers / private), street address, booking link, and for each field an **exact quote** from the page. No free text, no scores.
+- **Quote check in code (the guard rail):** after the call, code drops any field whose quote is not found verbatim (after whitespace normalisation) in the fetched page text. A page with no surviving field yields no candidate. Sports are matched against `all_racquet` / `sport_aliases` so only known sports can come out.
+- **Output is staged, never applied:** a candidate CSV (`docs/reader_candidates.csv`, git-tracked for review, one row per venue + field with quote, page URL, `read_on`), `status = inferred`. Nothing reaches seeds, `venues.json` or the map until a person approves rows in bulk into the existing seeds (`manual_venues.csv`, `place_sport_overrides.csv`, `venue_actions.csv`), where the usual `evidence` + `verified_on` rules apply (ADR 0007, ADR 0016). The quote becomes the evidence.
+- **Home privacy unchanged:** a street address from a page is only proposed for non-home-like pins (`int_venue_address.is_home_like`); coaches and lesson businesses with no court address follow ADR 0016.
+- **Measure before trusting:** run first on pages whose answer a person already settled (hand-checked rows in `place_sport_overrides.csv`, the address fills). Report precision (fields confirmed by the reviewer / fields proposed) and the share of rows with no quote found. Scale up only above a bar the owner sets (suggested: 90% field precision after quote filtering); below it the reader stays a triage tool that ranks pages for hand review.
+- **Cost control (the owner's call):** use the smallest Claude model that clears the bar; send page text only (HTML stripped, capped length); cache each page's text and result by URL + date so a page is read once; a dry run prints page count and token estimate first, and a run has a hard cap on pages and spend set by the owner. The API key lives in `.env` (never read, printed or committed; `.env.example` gets the key name).
+- **Not decided here:** crawling beyond known URLs (link discovery), reading PDFs or images, and any use of the reader's output without a person approving it. Each needs its own ADR.
+
+## Consequences
+- Review throughput goes up and every accepted fact still carries a quote a person can check on the page.
+- A new paid dependency (the Claude API) and a new secret in `.env`: a spend cap is part of the design, and the pipeline runs unchanged without it (hand review remains the fallback).
+- Pages that block bots, need scripts, or hide facts in images are skipped, so coverage stays uneven (same limit as hand review).
+- A quote can be real but out of date or about a different location of a chain page: the reviewer approves, so `verified_on` is the review date and the page URL stays in the evidence.
