@@ -4,7 +4,8 @@ Courts are usually unnamed; the park, school or club they sit inside usually has
 to the smallest named feature whose bounding box contains it (see int_court_parent).
 
     python ingestion/extract_osm_parents.py --area california
-Output: data/raw/osm_parents.csv
+Output: data/raw/osm_parents.csv (`--area nevada --out data/raw/osm_parents_nv.csv` for NV; load_raw appends it)
+OSM address tags (addr:housenumber / street / city) are kept: dbt uses them for venues inside the feature.
 """
 from __future__ import annotations
 
@@ -24,7 +25,7 @@ KINDS = [
     ("club", "sport"),
     ("tourism", "resort|hotel|camp_site"),
 ]
-FIELDS = ["osm_type", "osm_id", "name", "kind", "minlat", "minlon", "maxlat", "maxlon", "extracted_at", "region"]
+FIELDS = ["osm_type", "osm_id", "name", "kind", "minlat", "minlon", "maxlat", "maxlon", "extracted_at", "region", "addr_housenumber", "addr_street", "addr_city"]
 
 
 def build_query(bbox) -> str:
@@ -65,6 +66,9 @@ def main() -> None:
                 "osm_type": e["type"], "osm_id": e["id"], "name": e["tags"]["name"], "kind": kind_of(e["tags"]),
                 "minlat": b["minlat"], "minlon": b["minlon"], "maxlat": b["maxlat"], "maxlon": b["maxlon"],
                 "extracted_at": ts,
+                # tier 1b of address fill (int_venue_address): the street address mapped on the park / school / club itself
+                "addr_housenumber": e["tags"].get("addr:housenumber", ""), "addr_street": e["tags"].get("addr:street", ""),
+                "addr_city": e["tags"].get("addr:city", ""),
                 "region": overpass.region_at((b["minlat"] + b["maxlat"]) / 2, (b["minlon"] + b["maxlon"]) / 2),   # ADR 0014
             }
         print(f"tile {i}/{len(tiles)} {bbox}: {len(els):>6,} features (running unique: {len(seen):,})", flush=True)

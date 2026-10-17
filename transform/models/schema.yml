@@ -437,7 +437,7 @@ models:
       - name: address_source
         tests:
           - accepted_values:
-              arguments: {values: [osm, overture_place, official, overture_nearest, nominatim]}
+              arguments: {values: [osm, overture_place, official, osm_parent, overture_nearest, nominatim]}
       - name: address_distance_m
         description: Metres from the pin to the filled address point; only set when address_source is overture_nearest or nominatim.
 
