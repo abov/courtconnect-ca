@@ -62,6 +62,20 @@ seeds:
       - name: reason
         tests: [not_null]
 
+  - name: place_no_group
+    description: Overture places that share a street address with another place but are a different business, so dim_place keeps each as its own pin.
+    columns:
+      - name: place_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_overture_places')
+                field: place_id
+      - name: reason
+        tests: [not_null]
+
   - name: nominatim_addresses
     description: >
       Cache of Nominatim reverse geocodes for non-home pins that tiers 1-2 left without a street address. One row per pin queried,
