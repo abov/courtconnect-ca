@@ -38,7 +38,7 @@ them, without building accounts or a backend, and without weakening the confirma
   `dbt-build` check reports. Untested until the first real issue; if the check does not appear, use a fine-grained token instead.
 
 ## Update 2026-10-16: community reports (word of mouth)
-- The suggest-a-change form has **Report a sport played here** and a **Sport played here** field. No link is needed: the owner cannot
+- The suggest-a-change form has **Report a racket sport played here** and a **Sport played here** field. No link is needed: the owner cannot
   visit venues, so what users saw or were told counts at the `reported` level, labelled "Reported, not independently confirmed".
 - A report or confirmation on any map pin (not only `manual_venues`) becomes a `manual_venues` row at the pin's coordinates
   (`location_precision` = `pin: map id ...`, `confirmation` = `reported`) that the build merges onto that pin, plus the reporter's
