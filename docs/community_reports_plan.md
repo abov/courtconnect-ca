@@ -1,6 +1,6 @@
 # Community reports: plan (2026-10-16)
 
-Status: step 1 BUILT (2026-10-16, waiting for owner review); steps 2-3 not started.
+Status: step 1 BUILT and merged (#149); step 2 BUILT (2026-10-16); step 3 PARKED by the owner (2026-10-16) for later; setup below is ready when picked up.
 
 ## Why
 The owner can't visit venues, and court-finder apps are off limits (Places2Play needs a sign-in; Pickleheads' terms forbid
@@ -35,7 +35,10 @@ both pins merged (venue count unchanged), badge 'Reported', Pickleball added at 
 - Check: `dbt build --select int_manual_venue_match+` and `assert_no_duplicate_venues`, then confirm in the export that the row merged
   onto the reported pin and did not make a second pin.
 
-**Step 2. Count reports, not only confirmations** (staging + export + popup text, small)
+**Step 2. Count reports, not only confirmations** (staging + export + popup text, small). BUILT: export adds `rn` (people who only
+reported; someone who also confirmed counts once, as a confirmer); popup: "reported by N people", and on a venue still at `reported`
+its confirmations read "N confirmations waiting for review" (not "confirmed by"); `make quality` prints venues reported by 1 and by 2+.
+`method` already accepted `reported` (step 1). Also fixed the popup separator (a broken character since PR #7, now a middle dot).
 - `stg_venue_confirmations.method` accepts `reported`; add an `accepted_values` test (`visited | official | reported`).
 - Popup: "Reported by N people" when every row is `reported`, "Confirmed by N" otherwise. Count distinct `confirmed_by`.
 - Level rule (ADR 0008, unchanged): 2+ independent reporters, or 1 report + an official page, may raise `reported` -> `official`
@@ -53,6 +56,24 @@ both pins merged (venue count unchanged), badge 'Reported', Pickleball added at 
   sync, runbook step 2b, next to `make issues`.
 - Anonymous rows: `confirmed_by = form:<sheet row>`. The reviewer judges independence. Two anonymous reports with the same wording or
   time count as one.
+
+**Step 3 setup (owner, about 10 minutes; then one session builds `make sync-reports` and the popup link)**
+1. Google Forms -> new form "CourtConnect: report a place to play". Settings: **Collect email addresses: off**, **Restrict to users in
+   your organisation / require sign-in: off**, "Limit to 1 response": off.
+2. Questions, with these exact titles (the import matches on them):
+   - `Venue name` (short answer, required) - `City` (short answer, required) - `Map ID` (short answer, optional; the popup fills it)
+   - `What are you reporting?` (multiple choice, required): `A racket sport is played here` / `I visited, or the operator's page says so` /
+     `Something is wrong or it closed`
+   - `Sport` (short answer) - `Date you saw it` (date, required) - `What did you see?` (paragraph, required)
+   - `Link to a public page (optional, https)` (short answer) - `Name or handle to credit you (optional, shown publicly)` (short answer)
+   - Description at the top: "Please don't include phone numbers, emails or other personal details. A reviewer checks every report."
+3. Responses -> Link to Sheets (new sheet). In the response tab add two columns at the right: `review` (type `approved` or `rejected`)
+   and `imported` (the import fills it in later; leave blank).
+4. Add a second tab `approved` with `=FILTER(<response tab>!A:Z, <response tab>!<review column>:<review column>="approved")`
+   so only approved rows are read. Share the sheet as "Anyone with the link can view" (the id stays private in `.env`, like the
+   sports sheet).
+5. Send me: the form's link, one prefilled link (Form menu -> "Get pre-filled link", fill Venue name / City / Map ID with `X`), and the
+   sheet id + the `approved` tab's gid. They go in `.env` as `REPORTS_SHEET_ID` / `REPORTS_SHEET_GID`, the prefilled link in the app.
 
 ## Not in scope (later)
 - Comments shown publicly on the map, accounts, upvotes, or a backend. These need the social-phase-B ADR (ADR 0015) and beta demand.

@@ -404,8 +404,8 @@ function wallNode(w) {
   box.append(el("h2", {text: w.n}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
   if (w.wn) box.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)"}));
-  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" � ")}));
-  box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " � Free to use: " + triState(w.f) + (w.su ? " � Surface: " + w.su : "")}));
+  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
+  box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " · Free to use: " + triState(w.f) + (w.su ? " · Surface: " + w.su : "")}));
   box.append(directionsNode(w.y, w.x, w.n, /approx/.test(w.pr)));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
@@ -422,7 +422,7 @@ function wallItems(list) {
   for (const w of list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
-      el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" � ")}),
+      el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
       el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t}))));
     btn.addEventListener("click", () => showWall(w, true));
     out.push(el("li", {}, btn));
@@ -539,7 +539,7 @@ function venueNode(v) {
   const box = el("div");
   box.append(el("h2", {text: v.n || "Unnamed courts"}));
   box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})));
-  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " � " + v.cn + (v.cn === 1 ? " person" : " people") + " confirmed" : "")})));
+  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "")})));
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014)
   if (place) box.append(el("p", {class: "meta", text: place}));
