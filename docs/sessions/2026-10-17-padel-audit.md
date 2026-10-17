@@ -12,9 +12,13 @@ Audited all 33 Padel and 27 Pop Tennis venues. Pulled each OSM tag's changeset f
 - `manual_venues.csv`: Padel Up (Century City) added; Taktika Carson pin moved.
 - Evidence rule: nothing here cites Pickleheads/Bounce listings (terms; see memory). Several search results came from them as leads only.
 
-## Still unverified (kept, labelled `osm_tag_loose`, needs review)
-Padel: Bakersfield Country Club 4 (plausible: Taktika lists a Bakersfield club, address unknown), Reagan Education Centre (Clovis), Residence Inn San Ramon, Wildhorse GC (Davis), and single unnamed courts in Tracy, Vacaville, Granite Bay, San Jose (Lake Hennessy Ct), Saratoga (Montauk Ct). All from bmaczero's 2025 MapRoulette "misidentified as tennis court" pass, no public page found either way. Padel San Diego (4606 Ingraham St) and San Diego NOX Padel Club (name_keyword only): the NOX pin is at 2015 Birch Rd, Chula Vista, the same address as ESL Padel (3 indoor courts, opened fall 2025, per directory + Playtomic snippets; club's own page could not be read), so likely real and renamed.
-Pop Tennis (OSM loose): Washington Park Alameda (city page lists tennis only), Exeter City Athletic Park, Frank F. Garside JHS (Las Vegas), 2 unnamed Simi Valley courts.
+## Imagery pass (added later 2026-10-17)
+Viewed Esri World Imagery tiles (zoom 19, 0.08-0.5 m/px, captured 2024-11 to 2026-03; fetched to a scratch folder, deleted afterwards, nothing stored) at each unverified spot, with a true-scale 10x20 m padel outline drawn on it. Calibration: the LA Galaxy Park padel courts match that outline exactly. Size is the test, because glass walls are not visible from above and NAIP (0.6 m) is too coarse for this.
+- **9 more Padel spots rejected (12 ways)**: Bakersfield CC (four pickleball-size courts; imagery 2025-09-09 predates the 2026-02 tag, so re-add if a club page shows padel), Reagan (grass field), Residence Inn San Ramon, Wildhorse (private backyard, not the golf club), Tracy, Vacaville, Granite Bay (no court visible), San Jose, Saratoga (all single backyard courts smaller than padel). Padel venues now 12 confirmed + 2 name-keyword only (below); every OSM-only Padel tag is gone. Map total 10,259.
+- **Pop Tennis (OSM loose) left flagged, nothing rejected**: Alameda Washington Park and Exeter show tennis-style courts of unclear size; Garside (Las Vegas) and the two Simi Valley courts are too blurry or overgrown to read; Kahler Russell Park fits a pickleball/paddle-size court. These need a site visit, a city page or street-level photos.
+
+## Still unverified (kept, labelled needs-review)
+Padel San Diego (4606 Ingraham St) and San Diego NOX Padel Club (name_keyword only): the NOX pin is at 2015 Birch Rd, Chula Vista, the same address as ESL Padel (3 indoor courts, opened fall 2025, per directory + Playtomic snippets; club's own page could not be read), so likely real and renamed.
 
 ## Next (step 3 and 4)
 - Read the Santa Monica Beach Club's own page (1 enclosed padel court + 5 paddle tennis per a directory) and add both sports.
