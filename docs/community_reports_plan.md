@@ -25,7 +25,7 @@ the stable key is the new `manual_venues.venue_key`.
 
 ## Steps (each its own small PR)
 **Step 1. Reports on existing venues reach the map** (~40 lines in `ci/issue_to_pr.py`, no model change). BUILT: new form option
-"Report a sport played here" + "Sport played here" field; `venue_confirmations.method` accepts `reported` (not counted in the map's `cn`);
+"Report a racket sport played here" + "Sport played here" field; `venue_confirmations.method` accepts `reported` (not counted in the map's `cn`);
 warn test `assert_reported_pins_merged`; `venue_leads.source_type` accepts `issue` (the script always wrote it). Simulated 5 reports:
 both pins merged (venue count unchanged), badge 'Reported', Pickleball added at Willow Glen.
 - "Report a sport/courts here" or "Confirm" on a non-manual venue: look up the map id in `venues.json` and append a `manual_venues` row
