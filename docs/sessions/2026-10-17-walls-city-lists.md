@@ -1,0 +1,3 @@
+# 2026-10-17 Backboards: Peninsula, Marin, Sacramento city lists
+Added 1 wall (Cuesta Tennis Center lighted hitting wall, Mountain View; city tennis page, `official`). Palo Alto (Hoover Park page), San Rafael (tennis page) and Sacramento city park pages name no backboard/practice wall; only crowd-sourced maps (mytennislessons: Curtis, Orchard, Sycamore) and real-estate pages claim some, so not added (unverified, no public city source).
+Returns are low from city pages. Next if continuing: Orange County/Inland Empire/Fresno city lists, school-district and college court pages, or owner/community reports (the Sacramento and Palo Alto Rinconada/Hoover claims are worth a visit report).
