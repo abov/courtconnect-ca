@@ -34,6 +34,7 @@ select
     a.address_line,                                           -- own address, else the nearest Overture address (inferred); never a street for home-like pins
     a.address_source,
     a.address_distance_m,
+    a.near_street,                                            -- road name only (inferred), for pins with no address; shown as "Near <street>"
     v.website,
     v.website_status,
     case when v.website_status = 'dead' then null else v.website end   as website_usable,   -- hides links to domains that no longer exist
