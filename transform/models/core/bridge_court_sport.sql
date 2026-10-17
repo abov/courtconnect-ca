@@ -1,9 +1,10 @@
 -- A court can host several sports (e.g. a tennis court with pickleball lines).
 -- Two seed files adjust what the OSM tags say:
 --   sport_also_played.csv         : a court tagged sport A is also a court for sport B (racquetball courts host 4-wall paddle)
---   osm_court_sport_overrides.csv : a person found a tag wrong, so that court is not counted for that sport (verdict 'reject')
+--   osm_court_sport_overrides.csv : a person found a tag wrong, so that court is not counted for that sport (verdict 'reject');
+--                                   optional correct_sport = the sport it really is (e.g. aerial 'padel' tag on pickleball courts)
 with tagged as (
-    select distinct
+    select
         c.court_id,
         c.access_type,
         s.sport_name
@@ -12,6 +13,18 @@ with tagged as (
         on c.sport_tag_delimited like '%;' || m.osm_sport_key || ';%'
     join {{ ref('dim_sport') }} s
         on s.sport_name = m.sport
+
+    union
+
+    -- a rejected tag that a person re-identified (correct_sport): the court counts for the real sport instead
+    select
+        c.court_id,
+        c.access_type,
+        trim(o.correct_sport) as sport_name
+    from {{ ref('osm_court_sport_overrides') }} o
+    join {{ ref('stg_osm_courts') }} c on c.court_id = trim(o.court_id)
+    where lower(trim(o.verdict)) = 'reject'
+      and nullif(trim(o.correct_sport), '') is not null
 ),
 
 with_also as (

@@ -17,8 +17,14 @@ Viewed Esri World Imagery tiles (zoom 19, 0.08-0.5 m/px, captured 2024-11 to 202
 - **9 more Padel spots rejected (12 ways)**: Bakersfield CC (four pickleball-size courts; imagery 2025-09-09 predates the 2026-02 tag, so re-add if a club page shows padel), Reagan (grass field), Residence Inn San Ramon, Wildhorse (private backyard, not the golf club), Tracy, Vacaville, Granite Bay (no court visible), San Jose, Saratoga (all single backyard courts smaller than padel). Padel venues now 12 confirmed + 2 name-keyword only (below); every OSM-only Padel tag is gone. Map total 10,259.
 - **Pop Tennis (OSM loose) left flagged, nothing rejected**: Alameda Washington Park and Exeter show tennis-style courts of unclear size; Garside (Las Vegas) and the two Simi Valley courts are too blurry or overgrown to read; Kahler Russell Park fits a pickleball/paddle-size court. These need a site visit, a city page or street-level photos.
 
+## Directory pass (CA + NV) and fixes after owner feedback
+- Read padelcourtsfinder (34 CA/NV names), padelusa, padelmapusa as leads; confirmed on each club's own page and added to `manual_venues.csv`: Kingdom of Padel (San Diego), ESL Padel (Chula Vista; the old Overture "San Diego NOX Padel Club" pin is retired in `closed_places.csv`), Bay Padel Dogpatch + Sunnyvale (separate pin from Bintang Badminton Academy, `manual_venue_no_merge.csv`), Park Padel West Sacramento (4 outdoor), University of the Pacific complex (4 padel + 8 pickleball, run by Taktika), Rancho Valencia (3, resort), La Valle Coastal Club (2, members), plus Flyte (Padel confirm). 17 clubs that are coming soon, unconfirmed or have no official page went to `venue_leads.csv`.
+- **Bakersfield CC cause:** OSM changeset 178817723 (2026-02-20, "add sports courts") tagged four courts `padel` with no survey; our pipeline trusted `padel` at high confidence. Fixed with `correct_sport`: those 4 plus San Juan School 6, Lake Forest 4, Orangetree 3, Silver Creek 2 and iTennis La Habra 2 now count as Pickleball (needs review). Calabasas is a basketball court, the "West Valley College" way is a private backyard court away from the college, Balboa is under trees: all stay rejected with no replacement.
+- **Operator vs venue (owner):** Taktika runs the courts at LA Galaxy Park, Barnes and Pacific; the manual rows are now named for the places and Taktika is in `rules` + link-outs (rules in `docs/padel_scan.md`).
+- Padel venues now 21 in CA/NV with a source; 1 name-keyword only (Padel San Diego, Ingraham St).
+
 ## Still unverified (kept, labelled needs-review)
-Padel San Diego (4606 Ingraham St) and San Diego NOX Padel Club (name_keyword only): the NOX pin is at 2015 Birch Rd, Chula Vista, the same address as ESL Padel (3 indoor courts, opened fall 2025, per directory + Playtomic snippets; club's own page could not be read), so likely real and renamed.
+Padel San Diego (4606 Ingraham St): name_keyword only, no page found.
 
 ## Next (step 3 and 4)
 - Read the Santa Monica Beach Club's own page (1 enclosed padel court + 5 paddle tennis per a directory) and add both sports.
