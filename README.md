@@ -4,7 +4,7 @@
 
 **[Open the live map](https://abov.github.io/courtconnect-ca/)**
 
-| Find a place to play | Watch a match |
+| Play | Watch |
 |---|---|
 | ![Pickleball venues across LA and Orange County, clustered, with filters](docs/screenshots/map-play.png) | ![Upcoming pro events across California, with dates and organizer links](docs/screenshots/map-watch.png) |
 
@@ -28,7 +28,7 @@ Numbers are dated and come from the notes linked in each row.
 | **No single source is enough.** 25,971 OSM court records became 9,941 venues; only 4,362 had a name, and Overture added 435 venues OSM had no court for ([snapshot, 10-14](docs/coverage_snapshot.md)). | OSM knows where courts are, business listings know names. Joining them is the product. |
 | **The map is mostly tennis.** Of the 76 sports on the master sheet, 19 are covered and 45 have nothing found ([snapshot](docs/coverage_snapshot.md)). | Gaps are the story for lesser-known sports, so the app shows them instead of hiding them. |
 | **Duplicates were inflating the count.** Merging courts inside one park or school, and places at one street address, cut venues from 10,542 to 10,235 (-3%). A guard test now fails if two venues share a name within 150 m. | Fix the cause, then add a test so it cannot return. |
-| **About 90% of venues have no street address** ([ML plan](docs/ml_plan.md)). | Most are park and school courts. Plan: fill from OSM tags or the nearest address, labelled inferred; homes show the city only. |
+| **About 90% of venues had no street address** ([ML plan](docs/ml_plan.md)). | Most are park and school courts. Now 4,057 of 10,273 venues show one (OSM tags, nearest Overture address or Nominatim, the last two labelled "inferred"); homes show the city only, by design. Filling the rest needs a different source, not a better lookup. |
 | **Pickleball hides on tennis courts.** Painted lines are rarely tagged, so a re-extract cannot find them; city park pages and owner reports did ([ML plan](docs/ml_plan.md)). | Refreshing data does not fix a data gap; a different source does. |
 | **Gyms and public facilities hold niche sports.** Chain and city pages added racquetball (105 venues: CA 90, NV 15) plus YMCA pickleball ([gym scan](docs/gym_chain_scan.md)). | Chain-by-chain scans beat generic search for sports like racquetball. |
 | **Websites go bad.** One club domain was hijacked and another belonged to a club in a different state. | Links are checked and flagged (`make check-websites`), not trusted. |
@@ -85,8 +85,9 @@ Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routi
 
 ## Roadmap
 - [x] Venue clustering, statewide extract, Overture second source, watch events, link-outs, suggest-a-change flow, Nevada, duplicate guard
+- [ ] Padel check: keep padel (walled glass court) and pop tennis / paddle tennis (open court, low net) apart, audit every Padel pin, and add missing padel clubs found via public padel directories; plan in [`docs/padel_scan.md`](docs/padel_scan.md)
 - [ ] Beta feedback round, then visual polish ([`docs/ux_polish.md`](docs/ux_polish.md))
-- [ ] Fill missing street addresses (OSM tags, nearest Overture address, labelled inferred; homes show city only)
+- [x] Fill missing street addresses (OSM tags, nearest Overture address, Nominatim; inferred ones labelled; homes show city only). Left over, tracked in `CLAUDE.md` item 2: park/school `addr:*` tags (Overpass re-extract), official pages for high-value venues, city for the last ~480 pins
 - [ ] Sport discovery ("Try something new") and tennis kept visible next to pickleball
 - [ ] All 76 sports in the dropdown (55 have no venue yet and are hidden today) plus a short "about this sport" card; plan in [`docs/sport_discovery_plan.md`](docs/sport_discovery_plan.md)
 - [ ] Social phase A: "Find people to play with" from existing groups; own accounts only after a separate decision ([`docs/competitor_scan.md`](docs/competitor_scan.md))
