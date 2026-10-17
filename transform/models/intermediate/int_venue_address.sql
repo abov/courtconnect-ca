@@ -102,6 +102,16 @@ nominatim as (
     join v on v.venue_id = m.venue_id
     where m.status = 'address' and m.address_line is not null
       and abs(v.lat - cast(m.lat as double)) < 0.0003 and abs(v.lon - cast(m.lon as double)) < 0.0003
+),
+
+-- city only, from any cached lookup (street_only / too_far rows included): a city never names a street, so it is safe for
+-- every pin, and it feeds the map's location search
+nominatim_city as (
+    select m.venue_id, m.city
+    from {{ ref('nominatim_addresses') }} m
+    join v on v.venue_id = m.venue_id
+    where m.city is not null and m.city <> ''
+      and abs(v.lat - cast(m.lat as double)) < 0.0003 and abs(v.lon - cast(m.lon as double)) < 0.0003
 )
 
 select
@@ -122,10 +132,11 @@ select
          when v.address_line is null and not fl.is_home_like and nm.address_line is not null
          then nm.distance_m end                               as address_distance_m,
     -- city for a pin with none (city is not sensitive: it never names a street); used by the map's location search
-    coalesce(v.city, n.city, nm.city)                         as city,
+    coalesce(v.city, n.city, nm.city, nc.city)                as city,
     (v.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld
 from v
 join flags fl on fl.venue_id = v.venue_id
 left join court_flags cf on cf.venue_id = v.venue_id
 left join nearest n on n.venue_id = v.venue_id
 left join nominatim nm on nm.venue_id = v.venue_id
+left join nominatim_city nc on nc.venue_id = v.venue_id
