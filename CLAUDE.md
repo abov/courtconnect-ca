@@ -36,8 +36,8 @@ Decisions are in `docs/decisions/` (ADRs 0001-0015, all accepted; one file each,
   - Prefer one batched tool call over many; stop once the task is done instead of extra "nice to have" work.
   - If a task looks expensive (many pages to research, big refactor), propose the cheaper scoped version first and wait for my OK.
 - Read only the lines you need from big files; don't dump whole CSVs, logs or `venues.json`.
-- One task per session. Keep sessions small: when context passes ~200-300k tokens, update "Current status" below and tell me to start a fresh session.
-- At the end of a session, update "Current status" (2-3 lines) so the next session can pick up without a long history.
+- One task per session. Keep sessions small: when context passes ~200-300k tokens, write the session note and tell me to start a fresh session.
+- At the end of a session, write a 2-3 line note in a NEW file `docs/sessions/YYYY-MM-DD-<topic>.md` (what changed, what is next). Never edit another session's note or add lines to a shared log: that is what caused merge conflicts. Update "Open, in order" below only when priorities change.
 - Use a lighter model for simple edits; save the biggest for hard problems.
 
 ## Where things are
@@ -47,7 +47,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0015, all accepted; one file each,
 - `ci/fixtures`  small sample data for CI
 
 ## Current status
-Full session log (2026-10-10 .. 10-15): `docs/status_history.md`. Plan: `~/.claude/plans/create-a-revised-plan-temporal-yao.md`. Add one short dated line per session here; keep the 3 newest session lines here and move the rest to the history file.
+Session notes: one file per session in `docs/sessions/` (read only the newest 1-2 when picking up). Older log: `docs/status_history.md`. Plan: `~/.claude/plans/create-a-revised-plan-temporal-yao.md`.
 
 **Working practices**
 - Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash). A worktree needs a copy of `courtconnect.duckdb`.
@@ -74,8 +74,3 @@ Full session log (2026-10-10 .. 10-15): `docs/status_history.md`. Plan: `~/.clau
 7c. After beta: social phase A, "Find people to play with" from existing groups (open play, clinics, ladders, Meetup/WhatsApp/Partiful; public pages, `verified_on` + evidence). Phase B (own accounts/matching) only with its own ADR and if beta shows demand. Competitor scan + why not Plei's hosted-games model: `docs/competitor_scan.md`.
 7d. LATER (parked 2026-10-16): community reports step 3, report without GitHub (Google Form -> sheet -> `make sync-reports`). Owner creates the form first (setup in `docs/community_reports_plan.md`). Steps 1-2 live (#149, #152).
 8. LATER (after beta): optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
-
-**Sessions**
-- 2026-10-16: Life Time Nevada (lifetime.life club pages): Summerlin (pickleball only, members, no guest/day pass; lead resolved) and Green Valley Henderson (8 tennis + pickleball, members or Day/Guest Pass for tennis; merged onto the OSM court pin) added as manual venues + 3 link-outs (provider `lifetime_site`); Durango opens Dec 2026 (lead). `dim_venue` skips digit-only OSM court names (pin was named '1'; 5 venues). No racquetball/squash/padel at any NV Life Time.
-- 2026-10-16: North Las Vegas (city parks directory + Sports/Recreation Centers pages, browser pane; WebFetch 403): 6 tennis parks (`nv-nlv-*`; Cheyenne Sports Complex, Craig Ranch, Desert Horizons, Seastrand merged onto OSM pins; Joe Kneip, Petitti new approximate pins) and indoor open gym at 3 city rec centers (Silver Mesa pickleball, Neighborhood badminton, SkyView table tennis; day fees) + 9 link-outs (provider `nlv_gov`). Directory has no counts and no pickleball amenity. Sparks site still unreachable.
-- 2026-10-16: coverage item 6 (own-site reads): 14 `*-access` clubs resolved into `manual_venues` (members 6, private 4, club 4; members is inferred from dues/member-only schedules) and 48 left open with the reason in each lead; club-named slice of 28 from `docs/review_priority.csv`: 9 confirms + 5 rejects in `place_sport_overrides.csv` (CI fixture places added); SF Beach Tennis 4 approximate pins (Heather Farm, Larkey, Piper, Sports House; exact sand court unverified). Dead domains skipped, TLS-failing/403 sites not read in the browser pane. DuckDB only.
