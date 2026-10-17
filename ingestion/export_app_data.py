@@ -9,7 +9,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, r, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
-     r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it
+     r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet (ud = date checked)
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
   walls   : [{n name, c city, r region, y, x, pr location precision, t [wall types], sp [sports suited], nv near venue, su surface, l lit 1/0 (absent = unknown),
@@ -84,6 +84,11 @@ def main() -> None:
             group by 1""").fetchall():
         manual[vid] = {"r": rules or "", "u": int(unconfirmed), "cf": {1: "v", 2: "o", 3: "r"}[rank], "cd": str(cdate) if cdate else ""}
 
+    # Venues confirmed but not open yet (venue_opening_status.csv): shown with a hollow pin and an "Opening soon" badge. Merged venues included.
+    opening = {vid: (status, ev, str(vo)) for vid, status, ev, vo in con.execute("""
+            select mm.effective_venue_id, s.opening_status, s.evidence, s.verified_on
+            from raw.venue_opening_status s join intermediate.int_manual_venue_match mm on mm.venue_key = trim(s.venue_key)""").fetchall()}
+
     # How many different people confirmed (visited / official) and how many only reported (word of mouth) each hand-added venue
     # (venue_confirmations.csv; handles only, never shown). Someone who also confirmed is not counted again as a reporter.
     confirmers: dict[str, int] = {}
@@ -148,6 +153,9 @@ def main() -> None:
                 v["rn"] = reporters[vid]        # number of different people who reported it (word of mouth, not confirmed)
             if manual[vid]["u"]:
                 v["xu"] = 1                      # public access not confirmed on the source map
+        if vid in opening:
+            v["up"] = opening[vid][0]            # not open yet: the badge text; the popup adds the caveat
+            v["ud"] = opening[vid][2]            # date the page was read
         out_venues.append(v)
     out_venues.sort(key=lambda v: (v["y"], v["x"]))
 
