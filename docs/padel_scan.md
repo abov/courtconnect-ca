@@ -35,4 +35,4 @@ Rules: public pages only (ADR 0007); read each site's terms before copying anyth
 ## Done when
 - Every Padel pin has a club page, a confirmed override, or is labelled inferred; no pop tennis court is shown as Padel (and the reverse).
 - The padel count by metro is compared with the three reference sites and the gaps are either added or listed with a reason.
-- A test fails when a Padel row has no supporting signal.
+- A test fails when a Padel row has no supporting signal (`transform/tests/assert_padel_pop_tennis_have_supporting_signal.sql`, built 2026-10-17: also covers Pop Tennis; allows rungs 1-2 and 5-6 of `mart_sport_evidence`, a loose OSM tag only while flagged needs_review, never a high-confidence OSM tag or a derived row).
