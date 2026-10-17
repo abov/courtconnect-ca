@@ -16,8 +16,8 @@ extract:          ## pull ALL CalNeva courts + named parent features from OpenSt
 extract-addresses: ## Overture address points near the pins, for the address fill (reads S3, ~1 min; run after the OSM/places extract, then make load)
 	$(PY) ingestion/extract_overture_addresses.py
 
-reverse-geocode: ## tier 3 address fill: cached Nominatim lookups for non-home blanks (1 request a second; ask the owner before more than ~100 uncached pins)
-	$(PY) ingestion/reverse_geocode_blanks.py --limit 25
+reverse-geocode: ## tier 3 address fill: cached Nominatim lookups for non-home blanks (1 request a second; runs the uncached pins only, capped at 100 per run; ask the owner for more)
+	$(PY) ingestion/reverse_geocode_blanks.py --limit 100
 
 extract-places:   ## pull racket-related CalNeva places from Overture Maps (reads S3 directly, ~1 min)
 	$(PY) ingestion/extract_overture_places.py
