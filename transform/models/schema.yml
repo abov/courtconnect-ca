@@ -86,7 +86,7 @@ seeds:
       - name: status
         tests:
           - accepted_values:
-              arguments: {values: [address, street_only, too_far, no_match]}
+              arguments: {values: [address, street_only, too_far, no_match, city_only]}
 
   - name: website_overrides
     description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
@@ -207,11 +207,11 @@ seeds:
           - accepted_values:
               values: ['reported', 'official', 'tagged', 'inferred']
       - name: access
-        description: public, restricted (campus, members or customers only) or blank = not known.
+        description: "Same vocabulary as venues and courts (access_type): public, customers, private (campus programs, apartments, not open to walk-up use), members, or blank = not known."
         tests:
           - accepted_values:
               arguments:
-                values: ['public', 'restricted']
+                values: ['public', 'customers', 'private', 'members']
       - name: evidence
         tests: [not_null]
 
@@ -497,6 +497,12 @@ models:
   - name: dim_wall
     description: One row per hitting wall (hand-curated plus OSM-mapped), kept apart from venues.
     columns:
+      - name: access
+        description: "Same vocabulary as venues (access_type); blank = not known (never read as public)."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['public', 'customers', 'private', 'members']
       - name: region
         tests:
           - not_null

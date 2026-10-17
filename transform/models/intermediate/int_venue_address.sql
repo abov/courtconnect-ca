@@ -95,6 +95,51 @@ nearest as (
     where rn = 1
 ),
 
+-- city only, wider search: pins with no city and no address point within the street radius take the city of the nearest Overture
+-- address point (with a city) within `address_city_radius_m`. A city never names a street, so this is safe for home-like pins too.
+-- Coarser grid (0.01 degrees, about 0.9 km east-west) so own cell + 8 neighbours cover the radius.
+city_cells as (
+    select venue_id, lat, lon,
+           cast(floor(lat / 0.01) as bigint) as cy,
+           cast(floor(lon / 0.01) as bigint) as cx
+    from v
+    where (city is null or city = '') and lat is not null and lon is not null
+),
+
+city_probe as (
+    select a.venue_id, a.lat, a.lon, a.cy + dy.d as ny, a.cx + dx.d as nx
+    from city_cells a
+    cross join offsets dy
+    cross join offsets dx
+),
+
+city_candidates as (
+    select
+        p.venue_id, b.city,
+        sqrt(
+              power((p.lat - b.lat) * 110540, 2)
+            + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2)
+        ) as distance_m
+    from city_probe p
+    join (
+        select address_id, city, lat, lon,
+               cast(floor(lat / 0.01) as bigint) as cy,
+               cast(floor(lon / 0.01) as bigint) as cx
+        from {{ ref('stg_overture_addresses') }}
+        where city is not null and city <> ''
+    ) b on b.cy = p.ny and b.cx = p.nx
+),
+
+nearest_city as (
+    select venue_id, city
+    from (
+        select *, row_number() over (partition by venue_id order by distance_m, city) as rn
+        from city_candidates
+        where distance_m <= {{ var('address_city_radius_m') }}
+    ) x
+    where rn = 1
+),
+
 -- a cached row counts only while the pin is still where it was queried (venue_id can shift when pins merge or split)
 nominatim as (
     select m.venue_id, m.address_line, m.city, cast(m.distance_m as integer) as distance_m
@@ -132,7 +177,7 @@ select
          when v.address_line is null and not fl.is_home_like and nm.address_line is not null
          then nm.distance_m end                               as address_distance_m,
     -- city for a pin with none (city is not sensitive: it never names a street); used by the map's location search
-    coalesce(v.city, n.city, nm.city, nc.city)                as city,
+    coalesce(v.city, n.city, nm.city, nc.city, wc.city)            as city,
     (v.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld
 from v
 join flags fl on fl.venue_id = v.venue_id
@@ -140,3 +185,4 @@ left join court_flags cf on cf.venue_id = v.venue_id
 left join nearest n on n.venue_id = v.venue_id
 left join nominatim nm on nm.venue_id = v.venue_id
 left join nominatim_city nc on nc.venue_id = v.venue_id
+left join nearest_city wc on wc.venue_id = v.venue_id

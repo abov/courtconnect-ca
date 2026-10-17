@@ -8,6 +8,7 @@ User-Agent, results stored, no grid sweeps. This sends pin coordinates only (no 
 
     python ingestion/reverse_geocode_blanks.py --limit 25     # query up to 25 uncached pins (sample); omit --limit for all
     python ingestion/reverse_geocode_blanks.py --dry-run      # count what would be queried
+    python ingestion/reverse_geocode_blanks.py --city-only    # pins still without a city (home-like ones too): city-level lookup, no street kept
 
 Needs a built courtconnect.duckdb (dbt build). Seeds keep CRLF line endings.
 """
@@ -62,9 +63,20 @@ def blanks() -> list[tuple]:
     """).fetchall()
 
 
-def lookup(lat: float, lon: float) -> dict:
+def city_blanks() -> list[tuple]:
+    """Pins that still have no city after the Overture city search. A city never names a street, so home-like pins are included."""
+    con = duckdb.connect(str(ROOT / "courtconnect.duckdb"), read_only=True)
+    return con.execute("""
+        select a.venue_id, v.lat, v.lon, v.region
+        from intermediate.int_venue_address a join core.dim_venue v using (venue_id)
+        where (a.city is null or a.city = '') and v.lat is not null and v.lon is not null
+        order by hash(a.venue_id)
+    """).fetchall()
+
+
+def lookup(lat: float, lon: float, zoom: int = 18) -> dict:
     r = requests.get(URL, headers=UA, timeout=30,
-                     params={"lat": lat, "lon": lon, "format": "jsonv2", "zoom": 18, "addressdetails": 1})
+                     params={"lat": lat, "lon": lon, "format": "jsonv2", "zoom": zoom, "addressdetails": 1})
     r.raise_for_status()
     return r.json()
 
@@ -73,8 +85,12 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--city-only", action="store_true", help="fill missing cities at city zoom; never stores a street for these pins")
     args = ap.parse_args()
     cache = load_cache()
+    if args.city_only:
+        run_city_only(cache, args)
+        return
     todo = [b for b in blanks() if b[0] not in cache or distance_m(b[1], b[2], float(cache[b[0]]["lat"]), float(cache[b[0]]["lon"])) > 30]
     print(f"{len(todo)} non-home pins without an address are not cached yet ({len(cache)} cached)")
     if args.dry_run:
@@ -103,6 +119,39 @@ def main() -> None:
         done += 1
         save_cache(cache)   # after every pin: an interrupted run loses nothing
         time.sleep(1.1)     # policy: at most 1 request per second
+    print(f"queried {done}")
+
+
+def run_city_only(cache: dict[str, dict], args) -> None:
+    """City-level lookup (zoom 10) for pins with no city. A pin already cached keeps its row and gains the city; a new pin is cached as
+    status city_only with no address_line, so a home-like pin never gets a street. Same rate limit and User-Agent as the street lookup."""
+    todo = []
+    for vid, lat, lon, _region in city_blanks():
+        row = cache.get(vid)
+        if row and distance_m(lat, lon, float(row["lat"]), float(row["lon"])) <= 30 and row["status"] == "city_only":
+            continue   # already tried at city level; a miss is cached too
+        todo.append((vid, lat, lon))
+    print(f"{len(todo)} pins without a city to look up ({len(cache)} cached)")
+    if args.dry_run:
+        return
+    done = 0
+    for vid, lat, lon in todo[: args.limit]:
+        try:
+            res = lookup(lat, lon, zoom=10)
+        except requests.RequestException as e:
+            print("stopping on error:", e, file=sys.stderr)
+            break
+        addr = res.get("address", {}) or {}
+        city = addr.get("city") or addr.get("town") or addr.get("village") or addr.get("hamlet") or ""
+        row = cache.get(vid)
+        if row and distance_m(lat, lon, float(row["lat"]), float(row["lon"])) <= 30:
+            row["city"] = city or row["city"]      # keep the street lookup (status, address_line) as it was
+        else:
+            cache[vid] = {"venue_id": vid, "lat": round(lat, 6), "lon": round(lon, 6), "status": "city_only", "address_line": "", "city": city,
+                          "distance_m": "", "osm_ref": "", "queried_on": date.today().isoformat()}
+        done += 1
+        save_cache(cache)
+        time.sleep(1.1)
     print(f"queried {done}")
 
 

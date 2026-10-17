@@ -383,9 +383,9 @@ function renderEventList() {
 // ---------- hitting walls (solo practice) ----------
 const WALL_TYPE = {one_wall: "One-wall", three_wall: "Three-wall", backboard: "Backboard", other: "Wall"};
 const WALL_CONF = {reported: "Reported by a player, not independently verified", official: "Confirmed from an official source", tagged: "From OpenStreetMap tags", inferred: "Inferred"};
-// Who may use a wall. manual_walls uses public / restricted; OSM tags use yes / permissive / private / customers / members / no. Anything else stays "not known".
-const WALL_ACCESS_PUBLIC = ["public", "yes", "permissive"], WALL_ACCESS_RESTRICTED = ["restricted", "private", "customers", "members", "no"];
-function wallAccess(w) { return WALL_ACCESS_PUBLIC.includes(w.ac) ? "public" : WALL_ACCESS_RESTRICTED.includes(w.ac) ? "restricted" : "unknown"; }
+// Who may use a wall: the same access vocabulary as venues (public / customers / private / members), blank = not known.
+const WALL_ACCESS_LABEL = {public: "Public", customers: "Customers only", private: "Private, not open to walk-up use", members: "Members only"};
+function wallAccess(w) { return w.ac === "public" ? "public" : WALL_ACCESS_LABEL[w.ac] ? "restricted" : "unknown"; }
 // Walls double as solo courts for the wall sports. Only walls whose type is known qualify: OSM handball/wall courts of unchecked type ("other") never do.
 const WALL_SPORT = {"1-wall Paddleball": ["one_wall", "backboard"], "3-wall Paddleball": ["three_wall"]};
 function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t))) : []; }
@@ -410,7 +410,7 @@ function wallNode(w) {
   box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
   box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " · Free to use: " + triState(w.f) + (w.su ? " · Surface: " + w.su : "")}));
   const acc = wallAccess(w);
-  box.append(el("p", {class: "meta", text: "Access: " + (acc === "public" ? "Public" : acc === "restricted" ? "Restricted, not open to walk-up use" : "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (as tagged in OpenStreetMap, not checked)" : "")}));
+  box.append(el("p", {class: "meta", text: "Access: " + (WALL_ACCESS_LABEL[w.ac] || "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (as tagged in OpenStreetMap, not checked)" : "")}));
   box.append(directionsNode(w.y, w.x, w.n, /approx/.test(w.pr)));
   if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
