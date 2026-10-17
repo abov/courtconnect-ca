@@ -133,8 +133,8 @@ seeds:
   - name: venue_opening_status
     description: >
       Hand-added venues (manual_venues, by venue_key) that are confirmed but NOT OPEN YET. The map still shows them, with a hollow pin and an
-      "Opening soon" badge, because the owner wants every padel, pop tennis and beach tennis place visible. Only add a venue whose own page (or an
-      official page) says it is coming; remove the row when it opens (and update the venue's `rules`). `evidence` says what the page said and `verified_on` when.
+      "Opening soon" badge, because the owner wants every padel, pop tennis and beach tennis place visible. 'Opening soon' = the club's own page (or an official page) says it is coming; 'Reported: opening soon' = only a directory or press listing says so (shown as a lighter pin). Only add a venue whose own page (or an
+      official page) says it is coming for 'Opening soon'; remove the row when it opens (and update the venue's `rules`). `evidence` says what the page said and `verified_on` when.
     columns:
       - name: venue_key
         tests:
@@ -149,7 +149,7 @@ seeds:
           - not_null
           - accepted_values:
               arguments:
-                values: ['Opening soon']
+                values: ['Opening soon', 'Reported: opening soon']
       - name: evidence
         tests: [not_null]
       - name: verified_on

@@ -80,6 +80,7 @@
   .join .sub { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
   .badge.warn { color: var(--warn); border-color: var(--warn); }
   .dot.soon { background: #fff; border: 2px solid var(--pin-c); width: 8px; height: 8px; }   /* hollow ring = confirmed but not open yet */
+  .dot.rep { background: #fff; border: 2px solid #6e7781; width: 8px; height: 8px; opacity: .65; }   /* light ring = only reported by a directory */
   .badge.ev { color: var(--ev); border-color: var(--ev); }
   .maplibregl-popup-content .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
   .maplibregl-popup-content a.btn { display: inline-block; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); transition: background-color var(--ease), opacity var(--ease); color: var(--accent); text-decoration: none; font-weight: 600; }
@@ -222,6 +223,7 @@
     <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
     <span><span class="dot" style="background:var(--pin-u)"></span>Unnamed courts</span>
     <span><span class="dot soon"></span>Opening soon (not open yet)</span>
+    <span><span class="dot rep"></span>Reported opening soon (unconfirmed)</span>
   </div>
   <footer><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
@@ -438,7 +440,7 @@ function wallItems(list) {
 // ---------- map ----------
 let map, popup, current = [], mapReady = false, viewList = [];
 function geojson(list) {
-  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? 1 : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
+  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
 function initMap() {
   map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: [[-124.6, 32.4], [-114.0, 42.2]],
@@ -461,9 +463,10 @@ function initMap() {
       paint: {"text-color": "#fff"}});
     map.addLayer({id: "pts", type: "circle", source: "v", filter: ["!", ["has", "point_count"]],
       paint: {"circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 4, 14, 8],
-              "circle-stroke-color": ["case", ["==", ["get", "up"], 1], ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"], "#fff"],
-              "circle-stroke-width": ["case", ["==", ["get", "up"], 1], 3, 1.5],
-              "circle-color": ["case", ["==", ["get", "up"], 1], "#fff", ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"]]}});   // up = confirmed but not open yet: hollow ring
+              "circle-stroke-color": ["case", ["==", ["get", "up"], 1], ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"], ["==", ["get", "up"], 2], "#6e7781", "#fff"],
+              "circle-stroke-width": ["case", ["==", ["get", "up"], 1], 3, ["==", ["get", "up"], 2], 2.5, 1.5],
+              "circle-opacity": ["case", ["==", ["get", "up"], 2], 0.65, 1], "circle-stroke-opacity": ["case", ["==", ["get", "up"], 2], 0.65, 1],
+              "circle-color": ["case", [">=", ["get", "up"], 1], "#fff", ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"]]}});   // up 1 = confirmed but not open yet: hollow ring; up 2 = only reported by a directory: lighter, grey ring
     map.on("click", "clusters", e => {
       const f = map.queryRenderedFeatures(e.point, {layers: ["clusters"]})[0];
       map.getSource("v").getClusterExpansionZoom(f.properties.cluster_id).then(z => map.easeTo({center: f.geometry.coordinates, zoom: z + 0.5}));
@@ -549,7 +552,9 @@ function venueNode(v) {
   if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "")})));
   if (v.up) {
     box.append(el("div", {}, el("span", {class: "badge warn", text: v.up})));
-    box.append(el("p", {class: "meta", text: "Not open yet. The club's own page (checked " + (v.ud || "recently") + ") says it is coming; court counts, address and opening date can change, and the pin may be approximate. Check the club before you go."}));
+    box.append(el("p", {class: "meta", text: v.ul
+      ? "Not open yet, and not confirmed by the club's own page: a directory or press listing (checked " + (v.ud || "recently") + ") says it is coming. The location is approximate and the court count, address and date may change or never happen."
+      : "Not open yet. The club's own page (checked " + (v.ud || "recently") + ") says it is coming; court counts, address and opening date can change, and the pin may be approximate. Check the club before you go."}));
   }
   if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a, v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014)
