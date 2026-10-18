@@ -4,7 +4,8 @@ with osm_facts as (
     select
         c.venue_id,
         b.sport_id,
-        max(case when c.setting = 'indoor' then 1 else 0 end) = 1                                   as has_indoor,
+        case when max(case when c.setting = 'indoor' then 1 else 0 end) = 1 then true
+             when max(case when c.setting in ('outdoor', 'covered') then 1 else 0 end) = 1 then false end as has_indoor,   -- null = unknown
         max(case when c.setting in ('outdoor', 'likely_outdoor', 'covered') then 1 else 0 end) = 1  as has_outdoor,
         max(case when c.surface_type = 'sand' then 1 else 0 end) = 1                                as has_sand_beach,
         max(case when c.surface_type = 'clay' then 1 else 0 end) = 1                                as has_clay,
@@ -41,7 +42,8 @@ select
     v.opening_hours,
     v.google_place_id,
     -- court-level facts come from OSM; hand-curated venues carry their own surface and setting
-    case when v.venue_source = 'manual' then v.has_indoor else coalesce(f.has_indoor, false) end     as has_indoor,
+    case when v.venue_source = 'manual' then v.has_indoor else f.has_indoor end                       as has_indoor,   -- null = unknown (the export treats it as "not indoor")
+    case when v.venue_source = 'manual' then v.indoor_basis when f.has_indoor is not null then 'osm_tag' else 'unknown' end as indoor_basis,
     case when v.venue_source = 'manual' then v.has_outdoor else coalesce(f.has_outdoor, false) end   as has_outdoor,
     case when v.venue_source = 'manual' then v.has_sand else coalesce(f.has_sand_beach, false) end   as has_sand_beach,
     coalesce(f.has_clay, false)                               as has_clay,

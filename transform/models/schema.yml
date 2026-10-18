@@ -373,6 +373,13 @@ models:
           - accepted_values:
               arguments:
                 values: ['osm', 'osm+places', 'places_only', 'manual']
+      - name: indoor_basis
+        description: Where has_indoor comes from. has_indoor is true/false only with a basis; null (unknown) otherwise. page_quote and footprint are reserved for later evidence.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['osm_tag', 'manual_seed', 'page_quote', 'footprint', 'unknown']
       - name: name_source
         tests:
           - accepted_values:

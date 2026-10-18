@@ -70,7 +70,10 @@ osm_venues as (
         max(case when access_type = 'public' then 1 else 0 end) = 1   as is_confirmed_public,
         max(case when access_type in ('private', 'members') then 1 else 0 end) = 1 as has_members_courts,
         max(case when is_free then 1 else 0 end) = 1                  as has_free_courts,
-        max(case when setting = 'indoor' then 1 else 0 end) = 1       as has_indoor,
+        -- indoor is three-valued: true (a court is tagged indoor), false (a court is tagged outdoor/covered, none indoor), null = unknown
+        -- (untagged pitches are 'likely_outdoor', an assumption, so they do not count as evidence)
+        case when max(case when setting = 'indoor' then 1 else 0 end) = 1 then true
+             when max(case when setting in ('outdoor', 'covered') then 1 else 0 end) = 1 then false end as has_indoor,
         max(case when setting in ('outdoor', 'likely_outdoor', 'covered') then 1 else 0 end) = 1 as has_outdoor,
         max(case when surface_type = 'hard' then 1 else 0 end) = 1    as has_hard,
         max(case when surface_type = 'clay' then 1 else 0 end) = 1    as has_clay,
@@ -112,6 +115,7 @@ osm_final as (
         -- members-only = marked private/members and nothing says public (the only access signal we hold; unmarked venues are NOT assumed public)
         ((v.has_members_courts or coalesce(bm.is_members, false)) and not (v.is_confirmed_public or coalesce(bm.is_public, false))) as is_members_only,
         v.has_indoor, v.has_outdoor,
+        case when v.has_indoor is not null then 'osm_tag' else 'unknown' end              as indoor_basis,
         v.has_hard, v.has_clay, v.has_grass, v.has_turf, v.has_sand, v.has_indoor_floor,
         cast(null as varchar)                                 as also_listed_as
     from osm_venues v
@@ -163,7 +167,8 @@ places_only as (
         bm.offerings                                          as offerings,
         false as has_lit_courts, coalesce(bm.is_public, false) as is_confirmed_public, false as has_free_courts,
         (coalesce(bm.is_members, false) and not coalesce(bm.is_public, false)) as is_members_only,
-        false as has_indoor, false as has_outdoor,
+        cast(null as boolean) as has_indoor, false as has_outdoor,   -- an Overture place says nothing about indoor/outdoor: unknown, not "outdoor"
+        'unknown'                                             as indoor_basis,
         false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor,
         x.also_listed_as
     from places_ranked p
@@ -196,8 +201,10 @@ manual_final as (
         false as has_free_courts,
         max(case when access_type in ('private', 'members') then 1 else 0 end) = 1
             and max(case when access_type = 'public' then 1 else 0 end) = 0 as is_members_only,
-        max(case when setting = 'indoor' then 1 else 0 end) = 1                               as has_indoor,
+        case when max(case when setting = 'indoor' then 1 else 0 end) = 1 then true
+             when max(case when setting in ('outdoor', 'covered') then 1 else 0 end) = 1 then false end as has_indoor,   -- blank / unknown / likely_outdoor = unknown
         max(case when setting in ('outdoor', 'likely_outdoor', 'covered') then 1 else 0 end) = 1 as has_outdoor,
+        case when max(case when setting in ('indoor', 'outdoor', 'covered') then 1 else 0 end) = 1 then 'manual_seed' else 'unknown' end as indoor_basis,
         max(case when surface_type = 'hard' then 1 else 0 end) = 1    as has_hard,
         max(case when surface_type = 'clay' then 1 else 0 end) = 1    as has_clay,
         max(case when surface_type = 'grass' then 1 else 0 end) = 1   as has_grass,
