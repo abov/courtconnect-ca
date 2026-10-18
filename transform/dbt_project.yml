@@ -71,6 +71,15 @@ seeds:
         address_line: varchar
         evidence: varchar
         verified_on: varchar
+    venue_city_official:     # all text
+      +column_types:
+        venue_id: varchar
+        lat: varchar
+        lon: varchar
+        venue_name: varchar
+        city: varchar
+        evidence: varchar
+        verified_on: varchar
     website_overrides:       # all text
       +column_types:
         domain: varchar
@@ -129,6 +138,7 @@ vars:
   manual_match_radius_m: 150   # a hand-added venue within this distance of a known court/place is merged into it
   place_match_radius_m: 100    # an Overture place within this distance of an OSM court is part of that venue
   place_name_match_radius_m: 300   # ...or within this distance when place and court have the same name
+  place_facility_match_radius_m: 200   # ...or within this distance when the place name matches the court's park/school/centre name, or the place and the court's park/court share a street address (only for places the two rules above leave unmatched)
   venue_radius_m: 75   # courts closer than this are treated as the same facility
   address_fill_radius_m: 150   # nearest Overture address point within this distance fills a pin that has no address (inferred)
   parent_merge_radius_m: 400   # courts inside the same named school/park/club closer than this are one facility
