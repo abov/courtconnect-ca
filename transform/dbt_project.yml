@@ -71,6 +71,15 @@ seeds:
         address_line: varchar
         evidence: varchar
         verified_on: varchar
+    venue_city_official:     # all text
+      +column_types:
+        venue_id: varchar
+        lat: varchar
+        lon: varchar
+        venue_name: varchar
+        city: varchar
+        evidence: varchar
+        verified_on: varchar
     website_overrides:       # all text
       +column_types:
         domain: varchar

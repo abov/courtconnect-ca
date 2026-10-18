@@ -109,6 +109,25 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: venue_city_official
+    description: >
+      City of a named pin that no dataset gives a city for (remote parks, schools, golf courses), read from the venue's own page or a
+      public listing (int_venue_address, city). Keyed by venue_id with the pin's lat/lon: a row is ignored if the pin has moved. Public pages
+      only (ADR 0007); evidence says which page and when.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: city
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: website_overrides
     description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
     columns:
@@ -436,7 +455,7 @@ models:
       nearest Overture address point within address_fill_radius_m (address_source overture_nearest, address_distance_m), else a cached
       Nominatim reverse geocode (address_source nominatim). A street printed on the venue's own official page
       (seeds/venue_address_official.csv, address_source official) beats the inferred tiers. A pin with no city gets one from the hand-added row,
-      a cached Nominatim lookup, or the nearest Overture address with a city within 1 km.
+      a cached Nominatim lookup, or the nearest Overture address with a city within 1 km (5 km as a last resort for remote pins), or a person-checked city in seeds/venue_city_official.csv.
       Home-like pins (is_home_like) never get an inferred street, only a city.
     columns:
       - name: venue_id
