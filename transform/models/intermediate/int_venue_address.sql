@@ -11,6 +11,8 @@
 --                                       the hand-added venue_key; evidence + verified_on required). Beats the inferred tiers and is shown as fact.
 --   near_street: a pin that still has no address but sits on a named road per the cached Nominatim lookup ('street_only'): the road name
 --                alone, shown as "Near <street>" and labelled inferred (a nearest road is not an address). Paths / trails are skipped.
+--   city: a pin with none takes, in order: a person-checked city (seeds/venue_city_official.csv), the nearest Overture address city (<= radius),
+--         the hand-added row's city, a cached Nominatim town, the parent's addr:city, the nearest Overture city within 1 km, then within 5 km.
 -- A venue that already has an address from OSM or Overture is never overwritten. Privacy rule (owner, 2026-10-16): home-like pins get a city,
 -- never a street (`address_withheld` counts what was held back).
 --   home signals: OSM building = house / detached / residential / semidetached_house / bungalow on the court, or an unnamed
@@ -22,6 +24,10 @@
 -- city fallback for a pin with no city from anywhere else: the nearest Overture address WITH a city within this distance (own grid, 3x3 cells >= radius)
 {% set city_radius = 1000 %}
 {% set city_cell = 0.012 %}
+-- last resort for remote pins that nothing above names (Nominatim found no town): the nearest Overture address WITH a city within this distance.
+-- Cell 0.06 deg >= 5 km in longitude up to latitude 45, so 3x3 cells cover the radius. Only pins still cityless are probed (a small set).
+{% set wide_city_radius = 5000 %}
+{% set wide_city_cell = 0.06 %}
 
 with v as (
     select venue_id, venue_name, name_source, lat, lon, address_line, city
@@ -164,6 +170,14 @@ nearby_city as (
     where rn = 1 and d2 <= {{ city_radius }} * {{ city_radius }}
 ),
 
+-- a person-checked city from the venue's own or a listing page (seeds/venue_city_official.csv); counts only while the pin is where it was checked
+official_city as (
+    select o.venue_id, o.city
+    from {{ ref('venue_city_official') }} o
+    join v on v.venue_id = o.venue_id
+    where abs(v.lat - cast(o.lat as double)) < 0.0003 and abs(v.lon - cast(o.lon as double)) < 0.0003
+),
+
 -- a cached row counts only while the pin is still where it was queried (venue_id can shift when pins merge or split)
 nominatim as (
     select m.venue_id, m.address_line, m.city, cast(m.distance_m as integer) as distance_m
@@ -191,6 +205,51 @@ nominatim_city as (
     join v on v.venue_id = m.venue_id
     where m.city is not null and m.city <> ''
       and abs(v.lat - cast(m.lat as double)) < 0.0003 and abs(v.lon - cast(m.lon as double)) < 0.0003
+),
+
+-- pins every source above leaves cityless
+still_cityless as (
+    select v.venue_id, v.lat, v.lon
+    from v
+    left join nearest n on n.venue_id = v.venue_id
+    left join nominatim nm on nm.venue_id = v.venue_id
+    left join nominatim_city nc on nc.venue_id = v.venue_id
+    left join parent_pick pp on pp.venue_id = v.venue_id
+    left join manual_city mc on mc.venue_id = v.venue_id
+    left join nearby_city ny on ny.venue_id = v.venue_id
+    left join official_city oc on oc.venue_id = v.venue_id
+    where v.city is null and v.lat is not null and v.lon is not null
+      and coalesce(n.city, nm.city, nc.city, mc.city, pp.addr_city, ny.city, oc.city) is null
+),
+
+wide_probe as (
+    select venue_id, lat, lon,
+           cast(floor(lat / {{ wide_city_cell }}) as bigint) + dy.d as ny,
+           cast(floor(lon / {{ wide_city_cell }}) as bigint) + dx.d as nx
+    from still_cityless
+    cross join offsets dy
+    cross join offsets dx
+),
+
+wide_points as (
+    select city, lat, lon,
+           cast(floor(lat / {{ wide_city_cell }}) as bigint) as cy,
+           cast(floor(lon / {{ wide_city_cell }}) as bigint) as cx
+    from {{ ref('stg_overture_addresses') }}
+    where city is not null and city <> ''
+),
+
+wide_city as (
+    select venue_id, city
+    from (
+        select p.venue_id, b.city,
+               row_number() over (partition by p.venue_id order by
+                   power((p.lat - b.lat) * 110540, 2) + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2), b.city) as rn,
+               power((p.lat - b.lat) * 110540, 2) + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2) as d2
+        from wide_probe p
+        join wide_points b on b.cy = p.ny and b.cx = p.nx
+    ) x
+    where rn = 1 and d2 <= {{ wide_city_radius }} * {{ wide_city_radius }}
 )
 
 select
@@ -217,7 +276,7 @@ select
          when v.address_line is null and not fl.is_home_like and nm.address_line is not null
          then nm.distance_m end                               as address_distance_m,
     -- city for a pin with none (city is not sensitive: it never names a street); used by the map's location search
-    coalesce(v.city, n.city, nm.city, nc.city, mc.city, pp.addr_city, ny.city) as city,
+    coalesce(v.city, oc.city, n.city, nm.city, nc.city, mc.city, pp.addr_city, ny.city, wc.city) as city,
     (v.address_line is null and o.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld,
     case when v.address_line is null and o.address_line is null and not fl.is_home_like
               and not (v.name_source = 'enclosing_feature' and pp.address_line is not null)
@@ -234,3 +293,5 @@ left join nominatim_street ns on ns.venue_id = v.venue_id
 left join official o on o.venue_id = v.venue_id
 left join manual_city mc on mc.venue_id = v.venue_id
 left join nearby_city ny on ny.venue_id = v.venue_id
+left join official_city oc on oc.venue_id = v.venue_id
+left join wide_city wc on wc.venue_id = v.venue_id

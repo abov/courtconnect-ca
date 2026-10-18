@@ -1,0 +1,5 @@
+# 2026-10-17: city fill, last pins
+
+Cityless pins 89 -> 61 (the "94" in the earlier note had drifted). 9 named venues got a city from a public page via the new seed `venue_city_official.csv` (venue_id + lat/lon guard, evidence + `verified_on`, dbt tests); `int_venue_address` also looks for the nearest Overture address with a city out to 5 km for pins nothing else names (19 more, all remote and unnamed; the 1 km tier is unchanged). No new Nominatim lookups: all 89 were already cached with no town.
+Left blank on purpose: 56 unnamed remote pins (Death Valley, Tahoe backcountry, Nevada desert: no address with a city within 5 km) and 5 named ones: Pleasant Valley School (no exact school match found), "Tennis Court" (38.881, -120.071, generic), Rite of Passage High School (Lyon County NV, no street address found), Pickleball Is Great and Manilla Athletics (online-only businesses, sites print no address).
+Next (optional): a county/place boundary file would name the last pins; not worth a download for 61 unnamed rural courts.
