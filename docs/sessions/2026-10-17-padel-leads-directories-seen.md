@@ -1,0 +1,3 @@
+# 2026-10-17 Golden Padel rejected; `directories_seen` on leads
+- Golden Padel lead is `rejected` (owner: the padelmapusa listing's site is no longer active). `venue_leads.csv` has a new `directories_seen` column (count of public padel directories seen listing a lead, 2026-10-17; padelusa.org not fully enumerated), passed through `stg_venue_leads` and `mart_venue_leads`. It is a sort hint for sleuthing, not evidence: it never changes a pin's confidence. PadelScout scores are deliberately not used.
+- Next: fill `directories_seen` for new padel leads as directories are read; owner to give an address if a "Gold Padel" near LA turns up.
