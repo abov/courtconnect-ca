@@ -1,0 +1,4 @@
+# 2026-10-17 Padel directory gap check (padelmapusa, padelusa.org, padelcourtsfinder)
+- **Result:** of ~31 CA and 3 NV clubs the three directories list, all but 6 were already pins or leads. Added Shadow Mountain Resort (Taktika Padel, Palm Desert, 1 court per directories) as `shadow-mountain-padel` with a Playtomic booking link, confirmed on the public Playtomic club page; it merged into the existing resort pin (37 Padel venues now).
+- **Not added (directory-only, no official page):** Golden Padel (golden-padel.com is 404; the Anaheim address geocodes to a mail store, the Palm Desert one to a house in Sun City 55+), Rad Padel (Murrieta, 39405 Murrieta Hot Springs Rd), EVO Padel (no venue found), The Padel Nomads (a roving community, no courts). Lead notes updated in `venue_leads.csv`.
+- **Next:** owner to give the real address or a visit report for "Gold Padel" near LA (would be a `reported` pin); recheck Rad Padel if the owner confirms it exists.
