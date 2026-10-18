@@ -2,7 +2,7 @@
 
 Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB dev/CI, Snowflake prod) -> static MapLibre map in `app/`.
 README.md has the full story; read it only if you need background. Mission (ADR 0015): help people find every place to play or watch racket sports in CA + NV, discover sports beyond pickleball (tennis stays visible), and get together to play.
-Decisions are in `docs/decisions/` (ADRs 0001-0018, all accepted except 0017 (LLM page reader, proposed 2026-10-17, owner to accept); one file each, read only the one you need).
+Decisions are in `docs/decisions/` (ADRs 0001-0018, all accepted; one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
