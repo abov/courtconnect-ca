@@ -17,6 +17,12 @@ extract:          ## pull ALL CalNeva courts + named parent features from OpenSt
 fresh-db:         ## new worktree (or a stale/broken db): rebuild courtconnect.duckdb here from the shared raw CSVs + this branch's seeds (~1 min)
 	$(PY) ingestion/fresh_db.py
 
+extract-boundaries: ## Census place + county boundaries for CA/NV into data/raw (~13 MB download; yearly at most), then make load
+	$(PY) ingestion/extract_census_boundaries.py
+
+city-boundaries: ## city for pins that still have none, from the Census boundaries (writes seeds/venue_place_boundary.csv; then dbt build, make app-data)
+	$(PY) ingestion/place_from_boundaries.py
+
 extract-addresses: ## Overture address points near the pins, for the address fill (reads S3, ~1 min; run after the OSM/places extract, then make load)
 	$(PY) ingestion/extract_overture_addresses.py
 
