@@ -24,6 +24,7 @@ TABLES = {
     "overture_addresses": ("overture_addresses.csv", ["lat", "lon"]),
     "google_place_ids": ("google_place_ids.csv", []),
     "website_checks": ("website_checks.csv", []),
+    "census_boundaries": ("census_boundaries.csv", []),   # reference polygons (extract_census_boundaries.py); read by place_from_boundaries.py
 }
 
 # Tables that may legitimately have no file yet (the Google lookup is opt-in). They load as empty tables with
@@ -32,7 +33,8 @@ OPTIONAL = {"overture_addresses": ["address_id", "house_number", "street", "unit
             "osm_walls": ["osm_type", "osm_id", "lat", "lon", "name", "sport", "surface", "lit", "access", "fee", "operator", "leisure",
                          "tennis", "addr_city", "extracted_at", "region"],
             "google_place_ids": ["venue_id", "google_place_id", "resolved_at"],
-            "website_checks": ["domain", "status", "resolved_host", "checked_at"]}
+            "website_checks": ["domain", "status", "resolved_host", "checked_at"],
+            "census_boundaries": ["kind", "state_fips", "geoid", "name", "wkt", "source", "extracted_at"]}
 
 
 def load_duckdb(table: str, df: pd.DataFrame, db_path: str, force: bool = False) -> None:

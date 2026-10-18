@@ -2,21 +2,19 @@
 
 For pins that still have no city after every other source in `int_venue_address`, find the US Census place (incorporated city or
 census-designated place) whose boundary contains the pin; if none does, the county. Results go to transform/seeds/venue_place_boundary.csv
-(one row per pin, lat/lon = the pin looked up), so the dbt model needs no spatial SQL and CI needs no shapefiles.
+(one row per pin, lat/lon = the pin looked up), so the dbt model needs no spatial SQL and CI needs no boundary data.
 
-Source: US Census Bureau cartographic boundary files (public domain), 2023, 1:500k:
-  cb_2023_06_place_500k.zip, cb_2023_32_place_500k.zip, cb_2023_us_county_500k.zip
-  from https://www2.census.gov/geo/tiger/GENZ2023/shp/ . Download them into a folder and pass it as the argument.
+The boundaries are the reference table raw.census_boundaries (Census 2023, public domain; `ingestion/extract_census_boundaries.py` writes
+data/raw/census_boundaries.csv, `make load` loads it). Nothing is downloaded here.
 
-    python ingestion/place_from_boundaries.py <folder with the three zips>
+    python ingestion/place_from_boundaries.py
 
-Needs a built courtconnect.duckdb and DuckDB's spatial extension (INSTALL spatial). Existing rows for pins that moved are replaced; rows for
-pins that now have a city from elsewhere stay harmless (the model only reads them for pins that are still cityless). Seeds keep CRLF.
+Needs a built courtconnect.duckdb with raw.census_boundaries loaded, and DuckDB's spatial extension (INSTALL spatial). A pin that moved gets
+a new row; rows for pins that now have a city from elsewhere stay harmless (the model reads them only for pins still cityless). Seeds keep CRLF.
 """
 from __future__ import annotations
 
 import csv
-import sys
 from datetime import date
 from pathlib import Path
 
@@ -26,10 +24,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SEED = ROOT / "transform" / "seeds" / "venue_place_boundary.csv"
 FIELDS = ["venue_id", "lat", "lon", "place_name", "place_kind", "source", "checked_on"]
 SOURCE = "US Census cartographic boundary files 2023 (1:500k)"
-STATE_FIPS = {"CA": "06", "NV": "32"}
 
 
-def main(folder: Path) -> None:
+def main() -> None:
     con = duckdb.connect(str(ROOT / "courtconnect.duckdb"), read_only=True)
     try:
         con.execute("load spatial")
@@ -41,19 +38,21 @@ def main(folder: Path) -> None:
            where (a.city is null or trim(a.city) = '') and v.lat is not null and v.lon is not null"""
     ).fetchall()
     print(f"{len(pins)} pins still have no city")
+    if not pins:
+        return
     con.execute("create temp table pin (venue_id varchar, lat double, lon double)")
     con.executemany("insert into pin values (?, ?, ?)", pins)
     con.execute("create temp table pin_geom as select *, st_point(lon, lat) as g from pin")
+    con.execute("create temp table shape as select kind, state_fips, name, st_geomfromtext(wkt) as geom from raw.census_boundaries")
+    if not con.execute("select count(*) from shape").fetchone()[0]:
+        raise SystemExit("raw.census_boundaries is empty: run extract_census_boundaries.py, then load_raw.py")
     found: dict[str, tuple[str, str]] = {}
-    for fips in STATE_FIPS.values():
-        z = (folder / f"cb_2023_{fips}_place_500k.zip").as_posix()
-        for vid, name in con.execute(
-            f"select p.venue_id, s.NAME from pin_geom p join st_read('/vsizip/{z}') s on st_contains(s.geom, p.g)"
-        ).fetchall():
-            found[vid] = (name, "place")
-    z = (folder / "cb_2023_us_county_500k.zip").as_posix()
     for vid, name in con.execute(
-        f"select p.venue_id, s.NAME from pin_geom p join st_read('/vsizip/{z}') s on st_contains(s.geom, p.g) where s.STATEFP in ('06','32')"
+        "select p.venue_id, s.name from pin_geom p join shape s on s.kind = 'place' and st_contains(s.geom, p.g)"
+    ).fetchall():
+        found[vid] = (name, "place")
+    for vid, name in con.execute(
+        "select p.venue_id, s.name from pin_geom p join shape s on s.kind = 'county' and st_contains(s.geom, p.g)"
     ).fetchall():
         found.setdefault(vid, (f"{name} County", "county"))
     old = {}
@@ -75,4 +74,4 @@ def main(folder: Path) -> None:
 
 
 if __name__ == "__main__":
-    main(Path(sys.argv[1]))
+    main()
