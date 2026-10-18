@@ -38,6 +38,7 @@ seeds:
         noted_on: varchar
         source_url: varchar
         city: varchar
+        directories_seen: varchar
     venue_actions:           # dates stay text in the seed; the staging model casts them
       +column_types:
         start_date: varchar
