@@ -26,7 +26,7 @@ is a data source. No partnership emails until we are ready to socialize or monet
 Not that model: hosted games, payments and dense players per city need staff, safety and moderation work, and start empty (Gameli's
 own guide says you may have to host the first game). Instead:
 - **Now:** community around the data: word-of-mouth reports shown as `reported` (`docs/community_reports_plan.md`).
-- **After beta (open item 7c, social phase A):** a "community of communities": on each pin, link out to open play, clubs,
+- **After beta (social phase A, `CLAUDE.md` "After beta" list; was item 7c):** a "community of communities": on each pin, link out to open play, clubs,
   Meetup/WhatsApp groups and OpenSports/GoodRec sessions that already exist. Check each source's terms first (not read yet).
 - **Only if the beta shows demand:** phase B (own profiles and matching), with its own ADR. Signals: GoatCounter clicks on social
   link-outs, and a beta question such as "Would you use CourtConnect to find people to play with?"
