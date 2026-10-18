@@ -1,6 +1,6 @@
 # ADR 0005: Overture Maps as the second source; Google Places only as place IDs
 
-**Status:** accepted (Overture built; the Google place-ID layer is built behind a dry-run switch and not yet run)
+**Status:** accepted. Overture is built and live. The Google place-ID layer is built but dormant and has never been run (checked 2026-10-17): `ingestion/google_place_ids.py` defaults to a dry run (no network, no key) and needs `--execute` plus the owner's own `GOOGLE_PLACES_API_KEY` and billing; with no `google_place_ids.csv`, `stg_google_place_ids` is empty and `dim_venue` / `mart_venue_finder` carry a null `google_place_id`, which the app export and map do not use. It stays as a cheap, compliant option (IDs only); remove it (script, staging model, source entry, `load_raw.py` table, the two joined columns) if the owner decides never to use it. Snowflake mentions below are history (ADR 0018).
 
 ## Context
 OpenStreetMap finds courts but not businesses: no clubs, indoor facilities, websites or phone numbers, and it knows nothing

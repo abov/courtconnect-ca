@@ -2,7 +2,7 @@
 
 Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB dev/CI, Snowflake prod) -> static MapLibre map in `app/`.
 README.md has the full story; read it only if you need background. Mission (ADR 0015): help people find every place to play or watch racket sports in CA + NV, discover sports beyond pickleball (tennis stays visible), and get together to play.
-Decisions are in `docs/decisions/` (ADRs 0001-0017, all accepted except 0017 (LLM page reader, proposed 2026-10-17, owner to accept); one file each, read only the one you need).
+Decisions are in `docs/decisions/` (ADRs 0001-0018, all accepted except 0017 (LLM page reader, proposed 2026-10-17, owner to accept); one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
@@ -21,7 +21,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0017, all accepted except 0017 (LL
 - Data edits go in seeds, then `make build`:
   - `manual_venues.csv` (venues no dataset knows), `venue_actions.csv` (link-outs; keep `verified_on` + `evidence`),
   - `watch_events.csv` (https links only), `place_sport_overrides.csv` (confirm/reject uncertain matches), `sport_aliases.csv`, `closed_places.csv` (Overture places that no longer exist but are still listed open; `place_id` + `evidence` + `verified_on`).
-- Models must run unchanged on DuckDB and Snowflake: use `adapter.dispatch` macros, no engine-specific SQL.
+- DuckDB only (ADR 0018): new SQL needs no Snowflake-safe form; keep the existing `adapter.dispatch` macros, don't add engine-specific SQL without need.
 - Honesty over polish: label inferred data as inferred, never present guesses as confirmed. CourtConnect links out; it takes no bookings or payments.
 - NEVER use the owner's logins (Playtomic, PlayByPoint, Padel Up, etc.) or read logged-in pages; use public pages and what the owner reports (ADR 0007).
 - Don't use Google Places data (terms forbid storing it); Overture + OSM only (ADR 0005).
@@ -51,7 +51,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 
 **Working practices**
 - Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash). A new worktree has no `courtconnect.duckdb`: run `python ingestion/fresh_db.py` (`make fresh-db`; ~1 min, loads the shared raw CSVs and runs the full dbt build) instead of copying one. Raw CSVs live in ONE shared folder, the main checkout's `data/raw` (`ingestion/rawdir.py`; override with `COURTCONNECT_DATA_DIR`): extract/load scripts from any worktree read and write it, and `load_raw.py` refuses to shrink a table by more than 10% unless `--force`.
-- Seed column changes need `--full-refresh`. **Snowflake is retired as of 2026-10-14 (access may be gone): DuckDB only, never build or sync Snowflake.** Its code stays until an ADR removes it.
+- Seed column changes need `--full-refresh`. **Snowflake is retired as of 2026-10-14 (access may be gone): DuckDB only, never build or sync Snowflake.** Its code stays dormant until the post-beta removal PR (ADR 0018).
 - Commit `app/data/venues.json` after `make app-data`. Re-run `pages.yml` after merging any app/export change; check the latest run (another session's run cancels yours). Confirm a PR is MERGED before calling it shipped.
 - Before starting a task: `git fetch`, check `git log origin/main --since=1.day --oneline` and `gh pr list`, and skim the newest `docs/sessions/` notes, so you don't redo work another session already landed (2026-10-17: city fill and the Padel guard-rail test were each built twice).
 - Avoid merge conflicts: sync with main (rebase or merge) right before opening and again before merging a PR. `app/data/venues.json` is generated and any two PRs that touch it collide: never hand-resolve it; take main's copy, rebuild (`dbt build --full-refresh`), re-run `make app-data`, commit.
