@@ -58,7 +58,25 @@ Built: `ci/gold/place_osm_pairs.csv` (40 hand-checked pairs), `ingestion/eval_ma
 
 Reading it: no sign of wrong merges, so the 100 m radius is not too loose. The misses are the other direction: places named after the park, school or centre that holds the courts ("Memorial Park Tennis Courts", "Fresno City College Tennis Courts", the Cubberley address) sit 105-182 m from the OSM courts and stay separate pins. Caution: the 19 were picked because their name or address pointed at the facility, so 17 of 19 is not a rate across all unmatched places; it shows the miss is real and has a pattern.
 
-## Next slice
+## Next slice (done 2026-10-17, see "Second slice" below; original plan)
 
 1. Try the cheap rule the misses suggest: widen the radius to about 200 m when the place name or address contains the OSM parent's name (park, school, centre; the parent is already in `int_court_parent`) and nothing else is closer. Change it on a branch, run `make build` and `make eval-match`, and see if the 17 misses move without any of the 21 correct pairs breaking.
 2. Add the random sample of about 40 places (plan step 2) so a whole-table precision and recall can be stated, and about 10 deliberate `different` pairs for the new rule (two clubs in one park; the YMCA and Neighborhood Pickleball case).
+
+## Second slice: result (2026-10-17)
+
+Rule added to `int_place_venue_match` (third tier `facility_name`, var `place_facility_match_radius_m: 200`; the old two rules win first, so their results are unchanged): a place the old rules leave unmatched joins the nearest OSM court within 200 m when (a) the distinctive part of the place name (generic words such as tennis, courts, club, park, school and single letters removed) equals or contains the court's parent name, or the reverse, 5+ characters; or (b) the place address equals the court's or the parent's address (street suffixes shortened). Golf-course and hotel parents never count for the name test (their bounding boxes swallow neighbours' courts; the Washoe Tennis Club / Washoe Golf Course case). Macros `facility_key` and `address_key` in `cross_db.sql`; `match_rule` column added to the model.
+
+Gold file now 90 pairs, 3 new strata: `facility_rule_new` (16 places the new rule merges, checked), `random_within_300m` (26 labelled out of a seeded random 45 of the 830 places that have an OSM court within 300 m and were not already in the file; 19 skipped because no independent evidence, never guessed), `different_near_courts` (8 offices, events and clubs that share only nearness with courts).
+
+| Stratum | Pairs | Old rule | New rule |
+|---|---|---|---|
+| matched 75-100 m, name-radius, under 50 m | 21 | 21 correct | 21 correct |
+| unmatched, court within 200 m | 19 | 17 missed | 3 missed (Cuesta: different street number; Terra Nova: parent has no address; Stanford: campus name vs "West Campus") |
+| facility_rule_new | 16 | 16 missed | 16 correct |
+| random_within_300m | 26 | 25 correct, 1 missed | same (the miss is a court 258 m away, outside every radius) |
+| different_near_courts | 8 | 8 correct | 8 correct (no wrong merge) |
+
+Effect: 30 places now join an existing venue instead of being separate pins (the map goes from 10,273 to 10,250 venues; the difference is places that had no pin of their own). Read with care: the first two strata were picked knowing what the rule does, so they show it works on the cases it was built for, not a rate. The only unbiased row is the random sample: 0 wrong merges in 26, 1 miss, a small sample (a 95% upper bound on the wrong-merge rate is about 11%). Known soft spot: about a dozen of the 30 new merges are tennis academies or clubs sharing a school's or park's street address; they are treated as part of that facility (their sport is added to the venue). If you would rather keep operators as separate pins, restrict rule (b) to places whose own sport words match the court's sport.
+
+Next: a second random sample (about 40, including places 300 m+ from any court, to catch missed merges the radius hides); pairs skipped for lack of evidence (Rancho Mirage Racquet Club vs The Club at Morningside, 36 m: possibly a wrong merge by the old distance rule) need a public page or an owner report.
