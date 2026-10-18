@@ -25,7 +25,16 @@ select
     nullif(lower(trim(surface)), '')                                                          as surface,
     case lower(trim(lit)) when 'yes' then true when 'no' then false end                       as is_lit,
     case lower(trim(fee)) when 'no' then true when 'yes' then false end                       as free_to_use,
-    nullif(lower(trim(access)), '')                                                           as access,
+    -- same vocabulary as stg_osm_courts.access_type; anything unrecognised stays NULL (not known)
+    case lower(trim(access))
+        when 'yes' then 'public'
+        when 'public' then 'public'
+        when 'permissive' then 'public'
+        when 'customers' then 'customers'
+        when 'private' then 'private'
+        when 'no' then 'private'
+        when 'members' then 'members'
+    end                                                                                       as access,
     'tagged'                                                                                  as confirmation,
     cast(extracted_at as date)                                                                as reported_on,
     'OpenStreetMap ' || osm_type || ' ' || cast(cast(osm_id as bigint) as varchar) || ', tagged sport=' || coalesce(sport, 'n/a')

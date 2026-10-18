@@ -1,0 +1,6 @@
+# 2026-10-17 Walls access vocabulary, Padel guard-rail test, city fill, ADR 0017
+- **Walls = courts for access:** `manual_walls.access` and `stg_osm_walls.access` now use the venue vocabulary (public / customers / private / members, blank = not known; OSM `no` -> private, unknown tags -> blank); Berkeley Channing + Hearst are `private`; `dim_wall.access` is tested; the popup shows the specific label (Public / Customers only / Private... / Members only) and the grey pin still marks anything non-public.
+- **Padel guard rail:** `assert_pop_tennis_has_supporting_signal` (Pop Tennis needs rung 1-2/5-6, or a loose OSM tag flagged needs_review; never a high-confidence OSM tag or a derived row; the Padel test is main's #211).
+- **City fill: dropped.** Main landed the same step first (#207: 540 -> 94 cityless pins plus official street addresses), so this branch was redone on top of main without my duplicate (Overture 900 m city search, `--city-only` Nominatim mode). Lesson: before starting a task, check recent merges and open PRs for the same item.
+- **ADR 0017 (proposed):** LLM page reader with exact-quote check, staged candidates, owner-set spend cap. Owner to accept; build after the December beta.
+- Next: owner accepts/edits ADR 0017; recheck Padel leads after openings; tier 1 parent park/school addresses needs an Overpass re-extract (ask first).
