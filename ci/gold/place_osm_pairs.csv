@@ -39,3 +39,53 @@ c3320c8b-bb2e-4bf1-a41b-124a2b6dda0b,way/390986545,same,control_under_50m,"OSM p
 42495b76-0be7-4127-9ddf-9324f7204683,way/1348380998,same,name_radius_match,OSM node South Bay Tennis Center has the same name and address (25924 Rolling Hills Road) as the place; matched by the name radius at 215 m,2026-10-17
 e00bbf62-6b90-48a7-b65d-506326ecb7b3,way/1459722102,same,name_radius_match,"OSM court and parent are both named Palm Springs Tennis Club, identical to the place name; matched by the name radius at 149 m",2026-10-17
 5da652a5-3af7-4433-9657-260dbba2c2aa,node/11707546836,same,name_radius_match,OSM node California Badminton Academy has the same name as the place; matched by the name radius at 168 m,2026-10-17
+01a2c54f-482a-4aae-981f-00b3f2b081c4,way/1297281107,same,facility_rule_new,"Place address equals the address of the OSM parent (Cañada College), so the place is that facility's own business",2026-10-17
+06c53180-546b-4bc3-bec7-8ae2d38e33b0,way/1525992028,same,facility_rule_new,"Place address equals the address of the OSM parent (Los Caballeros), so the place is that facility's own business",2026-10-17
+0b2348bc-d423-45a2-b3c4-dc0f2dde66d3,way/243866637,same,facility_rule_new,"Place address equals the address of the OSM parent (Plummer Park), so the place is that facility's own business",2026-10-17
+35d114f8-008e-455a-a7f7-8e38a383d9ef,way/1164832984,same,facility_rule_new,"Place address equals the address of the OSM parent (Lowell High School), so the place is that facility's own business",2026-10-17
+3b59e1b9-92e6-4d9d-985e-ba81f72aca10,way/1418289073,same,facility_rule_new,Place name is the courts of Hidden Glen; OSM parent is the Hidden Glen Property Owners Association that owns them,2026-10-17
+6da985a8-8af9-4d74-bcc6-dea6fce50f35,way/387467914,same,facility_rule_new,"Place address equals the address of the OSM parent (Pleasanton Middle School), so the place is that facility's own business (a table tennis club in the school; the venue gains that sport)",2026-10-17
+7aa3a3f8-a071-47e3-8141-5ddbfa381873,way/99433966,same,facility_rule_new,"Place address equals the address of the OSM parent (Pioneer High School), so the place is that facility's own business",2026-10-17
+7c9cc3c8-ad7b-43c3-aee4-df77c5413bbb,way/340772731,same,facility_rule_new,"Place address equals the address of the OSM parent (Willow Glen High School), so the place is that facility's own business",2026-10-17
+7e6ff6e8-bf1c-4b8c-9843-440ee7d5fbf1,way/1420900740,same,facility_rule_new,"Place address equals the address of the OSM parent (Michelle and Barack Obama Sports Complex), so the place is that facility's own business",2026-10-17
+870aa375-da40-4f19-a821-930bf8f3a994,way/281200331,same,facility_rule_new,"Place address equals the address of the OSM parent (Aliso Niguel High School), so the place is that facility's own business",2026-10-17
+884982db-7216-4857-9819-7329554b92f2,way/1301004840,same,facility_rule_new,"Place address equals the address of the OSM parent (Mountain View High School), so the place is that facility's own business",2026-10-17
+a5ec0644-e814-4ef0-ad8f-6966f8467ffc,way/1420901988,same,facility_rule_new,"Place address equals the address of the OSM parent (Birmingham Community Charter High School), so the place is that facility's own business",2026-10-17
+aadf4205-3dd1-46f9-a18d-fc435f65fadb,way/1425200209,same,facility_rule_new,"Place address equals the address of the OSM parent (La Mirada Community Regional Park), so the place is that facility's own business",2026-10-17
+d1f8f9ed-d1b7-45b2-81be-16ca5dc05bdf,way/195221580,same,facility_rule_new,"Place address equals the address of the OSM parent (Castillero Middle School), so the place is that facility's own business",2026-10-17
+df07a247-3424-42c1-87ce-0dca64f712fd,way/854992305,same,facility_rule_new,"Place is Westwood Tennis Center, 1350 S Sepulveda Blvd; OSM parent is Westwood Park (Westwood Recreation Complex)",2026-10-17
+ffa3b7fe-e881-4fe9-86c2-9a80c98de6c1,way/843554872,same,facility_rule_new,"Place address equals the address of the OSM parent (Canyonside Community Park), so the place is that facility's own business; Rancho Penasquitos Tennis Center is in that park",2026-10-17
+5b9734e4-042c-4736-b107-0afff9eb3b06,way/1092670454,same,random_within_300m,"OSM parent is DuPont Tennis Courts, same name as the place",2026-10-17
+8b3579c2-4792-4111-b30d-71f6c2a5e65d,way/1419148850,same,random_within_300m,"Spalding G. Wathen Tennis Center is the Fresno State tennis facility; OSM parent is California State University, Fresno",2026-10-17
+9970adce-07c9-438b-b4d6-c98ac89cb27a,way/1172666446,same,random_within_300m,"OSM court/parent is The Berkeley Tennis Club at 1 Tunnel Road, identical to the place",2026-10-17
+fb32795c-47ef-465e-b4e3-093549925ee3,way/1525568492,same,random_within_300m,"OSM parent is Coronado Cays Park, same name as the place",2026-10-17
+a66a53fa-b7b3-4574-87df-c5baa8952942,way/910300988,same,random_within_300m,Whitney Mesa pickleball courts are part of the Whitney Ranch Recreation Center complex (OSM parent),2026-10-17
+a3b3eb3a-3d89-4fed-8a77-f6e7282531db,way/1413408856,same,random_within_300m,"OSM parent is de Fremery Park, same name as the place",2026-10-17
+ab8b980e-51c7-4454-9bc4-24fb1bc04cb4,way/247490874,same,random_within_300m,"OSM parent is Davis Senior High School, same name as the place",2026-10-17
+6874b703-a828-4064-83eb-8d076d532662,way/85885447,same,random_within_300m,OSM parent is Noe Valley Courts inside Noe Valley Park (780 Douglass St),2026-10-17
+3d9bd011-8450-46fe-83cb-88f6e42946ba,way/1030856375,same,random_within_300m,"Place address equals the address of the OSM parent (David Sills Lower Peters Canyon Park), so the place is that facility's own business (3901 Farwell Ave)",2026-10-17
+9829cc2e-8fb0-4061-9730-a1da6e3977b2,way/1423807538,same,random_within_300m,"Place address 2100 Costa Del Mar Rd is the La Costa Omni Resort, the OSM parent of the court",2026-10-17
+7e38cf20-d568-4f04-a046-5e583d032de1,way/1418288441,same,random_within_300m,"Place address equals the address of the OSM parent (Cabrillo College), so the place is that facility's own business",2026-10-17
+aad23ee7-0452-46a9-8656-9ffdd5d53ffd,way/1341959471,same,random_within_300m,"Place is the tennis academy of The Club At Rancho Niguel, the OSM parent of the court",2026-10-17
+afbf1b34-e7db-420b-979d-14fb3af656dd,way/1350369632,same,random_within_300m,"OSM parent is Los Angeles Tennis Center, same name as the place",2026-10-17
+e32e0e15-d565-4381-bf6e-d3c41c11189e,way/1418854948,same,random_within_300m,"Place address equals the address of the OSM parent (Southwestern College), so the place is that facility's own business",2026-10-17
+397f5203-b64a-4d21-aa4c-f1b55688616e,way/1214018313,same,random_within_300m,"OSM parent is Del Cerro Tennis Club, same name as the place",2026-10-17
+543e3a05-970c-4427-b11a-6f4c202a0cc5,way/1190504279,same,random_within_300m,"OSM parent is Clovis West High School, same name as the place",2026-10-17
+8fc02364-0103-45c5-98e5-be3350deb560,node/2268043326,same,random_within_300m,OSM node Bay Badminton Center has the same name and address (1191 Montague Expressway),2026-10-17
+f1df3b93-2241-4e06-ac3f-81b4483a3c6e,way/1019269086,same,random_within_300m,"OSM parent is Hugo Reid School, same name as the place",2026-10-17
+b01b8d68-e626-40f0-bdda-81fd8176100c,way/1350369634,same,random_within_300m,"OSM parent is Straus Stadium, same name as the place",2026-10-17
+6710730a-d370-4e18-ba76-c787c8f46a28,way/1420900748,same,random_within_300m,"Place address equals the address of the OSM parent (Michelle and Barack Obama Sports Complex), so the place is that facility's own business",2026-10-17
+1d314cc2-ed28-4ca9-8582-55e8f2e0c817,way/1350369656,same,random_within_300m,"OSM parent is the University of California, Los Angeles; the place is UCLA practice courts",2026-10-17
+f6c64796-3d51-46b4-993c-6313f75a56af,way/1422461215,same,random_within_300m,"OSM parent is Orange Grove Park, same name as the place",2026-10-17
+77053bda-f5ef-4213-8c11-707a4caf38ee,way/544261441,same,random_within_300m,"OSM parent is Rafael Racquet Club, same name as the place",2026-10-17
+9f97f247-8ec5-4080-8d09-d672f3f888d9,way/1423308842,same,random_within_300m,"OSM parent is Laguna Park, same name as the place",2026-10-17
+6da9041c-33e8-416b-bf2b-9c4bbb52e093,way/1418289212,same,random_within_300m,"OSM parent is Santa Cruz High School, same name as the place",2026-10-17
+3efc8258-446a-409a-8f1e-f6e0e0685470,way/1420898669,same,random_within_300m,"Place address 13100 Hubbard St equals the OSM parent El Cariso Park address, but the court is 258 m from the pin (outside every radius)",2026-10-17
+14410934-4da6-40b5-81b0-fab9b2633e4c,way/1106224576,different,different_near_courts,"USTA Northern California is an association office at 1920 N Loop Rd, not the Shoreline Park courts",2026-10-17
+37af97eb-980e-4991-9b4f-b5060f981f27,way/817001064,different,different_near_courts,Rally House Pickleball Club is an indoor club in a business-park suite (6131 Innovation Way #100); the OSM courts belong to the Staybridge Suites hotel,2026-10-17
+6ad79cff-3d59-425b-b0d4-e3064fdade28,way/937478813,different,different_near_courts,"Bryan Bros Tennis Fest is an event/promoter at 999 Crestview Ave, not a court facility",2026-10-17
+93ee526d-d0b6-41e6-a00b-6de3270c7355,way/1068362915,different,different_near_courts,"Cal Table Tennis meets in the UC Berkeley Recreational Sports Facility (2301 Bancroft Way), not at Hellman Tennis Center",2026-10-17
+a27b92b9-b24f-4b2c-aecb-bf027e3b19a2,way/1222455443,different,different_near_courts,"Tennis Club at UCI is a student club at 680 California Ave, not the Anteater Recreation Center courts",2026-10-17
+a760795e-d2e0-48cb-acd8-d1af0cbee68a,way/287775744,different,different_near_courts,The Tennis Channel is a TV network office at 2850 Ocean Park Blvd,2026-10-17
+cf472013-3220-47a6-950b-8f69c0445959,way/1387126544,different,different_near_courts,"Itennis Tumanyani Shaurma is a food business at 5051 Chicago Ave, not the Andulka Park courts",2026-10-17
+e385fd9a-f6bf-46c3-9496-3f341e78cd68,way/1350369634,different,different_near_courts,"Southern California Tennis Association is an association office at 420 Charles E Young Dr W, not Straus Stadium",2026-10-17
