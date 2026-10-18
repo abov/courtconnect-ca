@@ -1,6 +1,6 @@
 # ADR 0006: "Watch a match" events, and a link-out model for booking, clinics and open play
 
-**Status:** watch events built; link-outs built for 2 beach tennis clubs and 6 padel clubs (hand-curated from the clubs' own sites); Playtomic and PlayByPoint read, link-out only
+**Status:** accepted. Watch events and link-outs are built and now cover CA + NV (as of 2026-10-17: 212 `venue_actions` rows and 25 Padel venues, curated from clubs' own sites and the ADR 0009/0010/0012 sources; counts in the sections below are the 2026-10-10 snapshot). Playtomic and PlayByPoint are read as a visitor, link-out only.
 
 ## Context
 The product is a **discovery tool**: it helps people find what they want, then sends them to the venue's or organizer's own site
