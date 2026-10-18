@@ -1,0 +1,60 @@
+venue_id,lat,lon,place_name,place_kind,source,checked_on
+0043940eab32f748ecea62d4b0688589,36.06587,-115.312921,Spring Valley,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+034e5e68629d7fc26709bd1cf95422e8,36.028765,-115.332384,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0a889434a71cd5f9baf2cfc052934513,37.24289,-115.818286,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0c58294f684affbc1af67a0369e14b32,38.961017,-119.884354,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0dabee24e1558a56575fa5712912d7dc,40.198843,-122.209937,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0f920998c37caf7f01737fa0c933c91a,38.7285,-121.072642,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+24f1beab0602400a3e0b7b64306f54d3,38.850144,-120.858497,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+3183945fa7ed31e6f3db6872a52238f5,33.001684,-118.552826,Los Angeles County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+352bd5cd0ce15a1857aeacc5fbdb4631,34.752497,-120.537476,Vandenberg AFB,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+43007abf5ebf0db370b955c2cdfb18ae,38.988489,-119.20795,Lyon County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+44cee3048419d2248635af0d55e3936d,38.965408,-119.897903,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+4823c8278ed994b59229e237178f83e8,36.574803,-115.677165,Indian Springs,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+485fdb4e388d8451fc480e0b3ae24003,37.88354,-116.765536,Nye County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+4b763b937705eee35545ab5d3f643687,39.082257,-119.220857,Lyon County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+586fec355f152aa7b251e053f2941d5a,40.349604,-122.199957,Lake California,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+59858458637951ef74539acd6e93470d,38.947786,-120.088789,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+5aeb5882c4c59bf2d1ea60f51603e49e,39.510521,-119.643718,Storey County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+5e0968232a24dbf0e5d73f5a5afa3266,38.730405,-120.895122,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+63ce57c09bbd9fea0d4107dfa010f020,38.737782,-121.07892,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+6b4c6e7796289d45e7b3033408829ee4,36.00993,-121.239845,Fort Hunter Liggett,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+6c8535550500dcee5b9e27f4fb6570c6,38.881435,-120.070764,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+7b2c3aab7c50e6461f3cf689f6abbcfa,36.151983,-115.419111,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+7d5ec6ef1b5f143becebe71d1b08b42c,40.195446,-122.212176,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+7f82adfdf24147bababcd5467ecff131,39.044849,-120.116557,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+837c9aa940f1f92e86652e7d80c10071,34.749733,-120.532812,Vandenberg AFB,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+8a5a34b1064ae854e66c583242bd80ce,40.653228,-119.355191,Gerlach,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+8c8fcb2993b0d09c80e3048162acc66d,37.119543,-121.732675,Santa Clara County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+97bf1bcd7a6077eef40a3daed63531f7,36.009749,-121.24186,Fort Hunter Liggett,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+992bc0716ef4918870aa00246bbb71e1,40.712595,-120.724389,Stones Landing,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+999eb3918b0c13436eb12ea0f630d0fb,39.053861,-119.945069,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+9b589ad4d133d1ae656f140533c16cd3,40.300616,-120.522383,Janesville,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+9bc58471747389e3b409f42c642febe9,39.368792,-119.722712,Washoe County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+9ebf19d212749c578628b4b000f847b9,39.74957,-122.157641,Glenn County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+a05cb4ce38139bc02bfab3d093523960,35.95837,-115.184415,Enterprise,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+a97ba9a6cf4da05610e774a5da9c8856,38.996073,-120.108152,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b14edaaf4ca2cb55d7c05a0c3e99c38e,34.989206,-117.860235,Kern County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b33f901721d5dd16353a1b47f4026c1b,38.977931,-119.935731,Round Hill Village,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b66b218205f3a8d6a6b1ffdb7c3c1a54,39.074931,-119.945234,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b6cd2917d7861f308c7332561ca23542,39.2472,-120.355386,Placer County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b8dfe584025d21eca5f8707ac9ea590f,39.079132,-119.944988,Glenbrook,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+bcd1baa5a0c08b68b3c0bd515fce9c96,36.056791,-115.446932,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+c090c3edda664947a957ef8ad12c30ee,39.459281,-118.792306,Churchill County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+c5c88196a91da06bde0529273517e6ea,40.31846,-122.802696,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+c5fc1ba6878b3ed0a6af698e00c6f8bc,38.692887,-120.678408,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+c6c45731d17323e2a17e001bea2bb38c,38.745383,-122.493311,Lake County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+caac4c9cc69559f4044b1e6b5ec6bd4a,36.579483,-115.674835,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+cc84e9ec53317387d465f12a9f5e6c81,38.756922,-119.365872,Smith Valley,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+cf2df7e18cfdf04d01ad1013e5c71dd9,33.256631,-119.48371,Ventura County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+d5753d09ccdbb0225b30521366aa4587,33.704967,-115.636431,Riverside County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+d6c0eaf8ec5d401f5b8cb2899d574214,38.902055,-120.995792,Auburn Lake Trails,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+dd44b3639bd1d5308f604a9fab7f6b07,38.743733,-121.080182,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+dd6da8f26261007d2ede027f88351730,39.050735,-119.944984,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+dd818859555239c9be2da861f91bab10,38.996228,-119.952016,Zephyr Cove,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+e15ca568d8664d580b80f35ea8ffa78c,39.051973,-120.114164,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+e6346b1329dc4ddbecca897e0e7303c5,39.076259,-119.945202,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+ef90afca5dfb35eecbddc73844ba1d48,36.904372,-119.122702,Fresno County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+f4480d06b457498831f9a2ecca6699e0,38.958683,-119.885206,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+fb1e01eee4179401394ab37d430cad5a,36.151895,-115.422999,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+fd7d948d090f4309bd32cc216333017e,36.694115,-118.874223,Tulare County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17

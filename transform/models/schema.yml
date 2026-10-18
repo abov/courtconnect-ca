@@ -128,6 +128,29 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: venue_place_boundary
+    description: >
+      The US Census place (incorporated city or census-designated place) whose boundary contains a pin that no other source gives a city,
+      or its county when no place does (ingestion/place_from_boundaries.py; Census cartographic boundary files, public domain). Last-resort
+      city in int_venue_address; the row is ignored if the pin has moved. A county shows as "<Name> County".
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: place_name
+        tests: [not_null]
+      - name: place_kind
+        tests:
+          - accepted_values:
+              arguments: {values: [place, county]}
+      - name: source
+        tests: [not_null]
+      - name: checked_on
+        tests: [not_null]
+
   - name: website_overrides
     description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
     columns:
@@ -455,7 +478,7 @@ models:
       nearest Overture address point within address_fill_radius_m (address_source overture_nearest, address_distance_m), else a cached
       Nominatim reverse geocode (address_source nominatim). A street printed on the venue's own official page
       (seeds/venue_address_official.csv, address_source official) beats the inferred tiers. A pin with no city gets one from the hand-added row,
-      a cached Nominatim lookup, or the nearest Overture address with a city within 1 km (5 km as a last resort for remote pins), or a person-checked city in seeds/venue_city_official.csv.
+      a cached Nominatim lookup, or the nearest Overture address with a city within 1 km (5 km as a last resort for remote pins, then the Census place or county containing the pin), or a person-checked city in seeds/venue_city_official.csv.
       Home-like pins (is_home_like) never get an inferred street, only a city.
     columns:
       - name: venue_id

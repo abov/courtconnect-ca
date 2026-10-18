@@ -80,6 +80,15 @@ seeds:
         city: varchar
         evidence: varchar
         verified_on: varchar
+    venue_place_boundary:    # all text
+      +column_types:
+        venue_id: varchar
+        lat: varchar
+        lon: varchar
+        place_name: varchar
+        place_kind: varchar
+        source: varchar
+        checked_on: varchar
     website_overrides:       # all text
       +column_types:
         domain: varchar
