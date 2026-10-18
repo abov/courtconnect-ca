@@ -48,6 +48,7 @@ Show all 76 sheet sports in the dropdown (55 with no venue are hidden today: sho
 
 ## 7c. Social phase A (after beta)
 "Find people to play with" from existing groups (open play, clinics, ladders, Meetup/WhatsApp/Partiful; public pages, `verified_on` + evidence). Phase B (own accounts/matching) only with its own ADR and if beta shows demand. Competitor scan + why not Plei's hosted-games model: `docs/competitor_scan.md`.
+Todo (2026-10-17): consider integrating with, or building a format like, connectplayers.ca and other player-connecting platforms. Scan first (public pages only), then choose link-out vs. own format; own accounts/matching stays phase B (own ADR).
 
 ## 7d. Community reports step 3 (LATER, parked 2026-10-16)
 Report without GitHub (Google Form -> sheet -> `make sync-reports`). Owner creates the form first (setup in `docs/community_reports_plan.md`). Steps 1-2 live (#149, #152).
