@@ -1,6 +1,6 @@
 # 0017. An LLM reads public pages for candidate venue facts (phase 2)
 
-Date: 2026-10-17. Status: **proposed** (owner to accept; build waits for the December beta, `docs/ml_plan.md` phase 2).
+Date: 2026-10-17. Status: **accepted** (owner, 2026-10-17); build waits for the December beta (`docs/ml_plan.md` phase 2). The spend cap and the precision bar (suggested 90%) are still set by the owner before a real run.
 
 ## Context
 Hand review of public pages is the bottleneck: review batches 10-11 settled 22 rows, the 116-row queue is parked, and several scans (`docs/public_facility_scan.md`, `docs/gym_chain_scan.md`, `*-access` leads, street addresses for parks) all come down to "read a page, find the sports, courts and address". The facts are on public pages, but reading them one at a time in a Claude Code session is slow and costs context. An LLM can do the first read; it must never become the source of truth, because a model can invent a court count or a sport that is not on the page.

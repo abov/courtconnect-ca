@@ -1,6 +1,6 @@
 # ADR 0001: Develop on DuckDB, deploy to Snowflake
 
-**Status:** accepted
+**Status:** superseded by [ADR 0018](0018-duckdb-only.md) (Snowflake retired 2026-10-14; DuckDB is the only warehouse). Body kept as history.
 
 ## Context
 Fast iteration and zero cloud cost matter during development, but the production target is Snowflake.

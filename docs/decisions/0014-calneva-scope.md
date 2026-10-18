@@ -1,6 +1,6 @@
 # 0014. CalNeva scope: California + Nevada
 
-Date: 2026-10-14. Status: accepted (2026-10-14); steps 1 (regions table, #65) and 2 (region column, #67) done 2026-10-14.
+Date: 2026-10-14. Status: accepted (2026-10-14); steps 1-4 done (regions table #65, region column #67, labels, Nevada extracts: 525 NV venues live as of 2026-10-17). Step 5 (Nevada seeds, leads, runbook) is in progress: first NV seeds, Reno, Henderson, Clark County and Washoe County parks done; Sparks parked; NV resort and casino gyms closed by the owner 2026-10-17. The "Engines" line below is superseded by ADR 0018 (DuckDB only).
 
 ## Context
 CourtConnect covers California only. The owner wants the same coverage for Nevada (Las Vegas/Henderson, Reno/Sparks, Carson City, Lake Tahoe) and the product to be called "CalNeva". `docs/calneva_audit.md` lists every hard-coded California assumption (extract borders and boxes, two bbox tests, the `likely_in_california` flag, map bounds, labels). Nothing in the models or export carries a state today.
