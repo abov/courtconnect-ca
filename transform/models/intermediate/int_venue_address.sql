@@ -12,7 +12,8 @@
 --   near_street: a pin that still has no address but sits on a named road per the cached Nominatim lookup ('street_only'): the road name
 --                alone, shown as "Near <street>" and labelled inferred (a nearest road is not an address). Paths / trails are skipped.
 --   city: a pin with none takes, in order: a person-checked city (seeds/venue_city_official.csv), the nearest Overture address city (<= radius),
---         the hand-added row's city, a cached Nominatim town, the parent's addr:city, the nearest Overture city within 1 km, then within 5 km.
+--         the hand-added row's city, a cached Nominatim town, the parent's addr:city, the nearest Overture city within 1 km, then within 5 km,
+--         then the Census place containing the pin (else its county) from seeds/venue_place_boundary.csv.
 -- A venue that already has an address from OSM or Overture is never overwritten. Privacy rule (owner, 2026-10-16): home-like pins get a city,
 -- never a street (`address_withheld` counts what was held back).
 --   home signals: OSM building = house / detached / residential / semidetached_house / bungalow on the court, or an unnamed
@@ -250,6 +251,15 @@ wide_city as (
         join wide_points b on b.cy = p.ny and b.cx = p.nx
     ) x
     where rn = 1 and d2 <= {{ wide_city_radius }} * {{ wide_city_radius }}
+),
+
+-- the Census place (city or census-designated place) whose boundary contains the pin, else the county: the final fallback, for pins no address
+-- point names (ingestion/place_from_boundaries.py -> seeds/venue_place_boundary.csv; the pin must still be where it was looked up)
+boundary_place as (
+    select b.venue_id, b.place_name as city
+    from {{ ref('venue_place_boundary') }} b
+    join v on v.venue_id = b.venue_id
+    where abs(v.lat - cast(b.lat as double)) < 0.0003 and abs(v.lon - cast(b.lon as double)) < 0.0003
 )
 
 select
@@ -276,7 +286,7 @@ select
          when v.address_line is null and not fl.is_home_like and nm.address_line is not null
          then nm.distance_m end                               as address_distance_m,
     -- city for a pin with none (city is not sensitive: it never names a street); used by the map's location search
-    coalesce(v.city, oc.city, n.city, nm.city, nc.city, mc.city, pp.addr_city, ny.city, wc.city) as city,
+    coalesce(v.city, oc.city, n.city, nm.city, nc.city, mc.city, pp.addr_city, ny.city, wc.city, bp.city) as city,
     (v.address_line is null and o.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld,
     case when v.address_line is null and o.address_line is null and not fl.is_home_like
               and not (v.name_source = 'enclosing_feature' and pp.address_line is not null)
@@ -295,3 +305,4 @@ left join manual_city mc on mc.venue_id = v.venue_id
 left join nearby_city ny on ny.venue_id = v.venue_id
 left join official_city oc on oc.venue_id = v.venue_id
 left join wide_city wc on wc.venue_id = v.venue_id
+left join boundary_place bp on bp.venue_id = v.venue_id
