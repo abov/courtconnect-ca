@@ -1,12 +1,16 @@
 -- One row per venue: the street address to show and where it came from (docs/ml_plan.md, address fill).
 --   address_source 'osm'              : address tagged on the OSM court itself (kept as is)
 --   address_source 'overture_place'   : the Overture place record's address (kept as is)
+--   address_source 'osm_parent'       : INFERRED, tier 1b: the address mapped in OSM on the park / school / club that encloses a venue named after it
+--                                       (name_source 'enclosing_feature'; name and address then describe the same place). Beats the nearest-point tiers.
 --   address_source 'overture_nearest' : INFERRED, the nearest Overture address point within `address_fill_radius_m` of the pin
 --   address_source 'nominatim'        : INFERRED, tier 3: OSM's Nominatim reverse geocode of the pin, cached in the nominatim_addresses
 --                                       seed (ingestion/reverse_geocode_blanks.py); only a house number + street within 150 m is used,
 --                                       and only for non-home pins that tiers 1-2 left blank
 --   address_source 'official'         : tier 4, the street printed on the venue's own official page (seeds/venue_address_official.csv, keyed by
 --                                       the hand-added venue_key; evidence + verified_on required). Beats the inferred tiers and is shown as fact.
+--   near_street: a pin that still has no address but sits on a named road per the cached Nominatim lookup ('street_only'): the road name
+--                alone, shown as "Near <street>" and labelled inferred (a nearest road is not an address). Paths / trails are skipped.
 -- A venue that already has an address from OSM or Overture is never overwritten. Privacy rule (owner, 2026-10-16): home-like pins get a city,
 -- never a street (`address_withheld` counts what was held back).
 --   home signals: OSM building = house / detached / residential / semidetached_house / bungalow on the court, or an unnamed
@@ -100,6 +104,19 @@ nearest as (
     where rn = 1
 ),
 
+-- tier 1b: the address mapped on the smallest enclosing feature (same pick as dim_venue's best_parent), only for venues named after it
+parent_pick as (
+    select venue_id, address_line, addr_city
+    from (
+        select c.venue_id, p.address_line, p.addr_city,
+               row_number() over (partition by c.venue_id order by cp.parent_area asc, cp.parent_name) as rn
+        from {{ ref('dim_court') }} c
+        join {{ ref('int_court_parent') }} cp on cp.court_id = c.court_id
+        join {{ ref('stg_osm_parents') }} p on p.parent_id = cp.parent_id
+    ) x
+    where rn = 1 and address_line is not null
+),
+
 -- official street from the venue's own page; a hand-added venue may have merged into a known pin (effective_venue_id)
 official as (
     select mm.effective_venue_id as venue_id, min(o.address_line) as address_line
@@ -156,6 +173,16 @@ nominatim as (
       and abs(v.lat - cast(m.lat as double)) < 0.0003 and abs(v.lon - cast(m.lon as double)) < 0.0003
 ),
 
+-- the road a pin sits on (no house number), for "Near <street>"; trails, paths and loops are not streets people navigate by
+nominatim_street as (
+    select m.venue_id, m.address_line as street
+    from {{ ref('nominatim_addresses') }} m
+    join v on v.venue_id = m.venue_id
+    where m.status = 'street_only' and m.address_line is not null and m.address_line <> ''
+      and not regexp_matches(lower(m.address_line), 'trail|path|loop|course|greenway|walk|track|alley|driveway|parking')
+      and abs(v.lat - cast(m.lat as double)) < 0.0003 and abs(v.lon - cast(m.lon as double)) < 0.0003
+),
+
 -- city only, from any cached lookup (street_only / too_far rows included): a city never names a street, so it is safe for
 -- every pin, and it feeds the map's location search
 nominatim_city as (
@@ -172,29 +199,38 @@ select
     case
         when v.address_line is not null then v.address_line
         when o.address_line is not null then o.address_line
+        when v.name_source = 'enclosing_feature' and pp.address_line is not null then pp.address_line
         when not fl.is_home_like then coalesce(n.address_line, nm.address_line)
     end                                                       as address_line,
     case
         when v.address_line is not null and coalesce(cf.court_has_address, false) then 'osm'
         when v.address_line is not null                                           then 'overture_place'
         when o.address_line is not null                                           then 'official'
+        when v.name_source = 'enclosing_feature' and pp.address_line is not null  then 'osm_parent'
         when not fl.is_home_like and n.address_line is not null                  then 'overture_nearest'
         when not fl.is_home_like and nm.address_line is not null                 then 'nominatim'
     end                                                       as address_source,
-    case when v.address_line is null and o.address_line is not null then null
+    case when v.address_line is null and (o.address_line is not null
+              or (v.name_source = 'enclosing_feature' and pp.address_line is not null)) then null
          when v.address_line is null and not fl.is_home_like and n.address_line is not null
          then cast(round(n.distance_m) as integer)
          when v.address_line is null and not fl.is_home_like and nm.address_line is not null
          then nm.distance_m end                               as address_distance_m,
     -- city for a pin with none (city is not sensitive: it never names a street); used by the map's location search
-    coalesce(v.city, n.city, nm.city, nc.city, mc.city, ny.city) as city,
-    (v.address_line is null and o.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld
+    coalesce(v.city, n.city, nm.city, nc.city, mc.city, pp.addr_city, ny.city) as city,
+    (v.address_line is null and o.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld,
+    case when v.address_line is null and o.address_line is null and not fl.is_home_like
+              and not (v.name_source = 'enclosing_feature' and pp.address_line is not null)
+              and n.address_line is null and nm.address_line is null
+         then ns.street end                                   as near_street
 from v
 join flags fl on fl.venue_id = v.venue_id
 left join court_flags cf on cf.venue_id = v.venue_id
 left join nearest n on n.venue_id = v.venue_id
 left join nominatim nm on nm.venue_id = v.venue_id
 left join nominatim_city nc on nc.venue_id = v.venue_id
+left join parent_pick pp on pp.venue_id = v.venue_id
+left join nominatim_street ns on ns.venue_id = v.venue_id
 left join official o on o.venue_id = v.venue_id
 left join manual_city mc on mc.venue_id = v.venue_id
 left join nearby_city ny on ny.venue_id = v.venue_id

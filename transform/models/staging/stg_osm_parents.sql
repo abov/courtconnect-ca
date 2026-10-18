@@ -15,6 +15,10 @@ select
     cast(maxlat as double)                                    as maxlat,
     cast(maxlon as double)                                    as maxlon,
     (cast(maxlat as double) - cast(minlat as double))
-      * (cast(maxlon as double) - cast(minlon as double))     as bbox_area_deg2
+      * (cast(maxlon as double) - cast(minlon as double))     as bbox_area_deg2,
+    -- the address mapped on the feature itself (addr:housenumber + addr:street), when someone tagged one
+    case when nullif(trim(addr_housenumber), '') is not null and nullif(trim(addr_street), '') is not null
+         then trim(addr_housenumber) || ' ' || trim(addr_street) end   as address_line,
+    nullif(trim(addr_city), '')                               as addr_city
 from {{ source('raw', 'osm_parents') }}
 where name is not null and trim(name) <> ''
