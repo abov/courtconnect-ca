@@ -65,7 +65,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 1. CalNeva (ADR 0014): steps 2-4 done, 525 NV venues live; NV park seeds done. Resort gyms CLOSED by the owner 2026-10-17: do not re-check NV resorts/casinos. Next: repo/Pages rename to `courtconnect` after the beta (date TBD; keep a redirect stub for the old Pages URL).
 2. Street addresses (tiers 1-3, 1b and "Near <street>" built; `int_venue_address`, `docs/ml_plan.md`): after every extract rerun `ingestion/reverse_geocode_blanks.py` (+ `dbt build`, `make app-data`) and `extract_osm_parents.py` after each OSM refresh; then city for the ~480 pins with none. Home-like pins never get an inferred street (owner 2026-10-16); OSM-tagged ones are kept. Tier 4 (official page + quote in `manual_venues.csv`) needs the phase 2 reader.
 3. Backboards / 1-wall courts (was 1b): `manual_walls.csv` rows need `confirmation` + `evidence` + `reported_on`; walls use the venue access vocabulary (#212). LA, SD, Bay Area, Sacramento, OC, Fresno, IE city pages checked: more metros one at a time, only if cheap. Statewide walls parked.
-4. Padel leads (was 1c, `docs/padel_scan.md`): recheck the 23 coming-soon clubs in `venue_leads.csv` after openings (audit, directory sweep and guard-rail test done).
+4. Padel leads (was 1c, `docs/padel_scan.md`): audit, directory sweep, guard-rail test and "Opening soon" pins are done. In December, or sooner if the owner reports an opening, recheck the 3 light "Reported" pins (Ballers DTLA, King of Padel at West Harbor, WynPadel at the Westin Rancho Mirage: promote by setting their `venue_opening_status.csv` value to `Opening soon` once an official page confirms) and the other coming-soon clubs in `venue_leads.csv`; when a club opens, delete its status row and update the venue (courts, address, access).
 5. Match gold set (was 4, `docs/gold_set_plan.md`): first slice of 40 labels built (`make eval-match`); build the next slice.
 6. Facility scans (was 5b/5c, `docs/gym_chain_scan.md`, `docs/public_facility_scan.md`): optional next: City of San Diego rec centers, Sacramento area, Orange County, Inland Empire, other UC/CSU campuses, more military MWR.
 7. Coverage (was 6): `*-access` leads (48 unresolved), club-named venues pass 2, beach tennis court locations, NorCal Equinox, OSM fix list.
@@ -73,7 +73,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 
 *After beta (December; rank with beta findings, ADR 0015)*
 - Beta round (was 9, `docs/feedback_round.md`; dates TBD): send, collect, record findings (RICE, `docs/feedback_findings.md`). Owner: exclude own IP in GoatCounter.
-- Visual polish (was 3, `docs/ux_polish.md`): PR 5 popup grouping + status band, PR 6 sport glyph pins; owner eyeballs 375/320px + dark.
+- Visual polish (was 3, `docs/ux_polish.md`): PR 5 popup grouping + status band, PR 6 sport glyph pins; owner eyeballs 375/320px + dark. Phone view (found 2026-10-17, `docs/sessions/2026-10-17-ring-visual-check.md`): the legend is hidden below 800 px so the Opening soon / Reported rings are explained only by the popup caveat, and the popup is tall and scrolls inside the 341 px phone map: add a short ring key on phones and make the popup fit.
 - Tennis visibility + sport discovery (was 7b): own pin look, never hidden in a pickleball pin, "Try something new" card.
 - All 76 sheet sports in the dropdown + "About <sport>" card (was 7b2, `docs/sport_discovery_plan.md`).
 - Watch events split on-site vs `screening` (was 7): `watch_format` value + accepted_values test + popup label, then Cosm events.
@@ -88,4 +88,4 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 - Review queue (parked 2026-10-17, 116 rows left; `docs/review_priority.csv` for reference): needs the phase 2 reader or community reports; the ~35 live-site rows pass is NOT planned.
 - Community reports step 3, report without GitHub (was 7d): owner creates the Google Form first (`docs/community_reports_plan.md`).
 - Owner to confirm Basque Pelota (Chino trinquet, South SF center) by 2026-11-16.
-- Owner/community visit reports to confirm walls (Sacramento, Berkeley campus walls need an access label) and Pop Tennis pins (Exeter, Garside, Kahler Russell).
+- Owner/community visit reports to confirm walls (Sacramento, Berkeley campus walls need an access label) (Pop Tennis pins Exeter, Garside and Kahler Russell were resolved by owner reports and imagery, 2026-10-17).
