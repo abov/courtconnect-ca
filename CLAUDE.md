@@ -78,6 +78,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 - All 76 sheet sports in the dropdown + "About <sport>" card (was 7b2, `docs/sport_discovery_plan.md`).
 - Watch events split on-site vs `screening` (was 7): `watch_format` value + accepted_values test + popup label, then Cosm events.
 - Social phase A, "Find people to play with" (was 7c, `docs/competitor_scan.md`); phase B only with its own ADR.
+- Player-connection platforms (added 2026-10-17): consider integrating with, or building a format like, https://connectplayers.ca/ and similar player-matching platforms. Scan them first (public pages only, add to `docs/competitor_scan.md`), then decide link-out vs. own format; own accounts/matching = phase B, own ADR.
 - Cost tier "Free / $ / $$ / $$$" (was 7f): ADR first, labelled inferred unless confirmed on a public page, members-only gets no tier.
 - ML phases 2-3 (was 5d, `docs/ml_plan.md`): LLM page reader (ADR 0017, accepted 2026-10-17) and NAIP aerial pilot (Hawthorne, then one LV zip; new courts go to OSM).
 - ITF 2027 calendars (was 7e, ~Dec): facts only (name, dates, venue, link), no scraping; read ITF pages singly in the browser pane.
