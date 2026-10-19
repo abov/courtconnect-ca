@@ -13,3 +13,4 @@ transform/.user.yml
 .claude/
 .venv-aerial/
 data/aerial/
+data/reader_cache/
