@@ -85,5 +85,8 @@ eval-match:      ## score the Overture place -> OSM match against ci/gold/place_
 quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 	$(PY) ingestion/export_quality_scorecard.py
 
+sync-reports:     ## import approved community-form reports (Google Form) as seed edits; needs REPORTS_CSV_URL in .env
+	$(PY) ci/sync_reports.py
+
 issues:           ## check open GitHub issues: what is missing, already done, duplicate or waiting (needs gh, read-only)
 	$(PY) ci/check_issues.py

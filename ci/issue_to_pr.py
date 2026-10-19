@@ -10,6 +10,7 @@ Reads the issue form body from $ISSUE_BODY and writes:
     always become leads: one unverified report never removes or changes a venue.
 The issue text is untrusted: it is only ever written through the csv module, URLs must be https, and nothing is executed.
 Prints a one-line summary on success; exits 1 with a reason on bad input.
+ci/sync_reports.py reuses process() for approved rows of the community Google Form (no GitHub account needed).
 """
 import csv, json, os, re, sys
 from datetime import date
@@ -24,9 +25,12 @@ LINK_TYPES = {"Open play": "open_play", "Drop-in": "drop_in", "Clinic": "clinic"
               "Court booking": "court_booking", "Club page": "club_page"}
 
 
+class Rejected(Exception):
+    """The report cannot be turned into a seed edit; the message says why."""
+
+
 def fail(msg):
-    print(msg)
-    sys.exit(1)
+    raise Rejected(msg)
 
 
 def parse_form(body):
@@ -89,16 +93,21 @@ def find_pin(map_id):
     return pin, sports
 
 
-def add_confirmation(key, user, method, seen, evidence):
+def add_confirmation(key, user, method, seen, evidence, who=None):
     if any(r["venue_key"] == key and r["confirmed_by"].strip().lower() == user.lower() and r["method"] == method
            and r["confirmed_on"] == seen for r in read_seed("venue_confirmations.csv")):
-        fail(f"@{user} already sent this {method} for this venue on {seen}.")
+        fail(f"{who or '@' + user} already sent this {method} for this venue on {seen}.")
     append("venue_confirmations.csv", [key, user, method, seen, evidence])
 
 
-def main():
-    form = parse_form(os.environ["ISSUE_BODY"])
-    num, user = os.environ["ISSUE_NUMBER"], os.environ["ISSUE_AUTHOR"]
+def process(form, num, user, origin=None, who=None, kind="issue", source_type="issue"):
+    """Write the seed rows for one report (a parsed issue form, or the same fields from the community Google Form).
+
+    num is the report's id (issue number, or a form timestamp), user is the confirmed_by value, origin the evidence prefix
+    ("issue #12 by @x"), kind prefixes the lead id and source_type is the venue_leads.source_type. Returns the summary line.
+    """
+    origin = origin or f"issue #{num} by @{user}"
+    out = []
     venue, city = clean(field(form, "Venue name"), 200), clean(field(form, "City"), 100)
     change, ltype = field(form, "What are you suggesting"), field(form, "If adding a way")
     source, price = clean(field(form, "Link to a public page"), 500), clean(field(form, "Price"), 200)
@@ -114,7 +123,7 @@ def main():
         fail("The date is not a real date.")
     if source and urlparse(source).scheme != "https":
         fail("The source link must be https.")
-    evidence = f"Suggested in issue #{num} by @{user}, saw/checked {seen}: {details}" + (f" Source: {source}" if source else "")
+    evidence = f"Suggested in {origin}, saw/checked {seen}: {details}" + (f" Source: {source}" if source else "")
 
     sport_text = clean(field(form, "Sport played here"), 60)
     sport = canonical_sport(sport_text) if sport_text else None
@@ -154,8 +163,8 @@ def main():
             added = f"manual_venues.csv: {key} {sport} (reported, merges onto pin {map_id}); "
         else:
             added = ""
-        add_confirmation(key, user, method, seen, evidence)
-        print(f"{added}venue_confirmations.csv: {key} {method} by @{user}")
+        add_confirmation(key, user, method, seen, evidence, who)
+        out.append(f"{added}venue_confirmations.csv: {key} {method} by {who or '@' + user}")
     elif change.startswith("Add a way") and key:
         if ltype not in LINK_TYPES or not source:
             fail("Adding a way to join needs a link type and an https link to a public page.")
@@ -163,13 +172,23 @@ def main():
         provider = host.split(".")[-2] if host.count(".") else host
         slug = re.sub(r"[^a-z0-9]+", "-", f"{key}-{LINK_TYPES[ltype]}-{num}".lower()).strip("-")
         append("venue_actions.csv", [slug, "manual", key, LINK_TYPES[ltype], f"{ltype} (suggested)", provider, source, price, "", "", evidence, seen])
-        print(f"venue_actions.csv: {slug} for {key}")
+        out.append(f"venue_actions.csv: {slug} for {key}")
     else:
         why = "venue not found in manual_venues; a reviewer must match it" if not key else "correction or closure"
-        append("venue_leads.csv", [f"issue-{num}", venue, city, "", clean(f"{change}: {details}", 500), "issue", source, "new",
+        append("venue_leads.csv", [f"{kind}-{num}", venue, city, "", clean(f"{change}: {details}", 500), source_type, source, "new",
                                   f"Reviewer: check the source and place the change ({why})", date.today().isoformat(),
-                                  f"Issue #{num} by @{user}; map id {field(form, 'Map ID')}"])
-        print(f"venue_leads.csv: issue-{num}")
+                                  f"{origin[0].upper() + origin[1:]}; map id {field(form, 'Map ID')}", ""])
+        out.append(f"venue_leads.csv: {kind}-{num}")
+    return "; ".join(out)
+
+
+def main():
+    form = parse_form(os.environ["ISSUE_BODY"])
+    try:
+        print(process(form, os.environ["ISSUE_NUMBER"], os.environ["ISSUE_AUTHOR"]))
+    except Rejected as e:
+        print(e)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
