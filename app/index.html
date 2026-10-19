@@ -73,6 +73,10 @@
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; }
+  .sportinfo { margin-top: 8px; } .sportinfo summary { font-size: 12.5px; }
+  .sportinfo p { margin: 6px 0 0; } .sportinfo .facts { color: var(--muted); }
+  .sportinfo .links { display: flex; flex-wrap: wrap; gap: 4px 12px; } .sportinfo .links a { color: var(--accent); }
+  .sportinfo .links small { color: var(--muted); }
   .join { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--line); }
   .join h3 { font-size: 12px; margin: 0 0 4px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
   .join a.act { display: block; padding: 5px 9px; margin: 4px 0; border: 1px solid var(--accent); border-radius: var(--r-sm); color: var(--accent); text-decoration: none; font-weight: 600; transition: background-color var(--ease); }
@@ -171,6 +175,7 @@
     <div>
       <label class="l" for="sport">Sport</label>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
+      <details id="sportinfo" class="note sportinfo" hidden><summary id="sportinfo-t"></summary><div id="sportinfo-b"></div></details>
       <p id="anywhere" class="note" hidden></p>
       <p id="wallnote" class="note" hidden></p>
     </div>
@@ -753,7 +758,36 @@ function populateSports() {
   sel.value = String(state.sport); updateSportIcon();
   showAnywhere();
 }
+const SPORT_LINKS = [["r", "Rules"], ["c", "Court size"], ["g", "Gear"], ["l", "Learn more"]];
+// "About <sport>": our own one-line blurb + the sheet's facts + link-outs to the rules, court and gear pages (never copied text).
+function showSportInfo() {
+  const box = $("sportinfo"), s = state.sport >= 0 ? sports[state.sport] : null, f = (s && s.f) || {}, u = (s && s.u) || {};
+  const facts = [];
+  if (f.p) facts.push(f.p + " players");
+  if (f.c) facts.push("Court " + f.c + (/^[\d.]+x[\d.]+$/.test(f.c) ? " ft" : ""));
+  if (f.g) facts.push("Gear: " + f.g);
+  if (f.o) facts.push("Governing body: " + f.o);
+  const links = SPORT_LINKS.filter(([k]) => u[k]);
+  if (f.ou) links.push(["ou", "Official site"]);
+  box.hidden = !(s && (s.d || facts.length || links.length));
+  if (box.hidden) return;
+  const body = $("sportinfo-b"); body.replaceChildren();
+  $("sportinfo-t").textContent = "About " + s.n;
+  if (s.d) body.append(el("p", {text: s.d}));
+  if (facts.length) body.append(el("p", {class: "facts", text: facts.join(" · ")}));
+  if (links.length) {
+    const row = el("p", {class: "links"});
+    for (const [k, label] of links) {
+      const url = k === "ou" ? f.ou : u[k];
+      let host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) { continue; }
+      row.append(el("a", {href: url, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(label + " "), el("small", {text: "(" + host + ")"})));
+    }
+    body.append(row, el("p", {class: "facts", text: "Links open each site's own page. Court sizes and gear are typical; check your venue's own rules."}));
+  }
+  box.open = window.innerWidth > 600;   // collapsed on phones so the map stays in view
+}
 function showAnywhere() {
+  showSportInfo();
   const n = $("anywhere"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
   n.hidden = !(s && s.w);
   if (s && s.w) n.textContent = s.wn + (s.v > 0 ? "" : ". No venue is listed because none is needed.");

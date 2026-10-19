@@ -6,7 +6,7 @@ It must be shared as "Anyone with the link can view" for the export URL to work.
     python ingestion/sync_sports_sheet.py
 
 Writes transform/seeds/all_racquet.csv (headers snake_cased, fully blank rows dropped, values otherwise
-untouched - cleaning happens in dbt so it is tested and visible in lineage).
+untouched, apart from the https/blurb-length checks on the info-card columns - cleaning happens in dbt so it is tested and visible in lineage).
 """
 from __future__ import annotations
 
@@ -34,6 +34,10 @@ COLUMNS = {
     "Court Surface": "court_surface", "Base Gear": "base_gear", "Net Type": "net_type",
     "Net Ht": "net_ht", "Gear Avail (AO)": "gear_avail_ao", "Competing": "competing", "url": "url",
 }
+# Added 2026-10-18 (sport info card, docs/sport_discovery_plan.md Part 2). Optional so a sheet without them still syncs; the seed
+# always gets the columns (blank until the sheet has them). Links must be https; the blurb is shown as plain text.
+DETAIL_COLUMNS = {"Blurb": "blurb", "Learn URL": "learn_url", "Rules URL": "rules_url", "Court URL": "court_url", "Gear URL": "gear_url"}
+MAX_BLURB = 200
 OUT = Path("transform/seeds/all_racquet.csv")
 
 
@@ -53,12 +57,20 @@ def main() -> None:
     rows = []
     for row in reader:
         out = {COLUMNS[k]: (row.get(k) or "").strip() for k in COLUMNS}
+        out.update({v: (row.get(k) or "").strip() for k, v in DETAIL_COLUMNS.items()})
         if out["sport"]:  # the sheet has ~20 formatted-but-empty rows below the data
             rows.append(out)
 
+    for r in rows:
+        for c in ("learn_url", "rules_url", "court_url", "gear_url"):
+            if r[c] and not r[c].startswith("https://"):
+                sys.exit(f"{r['sport']}: {c} must start with https:// (got {r[c]!r}). Fix it in the sheet.")
+        if len(r["blurb"]) > MAX_BLURB:
+            sys.exit(f"{r['sport']}: blurb is {len(r['blurb'])} characters (max {MAX_BLURB}). Shorten it in the sheet.")
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with OUT.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=list(COLUMNS.values()), lineterminator="\n")
+        w = csv.DictWriter(f, fieldnames=list(COLUMNS.values()) + list(DETAIL_COLUMNS.values()), lineterminator="\n")
         w.writeheader()
         w.writerows(rows)
 
