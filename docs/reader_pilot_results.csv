@@ -1,9 +1,11 @@
 venue_ref,page_url,field,sport,reader_value,seed_value,outcome,quote
 calismash-el-segundo,https://calismash.com/,sport,Pickleball,Pickleball,Pickleball,agree,Pickleball Programs
 calismash-el-segundo,https://calismash.com/,sport,Tennis,Tennis,Pickleball,new,I am shocked! This place is actually BADASS! Iâve been a tennis guy and swore pickleball would not be my thing But this place has music bumping
+calismash-el-segundo,https://calismash.com/,setting,Pickleball,indoor,indoor,agree,"h of California Smash in El Segundo and explore our premium indoor pickleball courts, modern lounge areas, event spaces, and member amenities. See what makes"
 diablo-country-club,https://www.diablocc.org/,sport,Tennis,Tennis,Tennis,agree,TENNIS & PICKLEBALL
 diablo-country-club,https://www.diablocc.org/,sport,Pickleball,Pickleball,Tennis,new,TENNIS & PICKLEBALL
 padelup-culver-city,https://culvercity.padelup.club/,sport,Padel,Padel,Padel,agree,Padel Up | Culver City
+padelup-culver-city,https://culvercity.padelup.club/,setting,Padel,indoor,indoor,agree,"Welcome to the Padel Up Flagship, the only indoor padel club in Los Angeles, CA! With 30ft high ceilings, three courts, and bar/lounge"
 chuck-minker-sports-complex,https://www.lasvegasnevada.gov/Residents/Parks-Facilities/Chuck-Minker-Sports-Complex,sport,Racquetball,Racquetball,Racquetball,agree,"ties, including the fitness equipment area, weight room and racquetball courts, are open. Fitness classes, open gym and other programs are available."
 chuck-minker-sports-complex,https://www.lasvegasnevada.gov/Residents/Parks-Facilities/Chuck-Minker-Sports-Complex,courts,Racquetball,5,5,agree,5 Racquetball Courts with upper deck viewing
 laguna-woods-paddle-tennis-club,https://lagunawoodsvillage.com/amenities/clubs/paddle-tennis-club/,sport,Tennis,Tennis,Pop Tennis,new,Paddle Tennis Club
@@ -42,3 +44,6 @@ pb-alta-vista-redondo,https://www.redondo.org/business_detail_T14_R115.php,sport
 pb-alta-vista-redondo,https://www.redondo.org/business_detail_T14_R115.php,courts,Tennis,7,,new,"ne little league field, a Community Center, Picnic Shelter, 7 outdoor tennis courts, 4 outdoor pickleball courts, 2 indoor racquetball courts, and a dog run."
 pb-alta-vista-redondo,https://www.redondo.org/business_detail_T14_R115.php,courts,Pickleball,4,4,agree,"Community Center, Picnic Shelter, 7 outdoor tennis courts, 4 outdoor pickleball courts, 2 indoor racquetball courts, and a dog run."
 pb-alta-vista-redondo,https://www.redondo.org/business_detail_T14_R115.php,courts,Racquetball,2,,new,"lter, 7 outdoor tennis courts, 4 outdoor pickleball courts, 2 indoor racquetball courts, and a dog run."
+pb-alta-vista-redondo,https://www.redondo.org/business_detail_T14_R115.php,setting,Tennis,outdoor,,new,"little league field, a Community Center, Picnic Shelter, 7 outdoor tennis courts, 4 outdoor pickleball courts, 2 indoor racquetball courts, and a dog run"
+pb-alta-vista-redondo,https://www.redondo.org/business_detail_T14_R115.php,setting,Pickleball,outdoor,outdoor,agree,"ommunity Center, Picnic Shelter, 7 outdoor tennis courts, 4 outdoor pickleball courts, 2 indoor racquetball courts, and a dog run."
+pb-alta-vista-redondo,https://www.redondo.org/business_detail_T14_R115.php,setting,Racquetball,indoor,,new,"er, 7 outdoor tennis courts, 4 outdoor pickleball courts, 2 indoor racquetball courts, and a dog run."

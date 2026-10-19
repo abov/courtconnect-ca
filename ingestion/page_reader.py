@@ -235,13 +235,17 @@ def verify(facts: object, page_text: str, sports: dict[str, str]) -> tuple[list[
         elif ok and field == "setting":
             value = value.lower()
             ok = value in SETTINGS
+            if ok and sport:  # a setting is about one sport ("2 indoor racquetball courts"): the quote must name it
+                canon = sports.get(sport.lower())
+                sport = canon or ""
+                ok = bool(canon) and any(al in quote.lower() for al, c in sports.items() if c == canon)
         elif ok and field == "access":
             value = value.lower()
             ok = value in ACCESS
         elif ok and field == "booking_url":
             ok = value.startswith("https://") and value in f"{page} {quote}"
         if ok:
-            kept.append({"field": field, "sport": sport if field == "courts" else (value if field == "sport" else ""),
+            kept.append({"field": field, "sport": sport if field in ("courts", "setting") else (value if field == "sport" else ""),
                          "value": value, "quote": quote})
         else:
             dropped += 1
@@ -291,6 +295,7 @@ def rules_extract(text: str, sports: dict[str, str]) -> list[dict]:
     spat = re.compile(r"\b(" + "|".join(re.escape(n) for n in names) + r")\b", re.I)
     cpat = re.compile(r"\b(\d{1,2}|" + "|".join(NUMBER_WORDS) + r")(?:[\s-]+[A-Za-z]+){0,3}[\s-]+courts?\b", re.I)
     lpat = re.compile(r"\W{1,3}(\d{1,2}|" + "|".join(NUMBER_WORDS) + r")\s+(?:\w+\s+)?courts?\b", re.I)
+    ppat = re.compile(r"(?:\s+\w+)?\s+courts?\s*(?:\(\s*(\d{1,2})\s*\)|[:=]\s*(\d{1,2})\b)", re.I)  # "Pickleball courts (7)"
     facts: list[dict] = []
     seen: set[tuple] = set()
     access_seen: set[str] = set()
@@ -328,6 +333,15 @@ def rules_extract(text: str, sports: dict[str, str]) -> list[dict]:
             if m:
                 n = m.group(1).lower()
                 add("courts", canon, str(NUMBER_WORDS.get(n, n)), window(line, s, m.end()))
+        for s, e, canon in found:  # "Pickleball courts (7)", "Tennis courts: 4"
+            m = ppat.match(line, e)
+            if m:
+                n = (m.group(1) or m.group(2))
+                add("courts", canon, str(int(n)), window(line, s, m.end()))
+        for s, e, canon in found:  # "indoor pickleball", "outdoor tennis courts": setting named right next to the sport
+            m = re.search(r"\b(indoor|outdoor)\b(?:\W+\w+){0,2}\W*$", line[max(0, s - 40):s], re.I)
+            if m:
+                add("setting", canon, m.group(1).lower(),window(line, max(0, s - 40) + m.start(), e))
         if found:
             for kind, pat in (("public", _PUBLIC), ("members", _MEMBERS)):
                 m = pat.search(line)
@@ -385,6 +399,8 @@ def compare(fact: dict, seed: dict | None) -> tuple[str, str]:
         sv = {"club": "members"}.get(seed["access"], seed["access"])
         return seed["access"], ("agree" if v == sv else "conflict") if seed["access"] not in ("", "unknown") else "new"
     if f == "setting":
+        if fact["sport"] and fact["sport"] != seed["sport"]:
+            return "", "new"
         return seed["setting"], ("agree" if v == seed["setting"] else "conflict") if seed["setting"] else "new"
     return "", "new"
 
