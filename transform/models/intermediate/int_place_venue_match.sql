@@ -5,6 +5,8 @@
 --   facility_name  within `place_facility_match_radius_m` when the place is named after the court's park/school/centre
 --                  ("Memorial Park Tennis Courts" for courts mapped inside Memorial Park), or place and court/park share a street address.
 --                  Added after the gold set found 17 of 19 checked unmatched places were such misses (docs/gold_set_plan.md).
+--                  A bare city name inside a longer parent name ("Atascadero Pickleball Club" vs "Atascadero Unified School District") never counts (an equal name, "Tustin Sports Park", still does):
+--                  radius 300 m (was 200) after the third gold slice, which showed this guard is needed there.
 -- Same grid-bucket trick as int_court_pairs, so it scales statewide.
 {% set radius = var('place_match_radius_m') %}
 {% set name_radius = var('place_name_match_radius_m') %}
@@ -13,6 +15,7 @@
 
 with places as (
     select place_id, lower(trim(place_name)) as name_key, {{ facility_key(normalize_name('place_name')) }} as fac_key,
+           trim({{ normalize_name('city') }}) as city_key,
            case when address_line is not null and substr(trim(address_line), 1, 1) between '0' and '9'
                 then {{ address_key('address_line') }} end as addr_key,
            lat, lon,
@@ -43,7 +46,7 @@ candidates as (
     select
         p.place_id, c.venue_id, (p.name_key = c.name_key) as same_name,
         -- the distinctive part of the place name is, or contains, the park/school/centre name (or the reverse); 5+ characters so a stub never matches
-        (length(trim(p.fac_key)) >= 5 and length(trim(c.parent_key)) >= 5
+        (length(trim(p.fac_key)) >= 5 and length(trim(c.parent_key)) >= 5 and not (trim(p.fac_key) = p.city_key and trim(c.parent_key) <> trim(p.fac_key))
          and (p.fac_key like '%' || c.parent_key || '%' or c.parent_key like '%' || p.fac_key || '%')) as facility_name,
         (p.addr_key is not null and length(p.addr_key) > 8
          and (p.addr_key = c.court_addr_key or p.addr_key = c.parent_addr_key)) as same_address,
