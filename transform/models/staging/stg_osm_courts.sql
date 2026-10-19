@@ -9,6 +9,29 @@ with src as (
           select 1 from {{ ref('osm_sport_map') }} m
           where ';' || lower(replace(o.sport, ' ', '')) || ';' like '%;' || m.osm_sport_key || ';%'
       )
+),
+
+-- The same court is sometimes drawn twice in OSM (two pitch ways, same sport tag, same spot: leftovers of aerial
+-- tracing passes), which doubled its court count (Van Nuys Sherman Oaks Tennis Courts showed 16 instead of 8). Keep the
+-- way with the lower id. Only pitch-vs-pitch: a sports centre or stadium legitimately sits on top of its courts.
+deduped as (
+    select s.*
+    from src s
+    where not (
+        s.leisure = 'pitch'
+        and exists (
+            select 1
+            from src d
+            where d.leisure = 'pitch'
+              and lower(replace(d.sport, ' ', '')) = lower(replace(s.sport, ' ', ''))
+              and (d.osm_id < s.osm_id or (d.osm_id = s.osm_id and d.osm_type < s.osm_type))
+              and abs(d.lat - s.lat) < 0.0001
+              and sqrt(
+                      power((d.lat - s.lat) * 110540, 2)
+                    + power((d.lon - s.lon) * cos(radians(s.lat)) * 111320, 2)
+                  ) <= {{ var('osm_court_duplicate_radius_m') }}
+        )
+    )
 )
 
 select
@@ -70,4 +93,4 @@ select
     lower(nullif(trim(building), ''))                       as building,
     extracted_at,
     {{ region_code('region') }}                               as region
-from src
+from deduped
