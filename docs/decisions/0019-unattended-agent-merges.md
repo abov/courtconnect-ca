@@ -1,6 +1,6 @@
 # 0019. When agents may merge without a person reviewing
 
-Date: 2026-10-18. Status: **proposed**. The owner set the spend cap ($20 a month, 2026-10-18); the other numbers below are the recommended starting values and become final when the owner accepts the ADR. Until then every merge stays human (ADR 0008).
+Date: 2026-10-18. Status: **accepted** (owner, 2026-10-18), with the Numbers table as written. **Stage 0 only: agents may open PRs, humans still merge.** No class may auto-merge until it earns it under section 4 and the owner switches it on; no scheduled task starts without the owner's go-ahead (CLAUDE.md).
 
 ## Context
 ADR 0015 sets a long-term goal: the project runs itself with the owner's review time driven toward zero. `docs/self_service_plan.md` classifies each refresh step: most are mechanical with a pass/fail result, some need a page read and a quote, a few need judgment. ADR 0008 says a reviewer checks the evidence and merges; ADR 0017 says nothing from the page reader is used without a person approving it. Both were right for a project with no automated gates and no measured accuracy. This ADR says how that changes, and what does not.
