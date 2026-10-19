@@ -85,20 +85,29 @@ osm_venues as (
     group by venue_id
 ),
 
+-- A hand-checked name for a court group a nearby club place names (seeds/venue_name_official.csv); counts only while the pin is where it was checked.
+official_name as (
+    select o.venue_id, o.venue_name
+    from {{ ref('venue_name_official') }} o
+    join osm_venues v on v.venue_id = o.venue_id
+    where abs(v.lat - cast(o.lat as double)) < 0.0003 and abs(v.lon - cast(o.lon as double)) < 0.0003
+),
+
 osm_final as (
     select
         v.venue_id,
-        coalesce(v.tagged_name, v.operator_name, bm.venue_name,
+        coalesce(v.tagged_name, v.operator_name, bm.venue_name, on_.venue_name,
                  case when pl.confidence >= 0.5 then pl.place_name end, pp.parent_name)   as venue_name,
         case
             when v.tagged_name is not null                      then 'court_name'
             when v.operator_name is not null                    then 'operator'
             when bm.venue_name is not null                      then 'manual'
+            when on_.venue_name is not null                     then 'manual'
             when pl.confidence >= 0.5                           then 'places_directory'
             when pp.parent_name is not null                     then 'enclosing_feature'
             else 'unnamed'
         end                                                   as name_source,
-        case when v.tagged_name is null and v.operator_name is null and bm.venue_name is null
+        case when v.tagged_name is null and v.operator_name is null and bm.venue_name is null and on_.venue_name is null
                   and coalesce(pl.confidence, 0) < 0.5 then pp.parent_kind end            as name_feature_kind,
         case when pl.venue_id is not null then 'osm+places' else 'osm' end                as venue_source,
         v.court_records,
@@ -122,6 +131,7 @@ osm_final as (
     left join best_parent pp on pp.venue_id = v.venue_id
     left join best_place pl on pl.venue_id = v.venue_id
     left join best_manual bm on bm.venue_id = v.venue_id
+    left join official_name on_ on on_.venue_id = v.venue_id
 ),
 
 -- Places that share an address are one venue (dim_place.venue_id): the best-confidence record names it, the others are
