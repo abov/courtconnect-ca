@@ -48,7 +48,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0019, all accepted; one file each,
 - `ci/fixtures`  small sample data for CI
 
 ## Current status
-Session notes: one file per session in `docs/sessions/` (read only the newest 1-2 when picking up). Older log: `docs/status_history.md`. Plan: `~/.claude/plans/create-a-revised-plan-temporal-yao.md`.
+Session notes: one file per session in `docs/sessions/` (read only the newest 1-2 when picking up). Older log: `docs/archive/status_history.md`. Plan: `~/.claude/plans/create-a-revised-plan-temporal-yao.md`.
 
 **Working practices**
 - Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash). A new worktree has no `courtconnect.duckdb`: run `python ingestion/fresh_db.py` (`make fresh-db`; ~1 min, loads the shared raw CSVs and runs the full dbt build) instead of copying one. Raw CSVs live in ONE shared folder, the main checkout's `data/raw` (`ingestion/rawdir.py`; override with `COURTCONNECT_DATA_DIR`): extract/load scripts from any worktree read and write it, and `load_raw.py` refuses to shrink a table by more than 10% unless `--force`.
@@ -60,7 +60,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 
 **Done (summary):** CA map with link-outs, confirmation levels, leads, suggest-a-change form -> PR workflow (ADR 0008), social/WhatsApp/Meetup/Partiful link-outs (ADR 0009/0010/0012), OSM edit link (ADR 0011), GoatCounter analytics (ADR 0013, site `courts`), logo C, UX Option A PRs 1-3, 43 tournament events, 265 hitting walls (LA/SD/Bay OSM + 2 owner), private-club passes 1-2 (partial), `ref_sport_fit`, `mart_sport_evidence`, `mart_venue_confidence` rules_v2 (not exported), `make quality` scorecard incl. 35-day freshness SLA, address fill tiers 1-3 + city fill (2026-10-17), mode buttons renamed "Play" / "Watch" (2026-10-17), monthly runbook, ADR 0014 CalNeva step 1 (`REGIONS` in `ingestion/overpass.py`, `ci/check_regions.py`).
 
-**Open, in order** (detail per item, dated results and numbers: `docs/roadmap_history.md`; old numbers there are in brackets)
+**Open, in order** (detail per item, dated results and numbers: `docs/archive/roadmap_history.md`; old numbers there are in brackets)
 
 *Doable now* (priority order; one task per session)
 1. CalNeva (ADR 0014): steps 2-4 done, 525 NV venues live; NV park seeds done. Resort gyms CLOSED by the owner 2026-10-17: do not re-check NV resorts/casinos. Next: repo/Pages rename to `courtconnect` after the beta (date TBD; keep a redirect stub for the old Pages URL).
