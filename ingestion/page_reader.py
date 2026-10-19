@@ -278,6 +278,65 @@ def call_model(model: str, key: str, venue_name: str, city: str, text: str) -> t
     return out, int(u.get("input_tokens", 0)), int(u.get("output_tokens", 0))
 
 
+# ---------- free engine: rules, no model, no cost ----------
+_PUBLIC = re.compile(r"open to (?:the )?(?:general )?public|available to the (?:general )?public", re.I)
+_MEMBERS = re.compile(r"members?[- ]only|for (?:our )?members|exclusive(?:ly)? (?:to|for) members|membership (?:is )?required", re.I)
+
+
+def rules_extract(text: str, sports: dict[str, str]) -> list[dict]:
+    """Candidate facts by plain pattern matching (sport names/aliases, '<n> ... courts', access phrases). The quote is a
+    window of the page around the match, so verify() applies exactly as it does to model output. Lower recall than a
+    model, but free, offline and reproducible, which is what an open-source project can run on every contributor's laptop."""
+    names = sorted(sports, key=len, reverse=True)
+    spat = re.compile(r"\b(" + "|".join(re.escape(n) for n in names) + r")\b", re.I)
+    cpat = re.compile(r"\b(\d{1,2}|" + "|".join(NUMBER_WORDS) + r")(?:[\s-]+[A-Za-z]+){0,3}[\s-]+courts?\b", re.I)
+    lpat = re.compile(r"\W{1,3}(\d{1,2}|" + "|".join(NUMBER_WORDS) + r")\s+(?:\w+\s+)?courts?\b", re.I)
+    facts: list[dict] = []
+    seen: set[tuple] = set()
+    access_seen: set[str] = set()
+
+    def add(field, sport, value, quote):
+        k = (field, sport, value)
+        if k not in seen:
+            seen.add(k)
+            facts.append({"field": field, "sport": sport, "value": value, "quote": quote})
+
+    def window(line, lo, hi):
+        lo, hi = max(0, lo - 60), min(len(line), hi + 80)
+        return line[lo:hi][:300]
+
+    for raw in text.split("\n"):
+        line = norm(raw)
+        if len(line) < MIN_QUOTE_CHARS:
+            continue
+        found = [(m.start(), m.end(), sports[m.group(1).lower()]) for m in spat.finditer(line)]
+        for s, e, canon in found:
+            add("sport", canon, canon, window(line, s, e))
+        for m in cpat.finditer(line):
+            # the sport must sit inside the "<n> ... courts" phrase itself ("7 outdoor tennis courts"); a count for another
+            # kind of court ("three basketball courts") next to a sport name is not that sport's count
+            inside = [t for t in found if t[0] >= m.start() and t[1] <= m.end()]
+            if not inside:
+                continue
+            near = inside[-1]
+            n = m.group(1).lower()
+            n = NUMBER_WORDS.get(n, n)
+            lo, hi = min(near[0], m.start()), max(near[1], m.end())
+            add("courts", near[2], str(n), window(line, lo, hi))
+        for s, e, canon in found:  # "Pickleball: 4 courts"
+            m = lpat.match(line, e)
+            if m:
+                n = m.group(1).lower()
+                add("courts", canon, str(NUMBER_WORDS.get(n, n)), window(line, s, m.end()))
+        if found:
+            for kind, pat in (("public", _PUBLIC), ("members", _MEMBERS)):
+                m = pat.search(line)
+                if m and kind not in access_seen:
+                    access_seen.add(kind)
+                    add("access", "", kind, window(line, m.start(), m.end()))
+    return facts
+
+
 # ---------- inputs ----------
 def pilot_inputs(n: int) -> list[dict]:
     """Hand-settled rows: official confirmation, a website and a court count. One row per page URL, spread across sports
@@ -337,6 +396,8 @@ def main() -> int:
     src.add_argument("--pilot", type=int, metavar="N", help="read N hand-settled manual_venues websites and compare")
     src.add_argument("--input", metavar="CSV", help="venue_ref,venue_name,city,url")
     ap.add_argument("--dry-run", action="store_true", help="fetch pages and estimate tokens; no API call")
+    ap.add_argument("--engine", choices=["claude", "rules"], default="claude",
+                    help="rules = free pattern matcher (no API key, no cost); claude = model call with a spend cap")
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--max-pages", type=int, default=0, help="hard cap on pages sent to the model (required for a real run)")
     ap.add_argument("--max-usd", type=float, default=0.0, help="hard spend cap (required for a real run)")
@@ -360,35 +421,44 @@ def main() -> int:
     if a.dry_run:
         return 0
 
-    from dotenv import load_dotenv
+    rules = a.engine == "rules"
+    key = ""
+    if not rules:
+        from dotenv import load_dotenv
 
-    load_dotenv()
-    key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
-    if not key:
-        sys.exit("ANTHROPIC_API_KEY is not set (add it to .env; .env.example shows the name). Use --dry-run without it.")
-    if not (a.max_pages > 0 and a.max_usd > 0 and a.usd_per_mtok_in > 0 and a.usd_per_mtok_out > 0):
-        sys.exit("A real run needs --max-pages, --max-usd, --usd-per-mtok-in and --usd-per-mtok-out (ADR 0017: the owner sets the cap).")
+        load_dotenv()
+        key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+        if not key:
+            sys.exit("ANTHROPIC_API_KEY is not set (add it to .env; .env.example shows the name). "
+                     "Use --engine rules for the free extractor, or --dry-run.")
+        if not (a.max_pages > 0 and a.max_usd > 0 and a.usd_per_mtok_in > 0 and a.usd_per_mtok_out > 0):
+            sys.exit("A model run needs --max-pages, --max-usd, --usd-per-mtok-in and --usd-per-mtok-out (ADR 0017: the owner sets the cap).")
 
+    engine_name = "rules" if rules else a.model
     today = date.today().isoformat()
     cands, results, spent, tok_in, tok_out, called, dropped_total = [], [], 0.0, 0, 0, 0, 0
-    for r, p in readable[: a.max_pages]:
-        if spent >= a.max_usd:
+    for r, p in readable if rules else readable[: a.max_pages]:
+        if spent >= a.max_usd and not rules:
             print(f"spend cap ${a.max_usd:.2f} reached; stopping", file=sys.stderr)
             break
-        try:
-            text, ti, to = call_model(a.model, key, r["venue_name"], r["city"], p["text"])
-        except requests.RequestException as e:
-            print(f"  API error for {r['venue_ref']}: {type(e).__name__}", file=sys.stderr)
-            continue
+        if rules:
+            raw_facts = rules_extract(p["text"], sports)
+        else:
+            try:
+                text, ti, to = call_model(a.model, key, r["venue_name"], r["city"], p["text"])
+            except requests.RequestException as e:
+                print(f"  API error for {r['venue_ref']}: {type(e).__name__}", file=sys.stderr)
+                continue
+            tok_in, tok_out = tok_in + ti, tok_out + to
+            spent += ti * a.usd_per_mtok_in / 1e6 + to * a.usd_per_mtok_out / 1e6
+            raw_facts = parse_model_json(text)
         called += 1
-        tok_in, tok_out = tok_in + ti, tok_out + to
-        spent += ti * a.usd_per_mtok_in / 1e6 + to * a.usd_per_mtok_out / 1e6
-        kept, dropped = verify(parse_model_json(text), p["text"], sports)
+        kept, dropped = verify(raw_facts, p["text"], sports)
         dropped_total += dropped
         for f in kept:
             cands.append({"venue_ref": r["venue_ref"], "venue_name": r["venue_name"], "page_url": r["url"],
                           "field": f["field"], "sport": f["sport"], "value": f["value"], "quote": f["quote"],
-                          "read_on": today, "status": "inferred", "model": a.model})
+                          "read_on": today, "status": "inferred", "model": engine_name})
             sv, outcome = compare(f, r["seed"])
             results.append({"venue_ref": r["venue_ref"], "page_url": r["url"], "field": f["field"], "sport": f["sport"],
                             "reader_value": f["value"], "seed_value": sv, "outcome": outcome, "quote": f["quote"]})
@@ -402,10 +472,17 @@ def main() -> int:
     from collections import Counter
     oc = Counter(x["outcome"] for x in results)
     with_fact = len({c["venue_ref"] for c in cands})
-    print(f"called {called} pages: {tok_in} in / {tok_out} out tokens, ${spent:.4f} spent ({a.model})")
+    print(f"read {called} pages with {engine_name}: {tok_in} in / {tok_out} out tokens, ${spent:.4f} spent")
     print(f"kept {len(cands)} facts from {with_fact} pages; dropped {dropped_total} facts that failed the quote/sport check")
     if a.pilot:
         print(f"vs seed: agree {oc['agree']}, conflict {oc['conflict']}, new {oc['new']}")
+        seeded = {r["venue_ref"]: r["seed"] for r, _ in readable}
+        for field, key_ in (("sport", "sport"), ("courts", "courts"), ("access", "access")):
+            have = [v for v, s in seeded.items() if s and s[key_] not in ("", "unknown")]
+            hit = {x["venue_ref"] for x in results if x["field"] == field and x["outcome"] == "agree"}
+            bad = {x["venue_ref"] for x in results if x["field"] == field and x["outcome"] == "conflict"}
+            print(f"  {field}: seed has it for {len(have)} pages; reader agreed on {len(hit & set(have))}, "
+                  f"conflicted on {len(bad & set(have))}")
     return 0
 
 

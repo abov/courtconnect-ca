@@ -40,6 +40,16 @@ def main() -> int:
     assert got == [("courts", "6"), ("courts", "4"), ("setting", "outdoor"), ("access", "public")], got
     assert dropped == 7, dropped
 
+    # the free rules engine: finds sports, court counts and access from the page, and every fact passes verify()
+    raw = pr.rules_extract(text, SPORTS)
+    rk, _ = pr.verify(raw, text, SPORTS)
+    assert len(rk) == len(raw), "rules engine produced a fact that fails its own quote check"
+    rgot = {(k["field"], k["sport"], k["value"]) for k in rk}
+    for want in (("courts", "Tennis", "6"), ("courts", "Pickleball", "4"), ("access", "", "public")):
+        assert want in rgot, (want, rgot)
+    assert not any(k["value"] == "50" for k in rk), "took a court count from an injected instruction line"
+    assert not any(k["sport"] == "Padel" for k in rk), "invented a sport that is not on the page"
+
     # model output wrapped in a code fence, or with prose around it, still parses; garbage gives no facts
     assert pr.parse_model_json('```json\n{"facts": [{"field": "sport"}]}\n```') == [{"field": "sport"}]
     assert pr.parse_model_json('Sure! {"facts": []} done') == []
