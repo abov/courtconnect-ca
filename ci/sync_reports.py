@@ -12,11 +12,12 @@ the seeds ("community form response <timestamp>"). Run it, review `git diff`, th
 
     python ci/sync_reports.py            # fetch REPORTS_CSV_URL
     python ci/sync_reports.py --file x.csv   # read a local export instead (testing)
+    python ci/sync_reports.py --dry-run      # print what would be added; change no file (add --file x.csv to preview a local export)
 
 Anonymous rows: confirmed_by = form:<timestamp>. The reporter's optional credit name goes into the evidence text only.
 The text is untrusted: it is only written through the csv module, URLs must be https, nothing is executed.
 """
-import csv, io, os, sys
+import csv, io, os, re, shutil, sys, tempfile
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
@@ -29,6 +30,9 @@ CHOICES = {   # the form's "What are you reporting?" options -> the issue form's
     "i visited, or the operator's page says so": "Confirm a venue's details",
     "something is wrong or it closed": "Correction or closure",
 }
+SEED_FILES = ["all_racquet.csv", "sport_aliases.csv", "manual_venues.csv", "venue_confirmations.csv", "venue_actions.csv", "venue_leads.csv"]
+EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+PHONE = re.compile(r"(?<!\d)(?:\+?\d[\s().-]?){9,}\d(?!\d)")
 REQUIRED = ["Timestamp", "Venue name", "City", "What are you reporting?", "Date you saw it", "What did you see?"]
 
 
@@ -77,6 +81,9 @@ def row_to_form(r):
     if not change:
         raise ip.Rejected(f"unknown report type {r['What are you reporting?']!r}")
     details = r["What did you see?"]
+    free = " ".join([r["Venue name"], r["City"], details, r.get("Sport", ""), r.get("Name or handle to credit you (optional, shown publicly)", "")])
+    if EMAIL.search(free + " " + r.get("Link to a public page (optional, https)", "")) or PHONE.search(free):
+        raise ip.Rejected("contains an email address or phone number; remove it in the sheet, then it imports next time")
     if change.startswith("Confirm") and "visited" not in details.lower():
         details = f"Reporter chose 'I visited, or the operator's page says so'. {details}"   # lets a confirmation without a link pass as a visit
     form = {"Venue name": r["Venue name"], "City": r["City"], "Map ID": r.get("Map ID", ""),
@@ -86,20 +93,8 @@ def row_to_form(r):
     return stamp.strftime("%Y-%m-%dT%H:%M:%S"), form
 
 
-def main():
-    args = sys.argv[1:]
-    if args[:1] == ["--file"]:
-        text = Path(args[1]).read_text(encoding="utf-8")
-    else:
-        load_dotenv_if_any()
-        url = os.environ.get("REPORTS_CSV_URL", "").strip()
-        if not url:
-            sys.exit("Set REPORTS_CSV_URL in .env (the approved tab's published-CSV link; see docs/community_reports_plan.md).")
-        text = fetch(url)
-    rows = list(csv.DictReader(io.StringIO(text)))
-    missing = [c for c in REQUIRED if rows and c not in rows[0]]
-    if missing:
-        sys.exit(f"The CSV is missing columns {missing}: the form's question titles must match the plan exactly.")
+def import_rows(rows):
+    """Run each approved row through ip.process(); returns (imported, already_in_seeds, rejected) and prints one line per row."""
     done = skipped = bad = 0
     for r in rows:
         if not (r.get("Timestamp") or "").strip():
@@ -117,7 +112,37 @@ def main():
         except ip.Rejected as e:
             bad += 1
             print(f"{r.get('Timestamp')}: NOT imported: {e}")
-    print(f"{done} imported, {skipped} already in the seeds, {bad} rejected. Review `git diff`, then `make build`.")
+    return done, skipped, bad
+
+
+def main():
+    args = sys.argv[1:]
+    dry = "--dry-run" in args
+    if "--file" in args:
+        text = Path(args[args.index("--file") + 1]).read_text(encoding="utf-8")
+    else:
+        load_dotenv_if_any()
+        url = os.environ.get("REPORTS_CSV_URL", "").strip()
+        if not url:
+            sys.exit("Set REPORTS_CSV_URL in .env (the approved tab's published-CSV link; see docs/community_reports_plan.md).")
+        text = fetch(url)
+    rows = list(csv.DictReader(io.StringIO(text)))
+    missing = [c for c in REQUIRED if rows and c not in rows[0]]
+    if missing:
+        sys.exit(f"The CSV is missing columns {missing}: the form's question titles must match the plan exactly.")
+    tmp = None
+    if dry:   # write into a throwaway copy of the seeds, so nothing in the repo changes
+        tmp = Path(tempfile.mkdtemp())
+        for n in SEED_FILES:
+            shutil.copy(ip.SEEDS / n, tmp / n)
+        ip.SEEDS = tmp
+    try:
+        done, skipped, bad = import_rows(rows)
+    finally:
+        if tmp:
+            shutil.rmtree(tmp, ignore_errors=True)
+    print(f"{done} {'would be imported (dry run, nothing written)' if dry else 'imported'}, {skipped} already in the seeds, {bad} rejected."
+          + ("" if dry else " Review `git diff`, then `make build`."))
 
 
 if __name__ == "__main__":
