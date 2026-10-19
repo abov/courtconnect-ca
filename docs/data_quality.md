@@ -12,14 +12,14 @@ Generated 2026-10-18 by `make quality` (`ingestion/export_quality_scorecard.py`)
 | Website link-check age | 8 days | <= 60 days | OK |
 | Dead venue websites (of checked) | 0.0 % | <= 10.0 % | OK |
 | Venues seen in the last 35 days | 99.9 % | >= 99.0 % | OK |
-| Venues with a real name | 14.0 % | >= 25.0 % | **BREACH** |
+| Venues with a real name | 14.2 % | >= 25.0 % | **BREACH** |
 
 **6 of 7 service levels met.**
 
 ## Coverage
 
 - Venues on the map: **10,248** (9,653 in OpenStreetMap, 1,007 in Overture places, 428 hand-curated; sources overlap).
-- Venues with a real name: **1,438** (14.0%). The rest carry a name guessed from the park or school, or none.
+- Venues with a real name: **1,451** (14.2%). The rest carry a name guessed from the park or school, or none.
 - Venues with a usable website: **977** (9.5%).
 - Sports on the sheet: **76**; with at least one venue: **22**; empty: **54**.
 
@@ -76,11 +76,11 @@ Stale or undated venues (first 9):
 | resolved | 44 |
 | rejected | 6 |
 | needs_location | 2 |
-| needs_visit | 1 |
 | confirmed | 1 |
+| needs_visit | 1 |
 
 ## Tests
 
-Last dbt run: 172 tests passed, 0 warned, 0 failed.
+Last dbt run: 179 tests passed, 0 warned, 0 failed.
 
 History: [data_quality_trend.csv](data_quality_trend.csv) (one row per run).
