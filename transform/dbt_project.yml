@@ -163,6 +163,8 @@ vars:
   place_match_radius_m: 100    # an Overture place within this distance of an OSM court is part of that venue
   place_name_match_radius_m: 300   # ...or within this distance when place and court have the same name
   place_facility_match_radius_m: 300   # ...or within this distance when the place name matches the court's park/school/centre name, or the place and the court's park/court share a street address (only for places the two rules above leave unmatched)
+  place_inside_match_radius_m: 350   # inside_facility rule (int_place_venue_match): lesson/court record whose pin is inside a small park/school/centre footprint joins its nearest court within this distance
+  place_inside_max_bbox_deg2: 0.0001   # ...only for footprints up to about 1 km2 (bounding boxes of campuses and big parks swallow neighbours)
   venue_radius_m: 75   # courts closer than this are treated as the same facility
   address_fill_radius_m: 150   # nearest Overture address point within this distance fills a pin that has no address (inferred)
   parent_merge_radius_m: 400   # courts inside the same named school/park/club closer than this are one facility

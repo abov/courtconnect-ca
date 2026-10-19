@@ -104,3 +104,22 @@ Still missed (6 in the new strata + Arcadia): La Costa Jr Tennis (resort parent,
 
 Side finding (not a matching issue): the Overture pin for "City of Fountain Valley Tennis Center" sits at 10540 Talbert Ave, while the city lists the tennis center at the Recreation Center, 16400 Brookhurst St; worth a look in the coverage pass.
 
+## Fourth slice: footprint rule (2026-10-18)
+
+New fourth tier in `int_place_venue_match`, `inside_facility` (vars `place_inside_match_radius_m: 350`, `place_inside_max_bbox_deg2: 0.0001`): a place the other three rules leave unmatched joins a court's park/school/centre when (a) its pin lies inside that feature's bounding box, which must be small (about 1 km2 or less: campus and big-park boxes swallow neighbours); (b) the nearest court of that feature is within 350 m; (c) its Overture category is a racquet lesson/court record (`tennis_court`, `pickleball_court`, `fitness_trainer`, `sports_and_recreation`, `sport_or_recreation_club`, `park`), not a gym or league; (d) its name does not say club, resort, country, association, society, league, federation, table, ping, badminton, squash, racquetball or handball; (e) no human 'reject' in `place_sport_overrides.csv` (ADR 0016 rejects mean the page names no courts). The exclusions come from a dry run of the plain "pin inside the box" idea on the 72 unmatched places that fall inside a box: it would have joined neighbouring businesses (Walnut Creek Racquet Club beside Heather Farm Park, Riviera Oaks Resort beside Ramona Oaks Park, Tustin Round Robin Pickleball beside Currie Middle School), so clubs, resorts and gyms are left as their own pins.
+
+Effect: 28 more places join an existing venue (all 28 listed and read; nearly all are academies, lesson providers and park/school/college tennis-court records at the host's own address). Gold file 129 pairs (10 new `inside_rule_new` pairs; the 9 checked from the host address, plus the correction below).
+
+| Whole file, 129 pairs | wrong merges | missed merges | correct merges |
+|---|---|---|---|
+| tier off | 0 | 21 | 90 |
+| tier on | **0** | **4** | 107 |
+
+The 10 `inside_rule_new` pairs were picked from the rule's own merges, so they only show it does what it was built to do. The independent evidence is the third-slice sample: of its 7 remaining misses, 4 are now merged (Dinosaur Park, K Orahood, Tennis Pickleball Lessons, Tennis Anyone) and 3 stay (La Costa: resort parent; Quail Lakes: no parent footprint; Better At Pickleball: gym category). Still 0 wrong in the random strata. Remaining 4 misses: Stanford West Campus (footprint 8 km2), La Costa, Quail Lakes, Better At Pickleball.
+
+Two corrections found on the way:
+- The first-slice `different_near_courts` pair "Itennis Tumanyani Shaurma" was labelled `different` from its odd name. Its phone is the one the City of Riverside lists for iTennis at Andulka Park (5201 Chicago Ave); the Overture name is wrong, the record is the park's tennis operator. Relabelled `same` (stratum `inside_rule_new`); the new rule had flagged it as a wrong merge, so the gold set caught its own error. `different_near_courts` is now 7 pairs.
+- Fountain Valley: `City of Fountain Valley Tennis Center` (10540 Talbert Ave, 767 m from any OSM court, no website) is a misplaced duplicate of the real center at 16400 Brookhurst St, which is already a pin. Added to `closed_places.csv` with the evidence (that seed also takes records that are not at the listed location); its gold pair was retired (place gone).
+
+Next: the three remaining misses need either the resort/hotel parents (La Costa) or a place address-to-court-cluster link that does not exist yet; not worth a rule until the beta shows they matter. Re-run `make eval-match` after every extract: the footprint tier reads OSM parent boxes, which change with each OSM refresh.
+
