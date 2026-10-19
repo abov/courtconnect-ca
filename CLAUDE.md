@@ -9,6 +9,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0018, all accepted; one file each,
 - `make app-data`   export `app/data/venues.json` for the map (commit it after any seed change; CI runs `ci/check_export_fresh.py`); `make app` serves it at localhost:8765
 - `make extract` / `make load`   refresh raw data (extract takes ~15 min; don't run unless asked)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
+- `make sync-reports`   import owner-approved community-form reports as seed edits (needs `REPORTS_CSV_URL` in `.env`)
 - `make issues`     read-only check of open GitHub issues (missing info, already in seeds, duplicates, waiting); runbook step 2b
 - `make report`     regenerate `docs/coverage_snapshot.md`
 - `make snowflake-build`   RETIRED (2026-10-14): do not run; DuckDB is the only warehouse
@@ -88,6 +89,6 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 *Parked / waiting on owner*
 - City of Sparks parks and `cityofsparks.us`: never retry unless the owner asks. NV resort/casino courts: closed, do not re-check.
 - Review queue (parked 2026-10-17, 116 rows left; `docs/review_priority.csv` for reference): needs the phase 2 reader or community reports; the ~35 live-site rows pass is NOT planned.
-- Community reports step 3, report without GitHub (was 7d): owner creates the Google Form first (`docs/community_reports_plan.md`).
+- Community reports step 3 (was 7d) is BUILT (form live, popup link, `make sync-reports`); owner step: add `REPORTS_CSV_URL` to `.env`, then run it at each sync (runbook 2b). `docs/community_reports_plan.md`.
 - Basque Pelota (Chino trinquet, South SF center): the owner will not confirm directly or in person (2026-10-18); confirm only from public online user sources (Yelp, Reddit, venue/club pages), evidence URL in the seed.
 - Owner/community visit reports to confirm walls (Sacramento, Berkeley campus walls need an access label) (Pop Tennis pins Exeter, Garside and Kahler Russell were resolved by owner reports and imagery, 2026-10-17).

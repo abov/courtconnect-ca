@@ -255,6 +255,7 @@ if (ANALYTICS_ON) {
   document.head.appendChild(sc);
 }
 // Events carry a short name only: never a venue name, location, search text or anything a visitor typed.
+const REPORT_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSf7BNf7oofeJxalLGwuWRXvZHhjQJkTqFsHFuZvJQ_foHTHyQ/viewform";   // community report form (Google Form, no sign-in): docs/community_reports_plan.md
 function track(name, title) {
   try { if (ANALYTICS_ON && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: "event/" + name, title: title || name, event: true}); } catch (e) { /* analytics must never break the map */ }
 }
@@ -264,6 +265,7 @@ document.addEventListener("click", ev => {
   const u = new URL(a.href);
   if (u.hostname === location.hostname) return;
   if (u.hostname === "github.com" && u.pathname.includes("/issues/new")) track("suggest-change");
+  else if (u.hostname === "docs.google.com" && u.pathname.includes("/forms/")) track("report-form");
   else if (u.hostname.endsWith("openstreetmap.org")) track("osm-edit");
   else track("linkout", u.hostname.replace(/^www\./, ""));   // domain only, so we learn which providers get used
 });
@@ -585,6 +587,8 @@ function venueNode(v) {
   const src = el("details", {class: "srcs"}, el("summary", {text: "Details, sources and corrections"}));
   const q = new URLSearchParams({template: "suggest-a-change.yml", title: "Change: " + (v.n || "Unnamed courts") + (v.c ? " (" + v.c + ")" : ""), venue: v.n || "", city: v.c || "", map_id: v.i});
   src.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change to this venue"}), document.createTextNode(" (opens a GitHub form; a reviewer approves it)")));
+  const rq = new URLSearchParams({usp: "pp_url", "entry.643805557": v.n || "", "entry.251841484": v.c || "", "entry.401515442": v.i});   // Venue name, City, Map ID of the report form
+  src.append(el("p", {class: "meta"}, el("a", {href: REPORT_FORM + "?" + rq, target: "_blank", rel: "noopener noreferrer", text: "Report without a GitHub account"}), document.createTextNode(" (opens a Google Form; a reviewer approves it)")));
   if (v.s === "o" || v.s === "b") {
     src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (opens the OSM editor here; you need your own free OSM account, and only add what you have seen or the venue's own page says)")));
   }

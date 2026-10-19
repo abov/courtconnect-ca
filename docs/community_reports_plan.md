@@ -1,6 +1,6 @@
 # Community reports: plan (2026-10-16)
 
-Status: step 1 BUILT and merged (#149); step 2 BUILT (2026-10-16); step 3 PARKED by the owner (2026-10-16) for later; setup below is ready when picked up.
+Status: steps 1-2 BUILT and merged (#149, #152); step 3 BUILT 2026-10-18: the form is live and the response sheet is set up (owner), the popup has the "Report without a GitHub account" link (`REPORT_FORM` in `app/index.html`) and `make sync-reports` (`ci/sync_reports.py`) imports approved rows. Owner step left: put the approved tab's published-CSV link in `.env` as `REPORTS_CSV_URL`.
 
 ## Why
 The owner can't visit venues, and court-finder apps are off limits (Places2Play needs a sign-in; Pickleheads' terms forbid

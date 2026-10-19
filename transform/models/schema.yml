@@ -268,7 +268,7 @@ seeds:
         tests:
           - accepted_values:
               arguments:
-                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'issue', 'other']   # issue = a GitHub issue (ci/issue_to_pr.py)
+                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'issue', 'community_form', 'other']   # issue = a GitHub issue (ci/issue_to_pr.py); community_form = ci/sync_reports.py
 
   - name: venue_actions
     description: >
