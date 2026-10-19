@@ -109,6 +109,20 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: court_group_merge
+    description: >
+      Two OSM court groups that are one facility (a club's courts mapped more than 100 m apart), merged into one venue by int_court_pairs.
+      The duplicate-venue test flags such pairs once both groups carry the same name. Keyed by OSM court id (stable; not FK-tested because the CI fixture holds only a sample of courts); evidence says how it was checked.
+    columns:
+      - name: court_id_a
+        tests: [not_null]
+      - name: court_id_b
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: venue_name_official
     description: >
       A name for an OSM court group that no dataset names, taken from a nearby high-confidence Overture club place (100-225 m away, so
