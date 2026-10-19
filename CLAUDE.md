@@ -88,5 +88,5 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 - City of Sparks parks and `cityofsparks.us`: never retry unless the owner asks. NV resort/casino courts: closed, do not re-check.
 - Review queue (parked 2026-10-17, 116 rows left; `docs/review_priority.csv` for reference): needs the phase 2 reader or community reports; the ~35 live-site rows pass is NOT planned.
 - Community reports step 3, report without GitHub (was 7d): owner creates the Google Form first (`docs/community_reports_plan.md`).
-- Owner to confirm Basque Pelota (Chino trinquet, South SF center) by 2026-11-16.
+- Basque Pelota (Chino trinquet, South SF center): the owner will not confirm directly or in person (2026-10-18); confirm only from public online user sources (Yelp, Reddit, venue/club pages), evidence URL in the seed.
 - Owner/community visit reports to confirm walls (Sacramento, Berkeley campus walls need an access label) (Pop Tennis pins Exeter, Garside and Kahler Russell were resolved by owner reports and imagery, 2026-10-17).
