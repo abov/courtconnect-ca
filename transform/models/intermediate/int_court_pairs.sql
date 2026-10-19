@@ -56,3 +56,10 @@ where sqrt(
           power((a.lat - b.lat) * 110540, 2)
         + power((a.lon - b.lon) * cos(radians(a.lat)) * 111320, 2)
       ) <= {{ var('parent_merge_radius_m') }}
+
+union
+
+-- hand-checked merges of court groups that are one facility (seeds/court_group_merge.csv), both directions
+select court_id_a as court_a, court_id_b as court_b from {{ ref('court_group_merge') }}
+union
+select court_id_b as court_a, court_id_a as court_b from {{ ref('court_group_merge') }}

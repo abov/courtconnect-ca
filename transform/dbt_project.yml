@@ -72,6 +72,12 @@ seeds:
         address_line: varchar
         evidence: varchar
         verified_on: varchar
+    court_group_merge:     # all text
+      +column_types:
+        court_id_a: varchar
+        court_id_b: varchar
+        evidence: varchar
+        verified_on: varchar
     venue_name_official:     # all text
       +column_types:
         venue_id: varchar
