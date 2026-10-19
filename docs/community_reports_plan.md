@@ -70,10 +70,10 @@ its confirmations read "N confirmations waiting for review" (not "confirmed by")
 3. Responses -> Link to Sheets (new sheet). In the response tab add two columns at the right: `review` (type `approved` or `rejected`)
    and `imported` (the import fills it in later; leave blank).
 4. Add a second tab `approved` with `=FILTER(<response tab>!A:Z, <response tab>!<review column>:<review column>="approved")`
-   so only approved rows are read. Share the sheet as "Anyone with the link can view" (the id stays private in `.env`, like the
-   sports sheet).
+   (built as `=QUERY(..., "select * where K = 'approved'", 1)`, which keeps the header row). Keep the sheet itself private and use
+   File -> Share -> Publish to web on the `approved` tab only, as CSV; sharing the whole sheet by link would expose unreviewed rows (decided 2026-10-18).
 5. Send me: the form's link, one prefilled link (Form menu -> "Get pre-filled link", fill Venue name / City / Map ID with `X`), and the
-   sheet id + the `approved` tab's gid. They go in `.env` as `REPORTS_SHEET_ID` / `REPORTS_SHEET_GID`, the prefilled link in the app.
+   published CSV URL of the `approved` tab. The URL goes in `.env` as `REPORTS_CSV_URL` (not committed), the prefilled link in the app.
 
 ## Not in scope (later)
 - Comments shown publicly on the map, accounts, upvotes, or a backend. These need the social-phase-B ADR (ADR 0015) and beta demand.
