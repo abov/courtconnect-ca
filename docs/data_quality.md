@@ -12,15 +12,15 @@ Generated 2026-10-18 by `make quality` (`ingestion/export_quality_scorecard.py`)
 | Website link-check age | 8 days | <= 60 days | OK |
 | Dead venue websites (of checked) | 0.0 % | <= 10.0 % | OK |
 | Venues seen in the last 35 days | 99.9 % | >= 99.0 % | OK |
-| Venues with a real name | 14.2 % | >= 25.0 % | **BREACH** |
+| Venues with a real name | 14.1 % | >= 25.0 % | **BREACH** |
 
 **6 of 7 service levels met.**
 
 ## Coverage
 
-- Venues on the map: **10,241** (9,646 in OpenStreetMap, 1,007 in Overture places, 428 hand-curated; sources overlap).
-- Venues with a real name: **1,451** (14.2%). The rest carry a name guessed from the park or school, or none.
-- Venues with a usable website: **977** (9.5%).
+- Venues on the map: **10,230** (9,646 in OpenStreetMap, 1,002 in Overture places, 428 hand-curated; sources overlap).
+- Venues with a real name: **1,446** (14.1%). The rest carry a name guessed from the park or school, or none.
+- Venues with a usable website: **974** (9.5%).
 - Sports on the sheet: **76**; with at least one venue: **22**; empty: **54**.
 
 ## Trust labels (hand-curated venues)
@@ -42,9 +42,9 @@ Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-
 | Band | All | CA | NV |
 |---|---|---|---|
 | high | 400 | 304 | 96 |
-| medium | 763 | 724 | 39 |
-| low | 9,087 | 8,675 | 412 |
-| total | 10,250 | 9,703 | 547 |
+| medium | 762 | 723 | 39 |
+| low | 9,077 | 8,666 | 411 |
+| total | 10,239 | 9,693 | 546 |
 
 ## Freshness
 
@@ -52,7 +52,7 @@ Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-
 - Current link-outs: 213; 0 older than 60 days.
 - Upcoming events: 54; 0 not re-checked in 14+ days.
 - Website liveness check: 8 days old; 0 of 156 checked venue sites dead (0.0%).
-- Venues seen by any source in the last 35 days: 10,241 of 10,250 (99.9%); oldest date 2026-09-23; 9 undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check (monthly runbook: docs/monthly_refresh.md).
+- Venues seen by any source in the last 35 days: 10,230 of 10,239 (99.9%); oldest date 2026-09-23; 9 undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check (monthly runbook: docs/monthly_refresh.md).
 
 Stale or undated venues (first 9):
 
@@ -81,6 +81,6 @@ Stale or undated venues (first 9):
 
 ## Tests
 
-Last dbt run: 185 tests passed, 0 warned, 0 failed.
+Last dbt run: 183 tests passed, 0 warned, 0 failed.
 
 History: [data_quality_trend.csv](data_quality_trend.csv) (one row per run).
