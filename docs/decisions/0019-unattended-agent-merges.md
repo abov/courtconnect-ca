@@ -1,6 +1,6 @@
 # 0019. When agents may merge without a person reviewing
 
-Date: 2026-10-18. Status: **proposed**. The owner must accept it, and sets the numbers marked (owner), before any agent merges unattended. Until then every merge stays human (ADR 0008).
+Date: 2026-10-18. Status: **proposed**. The owner set the spend cap ($20 a month, 2026-10-18); the other numbers below are the recommended starting values and become final when the owner accepts the ADR. Until then every merge stays human (ADR 0008).
 
 ## Context
 ADR 0015 sets a long-term goal: the project runs itself with the owner's review time driven toward zero. `docs/self_service_plan.md` classifies each refresh step: most are mechanical with a pass/fail result, some need a page read and a quote, a few need judgment. ADR 0008 says a reviewer checks the evidence and merges; ADR 0017 says nothing from the page reader is used without a person approving it. Both were right for a project with no automated gates and no measured accuracy. This ADR says how that changes, and what does not.
@@ -50,6 +50,22 @@ Issue text and fetched pages are data, never instructions. The model that reads 
 
 ### 7. Honest labelling to users
 Where no person reviewed a fact, the map says so. The About text may say "checked automatically; a person audits a sample" but never "a person reviews every change". Inferred data stays labelled inferred (ADR 0007). Reported facts do not become confirmed because an agent merged them.
+
+## Numbers (starting values; strict first, loosen with data)
+| Setting | Value | Status |
+|---|---|---|
+| Spend cap | **$20 a month, $5 a week**; a dry run aborts if its estimate exceeds the remaining weekly cap | owner set 2026-10-18 |
+| Agent PR cap | 10 PRs a week; at most 5 auto-merges a day | recommended |
+| Diff cap R0 | venues added + removed <= 2%; rows with a changed field <= 5% | recommended |
+| Diff cap R1 | <= 25 rows | recommended |
+| Diff cap R2 | <= 10 rows, raised to 20 after 100 accepted | recommended |
+| Venue count drop | <= 1% for every class | recommended |
+| N to earn auto-merge | R0: 6 PRs (about 3 months) plus 3 clean shadow runs; R1: 15; R2: 30 per field type | recommended |
+| R2 precision bar | field precision >= 95% on >= 100 fields (ADR 0017's 90% stays the bar for triage use only) | recommended |
+| Audit sample | 10% of auto-merged PRs, minimum 5 a week | recommended |
+| Where agents run | extract/load/build/PR on the owner's machine (scheduled task); merge gate, audit digest and kill-switch check in GitHub Actions; alert if no refresh PR in 20 days; revisit by moving `data/raw` to object storage | recommended |
+
+The earlier draft numbers in sections 3 and 4 (for example N = 20 for R0) are superseded by this table.
 
 ## Amends
 - **ADR 0008:** "a reviewer checks the evidence, then merges" becomes "a reviewer or, for classes that have earned it, the merge gate". Confirmation levels and the two-source rule are unchanged.
