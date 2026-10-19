@@ -44,5 +44,8 @@ them, without building accounts or a backend, and without weakening the confirma
   (`location_precision` = `pin: map id ...`, `confirmation` = `reported`) that the build merges onto that pin, plus the reporter's
   `venue_confirmations` row (`method` = `reported`). Later reports on the same pin reuse that row's `venue_key`.
 - Corrections and closures still become leads: one unverified report never removes or changes a venue.
+- Report without GitHub (2026-10-19): the popup also links to a Google Form (prefilled venue, city, map id). The owner approves rows in a
+  private response sheet; `make sync-reports` reads only the published `approved` tab and writes the same seed rows as an issue report
+  (shared code, `ci/issue_to_pr.py`), with `confirmed_by = form:<id>` and no personal data. Nothing is imported until the owner approves it.
 - Reported rows are not counted as confirmations on the map. Raising a level still needs a reviewer (two independent people, or a
   report plus an official page). Plan and next steps (report count, no-GitHub form): `docs/community_reports_plan.md`.

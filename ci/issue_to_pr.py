@@ -10,6 +10,9 @@ Reads the issue form body from $ISSUE_BODY and writes:
     always become leads: one unverified report never removes or changes a venue.
 The issue text is untrusted: it is only ever written through the csv module, URLs must be https, and nothing is executed.
 Prints a one-line summary on success; exits 1 with a reason on bad input.
+
+The row-writing logic is `apply_report()`, shared with ingestion/sync_reports.py (approved Google Form reports): both entry points
+pass the same fields, so a report from the form lands in the seeds exactly like one from a GitHub issue.
 """
 import csv, json, os, re, sys
 from datetime import date
@@ -24,9 +27,12 @@ LINK_TYPES = {"Open play": "open_play", "Drop-in": "drop_in", "Clinic": "clinic"
               "Court booking": "court_booking", "Club page": "club_page"}
 
 
+class ReportError(Exception):
+    """Bad or unusable input; the message says why (printed by main(), shown per row by sync_reports)."""
+
+
 def fail(msg):
-    print(msg)
-    sys.exit(1)
+    raise ReportError(msg)
 
 
 def parse_form(body):
@@ -89,20 +95,14 @@ def find_pin(map_id):
     return pin, sports
 
 
-def add_confirmation(key, user, method, seen, evidence):
+def add_confirmation(key, user, by, method, seen, evidence):
     if any(r["venue_key"] == key and r["confirmed_by"].strip().lower() == user.lower() and r["method"] == method
            and r["confirmed_on"] == seen for r in read_seed("venue_confirmations.csv")):
-        fail(f"@{user} already sent this {method} for this venue on {seen}.")
+        fail(f"{by} already sent this {method} for this venue on {seen}.")
     append("venue_confirmations.csv", [key, user, method, seen, evidence])
 
 
-def main():
-    form = parse_form(os.environ["ISSUE_BODY"])
-    num, user = os.environ["ISSUE_NUMBER"], os.environ["ISSUE_AUTHOR"]
-    venue, city = clean(field(form, "Venue name"), 200), clean(field(form, "City"), 100)
-    change, ltype = field(form, "What are you suggesting"), field(form, "If adding a way")
-    source, price = clean(field(form, "Link to a public page"), 500), clean(field(form, "Price"), 200)
-    seen, details = field(form, "Date you saw"), clean(field(form, "What did you see"))
+def check_report(venue, city, details, seen, source):
     if not venue or not city or not details:
         fail("Venue, city and 'What did you see?' are required.")
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", seen):
@@ -114,15 +114,27 @@ def main():
         fail("The date is not a real date.")
     if source and urlparse(source).scheme != "https":
         fail("The source link must be https.")
-    evidence = f"Suggested in issue #{num} by @{user}, saw/checked {seen}: {details}" + (f" Source: {source}" if source else "")
 
-    sport_text = clean(field(form, "Sport played here"), 60)
+
+def apply_report(*, ref, lead_id, origin, user, by, venue, city, change, ltype, source, price, seen, details, sport_text, map_id_raw,
+                 lead_source="issue"):
+    """Write one report into the seeds and return the summary line.
+
+    ref = suffix for generated slugs ('12'); lead_id = id if it becomes a lead ('issue-12'); origin = who/where, for the evidence
+    ('issue #12 by @name'); user = the confirmed_by value; by = the same, as shown in messages. Raises ReportError on unusable input.
+    """
+    venue, city = clean(venue, 200), clean(city, 100)
+    source, price, details = clean(source, 500), clean(price, 200), clean(details)
+    check_report(venue, city, details, seen, source)
+    evidence = f"Suggested in {origin}, saw/checked {seen}: {details}" + (f" Source: {source}" if source else "")
+
+    sport_text = clean(sport_text, 60)
     sport = canonical_sport(sport_text) if sport_text else None
     if sport_text and not sport:
         fail(f"'{sport_text}' is not a sport we list; use the name the map's sport list shows.")
     reporting = change.lower().startswith("report a") and "sport" in change.lower().split("(")[0]   # tolerate wording edits ("Report a racket sport ...")
     confirming = change.startswith("Confirm")
-    map_id = clean(field(form, "Map ID"), 20).lower()
+    map_id = clean(map_id_raw, 20).lower()
 
     rows = read_seed("manual_venues.csv")
     key = next((r["venue_key"] for r in rows
@@ -154,22 +166,36 @@ def main():
             added = f"manual_venues.csv: {key} {sport} (reported, merges onto pin {map_id}); "
         else:
             added = ""
-        add_confirmation(key, user, method, seen, evidence)
-        print(f"{added}venue_confirmations.csv: {key} {method} by @{user}")
-    elif change.startswith("Add a way") and key:
+        add_confirmation(key, user, by, method, seen, evidence)
+        return f"{added}venue_confirmations.csv: {key} {method} by {by}"
+    if change.startswith("Add a way") and key:
         if ltype not in LINK_TYPES or not source:
             fail("Adding a way to join needs a link type and an https link to a public page.")
         host = (urlparse(source).hostname or "other").removeprefix("www.")
         provider = host.split(".")[-2] if host.count(".") else host
-        slug = re.sub(r"[^a-z0-9]+", "-", f"{key}-{LINK_TYPES[ltype]}-{num}".lower()).strip("-")
+        slug = re.sub(r"[^a-z0-9]+", "-", f"{key}-{LINK_TYPES[ltype]}-{ref}".lower()).strip("-")
         append("venue_actions.csv", [slug, "manual", key, LINK_TYPES[ltype], f"{ltype} (suggested)", provider, source, price, "", "", evidence, seen])
-        print(f"venue_actions.csv: {slug} for {key}")
-    else:
-        why = "venue not found in manual_venues; a reviewer must match it" if not key else "correction or closure"
-        append("venue_leads.csv", [f"issue-{num}", venue, city, "", clean(f"{change}: {details}", 500), "issue", source, "new",
-                                  f"Reviewer: check the source and place the change ({why})", date.today().isoformat(),
-                                  f"Issue #{num} by @{user}; map id {field(form, 'Map ID')}"])
-        print(f"venue_leads.csv: issue-{num}")
+        return f"venue_actions.csv: {slug} for {key}"
+    why = "venue not found in manual_venues; a reviewer must match it" if not key else "correction or closure"
+    append("venue_leads.csv", [lead_id, venue, city, "", clean(f"{change}: {details}", 500), lead_source, source, "new",
+                              f"Reviewer: check the source and place the change ({why})", date.today().isoformat(),
+                              f"{origin[:1].upper()}{origin[1:]}; map id {map_id_raw}"])
+    return f"venue_leads.csv: {lead_id}"
+
+
+def main():
+    form = parse_form(os.environ["ISSUE_BODY"])
+    num, user = os.environ["ISSUE_NUMBER"], os.environ["ISSUE_AUTHOR"]
+    try:
+        print(apply_report(
+            ref=num, lead_id=f"issue-{num}", origin=f"issue #{num} by @{user}", user=user, by=f"@{user}",
+            venue=field(form, "Venue name"), city=field(form, "City"), change=field(form, "What are you suggesting"),
+            ltype=field(form, "If adding a way"), source=field(form, "Link to a public page"), price=field(form, "Price"),
+            seen=field(form, "Date you saw"), details=field(form, "What did you see"),
+            sport_text=field(form, "Sport played here"), map_id_raw=field(form, "Map ID")))
+    except ReportError as e:
+        print(e)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

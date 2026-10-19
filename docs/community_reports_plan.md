@@ -1,6 +1,8 @@
 # Community reports: plan (2026-10-16)
 
-Status: step 1 BUILT and merged (#149); step 2 BUILT (2026-10-16); step 3 PARKED by the owner (2026-10-16) for later; setup below is ready when picked up.
+Status: step 1 BUILT and merged (#149); step 2 BUILT (2026-10-16); step 3 BUILT (2026-10-19): form + private response sheet (owner), popup link "Report a change without GitHub" (`app/index.html`, `REPORT_FORM` / `REPORT_ENTRY`), `make sync-reports` (`ingestion/sync_reports.py`, test `ci/test_sync_reports.py`). One change from the setup below: the sheet stays private and only the `approved` tab is "published to the web" as CSV, so the import reads ONE url, `REPORTS_CSV_URL` in `.env`, not `REPORTS_SHEET_ID` / `REPORTS_SHEET_GID`.
+
+How the import works: each approved row has the stable id `form:<digits of its timestamp>` (the sheet row number moves), which is written into the evidence and `venue_confirmations.confirmed_by`; a row whose id is already in a seed is skipped (so re-running is safe and the `imported` column is optional). Rows with an email address or phone number, a non-https link or no usable date are listed as "need attention" and not imported. "A racket sport is played here" -> report path (`manual_venues` row at the pin + `reported` confirmation); "I visited, or the operator's page says so" -> confirm path (needs a link or the word "visited"); "Something is wrong or it closed" -> lead (never changes the map by itself). A venue the seeds cannot place becomes a lead with source_type `word_of_mouth`. The optional credit name goes into the evidence (public in git history). The TEST row must be deleted from the sheet before launch.
 
 ## Why
 The owner can't visit venues, and court-finder apps are off limits (Places2Play needs a sign-in; Pickleheads' terms forbid

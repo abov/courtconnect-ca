@@ -65,7 +65,7 @@ When they reply, ask what they did, not whether they liked it ("What did you sea
 | Is it used? | page views, visits per person | most invited people open it 2+ times |
 | Does it deliver? | link-out rate = `linkout` / `venue-open` | 25% or more |
 | Where do people look? | `sport` events vs coverage | the top 3 requested sports have 20+ venues |
-| Do people contribute? | `suggest-change` + `osm-edit` | at least 3 suggestions in two weeks |
+| Do people contribute? | `suggest-change` + `report-form` + `osm-edit` | at least 3 suggestions in two weeks |
 
 State numbers as they are. With 6 to 10 people they are directional, not statistics; say so in the case study.
 

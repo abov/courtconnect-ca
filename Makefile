@@ -45,6 +45,9 @@ sport-map:        ## rebuild the OSM-tag -> sport mapping from the synced sheet
 sync-sports:    ## refresh the sports list from the Google Sheet
 	$(PY) ingestion/sync_sports_sheet.py
 
+sync-reports:   ## import approved community-form reports into the seeds (REPORTS_CSV_URL in .env; add ARGS=--dry-run to preview)
+	$(PY) ingestion/sync_reports.py $(ARGS)
+
 check-websites: ## flag venue websites whose domain no longer exists (DNS only, ~1 min)
 	$(PY) ingestion/check_websites.py
 

@@ -10,6 +10,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0018, all accepted; one file each,
 - `make extract` / `make load`   refresh raw data (extract takes ~15 min; don't run unless asked)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
 - `make issues`     read-only check of open GitHub issues (missing info, already in seeds, duplicates, waiting); runbook step 2b
+- `make sync-reports`   import owner-approved Google Form reports into the seeds (`ARGS=--dry-run` first; needs `REPORTS_CSV_URL` in `.env`); runbook step 2b
 - `make report`     regenerate `docs/coverage_snapshot.md`
 - `make snowflake-build`   RETIRED (2026-10-14): do not run; DuckDB is the only warehouse
 
@@ -88,6 +89,6 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 *Parked / waiting on owner*
 - City of Sparks parks and `cityofsparks.us`: never retry unless the owner asks. NV resort/casino courts: closed, do not re-check.
 - Review queue (parked 2026-10-17, 116 rows left; `docs/review_priority.csv` for reference): needs the phase 2 reader or community reports; the ~35 live-site rows pass is NOT planned.
-- Community reports step 3, report without GitHub (was 7d): owner creates the Google Form first (`docs/community_reports_plan.md`).
+- Community reports step 3, report without GitHub (was 7d): BUILT 2026-10-19 (popup link + `make sync-reports`, `docs/community_reports_plan.md`). Owner to-do: put `REPORTS_CSV_URL` in `.env`, delete the TEST row in the sheet, then run `make sync-reports ARGS=--dry-run` at each sync.
 - Basque Pelota (Chino trinquet, South SF center): the owner will not confirm directly or in person (2026-10-18); confirm only from public online user sources (Yelp, Reddit, venue/club pages), evidence URL in the seed.
 - Owner/community visit reports to confirm walls (Sacramento, Berkeley campus walls need an access label) (Pop Tennis pins Exeter, Garside and Kahler Russell were resolved by owner reports and imagery, 2026-10-17).
