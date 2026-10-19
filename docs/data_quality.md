@@ -18,9 +18,9 @@ Generated 2026-10-18 by `make quality` (`ingestion/export_quality_scorecard.py`)
 
 ## Coverage
 
-- Venues on the map: **10,230** (9,646 in OpenStreetMap, 1,002 in Overture places, 428 hand-curated; sources overlap).
-- Venues with a real name: **1,446** (14.1%). The rest carry a name guessed from the park or school, or none.
-- Venues with a usable website: **974** (9.5%).
+- Venues on the map: **10,230** (9,646 in OpenStreetMap, 1,002 in Overture places, 432 hand-curated; sources overlap).
+- Venues with a real name: **1,447** (14.1%). The rest carry a name guessed from the park or school, or none.
+- Venues with a usable website: **975** (9.5%).
 - Sports on the sheet: **76**; with at least one venue: **22**; empty: **54**.
 
 ## Trust labels (hand-curated venues)
@@ -28,7 +28,7 @@ Generated 2026-10-18 by `make quality` (`ingestion/export_quality_scorecard.py`)
 | Confirmation | Venues |
 |---|---|
 | official | 466 |
-| reported | 39 |
+| reported | 43 |
 | visited | 3 |
 
 Visited = seen in person; official = stated on the operator's own page; reported = told to us, not verified. Inferred data is labeled inferred on the map and never counted as confirmed.
@@ -41,9 +41,9 @@ Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-
 
 | Band | All | CA | NV |
 |---|---|---|---|
-| high | 400 | 304 | 96 |
-| medium | 762 | 723 | 39 |
-| low | 9,077 | 8,666 | 411 |
+| high | 401 | 305 | 96 |
+| medium | 765 | 725 | 40 |
+| low | 9,073 | 8,663 | 410 |
 | total | 10,239 | 9,693 | 546 |
 
 ## Freshness
