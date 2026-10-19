@@ -109,6 +109,40 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: court_group_merge
+    description: >
+      Two OSM court groups that are one facility (a club's courts mapped more than 100 m apart), merged into one venue by int_court_pairs.
+      The duplicate-venue test flags such pairs once both groups carry the same name. Keyed by OSM court id (stable; not FK-tested because the CI fixture holds only a sample of courts); evidence says how it was checked.
+    columns:
+      - name: court_id_a
+        tests: [not_null]
+      - name: court_id_b
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
+  - name: venue_name_official
+    description: >
+      A name for an OSM court group that no dataset names, taken from a nearby high-confidence Overture club place (100-225 m away, so
+      the nearest-court rule left it unlinked), checked by hand against the pin's position (core.dim_venue, name_source 'manual').
+      The name is INFERRED from position unless `evidence` says the club's own page was read. Keyed by venue_id with the pin's lat/lon: a
+      row is ignored if the pin has moved. Public data only (ADR 0005, 0007).
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: venue_name
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: venue_city_official
     description: >
       City of a named pin that no dataset gives a city for (remote parks, schools, golf courses), read from the venue's own page or a
