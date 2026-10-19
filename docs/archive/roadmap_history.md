@@ -60,7 +60,7 @@ ITF W35 Redding, W35 Bakersfield + M25 DragonRidge Open (Henderson) added; no ot
 "Free / $ / $$ / $$$" (cost to book or use). Phase 1 is rule-based from what the place is listed with (public park or wall = Free; city rec center or school = $; paid public or pay-to-play = $$; private club, resort or apartment = $$$ or "members/residents only", with guest or day-pass noted if public pages say so). New `price_tier` + `price_basis` (`confirmed` from a public page, else `inferred`) + `evidence` in a seed (e.g. `venue_price.csv`). Honesty: label inferred tiers as estimates, never a quote; CourtConnect takes no bookings or payments. ADR first (tier definitions; members-only gets no tier), then a gold set of ~50 confirmed prices to test the rules; ML (`docs/ml_plan.md`) only if rules prove too coarse. Needs the shared access model from 1b so walls and courts behave the same. Public pages only (ADR 0007).
 
 ## 8. MCP server (LATER, after beta)
-Optional read-only CourtConnect MCP server over `venues.json` (details in docs/status_history.md, TODO 2026-10-14; ADR first).
+Optional read-only CourtConnect MCP server over `venues.json` (details in docs/archive/status_history.md, TODO 2026-10-14; ADR first).
 
 ## 9. Beta round (TIME-BOXED; docs/feedback_round.md; moved to December by owner 2026-10-17, exact dates TBD)
 Send the round, collect replies, record findings, then fill case study + docs/feedback_findings.md (RICE). Owner: exclude own IP in GoatCounter. Items marked "after beta" wait for these findings.

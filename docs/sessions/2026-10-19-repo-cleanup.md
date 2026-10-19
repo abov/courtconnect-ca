@@ -1,0 +1,2 @@
+Repo cleanup: removed `backfill_region.py`, `roadmap_phase2.md`, `ux_audit.md`, `calneva_audit.md`, `imagery_sweep_pilot.md` (2-line summary now in `docs/ml_plan.md`); moved `status_history.md` and `roadmap_history.md` to `docs/archive/` and fixed the links in CLAUDE.md, `ux_polish.md`, `sessions/README.md`. Old session notes still name the old paths (never edited).
+Next: Snowflake code removal is the post-beta PR (ADR 0018); optional later: roll `docs/sessions/` up per month, retake `docs/screenshots/`.
