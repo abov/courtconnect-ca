@@ -46,3 +46,7 @@ UX notes: mobile 375/320px first (card collapsed by default on phones, expanded 
 - Blurb and wiki columns live in the Google Sheet (synced by `make sync-sports`), not a repo seed. The `sport_details.csv` seed in Part 2 is dropped.
 - Unmapped sports stay in the main list, greyed out and marked "no places yet" (no separate group; supersedes the `<optgroup>` idea in Part 1).
 - No popularity-class labels on the card.
+
+## Update (2026-10-18)
+
+- Part 2 built early for the card (not the all-76 dropdown): sheet columns `Blurb`, `Learn URL`, `Rules URL`, `Court URL`, `Gear URL` (owner chose sheet columns and all 76 sports). Draft values for the 27 verifiable sports are in `docs/sport_details_draft.csv`; 49 remain blank. Details: `docs/sessions/2026-10-18-sport-info-card.md`.

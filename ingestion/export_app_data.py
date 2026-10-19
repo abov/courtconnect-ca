@@ -7,7 +7,8 @@ Websites are exported only when `website_usable` is set, so dead links never rea
 
 File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
-  sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
+  sports  : [{n: name, v: venues, s: status, r: recommended next source, d blurb, f facts {p players, c court, g gear, o governing body, y year, ou official site},
+              u links {l learn more, r rules, c court size, g gear} (https only)}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, r, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
      a street address; ai 1 + ad metres = nearest address point (inferred); ap 1 = address of the enclosing park/school/club (inferred); ns = nearest road name when no address (shown "Near <street>", inferred)
      r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet, or 'Reported: opening soon' with ul 1 = only a directory said so (ud = date checked)
@@ -39,6 +40,37 @@ ACTION_OFFER = {"open_play": "O", "clinic": "C", "private_lesson": "L", "group_c
                 "league": "E", "social_event": "S"}
 
 
+def https_only(url: str) -> str:
+    url = (url or "").strip()
+    if url and not url.startswith("https://"):
+        raise SystemExit(f"Sport link must be https: {url!r} (fix it in the Google Sheet, then make sync-sports)")
+    return url
+
+
+def add_sport_details(con, sports: list, sport_index: dict) -> None:
+    """Mini description for the sport card: blurb + facts + rules/court/gear links, all from the Google Sheet via the all_racquet seed.
+    The link/blurb columns may not exist yet (sheet not extended): then only the facts are exported."""
+    have = {r[0] for r in con.execute("select column_name from information_schema.columns where table_schema = 'raw' and table_name = 'all_racquet'").fetchall()}
+    col = lambda c: f"trim({c})" if c in have else "''"
+    for row in con.execute(f"""select trim(sport), {col('players')}, {col('court_dim')}, {col('base_gear')}, {col('org')}, {col('year_origin')},
+                               {col('url')}, {col('blurb')}, {col('learn_url')}, {col('rules_url')}, {col('court_url')}, {col('gear_url')}
+                        from raw.all_racquet""").fetchall():
+        name, players, court, gear, org, year, official, blurb, learn, rules, court_url, gear_url = (v or "" for v in row)
+        if name not in sport_index:
+            continue
+        if len(blurb) > 200:
+            raise SystemExit(f"Blurb for {name} is {len(blurb)} characters (max 200): shorten it in the Google Sheet")
+        facts = {k: v for k, v in (("p", players), ("c", court), ("g", gear), ("o", org), ("y", year), ("ou", https_only(official))) if v}
+        links = {k: https_only(v) for k, v in (("l", learn), ("r", rules), ("c", court_url), ("g", gear_url)) if v}
+        entry = sports[sport_index[name]]
+        if blurb:
+            entry["d"] = blurb
+        if facts:
+            entry["f"] = facts
+        if links:
+            entry["u"] = links
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     con = duckdb.connect("courtconnect.duckdb", read_only=True)
@@ -48,6 +80,7 @@ def main() -> None:
         from marts.mart_sport_gaps g order by g.venues_found desc, g.sport_name""").fetchall()
     sport_index = {r[0]: i for i, r in enumerate(gaps)}
     sports = [{"n": r[0], "v": int(r[2]), "s": r[1], "r": r[3]} for r in gaps]
+    add_sport_details(con, sports, sport_index)
     # sports that need no fixed court (any beach): w = where, wn = note; the map lists them without pinpointing a place
     for name, where, note in con.execute("select trim(sport), trim(where_played), trim(note) from raw.sport_play_anywhere").fetchall():
         if name in sport_index:
