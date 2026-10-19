@@ -1,4 +1,4 @@
 date,venues,named_pct,sites_dead_pct,sports_with_venues,events_upcoming,actions_current,extract_age_days,events_oldest_check_days,seen_35d_pct,sla_met,sla_total,tests_pass,tests_warn,tests_fail
 2026-10-13,9941,11.6,0.0,21,43,92,4,4,,5,6,94,0,0
 2026-10-14,10466,11.6,0.0,21,44,120,0,5,99.9,6,7,112,0,0
-2026-10-18,10248,14.2,0.0,22,54,213,4,9,99.9,6,7,179,0,0
+2026-10-18,10241,14.2,0.0,22,54,213,4,9,99.9,6,7,185,0,0
