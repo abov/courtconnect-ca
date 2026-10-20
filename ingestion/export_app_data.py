@@ -51,7 +51,7 @@ def add_sport_details(con, sports: list, sport_index: dict) -> None:
     """Mini description for the sport card: blurb + facts + rules/court/gear links, all from the Google Sheet via the all_racquet seed.
     The link/blurb columns may not exist yet (sheet not extended): then only the facts are exported."""
     have = {r[0] for r in con.execute("select column_name from information_schema.columns where table_schema = 'raw' and table_name = 'all_racquet'").fetchall()}
-    col = lambda c: f"trim({c})" if c in have else "''"
+    col = lambda c: f"trim(cast({c} as varchar))" if c in have else "''"   # cast: an all-blank sheet column loads as INTEGER
     for row in con.execute(f"""select trim(sport), {col('players')}, {col('court_dim')}, {col('base_gear')}, {col('org')}, {col('year_origin')},
                                {col('url')}, {col('blurb')}, {col('learn_url')}, {col('rules_url')}, {col('court_url')}, {col('gear_url')}
                         from raw.all_racquet""").fetchall():

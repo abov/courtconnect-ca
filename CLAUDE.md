@@ -70,7 +70,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 5. Match gold set (was 4, `docs/gold_set_plan.md`): 90 labels (`make eval-match`); `facility_name` rule 2026-10-17, radius 300 m + city-name guard and a second random sample (121 pairs, 0 wrong merges, 11 missed) 2026-10-18; `inside_facility` footprint tier 2026-10-18 (129 pairs, 0 wrong, 4 missed; `docs/gold_set_plan.md`, "Fourth slice"); next: re-run `make eval-match` after each OSM refresh; only worth a new rule if the beta shows the 4 remaining misses matter.
 6. Facility scans (was 5b/5c, `docs/gym_chain_scan.md`, `docs/public_facility_scan.md`): optional next: City of San Diego rec centers, Sacramento area, Orange County, Inland Empire, other UC/CSU campuses, more military MWR.
 7. Coverage (was 6): `*-access` leads (48 unresolved), club-named venues pass 2, beach tennis court locations, NorCal Equinox, OSM fix list.
-8. Rechecks (was 7): Club Locker (squash), badminton 2027 ORCs (Nov-Dec), Cosm events (add only after the screening split below).
+8. Rechecks (was 7): 3WallBall (3wallball.com, Outdoor Racquetball): Vegas World Championships has no 2027 dates yet (last held 2024), recheck each sync and add it when dates post; Huntington Beach Nationals is in (July 9-11, 2027); Club Locker (squash), badminton 2027 ORCs (Nov-Dec), Cosm events (add only after the screening split below).
 
 *After beta (December; rank with beta findings, ADR 0015)*
 - Beta round (was 9, `docs/feedback_round.md`; dates TBD): send, collect, record findings (RICE, `docs/feedback_findings.md`). Owner: exclude own IP in GoatCounter.
