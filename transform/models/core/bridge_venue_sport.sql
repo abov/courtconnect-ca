@@ -25,7 +25,8 @@ manual as (
         mm.effective_venue_id                                 as venue_id,
         s.sport_id,
         coalesce(max(m.courts_count), 0)                      as courts,
-        string_agg(distinct m.surface_type, ';')              as surfaces
+        string_agg(distinct m.surface_type, ';')              as surfaces,
+        string_agg(distinct m.access_type, ';')               as access_types
     from {{ ref('stg_manual_venues') }} m
     join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
     join {{ ref('dim_sport') }} s on s.sport_name = m.sport_name
@@ -42,8 +43,11 @@ manual_also as (
     join {{ ref('sport_also_played') }} a on trim(a.sport) = f.sport_name
     join {{ ref('dim_sport') }} d on d.sport_name = trim(a.also_sport)
     -- only_surfaces set (Soft Tennis: grass;turf): the hand-added venue must list one of those surfaces
-    where nullif(trim(a.only_surfaces), '') is null
-       or list_has_any(string_split(m.surfaces, ';'), string_split(replace(a.only_surfaces, ' ', ''), ';'))
+    where (nullif(trim(a.only_surfaces), '') is null
+           or list_has_any(string_split(m.surfaces, ';'), string_split(replace(a.only_surfaces, ' ', ''), ';')))
+      -- only_access set (Micro Pickleball: public): the hand-added venue must be marked with one of those access values
+      and (nullif(trim(a.only_access), '') is null
+           or list_has_any(string_split(m.access_types, ';'), string_split(replace(a.only_access, ' ', ''), ';')))
 ),
 
 unioned as (

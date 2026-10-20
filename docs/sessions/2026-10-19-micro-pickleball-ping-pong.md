@@ -1,0 +1,5 @@
+# 2026-10-19 Micro Pickleball on public ping pong tables; Tennis Baseball and Toccer as play-anywhere sports
+
+`sport_also_played.csv` gets an optional `only_access` column (e.g. `public`); Table Tennis -> Micro Pickleball uses it (owner 2026-10-19: open tables only, clubs / private / members-only probably do not allow it). Only OSM tables mapped `public` and hand-added venues marked `public` pass it on; unknown-access tables and Overture places (no access data, mostly clubs) do not. Result: 15 Micro Pickleball venues (the first try, "not private", gave 77 incl. clubs, resorts, campuses).
+Tennis Baseball ("any open baseball field") and Toccer ("any open soccer field") are rows in `sport_play_anywhere.csv`, like Frescoball: the map lists them with a note and pins no fields (owner's call, 2026-10-19; mapping baseball/soccer pitches from OSM would add thousands of pins).
+Next: more ping pong tables turn up as OSM tables get an access tag; revisit pinning fields only if the beta asks for it.

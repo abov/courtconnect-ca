@@ -44,6 +44,9 @@ with_also as (
     -- only_surfaces = e.g. grass;turf (Soft Tennis): the court's surface must be listed; an unknown surface does not qualify
       and (nullif(trim(a.only_surfaces), '') is null
            or ';' || replace(a.only_surfaces, ' ', '') || ';' like '%;' || t.surface_type || ';%')
+    -- only_access = e.g. public (Micro Pickleball on ping pong tables): the court's access must be listed; unknown access does not qualify
+      and (nullif(trim(a.only_access), '') is null
+           or ';' || replace(a.only_access, ' ', '') || ';' like '%;' || t.access_type || ';%')
 )
 
 select distinct

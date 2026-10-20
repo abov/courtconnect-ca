@@ -202,7 +202,8 @@ seeds:
       are inferred, not separately observed; bridge_place_sport labels them match_type 'also_played'.
       `exclude_private_members` = yes skips members-only venues and club-style place names; `exclude_name_inferred` = yes skips places
       whose source sport was inferred from the place name. `only_surfaces` (e.g. grass;turf) limits the derived sport to courts with one of those
-      surfaces; places and courts with an unknown surface are skipped.
+      surfaces; places and courts with an unknown surface are skipped. `only_access` (e.g. public) limits the derived sport to courts and hand-added
+      venues with that access; unknown-access courts and Overture places (no access data) are skipped (Table Tennis -> Micro Pickleball).
 
   - name: osm_court_sport_overrides
     description: >
