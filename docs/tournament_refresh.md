@@ -48,3 +48,6 @@ Rows with provider meetup or partiful: check each link still loads and the club'
 
 ## Beach tennis
 Recheck: olabeachtennis.com (open play times at Tower 26, leagues), sfbeachtennis.com (park locations, training tour 18 Oct, SFBT League page), and the San Diego beach tennis social links (leads `beach-tennis-mission-beach-tower-22`, `sfbt-*`). Promote a lead to `manual_venues` only once the club gives a court location.
+
+## Instagram sweep (added 2026-10-19, owner request)
+Every ~2 weeks, for the Instagram accounts in `venue_actions.csv` (`provider = instagram`): open `https://www.instagram.com/<handle>/` in the browser pane (logged out; ignore the log-in banner, never sign in), then in JS read the first ~12 `a[href*="/p/"], a[href*="/reel/"]` links and `fetch(link,{credentials:'omit'})` each, taking `og:description`. Run it for 3-4 accounts per call (a script must finish in 45 s; use `Promise.all`). Keep only posts dated today or later for events (check the year), prefer the club's own event page over the post, and put facts only in the seeds. Courts mentioned in posts become leads, not pins. See Pass 9 in `tournament_sources.md`.
