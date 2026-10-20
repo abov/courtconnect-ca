@@ -24,7 +24,8 @@ manual as (
     select
         mm.effective_venue_id                                 as venue_id,
         s.sport_id,
-        coalesce(max(m.courts_count), 0)                      as courts
+        coalesce(max(m.courts_count), 0)                      as courts,
+        string_agg(distinct m.surface_type, ';')              as surfaces
     from {{ ref('stg_manual_venues') }} m
     join {{ ref('int_manual_venue_match') }} mm on mm.venue_key = m.venue_key
     join {{ ref('dim_sport') }} s on s.sport_name = m.sport_name
@@ -40,6 +41,9 @@ manual_also as (
     join {{ ref('dim_sport') }} f on f.sport_id = m.sport_id
     join {{ ref('sport_also_played') }} a on trim(a.sport) = f.sport_name
     join {{ ref('dim_sport') }} d on d.sport_name = trim(a.also_sport)
+    -- only_surfaces set (Soft Tennis: grass;turf): the hand-added venue must list one of those surfaces
+    where nullif(trim(a.only_surfaces), '') is null
+       or list_has_any(string_split(m.surfaces, ';'), string_split(replace(a.only_surfaces, ' ', ''), ';'))
 ),
 
 unioned as (
