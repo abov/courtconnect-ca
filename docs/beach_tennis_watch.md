@@ -13,10 +13,10 @@ Courts used: Santa Monica Beach at Tower 26 (pins "Beach Tennis Santa Monica" an
 
 ## Rules
 - Add an event only with a stated year and date; use the organizer's own page over any post or aggregator and note disagreements in `source_note`.
-- Level: ITF BT10 / BT50 are `pro`; club and community events are `amateur`. League seasons and league finals days are not events here (note them in the session note).
+- Level: ITF BT10 / BT50 are `pro`; club and community events are `amateur`. A league's finals day is an event (owner decision 2026-10-19); the league season itself is not.
 - Past events (the Sept 20 and Oct 18 BT10s, the July Santa Monica Open) are not added.
 
 ## Read on 2026-10-19
 Added: OLA Team Cup (Oct 25, sold out), Winter Kickoff Classic 2nd Edition (Nov 20-22), Vision BT10 Nov 20 and Nov 22 (ITF), and, from the BT Cali Club sweep, the CaliClub Halloween Tournament (Oct 25, PR for the Instagram sweep).
-Not added: BTSM League 3rd Edition finals day (Nov 14, league), BTCC League 3rd Edition (Saturday round robin league), OLA Summer League (season), OLA Mixed Doubles (page has no dates).
+Added later the same day (owner request): BT Cali Club League 3rd Edition semifinals and finals (Nov 7) and BTSM League 3rd Edition Finals Day (Nov 14). Not added: the league seasons themselves, OLA Summer League (season), OLA Mixed Doubles (page has no dates).
 Next: recheck in early November for a December / 2027 calendar (Santa Monica Open 2027, more BT10s).
