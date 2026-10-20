@@ -118,6 +118,8 @@ also_played as (
     join {{ ref('dim_sport') }} d on d.sport_name = trim(a.also_sport)
     join {{ ref('stg_overture_places') }} p on p.place_id = s.place_id
     where not exists (select 1 from settled x where x.place_id = s.place_id and x.sport_id = d.sport_id)
+      -- only_surfaces set: Overture places carry no court surface, so the sport is not passed on
+      and nullif(trim(a.only_surfaces), '') is null
       -- exclude_name_inferred = yes: the place's sport came from its name (name_keyword), not from an Overture category or a human
       -- confirmation, so the sport is not passed on; only known (tagged or confirmed) courts count
       and not (lower(trim(coalesce(a.exclude_name_inferred, ''))) = 'yes' and s.match_type = 'name_keyword')

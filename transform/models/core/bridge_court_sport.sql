@@ -7,6 +7,7 @@ with tagged as (
     select
         c.court_id,
         c.access_type,
+        c.surface_type,
         s.sport_name
     from {{ ref('stg_osm_courts') }} c
     join {{ ref('osm_sport_map') }} m
@@ -20,6 +21,7 @@ with tagged as (
     select
         c.court_id,
         c.access_type,
+        c.surface_type,
         trim(o.correct_sport) as sport_name
     from {{ ref('osm_court_sport_overrides') }} o
     join {{ ref('stg_osm_courts') }} c on c.court_id = trim(o.court_id)
@@ -39,6 +41,9 @@ with_also as (
     -- exclude_private_members = yes: private / members-only courts do not pass the sport on (Pitton on badminton courts)
     where r.court_id is null
       and not (lower(trim(coalesce(a.exclude_private_members, ''))) = 'yes' and t.access_type in ('private', 'members'))
+    -- only_surfaces = e.g. grass;turf (Soft Tennis): the court's surface must be listed; an unknown surface does not qualify
+      and (nullif(trim(a.only_surfaces), '') is null
+           or ';' || replace(a.only_surfaces, ' ', '') || ';' like '%;' || t.surface_type || ';%')
 )
 
 select distinct
