@@ -15,6 +15,7 @@ Courts used: Santa Monica Beach at Tower 26 (pins "Beach Tennis Santa Monica" an
 - Add an event only with a stated year and date; use the organizer's own page over any post or aggregator and note disagreements in `source_note`.
 - Level: ITF BT10 / BT50 are `pro`; club and community events are `amateur`. A league's finals day is an event (owner decision 2026-10-19); the league season itself is not.
 - Past events (the Sept 20 and Oct 18 BT10s, the July Santa Monica Open) are not added.
+- Spectators: the owner says watching is usually free at beach tennis events (2026-10-19). The organizers' pages mostly do not say, so rows carry it as the owner's report, not as a confirmed fact; replace it with the page's wording when an organizer states admission.
 
 ## Read on 2026-10-19
 Added: OLA Team Cup (Oct 25, sold out), Winter Kickoff Classic 2nd Edition (Nov 20-22), Vision BT10 Nov 20 and Nov 22 (ITF), and, from the BT Cali Club sweep, the CaliClub Halloween Tournament (Oct 25, PR for the Instagram sweep).
