@@ -1,0 +1,16 @@
+sport,column,proposed_value,confidence,source_note
+Frontenis,Org,FIPV,high,International Federation of Basque Pelota; frontenis is in its scope (fipv.net/en). Same code the sheet already uses for Basque Pelota
+Soft Tennis,Org,ISTF,high,International Soft Tennis Federation (founded 1973; softtennis-istf.com)
+Taiji Bailong,Org,TBBA,medium,European Association of Tai Chi Bailong Ball (Germany 2005) per Wikipedia's Roliball article; no site found
+Outdoor Racquetball,Org,3WallBall,medium,3WallBall runs the World Outdoor Racquetball championships (3wallball.com loads). It is an event organiser more than a federation
+Qianball,Org,KFUM (Denmark),medium,Run in Denmark under KFUM (the Danish YMCA sport branch) per Wikipedia and lex.dk. Search did not confirm the narrower name "KFUM Idraetsforbund"
+Toccer,Org,Tennis Polo Association,low,Wikipedia names it as the governing body; no website found
+Smolball,Org,Smolball IP Association,low,Appears only as the owner of a 2024 SMOLBALL trademark record; not confirmed to be a governing body
+Typti,Org,TYPTI Inc.,low,Company led by founder Steve Bellamy. The Hollywood Reporter says the sport has its own governing body with tours, but the body is not named in anything found
+3-wall Paddleball,Org,,none found,NPA covers 4-wall paddleball and APA covers 1-wall. USHA publishes 3-wall handball rules but that is a different sport; leave blank unless the owner knows
+Hand Tennis,Org,,skipped,The only "Hand Tennis" association found (HTA) is for a 2006 school desk game, not the court sport in the sheet's Alt Name ("Jeu de Paume")
+Street Racket,Org,,none found,Swiss, founder Marcel Straub; no association name confirmed
+Pang Pong,Org,,none found,Origin is Hitachi (Ibaraki); no federation
+Rapidball,Org,,none found,Only a Dutch club (ACLO) offers it; a club is not a governing body
+Downside Ball Game / Pitton / Racket Hockey / Eclipseball / Jokari / Totem Tennis,Org,,none found,"Played at one school, or invented by an individual; no governing body found (Jokari company reportedly stopped selling the game)"
+Remaining blank Org rows,Org,,not searched,"Naked Tennis, Xare, 360Ball, Biraq, Floor Pro Mini Tennis, Frescotennis, Goodminton, Indiaca Tennis, Jazzminton, Ketball, Knuckle Racket, Loboton, Miniten Thug, Pro Sunball, Ricochet, Sandball, Speedball, Street Tennis, String Paddleball, Tennis Baseball, Tennis Triples, Wacquetball, Wall Pong, Riftball: most are invented games with no body; earlier url searches found none"

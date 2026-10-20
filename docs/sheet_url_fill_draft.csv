@@ -1,0 +1,46 @@
+sport,column,proposed_value,tier,confidence,source_note
+Frontenis,url,https://www.fipv.net/en/,official,high,FIPV is the international federation whose scope includes frontenis (fipv.net/en documentation + tournaments pages)
+Soft Tennis,url,https://softtennis-istf.com/,official,high,ISTF's own news/history pages; ISTF governs the sport worldwide (founded 1973)
+Paleta frontón,url,https://www.fipv.net/en/,official (parent federation),medium,Sheet lists Org FDPPF(FIPV); FIPV is the parent. Peruvian FDPPF site not found
+Australian Racquetball,url,https://www.squash.org.au/w/participation/Racquetball,official (national body page),medium,"No standalone ""Australian Racquetball Association"" site found; Squash Australia runs racquetball. Org value ARA is unverified"
+Table Squash,url,https://en.wikipedia.org/wiki/Table_squash,backup: Wikipedia,low,"No governing body found. ""ITSA"" in the Org column could not be verified (search returned an unrelated top-spinners group)"
+Smashball,url,https://en.wikipedia.org/wiki/Matkot,backup: Wikipedia,low,"No association site found for Matkot/Smashball. Sheet Org ""BRWL"" also unverified"
+Frescoball,url,https://en.wikipedia.org/wiki/Frescobol,backup: Wikipedia,low,"No single official site; Japan (JFBA) and Brazil (OFI) bodies exist but their URLs were not confirmed. Org ""BRWL?"" unverified"
+Qianball,url,https://en.wikipedia.org/wiki/Qianball,backup: Wikipedia,medium,No Danish site confirmed. Played under KFUM Idraetsforbund since 2006 (inferred; URL not checked)
+Pang Pong,url,https://en.wikipedia.org/wiki/Pang_Pong,backup: Wikipedia,medium,Hitachi's own article (social-innovation.hitachi/en/article/pang_pong) is a good second source. No federation
+Toccer,url,https://en.wikipedia.org/wiki/Tennis_polo,backup: Wikipedia,low,Wikipedia names a Tennis Polo Association but no site was found
+Pitton,url,https://www.topendsports.com/sport/list/pitton.htm,backup: other reference (no Wikipedia page seen),medium,No official site. Topend Sports entry (44x20 ft court, pickleball paddle + shuttlecock)
+Eclipseball,url,https://new.topendsports.com/sport/new/eclipse-ball.htm,backup: other reference (no Wikipedia page seen),low,No official site; only retailers + Topend Sports (created 1985). Host seen was new.topendsports.com: check the www. variant loads before using
+Racket Hockey,url,https://topendsports.com/sport/new/racket-hockey.htm,backup: other reference (no Wikipedia page seen),low,Single hobbyist page (created 2016 per Topend Sports). No governing body
+Rapidball,url,https://www.aclosport.nl/en/actualiteiten/sport-of-this-week-rapidball/,backup: other reference (no Wikipedia page seen),low,Dutch university sport club page; not clear this is the same game as UK Racketball/Squash 57
+Smolball,Rules,https://www.mobilesport.ch/wp-content/uploads/2014/02/02_14_Smolball_d.pdf,rules (German),medium,Swiss federal sport office (BASPO) teaching material; no governing body site found. French and Italian versions exist
+Shuttleball,Rules,https://www.sups.tp.edu.tw/shuttleball/en/htm/4-2.htm,rules,medium,"Taipei Shuttleball Committee rules page. Sheet Org ""Alternative Sports Associations"" could not be verified"
+Outdoor Racquetball,url,https://3wallball.com/,official,medium,"3WallBall = World Outdoor Racquetball (also named in CLAUDE.md rechecks). Loads (HTTP 200) on 2026-10-19; 3wallball.org, used in a 2023 USA Racquetball preview, did not connect"
+Road Tennis,url,https://en.wikipedia.org/wiki/Road_tennis,backup: Wikipedia,high,"Barbados, 1930s. No official PRTA site found (earlier search)"
+Jokari,url,https://en.wikipedia.org/wiki/Jokari,backup: Wikipedia,medium,"Rubber ball on an elastic band, invented in France 1938. The Jokari company reportedly no longer sells the game (2013 mirror), so no official site"
+Downside Ball Game,url,https://en.wikipedia.org/wiki/Downside_ball_game,backup: Wikipedia,high,"Played at Downside School, Somerset since 1820"
+Totem Tennis,url,https://en.wikipedia.org/wiki/Totem_tennis,backup: Wikipedia,high,Also tether tennis / swingball
+Taiji Bailong,url,https://en.wikipedia.org/wiki/Roliball,backup: Wikipedia,medium,"Roliball is also called Bailong ball. A European association (TBBA, Germany) exists but no site found"
+Xare,url,https://en.wikipedia.org/wiki/Basque_pelota,backup: Wikipedia,low,Redirects to the parent Basque pelota article; no Xare-specific page. Could also use https://www.fipv.net/en/ (official parent body)
+360Ball,url,https://www.topendsports.com/sport/new/360ball.htm,backup: other reference (no Wikipedia page seen),low,"South Africa, no official site or governing body found; US trademark abandoned 2012"
+Goodminton,url,,none found,,"Only retailers (Target, Vat19). No official site or Wikipedia page"
+Micro Pickleball,url,,none found,,Nothing found for the name or for 'APBA' (Asia PB Alliance) in the Org column; Org looks unverified
+Street Racket,url,,none found,,"Swiss game (founder Marcel Straub, per MOVE Congress). Official domain not confirmed; no Wikipedia page"
+Loboton,url,,none found,,Only a 2024 Asheville Tennis Association event listing; no Wikipedia page
+Riftball,url,,none found,,Only retail listings for the B3 Riftball set (Creative Brainworks); no Wikipedia page
+Wacquetball,url,,none found,,Only a USPTO trademark record; no Wikipedia page
+Floor Pro Mini Tennis,url,,none found,,Nothing found for this exact name
+Jazzminton,url,,none found,,Nothing found; no Wikipedia page
+Ricochet,url,,none found,,Only Ricochet croquet and Racquetball Canada came up; Wikipedia 'Ricochet' is a disambiguation page
+Pro Sunball,url,,none found,,Nothing found; no Wikipedia page
+Ketball,url,,none found,,Nothing found; no Wikipedia page
+Naked Tennis,url,,none found,,Wikipedia search only (no page); official-site search not run
+Biraq,url,,none found,,"Wikipedia 'Birak' is a disambiguation page for place names, not the sport; official-site search not run"
+Frescotennis,url,,none found,,Wikipedia search only (no page); official-site search not run
+Indiaca Tennis,url,,none found,,Wikipedia search only (no page); official-site search not run
+Knuckle Racket,url,,none found,,Wikipedia search only (no page); official-site search not run
+Tennis Baseball,url,,none found,,Wikipedia search only (no page); official-site search not run
+Wall Pong,url,,none found,,Wikipedia search only (no page); official-site search not run
+Tennis Triples,url,,none found,,Only a patent for '3-Way Mini Tennis' and local event pages; no site
+Sandball,url,,none found,,Wikipedia 'Sandball' redirects to beach handball (a different sport); official-site search not run
+Speedball,url,,none found,,Wikipedia 'Speedball' is a disambiguation page; official-site search not run
