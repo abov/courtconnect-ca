@@ -16,7 +16,7 @@ import duckdb
 # Hand-written notes for sports whose NAME may need a human check. Keyed by the name on the sheet.
 NAME_NOTES = {
     "Frescoball": "Common spelling is 'Frescobol' (alias added)",
-    "Kadima": "Also known as Matkot, Smashball, Raketa (aliases added)",
+    "Smashball": "Also known as Kadima, Matkot, Raketa (aliases added)",
     "Touchtennis": "Only 1 OpenStreetMap use, inside a multi-sport tag",
     "Miniten Thug": "Possible stray word in the name - please check",
     "Pitton": "I could not verify this name - please check the spelling",

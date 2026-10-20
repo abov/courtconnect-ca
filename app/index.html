@@ -72,6 +72,7 @@
   body.watch .playonly, body.watch .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #sport option.nomap { color: var(--muted); }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; }
   .sportinfo { margin-top: 8px; } .sportinfo summary { font-size: 12.5px; }
   .sportinfo p { margin: 6px 0 0; } .sportinfo .facts { color: var(--muted); }
@@ -397,7 +398,8 @@ const WALL_CONF = {reported: "Reported by a player, not independently verified",
 const WALL_ACCESS_LABEL = {public: "Public", customers: "Customers only", private: "Private, not open to walk-up use", members: "Members only"};
 function wallAccess(w) { return w.ac === "public" ? "public" : WALL_ACCESS_LABEL[w.ac] ? "restricted" : "unknown"; }
 // Walls double as solo courts for the wall sports. Only walls whose type is known qualify: OSM handball/wall courts of unchecked type ("other") never do.
-const WALL_SPORT = {"1-wall Paddleball": ["one_wall", "backboard"], "3-wall Paddleball": ["three_wall"]};
+// Racquetball is mainly indoors, but outdoor racquetball is played on 1-wall and 3-wall courts (3WallBall), so those walls show as an option (no backboards).
+const WALL_SPORT = {"1-wall Paddleball": ["one_wall", "backboard"], "3-wall Paddleball": ["three_wall"], "Racquetball": ["one_wall", "three_wall"], "Outdoor Racquetball": ["one_wall", "three_wall"]};
 function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t))) : []; }
 function wallsFiltered() { return state.mode === "play" && state.sport >= 0 ? wallsFor(sports[state.sport].n) : []; }
 function wallGeojson(list) {
@@ -751,8 +753,10 @@ function populateSports() {
     const narrowed = !!(state.text || state.on.size || state.offers.size);
     sel.append(el("option", {value: "-1", text: "All racket sports"}));
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => {
-      if (!(s.v > 0 || s.w || (!narrowed && wallsFor(s.n).length))) return;
-      sel.append(el("option", {value: String(i), text: s.n}));
+      const mapped = s.v > 0 || s.w || wallsFor(s.n).length > 0;
+      if (!mapped && narrowed) return;   // with a filter on, only sports that can match stay
+      // sports with no place found yet stay listed, greyed, so people can discover them (they get an explainer card, never fake pins)
+      sel.append(el("option", mapped ? {value: String(i), text: s.n} : {value: String(i), text: s.n, class: "nomap"}));
     });
   }
   sel.value = String(state.sport); updateSportIcon();
@@ -789,15 +793,22 @@ function showSportInfo() {
 function showAnywhere() {
   showSportInfo();
   const n = $("anywhere"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
-  n.hidden = !(s && s.w);
-  if (s && s.w) n.textContent = s.wn + (s.v > 0 ? "" : ". No venue is listed because none is needed.");
+  const none = !!(s && !s.w && s.v === 0 && !wallsFor(s.n).length);
+  n.hidden = !(s && (s.w || none));
+  n.replaceChildren();
+  if (s && s.w) n.textContent = s.wn;
+  else if (none) {
+    const q = new URLSearchParams({template: "report-a-venue.yml", sport: s.n});
+    n.append(document.createTextNode("No place for " + s.n + " is listed in California or Nevada yet. Know one? "),
+      el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Tell us about it"}), document.createTextNode("."));
+  }
 }
 function showWallNote() {
   const n = $("wallnote"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
   n.hidden = !(s && WALL_SPORT[s.n]);
   if (!n.hidden) {
     const shown = wallsFor(s.n).reduce((n, w) => n + (w.wn || 1), 0), unknown = walls.filter(w => w.t.every(t => t === "other")).reduce((n, w) => n + (w.wn || 1), 0);
-    n.textContent = "Orange pins are hitting walls you can also use alone, shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap across California and Nevada; ones nobody has mapped there are missing.";
+    n.textContent = (/Racquetball$/.test(s.n) ? "Orange pins are outdoor 1-wall and 3-wall courts where racquetball is also played (an option next to the indoor courts), " : "Orange pins are hitting walls you can also use alone, ") + "shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap across California and Nevada; ones nobody has mapped there are missing.";
   }
 }
 function setMode(m) {
