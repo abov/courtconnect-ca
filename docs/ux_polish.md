@@ -1,7 +1,7 @@
 # Visual polish: scope and options (2026-10-14)
 
 Status: **proposal, no code changed.** Owner picks one option (or mixes), then PRs of one area each.
-Source read as text (`app/index.html`, 748 lines; `app/favicon.svg`); no screenshots. Builds on `docs/ux_audit.md` (readability, UX Option A PRs 1-3, done). This is about warmth and look, not layout or content.
+Source read as text (`app/index.html`, 748 lines; `app/favicon.svg`); no screenshots. Builds on the 2026-10-13 UX audit (removed, in git history) (readability, UX Option A PRs 1-3, done). This is about warmth and look, not layout or content.
 
 ## Goal and hard constraints
 
