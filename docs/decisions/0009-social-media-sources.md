@@ -39,7 +39,7 @@ site still linking to it. A dead link is removed, not guessed at.
 - The map stays honest and compliant, but shows no live content: a visitor still has to click through to see the latest post.
 - Reaching live schedules would need an approved Meta API integration; revisit only if the owner pursues app review.
 
-## Amendment (proposed 2026-10-19, owner request; needs owner review in the PR)
+## Amendment (accepted 2026-10-19, owner request)
 The owner asked for a sweep of the public Instagram posts of the clubs already linked. This relaxes "automated browsing ... not done" for one narrow case, so it is written down here instead of silently done:
 - Allowed: reading **public** profile and post pages logged out, in the browser pane, for the accounts we already list (`official` handles), at low volume (about 12 posts per account, every ~2 weeks). Never log in, never click through a login wall, never read stories, private accounts or groups, never use the owner's session.
 - Stored: facts only (event name, date, venue, link, and a plain "club's post, single source" note). Never post text, images, follower counts or comments (unchanged).
