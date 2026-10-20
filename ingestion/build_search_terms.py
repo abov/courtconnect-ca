@@ -28,6 +28,8 @@ DISTINCTIVE = {
 # Extra spellings people use in business names; (term, sport on the sheet)
 EXTRA = [("pickle ball", "Pickleball"), ("racquet club", "Tennis"), ("racket club", "Tennis"),
          ("ping pong", "Table Tennis"), ("paddleball", "4-wall Paddleball")]
+# Generic pelota words do not say which variant a place offers: every Basque Pelota variant on the sheet gets the term (ambiguous, weak evidence only)
+PELOTA_TERMS = ["basque pelota", "pelota", "pelota vasca"]
 
 
 def main() -> None:
@@ -50,14 +52,17 @@ def main() -> None:
         if s in sheet:
             terms.setdefault(t, s)
 
+    pairs = set(terms.items())
+    for t in PELOTA_TERMS:
+        pairs |= {(t, s) for s in sheet if s.startswith("Basque Pelota:")}
     out = SEEDS / "sport_search_terms.csv"
     with out.open("w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, lineterminator="\n")
         w.writerow(["term", "sport", "reliability"])
-        for t, s in sorted(terms.items()):
+        for t, s in sorted(pairs):
             w.writerow([t, s, "distinctive" if t in DISTINCTIVE else "ambiguous"])
-    d = sum(1 for t in terms if t in DISTINCTIVE)
-    print(f"Wrote {len(terms)} search terms ({d} distinctive, {len(terms) - d} ambiguous) -> {out}")
+    d = sum(1 for t, _ in pairs if t in DISTINCTIVE)
+    print(f"Wrote {len(pairs)} search terms ({d} distinctive, {len(pairs) - d} ambiguous) -> {out}")
 
 
 if __name__ == "__main__":

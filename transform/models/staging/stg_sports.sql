@@ -20,9 +20,9 @@ cleaned as (
             else try_cast(coalesce({{ regex_extract('players', '-([0-9]+)$') }}, {{ regex_extract('players', '^([0-9]+)$') }}) as integer)
         end                                                   as players_max,
 
-        -- court: '44x20' -> 44 x 20 ft. Anything else (blocks, circumference, 'user descretion') stays null.
-        try_cast({{ regex_extract('court_dim', '^([0-9.]+)x[0-9.]+$') }} as double) as court_length_ft,
-        try_cast({{ regex_extract('court_dim', '^[0-9.]+x([0-9.]+)$') }} as double) as court_width_ft,
+        -- court: '44x20' (or '118.1×32.8') -> 44 x 20 ft. Anything else (blocks, circumference, 'user descretion') stays null.
+        try_cast({{ regex_extract('court_dim', '^([0-9.]+)[x×][0-9.]+$') }} as double) as court_length_ft,
+        try_cast({{ regex_extract('court_dim', '^[0-9.]+[x×]([0-9.]+)$') }} as double) as court_width_ft,
 
         lower(coalesce(court_surface, ''))                    as surface_lc,
         nullif(trim(base_gear), '')                           as base_gear,
