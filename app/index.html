@@ -768,7 +768,7 @@ function showSportInfo() {
   const box = $("sportinfo"), s = state.sport >= 0 ? sports[state.sport] : null, f = (s && s.f) || {}, u = (s && s.u) || {};
   const facts = [];
   if (f.p) facts.push(f.p + " players");
-  if (f.c) facts.push("Court " + f.c + (/^[\d.]+x[\d.]+$/.test(f.c) ? " ft" : ""));
+  if (f.c) facts.push("Court " + f.c + (/^[\d.]+[x×][\d.]+$/.test(f.c) ? " ft" : ""));
   if (f.g) facts.push("Gear: " + f.g);
   if (f.o) facts.push("Governing body: " + f.o);
   const links = SPORT_LINKS.filter(([k]) => u[k]);
