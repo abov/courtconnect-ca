@@ -69,7 +69,7 @@
   .seg { display: flex; gap: 6px; margin-top: 10px; }
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; white-space: nowrap; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
-  body:not(.watch):not(.social) .subseg { display: none; }
+  #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
   body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -170,10 +170,6 @@
     <div class="seg" role="group" aria-label="What are you looking for?">
       <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice">Practice &amp; Play</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Watch &amp; Social</button>
-    </div>
-    <div class="seg subseg" role="group" aria-label="Events to watch or get-togethers to join">
-      <button class="chip" id="subWatch" type="button" aria-pressed="false" title="Matches and tournaments to go and watch">To watch</button>
-      <button class="chip" id="subSocial" type="button" aria-pressed="false" title="Mixers, club nights and open play to join">To join</button>
     </div>
   </header>
 
@@ -390,8 +386,9 @@ function emptyItem(msg, label) {
   b.addEventListener("click", () => $("reset").click());
   return el("li", {class: "empty"}, el("p", {text: msg}), b);
 }
-function renderEventList() {
-  const list = eventsFiltered(), ul = $("list"); ul.replaceChildren();
+function renderEventList(ul) {                                          // rows for the watch half of the combined Watch & Social list
+  const list = eventsFiltered();
+  if (list.length) ul.append(el("li", {class: "lh", text: "To watch (dated events)"}));
   for (const ev of list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: ev.n}),
@@ -400,8 +397,6 @@ function renderEventList() {
     btn.addEventListener("click", () => showEvent(ev, true));
     ul.append(el("li", {}, btn));
   }
-  if (!list.length) ul.append(emptyItem("No events match these filters. Try all sports.", "Show all sports"));
-  viewList = list; updateCount();
   return list;
 }
 
@@ -453,16 +448,21 @@ function showSocial(g, fly) {
   if (fly) map.flyTo({center: [g.x, g.y], zoom: Math.max(map.getZoom(), 10), essential: true});
   popup.setLngLat([g.x, g.y]).setDOMContent(socialNode(g)).addTo(map);
 }
-function renderSocialList() {
-  const list = socialFiltered(), ul = $("list"); ul.replaceChildren();
+function renderSocialList(ul) {
+  const list = socialFiltered();
+  if (list.length) ul.append(el("li", {class: "lh", text: "To join (recurring mixers, club nights, open play)"}));
   for (const s of list) {
     const btn = el("button", {type: "button"}, el("div", {class: "nm", text: s.n}), el("div", {class: "meta", text: s.sc + " · " + s.v + ", " + s.c}), socialBadges(s));
     btn.addEventListener("click", () => showSocial(socialPins.find(g => g.items.includes(s)) || socialGroups([s])[0], true));
     ul.append(el("li", {}, btn));
   }
-  if (!list.length) ul.append(emptyItem("No get-togethers are listed for this sport yet. Try all sports.", "Show all sports"));
-  viewList = list; updateCount();
   return list;
+}
+function renderWatchList() {
+  const ul = $("list"); ul.replaceChildren();
+  viewEv = renderEventList(ul); viewSoc = renderSocialList(ul);
+  if (!viewEv.length && !viewSoc.length) ul.append(emptyItem("No events or get-togethers match these filters. Try all sports.", "Show all sports"));
+  updateCount();
 }
 
 // ---------- hitting walls (solo practice) ----------
@@ -524,7 +524,7 @@ function wallItems(list) {
 }
 
 // ---------- map ----------
-let map, popup, current = [], mapReady = false, viewList = [];
+let map, popup, current = [], mapReady = false, viewEv = [], viewSoc = [];
 function geojson(list) {
   return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
@@ -700,8 +700,7 @@ function dist2(v, c) { const dx = (v.x - c.lng) * Math.cos(c.lat * Math.PI / 180
 function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
   show(["clusters", "cluster-count", "pts"], mode === "play");
-  show(["ev-pts", "ev-label"], mode === "watch");
-  show(["soc-pts", "soc-label"], mode === "social");
+  show(["ev-pts", "ev-label", "soc-pts", "soc-label"], mode === "watch");
   show(["wall-pts", "wall-label"], mode === "play" && wallsFiltered().length > 0);
 }
 function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
@@ -709,11 +708,8 @@ function applyMode(fit) {
   if (!mapReady) return;
   setLayersFor(state.mode); popup.remove();
   if (state.mode === "watch" && fit) {
-    const list = eventsFiltered();
+    const list = [...eventsFiltered(), ...socialFiltered()];
     if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(ev => b.extend([ev.x, ev.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
-  } else if (state.mode === "social" && fit) {
-    const list = socialFiltered();
-    if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(s => b.extend([s.x, s.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
   } else if (state.mode === "play" && fit) {
     const list = wallsFiltered();
     if (list.length) fitWalls(list); else map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
@@ -763,20 +759,16 @@ function updateCount() {
     } else box.replaceChildren(...kids);
     return;
   }
-  const n = viewList.filter(pin).length, all = viewList.length;
-  if (state.mode === "social") { box.replaceChildren(el("b", {text: fmt(n)}), document.createTextNode(noun(n, " get-together", " get-togethers") + " in view" + (n !== all ? " of " + fmt(all) : "") + ", recurring series rather than single dates")); return; }
-  box.replaceChildren(el("b", {text: fmt(n)}), document.createTextNode(noun(n, " event", " events") + " in view" + (n !== all ? " of " + fmt(all) : "") + ", soonest first in the list"));
+  const ne = viewEv.filter(pin).length, ns = viewSoc.filter(pin).length;
+  box.replaceChildren(el("b", {text: fmt(ne)}), document.createTextNode(noun(ne, " event", " events") + " to watch (dated) and "), el("b", {text: fmt(ns)}),
+    document.createTextNode(noun(ns, " get-together", " get-togethers") + " to join (recurring series) in view"));
 }
 function refresh() {
   renderActive();
-  if (state.mode === "social") {
-    const list = renderSocialList();
-    if (map.getSource("s")) map.getSource("s").setData(socialGeojson(list));
-    writeHash(); return;
-  }
   if (state.mode === "watch") {
-    const list = renderEventList();
-    if (map.getSource("e")) map.getSource("e").setData(eventGeojson(list));
+    renderWatchList();
+    if (map.getSource("e")) map.getSource("e").setData(eventGeojson(viewEv));
+    if (map.getSource("s")) map.getSource("s").setData(socialGeojson(viewSoc));
     writeHash(); return;
   }
   current = filtered();
@@ -800,7 +792,7 @@ function writeHash() {
 }
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
-  if (["watch", "social"].includes(p.get("mode"))) state.mode = p.get("mode");
+  if (["watch", "social"].includes(p.get("mode"))) state.mode = "watch";   // #mode=social links (before the two views were merged) land on Watch & Social
   // old #mode=walls links land on the wall sport
   const s = p.get("sport") || (p.get("mode") === "walls" ? "1-wall Paddleball" : ""); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
   for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
@@ -829,18 +821,18 @@ function renderActive() {
 function syncControls() {
   renderActive();
   $("sport").value = String(state.sport); $("q").value = state.text;
-  document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "social");
+  document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "watch");   // both notes show in the combined view
   const nOn = state.on.size + state.offers.size;
   $("moreSummary").textContent = nOn ? "Filters on: " + nOn + " (tap to change)" : "More filters: surface, access, what they offer";
   if (nOn && !matchMedia("(max-width: 800px)").matches) $("moreFilters").open = true;
-  $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode !== "play"); $("subWatch").setAttribute("aria-pressed", state.mode === "watch"); $("subSocial").setAttribute("aria-pressed", state.mode === "social");
+  $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode !== "play");
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
   for (const b of document.querySelectorAll("[data-o]")) b.setAttribute("aria-pressed", state.offers.has(b.dataset.o));
 }
 function populateSports() {
   const sel = $("sport"); sel.replaceChildren();
-  if (state.mode === "watch" || state.mode === "social") {
-    const up = state.mode === "watch" ? upcomingEvents() : socials.filter(isCurrentSocial), counts = {};
+  if (state.mode === "watch") {
+    const up = [...upcomingEvents(), ...socials.filter(isCurrentSocial)], counts = {};
     up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
     sel.append(el("option", {value: "-1", text: "All sports"}));
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n})); });
@@ -929,9 +921,7 @@ function showWallNote() {
     n.textContent = (s.n === "Outdoor Racquetball" ? "Orange pins are outdoor 1-wall and 3-wall courts where outdoor racquetball is played, " : s.n === "Knuckle Racket" ? "Orange pins are public 1-wall and 3-wall courts where Knuckle Racket can be played (walls not marked public are left out), " : "Orange pins are hitting walls you can also use alone, ") + "shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap across California and Nevada; ones nobody has mapped there are missing.";
   }
 }
-let lastEventsView = "watch";
 function setMode(m) {
-  if (m !== "play") lastEventsView = m;
   if (state.mode === m) return;
   state.mode = m; populateSports(); syncControls(); applyMode(true);
 }
@@ -939,9 +929,7 @@ function initControls() {
   const sel = $("sport");
   populateSports();
   $("modePlay").addEventListener("click", () => setMode("play"));
-  $("modeWatch").addEventListener("click", () => setMode(lastEventsView));   // one button; the sub-switch picks events to watch or get-togethers to join
-  $("subWatch").addEventListener("click", () => setMode("watch"));
-  $("subSocial").addEventListener("click", () => setMode("social"));
+  $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
   sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); refresh(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); });
   $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); refresh(); }, 200));
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
@@ -988,7 +976,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   });
   readHash(); initControls(); initCoverage(); syncControls();
   initMap();
-  if (state.mode === "watch") renderEventList(); else if (state.mode === "social") renderSocialList();
+  if (state.mode === "watch") renderWatchList();
   $("loading").remove();
 }).catch(err => { document.querySelector("#loading .spin")?.remove(); $("loadmsg").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });
 </script>
