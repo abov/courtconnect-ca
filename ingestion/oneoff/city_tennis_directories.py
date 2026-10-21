@@ -1,7 +1,7 @@
 """Seed official tennis court counts from two city one-page directories: SF Rec & Park and the City of San Diego.
 
-    python ingestion/city_tennis_directories.py                 # report: parse, geocode (cached), match to mapped tennis pins
-    python ingestion/city_tennis_directories.py --emit rows.csv # also write manual_venues.csv rows to append
+    python ingestion/oneoff/city_tennis_directories.py                 # report: parse, geocode (cached), match to mapped tennis pins
+    python ingestion/oneoff/city_tennis_directories.py --emit rows.csv # also write manual_venues.csv rows to append
 
 SF  https://sfrecpark.org/1446/Tennis-Court-Directory   facility, ZIP, lights, restrooms, total / reservable / walk-up courts (no address)
 SD  https://www.sandiego.gov/park-and-recreation/activities/sports/tenniscourts   facility, address, court count, lights, hours
@@ -25,8 +25,10 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-UA = "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"
+ROOT = Path(__file__).resolve().parent.parent.parent
+import sys
+sys.path.insert(0, str(ROOT / "ingestion"))
+from useragent import USER_AGENT as UA
 SF_URL = "https://sfrecpark.org/1446/Tennis-Court-Directory"
 SF_RULES = "https://sfrecpark.org/1887/Walk-Up-Tennis-Court-Rules"
 SF_BOOK = "https://sfrecpark.org/1188/How-to-Book-a-Tennis-or-Pickleball-Court"
@@ -213,12 +215,12 @@ def emit(rows, path):
                 rules = (f"SF Rec & Park: {r['reservable']} reservable court(s) ($5 per court-hour, book at rec.us/sfrecpark: {SF_BOOK}), "
                          f"{r['walkup']} walk-up court(s) (first come, first served; rules: {SF_RULES}). Lights: {'yes' if r['lit'] else 'no'}.")
                 ev = (f"SF Recreation and Park Department Tennis Court Directory ({SF_URL}), read {d}: {r['name']} (ZIP {r['zip']}), {r['courts']} courts, "
-                      f"{r['reservable']} reservable, {r['walkup']} walk-up, lights {'yes' if r['lit'] else 'no'}. Location: {r['prec']}. Found by ingestion/city_tennis_directories.py.")
+                      f"{r['reservable']} reservable, {r['walkup']} walk-up, lights {'yes' if r['lit'] else 'no'}. Location: {r['prec']}. Found by ingestion/oneoff/city_tennis_directories.py.")
                 site = SF_URL
             else:
                 rules = f"City of San Diego listing hours: {r['hours']}. {r['courts']} court(s), {'lighted' if r['lit'] else 'no lights'}. The page gives no fees or reservation rules."
                 ev = (f"City of San Diego Parks & Recreation 'Tennis Courts' page ({SD_URL}), read {d}: {r['name']}, {r['addr']}, {r['courts']} courts, "
-                      f"{'lighted' if r['lit'] else 'no lights'}, hours {r['hours']}. Location: {r['prec']}. Found by ingestion/city_tennis_directories.py.")
+                      f"{'lighted' if r['lit'] else 'no lights'}, hours {r['hours']}. Location: {r['prec']}. Found by ingestion/oneoff/city_tennis_directories.py.")
                 site = SD_URL
             w.writerow({"venue_key": r["key"], "venue_name": nm, "sport": "Tennis", "city": r["city"], "lat": f"{r['lat']:.6f}", "lon": f"{r['lon']:.6f}",
                         "location_precision": r["prec"], "website": site, "surface_type": "unknown", "setting": "unknown", "offerings": "", "courts": r["courts"],

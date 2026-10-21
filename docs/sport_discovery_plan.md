@@ -1,6 +1,6 @@
 # Plan: every sport in the dropdown + "what is this sport?" details
 
-Status: PLAN ONLY (2026-10-16), nothing built. Starts after the beta findings (10-29..11-01); ranks with roadmap items 7b/7c and ADR 0015 (mission: discover sports beyond pickleball).
+Status: PLAN ONLY (2026-10-16), nothing built. Starts after the beta findings (10-29..11-01); ranks with roadmap item 7c and ADR 0015 (7b, tennis visibility + "Try something new", dropped 2026-10-21) (mission: discover sports beyond pickleball).
 Source of truth for sports: the Google Sheet (synced into `transform/seeds/all_racquet.csv` by `make sync-sports`; never hand-edit the seed).
 
 ## Problem (measured 2026-10-16 from `app/data/venues.json`)

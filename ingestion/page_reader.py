@@ -38,7 +38,7 @@ import requests
 
 from rawdir import ROOT, raw_dir
 
-USER_AGENT = "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"
+from useragent import USER_AGENT
 API_URL = "https://api.anthropic.com/v1/messages"
 DEFAULT_MODEL = "claude-haiku-5-5"
 HOST_DELAY_S = 4.0

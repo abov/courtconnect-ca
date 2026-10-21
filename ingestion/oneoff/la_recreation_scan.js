@@ -5,7 +5,7 @@
      2. Run this file's contents with javascript_tool (it starts a background scan and returns at once).
      3. Poll `({done: window.__laScan.done, total: window.__laScan.total, fin: window.__laScan.fin})` every ~40 s (about 3 min for ~400 pages).
      4. When fin is true, read `window.__laScan.csv` and save it as ingestion/data/la_recreation_scan.csv.
-     5. python ingestion/la_recreation_scan.py   (joins coordinates from the city's open-data list, compares to the map, writes the gap report)
+     5. python ingestion/oneoff/la_recreation_scan.py   (joins coordinates from the city's open-data list, compares to the map, writes the gap report)
 
    Reads only public pages: the sitemap, then each /park/, /reccenter/ and /sports/tennis/facility/ page. One request per 0.4 s.
    Each page has a "Facility Features" list (comma-separated, e.g. "Tennis Courts (Lighted) , Handball Courts (Lighted) , Pickleball").

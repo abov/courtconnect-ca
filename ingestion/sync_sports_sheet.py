@@ -19,6 +19,7 @@ import os
 
 import requests
 from dotenv import load_dotenv
+from useragent import HEADERS
 
 # The sheet's location lives in .env (gitignored), not in the repo:
 #   SPORTS_SHEET_ID=<the long id in the sheet's URL>     SPORTS_SHEET_GID=0   (the tab; 0 = "All Raquet")
@@ -44,7 +45,7 @@ OUT = Path("transform/seeds/all_racquet.csv")
 def main() -> None:
     if not SHEET_ID:
         sys.exit("SPORTS_SHEET_ID is not set. Add it to .env (see .env.example). It is the long id in the sheet's URL.")
-    r = requests.get(EXPORT_URL, timeout=60, headers={"User-Agent": "courtconnect-ca/0.1"})
+    r = requests.get(EXPORT_URL, timeout=60, headers=HEADERS)
     r.raise_for_status()
     if "text/csv" not in r.headers.get("content-type", ""):
         sys.exit("Sheet did not return CSV - is it shared as 'Anyone with the link can view'?")

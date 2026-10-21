@@ -1,6 +1,6 @@
 # CourtConnect CalNeva
 
-Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB dev/CI, Snowflake prod) -> static MapLibre map in `app/`.
+Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB, the only warehouse) -> static MapLibre map in `app/`.
 README.md has the full story; read it only if you need background. Mission (ADR 0015): help people find every place to play or watch racket sports in CA + NV, discover sports beyond pickleball (tennis stays visible), and get together to play. Long-term goal: run itself with as little human review as possible, AI agents doing the work behind automated gates (see "After beta").
 Decisions are in `docs/decisions/` (ADRs 0001-0021, all accepted except 0001, superseded by 0018; one file each, read only the one you need).
 
@@ -12,12 +12,11 @@ Decisions are in `docs/decisions/` (ADRs 0001-0021, all accepted except 0001, su
 - `make sync-reports`   import owner-approved community-form reports as seed edits (needs `REPORTS_CSV_URL` in `.env`; `ARGS=--dry-run` previews)
 - `make issues`     read-only check of open GitHub issues (missing info, already in seeds, duplicates, waiting); runbook step 2b
 - `make report`     regenerate `docs/coverage_snapshot.md`
-- `make snowflake-build`   RETIRED (2026-10-14): do not run; DuckDB is the only warehouse
 
 ## Rules
 - NEVER read, print or commit `.env` (credentials). `.env.example` shows the keys.
 - Never put the owner's email or any personal contact in request headers, query strings or forms sent to outside services (geocoders, APIs, scrapers). Identify requests with the project contact only: `User-Agent: courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)`.
-- Never hand-edit `transform/seeds/all_racquet.csv` or Snowflake `RAW.ALL_RACQUET`: the Google Sheet is the source, `make sync-sports` overwrites them.
+- Never hand-edit `transform/seeds/all_racquet.csv`: the Google Sheet is the source, `make sync-sports` overwrites it.
   The sheet must stay in sync with the project: run `make sync-sports` at every project sync (twice a month, `docs/monthly_refresh.md` step 2) and carry renames/new sports through seeds, scripts and the app.
 - Data edits go in seeds, then `make build`:
   - `manual_venues.csv` (venues no dataset knows), `venue_actions.csv` (link-outs; keep `verified_on` + `evidence`),
@@ -33,7 +32,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0021, all accepted except 0001, su
 - In auto mode (or whenever I haven't picked an approach), always choose the cheapest path that does the job, and say in one line what it is:
   - Do it directly with Grep/Read/Edit; don't spawn subagents, run deep-research, or use extended web search unless I ask.
   - Run the narrowest check (`dbt build --select <changed models>`, one test) before the full build; run the full build once at the end.
-  - Never start `make extract`/`make load`/`snowflake-build`, or loops/scheduled tasks, without asking.
+  - Never start `make extract`/`make load`, or loops/scheduled tasks, without asking.
   - Prefer one batched tool call over many; stop once the task is done instead of extra "nice to have" work.
   - If a task looks expensive (many pages to research, big refactor), propose the cheaper scoped version first and wait for my OK.
 - Read only the lines you need from big files; don't dump whole CSVs, logs or `venues.json`.
@@ -42,7 +41,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0021, all accepted except 0001, su
 - Use a lighter model for simple edits; save the biggest for hard problems.
 
 ## Where things are
-- `ingestion/`   Python extract/load/export scripts
+- `ingestion/`   Python extract/load/export scripts (`ingestion/oneoff/`: one-time research scans, not in any make target; outside requests use `ingestion/useragent.py`)
 - `transform/`   dbt project (models, seeds, macros, tests)
 - `app/`         static map page
 - `ci/fixtures`  small sample data for CI
@@ -52,11 +51,11 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 
 **Working practices**
 - Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash). A new worktree has no `courtconnect.duckdb`: run `python ingestion/fresh_db.py` (`make fresh-db`; ~1 min, loads the shared raw CSVs and runs the full dbt build) instead of copying one. Raw CSVs live in ONE shared folder, the main checkout's `data/raw` (`ingestion/rawdir.py`; override with `COURTCONNECT_DATA_DIR`): extract/load scripts from any worktree read and write it, and `load_raw.py` refuses to shrink a table by more than 10% unless `--force`.
-- Seed column changes need `--full-refresh`. **Snowflake is retired as of 2026-10-14 (access may be gone): DuckDB only, never build or sync Snowflake.** Its code stays dormant until the post-beta removal PR (ADR 0018).
+- Seed column changes need `--full-refresh`. Snowflake was retired 2026-10-14 and its code removed 2026-10-21 (ADR 0018): DuckDB only.
 - Commit `app/data/venues.json` after `make app-data`. Re-run `pages.yml` after merging any app/export change; check the latest run (another session's run cancels yours). Confirm a PR is MERGED before calling it shipped.
 - Before starting a task: `git fetch`, check `git log origin/main --since=1.day --oneline` and `gh pr list`, and skim the newest `docs/sessions/` notes, so you don't redo work another session already landed (2026-10-17: city fill and the Padel guard-rail test were each built twice).
 - Avoid merge conflicts: sync with main (rebase or merge) right before opening and again before merging a PR. `app/data/venues.json` is generated and any two PRs that touch it collide: never hand-resolve it; take main's copy, rebuild (`dbt build --full-refresh`), re-run `make app-data`, commit.
-- Dirty main checkout: `git worktree add ../x -b branch origin/main`, use the main `.venv`, copy `.env` only for the Snowflake build, then delete it.
+- Dirty main checkout: `git worktree add ../x -b branch origin/main`, use the main `.venv`.
 
 **Done (summary):** CA map with link-outs, confirmation levels, leads, suggest-a-change form -> PR workflow (ADR 0008), social/WhatsApp/Meetup/Partiful link-outs (ADR 0009/0010/0012), OSM edit link (ADR 0011), GoatCounter analytics (ADR 0013, site `courts`), logo C, UX Option A PRs 1-3, 43 tournament events, 265 hitting walls (LA/SD/Bay OSM + 2 owner), private-club passes 1-2 (partial), `ref_sport_fit`, `mart_sport_evidence`, `mart_venue_confidence` rules_v2 (not exported), `make quality` scorecard incl. 35-day freshness SLA, address fill tiers 1-3 + city fill (2026-10-17), mode buttons renamed "Play" / "Watch" (2026-10-17), monthly runbook, ADR 0014 CalNeva step 1 (`REGIONS` in `ingestion/overpass.py`, `ci/check_regions.py`).
 
@@ -75,7 +74,6 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 *After beta (December; rank with beta findings, ADR 0015)*
 - Beta round (was 9, `docs/feedback_round.md`; dates TBD): send, collect, record findings (RICE, `docs/feedback_findings.md`). Owner: exclude own IP in GoatCounter.
 - Visual polish (was 3, `docs/ux_polish.md`): PR 5 popup grouping + status band, PR 6 sport glyph pins; owner eyeballs 375/320px + dark. Phone view (found 2026-10-17, `docs/sessions/2026-10-17-ring-visual-check.md`): the legend is hidden below 800 px so the Opening soon / Reported rings are explained only by the popup caveat, and the popup is tall and scrolls inside the 341 px phone map: add a short ring key on phones and make the popup fit.
-- Tennis visibility + sport discovery (was 7b): own pin look, never hidden in a pickleball pin, "Try something new" card.
 - Watch events split on-site vs `screening` (was 7): `watch_format` value + accepted_values test + popup label, then Cosm events.
 - Social phase A, "Find people to play with" (was 7c, `docs/competitor_scan.md`); phase B only with its own ADR. Started 2026-10-21: one Watch & Social view + `social_events.csv` (19 series: padel, beach tennis, badminton, pickleball, Basque pala; ADR 0021) and `player_platforms.csv` (player-matching apps); next: group links are collected by the scheduled task, step 2d (`player_groups.csv`, ADR 0009 amendment 2, 2026-10-21); build the groups shelf only once that seed has rows; RacketX only with a public page.
 - Player-connection platforms (added 2026-10-17): consider integrating with, or building a format like, https://connectplayers.ca/ and similar player-matching platforms. Scan them first (public pages only, add to `docs/competitor_scan.md`), then decide link-out vs. own format; own accounts/matching = phase B, own ADR.

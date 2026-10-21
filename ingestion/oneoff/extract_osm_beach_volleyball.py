@@ -3,7 +3,7 @@
 Why: sand courts can be reused for Pro Sunball (sheet sport; no court data of its own).
 These rows are CANDIDATES (inferred from the volleyball tag), not confirmed Pro Sunball venues.
 
-    python ingestion/extract_osm_beach_volleyball.py            # both states, ~ a few minutes
+    python ingestion/oneoff/extract_osm_beach_volleyball.py            # both states, ~ a few minutes
 
 Output: data/raw/osm_beach_volleyball.csv (one row per OSM element, de-duplicated across tiles)
 Not loaded into dbt: a scan to size the opportunity first.
@@ -15,6 +15,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # shared helpers in ingestion/
 import overpass
 from rawdir import raw_path
 

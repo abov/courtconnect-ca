@@ -1,8 +1,8 @@
 """Compare the City of LA Recreation and Parks facility scan with the map and list the gaps.
 
-    1. Run ingestion/la_recreation_scan.js in the Browser pane (the site answers 403 to scripts) and save its CSV as
+    1. Run ingestion/oneoff/la_recreation_scan.js in the Browser pane (the site answers 403 to scripts) and save its CSV as
        ingestion/data/la_recreation_scan.csv.
-    2. python ingestion/la_recreation_scan.py [--radius-m 400]
+    2. python ingestion/oneoff/la_recreation_scan.py [--radius-m 400]
 
 Coordinates and names come from the city's own open-data list "LAPARKS.ORG Recreation and Parks Facilities"
 (data.lacity.org/resource/ukgg-rgf9), joined on the page slug. The scan only says a site LISTS "Tennis Courts", "Handball Courts",
@@ -20,8 +20,10 @@ import re
 import urllib.request
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-UA = "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"
+ROOT = Path(__file__).resolve().parent.parent.parent
+import sys
+sys.path.insert(0, str(ROOT / "ingestion"))
+from useragent import USER_AGENT as UA
 OPEN_DATA = "https://data.lacity.org/resource/ukgg-rgf9.json?$limit=5000"
 SITE = "https://recreation.parks.lacity.gov"
 

@@ -6,6 +6,7 @@ import time
 
 import requests
 from rawdir import raw_path
+from useragent import HEADERS
 
 URLS = [  # ordered by observed reliability; the first healthy one wins
     "https://overpass.openstreetmap.fr/api/interpreter",
@@ -67,7 +68,7 @@ def run(query: str, label: str = "", attempts: int = 4) -> list[dict]:
         for attempt in range(attempts):
             try:
                 r = requests.post(url, data={"data": query}, timeout=330,
-                                  headers={"User-Agent": "courtconnect-ca/0.1 (portfolio project)"})
+                                  headers=HEADERS)
                 r.raise_for_status()
                 return r.json()["elements"]
             except Exception as err:  # noqa: BLE001 - retry on any transport/parse error
