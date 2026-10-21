@@ -90,6 +90,15 @@
   .badge.ev { color: var(--ev); border-color: var(--ev); }
   .badge.soc { color: var(--soc); border-color: var(--soc); }
   .soc-item + .soc-item { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 4px; }
+  .soc-item.compact > summary { display: flex; flex-direction: column; gap: 0; cursor: pointer; list-style: none; padding: 3px 18px 3px 0; position: relative; line-height: 1.3; }
+  .soc-item.compact { margin-top: 3px; padding-top: 0; }
+  .maplibregl-popup-content .soc-pop h2 { margin-bottom: 0; } .maplibregl-popup-content .soc-pop > .meta:nth-child(2) { margin: 0 0 4px; }
+  .soc-item.compact > summary::-webkit-details-marker { display: none; }
+  .soc-item.compact > summary::after { content: ""; position: absolute; right: 4px; top: 50%; width: 6px; height: 6px; margin-top: -5px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform var(--ease); }
+  .soc-item.compact[open] > summary::after { transform: rotate(-135deg); margin-top: -1px; }
+  .soc-item.compact > summary > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .soc-item.compact[open] > summary > span { white-space: normal; }   /* the open row shows the whole name and schedule */
+  .soc-item.compact > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .maplibregl-popup-content .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
   .maplibregl-popup-content a.btn { display: inline-block; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); transition: background-color var(--ease), opacity var(--ease); color: var(--accent); text-decoration: none; font-weight: 600; }
   .maplibregl-popup-content a.btn.primary { background: var(--accent); color: var(--on-accent); }
@@ -151,6 +160,7 @@
     #list button { padding-left: 11px; padding-right: 14px; }
     .legend, .welcome { display: none; }
     .maplibregl-popup-content { max-height: calc(42vh - 110px); max-height: calc(42dvh - 110px); }
+    .maplibregl-popup-content:has(.soc-pop) { max-height: calc(42vh - 56px); max-height: calc(42dvh - 56px); }   /* many series: collapsed rows still need the room */
     footer { padding: 6px 14px; }
     #map { order: -1; } #panel { border-right: 0; border-top: 1px solid var(--line); }
   }
@@ -429,20 +439,32 @@ function socialBadges(s) {
   return el("div", {}, el("span", {class: "badge soc", text: SOCIAL_KIND[s.k] || s.k}), el("span", {class: "badge", text: s.sp}),
     s.ag ? el("span", {class: "badge", text: SOCIAL_AGE[s.ag] || s.ag}) : null, s.au ? el("span", {class: "badge", text: SOCIAL_AUD[s.au] || s.au}) : null);
 }
+// A venue with several series (P1 Padel has 6) is a tall popup on a phone: there each series collapses to a name + schedule row and opens on tap.
+const phoneWidth = () => window.matchMedia("(max-width: 800px)").matches;
+function socialDetails(s) {                                              // everything below the name and schedule, shared by both layouts
+  const parts = [], bits = [s.sl, s.pi, s.ll ? "Listed through " + fmtDate(s.ll, {month: "short", day: "numeric"}) : ""].filter(Boolean);
+  if (bits.length) parts.push(el("p", {class: "meta", text: bits.join(" · ")}));
+  const row = el("div", {class: "btnrow"}), signup = s.g ? safeUrl(s.g) : "", info = s.u ? safeUrl(s.u) : "";
+  if (signup) row.append(el("a", {class: "btn primary", href: signup, target: "_blank", rel: "noopener noreferrer", text: "Sign up (organizer's site)"}));
+  if (info) row.append(el("a", {class: "btn", href: info, target: "_blank", rel: "noopener noreferrer", text: "Organizer's page"}));
+  parts.push(row, el("p", {class: "meta", text: "Found on " + (SOCIAL_SRC[s.sk] || s.sk) + ", checked " + s.vo + "."}));
+  return parts;
+}
 function socialNode(g) {
-  const box = el("div");
+  const compact = phoneWidth() && g.items.length > 1, box = el("div", compact ? {class: "soc-pop"} : {});
   box.append(el("h2", {text: g.v}), el("p", {class: "meta", text: g.c}));
   for (const s of g.items) {
-    const part = el("div", {class: "soc-item"});
-    part.append(el("p", {}, el("b", {text: s.n})), socialBadges(s), el("p", {}, el("b", {text: s.sc})));
-    const bits = [s.sl, s.pi, s.ll ? "Listed through " + fmtDate(s.ll, {month: "short", day: "numeric"}) : ""].filter(Boolean);
-    if (bits.length) part.append(el("p", {class: "meta", text: bits.join(" · ")}));
-    const row = el("div", {class: "btnrow"}), signup = s.g ? safeUrl(s.g) : "", info = s.u ? safeUrl(s.u) : "";
-    if (signup) row.append(el("a", {class: "btn primary", href: signup, target: "_blank", rel: "noopener noreferrer", text: "Sign up (organizer's site)"}));
-    if (info) row.append(el("a", {class: "btn", href: info, target: "_blank", rel: "noopener noreferrer", text: "Organizer's page"}));
-    part.append(row, el("p", {class: "meta", text: "Found on " + (SOCIAL_SRC[s.sk] || s.sk) + ", checked " + s.vo + "."}));
-    box.append(part);
+    if (!compact) {
+      box.append(el("div", {class: "soc-item"}, el("p", {}, el("b", {text: s.n})), socialBadges(s), el("p", {}, el("b", {text: s.sc})), ...socialDetails(s)));
+      continue;
+    }
+    const stated = [SOCIAL_AGE[s.ag] || s.ag, SOCIAL_AUD[s.au] || s.au].filter(Boolean);   // only what the organizer states, kept visible when collapsed
+    const sum = el("summary", {}, el("span", {class: "nm", text: s.n}), el("span", {class: "meta", text: [s.sc, ...stated].join(" · ")}));
+    box.append(el("details", {class: "soc-item compact"}, sum, socialBadges(s), ...socialDetails(s)));
   }
+  box.addEventListener("toggle", e => {                                  // one series open at a time keeps the popup short
+    if (e.target.open) for (const d of box.querySelectorAll("details[open]")) if (d !== e.target) d.open = false;
+  }, true);
   const courts = Math.max(...g.items.map(s => s.ct || 0));
   if (courts) box.append(el("p", {class: "meta", text: courts + (courts === 1 ? " court" : " courts") + " at this venue, a rough guide to how many can play at once."}));
   box.append(el("p", {class: "meta", text: "Schedules change. CourtConnect signs nobody up and takes no payments; confirm on the organizer's page."}));
@@ -450,7 +472,7 @@ function socialNode(g) {
 }
 function showSocial(g, fly) {
   if (!g) return;
-  if (fly) map.flyTo({center: [g.x, g.y], zoom: Math.max(map.getZoom(), 10), essential: true});
+  if (fly) map.flyTo({center: [g.x, g.y], zoom: Math.max(map.getZoom(), 10), essential: true, offset: [0, Math.round(map.getContainer().clientHeight * (phoneWidth() ? 0.47 : 0.22))]});   // leave room above the pin for the popup
   popup.setLngLat([g.x, g.y]).setDOMContent(socialNode(g)).addTo(map);
 }
 function renderSocialList() {
