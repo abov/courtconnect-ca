@@ -19,7 +19,7 @@ jobs:
           python ci/check_scorecard_regression.py --base-ref origin/main
       - run: pip install dbt-core dbt-duckdb "duckdb<2" pandas python-dotenv
       - run: python ci/check_page_reader.py  # ADR 0017 guard rail, offline (needs requests, pulled in by dbt)
-      # CI never calls OpenStreetMap or Snowflake: it loads a small committed sample of real OSM data
+      # CI never calls OpenStreetMap: it loads a small committed sample of real OSM data
       # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
       - run: python ingestion/load_raw.py --data-dir ci/fixtures
       - run: dbt build --project-dir transform --profiles-dir transform

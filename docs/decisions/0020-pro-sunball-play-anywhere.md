@@ -8,7 +8,7 @@ Pro Sunball is on the master sheet (2-4 players, felt rubber ball) but has no ve
 was found (`docs/sport_directories.md`), and the sheet row has no court size, net height or rules link. Its surface is
 "Various". Beach and sand volleyball courts are plentiful, so they are the obvious places to play it.
 
-A scan on 2026-10-19 (`ingestion/extract_osm_beach_volleyball.py`, kept for reference) found 1,527 sand volleyball court
+A scan on 2026-10-19 (`ingestion/oneoff/extract_osm_beach_volleyball.py`, kept for reference) found 1,527 sand volleyball court
 elements in CA + NV, about 841 sites (787 CA, 54 NV): 669 single-court sites, 42 named, 46 `access=private`.
 
 ## Decision

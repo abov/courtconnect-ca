@@ -12,7 +12,7 @@ Cost rules: no subagents, no screenshots, no extended web search. Read pages as 
 3. Update changed dates of existing rows (a source disagreeing with the seed is flagged in `source_note`, not silently overwritten when the seed came from the official page).
 4. Run `.venv/Scripts/dbt build --select stg_watch_events watch_events mart_watch_events --project-dir transform --profiles-dir transform` and `python ci/check_seed_evidence.py`, then the full `dbt build` once.
 5. Append a "Pass N (date)" section to `docs/tournament_sources.md` (added, changed, sources that failed) and set "Last run: date" at the top of that section. Update CLAUDE.md "Current status" with 2 lines.
-6. Commit, push, open a PR. Do not merge. Do not run `make extract`, `make load`, `snowflake-build`, or `pages.yml`.
+6. Commit, push, open a PR. Do not merge. Do not run `make extract`, `make load` or `pages.yml`.
 
 ## Sources (what worked on 2026-10-12)
 | Sport | Source | How |

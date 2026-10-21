@@ -1,11 +1,14 @@
 """Scan public LA Fitness club pages (ids 1-1799) for CA/NV clubs and whether they list racquetball.
-Usage: .venv/Scripts/python.exe -I ingestion/scan_lafitness.py out.csv  (appends id,name,address,phone,racquetball; ~30 min, throttled)."""
+Usage: .venv/Scripts/python.exe -I ingestion/oneoff/scan_lafitness.py out.csv  (appends id,name,address,phone,racquetball; ~30 min, throttled)."""
 import re,sys,time,csv,urllib.request,html
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # shared helpers in ingestion/
+from useragent import HEADERS
 out=sys.argv[1]
 w=csv.writer(open(out,'a',newline='',encoding='utf-8'))
 for i in range(1,1800):
     try:
-        req=urllib.request.Request(f"https://www.lafitness.com/Pages/clubhome.aspx?clubid={i}",headers={"User-Agent":"Mozilla/5.0 CourtConnect-research"})
+        req=urllib.request.Request(f"https://www.lafitness.com/Pages/clubhome.aspx?clubid={i}",headers=HEADERS)
         t=urllib.request.urlopen(req,timeout=25).read().decode('utf-8','ignore')
     except Exception as e:
         continue
