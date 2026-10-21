@@ -972,7 +972,7 @@ function showPeople() {
   if (box.hidden) return;
   $("people-t").textContent = "Find people to play with" + (s ? " (" + s.n + ")" : "");
   const body = $("people-b"); body.replaceChildren();
-  body.append(el("p", {class: "facts", text: "Apps that match players. We haven't checked how many people use each one in California or Nevada, and some charge for extras."}));
+  body.append(el("p", {class: "facts", text: "Apps that match players."}));
   for (const p of list) {
     const sp = p.sp.map(i => sports[i].n).join(", ");
     body.append(el("p", {}, el("a", {href: p.u, target: "_blank", rel: "noopener noreferrer", text: p.n}), document.createTextNode(": " + p.d + ". "),

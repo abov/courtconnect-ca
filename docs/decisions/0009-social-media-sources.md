@@ -46,3 +46,12 @@ The owner asked for a sweep of the public Instagram posts of the clubs already l
 - Events need a stated date with the right year; prefer the club's own event page; mark single-source post events as such. Courts or accounts found only in a post are leads (`venue_leads.csv`), not pins or links.
 - Not allowed (unchanged): Meta APIs without approval, search/hashtag crawling, Facebook groups, bulk scraping beyond the listed accounts.
 - Facebook was not tested and is not covered by this amendment.
+
+
+## Amendment 2 (accepted 2026-10-21, owner request): player-group links
+The first amendment covers events, not group links, so this adds the narrow case of a club's own link to a player group (social phase A, ADR 0015):
+- Allowed: while reading a listed account's public profile (logged out) or the club's own website, note a Meetup, WhatsApp (`chat.whatsapp.com` invite or channel), Partiful or public Facebook group URL that the club **publishes itself** in its bio or site. Same spirit as the rule above: only a URL the club made public.
+- Stored: the URL, a group name, platform, sports, area, the page that carried the link (`published_at`) and `verified_on` in `player_groups.csv` (`evidence` quotes where it was seen). Never the bio text beyond the link, member names or counts, messages, images.
+- Never: join a group, request to join, open an invite to read members or messages, or read a private group. Rechecks only ask whether the URL still loads (public Meetup/Partiful pages) or is still linked from the club page; a WhatsApp invite is checked by the club page still carrying it.
+- A dead or no-longer-linked URL is removed, not guessed at. A group found only by search is not stored; it is a lead in `docs/tournament_sources.md`.
+- `player_groups.csv` is not exported or shown yet. The groups shelf waits until it has rows.

@@ -1,0 +1,3 @@
+Social phase A, groups shelf scoped: searched for public Meetup/WhatsApp/Partiful groups in CA + NV and found none safe to add (two Meetup groups gone, LABC Badminton dormant since 2020, one unconfirmed WhatsApp link). Added ADR 0009 amendment 2 (club-published group links only, never join/read), an empty `player_groups.csv` seed with dbt tests and CI checks, runbook item 6 in `docs/tournament_refresh.md`, and step 2d in the scheduled task. Also shortened the player-apps note to "Apps that match players."
+Next: let the scheduled run fill `player_groups.csv`; build the shelf (export `groups`, panel block) only once it has rows.
+Also added Playtomic, UTR Sports, PairUp and RacketPal to `player_platforms.csv`. Run `make app-data` and commit `venues.json` before merging.

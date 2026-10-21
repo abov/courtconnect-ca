@@ -22,6 +22,7 @@ SPORT_COLUMNS = {
     "watch_events.csv": ["sport"],
     "social_events.csv": ["sport"],
     "player_platforms.csv": ["sports"],
+    "player_groups.csv": ["sports"],
 }
 
 
