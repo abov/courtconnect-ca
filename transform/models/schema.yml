@@ -342,6 +342,43 @@ seeds:
               arguments:
                 values: ['confirmed', 'dates_not_confirmed']
 
+  - name: social_events
+    description: >
+      Recurring social get-togethers people can join (mixers, club nights, open play, social nights), curated by hand, one row per SERIES, not per date.
+      A discovery list only: every row links out to the organizer; nothing is signed up for or paid here. `schedule` is the organizer's own wording;
+      `last_listed_date` is the last session date their page lists (blank = no end shown); `age_focus` and `audience` are only what the organizer states, never guessed
+      (ADR 0021). `verified_on` records when the page was last read.
+    columns:
+      - name: series_key
+        tests: [unique, not_null]
+      - name: sport
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('all_racquet')", field: sport}
+      - name: schedule
+        tests: [not_null]
+      - name: kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['social_night', 'open_play', 'mixer', 'club_night', 'match_play', 'meetup']
+      - name: audience
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['women', 'men', 'mixed']
+      - name: age_focus
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['all_ages', 'juniors', '18_plus', '21_plus', '50_plus']
+      - name: source_kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['official_site', 'instagram', 'partiful', 'meetup', 'whatsapp', 'email', 'owner_report']
+
   - name: place_sport_overrides
     description: >
       Human review of weak place-to-sport matches (see mart_places_to_review). One row per decision:
@@ -676,6 +713,9 @@ models:
 
   - name: mart_watch_events
     description: Events to watch (pro and amateur tournaments, dome screenings). Link-out only, with date_status and location_precision saying how certain the data is (ADR 0006).
+
+  - name: mart_social_events
+    description: Recurring social get-togethers (mixers, club nights, open play). Link-out only; age_focus and audience are organizer-stated, never inferred.
 
   - name: mart_venue_leads
     description: Open research leads (claims we have not confirmed, such as whether a club is members only). Leads are never shown as facts on the map.

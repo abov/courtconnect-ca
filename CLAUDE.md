@@ -78,7 +78,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 - Tennis visibility + sport discovery (was 7b): own pin look, never hidden in a pickleball pin, "Try something new" card.
 - All 76 sheet sports in the dropdown + "About <sport>" card (was 7b2, `docs/sport_discovery_plan.md`).
 - Watch events split on-site vs `screening` (was 7): `watch_format` value + accepted_values test + popup label, then Cosm events.
-- Social phase A, "Find people to play with" (was 7c, `docs/competitor_scan.md`); phase B only with its own ADR.
+- Social phase A, "Find people to play with" (was 7c, `docs/competitor_scan.md`); phase B only with its own ADR. Started 2026-10-21: Social mode + `social_events.csv` (9 padel series, ADR 0021); next: more organizers (Instagram/Partiful/WhatsApp one account at a time), RacketX, a groups shelf from existing link-outs.
 - Player-connection platforms (added 2026-10-17): consider integrating with, or building a format like, https://connectplayers.ca/ and similar player-matching platforms. Scan them first (public pages only, add to `docs/competitor_scan.md`), then decide link-out vs. own format; own accounts/matching = phase B, own ADR.
 - Cost tier "Free / $ / $$ / $$$" (was 7f): ADR first, labelled inferred unless confirmed on a public page, members-only gets no tier.
 - ML phases 2-3 (was 5d, `docs/ml_plan.md`): LLM page reader (ADR 0017, accepted 2026-10-17) and NAIP aerial pilot (Hawthorne, then one LV zip; new courts go to OSM).

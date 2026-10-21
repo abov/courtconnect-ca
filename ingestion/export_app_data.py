@@ -14,6 +14,9 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
      r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet, or 'Reported: opening soon' with ul 1 = only a directory said so (ud = date checked)
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
+  social  : [{n series name, sp sport, k kind, o organizer, v venue, c city, y, x, pr location precision, sc schedule (organizer's wording), ll last listed date, sl skill level,
+              au audience women/men/mixed, ag age focus, ct courts at the venue, pi price info, sk how it was found, u info link, g signup link, vo verified on}]   (recurring social get-togethers;
+              every one links out to the organizer; au/ag are only what the organizer states, absent = not stated)
   walls   : [{n name, c city, r region, y, x, pr location precision, t [wall types], sp [sports suited], nv near venue, su surface, l lit 1/0 (absent = unknown),
               f free 1/0 (absent = unknown), ac access, cf confirmation, d reported on, ev evidence, wn walls at this pin (absent = 1)}]   (hitting walls for solo practice)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
@@ -209,6 +212,18 @@ def main() -> None:
                        "pr": prec or "", "s": str(start) if start else "", "e": str(end) if end else "", "d": dstat,
                        "t": tix or "", "u": info or "", "k": tickets or "", "vo": str(verified)})
 
+    # Social get-togethers: recurring series (not dates), link-out only. Audience and age focus are organizer-stated; absent keys mean "not stated", never a guess (ADR 0021).
+    social = []
+    for (name, sport, kind, org, venue, city, lat, lon, prec, sched, last, skill, aud, age, courts, price, skind, info, signup, verified) in con.execute("""
+            select series_name, sport_name, kind, organizer, venue_name, city, lat, lon, location_precision, schedule, last_listed_date, skill_level,
+                   audience, age_focus, courts, price_info, source_kind, info_url, signup_url, verified_on
+            from marts.mart_social_events order by sport_name, city, series_name""").fetchall():
+        e = {"n": name, "sp": sport, "k": kind, "o": org, "v": venue, "c": city, "y": round(float(lat), 5), "x": round(float(lon), 5), "pr": prec or "",
+             "sc": sched, "sk": skind, "vo": str(verified)}
+        for key, val in (("ll", str(last) if last else ""), ("sl", skill), ("au", aud), ("ag", age), ("ct", courts), ("pi", price), ("u", info), ("g", signup)):
+            if val: e[key] = val
+        social.append(e)
+
     # Hitting walls: solo practice, one row per map pin (walls side by side share a pin, wn = how many). Unknown lit / free flags are left out of the row, never exported as 0.
     walls = []
     for (name, city, region, lat, lon, prec, wtype, suited, near, surf, lit, free, access, conf, rep, evid, count) in con.execute("""
@@ -234,12 +249,13 @@ def main() -> None:
         "sports_total": len(sports),
         "sports_with_venues": sum(1 for s in sports if s["v"] > 0),
         "events": len(events),
+        "social": len(social),
         "walls": sum(w.get("wn", 1) for w in walls),
         "link_outs": sum(len(v.get("ac", [])) for v in out_venues),
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "walls": walls}, ensure_ascii=False, separators=(",", ":")),
+    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "walls": walls}, ensure_ascii=False, separators=(",", ":")),
                    encoding="utf-8")
     size = OUT.stat().st_size / 1e6
     print(f"Wrote {OUT}: {len(out_venues):,} venues, {len(sports)} sports, {size:.2f} MB  (named {named:,}; confirmed {meta['confirmed']:,})")
