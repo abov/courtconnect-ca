@@ -65,6 +65,8 @@
   .sico[hidden], .sico:empty { display: none; }
   .sico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
   .sico svg .f { fill: currentColor; stroke: none; }
+  .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > .playonly { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
+  .mapkey > summary { padding: 6px 16px; } .mapkey .legend { padding-top: 0; }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
@@ -107,6 +109,7 @@
   .maplibregl-popup-content a.btn { display: inline-block; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); transition: background-color var(--ease), opacity var(--ease); color: var(--accent); text-decoration: none; font-weight: 600; }
   .maplibregl-popup-content a.btn.primary { background: var(--accent); color: var(--on-accent); }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); padding: 6px 16px 10px; }
+  .legend[hidden] { display: none; }
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
@@ -176,7 +179,7 @@
     .seg .chip#modePlay { flex: 2; }
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
-    .legend, .welcome { display: none; }
+    .legend, .mapkey, .welcome { display: none; }
     .maplibregl-popup-content { max-height: calc(42vh - 110px); max-height: calc(42dvh - 110px); }
     .maplibregl-popup-content:has(.soc-pop) { max-height: calc(42vh - 56px); max-height: calc(42dvh - 56px); }   /* many series: collapsed rows still need the room */
     footer { padding: 6px 14px; }
@@ -192,9 +195,6 @@
     <h1><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1>
     <div class="sub" id="headline">&nbsp;</div>
     <p class="sub welcome">Find where to play racket sports. We link out to venues; no bookings or payments.</p>
-    <div class="row" style="margin-top:6px">
-      <button class="link" id="nearMe" type="button">Near me</button>
-    </div>
     <div class="seg" role="group" aria-label="What are you looking for?">
       <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice, and apps to find people to play with">Play, Practice &amp; Partner Up</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Watch &amp; Social</button>
@@ -213,9 +213,12 @@
     </div>
     <div class="socialonly note">Recurring mixers, club nights and open play. Each links to the organizer's own page.</div>
     <div class="watchonly note">Every event links to the organizer's page: check dates and prices there.</div>
-    <div class="playonly">
-      <label class="l" for="q">Search name or city</label>
-      <input id="q" type="search" placeholder="e.g. Manhattan Beach" autocomplete="off">
+    <div class="searchrow">
+      <div class="playonly">
+        <label class="l" for="q">Search name or city</label>
+        <input id="q" type="search" placeholder="e.g. Manhattan Beach" autocomplete="off">
+      </div>
+      <button class="chip" id="nearMe" type="button" title="Centre the map on your location (used only in your browser)">Near me</button>
     </div>
     <details class="playonly" id="moreFilters">
     <summary id="moreSummary">More filters: surface, access, what they offer</summary>
@@ -258,13 +261,23 @@
 
   <div id="listbar"><div id="count" aria-live="polite"></div><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div>
   <ul id="list"></ul>
-  <div class="legend playlegend" aria-label="Map legend">
-    <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
-    <span><span class="dot" style="background:var(--pin-p)"></span>Listed business</span>
-    <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
-    <span><span class="dot" style="background:var(--pin-u)"></span>Unnamed courts</span>
-    <span><span class="dot soon"></span>Opening soon (not open yet)</span>
-    <span><span class="dot rep"></span>Reported opening soon (unconfirmed)</span>
+  <details class="mapkey playonly">
+    <summary>Map key</summary>
+    <div class="legend" aria-label="Map legend">
+      <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
+      <span><span class="dot" style="background:var(--pin-p)"></span>Listed business</span>
+      <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
+      <span><span class="dot" style="background:var(--pin-u)"></span>Unnamed courts</span>
+      <span><span class="dot soon"></span>Opening soon (not open yet)</span>
+      <span><span class="dot rep"></span>Reported opening soon (unconfirmed)</span>
+    </div>
+  </details>
+  <div class="legend playlegend" id="wallLegend" aria-label="Hitting wall legend" hidden>
+    <span>Hitting walls:</span>
+    <span><span class="dot" style="background:var(--pin-c)"></span>Confirmed</span>
+    <span><span class="dot" style="background:var(--pin-p)"></span>Reported by a player</span>
+    <span><span class="dot" style="background:var(--pin-i)"></span>From OpenStreetMap tags, unchecked</span>
+    <span><span class="dot" style="background:var(--pin-u)"></span>Restricted access</span>
   </div>
   <footer><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
@@ -519,7 +532,7 @@ const WALL_PUBLIC_ONLY = ["Knuckle Racket"];
 function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t)) && (!WALL_PUBLIC_ONLY.includes(name) || wallAccess(w) === "public")) : []; }
 function wallsFiltered() { return state.mode === "play" && state.sport >= 0 ? wallsFor(sports[state.sport].n) : []; }
 function wallGeojson(list) {
-  return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n, r: wallAccess(w) === "restricted" ? 1 : 0}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
+  return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n, f: w.cf, r: wallAccess(w) === "restricted" ? 1 : 0}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
 }
 // Directions open the user's own maps app at the pin's coordinates (no address lookup, nothing stored; ADR 0005).
 function directionsNode(y, x, name, approx) {
@@ -621,10 +634,10 @@ function initMap() {
     map.on("mouseleave", "ev-pts", () => map.getCanvas().style.cursor = "");
     map.addSource("w", {type: "geojson", data: wallGeojson([])});
     map.addLayer({id: "wall-pts", type: "circle", source: "w", layout: {visibility: "none"},
-      paint: {"circle-radius": 9, "circle-color": ["case", ["==", ["get", "r"], 1], "#8b949e", "#bc4c00"], "circle-stroke-color": "#fff", "circle-stroke-width": 2}});
+      paint: {"circle-radius": 9, "circle-color": ["case", ["==", ["get", "r"], 1], "#8c959f", ["match", ["get", "f"], "official", "#1a7f37", "reported", "#0969da", "#d4a72c"]], "circle-stroke-color": "#fff", "circle-stroke-width": 2}});   // same palette as venues: green confirmed, blue reported by a player, yellow unchecked (OSM tags / inferred), grey restricted access
     map.addLayer({id: "wall-label", type: "symbol", source: "w", layout: {visibility: "none", "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"],
       "text-size": 12, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 9},
-      paint: {"text-color": "#7a3200", "text-halo-color": "#fff", "text-halo-width": 1.5}});
+      paint: {"text-color": "#24292f", "text-halo-color": "#fff", "text-halo-width": 1.5}});
     map.on("click", "wall-pts", e => showWall(walls[e.features[0].properties.k], false));
     map.on("mouseenter", "wall-pts", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "wall-pts", () => map.getCanvas().style.cursor = "");
@@ -750,7 +763,9 @@ function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
   show(["clusters", "cluster-count", "pts"], mode === "play");
   show(["ev-pts", "ev-label", "soc-pts", "soc-label"], mode === "watch");
-  show(["wall-pts", "wall-label"], mode === "play" && wallsFiltered().length > 0);
+  const walls_on = mode === "play" && wallsFiltered().length > 0;
+  show(["wall-pts", "wall-label"], walls_on);
+  $("wallLegend").hidden = !walls_on;
 }
 function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
 function applyMode(fit) {
