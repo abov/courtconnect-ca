@@ -540,22 +540,24 @@ function directionsNode(y, x, name, approx) {
   return el("p", {class: "meta"}, el("b", {text: "Directions: "}),
     a("https://www.google.com/maps/dir/?api=1&destination=" + ll, "Google Maps"), document.createTextNode(" · "),
     a("https://maps.apple.com/?daddr=" + ll + "&q=" + encodeURIComponent(name || "Courts"), "Apple Maps"),
-    document.createTextNode(approx ? " (to the pin, which is approximate)" : " (to the pin)"));
+    approx ? document.createTextNode(" (pin is approximate)") : null);
 }
 function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
 function wallNode(w) {
-  const box = el("div");
+  const box = el("div"), approx = /approx/.test(w.pr), acc = wallAccess(w);
   box.append(el("h2", {text: w.n}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
-  if (w.wn) box.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)"}));
-  box.append(el("p", {class: "meta", text: [w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
-  box.append(el("p", {class: "meta", text: "Lit at night: " + triState(w.l) + " · Free to use: " + triState(w.f) + (w.su ? " · Surface: " + w.su : "")}));
-  const acc = wallAccess(w);
-  box.append(el("p", {class: "meta", text: "Access: " + (WALL_ACCESS_LABEL[w.ac] || "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (as tagged in OpenStreetMap, not checked)" : "")}));
-  box.append(directionsNode(w.y, w.x, w.n, /approx/.test(w.pr)));
-  if (/approx/.test(w.pr)) box.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
-  box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + " (" + w.d + "). " + (w.cf === "tagged" ? "Sport is as tagged there; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit.")}));
-  if (w.cf === "tagged") box.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
+  box.append(el("p", {class: "meta", text: [w.wn ? w.wn + " walls (one pin)" : "", w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
+  box.append(el("p", {class: "meta", text: ["Access: " + (WALL_ACCESS_LABEL[w.ac] || "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (OSM tag, not checked)" : ""),
+    "Lights: " + triState(w.l), "Free: " + triState(w.f), w.su ? "Surface: " + w.su : ""].filter(Boolean).join(" · ")}));
+  box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + (w.cf === "tagged" ? ", not checked" : "") + " (" + w.d + ")"}));
+  box.append(directionsNode(w.y, w.x, w.n, approx));
+  const src = el("details", {class: "srcs"}, el("summary", {text: "Details and corrections"}));   // long explanations, one tap away
+  if (approx) src.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
+  if (w.wn) src.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)."}));
+  src.append(el("p", {class: "meta", text: w.cf === "tagged" ? "Sport is as tagged in OpenStreetMap; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit."}));
+  if (w.cf === "tagged") src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
+  box.append(src);
   return box;
 }
 function showWall(w, fly) {
@@ -671,7 +673,8 @@ function iconSpan(fams) {
 const venueIcons = v => iconSpan(v.p.slice().sort((a, b) => (b[1] || 0) - (a[1] || 0)).map(p => familyOf(sports[p[0]].n)));
 function updateSportIcon() { const w = $("sporticon"), s = state.sport >= 0 ? sports[state.sport] : null; w.innerHTML = ""; w.hidden = !s; if (s) w.append(...iconSpan([familyOf(s.n)]).childNodes); }
 
-function sportLine(v) {
+// Plays line keeps the sports and counts; same-court options and inferred variants are returned separately for the details section.
+function sportParts(v) {
   const have = new Set(v.p.map(p => p[0])), extras = {}, plain = [];
   for (const p of v.p) {
     const bases = (sports[p[0]].b || []).filter(b => have.has(b));
@@ -682,19 +685,22 @@ function sportLine(v) {
   // variants of one game ("Basque Pelota: Xare", "Basque Pelota: Jai Alai"…) share the same court: show it once, variants as inferred options
   const fam = {}, solo = [];
   for (const p of plain) { const k = famOf(sports[p[0]].n); if (k) (fam[k] = fam[k] || []).push(p); else solo.push(p); }
+  const extra = [];
   const parts = solo.map(p => {
     const x = extras[p[0]];
-    if (!x) return sports[p[0]].n + cnt(p[1]);
-    return sports[p[0]].n + " (" + (p[1] ? p[1] + (p[1] === 1 ? " court" : " courts") : "at least 1 court") + "; optional: " + x.join(", ") + ")";
+    if (x) extra.push(sports[p[0]].n + " courts, optional: " + x.join(", "));
+    return sports[p[0]].n + cnt(p[1]);
   }), counts = solo.map(p => p[1] || 0);
   for (const [k, ps] of Object.entries(fam)) {
     const c = Math.max(...ps.map(p => p[1] || 0)); counts.push(c);
     if (ps.length < 2) { parts.push(sports[ps[0][0]].n + cnt(c)); continue; }
-    parts.push(k + cnt(c).slice(0, -1) + "; may suit these variants, court size unconfirmed (inferred): " + ps.map(p => sports[p[0]].n.slice(k.length + 2)).join(", ") + ")");
+    parts.push(k + cnt(c));
+    extra.push(k + " may suit these variants, court size unconfirmed (inferred): " + ps.map(p => sports[p[0]].n.slice(k.length + 2)).join(", "));
   }
   const total = counts.reduce((a, c) => a + c, 0);
-  return parts.join(", ") + (counts.filter(Boolean).length > 1 ? " · " + total + " courts listed" : "");
+  return {main: parts.join(", ") + (counts.filter(Boolean).length > 1 ? " · " + total + " courts listed" : ""), extra};
 }
+const sportLine = v => sportParts(v).main;
 const famOf = n => { const i = n.indexOf(": "); return i > 0 ? n.slice(0, i) : null; };
 function facts(v, entry) {
   const out = [], m = entry ? entry[2] : v.m;
@@ -702,51 +708,57 @@ function facts(v, entry) {
   if (v.f & 1) out.push("Lights"); if (v.f & 2) out.push("Public"); if (v.f & 8) out.push("Private / members");  return out;
 }
 function venueNode(v) {
-  const box = el("div");
+  const box = el("div"), more = [];                                       // more = the long explanations, kept one tap away in the details section
   box.append(el("h2", {text: v.n || "Unnamed courts"}));
-  box.append(el("div", {}, el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})));
-  if (v.cf) box.append(el("div", {}, el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "")})));
+  const badges = [el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})];
+  if (v.cf) badges.push(el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "")}));
+  if (v.up) badges.push(el("span", {class: "badge warn", text: v.up}));
+  if (v.xu) badges.push(el("span", {class: "badge warn", text: "Public access not confirmed"}));
+  box.append(el("div", {}, ...badges));
   if (v.up) {
-    box.append(el("div", {}, el("span", {class: "badge warn", text: v.up})));
-    box.append(el("p", {class: "meta", text: v.ul
+    box.append(el("p", {class: "meta", text: (v.ul ? "Not open yet; not confirmed by the club" : "Not open yet, per the club") + " (checked " + (v.ud || "recently") + ")"}));
+    more.push(v.ul
       ? "Not open yet, and not confirmed by the club's own page: a directory or press listing (checked " + (v.ud || "recently") + ") says it is coming. The location is approximate and the court count, address and date may change or never happen."
-      : "Not open yet. The club's own page (checked " + (v.ud || "recently") + ") says it is coming; court counts, address and opening date can change, and the pin may be approximate. Check the club before you go."}));
+      : "Not open yet. The club's own page (checked " + (v.ud || "recently") + ") says it is coming; court counts, address and opening date can change, and the pin may be approximate. Check the club before you go.");
   }
-  if (v.xu) box.append(el("div", {}, el("span", {class: "badge warn", text: "Public access not confirmed"})));
   const place = [v.a || (v.ns ? "Near " + v.ns : ""), v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014); ns = nearest road, no address known
-  if (place) box.append(el("p", {class: "meta", text: place}));
-  if (v.ai) box.append(el("p", {class: "meta", text: "Nearest address (inferred), " + (v.ad < 10 ? "at the pin" : "about " + v.ad + " m from the pin") + ": the street address above is the closest address point we know, not confirmed for these courts."}));
-  if (v.ap) box.append(el("p", {class: "meta", text: "Address of the surrounding park, school or club (as mapped in OpenStreetMap, inferred): these courts are inside it, but the address is not confirmed for the courts themselves."}));
-  if (!v.a && v.ns) box.append(el("p", {class: "meta", text: "No street address known (inferred): the road name is the nearest street to the pin, not an address."}));
-  if (v.al) box.append(el("p", {class: "meta", text: "Also listed as: " + v.al}));
-  box.append(directionsNode(v.y, v.x, v.n, false));
-  box.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sportLine(v))));
+  const tag = v.ai ? "address inferred, " + (v.ad < 10 ? "at the pin" : "~" + v.ad + " m from pin") : v.ap ? "address of the surrounding site (inferred)" : !v.a && v.ns ? "nearest road (inferred)" : "";
+  if (place) box.append(el("p", {class: "meta", text: place + (tag ? " · " + tag : "")}));
+  if (v.ai) more.push("Nearest address (inferred), " + (v.ad < 10 ? "at the pin" : "about " + v.ad + " m from the pin") + ": the street address above is the closest address point we know, not confirmed for these courts.");
+  if (v.ap) more.push("Address of the surrounding park, school or club (as mapped in OpenStreetMap, inferred): these courts are inside it, but the address is not confirmed for the courts themselves.");
+  if (!v.a && v.ns) more.push("No street address known (inferred): the road name is the nearest street to the pin, not an address.");
+  if (v.al) more.push("Also listed as: " + v.al);
+  const sp = sportParts(v);
+  box.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sp.main)));
+  more.push(...sp.extra);
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
   if (f.length) box.append(el("p", {text: f.join(" · ")}));
   if (v.o && !noPrograms()) box.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
   if (v.ru) box.append(el("p", {}, el("b", {text: "Notes: "}), document.createTextNode(v.ru)));
   const url = v.w ? safeUrl(v.w) : "";
   if (url) box.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
+  box.append(directionsNode(v.y, v.x, v.n, false));
   if (v.ac && v.ac.length && !noPrograms()) {
-    const join = el("div", {class: "join"}, el("h3", {text: "Ways to join and follow (opens the club's or organizer's site)"}));
+    const join = el("div", {class: "join"}, el("h3", {text: "Join & follow"}));
     for (const [type, title, aurl, provider, st, en, price] of v.ac) {
       const href = safeUrl(aurl); if (!href) continue;
       const when = st ? fmtRange({s: st, e: en}) : "";
-      const sub = [ACTION[type] || type, when, price].filter(Boolean).join(" \u00b7 ");
-      join.append(el("a", {class: "act", href, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(title), el("span", {class: "sub", text: (PROVIDER[provider] || provider) + " \u00b7 " + sub})));
+      const sub = [ACTION[type] || type, when, price].filter(Boolean).join(" · ");
+      join.append(el("a", {class: "act", href, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(title), el("span", {class: "sub", text: (PROVIDER[provider] || provider) + " · " + sub})));
     }
-    join.append(el("p", {class: "meta", text: "CourtConnect doesn't take registrations or payments; the provider does."}));
     box.append(join);
   }
   const src = el("details", {class: "srcs"}, el("summary", {text: "Details, sources and corrections"}));
-  const q = new URLSearchParams({template: "suggest-a-change.yml", title: "Change: " + (v.n || "Unnamed courts") + (v.c ? " (" + v.c + ")" : ""), venue: v.n || "", city: v.c || "", map_id: v.i});
-  src.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change to this venue"}), document.createTextNode(" (opens a GitHub form; a reviewer approves it)")));
-  const rq = new URLSearchParams({usp: "pp_url", "entry.643805557": v.n || "", "entry.251841484": v.c || "", "entry.401515442": v.i});   // Venue name, City, Map ID of the report form
-  src.append(el("p", {class: "meta"}, el("a", {href: REPORT_FORM + "?" + rq, target: "_blank", rel: "noopener noreferrer", text: "Report without a GitHub account"}), document.createTextNode(" (opens a Google Form; a reviewer approves it)")));
-  if (v.s === "o" || v.s === "b") {
-    src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (opens the OSM editor here; you need your own free OSM account, and only add what you have seen or the venue's own page says)")));
-  }
+  for (const t of more) src.append(el("p", {class: "meta", text: t}));
   src.append(el("p", {class: "meta", text: "Source: " + SRC[v.s]+ (v.q === "i" ? ". Name is a guess from the park or school the courts sit inside." : "")}));
+  const q = new URLSearchParams({template: "suggest-a-change.yml", title: "Change: " + (v.n || "Unnamed courts") + (v.c ? " (" + v.c + ")" : ""), venue: v.n || "", city: v.c || "", map_id: v.i});
+  src.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change"}), document.createTextNode(" (GitHub form)")));
+  const rq = new URLSearchParams({usp: "pp_url", "entry.643805557": v.n || "", "entry.251841484": v.c || "", "entry.401515442": v.i});   // Venue name, City, Map ID of the report form
+  src.append(el("p", {class: "meta"}, el("a", {href: REPORT_FORM + "?" + rq, target: "_blank", rel: "noopener noreferrer", text: "Report without a GitHub account"}), document.createTextNode(" (Google Form)")));
+  if (v.s === "o" || v.s === "b") {
+    src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (needs a free OSM account; add only what you have seen or the venue's own page says)")));
+  }
+  src.append(el("p", {class: "meta", text: "A reviewer checks every suggested change. CourtConnect takes no registrations or payments; the provider does."}));
   box.append(src);
   return box;
 }
