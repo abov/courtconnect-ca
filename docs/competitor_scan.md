@@ -25,8 +25,12 @@ Read from public App Store pages and the connectplayers.ca home page (text only,
 | Matched Point | Tennis, pickleball | Free + paid plans | "Live in your city", none named |
 | Padel Mates | Padel, pickleball, tennis, badminton, squash | Free + paid Pro | None stated |
 | ConnectPlayers | Badminton, tennis, pickleball, table tennis (20+) | Not stated | None stated (.ca domain) |
+| Playtomic | Padel, tennis, pickleball | Player prices not stated | None in CA/NV (Miami is the only US club shown) |
+| UTR Sports | Tennis, pickleball | Free signup + paid subscription (search summaries; page body did not load) | None checked |
+| PairUp | Tennis, padel, pickleball | Free; league fees via Stripe | None stated; 5 ratings |
+| RacketPal | Tennis, badminton, squash, table tennis, padel | Free + premium | London origin (2019); no US region stated |
 
-Not added: **RacketPal** (London-based, UK matching) and the names "Link Up" and "RacketX", which could not be found at all. Re-check if the owner has a link. None of the five has a verified California/Nevada player pool, so the app says so. Shown as the "Find people to play with" list (seed `player_platforms.csv`, needs `evidence` + `verified_on`). Next: filter the existing Meetup/WhatsApp/Partiful link-outs into the same view; deep links or embeds need the platform's say-so, so no.
+Added later the same day (2026-10-21): Playtomic, UTR Sports, PairUp and RacketPal, from public store and homepage text. Not added: the names "Link Up" and "RacketX", which could not be found at all. Re-check if the owner has a link. None of the five has a verified California/Nevada player pool, so the app says so. Shown as the "Find people to play with" list (seed `player_platforms.csv`, needs `evidence` + `verified_on`). Next: filter the existing Meetup/WhatsApp/Partiful link-outs into the same view; deep links or embeds need the platform's say-so, so no.
 
 ## What makes CourtConnect different (keep these)
 1. **Every place, not only bookable ones:** public parks, hitting walls, YMCAs, rec centers, places to watch.

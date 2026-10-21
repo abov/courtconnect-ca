@@ -331,6 +331,23 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: player_groups
+    description: >
+      Public player-group links (Meetup, WhatsApp, Partiful, Facebook) that a club or organizer publishes itself, kept as leads for
+      a future groups shelf (ADR 0009 amendment 2026-10-21). Link-outs only: groups are never joined or read, no member data is
+      stored. `published_at` is the club page or bio that carries the link; a link that stops loading is removed, not guessed at.
+    columns:
+      - name: group_key
+        tests: [unique, not_null]
+      - name: url
+        tests: [not_null]
+      - name: published_at
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: watch_events
     description: >
       Pro and amateur events people can go and watch, curated by hand, one row per event. A discovery list only:

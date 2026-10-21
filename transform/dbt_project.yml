@@ -133,6 +133,17 @@ seeds:
         price_note: varchar
         evidence: varchar
         verified_on: varchar
+    player_groups:           # all text; leads for the groups shelf (ADR 0009 amendment 2026-10-21), not exported yet
+      +column_types:
+        group_key: varchar
+        name: varchar
+        platform: varchar
+        sports: varchar
+        area: varchar
+        url: varchar
+        published_at: varchar
+        evidence: varchar
+        verified_on: varchar
     manual_walls:            # all text; flags and dates are cast in stg_manual_walls
       +column_types:
         lat: varchar
