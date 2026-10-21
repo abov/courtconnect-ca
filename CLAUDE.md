@@ -81,6 +81,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 - Social phase A, "Find people to play with" (was 7c, `docs/competitor_scan.md`); phase B only with its own ADR. Started 2026-10-21: Social mode + `social_events.csv` (9 padel series, ADR 0021); next: more organizers (Instagram/Partiful/WhatsApp one account at a time), RacketX, a groups shelf from existing link-outs.
 - Player-connection platforms (added 2026-10-17): consider integrating with, or building a format like, https://connectplayers.ca/ and similar player-matching platforms. Scan them first (public pages only, add to `docs/competitor_scan.md`), then decide link-out vs. own format; own accounts/matching = phase B, own ADR.
 - Cost tier "Free / $ / $$ / $$$" (was 7f): ADR first, labelled inferred unless confirmed on a public page, members-only gets no tier.
+- ML + agents strategy (added 2026-10-21, umbrella plan `docs/ml_strategy.md`: tracks, agent roster, scoreboard, phased roadmap; Phase 0 needs only the owner's OK, no spend).
 - ML phases 2-3 (was 5d, `docs/ml_plan.md`): LLM page reader (ADR 0017, accepted 2026-10-17) and NAIP aerial pilot (Hawthorne, then one LV zip; new courts go to OSM).
 - ITF 2027 calendars (was 7e, ~Dec): facts only (name, dates, venue, link), no scraping; read ITF pages singly in the browser pane.
 - Optional read-only MCP server over `venues.json` (was 8; ADR first).

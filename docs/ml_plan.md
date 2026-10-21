@@ -1,5 +1,7 @@
 # ML plan (after the beta)
 
+The umbrella strategy (tracks ranked by value, agent roster, evaluation scoreboard, phased roadmap) is `docs/ml_strategy.md`; this page keeps the phase detail and results.
+
 Three steps, cheapest first. Each one only **suggests**; a person confirms before anything reaches the map (honesty rule). Start after beta findings (from 2026-11-02).
 
 ## Phase 1: review-queue ranker (quick win, ~1 session)
