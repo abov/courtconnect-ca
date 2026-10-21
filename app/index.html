@@ -416,7 +416,7 @@ function eventNode(ev) {
 }
 function showEvent(ev, fly) {
   if (!ev) return;
-  if (fly) map.flyTo({center: [ev.x, ev.y], zoom: Math.max(map.getZoom(), 9), essential: true});
+  if (fly) map.flyTo({center: [ev.x, ev.y], zoom: Math.max(map.getZoom(), 9), essential: true, offset: popupRoom()});
   popup.setLngLat([ev.x, ev.y]).setDOMContent(eventNode(ev)).addTo(map);
 }
 // Friendly empty state; the button reuses the Clear filters handler (nothing is hidden, only explained).
@@ -465,6 +465,7 @@ function socialBadges(s) {
 }
 // A venue with several series (P1 Padel has 6) is a tall popup on a phone: there each series collapses to a name + schedule row and opens on tap.
 const phoneWidth = () => window.matchMedia("(max-width: 800px)").matches;
+const popupRoom = () => [0, Math.round(map.getContainer().clientHeight * (phoneWidth() ? 0.47 : 0.22))];   // leave room above the pin for the popup
 function socialDetails(s) {                                              // everything below the name and schedule, shared by both layouts
   const parts = [], bits = [s.sl, s.pi, s.ll ? "Listed through " + fmtDate(s.ll, {month: "short", day: "numeric"}) : ""].filter(Boolean);
   if (bits.length) parts.push(el("p", {class: "meta", text: bits.join(" · ")}));
@@ -495,7 +496,7 @@ function socialNode(g) {
 }
 function showSocial(g, fly) {
   if (!g) return;
-  if (fly) map.flyTo({center: [g.x, g.y], zoom: Math.max(map.getZoom(), 10), essential: true, offset: [0, Math.round(map.getContainer().clientHeight * (phoneWidth() ? 0.47 : 0.22))]});   // leave room above the pin for the popup
+  if (fly) map.flyTo({center: [g.x, g.y], zoom: Math.max(map.getZoom(), 10), essential: true, offset: popupRoom()});
   popup.setLngLat([g.x, g.y]).setDOMContent(socialNode(g)).addTo(map);
 }
 function renderSocialList(ul) {
@@ -559,7 +560,7 @@ function wallNode(w) {
 }
 function showWall(w, fly) {
   if (!w) return;
-  if (fly) map.flyTo({center: [w.x, w.y], zoom: Math.max(map.getZoom(), 15), essential: true});
+  if (fly) map.flyTo({center: [w.x, w.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: popupRoom()});
   popup.setLngLat([w.x, w.y]).setDOMContent(wallNode(w)).addTo(map);
 }
 function wallItems(list) {
@@ -761,7 +762,7 @@ function venueNode(v) {
 }
 function showVenue(v, fly) {
   if (!v) return;
-  if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: [0, Math.round(map.getContainer().clientHeight * (matchMedia("(max-width: 800px)").matches ? 0.47 : 0.22))]});   // leave room above the pin for the popup
+  if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: popupRoom()});
   track("venue-open");
   popup.setLngLat([v.x, v.y]).setDOMContent(venueNode(v)).addTo(map);
 }
