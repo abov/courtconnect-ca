@@ -86,6 +86,7 @@ osm_venues as (
 ),
 
 -- A hand-checked name for a court group a nearby club place names (seeds/venue_name_official.csv); counts only while the pin is where it was checked.
+-- places_only pins use the same seed below (a club listing that sits on a public building, e.g. Balboa Park Activity Center).
 official_name as (
     select o.venue_id, o.venue_name
     from {{ ref('venue_name_official') }} o
@@ -161,8 +162,8 @@ place_group_extra as (
 places_only as (
     select
         p.venue_id,
-        p.place_name                                          as venue_name,
-        'places_directory'                                    as name_source,
+        coalesce(pn.venue_name, p.place_name)                 as venue_name,   -- a hand-checked place name beats the operator's listing
+        case when pn.venue_name is not null then 'manual' else 'places_directory' end as name_source,
         cast(null as varchar)                                 as name_feature_kind,
         'places_only'                                         as venue_source,
         0                                                     as court_records,
@@ -180,10 +181,14 @@ places_only as (
         cast(null as boolean) as has_indoor, false as has_outdoor,   -- an Overture place says nothing about indoor/outdoor: unknown, not "outdoor"
         'unknown'                                             as indoor_basis,
         false as has_hard, false as has_clay, false as has_grass, false as has_turf, false as has_sand, false as has_indoor_floor,
-        x.also_listed_as
+        case when pn.venue_name is not null
+             then concat_ws(' | ', p.place_name, x.also_listed_as) else x.also_listed_as end as also_listed_as
     from places_ranked p
     join place_group_extra x on x.venue_id = p.venue_id
     left join best_manual bm on bm.venue_id = p.venue_id
+    left join {{ ref('venue_name_official') }} pn
+        on pn.venue_id = p.venue_id
+       and abs(p.lat - cast(pn.lat as double)) < 0.0003 and abs(p.lon - cast(pn.lon as double)) < 0.0003
     where p.rn = 1
 ),
 
