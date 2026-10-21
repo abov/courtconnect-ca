@@ -11,7 +11,7 @@ P1 Padel's weekly programs page lists a men's night, a ladies match-play clinic,
 ## Decision
 - **Series, not dates.** `social_events.csv` holds one row per recurring series (schedule in the organizer's words, `last_listed_date` = last session their page shows).
   Rows do not go stale each week, and the app hides a series once its listed run has ended. `verified_on` + `source_note` are required (CI `check_seed_evidence.py`).
-- **Social lives inside the Watch button (owner, 2026-10-21).** The two top buttons are "Practice & Play" (venues and hitting walls) and "Watch & Social". The second is ONE
+- **Social lives inside the Watch button (owner, 2026-10-21).** The two top buttons are "Play, Practice & Partner Up" (venues and hitting walls; was "Practice & Play") and "Watch & Social". The second is ONE
   view (owner, 2026-10-21, same day: no "To watch / To join" switch for now): the list has two headed sections ("To watch" dated events, "To join" recurring series), and the map
   shows both pin layers. A venue with several series gets one pin and a popup that groups them. Every series links to the organizer; CourtConnect signs nobody up and takes no
   payments. The two kinds stay visibly separate inside the list because one is dated and the other recurring. Old `#mode=social` links land on this view.
