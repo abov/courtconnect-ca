@@ -663,14 +663,23 @@ function sportLine(v) {
     else plain.push(p);
   }
   const cnt = c => v.up ? (c ? " (" + c + " courts planned)" : " (planned)") : c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court; not open yet: planned
-  const parts = plain.map(p => {
+  // variants of one game ("Basque Pelota: Xare", "Basque Pelota: Jai Alai"…) share the same court: show it once, variants as inferred options
+  const fam = {}, solo = [];
+  for (const p of plain) { const k = famOf(sports[p[0]].n); if (k) (fam[k] = fam[k] || []).push(p); else solo.push(p); }
+  const parts = solo.map(p => {
     const x = extras[p[0]];
     if (!x) return sports[p[0]].n + cnt(p[1]);
     return sports[p[0]].n + " (" + (p[1] ? p[1] + (p[1] === 1 ? " court" : " courts") : "at least 1 court") + "; optional: " + x.join(", ") + ")";
-  });
-  const total = plain.reduce((a, p) => a + (p[1] || 0), 0);
-  return parts.join(", ") + (plain.filter(p => p[1]).length > 1 ? " · " + total + " courts listed" : "");
+  }), counts = solo.map(p => p[1] || 0);
+  for (const [k, ps] of Object.entries(fam)) {
+    const c = Math.max(...ps.map(p => p[1] || 0)); counts.push(c);
+    if (ps.length < 2) { parts.push(sports[ps[0][0]].n + cnt(c)); continue; }
+    parts.push(k + cnt(c).slice(0, -1) + "; may suit these variants, court size unconfirmed (inferred): " + ps.map(p => sports[p[0]].n.slice(k.length + 2)).join(", ") + ")");
+  }
+  const total = counts.reduce((a, c) => a + c, 0);
+  return parts.join(", ") + (counts.filter(Boolean).length > 1 ? " · " + total + " courts listed" : "");
 }
+const famOf = n => { const i = n.indexOf(": "); return i > 0 ? n.slice(0, i) : null; };
 function facts(v, entry) {
   const out = [], m = entry ? entry[2] : v.m;
   for (const [k, label] of [["indoor", "Indoor"], ["outdoor", "Outdoor"], ["sand", "Sand"], ["clay", "Clay"], ["grass", "Grass"], ["hard", "Hard court"]]) if (m & SURF[k]) out.push(label);
@@ -778,7 +787,13 @@ function renderList() {
 function venueCourts(v) {
   if (state.sport >= 0) { const e = v.p.find(p => p[0] === state.sport); return e && e[1] ? e[1] : 0; }
   const have = new Set(v.p.map(p => p[0]));
-  return v.p.reduce((a, p) => a + ((sports[p[0]].b || []).some(b => have.has(b)) ? 0 : (p[1] || 0)), 0);
+  const fam = {}; let solo = 0;   // variants of one game ("Basque Pelota: …") share a court: count the family once, by its largest count
+  for (const p of v.p) {
+    if ((sports[p[0]].b || []).some(b => have.has(b))) continue;
+    const k = famOf(sports[p[0]].n);
+    if (k) fam[k] = Math.max(fam[k] || 0, p[1] || 0); else solo += p[1] || 0;
+  }
+  return Object.values(fam).reduce((a, c) => a + c, solo);
 }
 // "In view" uses the data (not rendered clusters), so it is exact for the current filters and mode.
 function updateCount() {
