@@ -211,8 +211,6 @@
       <p id="anywhere" class="note" hidden></p>
       <p id="wallnote" class="note" hidden></p>
     </div>
-    <div class="socialonly note">Recurring mixers, club nights and open play. Each links to the organizer's own page.</div>
-    <div class="watchonly note">Every event links to the organizer's page: check dates and prices there.</div>
     <div class="searchrow">
       <div class="playonly">
         <label class="l" for="q">Search name or city</label>
@@ -406,14 +404,14 @@ function eventNode(ev) {
   box.append(el("div", {}, el("span", {class: "badge ev", text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
   box.append(el("p", {}, el("b", {text: fmtRange(ev)})));
   const cityPin = /city/.test(ev.pr);
-  box.append(el("p", {class: "meta", text: (cityPin ? ev.c + " (venue not yet listed; the pin is the city centre)" : ev.v + ", " + ev.c)}));
+  box.append(el("p", {class: "meta", text: (cityPin ? ev.c + " · venue TBA (pin shows the city)" : ev.v + ", " + ev.c)}));
   if (ev.t) box.append(el("p", {text: ev.t}));
   const row = el("div", {class: "btnrow"});
   const info = ev.u ? safeUrl(ev.u) : "", tix = ev.k ? safeUrl(ev.k) : "";
-  if (tix) row.append(el("a", {class: "btn primary", href: tix, target: "_blank", rel: "noopener noreferrer", text: "Tickets (organizer's site)"}));
+  if (tix) row.append(el("a", {class: "btn primary", href: tix, target: "_blank", rel: "noopener noreferrer", text: "Tickets"}));
   if (info) row.append(el("a", {class: "btn", href: info, target: "_blank", rel: "noopener noreferrer", text: "Event page"}));
   box.append(row);
-  box.append(el("p", {class: "meta", text: "Details checked " + ev.vo + ". CourtConnect sells nothing; confirm on the organizer's site."}));
+  box.append(el("p", {class: "meta", text: "Checked " + fmtDate(ev.vo, {month: "short", day: "numeric"})}));
   return box;
 }
 function showEvent(ev, fly) {
@@ -429,7 +427,7 @@ function emptyItem(msg, label) {
 }
 function renderEventList(ul) {                                          // rows for the watch half of the combined Watch & Social list
   const list = eventsFiltered();
-  if (list.length) ul.append(el("li", {class: "lh", text: "To watch (dated events)"}));
+  if (list.length) ul.append(el("li", {class: "lh", text: "To watch"}));
   for (const ev of list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: ev.n}),
@@ -471,9 +469,9 @@ function socialDetails(s) {                                              // ever
   const parts = [], bits = [s.sl, s.pi, s.ll ? "Listed through " + fmtDate(s.ll, {month: "short", day: "numeric"}) : ""].filter(Boolean);
   if (bits.length) parts.push(el("p", {class: "meta", text: bits.join(" · ")}));
   const row = el("div", {class: "btnrow"}), signup = s.g ? safeUrl(s.g) : "", info = s.u ? safeUrl(s.u) : "";
-  if (signup) row.append(el("a", {class: "btn primary", href: signup, target: "_blank", rel: "noopener noreferrer", text: "Sign up (organizer's site)"}));
-  if (info) row.append(el("a", {class: "btn", href: info, target: "_blank", rel: "noopener noreferrer", text: "Organizer's page"}));
-  parts.push(row, el("p", {class: "meta", text: "Found on " + (SOCIAL_SRC[s.sk] || s.sk) + ", checked " + s.vo + "."}));
+  if (signup) row.append(el("a", {class: "btn primary", href: signup, target: "_blank", rel: "noopener noreferrer", text: "Sign up"}));
+  if (info) row.append(el("a", {class: "btn", href: info, target: "_blank", rel: "noopener noreferrer", text: "Details"}));
+  parts.push(row, el("p", {class: "meta", text: "Checked " + fmtDate(s.vo, {month: "short", day: "numeric"}), title: "Found on " + (SOCIAL_SRC[s.sk] || s.sk)}));
   return parts;
 }
 function socialNode(g) {
@@ -492,8 +490,7 @@ function socialNode(g) {
     if (e.target.open) for (const d of box.querySelectorAll("details[open]")) if (d !== e.target) d.open = false;
   }, true);
   const courts = Math.max(...g.items.map(s => s.ct || 0));
-  if (courts) box.append(el("p", {class: "meta", text: courts + (courts === 1 ? " court" : " courts") + " at this venue, a rough guide to how many can play at once."}));
-  box.append(el("p", {class: "meta", text: "Schedules change. CourtConnect signs nobody up and takes no payments; confirm on the organizer's page."}));
+  if (courts) box.append(el("p", {class: "meta", text: courts + (courts === 1 ? " court" : " courts")}));
   return box;
 }
 function showSocial(g, fly) {
@@ -503,7 +500,7 @@ function showSocial(g, fly) {
 }
 function renderSocialList(ul) {
   const list = socialFiltered();
-  if (list.length) ul.append(el("li", {class: "lh", text: "To join (recurring mixers, club nights, open play)"}));
+  if (list.length) ul.append(el("li", {class: "lh", text: "To join"}));
   for (const s of list) {
     const btn = el("button", {type: "button"}, el("div", {class: "nm", text: s.n}), el("div", {class: "meta", text: s.sc + " · " + s.v + ", " + s.c}), socialBadges(s));
     btn.addEventListener("click", () => showSocial(socialPins.find(g => g.items.includes(s)) || socialGroups([s])[0], true));
