@@ -48,7 +48,10 @@
   .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
   button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
   button.link:hover { text-decoration: underline; }
-  #count { padding: 8px 16px; font-size: 12.5px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  #listbar { display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--line); }
+  #listbar #listtoggle { flex: none; margin: 6px 14px 0 0; font-size: 12.5px; }
+  #panel.listoff #list { display: none; }
+  #count { flex: 1; padding: 8px 16px; font-size: 12.5px; color: var(--muted); }
   #count b { color: var(--text); }
   #list { overflow: auto; flex: 1; min-height: 0; margin: 0; padding: 0; list-style: none; }
   #list li { border-bottom: 1px solid var(--line); }
@@ -202,7 +205,7 @@
     <div>
       <label class="l" for="sport">Sport</label>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
-      <details id="sportinfo" class="note sportinfo" hidden><summary id="sportinfo-t"></summary><div id="sportinfo-b"></div></details>
+      <details id="people" class="playonly note sportinfo" hidden><summary id="people-t">Find people to play with</summary><div id="people-b"></div></details>
       <p id="anywhere" class="note" hidden></p>
       <p id="wallnote" class="note" hidden></p>
     </div>
@@ -247,11 +250,11 @@
     </div>
     </div>
     </details>
-    <details id="people" class="playonly note sportinfo" hidden><summary id="people-t">Find people to play with</summary><div id="people-b"></div></details>
+    <details id="sportinfo" class="note sportinfo" hidden><summary id="sportinfo-t"></summary><div id="sportinfo-b"></div></details>
     <div class="row playonly"><button class="link" id="reset" type="button">Clear filters</button></div>
   </div>
 
-  <div id="count" aria-live="polite"></div>
+  <div id="listbar"><div id="count" aria-live="polite"></div><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div>
   <ul id="list"></ul>
   <div class="legend playlegend" aria-label="Map legend">
     <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
@@ -984,6 +987,11 @@ function initControls() {
   });
     for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
     const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); refresh();
+  });
+  $("listtoggle").addEventListener("click", () => {
+    const off = $("panel").classList.toggle("listoff");
+    $("listtoggle").textContent = off ? "Show list" : "Hide list";
+    $("listtoggle").setAttribute("aria-expanded", String(!off));
   });
   $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
