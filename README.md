@@ -102,11 +102,12 @@ Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routi
 
 ## Roadmap
 - [x] Venue clustering, statewide extract, Overture second source, watch events, link-outs, suggest-a-change flow, Nevada, duplicate guard
-- [ ] Padel check: keep padel (walled glass court) and pop tennis / paddle tennis (open court, low net) apart, audit every Padel pin, and add missing padel clubs found via public padel directories; plan in [`docs/padel_scan.md`](docs/padel_scan.md)
+- [x] Padel check: padel (walled glass court) kept apart from pop tennis / paddle tennis (open court, low net), every Padel pin audited, padel directories swept, guard-rail test and "Opening soon" pins added ([`docs/padel_scan.md`](docs/padel_scan.md)). Lead rechecks now run in the scheduled refresh task; left: the padel vs pop tennis line in the sheet and the sport card
 - [ ] Beta feedback round, then visual polish ([`docs/ux_polish.md`](docs/ux_polish.md))
 - [x] Fill missing street addresses (OSM tags, nearest Overture address, Nominatim; inferred ones labelled; homes show city only). Left over, tracked in `CLAUDE.md` item 2: park/school `addr:*` tags (Overpass re-extract), official pages for high-value venues, city for the last ~480 pins
 - [ ] Sport discovery ("Try something new") and tennis kept visible next to pickleball
-- [ ] All 76 sports in the dropdown (55 have no venue yet and are hidden today) plus a short "about this sport" card; plan in [`docs/sport_discovery_plan.md`](docs/sport_discovery_plan.md)
-- [ ] Social phase A: "Find people to play with" from existing groups; own accounts only after a separate decision ([`docs/competitor_scan.md`](docs/competitor_scan.md))
+- [x] Every sheet sport in the dropdown (now 81): sports with no place yet are greyed "(none yet)" and show "No place for X is listed yet" with a pre-filled report-a-venue link; never fake pins ([`docs/sport_discovery_plan.md`](docs/sport_discovery_plan.md))
+- [ ] "About <sport>" card: built (players, court size, gear, governing body, official site), but the blurb and rules/court/gear links are still empty because the sheet's `Blurb` / `Learn URL` / `Rules URL` / `Court URL` / `Gear URL` columns are not filled. Draft for 63 sports in [`docs/sport_details_draft.csv`](docs/sport_details_draft.csv): paste into the sheet, then `make sync-sports` and `make app-data`. Left after that: blurbs for the remaining sports, a CI check that every sheet sport is exported, a "closest mapped sport" hint on the empty card, and venue searches for unmapped sports, one family at a time
+- [ ] Social phase A: "Find people to play with" (started: player-matching app links, Social mode with recurring open-play series; next: a groups shelf once `player_groups.csv` has rows); own accounts only after a separate decision ([`docs/competitor_scan.md`](docs/competitor_scan.md))
 - [ ] More Nevada link-outs, review queue, ML phases 2-3
 - [ ] Rename repo and Pages URL to `courtconnect` after the beta
