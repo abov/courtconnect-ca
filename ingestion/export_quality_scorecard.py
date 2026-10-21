@@ -23,7 +23,8 @@ RUN_RESULTS = Path("transform/target/run_results.json")
 SLA_EXTRACT_DAYS = 90        # OpenStreetMap extract age
 SLA_ACTIONS_DAYS = 60        # oldest current link-out verification (matches assert_venue_actions_fresh)
 SLA_EVENTS_DAYS = 14         # oldest upcoming event verification (bi-weekly refresh runbook; the dbt test warns at 120)
-SLA_LINKCHECK_DAYS = 60      # website liveness checks
+SLA_SOCIAL_DAYS = 35         # oldest current social-series verification (monthly sync re-reads each series; matches SLA_SEEN_DAYS)
+SLA_LINKCHECK_DAYS = 60     # website liveness checks
 SLA_DEAD_SITE_PCT = 10.0     # share of checked venue websites that are dead
 SLA_SEEN_DAYS = 35          # monthly freshness: a venue counts as fresh when some source saw it within this many days (mart_venue_confidence.last_seen_on)
 SLA_SEEN_PCT = 99.0          # share of venues that must be fresh; undated rows count as stale and are listed so they get a date
@@ -64,6 +65,9 @@ def main() -> None:
     events_up, events_old, events_age = q("""
         select count(*), count(*) filter (where verified_on < current_date - 14), max(current_date - verified_on)
         from staging.stg_watch_events where end_date is null or end_date >= current_date""")[0]
+    social_cur, social_old, social_age = q(f"""
+        select count(*), count(*) filter (where verified_on < current_date - {SLA_SOCIAL_DAYS}), max(current_date - verified_on)
+        from staging.stg_social_events where last_listed_date is null or last_listed_date >= current_date""")[0]
     seen_total, seen_fresh, seen_undated, seen_oldest = q(f"""
         select count(*), count(*) filter (where last_seen_on >= current_date - {SLA_SEEN_DAYS}),
                count(*) filter (where last_seen_on is null), min(last_seen_on)
@@ -100,6 +104,7 @@ def main() -> None:
         ("OSM extract age", extract_age, SLA_EXTRACT_DAYS, "days", extract_age is not None and extract_age <= SLA_EXTRACT_DAYS),
         ("Oldest current link-out check", actions_age, SLA_ACTIONS_DAYS, "days", actions_age is None or actions_age <= SLA_ACTIONS_DAYS),
         ("Oldest upcoming-event check", events_age, SLA_EVENTS_DAYS, "days", events_age is None or events_age <= SLA_EVENTS_DAYS),
+        ("Oldest current social-series check", social_age, SLA_SOCIAL_DAYS, "days", social_age is None or social_age <= SLA_SOCIAL_DAYS),
         ("Website link-check age", link_age, SLA_LINKCHECK_DAYS, "days", link_age is not None and link_age <= SLA_LINKCHECK_DAYS),
         ("Dead venue websites (of checked)", dead_pct, SLA_DEAD_SITE_PCT, "%", dead_pct <= SLA_DEAD_SITE_PCT),
         (f"Venues seen in the last {SLA_SEEN_DAYS} days", seen_pct, SLA_SEEN_PCT, "% (minimum)", seen_pct >= SLA_SEEN_PCT),
@@ -143,6 +148,7 @@ def main() -> None:
           f"- OSM extract: {extract_age if extract_age is not None else 'unknown'} days old.",
           f"- Current link-outs: {actions_cur}; {actions_old} older than {SLA_ACTIONS_DAYS} days.",
           f"- Upcoming events: {events_up}; {events_old} not re-checked in {SLA_EVENTS_DAYS}+ days.",
+          f"- Current social series: {social_cur}; {social_old} not re-checked in {SLA_SOCIAL_DAYS}+ days.",
           f"- Website liveness check: {link_age if link_age is not None else 'unknown'} days old; {dead} of {checked} checked venue sites dead ({dead_pct}%).",
           f"- Venues seen by any source in the last {SLA_SEEN_DAYS} days: {seen_fresh:,} of {seen_total:,} ({seen_pct}%); oldest date {seen_oldest or 'none'}; "
           f"{seen_undated} undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check "
