@@ -314,6 +314,23 @@ seeds:
       - name: evidence
         tests: [not_null]
 
+  - name: player_platforms
+    description: >
+      Player-matching apps and sites shown under "Find people to play with" (social phase A, ADR 0015). Link-outs only: nothing is
+      scraped, no member data is stored. `evidence` quotes the public page read on `verified_on`; none of them is checked for a
+      California or Nevada player pool, and the app says so.
+    columns:
+      - name: platform
+        tests: [unique, not_null]
+      - name: sports
+        tests: [not_null]
+      - name: url
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: watch_events
     description: >
       Pro and amateur events people can go and watch, curated by hand, one row per event. A discovery list only:

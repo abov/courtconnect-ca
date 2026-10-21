@@ -220,6 +220,7 @@
     </div>
     </div>
     </details>
+    <details id="people" class="playonly note sportinfo" hidden><summary id="people-t">Find people to play with</summary><div id="people-b"></div></details>
     <div class="row playonly"><button class="link" id="reset" type="button">Clear filters</button></div>
   </div>
 
@@ -291,7 +292,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   courtreserve: "CourtReserve", matchtime: "MatchTime", p1padel_site: "P1 Padel", vip_site: "Vegas Indoor Pickleball", darling_site: "Darling Tennis Center",
   ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson", washoe_county: "Washoe County Regional Parks", clark_county: "Clark County Parks & Recreation", suncity_summerlin: "Sun City Summerlin", lifetime_site: "Life Time", nlv_gov: "City of North Las Vegas"};
 
-let DATA, sports, venues, events = [], walls = [];
+let DATA, sports, venues, events = [], walls = [], platforms = [];
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
 const $ = id => document.getElementById(id);
 
@@ -798,8 +799,25 @@ function showSportInfo() {
   }
   box.open = window.innerWidth > 600;   // collapsed on phones so the map stays in view
 }
+// "Find people to play with" (social phase A, ADR 0015): link-outs to player-matching apps for the chosen sport. CourtConnect stores no members and
+// has not checked how many players each app has in California or Nevada, so the list says so.
+function showPeople() {
+  const box = $("people"), s = state.sport >= 0 ? sports[state.sport] : null;
+  const list = platforms.filter(p => !s || p.sp.includes(state.sport));
+  box.hidden = !list.length;
+  if (box.hidden) return;
+  $("people-t").textContent = "Find people to play with" + (s ? " (" + s.n + ")" : "");
+  const body = $("people-b"); body.replaceChildren();
+  body.append(el("p", {class: "facts", text: "Apps that match players. We haven't checked how many people use each one in California or Nevada, and some charge for extras."}));
+  for (const p of list) {
+    const sp = p.sp.map(i => sports[i].n).join(", ");
+    body.append(el("p", {}, el("a", {href: p.u, target: "_blank", rel: "noopener noreferrer", text: p.n}), document.createTextNode(": " + p.d + ". "),
+      el("span", {class: "facts", text: sp + " · " + p.p + " · read " + p.vo})));
+  }
+}
 function showAnywhere() {
   showSportInfo();
+  showPeople();
   const n = $("anywhere"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
   const none = !!(s && !s.w && s.v === 0 && !wallsFor(s.n).length);
   n.hidden = !(s && (s.w || none));
@@ -871,7 +889,7 @@ function initCoverage() {
 // ---------- boot ----------
 let byKey = {};
 fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(d => {
-  DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; walls = d.walls || [];
+  DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; walls = d.walls || []; platforms = d.platforms || [];
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
     v.m = v.p.reduce((a, p) => a | p[2], 0);
