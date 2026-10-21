@@ -117,6 +117,13 @@ seeds:
         verified_on: varchar
         lat: varchar
         lon: varchar
+    social_events:           # all text; dates and numbers are cast in stg_social_events
+      +column_types:
+        lat: varchar
+        lon: varchar
+        last_listed_date: varchar
+        courts: varchar
+        verified_on: varchar
     player_platforms:        # all text (social phase A, ADR 0015); the app shows them as a link-out list
       +column_types:
         platform: varchar

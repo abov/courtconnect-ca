@@ -26,6 +26,12 @@ exported = {e["n"] for e in data["events"]}
 for name in sorted(expected - exported):
     problems.append(f"watch event missing from venues.json: {name}")
 
+with open(seeds / "social_events.csv", encoding="utf-8", newline="") as f:
+    expected_social = {r["series_name"] for r in csv.DictReader(f) if (r["last_listed_date"] or "9999-12-31") >= generated}
+exported_social = {e["n"] for e in data.get("social", [])}
+for name in sorted(expected_social - exported_social):
+    problems.append(f"social series missing from venues.json: {name}")
+
 if problems:
     print("app/data/venues.json is stale (generated " + generated + "):\n  " + "\n  ".join(problems))
     sys.exit(1)

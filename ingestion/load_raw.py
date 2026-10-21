@@ -44,15 +44,15 @@ def load_duckdb(table: str, df: pd.DataFrame, db_path: str, force: bool = False)
     con.execute("create schema if not exists raw")
     # Guard against loading a stale CSV over newer data (an old copy once cut raw.osm_walls from 888 to 263 rows).
     exists = con.execute("select count(*) from information_schema.tables where table_schema = 'raw' and table_name = ?",
-                         [table]).fetchone()[0]
-    old = con.execute(f"select count(*) from raw.{table}").fetchone()[0] if exists else 0
+                         [table]).fetchall()[0][0]
+    old = con.execute(f"select count(*) from raw.{table}").fetchall()[0][0] if exists else 0
     if old >= 50 and len(df) < 0.9 * old and not force:
         con.close()
         raise SystemExit(f"raw.{table} would shrink from {old:,} to {len(df):,} rows: the CSV in the data folder looks "
                          f"older than the database. Refresh the CSV, or pass --force if the drop is intended.")
     con.register("df", df)
     con.execute(f"create or replace table raw.{table} as select * from df")
-    n = con.execute(f"select count(*) from raw.{table}").fetchone()[0]
+    n = con.execute(f"select count(*) from raw.{table}").fetchall()[0][0]
     print(f"DuckDB: raw.{table} now has {n:,} rows")
     con.close()
 
