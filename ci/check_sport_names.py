@@ -21,6 +21,7 @@ SPORT_COLUMNS = {
     "place_sport_overrides.csv": ["sport"],
     "watch_events.csv": ["sport"],
     "social_events.csv": ["sport"],
+    "player_platforms.csv": ["sports"],
 }
 
 

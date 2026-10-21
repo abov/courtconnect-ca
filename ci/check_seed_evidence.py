@@ -10,6 +10,7 @@ RULES = {  # file: (date column, columns that must be non-empty, columns that mu
     "venue_confirmations.csv": ("confirmed_on", ["evidence", "confirmed_by", "method"], []),
     "watch_events.csv": ("verified_on", ["source_note"], ["info_url", "tickets_url"]),
     "social_events.csv": ("verified_on", ["source_note", "schedule", "info_url"], ["info_url", "signup_url"]),
+    "player_platforms.csv": ("verified_on", ["evidence", "url", "sports"], ["url"]),
 }
 # Older rows that predate this check and have no date. Date them (or lower them to reported) and delete the entry.
 GRANDFATHERED = set()

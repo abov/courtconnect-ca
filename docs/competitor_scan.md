@@ -16,6 +16,18 @@ Read from each app's public page on 2026-10-16 (Playo from general knowledge: it
 **Data:** Places2Play is behind a sign-in, and Pickleheads' terms forbid bot access and compiling a directory from the site. Neither
 is a data source. No partnership emails until we are ready to socialize or monetize.
 
+## Player-matching apps scan (2026-10-21, social phase A)
+Read from public App Store pages and the connectplayers.ca home page (text only, no logins). Terms of service NOT read for any of them; we only link out, nothing is scraped or stored.
+| App | Sports | Price | Region evidence |
+|---|---|---|---|
+| Hitch | Tennis, padel, pickleball | Free + paid plans | Lists Los Angeles among its cities |
+| Courtmate | Tennis, padel, pickleball | Free + paid plans | None stated |
+| Matched Point | Tennis, pickleball | Free + paid plans | "Live in your city", none named |
+| Padel Mates | Padel, pickleball, tennis, badminton, squash | Free + paid Pro | None stated |
+| ConnectPlayers | Badminton, tennis, pickleball, table tennis (20+) | Not stated | None stated (.ca domain) |
+
+Not added: **RacketPal** (London-based, UK matching) and the names "Link Up" and "RacketX", which could not be found at all. Re-check if the owner has a link. None of the five has a verified California/Nevada player pool, so the app says so. Shown as the "Find people to play with" list (seed `player_platforms.csv`, needs `evidence` + `verified_on`). Next: filter the existing Meetup/WhatsApp/Partiful link-outs into the same view; deep links or embeds need the platform's say-so, so no.
+
 ## What makes CourtConnect different (keep these)
 1. **Every place, not only bookable ones:** public parks, hitting walls, YMCAs, rec centers, places to watch.
 2. **Every racket sport**, with room to discover lesser-known ones; tennis stays visible next to pickleball (ADR 0015).

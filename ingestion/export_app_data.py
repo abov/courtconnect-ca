@@ -19,6 +19,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
               every one links out to the organizer; au/ag are only what the organizer states, absent = not stated)
   walls   : [{n name, c city, r region, y, x, pr location precision, t [wall types], sp [sports suited], nv near venue, su surface, l lit 1/0 (absent = unknown),
               f free 1/0 (absent = unknown), ac access, cf confirmation, d reported on, ev evidence, wn walls at this pin (absent = 1)}]   (hitting walls for solo practice)
+  platforms : [{n name, sp [sport indexes], d what it does, p price note, u https link, vo verified on}]   (player-matching apps, link-outs only)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
      s source: o OpenStreetMap, p places, b both, m hand-curated
      f venue bits: 1 lit, 2 public, 4 free, 8 members-only (marked private/members, not marked public)      p[i][2] sport bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf
@@ -240,6 +241,13 @@ def main() -> None:
         if count > 1: w["wn"] = int(count)
         walls.append(w)
 
+    # Player-matching apps (social phase A): link-outs shown under "Find people to play with". Sports are indexes into `sports`.
+    platforms = []
+    for name, sps, what, price, url, verified in con.execute(
+            "select trim(platform), trim(sports), trim(what), trim(price_note), trim(url), trim(verified_on) from raw.player_platforms order by platform").fetchall():
+        platforms.append({"n": name, "sp": [sport_index[s.strip()] for s in sps.split(";") if s.strip() in sport_index], "d": what, "p": price,
+                          "u": https_only(url), "vo": verified})
+
     named = sum(1 for v in out_venues if v["q"] != "u")
     meta = {
         "generated": date.today().isoformat(),
@@ -255,7 +263,7 @@ def main() -> None:
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "walls": walls}, ensure_ascii=False, separators=(",", ":")),
+    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "walls": walls, "platforms": platforms}, ensure_ascii=False, separators=(",", ":")),
                    encoding="utf-8")
     size = OUT.stat().st_size / 1e6
     print(f"Wrote {OUT}: {len(out_venues):,} venues, {len(sports)} sports, {size:.2f} MB  (named {named:,}; confirmed {meta['confirmed']:,})")
