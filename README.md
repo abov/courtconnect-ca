@@ -50,9 +50,26 @@ Lessons worth keeping:
 ## How it fits together
 ![Architecture: sources, Python ingestion, a dbt project on DuckDB, and the static map app](docs/architecture.svg)
 
-Python ingestion -> dbt (DuckDB) -> static MapLibre page in [`app/`](app) reading one exported file, `app/data/venues.json`. Phone numbers are never exported. Layout: [`docs/architecture.md`](docs/architecture.md). The problem, choices and trade-offs in longer form: [`docs/case_study.md`](docs/case_study.md).
+```
+OSM, Overture, Census, Google Sheet, hand-edited seeds (each with evidence)
+  -> Python ingestion -> raw CSV -> DuckDB -> dbt (staging, intermediate, core, marts)
+  -> export -> venues.json -> static MapLibre page on GitHub Pages
+```
 
-**Skills shown:** SQL and dbt modelling with tests, entity resolution across messy sources, data-quality scorecards and freshness SLAs, small ML with leave-one-out validation, written decision records ([ADRs](docs/decisions)), and scoping work by cost and risk (privacy, terms of use, honesty).
+| Stage | Where | Gate |
+|---|---|---|
+| Ingest | [`ingestion/`](ingestion) | `load_raw.py` refuses to shrink a table by more than 10% |
+| Transform | [`transform/`](transform) | dbt tests, hand-labelled gold set for the place-to-court match |
+| Ship | [`app/`](app), [`.github/workflows/`](.github/workflows) | CI on a small fixture dataset, export freshness, scorecard no-regression |
+
+There is no server or API: the map reads one exported file, `app/data/venues.json`. Phone numbers are never exported. Layout and layer table: [`docs/architecture.md`](docs/architecture.md); all tools and strategies: [`docs/tools_and_strategies.md`](docs/tools_and_strategies.md). The problem, choices and trade-offs in longer form: [`docs/case_study.md`](docs/case_study.md).
+
+## Workflow and automation
+- **Twice-monthly refresh:** sync sports, extract, load, fill addresses, build, export, quality scorecard, PR, CI, deploy ([runbook](docs/monthly_refresh.md)).
+- **Suggest a change:** a form or issue, a reviewer adds the `approved` label, a GitHub Action opens a PR that edits one seed row, CI gates it, then merge ([ADR 0008](docs/decisions/0008-contributors-and-confirmation-workflow.md)).
+- **Agent-assisted, gate-checked:** agents propose changes with evidence, automated gates verify them, and people still merge. A kind of change may auto-merge only after it has earned that and the owner switches it on ([ADR 0019](docs/decisions/0019-unattended-agent-merges.md), [plan](docs/self_service_plan.md)).
+
+**Skills shown:** SQL and dbt modelling with tests, entity resolution across messy sources, data-quality scorecards and freshness SLAs, CI/CD gates and GitHub Actions automation, small ML with leave-one-out validation, guard-railed LLM and agent workflows, written decision records ([ADRs](docs/decisions)), and scoping work by cost and risk (privacy, terms of use, honesty).
 
 ## Quick start
 ```bash
