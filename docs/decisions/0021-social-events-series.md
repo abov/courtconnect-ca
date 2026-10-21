@@ -11,9 +11,10 @@ P1 Padel's weekly programs page lists a men's night, a ladies match-play clinic,
 ## Decision
 - **Series, not dates.** `social_events.csv` holds one row per recurring series (schedule in the organizer's words, `last_listed_date` = last session their page shows).
   Rows do not go stale each week, and the app hides a series once its listed run has ended. `verified_on` + `source_note` are required (CI `check_seed_evidence.py`).
-- **Social lives inside the Watch button (owner, 2026-10-21).** The two top buttons are now "Practice & Play" (venues and hitting walls) and "Watch & Social"; inside the
-  second, a switch picks "To watch" (dated events) or "To join" (recurring series). In "To join" there is one pin per venue, a list of series, and a popup that groups the
-  venue's series. Every series links to the organizer; CourtConnect signs nobody up and takes no payments. The two views stay separate because one is dated and the other recurring.
+- **Social lives inside the Watch button (owner, 2026-10-21).** The two top buttons are "Practice & Play" (venues and hitting walls) and "Watch & Social". The second is ONE
+  view (owner, 2026-10-21, same day: no "To watch / To join" switch for now): the list has two headed sections ("To watch" dated events, "To join" recurring series), and the map
+  shows both pin layers. A venue with several series gets one pin and a popup that groups them. Every series links to the organizer; CourtConnect signs nobody up and takes no
+  payments. The two kinds stay visibly separate inside the list because one is dated and the other recurring. Old `#mode=social` links land on this view.
 - **How a series was found** is stored (`source_kind`: official site, Instagram, Partiful, Meetup, WhatsApp, email, owner report) and shown in the popup.
   Instagram, Partiful and Meetup are read one public page at a time (ADR 0009, 0012); WhatsApp is a link-out only (ADR 0010); email and owner reports are labelled as reports.
 - **Age focus and audience are only what the organizer states** (`age_focus`: all ages / juniors / 18+ / 21+ / 50+; `audience`: women / men / mixed). Blank means not stated, never a guess.
