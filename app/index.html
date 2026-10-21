@@ -67,7 +67,8 @@
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
   .badge.i { color: var(--warn); border-color: var(--warn); }
   .seg { display: flex; gap: 6px; margin-top: 10px; }
-  .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; white-space: nowrap; }
+  .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
+  .seg .chip#modePlay { flex: 2 1 auto; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
   #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
   body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
@@ -168,7 +169,8 @@
     #panel { overflow-y: auto; }
     #list { overflow: visible; flex: none; }
     .controls { padding: 10px 14px; gap: 8px; }
-    .seg .chip { flex: 1; padding: 6px 4px; font-size: 13px; white-space: nowrap; }
+    .seg .chip { flex: 1; padding: 6px 4px; font-size: 13px; }
+    .seg .chip#modePlay { flex: 2; }
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
     .legend, .welcome { display: none; }
@@ -186,12 +188,12 @@
   <header>
     <h1><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1>
     <div class="sub" id="headline">&nbsp;</div>
-    <p class="sub welcome">Find where to play racket sports, with a clear note on how sure we are about each place. We link out to venues; we take no bookings or payments.</p>
+    <p class="sub welcome">Find where to play racket sports. We link out to venues; no bookings or payments.</p>
     <div class="row" style="margin-top:6px">
       <button class="link" id="nearMe" type="button">Near me</button>
     </div>
     <div class="seg" role="group" aria-label="What are you looking for?">
-      <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice">Practice &amp; Play</button>
+      <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice, and apps to find people to play with">Practice &amp; Play &amp; Partner Up</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Watch &amp; Social</button>
     </div>
   </header>
@@ -206,8 +208,8 @@
       <p id="anywhere" class="note" hidden></p>
       <p id="wallnote" class="note" hidden></p>
     </div>
-    <div class="socialonly note">Recurring get-togethers (mixers, club nights, open play), listed as series rather than single dates. CourtConnect signs nobody up and takes no payments: each one links to the organizer's own page. Ages and audiences appear only when the organizer states them.</div>
-    <div class="watchonly note">CourtConnect doesn't sell tickets or book anything. Every event links to the organizer's own page: check dates, seating and prices there.</div>
+    <div class="socialonly note">Recurring mixers, club nights and open play. Each links to the organizer's own page.</div>
+    <div class="watchonly note">Every event links to the organizer's page: check dates and prices there.</div>
     <div class="playonly">
       <label class="l" for="q">Search name or city</label>
       <input id="q" type="search" placeholder="e.g. Manhattan Beach" autocomplete="off">
@@ -754,10 +756,10 @@ function applyMode(fit) {
 function renderList() {
   if (state.mode !== "play") return;
   const c = map.getCenter(), b = map.getBounds();
-  const inView = current.filter(v => b.contains([v.x, v.y]));
-  const pool = inView.length ? inView : current;
-  const top = pool.map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).slice(0, 40).map(x => x[1]);
-  const ul = $("list"); ul.replaceChildren(...wallItems(wallsFiltered()));
+  const nearest = pool => pool.filter(v => b.contains([v.x, v.y])).map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  const top = nearest(current).slice(0, 40), wallsInView = nearest(wallsFiltered());   // only what the map shows right now, nearest the centre first
+  const ul = $("list"), key = top.map(v => v.n).join("|") + "#" + wallsInView.length;
+  ul.replaceChildren(...wallItems(wallsInView));
   for (const v of top) {
     const btn = el("button", {type: "button", class: "q" + v.q},
       el("div", {class: "nm"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
@@ -766,7 +768,10 @@ function renderList() {
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
   }
-  if (!top.length && !wallsFiltered().length) ul.append(emptyItem(state.text ? "No venues match “" + state.text + "” yet. Try a nearby city, or clear the filters." : "No venues match these filters yet. Try zooming out or clearing a filter.", "Clear filters"));
+  if (!top.length && !wallsInView.length) ul.append(current.length || wallsFiltered().length
+    ? el("li", {class: "empty"}, el("p", {text: "Nothing in this view. Zoom out or pan the map to see more."}))
+    : emptyItem(state.text ? "No venues match “" + state.text + "” yet. Try a nearby city, or clear the filters." : "No venues match these filters yet. Try zooming out or clearing a filter.", "Clear filters"));
+  if (key !== renderList.key) { renderList.key = key; ul.scrollTop = 0; }   // a new view starts at its top rows
   updateCount();
 }
 // Courts a venue lists for the active sport; with all sports, courts that also host another sport (pickleball lines on tennis) are counted once.
@@ -903,8 +908,8 @@ function showSportInfo() {
   const box = $("sportinfo"), s = state.sport >= 0 ? sports[state.sport] : null, f = (s && s.f) || {}, u = (s && s.u) || {};
   const facts = [];
   if (f.p) facts.push(f.p + " players");
-  if (f.c) facts.push("Court " + f.c + (/^[\d.]+[x×][\d.]+$/.test(f.c) ? " ft" : ""));
-  if (f.g) facts.push("Gear: " + f.g);
+  if (f.c) facts.push("Typical court " + f.c + (/^[\d.]+[x×][\d.]+$/.test(f.c) ? " ft" : ""));
+  if (f.g) facts.push("Typical gear: " + f.g);
   if (f.o) facts.push("Governing body: " + f.o);
   const links = SPORT_LINKS.filter(([k]) => u[k]);
   if (f.ou) links.push(["ou", "Official site"]);
@@ -921,7 +926,7 @@ function showSportInfo() {
       let host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) { continue; }
       row.append(el("a", {href: url, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(label + " "), el("small", {text: "(" + host + ")"})));
     }
-    body.append(row, el("p", {class: "facts", text: "Links open each site's own page. Court sizes and gear are typical; check your venue's own rules."}));
+    body.append(row);
   }
   box.open = window.innerWidth > 600;   // collapsed on phones so the map stays in view
 }
