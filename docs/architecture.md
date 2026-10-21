@@ -61,6 +61,6 @@ Between syncs, the suggest-a-change flow (ADR 0008) turns an approved issue into
 
 ## ML and agents
 
-Models and LLMs only suggest; code, tests and people decide. See [`ml_plan.md`](ml_plan.md) (review-queue ranker, address fill, LLM page reader with quote checking, aerial pilot), ADR 0017 (page reader), ADR 0019 and [`self_service_plan.md`](self_service_plan.md) (staged agent autonomy).
+Models and LLMs only suggest; code, tests and people decide. See [`ml_plan.md`](ml_plan.md) (review-queue ranker, address fill, LLM page reader with quote checking, aerial pilot), ADR 0017 (page reader), ADR 0019 and [`self_service_plan.md`](self_service_plan.md) (staged agent autonomy), and [`ml_strategy.md`](ml_strategy.md) (the order and case for AI taking over the project's work).
 
 Decisions: [`docs/decisions`](decisions). Coverage: [`coverage_snapshot.md`](coverage_snapshot.md). Sports we cannot find: [`sport_name_review.md`](sport_name_review.md). All tools and strategies: [`tools_and_strategies.md`](tools_and_strategies.md).
