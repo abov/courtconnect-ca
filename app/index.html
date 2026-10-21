@@ -219,10 +219,10 @@
       <button class="chip" id="nearMe" type="button" title="Centre the map on your location (used only in your browser)">Near me</button>
     </div>
     <details class="playonly" id="moreFilters">
-    <summary id="moreSummary">More filters: surface, access, what they offer</summary>
+    <summary id="moreSummary">More filters</summary>
     <div style="display:grid; gap:10px; margin-top:10px">
     <div id="surfBox">
-      <span class="l">Setting and surface</span>
+      <span class="l">Surface</span>
       <div class="chips" id="chipsPlay">
         <button class="chip" data-k="sand" aria-pressed="false">Sand / beach</button>
         <button class="chip" data-k="clay" aria-pressed="false">Clay</button>
@@ -231,12 +231,12 @@
       </div>
     </div>
     <div>
-      <span class="l">Good to know</span>
+      <span class="l">Access and info</span>
       <div class="chips" id="chipsInfo">
         <button class="chip" data-k="public" aria-pressed="false">Public</button>
         <button class="chip" data-k="members" aria-pressed="false">Private / members</button>
         <button class="chip" data-k="web" aria-pressed="false">Has website</button>
-        <button class="chip" data-k="named" aria-pressed="false">Hide unnamed</button>
+        <button class="chip" data-k="named" aria-pressed="false">Named only</button>
       </div>
     </div>
     <div id="offerBox" hidden>
@@ -915,9 +915,9 @@ function renderActive() {
 function syncControls() {
   renderActive();
   $("sport").value = String(state.sport); $("q").value = state.text;
-  document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "watch");   // both notes show in the combined view
+  document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "watch");   // Watch & Social is one combined view
   const nOn = state.on.size + state.offers.size;
-  $("moreSummary").textContent = nOn ? "Filters on: " + nOn + " (tap to change)" : "More filters: surface, access, what they offer";
+  $("moreSummary").textContent = nOn ? "More filters (" + nOn + " on)" : "More filters";
   if (nOn && !matchMedia("(max-width: 800px)").matches) $("moreFilters").open = true;
   $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode !== "play");
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
