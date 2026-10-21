@@ -107,7 +107,7 @@
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
   #active { padding: 8px 16px 2px; border-bottom: 0; }
-  #active[hidden] { display: none; }
+  #active[hidden], .chip[hidden] { display: none; }
   #active .chip { padding-right: 8px; background: var(--chip-on); border-color: var(--accent); }
   #active .chip::after { content: " \00d7"; font-weight: 700; }
   #active .chip.clear { background: none; border-color: transparent; color: var(--accent); }
@@ -206,7 +206,7 @@
     <details class="playonly" id="moreFilters">
     <summary id="moreSummary">More filters: surface, access, what they offer</summary>
     <div style="display:grid; gap:10px; margin-top:10px">
-    <div>
+    <div id="surfBox">
       <span class="l">Setting and surface</span>
       <div class="chips" id="chipsPlay">
         <button class="chip" data-k="sand" aria-pressed="false">Sand / beach</button>
@@ -830,7 +830,19 @@ function readHash() {
   state.text = (p.get("q") || "").toLowerCase();
   if (p.get("access") === "members") state.on.add("members");  // old links
 }
+// Surface chips only make sense for tennis and for "All racket sports" (owner 2026-10-21); regular tennis is never played on sand.
+// A chip that stops applying is also dropped from the filters, so nothing stays on invisibly.
+function syncSurface() {
+  const name = state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", show = state.sport < 0 || name === "Tennis";
+  for (const k of ["sand", "clay", "grass", "hard"]) {
+    const keep = show && !(k === "sand" && name === "Tennis"), b = document.querySelector('[data-k="' + k + '"]');
+    if (b) b.hidden = !keep;
+    if (!keep) state.on.delete(k);
+  }
+  $("surfBox").hidden = !show;
+}
 function renderActive() {
+  syncSurface();
   const box = $("active"); if (!box) return;
   const items = [];
   if (state.mode === "play") {
