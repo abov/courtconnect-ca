@@ -48,7 +48,10 @@
   .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
   button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
   button.link:hover { text-decoration: underline; }
-  #count { padding: 8px 16px; font-size: 12.5px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  #listbar { display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--line); }
+  #listbar #listtoggle { flex: none; margin: 6px 14px 0 0; font-size: 12.5px; }
+  #panel.listoff #list { display: none; }
+  #count { flex: 1; padding: 8px 16px; font-size: 12.5px; color: var(--muted); }
   #count b { color: var(--text); }
   #list { overflow: auto; flex: 1; min-height: 0; margin: 0; padding: 0; list-style: none; }
   #list li { border-bottom: 1px solid var(--line); }
@@ -62,12 +65,15 @@
   .sico[hidden], .sico:empty { display: none; }
   .sico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
   .sico svg .f { fill: currentColor; stroke: none; }
+  .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > .playonly { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
+  .mapkey > summary { padding: 6px 16px; } .mapkey .legend { padding-top: 0; }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
   .badge.i { color: var(--warn); border-color: var(--warn); }
   .seg { display: flex; gap: 6px; margin-top: 10px; }
-  .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; white-space: nowrap; }
+  .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
+  .seg .chip#modePlay { flex: 2 1 auto; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
   #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
   body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
@@ -103,6 +109,7 @@
   .maplibregl-popup-content a.btn { display: inline-block; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); transition: background-color var(--ease), opacity var(--ease); color: var(--accent); text-decoration: none; font-weight: 600; }
   .maplibregl-popup-content a.btn.primary { background: var(--accent); color: var(--on-accent); }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); padding: 6px 16px 10px; }
+  .legend[hidden] { display: none; }
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
@@ -168,10 +175,11 @@
     #panel { overflow-y: auto; }
     #list { overflow: visible; flex: none; }
     .controls { padding: 10px 14px; gap: 8px; }
-    .seg .chip { flex: 1; padding: 6px 4px; font-size: 13px; white-space: nowrap; }
+    .seg .chip { flex: 1; padding: 6px 4px; font-size: 13px; }
+    .seg .chip#modePlay { flex: 2; }
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
-    .legend, .welcome { display: none; }
+    .legend, .mapkey, .welcome { display: none; }
     .maplibregl-popup-content { max-height: calc(42vh - 110px); max-height: calc(42dvh - 110px); }
     .maplibregl-popup-content:has(.soc-pop) { max-height: calc(42vh - 56px); max-height: calc(42dvh - 56px); }   /* many series: collapsed rows still need the room */
     footer { padding: 6px 14px; }
@@ -186,12 +194,9 @@
   <header>
     <h1><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1>
     <div class="sub" id="headline">&nbsp;</div>
-    <p class="sub welcome">Find where to play racket sports, with a clear note on how sure we are about each place. We link out to venues; we take no bookings or payments.</p>
-    <div class="row" style="margin-top:6px">
-      <button class="link" id="nearMe" type="button">Near me</button>
-    </div>
+    <p class="sub welcome">Find where to play racket sports. We link out to venues; no bookings or payments.</p>
     <div class="seg" role="group" aria-label="What are you looking for?">
-      <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice">Practice &amp; Play</button>
+      <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice, and apps to find people to play with">Play, Practice &amp; Partner Up</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Watch &amp; Social</button>
     </div>
   </header>
@@ -202,15 +207,18 @@
     <div>
       <label class="l" for="sport">Sport</label>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
-      <details id="sportinfo" class="note sportinfo" hidden><summary id="sportinfo-t"></summary><div id="sportinfo-b"></div></details>
+      <details id="people" class="playonly note sportinfo" hidden><summary id="people-t">Find people to play with</summary><div id="people-b"></div></details>
       <p id="anywhere" class="note" hidden></p>
       <p id="wallnote" class="note" hidden></p>
     </div>
-    <div class="socialonly note">Recurring get-togethers (mixers, club nights, open play), listed as series rather than single dates. CourtConnect signs nobody up and takes no payments: each one links to the organizer's own page. Ages and audiences appear only when the organizer states them.</div>
-    <div class="watchonly note">CourtConnect doesn't sell tickets or book anything. Every event links to the organizer's own page: check dates, seating and prices there.</div>
-    <div class="playonly">
-      <label class="l" for="q">Search name or city</label>
-      <input id="q" type="search" placeholder="e.g. Manhattan Beach" autocomplete="off">
+    <div class="socialonly note">Recurring mixers, club nights and open play. Each links to the organizer's own page.</div>
+    <div class="watchonly note">Every event links to the organizer's page: check dates and prices there.</div>
+    <div class="searchrow">
+      <div class="playonly">
+        <label class="l" for="q">Search name or city</label>
+        <input id="q" type="search" placeholder="e.g. Manhattan Beach" autocomplete="off">
+      </div>
+      <button class="chip" id="nearMe" type="button" title="Centre the map on your location (used only in your browser)">Near me</button>
     </div>
     <details class="playonly" id="moreFilters">
     <summary id="moreSummary">More filters: surface, access, what they offer</summary>
@@ -247,19 +255,29 @@
     </div>
     </div>
     </details>
-    <details id="people" class="playonly note sportinfo" hidden><summary id="people-t">Find people to play with</summary><div id="people-b"></div></details>
+    <details id="sportinfo" class="note sportinfo" hidden><summary id="sportinfo-t"></summary><div id="sportinfo-b"></div></details>
     <div class="row playonly"><button class="link" id="reset" type="button">Clear filters</button></div>
   </div>
 
-  <div id="count" aria-live="polite"></div>
+  <div id="listbar"><div id="count" aria-live="polite"></div><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div>
   <ul id="list"></ul>
-  <div class="legend playlegend" aria-label="Map legend">
-    <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
-    <span><span class="dot" style="background:var(--pin-p)"></span>Listed business</span>
-    <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
-    <span><span class="dot" style="background:var(--pin-u)"></span>Unnamed courts</span>
-    <span><span class="dot soon"></span>Opening soon (not open yet)</span>
-    <span><span class="dot rep"></span>Reported opening soon (unconfirmed)</span>
+  <details class="mapkey playonly">
+    <summary>Map key</summary>
+    <div class="legend" aria-label="Map legend">
+      <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
+      <span><span class="dot" style="background:var(--pin-p)"></span>Listed business</span>
+      <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
+      <span><span class="dot" style="background:var(--pin-u)"></span>Unnamed courts</span>
+      <span><span class="dot soon"></span>Opening soon (not open yet)</span>
+      <span><span class="dot rep"></span>Reported opening soon (unconfirmed)</span>
+    </div>
+  </details>
+  <div class="legend playlegend" id="wallLegend" aria-label="Hitting wall legend" hidden>
+    <span>Hitting walls:</span>
+    <span><span class="dot" style="background:var(--pin-c)"></span>Confirmed</span>
+    <span><span class="dot" style="background:var(--pin-p)"></span>Reported by a player</span>
+    <span><span class="dot" style="background:var(--pin-i)"></span>From OpenStreetMap tags, unchecked</span>
+    <span><span class="dot" style="background:var(--pin-u)"></span>Restricted access</span>
   </div>
   <footer><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
@@ -514,7 +532,7 @@ const WALL_PUBLIC_ONLY = ["Knuckle Racket"];
 function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t)) && (!WALL_PUBLIC_ONLY.includes(name) || wallAccess(w) === "public")) : []; }
 function wallsFiltered() { return state.mode === "play" && state.sport >= 0 ? wallsFor(sports[state.sport].n) : []; }
 function wallGeojson(list) {
-  return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n, r: wallAccess(w) === "restricted" ? 1 : 0}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
+  return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n, f: w.cf, r: wallAccess(w) === "restricted" ? 1 : 0}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
 }
 // Directions open the user's own maps app at the pin's coordinates (no address lookup, nothing stored; ADR 0005).
 function directionsNode(y, x, name, approx) {
@@ -616,10 +634,10 @@ function initMap() {
     map.on("mouseleave", "ev-pts", () => map.getCanvas().style.cursor = "");
     map.addSource("w", {type: "geojson", data: wallGeojson([])});
     map.addLayer({id: "wall-pts", type: "circle", source: "w", layout: {visibility: "none"},
-      paint: {"circle-radius": 9, "circle-color": ["case", ["==", ["get", "r"], 1], "#8b949e", "#bc4c00"], "circle-stroke-color": "#fff", "circle-stroke-width": 2}});
+      paint: {"circle-radius": 9, "circle-color": ["case", ["==", ["get", "r"], 1], "#8c959f", ["match", ["get", "f"], "official", "#1a7f37", "reported", "#0969da", "#d4a72c"]], "circle-stroke-color": "#fff", "circle-stroke-width": 2}});   // same palette as venues: green confirmed, blue reported by a player, yellow unchecked (OSM tags / inferred), grey restricted access
     map.addLayer({id: "wall-label", type: "symbol", source: "w", layout: {visibility: "none", "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"],
       "text-size": 12, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 9},
-      paint: {"text-color": "#7a3200", "text-halo-color": "#fff", "text-halo-width": 1.5}});
+      paint: {"text-color": "#24292f", "text-halo-color": "#fff", "text-halo-width": 1.5}});
     map.on("click", "wall-pts", e => showWall(walls[e.features[0].properties.k], false));
     map.on("mouseenter", "wall-pts", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "wall-pts", () => map.getCanvas().style.cursor = "");
@@ -661,14 +679,23 @@ function sportLine(v) {
     else plain.push(p);
   }
   const cnt = c => v.up ? (c ? " (" + c + " courts planned)" : " (planned)") : c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court; not open yet: planned
-  const parts = plain.map(p => {
+  // variants of one game ("Basque Pelota: Xare", "Basque Pelota: Jai Alai"…) share the same court: show it once, variants as inferred options
+  const fam = {}, solo = [];
+  for (const p of plain) { const k = famOf(sports[p[0]].n); if (k) (fam[k] = fam[k] || []).push(p); else solo.push(p); }
+  const parts = solo.map(p => {
     const x = extras[p[0]];
     if (!x) return sports[p[0]].n + cnt(p[1]);
     return sports[p[0]].n + " (" + (p[1] ? p[1] + (p[1] === 1 ? " court" : " courts") : "at least 1 court") + "; optional: " + x.join(", ") + ")";
-  });
-  const total = plain.reduce((a, p) => a + (p[1] || 0), 0);
-  return parts.join(", ") + (plain.filter(p => p[1]).length > 1 ? " · " + total + " courts listed" : "");
+  }), counts = solo.map(p => p[1] || 0);
+  for (const [k, ps] of Object.entries(fam)) {
+    const c = Math.max(...ps.map(p => p[1] || 0)); counts.push(c);
+    if (ps.length < 2) { parts.push(sports[ps[0][0]].n + cnt(c)); continue; }
+    parts.push(k + cnt(c).slice(0, -1) + "; may suit these variants, court size unconfirmed (inferred): " + ps.map(p => sports[p[0]].n.slice(k.length + 2)).join(", ") + ")");
+  }
+  const total = counts.reduce((a, c) => a + c, 0);
+  return parts.join(", ") + (counts.filter(Boolean).length > 1 ? " · " + total + " courts listed" : "");
 }
+const famOf = n => { const i = n.indexOf(": "); return i > 0 ? n.slice(0, i) : null; };
 function facts(v, entry) {
   const out = [], m = entry ? entry[2] : v.m;
   for (const [k, label] of [["indoor", "Indoor"], ["outdoor", "Outdoor"], ["sand", "Sand"], ["clay", "Clay"], ["grass", "Grass"], ["hard", "Hard court"]]) if (m & SURF[k]) out.push(label);
@@ -736,7 +763,9 @@ function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
   show(["clusters", "cluster-count", "pts"], mode === "play");
   show(["ev-pts", "ev-label", "soc-pts", "soc-label"], mode === "watch");
-  show(["wall-pts", "wall-label"], mode === "play" && wallsFiltered().length > 0);
+  const walls_on = mode === "play" && wallsFiltered().length > 0;
+  show(["wall-pts", "wall-label"], walls_on);
+  $("wallLegend").hidden = !walls_on;
 }
 function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
 function applyMode(fit) {
@@ -754,10 +783,10 @@ function applyMode(fit) {
 function renderList() {
   if (state.mode !== "play") return;
   const c = map.getCenter(), b = map.getBounds();
-  const inView = current.filter(v => b.contains([v.x, v.y]));
-  const pool = inView.length ? inView : current;
-  const top = pool.map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).slice(0, 40).map(x => x[1]);
-  const ul = $("list"); ul.replaceChildren(...wallItems(wallsFiltered()));
+  const nearest = pool => pool.filter(v => b.contains([v.x, v.y])).map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  const top = nearest(current).slice(0, 40), wallsInView = nearest(wallsFiltered());   // only what the map shows right now, nearest the centre first
+  const ul = $("list"), key = top.map(v => v.n).join("|") + "#" + wallsInView.length;
+  ul.replaceChildren(...wallItems(wallsInView));
   for (const v of top) {
     const btn = el("button", {type: "button", class: "q" + v.q},
       el("div", {class: "nm"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
@@ -766,14 +795,23 @@ function renderList() {
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
   }
-  if (!top.length && !wallsFiltered().length) ul.append(emptyItem(state.text ? "No venues match “" + state.text + "” yet. Try a nearby city, or clear the filters." : "No venues match these filters yet. Try zooming out or clearing a filter.", "Clear filters"));
+  if (!top.length && !wallsInView.length) ul.append(current.length || wallsFiltered().length
+    ? el("li", {class: "empty"}, el("p", {text: "Nothing in this view. Zoom out or pan the map to see more."}))
+    : emptyItem(state.text ? "No venues match “" + state.text + "” yet. Try a nearby city, or clear the filters." : "No venues match these filters yet. Try zooming out or clearing a filter.", "Clear filters"));
+  if (key !== renderList.key) { renderList.key = key; ul.scrollTop = 0; }   // a new view starts at its top rows
   updateCount();
 }
 // Courts a venue lists for the active sport; with all sports, courts that also host another sport (pickleball lines on tennis) are counted once.
 function venueCourts(v) {
   if (state.sport >= 0) { const e = v.p.find(p => p[0] === state.sport); return e && e[1] ? e[1] : 0; }
   const have = new Set(v.p.map(p => p[0]));
-  return v.p.reduce((a, p) => a + ((sports[p[0]].b || []).some(b => have.has(b)) ? 0 : (p[1] || 0)), 0);
+  const fam = {}; let solo = 0;   // variants of one game ("Basque Pelota: …") share a court: count the family once, by its largest count
+  for (const p of v.p) {
+    if ((sports[p[0]].b || []).some(b => have.has(b))) continue;
+    const k = famOf(sports[p[0]].n);
+    if (k) fam[k] = Math.max(fam[k] || 0, p[1] || 0); else solo += p[1] || 0;
+  }
+  return Object.values(fam).reduce((a, c) => a + c, solo);
 }
 // "In view" uses the data (not rendered clusters), so it is exact for the current filters and mode.
 function updateCount() {
@@ -903,8 +941,8 @@ function showSportInfo() {
   const box = $("sportinfo"), s = state.sport >= 0 ? sports[state.sport] : null, f = (s && s.f) || {}, u = (s && s.u) || {};
   const facts = [];
   if (f.p) facts.push(f.p + " players");
-  if (f.c) facts.push("Court " + f.c + (/^[\d.]+[x×][\d.]+$/.test(f.c) ? " ft" : ""));
-  if (f.g) facts.push("Gear: " + f.g);
+  if (f.c) facts.push("Typical court " + f.c + (/^[\d.]+[x×][\d.]+$/.test(f.c) ? " ft" : ""));
+  if (f.g) facts.push("Typical gear: " + f.g);
   if (f.o) facts.push("Governing body: " + f.o);
   const links = SPORT_LINKS.filter(([k]) => u[k]);
   if (f.ou) links.push(["ou", "Official site"]);
@@ -921,7 +959,7 @@ function showSportInfo() {
       let host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) { continue; }
       row.append(el("a", {href: url, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(label + " "), el("small", {text: "(" + host + ")"})));
     }
-    body.append(row, el("p", {class: "facts", text: "Links open each site's own page. Court sizes and gear are typical; check your venue's own rules."}));
+    body.append(row);
   }
   box.open = window.innerWidth > 600;   // collapsed on phones so the map stays in view
 }
@@ -984,6 +1022,11 @@ function initControls() {
   });
     for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
     const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); refresh();
+  });
+  $("listtoggle").addEventListener("click", () => {
+    const off = $("panel").classList.toggle("listoff");
+    $("listtoggle").textContent = off ? "Show list" : "Hide list";
+    $("listtoggle").setAttribute("aria-expanded", String(!off));
   });
   $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
