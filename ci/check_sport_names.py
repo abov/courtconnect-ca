@@ -20,6 +20,7 @@ SPORT_COLUMNS = {
     "sport_aliases.csv": ["sport"],          # the alias column is free text on purpose
     "place_sport_overrides.csv": ["sport"],
     "watch_events.csv": ["sport"],
+    "player_platforms.csv": ["sports"],
 }
 
 

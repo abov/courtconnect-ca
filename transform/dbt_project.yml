@@ -117,6 +117,15 @@ seeds:
         verified_on: varchar
         lat: varchar
         lon: varchar
+    player_platforms:        # all text (social phase A, ADR 0015); the app shows them as a link-out list
+      +column_types:
+        platform: varchar
+        sports: varchar
+        url: varchar
+        what: varchar
+        price_note: varchar
+        evidence: varchar
+        verified_on: varchar
     manual_walls:            # all text; flags and dates are cast in stg_manual_walls
       +column_types:
         lat: varchar
