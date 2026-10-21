@@ -69,7 +69,7 @@ Ranked by value to the self-service goal against effort and risk. "Gold" = the l
 | 5 | **Watcher** (page-change and closure signals) | Detects a venue page that changed, went dead, or says "permanently closed" / "coming soon" / "now open"; rechecks leads and events | `closed_places.csv`, lead outcomes, padel rechecks | Medium-high: covers rechecks (item 4, 8 on the roadmap) | Medium | After 1 |
 | 6 | **Learned matcher** (Overture/OSM entity resolution) | A gradient-boosted pair classifier as a challenger to the hand rules | Match gold set (129 pairs, 0 wrong, 4 missed) | Low now: rules leave little room; the gold set is also small | Medium | **Shadow only.** Adopt only if it beats the rules on a fresh sample without a wrong merge |
 | 7 | **Supply-gap and demand view** (`mart_supply_gap`) | Courts per 10,000 residents by sport and area (Census, no key) plus anonymous click signals | Needs beta traffic (GoatCounter) | Medium, product-facing: a story for the beta and for "discover new sports" | Medium | After beta data exists; ADR first (privacy line in `ml_plan.md`) |
-| 8 | **"Try something new" recommender** | Suggests sports like the ones you play, using `ref_sport_fit` and `sport_also_played`; no accounts, no tracking | Hand check on 10 sport pairs; click-through in beta | Medium, directly serves the mission (ADR 0015) | Low | After beta; a similarity table, not a deep model |
+| 8 | **"Try something new" recommender** (DROPPED 2026-10-21, ADR 0015 amendment) | Suggests sports like the ones you play, using `ref_sport_fit` and `sport_also_played`; no accounts, no tracking | Hand check on 10 sport pairs; click-through in beta | Medium, directly serves the mission (ADR 0015) | Low | After beta; a similarity table, not a deep model |
 | 9 | **Aerial court detector** (phase 3) | Finds courts in no dataset | OSM pitches | Low: single-digit new sites per city, mostly private, needs a person per site | High | **Parked.** Revisit only after 1-5, with fine-tuning and recall by sport |
 
 Notes on the table:
@@ -179,7 +179,7 @@ Each item is a small PR or a single session.
 1. R0 and R1 switch to auto-merge only when their ADR 0019 numbers are met and the owner switches them on. R0 needs 6 clean PRs plus 3 shadow runs, so about three months of stage 0 first.
 2. R2 per field type: only fields whose precision and interval clear the bar.
 3. Watcher agent live (closures stay R3; the page must state the closure).
-4. Product: supply-gap view and "Try something new" recommender, using beta data (each behind an ADR where it touches privacy).
+4. Product: supply-gap view, using beta data (each behind an ADR where it touches privacy).
 5. Learned matcher as a shadow challenger on the next gold sample; adopt only on a clear win.
 
 ### Later (each needs its own ADR first)
