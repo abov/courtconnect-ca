@@ -110,6 +110,8 @@
   .maplibregl-popup-content a.btn.primary { background: var(--accent); color: var(--on-accent); }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); padding: 6px 16px 10px; }
   .legend[hidden] { display: none; }
+  .ringkey { display: none; }   /* phones only: the map key is hidden there, so the two ring pins get a one-line key */
+  body.watch .ringkey { display: none; }
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
@@ -180,8 +182,11 @@
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
     .legend, .mapkey, .welcome { display: none; }
-    .maplibregl-popup-content { max-height: calc(42vh - 110px); max-height: calc(42dvh - 110px); }
-    .maplibregl-popup-content:has(.soc-pop) { max-height: calc(42vh - 56px); max-height: calc(42dvh - 56px); }   /* many series: collapsed rows still need the room */
+    .ringkey { display: flex; padding: 0 14px 6px; }
+    /* phones: the popup is a bottom sheet over the list, so it fits without scrolling inside the small map and the pin stays in view above it */
+    .maplibregl-popup { position: fixed !important; top: auto !important; bottom: 0; left: 0; right: 0; transform: none !important; max-width: none !important; z-index: 5; }
+    .maplibregl-popup-tip { display: none; }
+    .maplibregl-popup-content { max-width: none; max-height: 58vh; max-height: 58dvh; border-radius: var(--r-md) var(--r-md) 0 0; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
     footer { padding: 6px 14px; }
     #map { order: -1; } #panel { border-right: 0; border-top: 1px solid var(--line); }
   }
@@ -219,10 +224,10 @@
       <button class="chip" id="nearMe" type="button" title="Centre the map on your location (used only in your browser)">Near me</button>
     </div>
     <details class="playonly" id="moreFilters">
-    <summary id="moreSummary">More filters: surface, access, what they offer</summary>
+    <summary id="moreSummary">More filters</summary>
     <div style="display:grid; gap:10px; margin-top:10px">
     <div id="surfBox">
-      <span class="l">Setting and surface</span>
+      <span class="l">Surface</span>
       <div class="chips" id="chipsPlay">
         <button class="chip" data-k="sand" aria-pressed="false">Sand / beach</button>
         <button class="chip" data-k="clay" aria-pressed="false">Clay</button>
@@ -231,12 +236,12 @@
       </div>
     </div>
     <div>
-      <span class="l">Good to know</span>
+      <span class="l">Access and info</span>
       <div class="chips" id="chipsInfo">
         <button class="chip" data-k="public" aria-pressed="false">Public</button>
         <button class="chip" data-k="members" aria-pressed="false">Private / members</button>
         <button class="chip" data-k="web" aria-pressed="false">Has website</button>
-        <button class="chip" data-k="named" aria-pressed="false">Hide unnamed</button>
+        <button class="chip" data-k="named" aria-pressed="false">Named only</button>
       </div>
     </div>
     <div id="offerBox" hidden>
@@ -258,6 +263,7 @@
   </div>
 
   <div id="listbar"><div id="count" aria-live="polite"></div><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div>
+  <div class="legend ringkey" aria-label="Ring pins"><span><span class="dot soon"></span>Opening soon</span><span><span class="dot rep"></span>Reported, unconfirmed</span></div>
   <ul id="list"></ul>
   <details class="mapkey playonly">
     <summary>Map key</summary>
@@ -465,7 +471,7 @@ function socialBadges(s) {
 }
 // A venue with several series (P1 Padel has 6) is a tall popup on a phone: there each series collapses to a name + schedule row and opens on tap.
 const phoneWidth = () => window.matchMedia("(max-width: 800px)").matches;
-const popupRoom = () => [0, Math.round(map.getContainer().clientHeight * (phoneWidth() ? 0.47 : 0.22))];   // leave room above the pin for the popup
+const popupRoom = () => [0, Math.round(map.getContainer().clientHeight * (phoneWidth() ? 0 : 0.22))];   // desktop: leave room above the pin for the popup; phones: it is a bottom sheet, so the pin is centred
 function socialDetails(s) {                                              // everything below the name and schedule, shared by both layouts
   const parts = [], bits = [s.sl, s.pi, s.ll ? "Listed through " + fmtDate(s.ll, {month: "short", day: "numeric"}) : ""].filter(Boolean);
   if (bits.length) parts.push(el("p", {class: "meta", text: bits.join(" · ")}));
@@ -916,9 +922,9 @@ function renderActive() {
 function syncControls() {
   renderActive();
   $("sport").value = String(state.sport); $("q").value = state.text;
-  document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "watch");   // both notes show in the combined view
+  document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "watch");   // Watch & Social is one combined view
   const nOn = state.on.size + state.offers.size;
-  $("moreSummary").textContent = nOn ? "Filters on: " + nOn + " (tap to change)" : "More filters: surface, access, what they offer";
+  $("moreSummary").textContent = nOn ? "More filters (" + nOn + " on)" : "More filters";
   if (nOn && !matchMedia("(max-width: 800px)").matches) $("moreFilters").open = true;
   $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode !== "play");
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));

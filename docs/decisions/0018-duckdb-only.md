@@ -19,6 +19,8 @@ What Snowflake code still exists (grep, 2026-10-17):
 - **(b) The "run unchanged on DuckDB and Snowflake" rule: relaxed.** New models and macros no longer need a Snowflake-safe form. Keep using the existing `adapter.dispatch` macros where they exist (no churn), but plain DuckDB SQL is fine in new code, and nobody should run or test a Snowflake build to check it. The rule that still holds: do not make SQL needlessly engine-specific where a standard form is as easy.
 - **No new Snowflake work:** no builds, no syncs, no `--target snowflake`, no new Snowflake-only code.
 
+- **Amendment (2026-10-21, owner):** the removal in (a) was brought forward from "after the beta" and done: `snowflake` profile, `infra/snowflake/`, `make snowflake-build`, the Snowflake branch of `load_raw.py`, the `dim_venue` GEOGRAPHY block, both Snowflake packages and the `SNOWFLAKE_*` keys are gone; the `adapter.dispatch` macros stay. Git history has the old code if a cloud warehouse is ever needed (new ADR).
+
 ## Consequences
 + CLAUDE.md, README and ADR 0001 agree. New SQL can use DuckDB features (for example richer string, list and spatial functions) without a portability check.
 + One engine to test; "identical on both engines" claims in ADRs 0003, 0004 and 0005 stay true as history.

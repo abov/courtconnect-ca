@@ -30,7 +30,7 @@ import requests
 
 ROOT = Path(__file__).resolve().parents[1]
 SEED = ROOT / "transform" / "seeds" / "nominatim_addresses.csv"
-UA = {"User-Agent": "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"}
+from useragent import HEADERS as UA
 URL = "https://nominatim.openstreetmap.org/reverse"
 FIELDS = ["venue_id", "lat", "lon", "status", "address_line", "city", "distance_m", "osm_ref", "queried_on"]   # lat/lon = the pin queried (a moved pin is re-queried and its old row ignored)
 MAX_DISTANCE_M = 150   # same bound as the Overture tier: farther is not "nearest address" for these courts

@@ -23,7 +23,7 @@ import requests
 from rawdir import raw_path
 
 BASE = "https://www2.census.gov/geo/tiger/GENZ2023/shp/"
-UA = {"User-Agent": "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"}
+from useragent import HEADERS as UA
 FILES = [("place", "cb_2023_06_place_500k"), ("place", "cb_2023_32_place_500k"), ("county", "cb_2023_us_county_500k")]
 SOURCE = "US Census cartographic boundary files 2023 (1:500k)"
 

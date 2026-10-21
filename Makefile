@@ -60,9 +60,6 @@ demo: extract load build   ## the one-command demo
 docs:
 	$(DBT) docs generate && $(DBT) docs serve
 
-snowflake-build:  ## run the same project on Snowflake
-	$(PY) ingestion/load_raw.py --target snowflake
-	$(DBT) build --target snowflake
 
 app-data:        ## export the venue finder to app/data/venues.json for the map
 	$(PY) ingestion/export_app_data.py

@@ -23,7 +23,7 @@ import urllib.request
 
 from PIL import Image, ImageDraw
 
-UA = "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"
+from useragent import USER_AGENT as UA
 Z = int(os.environ.get("IMG_ZOOM", 19))   # 19 everywhere; 20 exists in some cities (about 0.15 m per pixel)
 TILE = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
 GROUND = 0.2986 * 2 ** (19 - Z)  # metres per pixel at the equator, 256 px tiles

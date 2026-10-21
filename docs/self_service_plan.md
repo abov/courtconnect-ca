@@ -40,7 +40,7 @@ Outside the runbook but on the "Open, in order" list:
 | Padel / coming-soon lead rechecks (4) | E | official page + quote promotes a lead; opening a venue also updates courts/address |
 | Review queue (116 rows) | E | same: reader + quote check |
 | Tournament events (`docs/tournament_refresh.md`) | E | separate bi-weekly runbook; classify it next |
-| Cost tier, tennis visibility, sport cards, UX polish | J | product choices |
+| Cost tier, sport cards, UX polish | J | product choices |
 | ADRs, mission, privacy, new data sources | J | never autonomous |
 
 ## What this tells us

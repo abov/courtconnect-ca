@@ -246,9 +246,6 @@ select
     {{ website_status('u.website', 'wc.status') }}            as website_status,   -- ok | dead | unknown | unchecked; null = no website
     g.google_place_id,                                         -- ID only; the app fetches details live (ADR 0005)
     coalesce(s.sport_count, 0)                                as sport_count
-    {% if target.type == 'snowflake' %}
-    , st_makepoint(u.lon, u.lat)                              as location  -- GEOGRAPHY, for ST_DWITHIN / ST_DISTANCE
-    {% endif %}
 from unioned u
 left join sports s on s.venue_id = u.venue_id
 left join {{ ref('stg_google_place_ids') }} g on g.venue_id = u.venue_id

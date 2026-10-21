@@ -7,8 +7,8 @@ refined to the OpenStreetMap park outline when the geocoder only found a street,
 Public, "?" (access in question) and Private entries are imported (private clubs and apartment complexes, shown as members-only/private).
 Private HOMES (Rules = "Private Home") are skipped on purpose: their addresses are people's homes. Owner decision 2026-10-14.
 
-    python ingestion/import_paddle_tennis_map.py            # dry run: print what would be written
-    python ingestion/import_paddle_tennis_map.py --write    # replace the 'pt-*' rows in manual_venues.csv
+    python ingestion/oneoff/import_paddle_tennis_map.py            # dry run: print what would be written
+    python ingestion/oneoff/import_paddle_tennis_map.py --write    # replace the 'pt-*' rows in manual_venues.csv
 
 Needs PADDLE_TENNIS_MAP_ID in .env (the `mid=` value of the map's link). Review the output before committing.
 """
@@ -27,7 +27,9 @@ import requests
 from dotenv import load_dotenv
 
 NS = {"k": "http://www.opengis.net/kml/2.2"}
-UA = {"User-Agent": "courtconnect-ca/0.1 (portfolio project)"}
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # shared helpers in ingestion/
+from useragent import HEADERS as UA
 SEED = "transform/seeds/manual_venues.csv"
 COLS = ["venue_key", "venue_name", "sport", "city", "lat", "lon", "location_precision", "website", "surface_type", "setting", "offerings",
         "courts", "access", "rules", "confirmation", "confirmed_on", "evidence", "region"]

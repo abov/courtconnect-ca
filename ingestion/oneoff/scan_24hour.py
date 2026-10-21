@@ -1,8 +1,10 @@
 """Scan public 24 Hour Fitness club pages (URLs from their sitemap) for CA/NV clubs that list a racquetball court.
-Usage: .venv/Scripts/python.exe -I ingestion/scan_24hour.py out.csv   (writes url,name,street,city,state,zip,phone,lat,lon,racquetball,squash; ~3 min, throttled)."""
+Usage: .venv/Scripts/python.exe -I ingestion/oneoff/scan_24hour.py out.csv   (writes url,name,street,city,state,zip,phone,lat,lon,racquetball,squash; ~3 min, throttled)."""
 import csv, html, json, re, sys, time, urllib.request
 
-UA = {"User-Agent": "Mozilla/5.0 CourtConnect-research"}
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # shared helpers in ingestion/
+from useragent import HEADERS as UA
 get = lambda u: urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=30).read().decode("utf-8", "ignore")
 urls = sorted(set(re.findall(r"<loc>(https://www\.24hourfitness\.com/gyms/[a-z0-9-]+-(?:ca|nv)/[a-z0-9-]+)</loc>", get("https://www.24hourfitness.com/sitemap.xml"))))
 w = csv.writer(open(sys.argv[1], "w", newline="", encoding="utf-8"))
