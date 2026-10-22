@@ -6,7 +6,22 @@
 <title>CourtConnect CalNeva</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
-<meta name="description" content="Find where to play racket sports in California and Nevada (Nevada data coming soon): tennis, pickleball, padel, beach tennis and more, with honest notes on how complete the data is.">
+<meta name="description" content="Find where to play racket sports in California and Nevada: tennis, pickleball, padel, beach tennis and more, with honest notes on how complete the data is.">
+<!-- Pages URL appears here and in og:url / og:image: update all three when the repo is renamed (roadmap item 1). -->
+<link rel="canonical" href="https://abov.github.io/courtconnect-ca/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CourtConnect CalNeva">
+<meta property="og:title" content="CourtConnect CalNeva: where to play racket sports in California + Nevada">
+<meta property="og:description" content="Tennis, pickleball, padel, squash, badminton and more on one map, with honest notes on how complete the data is. Links out; no bookings or payments.">
+<meta property="og:url" content="https://abov.github.io/courtconnect-ca/">
+<meta property="og:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CourtConnect CalNeva logo: a racket with a map pin. Where to play racket sports in California and Nevada.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CourtConnect CalNeva: where to play racket sports in California + Nevada">
+<meta name="twitter:description" content="Tennis, pickleball, padel, squash, badminton and more on one map, with honest notes on how complete the data is.">
+<meta name="twitter:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V" crossorigin="anonymous">
 <style>
   :root {
@@ -309,12 +324,22 @@ if (ANALYTICS_ON) {
   const sc = document.createElement("script");
   sc.async = true; sc.src = "https://gc.zgo.at/count.js";
   sc.dataset.goatcounter = "https://" + GOATCOUNTER_CODE + ".goatcounter.com/count";
+  sc.addEventListener("load", () => trackRef());
   document.head.appendChild(sc);
 }
 // Events carry a short name only: never a venue name, location, search text or anything a visitor typed.
 const REPORT_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSf7BNf7oofeJxalLGwuWRXvZHhjQJkTqFsHFuZvJQ_foHTHyQ/viewform";   // community report form (Google Form, no sign-in): docs/community_reports_plan.md
 function track(name, title) {
   try { if (ANALYTICS_ON && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: "event/" + name, title: title || name, event: true}); } catch (e) { /* analytics must never break the map */ }
+}
+// Which shared link brought the visitor: ?ref=reddit-pickleball logs the event "ref/reddit-pickleball". Only an allowlisted
+// source (plus an optional short community tag) is kept; anything else is ignored. GoatCounter also reads ?ref= as the referrer.
+const REF_RE = /^(reddit|fb|ig|wa|x|nd|hn|tt|nl|sms|friend)(-[a-z0-9-]{1,20})?$/;
+function trackRef() {
+  try {
+    const ref = (new URLSearchParams(location.search).get("ref") || "").toLowerCase();
+    if (REF_RE.test(ref)) track("ref/" + ref, "ref " + ref);
+  } catch (e) { /* ignore */ }
 }
 document.addEventListener("click", ev => {
   const a = ev.target.closest && ev.target.closest("a[href]");
