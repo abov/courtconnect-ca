@@ -1,0 +1,5 @@
+# 2026-10-21 Access leads, second 10
+
+Read 10 open `*-access` leads in the browser pane (their sites are JS apps or blocked a plain fetch). 7 resolved as `manual_venues.csv` rows merged into their existing pins (all within 20 m): Canon Swim and Tennis, Rancho Colorados, Harbor Point, Chabot Canyon, Marin TC, Bakersfield RC = members (inferred where the page says so); Pebble Beach Beach & Tennis Club = club (members and resort guests). Left open with notes: Lomas Santa Fe CC (own site says private, but 4 pins up to 1.5 km apart need imagery to pick the club's courts), Valley Vista RC (empty CourtReserve page), Mission Viejo S&R (no text).
+Next: the remaining ~27 open access leads; most have no own site in the data (Burlingame, Menlo, Riviera, Wilshire, Coto de Caza, Fairbanks Ranch: menlocc.org and fairbanksranchcc.com refused in the browser pane).
+Gotcha: `manual_venues.csv` checks out with CRLF; appending LF rows makes DuckDB's CSV sniffer fail. Keep one line ending in the working copy (git stores LF).
