@@ -1,6 +1,6 @@
 # Usage analysis with GoatCounter
 
-How to turn the anonymous counts (ADR 0013) into decisions. Counts are directional: ad blockers and Do Not Track hide some visits, there are no per-visitor funnels, and your own visits count until you exclude your IP (GoatCounter -> Settings -> Ignore IPs).
+How to turn the anonymous counts (ADR 0013) into decisions. Counts are directional: ad blockers and Do Not Track hide some visits, there are no per-visitor funnels, and your own visits count until you exclude them (per browser and device: add `#toggle-goatcounter` to the live URL once, see `docs/feedback_round.md`; or GoatCounter -> Settings -> Ignore IPs).
 
 ## Run it
 1. One-off: GoatCounter -> Settings -> API -> create a token with "View statistics" only, put it in `.env` as `GOATCOUNTER_API_TOKEN`.

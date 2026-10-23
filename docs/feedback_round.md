@@ -3,7 +3,7 @@
 Goal: learn whether CourtConnect helps people find a place to play, watch or find people to play with, and what is missing, before choosing between staying personal, open source or a paid layer. Output: a ranked backlog (`docs/feedback_findings.md`) and real numbers for `docs/case_study.md`. Dates are TBD (owner picks the start; the round is 2 weeks).
 
 ## Owner checklist before sending
-- [ ] GoatCounter (ADR 0013, site `courts`, https://courts.goatcounter.com): add your own IP under Settings > Ignore IPs. Date done: ____. Do not quote usage numbers from before it.
+- [ ] GoatCounter (ADR 0013, site `courts`, https://courts.goatcounter.com): exclude your own visits: open the live site once on each device and browser you use (laptop, phone) with `#toggle-goatcounter` added to the address, e.g. `https://abov.github.io/courtconnect-ca/#toggle-goatcounter`; GoatCounter then says tracking is disabled in that browser (it sets a local flag, so it survives changing IP; visit the same link again to turn counting back on); optionally also add your home IP under Settings > Ignore IPs (it changes, and a phone on mobile data uses another one). Date done: ____ (laptop), ____ (phone). Do not quote usage numbers from before it.
 - [ ] Write the start date and the baseline from `docs/data_quality.md` (venues, named %, events) at the top of `feedback_findings.md`.
 - [ ] Open the live map on your phone once and check the invite steps still match the screens (mode names Play / Watch, "Suggest a change" in the popup).
 - [ ] Hard-refresh after the last deploy (Pages caches up to 10 minutes).
