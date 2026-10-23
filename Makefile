@@ -86,6 +86,9 @@ usage:            ## export GoatCounter daily counts and print the usage metrics
 	$(PY) ingestion/extract_goatcounter.py
 	$(PY) ingestion/goat_report.py $(ARGS)
 
+market-snapshot:  ## append today's venue counts (city x sport) to docs/market_snapshots.csv; run once per refresh after dbt build
+	$(PY) ingestion/snapshot_market.py
+
 sync-reports:     ## import approved community-form reports (Google Form) as seed edits; needs REPORTS_CSV_URL in .env
 	$(PY) ci/sync_reports.py $(ARGS)
 

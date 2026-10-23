@@ -775,3 +775,35 @@ models:
 
   - name: mart_venue_leads
     description: Open research leads (claims we have not confirmed, such as whether a club is members only). Leads are never shown as facts on the map.
+
+  - name: mart_market_gaps
+    description: >
+      One row per (city, sport) for every city with a mapped racket venue: venues in the city, venues within 15 miles of the city point, nearest venue,
+      and a gap_status. INFERRED from known venues only (undercounts private clubs); the city point is the average of its venues, distances are
+      straight-line. Read gap_status together with sport_coverage_status: for a sparse sport a gap may be missing data. No population yet.
+    columns:
+      - name: gap_status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['served', 'nearby', 'no_venue_within_15mi']
+      - name: confirmation
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['inferred']
+
+  - name: mart_venue_neighbors
+    description: Per (venue, directly listed sport), how many other venues with the same sport are within 5 and 15 miles (straight-line). INFERRED; known venues only.
+    columns:
+      - name: venue_id
+        tests: [not_null]
+      - name: same_sport_venues_15mi
+        tests: [not_null]
+
+  - name: mart_venue_nearby_sports
+    description: Per venue, the sports it is not listed for that other venues offer within 15 miles (count, nearest). Absence of a row means none within 15 miles in our data. INFERRED.
+    columns:
+      - name: venue_id
+        tests: [not_null]
