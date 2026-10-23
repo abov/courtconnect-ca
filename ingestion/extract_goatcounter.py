@@ -36,13 +36,16 @@ def fetch(token: str, start: date, end: date) -> list[dict]:
     rows: list[dict] = []
     exclude: list[int] = []
     while True:
-        params = {"start": start.isoformat(), "end": end.isoformat(), "limit": PAGE, "group": "day"}
+        # the API wants RFC 3339 times rounded to the hour; a bare date answered 404
+        params = {"start": start.isoformat() + "T00:00:00Z", "end": end.isoformat() + "T23:00:00Z", "limit": PAGE, "group": "day"}
         if exclude:
             params["exclude_paths"] = ",".join(map(str, exclude))
         r = requests.get(url, headers=headers, params=params, timeout=30)
         if r.status_code == 429:   # rate limited: wait and retry the same page
             time.sleep(float(r.headers.get("X-Rate-Limit-Reset", "5")) + 1)
             continue
+        if r.status_code == 404 and exclude:   # a page with every path already excluded: that was the last one
+            return rows
         r.raise_for_status()
         body = r.json()
         hits = body.get("hits", [])
