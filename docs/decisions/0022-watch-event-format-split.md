@@ -1,6 +1,6 @@
 # 0022. Watch events: on-site vs screening, using the format values we already have
 
-Date: 2026-10-23. Status: proposed. Builds ADR 0006 (watch events) and ADR 0021 (Watch & Social view); same link-out rules as ADR 0009 and 0012.
+Date: 2026-10-23. Status: accepted (owner, 2026-10-23). Builds ADR 0006 (watch events) and ADR 0021 (Watch & Social view); same link-out rules as ADR 0009 and 0012.
 
 ## Context
 CLAUDE.md's "After beta" list says: split watch events into on-site vs `screening` (watch parties, dome screenings such as Cosm, broadcast-only), with a new `watch_format` value, an accepted_values test and a popup label.
@@ -29,7 +29,7 @@ Recommended: **keep the six existing values; do not add a seventh `screening` va
 - **Separate map layer / toggle.** Right if screenings grow past a handful and users want them hidden. With zero rows today it is guesswork; revisit with beta findings.
 
 ## Consequences
-- No seed, model or schema change for the group; one small singular-test addition and one popup line in `app/index.html` (a later PR, not this one; this ADR changes docs only).
+- No seed, model or schema change for the group; one small singular-test addition and one popup line in `app/index.html` (done in the same PR).
 - Cosm and watch-party rows can be added as soon as a dated public listing exists, with the same evidence rules as other watch rows (`verified_on` + `source_note`, 35-day freshness SLA).
 - Risk: a screening pin looks like a place to play. Mitigated by the popup line and the badge; checked in the beta round.
-- CLAUDE.md "After beta" line should become: "Watch events, screenings (ADR 0022, proposed): keep the six `watch_format` values, popup line 'Shown on a screen here; not played at this venue', one test for screening rows; then add Cosm LA rows only when a dated public listing exists."
+- CLAUDE.md "After beta" line should become: "Watch events, screenings (ADR 0022, done): keep the six `watch_format` values, popup line 'Shown on a screen here; not played at this venue', one test for screening rows; then add Cosm LA rows only when a dated public listing exists."
