@@ -88,7 +88,6 @@
   .badge.i { color: var(--warn); border-color: var(--warn); }
   .seg { display: flex; gap: 6px; margin-top: 10px; }
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
-  .seg .chip#modePlay { flex: 2 1 auto; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
   #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
   body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
@@ -192,6 +191,8 @@
     #list { overflow: visible; flex: none; }
     .controls { padding: 10px 14px; gap: 8px; }
     .seg .chip { flex: 1; padding: 6px 4px; font-size: 13px; }
+    /* iOS Safari zooms the page when a field under 16px gets focus */
+    select, input[type=search] { font-size: 16px; }
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
     .legend, .mapkey, .welcome { display: none; }
