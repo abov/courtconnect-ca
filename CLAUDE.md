@@ -1,7 +1,7 @@
 # CourtConnect CalNeva
 
 Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB, the only warehouse) -> static MapLibre map in `app/`.
-README.md has the full story; read it only if you need background. Mission (ADR 0015): help people find every place to play or watch racket sports in CA + NV, discover sports beyond pickleball (tennis stays visible), and get together to play. Long-term goal: run itself with as little human review as possible, AI agents doing the work behind automated gates (see "After beta").
+README.md has the full story; read it only if you need background. Mission (ADR 0015): one map for every racket sport in CA + NV: find a court, watch a match, try a new sport, and find people to play with. Long-term goal: run itself with as little human review as possible, AI agents doing the work behind automated gates (see "After beta").
 Decisions are in `docs/decisions/` (ADRs 0001-0021, all accepted except 0001, superseded by 0018; one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
