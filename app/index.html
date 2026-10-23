@@ -391,6 +391,16 @@ const REPORT_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSf7BNf7oofeJxalLGw
 function track(name, title) {
   try { if (ANALYTICS_ON && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: "event/" + name, title: title || name, event: true}); } catch (e) { /* analytics must never break the map */ }
 }
+// The detail goes in the event PATH (event/<name>/<detail>), not only the title, so every value counts as its own row in GoatCounter and in the export.
+// Details are fixed vocabularies (sport names, filter keys, domains, link kinds), never anything typed.
+function trackD(name, detail) { track(name + "/" + String(detail).toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40), detail); }
+// A pick (sport or filter) that leaves nothing on the map: where people look vs what we have.
+function trackEmpty() {
+  try {
+    const none = state.mode === "play" ? !current.length && !wallsFiltered().length : !viewEv.length && !viewSoc.length;
+    if (none) trackD("empty-" + state.mode, state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "any sport");
+  } catch (e) { /* ignore */ }
+}
 // Which shared link brought the visitor: ?ref=reddit-pickleball logs the event "ref/reddit-pickleball". Only an allowlisted
 // source (plus an optional short community tag) is kept; anything else is ignored. GoatCounter also reads ?ref= as the referrer.
 const REF_RE = /^(reddit|fb|ig|wa|x|nd|hn|tt|nl|sms|friend)(-[a-z0-9-]{1,20})?$/;
@@ -408,7 +418,14 @@ document.addEventListener("click", ev => {
   if (u.hostname === "github.com" && u.pathname.includes("/issues/new")) track("suggest-change");
   else if (u.hostname === "docs.google.com" && u.pathname.includes("/forms/")) track("report-form");
   else if (u.hostname.endsWith("openstreetmap.org")) track("osm-edit");
-  else track("linkout", u.hostname.replace(/^www\./, ""));   // domain only, so we learn which providers get used
+  else {
+    const host = u.hostname.replace(/^www\./, "");
+    track("linkout", host);   // domain only, so we learn which providers get used; the north-star total stays this one path
+    // The rows below break it down by domain, kind of link and the sport filter that was active (fixed vocabularies, never a venue).
+    trackD("linkout-domain", host);
+    if (a.dataset.kind) trackD("linkout-kind", a.dataset.kind);
+    if (typeof state !== "undefined" && state.sport >= 0 && sports[state.sport]) trackD("linkout-sport", sports[state.sport].n);
+  }
 });
 const SURF = {indoor: 1, outdoor: 2, sand: 4, clay: 8, grass: 16, hard: 32, turf: 64};
 const QNAME = {c: "Name confirmed", p: "Listed business", i: "Name guessed from nearby park or school", u: "No name known"};
@@ -583,8 +600,8 @@ function eventNode(ev) {
   if (ev.t) box.append(el("p", {text: ev.t}));
   const row = el("div", {class: "btnrow"});
   const info = ev.u ? safeUrl(ev.u) : "", tix = ev.k ? safeUrl(ev.k) : "";
-  if (tix) row.append(el("a", {class: "btn primary", href: tix, target: "_blank", rel: "noopener noreferrer", text: "Tickets"}));
-  if (info) row.append(el("a", {class: "btn", href: info, target: "_blank", rel: "noopener noreferrer", text: "Event page"}));
+  if (tix) row.append(el("a", {class: "btn primary", href: tix, "data-kind": "tickets", target: "_blank", rel: "noopener noreferrer", text: "Tickets"}));
+  if (info) row.append(el("a", {class: "btn", href: info, "data-kind": "event-page", target: "_blank", rel: "noopener noreferrer", text: "Event page"}));
   box.append(row);
   box.append(el("p", {class: "meta", text: "Checked " + fmtDate(ev.vo, {month: "short", day: "numeric"})}));
   return box;
@@ -645,8 +662,8 @@ function socialDetails(s) {                                              // ever
   const parts = [], bits = [s.sl, s.pi, s.ll ? "Listed through " + fmtDate(s.ll, {month: "short", day: "numeric"}) : ""].filter(Boolean);
   if (bits.length) parts.push(el("p", {class: "meta", text: bits.join(" · ")}));
   const row = el("div", {class: "btnrow"}), signup = s.g ? safeUrl(s.g) : "", info = s.u ? safeUrl(s.u) : "";
-  if (signup) row.append(el("a", {class: "btn primary", href: signup, target: "_blank", rel: "noopener noreferrer", text: "Sign up"}));
-  if (info) row.append(el("a", {class: "btn", href: info, target: "_blank", rel: "noopener noreferrer", text: "Details"}));
+  if (signup) row.append(el("a", {class: "btn primary", href: signup, "data-kind": "signup", target: "_blank", rel: "noopener noreferrer", text: "Sign up"}));
+  if (info) row.append(el("a", {class: "btn", href: info, "data-kind": "details", target: "_blank", rel: "noopener noreferrer", text: "Details"}));
   parts.push(row, el("p", {class: "meta", text: "Checked " + fmtDate(s.vo, {month: "short", day: "numeric"}), title: "Found on " + (SOCIAL_SRC[s.sk] || s.sk)}));
   return parts;
 }
@@ -974,7 +991,7 @@ function venueNode(v) {
   if (v.o && !noPrograms()) plays.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
   if (v.ru) plays.append(el("p", {}, el("b", {text: "Notes: "}), document.createTextNode(v.ru)));
   const url = v.w ? safeUrl(v.w) : "";
-  if (url) go.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
+  if (url) go.append(el("p", {}, el("a", {href: url, "data-kind": "website", target: "_blank", rel: "noopener noreferrer", text: "Website"})));
   go.append(directionsNode(v.y, v.x, v.n, false));
   go.append(shareNode(v));
   if (v.ac && v.ac.length && !noPrograms()) {
@@ -983,7 +1000,7 @@ function venueNode(v) {
       const href = safeUrl(aurl); if (!href) continue;
       const when = st ? fmtRange({s: st, e: en}) : "";
       const sub = [ACTION[type] || type, when, price].filter(Boolean).join(" · ");
-      join.append(el("a", {class: "act", href, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(title), el("span", {class: "sub", text: (PROVIDER[provider] || provider) + " · " + sub})));
+      join.append(el("a", {class: "act", href, "data-kind": "act-" + String(type).replace(/[^a-z0-9-]/gi, "").slice(0, 20), target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(title), el("span", {class: "sub", text: (PROVIDER[provider] || provider) + " · " + sub})));
     }
     box.append(join);
   }
@@ -1104,7 +1121,7 @@ async function runSearch(zoom, open) {
     try {
       const z = await zipPoint(zq);
       if (my !== searchRun) return;
-      if (!z) { textOff = true; note = "ZIP " + zq + " is outside California and Nevada."; }
+      if (!z) { textOff = true; note = "ZIP " + zq + " is outside California and Nevada."; trackD("search-miss", "zip-outside"); }
       else {
         const c = {lat: z.at[0], lng: z.at[1]}; searchCentre = c; maxZoom = play ? 13 : 9;
         let pool = pins(), lead = "";
@@ -1131,9 +1148,10 @@ async function runSearch(zoom, open) {
       else if (pl && !pl.typo || pl && !city) {
         const c = {lat: pl.p[2], lng: pl.p[3]}; searchCentre = c; maxZoom = play ? 11 : 8; pts = [{x: c.lng, y: c.lat}];
         note = noVenueNote(q, pl, pins(), c, play);
+        trackD("search-miss", "place-no-" + (play ? "venues" : "events"));   // a real place with nothing listed: the coverage gap
       }
       else if (city) { pts = all.filter(x => x.c === city); note = "No match for “" + q + "”. Showing " + city + ", the closest name."; }
-      else note = "No match for “" + q + "”. Try a city, a venue name or a ZIP code.";
+      else { note = "No match for “" + q + "”. Try a city, a venue name or a ZIP code."; trackD("search-miss", "no-match"); }
     }
   }
   refresh();
@@ -1393,7 +1411,7 @@ function showWallNote() {
 }
 function setMode(m) {
   if (state.mode === m) return;
-  state.mode = m; populateSports(); syncControls(); applyMode(true);
+  state.mode = m; trackD("mode", m); populateSports(); syncControls(); applyMode(true);
   if (state.text) runSearch(true);
 }
 function initControls() {
@@ -1401,7 +1419,7 @@ function initControls() {
   populateSports();
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
-  sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); if (state.text) runSearch(true); else { refresh(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
+  sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
   $("q").addEventListener("keydown", e => {   // Enter: search now (a single venue also opens its popup) and close the phone keyboard
@@ -1410,9 +1428,11 @@ function initControls() {
   });
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
     const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); reSearch(false);
+    if (state.on.has(k)) { trackD("filter", k); if (!state.text) trackEmpty(); }
   });
     for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
     const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); reSearch(false);
+    if (state.offers.has(k)) { trackD("filter", "offer-" + k); if (!state.text) trackEmpty(); }
   });
   $("listtoggle").addEventListener("click", () => {
     const off = $("panel").classList.toggle("listoff");

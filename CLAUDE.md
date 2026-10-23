@@ -11,6 +11,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0021, all accepted except 0001, su
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
 - `make sync-reports`   import owner-approved community-form reports as seed edits (needs `REPORTS_CSV_URL` in `.env`; `ARGS=--dry-run` previews)
 - `make issues`     read-only check of open GitHub issues (missing info, already in seeds, duplicates, waiting); runbook step 2b
+- `make usage`      export GoatCounter counts and print the usage metrics + sport demand vs coverage (needs `GOATCOUNTER_API_TOKEN` in `.env`; `docs/goat_analysis.md`)
 - `make report`     regenerate `docs/coverage_snapshot.md`
 
 ## Rules
