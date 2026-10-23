@@ -19,3 +19,7 @@ Built from a fresh pull of the sheet (81 sports, rows 2-82). The sheet changed u
 - `docs/sheet_paste_low_confidence.csv`: 19 low-confidence proposals, not recommended without checking.
 
 Not paste-ready: the three sheet years that disagree with the one source found (Knuckle Racket, Eclipseball, 360Ball). Repo follow-up: the sheet's Basque Pelota rename means seeds, aliases and `EXPECTED_SPORTS` (76) need checking at the next `make sync-sports`.
+
+## Written to the sheet (2026-10-22)
+
+With the Google Sheets connector on, wrote the blank cells only, one cell at a time, matched by Sport name and checked by reading the range back. 12 cells written: url for Australian Racquetball (P20), Downside Ball Game (P30), Paleta frontón (P33), Road Tennis (P34), Jokari (P47), Outdoor Racquetball (P54), Pang Pong (P55), Pitton (P56), Qianball (P58), Taiji Bailong (P72), Totem Tennis (P77); Rules for Smolball (Q65). The other 7 of the 19 high/medium cells (Org and Active Loc for Outdoor Racquetball, Qianball, Taiji Bailong, 360Ball, Shuttleball) had already been filled with the same values by someone else, so nothing was overwritten. The 19 low-confidence proposals and the three year conflicts (Knuckle Racket, Eclipseball, 360Ball) were not written. Next `make sync-sports` will pick these up; check the Basque Pelota rename then.
