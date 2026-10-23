@@ -536,6 +536,7 @@ function filtered() {
 // ---------- watch events (link-out discovery, never booking) ----------
 const FORMAT = {in_person_ticketed: "Tickets required", in_person_free: "Free to watch", in_person_unconfirmed: "Check ticket access",
                 watch_party: "Watch party", dome_screening: "Dome screening", broadcast_only: "Broadcast only"};
+const SCREENING = new Set(["watch_party", "dome_screening", "broadcast_only"]);   // shown on a screen, not played at the pin (ADR 0022)
 const LEVEL = {pro: "Pro", college: "College", amateur: "Amateur", junior: "Junior", exhibition: "Exhibition"};
 function todayIso() { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
 const isUpcoming = ev => !ev.e || ev.e >= todayIso();                   // recomputed in the browser, so a stale deploy still hides past events
@@ -563,6 +564,7 @@ function eventNode(ev) {
   box.append(el("p", {}, el("b", {text: fmtRange(ev)})));
   const cityPin = /city/.test(ev.pr);
   box.append(el("p", {class: "meta", text: (cityPin ? ev.c + " · venue TBA (pin shows the city)" : ev.v + ", " + ev.c)}));
+  if (SCREENING.has(ev.f)) box.append(el("p", {class: "meta", text: "Shown on a screen here; not played at this venue."}));
   if (ev.t) box.append(el("p", {text: ev.t}));
   const row = el("div", {class: "btnrow"});
   const info = ev.u ? safeUrl(ev.u) : "", tix = ev.k ? safeUrl(ev.k) : "";
