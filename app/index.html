@@ -64,7 +64,10 @@
   button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
   button.link:hover { text-decoration: underline; }
   #listbar { display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--line); }
-  #listbar #listtoggle { flex: none; margin: 6px 14px 0 0; font-size: 12.5px; }
+  #listbar .barlinks { flex: none; display: flex; align-items: center; margin: 4px 8px 0 0; }
+  #listbar .link { padding: 4px 6px; font-size: 12.5px; }
+  @media (max-width: 360px) { #listbar .barlinks { flex-direction: column; align-items: flex-end; } }   /* narrow phones: stacked, so the count text keeps its width */
+  #mapkey { border-bottom: 1px solid var(--line); } #mapkey .legend { padding-bottom: 4px; } #mapkey .legend:last-child { padding-bottom: 8px; }
   #panel.listoff #list { display: none; }
   #count { flex: 1; padding: 8px 16px; font-size: 12.5px; color: var(--muted); }
   #count b { color: var(--text); }
@@ -81,7 +84,6 @@
   .sico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
   .sico svg .f { fill: currentColor; stroke: none; }
   .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > div { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
-  .mapkey > summary { padding: 6px 16px; } .mapkey .legend { padding-top: 0; }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
@@ -89,6 +91,9 @@
   .seg { display: flex; gap: 6px; margin-top: 10px; }
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
+  #list li.thisweek { background: color-mix(in srgb, var(--accent) 6%, var(--panel)); } #list li.thisweek .lh2 { margin: 0; padding: 8px 16px 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+  #list li.thisweek button { padding-top: 6px; padding-bottom: 6px; } #list li.thisweek .nm, #list li.thisweek .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #list li.thisweek button + button { border-top: 1px solid var(--line); }
   #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
   body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
@@ -122,10 +127,11 @@
   .maplibregl-popup-content .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
   .maplibregl-popup-content a.btn { display: inline-block; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); transition: background-color var(--ease), opacity var(--ease); color: var(--accent); text-decoration: none; font-weight: 600; }
   .maplibregl-popup-content a.btn.primary { background: var(--accent); color: var(--on-accent); }
+  .maplibregl-popup-content .sharerow { margin: 6px 0 0; display: flex; align-items: center; gap: 8px; }
+  .maplibregl-popup-content button.share { font: inherit; font-weight: 600; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; transition: background-color var(--ease); }
+  .maplibregl-popup-content button.share:hover { background: var(--hover); }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); padding: 6px 16px 10px; }
   .legend[hidden] { display: none; }
-  .ringkey { display: none; }   /* phones only: the map key is hidden there, so the two ring pins get a one-line key */
-  body.watch .ringkey { display: none; }
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
@@ -170,6 +176,29 @@
   #list li.empty p { margin: 0 0 12px; }
   #list li.empty button { display: inline-block; width: auto; padding: 6px 16px; min-height: 34px; border: 1px solid var(--accent); border-radius: var(--r-pill); color: var(--accent); background: var(--chip); font: inherit; font-weight: 600; cursor: pointer; }
   #list li.empty button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* Focus helpers for easily distracted visitors (docs/product_brief.md, PR 3): a shortlist to park places in, a nudge back after a link-out, Focus mode (5 places at a time, extras hidden). */
+  .tools { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .tools .chip { font-size: 12.5px; min-height: 30px; padding: 3px 10px; }
+  .badge.sv { background: var(--hi); border-color: var(--hi); color: var(--on-hi); font-weight: 600; }
+  .maplibregl-popup-content .sharerow { flex-wrap: wrap; }
+  #shortlist { border-bottom: 1px solid var(--line); padding: 8px 16px 10px; }
+  #shortlist[hidden], #toast[hidden], #resume[hidden] { display: none; }
+  #shortlist h3 { margin: 0 0 4px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  #shortlist ul { list-style: none; margin: 0; padding: 0; }
+  #shortlist li { display: flex; align-items: center; gap: 4px; border-bottom: 1px solid var(--line); }
+  #shortlist .sl-open { all: unset; flex: 1; min-width: 0; padding: 7px 0; cursor: pointer; }
+  #shortlist .sl-open:hover .nm { text-decoration: underline; }
+  #shortlist .sl-open:focus-visible, #shortlist .sl-rm:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  #shortlist .sl-rm { font: inherit; font-size: 18px; line-height: 1; min-width: 32px; min-height: 32px; border: 0; background: none; color: var(--muted); cursor: pointer; border-radius: var(--r-sm); }
+  #shortlist .sl-rm:hover { color: var(--bad); background: var(--hover); }
+  #shortlist .sharerow { margin: 8px 0 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  #resume { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #toast { position: fixed; top: 12px; left: 0; right: 0; margin: 0 auto; width: min(92vw, 420px); z-index: 6; background: var(--bg); color: var(--text);
+           border: 2px solid var(--hi); border-radius: var(--r-md); box-shadow: var(--shadow); padding: 10px 14px; animation: pop var(--ease); }
+  #toast .chips { margin-top: 8px; }
+  body.focus:not(.watch) .sportinfo, body.focus:not(.watch) #anywhere, body.focus:not(.watch) #moreFilters, body.focus:not(.watch) #clearrow,
+  body.focus:not(.watch) .welcome, body.focus:not(.watch) #count { display: none; }
+  body.focus:not(.watch) #listbar .barlinks { margin-left: auto; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
   /* Desktop: the header, filters, legend and footer used to fill the panel and squeeze the venue list to 0-2 rows.
      The list now keeps room for about 5 rows and the panel scrolls when the window is shorter than that;
@@ -195,8 +224,8 @@
     select, input[type=search] { font-size: 16px; }
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
-    .legend, .mapkey, .welcome { display: none; }
-    .ringkey { display: flex; padding: 0 14px 6px; }
+    .welcome { display: none; }
+    #mapkey .legend { padding-left: 14px; padding-right: 14px; }
     /* phones: the popup is a bottom sheet over the list, so it fits without scrolling inside the small map and the pin stays in view above it */
     .maplibregl-popup { position: fixed !important; top: auto !important; bottom: 0; left: 0; right: 0; transform: none !important; max-width: none !important; z-index: 5; }
     .maplibregl-popup-tip { display: none; }
@@ -218,11 +247,16 @@
       <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice, and apps to find people to play with">Places to play</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Events &amp; meetups</button>
     </div>
+    <div class="tools playonly" role="group" aria-label="Stay on track">
+      <button class="chip" id="shortlistToggle" type="button" aria-expanded="false" aria-controls="shortlist" title="Places you saved, kept in this browser only">&#9733; Shortlist (0)</button>
+      <button class="chip" id="focusToggle" type="button" aria-pressed="false" title="Show 5 places at a time and hide the extras, so there is less to read">Focus mode</button>
+    </div>
   </header>
 
   <div id="active" class="chips playonly" role="group" aria-label="Active filters" hidden></div>
 
   <div class="controls">
+    <p id="resume" class="note" role="status" hidden></p>
     <div>
       <label class="l" for="sport">Sport</label>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
@@ -274,15 +308,12 @@
     </div>
     </details>
     <details id="sportinfo" class="note sportinfo" hidden><summary id="sportinfo-t"></summary><div id="sportinfo-b"></div></details>
-    <div class="row playonly"><button class="link" id="reset" type="button">Clear filters</button></div>
+    <div class="row playonly" id="clearrow"><button class="link" id="reset" type="button">Clear filters</button></div>
   </div>
 
-  <div id="listbar"><div id="count" aria-live="polite"></div><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div>
-  <div class="legend ringkey" aria-label="Ring pins"><span><span class="dot soon"></span>Opening soon</span><span><span class="dot rep"></span>Reported, unconfirmed</span></div>
-  <ul id="list"></ul>
-  <details class="mapkey playonly">
-    <summary>Map key</summary>
-    <div class="legend" aria-label="Map legend">
+  <div id="listbar"><div id="count" aria-live="polite"></div><div class="barlinks"><button class="link playonly" id="keytoggle" type="button" aria-expanded="false" aria-controls="mapkey">Map key</button><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div></div>
+  <div id="mapkey" class="playonly" hidden>
+    <div class="legend" aria-label="Pin colours and rings">
       <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
       <span><span class="dot" style="background:var(--pin-p)"></span>Listed business</span>
       <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
@@ -290,18 +321,22 @@
       <span><span class="dot soon"></span>Opening soon (not open yet)</span>
       <span><span class="dot rep"></span>Reported opening soon (unconfirmed)</span>
     </div>
-  </details>
-  <div class="legend playlegend" id="wallLegend" aria-label="Hitting wall legend" hidden>
-    <span>Hitting walls:</span>
-    <span><span class="dot" style="background:var(--pin-c)"></span>Confirmed</span>
-    <span><span class="dot" style="background:var(--pin-p)"></span>Reported by a player</span>
-    <span><span class="dot" style="background:var(--pin-i)"></span>From OpenStreetMap tags, unchecked</span>
-    <span><span class="dot" style="background:var(--pin-u)"></span>Restricted access</span>
+    <div class="legend playlegend" id="wallLegend" aria-label="Hitting wall legend" hidden>
+      <span>Hitting walls:</span>
+      <span><span class="dot" style="background:var(--pin-c)"></span>Confirmed</span>
+      <span><span class="dot" style="background:var(--pin-p)"></span>Reported by a player</span>
+      <span><span class="dot" style="background:var(--pin-i)"></span>From OpenStreetMap tags, unchecked</span>
+      <span><span class="dot" style="background:var(--pin-u)"></span>Restricted access</span>
+    </div>
   </div>
+  <div id="shortlist" class="playonly" aria-label="Your shortlist" hidden></div>
+  <ul id="list"></ul>
   <footer><div id="stats"></div><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
 
 <main id="map" aria-label="Map of racket-sport venues in California and Nevada"></main>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
 
 <dialog id="coverage" aria-labelledby="covTitle">
   <div class="dlg-h"><h2 id="covTitle">How complete is this data?</h2><button class="link" id="closeCoverage" type="button">Close</button></div>
@@ -369,7 +404,8 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
 let DATA, sports, venues, events = [], socials = [], socialPins = [], walls = [], platforms = [];
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
 const $ = id => document.getElementById(id);
-let textOff = false, searchCentre = null, zips = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
+let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
+let textOff = false, searchCentre = null, zips = null, places = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
   const e = document.createElement(tag);
@@ -379,6 +415,87 @@ function el(tag, props, ...kids) {
 }
 function safeUrl(u) { try { const x = new URL(u.includes("//") ? u : "http://" + u); return /^https?:$/.test(x.protocol) ? x.href : ""; } catch { return ""; } }
 const fmt = n => n.toLocaleString("en-US");
+
+// ---------- focus helpers: for visitors who get distracted easily (docs/product_brief.md, PR 3) ----------
+// Shortlist (park a place instead of opening another tab), a nudge back after a link-out, Focus mode (5 places at a time), and "pick up where you left off".
+// Everything stays in this browser (localStorage in try/catch: with storage blocked the page works, it just forgets). No accounts, streaks or reminders:
+// the aim is to help someone finish choosing a place and leave with a plan, not to hold them here.
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("cc." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("cc." + k, JSON.stringify(v)); } catch { /* storage blocked: this visit still works */ } },
+};
+const SHORT_MAX = 30, FOCUS_STEP = 5, AWAY_MS = 4000;
+const byId = {};   // map id -> venue, filled at boot (a saved id whose venue was removed since is skipped)
+let shortIds = (a => Array.isArray(a) ? a.filter(x => typeof x === "string").slice(0, SHORT_MAX) : [])(store.get("shortlist", []));
+let focusMode = store.get("focus", false) === true, focusShown = FOCUS_STEP, lastOut = null, leftAt = 0;
+const isSaved = v => shortIds.includes(v.i);
+const saveLabel = b => { const on = shortIds.includes(b.dataset.id); b.textContent = on ? "★ Saved" : "☆ Save to shortlist"; b.setAttribute("aria-pressed", String(on)); };
+function toggleSaved(v) {
+  if (isSaved(v)) shortIds = shortIds.filter(i => i !== v.i);
+  else if (shortIds.length >= SHORT_MAX) return false;
+  else { shortIds.push(v.i); track("shortlist-add"); }
+  store.set("shortlist", shortIds); syncShortlist(); return true;
+}
+function syncShortlist() {
+  $("shortlistToggle").textContent = "★ Shortlist (" + shortIds.filter(i => byId[i]).length + ")";
+  document.querySelectorAll("button.save[data-id]").forEach(saveLabel);   // the popup and nudge buttons follow the list
+  renderShortlist();
+  if (mapReady && state.mode === "play") renderList();   // the "Saved" badge in the list
+}
+function renderShortlist() {
+  const box = $("shortlist"), saved = shortIds.map(i => byId[i]).filter(Boolean);
+  box.replaceChildren(el("h3", {text: "Your shortlist (kept in this browser only)"}));
+  if (!saved.length) { box.append(el("p", {class: "meta", text: "Nothing saved yet. Tap “Save to shortlist” on a place and keep exploring; compare them here instead of opening more tabs."})); return; }
+  const ul = el("ul");
+  for (const v of saved) {
+    const name = v.n || "Unnamed courts" + (v.c ? " in " + v.c : "");
+    const open = el("button", {type: "button", class: "sl-open"}, el("div", {class: "nm", text: name}), el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}));
+    open.addEventListener("click", () => showVenue(v, true));
+    const rm = el("button", {type: "button", class: "sl-rm", "aria-label": "Remove " + name + " from shortlist", title: "Remove", text: "×"});
+    rm.addEventListener("click", () => toggleSaved(v));
+    ul.append(el("li", {}, open, rm));
+  }
+  const copy = el("button", {type: "button", class: "chip", text: "Copy list to send to a friend"}), msg = el("span", {class: "meta", role: "status"});
+  copy.addEventListener("click", async () => {
+    const text = "Places I'm thinking of:\n" + saved.map(v => "- " + (v.n || "Courts") + (v.c ? " (" + v.c + ")" : "") + " " + shareUrl(v)).join("\n");
+    track("shortlist-copy");
+    try { await navigator.clipboard.writeText(text); msg.textContent = "Copied"; setTimeout(() => { msg.textContent = ""; }, 2500); } catch (e) { window.prompt("Copy this list", text); }
+  });
+  box.append(ul, el("p", {class: "sharerow"}, copy, msg));
+}
+function setFocusUI() { document.body.classList.toggle("focus", focusMode); $("focusToggle").setAttribute("aria-pressed", String(focusMode)); }
+function setFocus(on) {
+  focusMode = on; focusShown = FOCUS_STEP; store.set("focus", on); setFocusUI();
+  if (on) track("focus-on");
+  if (mapReady && state.mode === "play") renderList();
+}
+// After a link-out opens in another tab, the way back should be obvious: a small card names the place and offers to save it.
+function hideToast() { clearTimeout(showToast.t); $("toast").hidden = true; }
+function showToast(v) {
+  const t = $("toast"), sv = el("button", {class: "chip save", type: "button", "data-id": v.i}), keep = el("button", {class: "chip", type: "button", text: "Keep looking"});
+  saveLabel(sv); sv.addEventListener("click", () => toggleSaved(v)); keep.addEventListener("click", hideToast);
+  t.replaceChildren(el("div", {class: "nm", text: "Welcome back. You were looking at " + (v.n || "these courts") + "."}),
+    el("div", {class: "meta", text: isSaved(v) ? "It is on your shortlist. Pick up where you left off." : "Save it to your shortlist, then pick up where you left off."}),
+    el("div", {class: "chips"}, sv, keep));
+  t.hidden = false; clearTimeout(showToast.t); showToast.t = setTimeout(hideToast, 30000);
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") { leftAt = Date.now(); return; }
+  if (lastOut && Date.now() - leftAt > AWAY_MS && state.mode === "play") { const v = lastOut; lastOut = null; track("welcome-back"); showToast(v); }
+});
+function hideResume() { $("resume").hidden = true; }
+function showResume() {
+  const n = state.on.size + state.offers.size;
+  const bits = [state.mode === "watch" ? "Events & meetups" : "", state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", state.text ? "“" + state.text + "”" : "", n ? n + (n === 1 ? " filter" : " filters") : ""].filter(Boolean);
+  if (!bits.length) return;
+  const b = el("button", {class: "link", type: "button", text: "Start over"});
+  b.addEventListener("click", () => {
+    hideResume(); store.set("hash", ""); $("reset").click();
+    if (state.mode !== "play") setMode("play"); else if (mapReady) map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
+  });
+  $("resume").replaceChildren(el("span", {text: "Picked up where you left off: " + bits.join(" · ") + "."}), b);
+  $("resume").hidden = false;
+}
 
 // ---------- filtering ----------
 function surfMask() { let m = 0; for (const k of ["sand", "clay", "grass", "hard"]) if (state.on.has(k)) m |= SURF[k]; return m; }
@@ -541,8 +658,24 @@ function renderSocialList(ul) {
   }
   return list;
 }
+// "Coming up next": the 3 earliest-starting dated events still on or ahead, straight from the export (nothing inferred; recurring series have no dates, so they stay in the list below).
+// Only on the unfiltered view: once a sport or search is set, the list below already answers it.
+function renderComingUp(ul) {
+  if (state.sport >= 0 || state.text) return;
+  const next = upcomingEvents().filter(ev => ev.s).sort((a, b) => a.s.localeCompare(b.s) || a.n.localeCompare(b.n)).slice(0, 3);
+  if (!next.length) return;
+  const li = el("li", {class: "thisweek"}, el("p", {class: "lh2", text: "Coming up next"}));
+  for (const ev of next) {
+    const live = ev.s <= todayIso(), when = ev.s.slice(0, 4) === todayIso().slice(0, 4) && (ev.e || ev.s).slice(0, 4) === ev.s.slice(0, 4) ? fmtRange(ev).replace(/, \d{4}/g, "") : fmtRange(ev);   // year only when it is not this year
+    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: ev.n}), el("div", {class: "meta", text: (live ? "On now · " : "") + when + " · " + ev.c}));
+    btn.addEventListener("click", () => { track("this-week-open"); showEvent(ev, true); });
+    li.append(btn);
+  }
+  ul.append(li);
+}
 function renderWatchList() {
   const ul = $("list"); ul.replaceChildren();
+  renderComingUp(ul);
   viewEv = renderEventList(ul); viewSoc = renderSocialList(ul);
   if (!viewEv.length && !viewSoc.length) ul.append(emptyItem("No events or get-togethers match these filters. Try all sports.", "Show all sports"));
   updateCount();
@@ -571,6 +704,25 @@ function directionsNode(y, x, name, approx) {
     a("https://www.google.com/maps/dir/?api=1&destination=" + ll, "Google Maps"), document.createTextNode(" · "),
     a("https://maps.apple.com/?daddr=" + ll + "&q=" + encodeURIComponent(name || "Courts"), "Apple Maps"),
     approx ? document.createTextNode(" (pin is approximate)") : null);
+}
+// Share a place: a link that opens the map on this pin (#venue=<map id>). ?ref=friend (allowlisted above) lets the visit counts show how many visits come from shared links.
+// Phones get the system share sheet; elsewhere the link is copied, and if copying is blocked it is shown in a prompt. Nothing about the visitor is sent anywhere.
+function shareUrl(v) { return location.origin + location.pathname + "?ref=friend#venue=" + encodeURIComponent(v.i); }
+function shareNode(v) {
+  const label = "Share this place", b = el("button", {class: "share", type: "button", text: label}), msg = el("span", {class: "meta", role: "status"});
+  b.addEventListener("click", async () => {
+    const url = shareUrl(v), title = (v.n || "Courts") + (v.c ? ", " + v.c : "");
+    track("share");
+    try {
+      if (navigator.share && matchMedia("(pointer: coarse)").matches) { await navigator.share({title: title + " on CourtConnect", url}); return; }
+      await navigator.clipboard.writeText(url);
+      msg.textContent = "Link copied"; setTimeout(() => { msg.textContent = ""; }, 2500);
+    } catch (e) { if (e.name !== "AbortError") window.prompt("Copy this link", url); }
+  });
+  const sv = el("button", {class: "share save", type: "button", "data-id": v.i});   // park the place instead of opening another tab
+  saveLabel(sv);
+  sv.addEventListener("click", () => { if (!toggleSaved(v)) { msg.textContent = "Shortlist is full (" + SHORT_MAX + "). Remove one first."; setTimeout(() => { msg.textContent = ""; }, 4000); } });
+  return el("p", {class: "sharerow"}, sv, b, msg);
 }
 function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
 function wallNode(w) {
@@ -677,6 +829,9 @@ function initMap() {
     mapReady = true;
     applyMode(false);
     if (state.text) runSearch(true);   // a shared #q= link zooms to its result
+    const shared = sharedVenue && state.mode === "play" ? venues.find(v => v.i === sharedVenue) : null;   // an unknown id (venue removed since) is ignored
+    sharedVenue = "";
+    if (shared) showVenue(shared, true);
   });
 }
 function debounce(fn, ms) { let t; const f = (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; f.cancel = () => clearTimeout(t); return f; }
@@ -740,6 +895,8 @@ function facts(v, entry) {
 }
 function venueNode(v) {
   const box = el("div"), more = [];                                       // more = the long explanations, kept one tap away in the details section
+  const leaving = ev => { const a = ev.target.closest && ev.target.closest("a[target=_blank]"); if (a && !a.closest("details.srcs")) lastOut = v; };   // a link-out (not a correction form): remember the place for the welcome-back card
+  box.addEventListener("click", leaving); box.addEventListener("auxclick", leaving);
   box.append(el("h2", {text: v.n || "Unnamed courts"}));
   const badges = [el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})];
   if (v.cf) {
@@ -772,6 +929,7 @@ function venueNode(v) {
   const url = v.w ? safeUrl(v.w) : "";
   if (url) box.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
   box.append(directionsNode(v.y, v.x, v.n, false));
+  box.append(shareNode(v));
   if (v.ac && v.ac.length && !noPrograms()) {
     const join = el("div", {class: "join"}, el("h3", {text: "Join & follow"}));
     for (const [type, title, aurl, provider, st, en, price] of v.ac) {
@@ -798,6 +956,7 @@ function venueNode(v) {
 }
 function showVenue(v, fly) {
   if (!v) return;
+  hideToast();
   if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: popupRoom()});
   track("venue-open");
   popup.setLngLat([v.x, v.y]).setDOMContent(venueNode(v)).addTo(map);
@@ -812,16 +971,20 @@ function setLayersFor(mode) {
   const walls_on = mode === "play" && wallsFiltered().length > 0;
   show(["wall-pts", "wall-label"], walls_on);
   $("wallLegend").hidden = !walls_on;
+  if (walls_on && !wallKeySeen) { wallKeySeen = true; setKey(true); }   // wall pins reuse the venue colours with other meanings: show the key once, the first time they appear
 }
+let wallKeySeen = false;
+function setKey(open) { $("mapkey").hidden = !open; $("keytoggle").setAttribute("aria-expanded", String(open)); }
 function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
 // ---------- search: name, city or ZIP; the map zooms to what it finds ----------
 // A name or city fits the map to every match. A ZIP (Census ZCTA centre, data/zips.json) fits to the pins within 6 km, or to the 5 nearest when none are that close.
 // Nothing found: the closest city name (typos), else the pins stay as the other filters leave them, with a note saying so.
 let qWords = [], qWordsFor = null;                                      // every typed word must appear (any order): "tennis manhattan" finds Manhattan Beach tennis courts
-const textMatch = s => { if (qWordsFor !== state.text) { qWordsFor = state.text; qWords = state.text.split(/\s+/).filter(Boolean); } return qWords.every(w => s.includes(w)); };
+const textMatch = s => { if (qWordsFor !== state.text) { qWordsFor = state.text; const z = zipToken(state.text); qWords = state.text.split(/\s+/).filter(w => w && w !== z); } return qWords.every(w => s.includes(w)); };
 const textHit = s => !state.text || textOff || textMatch(s);
 const evText = e => [e.n, e.v, e.c, e.sp, e.o].filter(Boolean).join(" ").toLowerCase();
 const isZip = t => /^\d{5}$/.test(t);
+const zipToken = t => { const w = t.split(/\s+/); return w.length > 1 && w.filter(isZip).length === 1 ? w.find(isZip) : null; };   // "94105 padel": the ZIP sets the centre, the other words still filter
 function distKm(p, c) { return Math.hypot((p.x - c.lng) * Math.cos(c.lat * Math.PI / 180) * 111.32, (p.y - c.lat) * 110.57); }
 const nearCmp = (a, b) => searchCentre ? distKm(a, searchCentre) - distKm(b, searchCentre) : 0;
 function editDist(a, b) {
@@ -865,6 +1028,22 @@ async function zipPoint(q) {
   for (const k in zips) { const d = Math.abs(+k - n), l = lcp(k); if (!best || l > best.l || (l === best.l && d < best.d)) best = {l, d, k}; }
   return {at: zips[best.k], zip: best.k, exact: false};
 }
+// A typed city with no venue pins: the Census place list (data/places.json, [name, state, lat, lon]) still knows where it is. Exact name first, then a unique "starts with", then a one-or-two letter typo.
+async function placePoint(q) {
+  if (!places) { const r = await fetch("data/places.json"); if (!r.ok) throw new Error("HTTP " + r.status); places = await r.json(); }
+  const low = p => p[0].toLowerCase(), pick = list => list.length ? list[0] : null;   // the same name in both states: the first, and the note names the state
+  const exact = pick(places.filter(p => low(p) === q));
+  if (exact) return {p: exact, typo: false};
+  const starts = places.filter(p => low(p).startsWith(q));
+  if (q.length >= 3 && new Set(starts.map(low)).size === 1) return {p: starts[0], typo: false};
+  let best = null;
+  for (const p of places) { const d = editDist(q, low(p)); if (d <= (q.length >= 6 ? 2 : 1) && (!best || d < best.d)) best = {d, p}; }
+  return best && {p: best.p, typo: true};
+}
+function noVenueNote(q, pl, pool, c, play) {
+  const near = pool.length ? Math.round(Math.min(...pool.map(p => distKm(p, c)))) : null;
+  return (pl.typo ? "No match for “" + q + "”. Showing " : "") + pl.p[0] + ", " + pl.p[1] + (play ? ": no venues are mapped there yet." : ": no events or get-togethers are listed there yet.") + (near !== null ? " The nearest one is about " + near + " km away." : "");
+}
 let searchRun = 0;
 async function runSearch(zoom, open) {
   const my = ++searchRun, q = state.text, play = state.mode === "play";
@@ -872,21 +1051,25 @@ async function runSearch(zoom, open) {
   const pins = () => play ? filtered() : [...eventsFiltered(), ...socialFiltered()];
   const all = play ? venues : [...upcomingEvents(), ...socials.filter(isCurrentSocial)], textOf = play ? (v => v.t) : evText;
   let pts = null, maxZoom = 15, note = "";
-  if (isZip(q)) {
-    textOff = true;
+  const zq = isZip(q) ? q : zipToken(q), rest = zq ? q.replace(zq, "").replace(/\s+/g, " ").trim() : "";   // "94105 padel": the ZIP sets the centre, "padel" still filters
+  if (zq) {
+    textOff = !rest;
     try {
-      const z = await zipPoint(q);
+      const z = await zipPoint(zq);
       if (my !== searchRun) return;
-      if (!z) note = "ZIP " + q + " is outside California and Nevada.";
+      if (!z) { textOff = true; note = "ZIP " + zq + " is outside California and Nevada."; }
       else {
         const c = {lat: z.at[0], lng: z.at[1]}; searchCentre = c; maxZoom = play ? 13 : 9;
-        const pool = pins(); let near = pool.filter(p => distKm(p, c) <= 6), within = near.length > 0;
+        let pool = pins(), lead = "";
+        if (rest && !pool.length) { textOff = true; pool = pins(); lead = "Nothing matches “" + rest + "” with the current filters. "; }
+        const what = rest && !lead ? " matching “" + rest + "”" : "";
+        let near = pool.filter(p => distKm(p, c) <= 6), within = near.length > 0;
         if (!within) near = pool.slice().sort((a, b) => distKm(a, c) - distKm(b, c)).slice(0, 5);
         pts = [{x: c.lng, y: c.lat}, ...near];
-        note = (z.exact ? "" : "ZIP " + q + " is not in the list; centred on the nearest ZIP (" + z.zip + "). ")
-          + (within ? near.length + (near.length === 1 ? " spot" : " spots") + " within 6 km of " + z.zip + "." : pool.length ? "Nothing within 6 km of " + z.zip + "; showing the " + near.length + " nearest." : "Nothing matches the current filters.");
+        note = lead + (z.exact ? "" : "ZIP " + zq + " is not in the list; centred on the nearest ZIP (" + z.zip + "). ")
+          + (within ? near.length + (near.length === 1 ? " spot" : " spots") + what + " within 6 km of " + z.zip + "." : pool.length ? "Nothing" + what + " within 6 km of " + z.zip + "; showing the " + near.length + " nearest." : "Nothing matches the current filters.");
       }
-    } catch (err) { if (my !== searchRun) return; note = "ZIP lookup is not available right now. Try a city or venue name."; }
+    } catch (err) { if (my !== searchRun) return; textOff = true; note = "ZIP lookup is not available right now. Try a city or venue name."; }
   } else if (q.length >= 2) {
     const hits = pins();
     if (hits.length) {
@@ -895,7 +1078,13 @@ async function runSearch(zoom, open) {
     } else {
       textOff = true;
       const cand = all.filter(x => textMatch(textOf(x))), city = cand.length ? "" : closestCity(q, all);
+      let pl = null;
+      if (!cand.length) { try { pl = await placePoint(q); } catch (err) { pl = null; } if (my !== searchRun) return; }   // a city with no venue pins is still a place on the map
       if (cand.length) { pts = cand; note = "“" + q + "” matches " + cand.length + (cand.length === 1 ? " place" : " places") + ", but not with the current filters. Clear the filters to see " + (cand.length === 1 ? "it." : "them."); }
+      else if (pl && !pl.typo || pl && !city) {
+        const c = {lat: pl.p[2], lng: pl.p[3]}; searchCentre = c; maxZoom = play ? 11 : 8; pts = [{x: c.lng, y: c.lat}];
+        note = noVenueNote(q, pl, pins(), c, play);
+      }
       else if (city) { pts = all.filter(x => x.c === city); note = "No match for “" + q + "”. Showing " + city + ", the closest name."; }
       else note = "No match for “" + q + "”. Try a city, a venue name or a ZIP code.";
     }
@@ -904,7 +1093,7 @@ async function runSearch(zoom, open) {
   setSearchNote(note);
   if (zoom && pts) fitTo(pts, maxZoom);
 }
-const reSearch = (zoom, open) => state.text ? runSearch(zoom, open) : refresh();   // a filter changed: re-check the search (zoom false keeps the map where it is)
+const reSearch = (zoom, open) => { if (state.text) return runSearch(zoom, open); ++searchRun; textOff = false; searchCentre = null; setSearchNote(""); refresh(); };   // a filter changed: re-check the search (zoom false keeps the map where it is)
 function applyMode(fit) {
   if (!mapReady) return;
   setLayersFor(state.mode); popup.remove();
@@ -921,16 +1110,25 @@ function renderList() {
   if (state.mode !== "play") return;
   const c = map.getCenter(), b = map.getBounds();
   const nearest = pool => pool.filter(v => b.contains([v.x, v.y])).map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
-  const top = nearest(current).slice(0, 40), wallsInView = nearest(wallsFiltered());   // only what the map shows right now, nearest the centre first
-  const ul = $("list"), key = top.map(v => v.n).join("|") + "#" + wallsInView.length;
-  ul.replaceChildren(...wallItems(wallsInView));
+  const all = nearest(current), wallsInView = nearest(wallsFiltered());   // only what the map shows right now, nearest the centre first
+  const ul = $("list"), key = all.slice(0, focusMode ? FOCUS_STEP : 40).map(v => v.n).join("|") + "#" + wallsInView.length + (focusMode ? "f" : "");
+  if (focusMode && key !== renderList.key) focusShown = FOCUS_STEP;   // a new view starts with 5 again
+  const walls = focusMode ? wallsInView.slice(0, focusShown) : wallsInView;
+  const top = all.slice(0, focusMode ? Math.max(0, focusShown - walls.length) : 40);
+  const total = all.length + wallsInView.length, lead = focusMode && total ? [el("li", {class: "lh", text: "Focus mode: the " + Math.min(focusShown, total) + " nearest of " + fmt(total) + " in view. Tap one for details. Filters and extras are hidden; turn Focus mode off to see them."})] : [];
+  ul.replaceChildren(...lead, ...wallItems(walls));
   for (const v of top) {
     const btn = el("button", {type: "button", class: "q" + v.q},
       el("div", {class: "nm"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
       el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}),
-      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.up ? el("span", {class: "badge warn", text: v.up}) : null, noPrograms() ? null : v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
+      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), isSaved(v) ? el("span", {class: "badge sv", text: "★ Saved"}) : null, v.up ? el("span", {class: "badge warn", text: v.up}) : null, noPrograms() ? null : v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
+  }
+  if (focusMode && total > focusShown) {
+    const more = el("button", {type: "button", text: "Show " + FOCUS_STEP + " more"});
+    more.addEventListener("click", () => { focusShown += FOCUS_STEP; renderList(); });
+    ul.append(el("li", {class: "empty"}, more));   // reuses the centred pill-button row of the empty state
   }
   if (!top.length && !wallsInView.length) ul.append(current.length || wallsFiltered().length
     ? el("li", {class: "empty"}, el("p", {text: "Nothing in this view. Zoom out or pan the map to see more."}))
@@ -999,6 +1197,7 @@ function writeHash() {
   if (state.offers.size) p.set("offer", [...state.offers].join(""));
   if (state.text) p.set("q", state.text);
   history.replaceState(null, "", p.toString() ? "#" + p : location.pathname + location.search);
+  store.set("hash", p.toString());   // so a return visit with no link can pick up where they left off
 }
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
@@ -1008,6 +1207,7 @@ function readHash() {
   for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
   state.text = (p.get("q") || "").toLowerCase();
+  sharedVenue = p.get("venue") || "";   // a "Share this place" link
   if (p.get("access") === "members") state.on.add("members");  // old links
 }
 // Surface chips only make sense for tennis and for "All racket sports" (owner 2026-10-21); regular tennis is never played on sand.
@@ -1172,8 +1372,16 @@ function initControls() {
     $("listtoggle").textContent = off ? "Show list" : "Hide list";
     $("listtoggle").setAttribute("aria-expanded", String(!off));
   });
+  $("keytoggle").addEventListener("click", () => { const open = $("mapkey").hidden; setKey(open); if (open) track("map-key"); });
   $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
+  $("focusToggle").addEventListener("click", () => setFocus(!focusMode));
+  $("shortlistToggle").addEventListener("click", () => {
+    const open = $("shortlist").hidden; $("shortlist").hidden = !open;
+    $("shortlistToggle").setAttribute("aria-expanded", String(open));
+    if (open) track("shortlist-open");
+  });
+  for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
   $("nearMe").addEventListener("click", () => {
     if (!navigator.geolocation) return alert("Your browser does not support location.");
     navigator.geolocation.getCurrentPosition(
@@ -1208,8 +1416,15 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
     v.k = i; byKey[i] = v;
     v.m = v.p.reduce((a, p) => a | p[2], 0);
     v.t = (v.n + " " + v.c).toLowerCase();
+    byId[v.i] = v;
   });
+  let resumed = false;
+  if (!location.hash.slice(1)) {   // opened with no link: restore the last search (a #venue= or #sport= link always wins)
+    const last = store.get("hash", "");
+    if (last && typeof last === "string") { history.replaceState(null, "", "#" + last); resumed = true; }
+  }
   readHash(); initControls(); initCoverage(); syncControls();
+  setFocusUI(); syncShortlist(); if (resumed) showResume();
   initMap();
   if (state.mode === "watch") renderWatchList();
   $("loading").remove();
