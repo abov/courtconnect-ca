@@ -465,6 +465,7 @@ let DATA, sports, venues, events = [], socials = [], socialPins = [], walls = []
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
+let userPos = null;   // {lat, lng} after a successful "Near me"
 let textOff = false, searchCentre = null, zips = null, places = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
@@ -816,7 +817,7 @@ function wallItems(list) {
   for (const w of list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
-      el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
+      el("div", {class: "meta", text: [distLabel(w), w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
       el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : null));
     btn.addEventListener("click", () => showWall(w, true));
     out.push(el("li", {}, btn));
@@ -1079,7 +1080,13 @@ const evText = e => [e.n, e.v, e.c, e.sp, e.o].filter(Boolean).join(" ").toLower
 const isZip = t => /^\d{5}$/.test(t);
 const zipToken = t => { const w = t.split(/\s+/); return w.length > 1 && w.filter(isZip).length === 1 ? w.find(isZip) : null; };   // "94105 padel": the ZIP sets the centre, the other words still filter
 function distKm(p, c) { return Math.hypot((p.x - c.lng) * Math.cos(c.lat * Math.PI / 180) * 111.32, (p.y - c.lat) * 110.57); }
-const nearCmp = (a, b) => searchCentre ? distKm(a, searchCentre) - distKm(b, searchCentre) : 0;
+const nearCmp = (a, b) => { const c = searchCentre || userPos; return c ? distKm(a, c) - distKm(b, c) : 0; };   // a searched place wins; after "Near me", events and groups sort by distance from the user
+// "1.2 mi" from the user's position (set by "Near me"; kept in this tab only, never sent anywhere); empty until then
+function distLabel(p) {
+  if (!userPos || !isFinite(p.x) || !isFinite(p.y)) return "";
+  const mi = distKm(p, userPos) * 0.621371;
+  return mi < 0.1 ? "<0.1 mi" : (mi < 10 ? mi.toFixed(1) : Math.round(mi)) + " mi";
+}
 function editDist(a, b) {
   let prev = Array.from({length: b.length + 1}, (_, j) => j);
   for (let i = 1; i <= a.length; i++) {
@@ -1214,7 +1221,7 @@ function renderList() {
   for (const v of top) {
     const btn = el("button", {type: "button", class: "q" + v.q},
       el("div", {class: "nm"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
-      el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}),
+      el("div", {class: "meta", text: [distLabel(v), v.c, sportLine(v)].filter(Boolean).join(" · ")}),
       el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), isSaved(v) ? el("span", {class: "badge sv", text: "★ Saved"}) : null, v.up ? el("span", {class: "badge warn", text: v.up}) : null, noPrograms() ? null : v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
@@ -1482,7 +1489,11 @@ function initControls() {
     if (!navigator.geolocation) return setSearchNote("Your browser does not support location. Search by city or ZIP instead.");
     setSearchNote("");
     navigator.geolocation.getCurrentPosition(
-      pos => map.flyTo({center: [pos.coords.longitude, pos.coords.latitude], zoom: 12}),   // used only in your browser, never sent anywhere
+      pos => {   // used only in your browser, never sent anywhere
+        userPos = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+        setSearchNote("Distances are straight-line from your location, which stays in your browser.");
+        map.flyTo({center: [userPos.lng, userPos.lat], zoom: 12});   // the flight ends in a refresh, so the list re-sorts and the distances appear
+      },
       () => setSearchNote("Could not get your location (check that location is allowed for this site). You can still search by city or ZIP."), {timeout: 8000});
   });
 }
