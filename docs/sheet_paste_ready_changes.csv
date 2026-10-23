@@ -1,0 +1,20 @@
+cell,sport,column,value_to_enter,confidence,tier,source_note
+H38,360Ball,Active Loc,South Africa,medium,,Topend Sports and a Knysna (Garden Route) newspaper. Topend is user-submitted
+H54,Outdoor Racquetball,Active Loc,US,medium,,3WallBall world championships are held in Las Vegas (USA Racquetball and sportsdestinations.com coverage)
+H63,Shuttleball,Active Loc,Taiwan,medium,,Taipei Shuttleball Committee runs the official games and rules (sups.tp.edu.tw/shuttleball); also used as a school sport in Spain and Australia
+H72,Taiji Bailong,Active Loc,China/Germany,medium,,Wikipedia's Roliball article (also called Bailong ball): European association founded in Germany 2005; unofficial world event in Jinzhong China since 2012
+F54,Outdoor Racquetball,Org,3WallBall,medium,,3WallBall runs the World Outdoor Racquetball championships (3wallball.com loads). It is an event organiser more than a federation
+F58,Qianball,Org,KFUM (Denmark),medium,,"Run in Denmark under KFUM (the Danish YMCA sport branch) per Wikipedia and lex.dk. Search did not confirm the narrower name ""KFUM Idraetsforbund"""
+F72,Taiji Bailong,Org,TBBA,medium,,European Association of Tai Chi Bailong Ball (Germany 2005) per Wikipedia's Roliball article; no site found
+Q65,Smolball,Rules,https://www.mobilesport.ch/wp-content/uploads/2014/02/02_14_Smolball_d.pdf,medium,rules (German),Swiss federal sport office (BASPO) teaching material; no governing body site found. French and Italian versions exist
+P20,Australian Racquetball,url,https://www.squash.org.au/w/participation/Racquetball,medium,official (national body page),"No standalone ""Australian Racquetball Association"" site found; Squash Australia runs racquetball. Org value ARA is unverified"
+P30,Downside Ball Game,url,https://en.wikipedia.org/wiki/Downside_ball_game,high,backup: Wikipedia,"Played at Downside School, Somerset since 1820"
+P33,Paleta frontón,url,https://www.fipv.net/en/,medium,official (parent federation),Sheet lists Org FDPPF(FIPV); FIPV is the parent. Peruvian FDPPF site not found
+P34,Road Tennis,url,https://en.wikipedia.org/wiki/Road_tennis,high,backup: Wikipedia,"Barbados, 1930s. No official PRTA site found (earlier search)"
+P47,Jokari,url,https://en.wikipedia.org/wiki/Jokari,medium,backup: Wikipedia,"Rubber ball on an elastic band, invented in France 1938. The Jokari company reportedly no longer sells the game (2013 mirror), so no official site"
+P54,Outdoor Racquetball,url,https://3wallball.com/,medium,official,"3WallBall = World Outdoor Racquetball (also named in CLAUDE.md rechecks). Loads (HTTP 200) on 2026-10-19; 3wallball.org, used in a 2023 USA Racquetball preview, did not connect"
+P55,Pang Pong,url,https://en.wikipedia.org/wiki/Pang_Pong,medium,backup: Wikipedia,Hitachi's own article (social-innovation.hitachi/en/article/pang_pong) is a good second source. No federation
+P56,Pitton,url,https://www.topendsports.com/sport/list/pitton.htm,medium,backup: other reference (no Wikipedia page seen),No official site. Topend Sports entry (44x20 ft court
+P58,Qianball,url,https://en.wikipedia.org/wiki/Qianball,medium,backup: Wikipedia,No Danish site confirmed. Played under KFUM Idraetsforbund since 2006 (inferred; URL not checked)
+P72,Taiji Bailong,url,https://en.wikipedia.org/wiki/Roliball,medium,backup: Wikipedia,"Roliball is also called Bailong ball. A European association (TBBA, Germany) exists but no site found"
+P77,Totem Tennis,url,https://en.wikipedia.org/wiki/Totem_tennis,high,backup: Wikipedia,Also tether tennis / swingball

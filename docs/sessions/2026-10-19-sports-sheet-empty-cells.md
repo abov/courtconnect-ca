@@ -9,3 +9,13 @@ Second pass (same day): checked Wikipedia via its API for the empty and unsearch
 Third pass: dropped the doubtful rows (Miniten Thug, String Paddleball, Street Tennis) from the url draft (45 rows left). Org column (43 blank) drafted in `docs/sheet_org_fill_draft.csv`: 8 proposals (2 high, 3 medium, 3 low), the rest none found or not searched. Yr Origin (5 blank: 3-wall Paddleball, Hand Tennis, Tennis Baseball, Riftball, Wackitball) drafted in `docs/sheet_yr_origin_fill_draft.csv`: only 1 low-confidence proposal (Hand Tennis ~1100, identity of the row unclear); the other 4 have no documented year, so they stay blank. Wackitball is a new row in the sheet since the first pull (77 sports). Active Loc (26 blank) drafted in `docs/sheet_active_loc_fill_draft.csv`: 15 proposals (5 medium, 10 low), 10 rows with none found/skipped, plus a FLAG row: three sheet years (Knuckle Racket, Eclipseball, 360Ball) differ from the only source found. The sheet was re-pulled mid-session and had no changes since the Org pass. Court Dim (36), Net Type (40), Net Ht (54), Rules (67) and Alt Sp Name are not started; many of those are "not applicable", not missing.
 
 Rule set by the owner: `url` = official site; if none exists, a Wikipedia page is the backup; only if there is no Wikipedia page, another reference page (tagged in the `tier` column). Next: the owner picks which proposals to apply; the 20 unsearched blank-url rows and the 11 "none found" rows still need a Wikipedia check; then the next column (Org or Yr Origin).
+
+## Paste-ready files (2026-10-22)
+
+Built from a fresh pull of the sheet (81 sports, rows 2-82). The sheet changed under us: Basque Pelota was split into eight "Basque Pelota: ..." rows (Frontenis and Xare renamed, Jai alai folded in), and some blanks were filled by hand (Soft Tennis url+Org, Shuttleball Rules, 360Ball url, Knuckle Racket and Pitton Active Loc), so those drafts were dropped. Only cells still blank are proposed.
+
+- `docs/sheet_paste_ready_changes.csv`: 19 high/medium cells with their sheet address (F54, P20, ...). The safest route: type or paste each cell.
+- `docs/sheet_paste_ready.csv`: Sport, Org, Active Loc, url, Rules for every row, current values kept, 19 cells filled. Row N here is row N in the sheet. Import as a new tab and copy a column back only if nobody edits the sheet meanwhile (a column paste overwrites the whole column).
+- `docs/sheet_paste_low_confidence.csv`: 19 low-confidence proposals, not recommended without checking.
+
+Not paste-ready: the three sheet years that disagree with the one source found (Knuckle Racket, Eclipseball, 360Ball). Repo follow-up: the sheet's Basque Pelota rename means seeds, aliases and `EXPECTED_SPORTS` (76) need checking at the next `make sync-sports`.

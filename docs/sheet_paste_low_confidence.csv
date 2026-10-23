@@ -1,0 +1,20 @@
+cell,sport,column,proposed_value,confidence,tier,source_note
+H40,Eclipseball,Active Loc,US,low,,Topend Sports: created by Donald Benson of Grant MI; sold by US school-supply retailers
+H44,Hand Tennis,Active Loc,France,low,,"Only if the row means jeu de paume (the sheet Alt Name says ""Jeu de Paume - FR""); same identity question as the Yr Origin draft"
+H47,Jokari,Active Loc,France,low,,Invented in France 1938 (Wikipedia). Where it is played now was not found; the US company reportedly no longer sells it
+H59,Racket Hockey,Active Loc,US,low,,Single hobbyist page: created 2016 in Parkville MO
+H60,Rapidball,Active Loc,Netherlands,low,,Offered by one Dutch university sport club (ACLO); introduced by an exchange student from Mallorca
+H64,Skyball,Active Loc,US,low,,"Topend Sports: created by Christopher Poon (USA) 2022. Other ""Skyball"" games found (Dutch league; Maui Toys ball; 1832 baseball ban) are different. ""International SkyBall Federation"" in the Org column was not confirmed anywhere"
+H65,Smolball,Active Loc,Switzerland,low,,Swiss federal sport office (BASPO) publishes school teaching material in DE/FR/IT. Inventor Janusz Smolinski's country was not found
+H80,Wall Pong,Active Loc,US,low,,Only Topend Sports (user-submitted): Jake Whetstone of Illinois. No second source
+F16,Typti,Org,TYPTI Inc.,low,,Company led by founder Steve Bellamy. The Hollywood Reporter says the sport has its own governing body with tours
+F65,Smolball,Org,Smolball IP Association,low,,Appears only as the owner of a 2024 SMOLBALL trademark record; not confirmed to be a governing body
+F76,Toccer,Org,Tennis Polo Association,low,,Wikipedia names it as the governing body; no website found
+G44,Hand Tennis,Yr Origin,~1100,low,,"Only if this row means the bare-hand ancestor of tennis (the sheet's Alt Name says ""on Tennis Court (Jeu de Paume - FR)""). Wikipedia's Jeu de paume and History of tennis articles put it in 12th-century northern France; one other source says 11th-century monks. Not a firm year: owner to confirm the row means jeu de paume before using"
+P31,Frescoball,url,https://en.wikipedia.org/wiki/Frescobol,low,backup: Wikipedia,"No single official site; Japan (JFBA) and Brazil (OFI) bodies exist but their URLs were not confirmed. Org ""BRWL?"" unverified"
+P35,Smashball,url,https://en.wikipedia.org/wiki/Matkot,low,backup: Wikipedia,"No association site found for Matkot/Smashball. Sheet Org ""BRWL"" also unverified"
+P40,Eclipseball,url,https://new.topendsports.com/sport/new/eclipse-ball.htm,low,backup: other reference (no Wikipedia page seen),No official site; only retailers + Topend Sports (created 1985). Host seen was new.topendsports.com: check the www. variant loads before using
+P59,Racket Hockey,url,https://topendsports.com/sport/new/racket-hockey.htm,low,backup: other reference (no Wikipedia page seen),Single hobbyist page (created 2016 per Topend Sports). No governing body
+P60,Rapidball,url,https://www.aclosport.nl/en/actualiteiten/sport-of-this-week-rapidball/,low,backup: other reference (no Wikipedia page seen),Dutch university sport club page; not clear this is the same game as UK Racketball/Squash 57
+P71,Table Squash,url,https://en.wikipedia.org/wiki/Table_squash,low,backup: Wikipedia,"No governing body found. ""ITSA"" in the Org column could not be verified (search returned an unrelated top-spinners group)"
+P76,Toccer,url,https://en.wikipedia.org/wiki/Tennis_polo,low,backup: Wikipedia,Wikipedia names a Tennis Polo Association but no site was found
