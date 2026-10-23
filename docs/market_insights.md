@@ -1,0 +1,22 @@
+# Market insights (v1): where is a racket sport missing, who competes nearby
+
+For clubs, operators and players. Built from the venues we already know; nothing new is scraped. Everything here is **inferred**: known venues only (private clubs are undercounted), distances are straight-line miles (not drive times), and there is no population data yet.
+
+## The tables (all in `marts`)
+- `mart_market_gaps`: one row per city x sport. `gap_status` is `served` (a venue in the city), `nearby` (none in the city, one within 15 miles) or `no_venue_within_15mi`. `racket_venues_in_city` is a rough activity proxy. The city point is the average of its venues' coordinates.
+- `mart_venue_neighbors`: per venue and sport, how many other venues offer that sport within 5 and 15 miles (the competition a club faces).
+- `mart_venue_nearby_sports`: per venue, the sports it does not list that exist within 15 miles, with the nearest (the "try another sport" list). No row = none within 15 miles in our data.
+- `docs/market_snapshots.csv`: city x sport counts, appended at each refresh by `make market-snapshot`. The warehouse is rebuilt every time, so this file is the only history; it turns openings and closures into a trend.
+
+Only sports a venue is directly listed for count. Sports that exist only as an inference (`sport_also_played`, e.g. Frescotennis on every tennis court) are left out, or they would inflate every number.
+
+## How to read a gap
+Check `sport_coverage_status` (from `mart_sport_gaps`) first: for a `sparse` or unmapped sport, "no venue within 15 miles" can mean we have not found it, not that it is absent. Padel is `covered` by that rule (37 venues, 29 hand-added), so a padel gap is meaningful but still a lower bound on supply.
+
+Example (2026-10-23 build): padel has no known venue within 15 miles of 65 cities that have 20+ racket venues, including Malibu, Irvine, Napa, Santa Rosa and Newport Beach. Treat that as a list of places to check, not a market sizing.
+
+## Known limits (next)
+- No population, so no per-capita figure. v2: Census ACS by place/tract (free), then "people per court".
+- A few cities have junk names from upstream address data (e.g. `1-WS-1`, 3 of 888); Overture's capitals ('IRVINE') are merged with OSM's ('Irvine') here, not upstream.
+- Sub-variants (eight Basque Pelota forms, etc.) each get their own rows; filter by `popularity_class` before showing a business anything.
+- Not in the app, not in `venues.json`. Decide where it goes after the beta (ADR 0015).

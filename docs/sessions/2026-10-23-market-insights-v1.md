@@ -1,0 +1,2 @@
+Market insights v1: added `mart_market_gaps`, `mart_venue_neighbors`, `mart_venue_nearby_sports` (+ `int_venue_pairs_15mi`, `distance_mi` macro, tests), `make market-snapshot` -> `docs/market_snapshots.csv` (committed history, step 7 of the monthly runbook); `docs/market_insights.md` explains use and limits. Full `dbt build` passed (299/299).
+Next: Census population (per-capita), a `popularity_class` filter for sub-variants, then decide after the beta whether any of it shows in the app or an exported CSV.
