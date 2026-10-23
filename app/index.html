@@ -214,6 +214,19 @@
   body.focus:not(.watch) .sportinfo, body.focus:not(.watch) #anywhere, body.focus:not(.watch) #moreFilters, body.focus:not(.watch) #clearrow,
   body.focus:not(.watch) .welcome, body.focus:not(.watch) #count { display: none; }
   body.focus:not(.watch) #listbar .barlinks { margin-left: auto; }
+  /* Touch: every standalone control gets a 44 px target (the `.tools` / `.searchrow` chip rules above are more specific than the generic coarse rule, so they are repeated here). Text links inside popup lines keep their look and grow only their hit area. */
+  @media (pointer: coarse) {
+    .tools .chip, .searchrow .chip { min-height: 44px; }
+    button.link, #listbar .link { min-height: 44px; padding-left: 8px; padding-right: 8px; }
+    .maplibregl-popup-content button.share, .maplibregl-popup-content a.btn { min-height: 44px; }
+    .maplibregl-popup-content a.btn { display: inline-flex; align-items: center; }
+    .maplibregl-popup-content p a:not(.btn):not(.act) { display: inline-block; padding: 13px 4px; margin: -13px -4px; }
+    details.srcs summary, #moreFilters > summary, .sportinfo > summary { padding: 13px 0; }
+    .maplibregl-popup-close-button { width: 44px; height: 44px; font-size: 22px; }
+    .maplibregl-popup-content h2 { padding-right: 36px; }
+    .maplibregl-ctrl-group button { width: 44px; height: 44px; }
+  }
+  @media (pointer: coarse) and (max-width: 360px) { #listbar .barlinks { flex-direction: row; margin-top: 0; } #listbar .link { padding-left: 4px; padding-right: 4px; } }   /* 44 px links side by side, not stacked: two stacked ones would make the bar 90 px tall */
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
   /* Desktop: the header, filters, legend and footer used to fill the panel and squeeze the venue list to 0-2 rows.
      The list now keeps room for about 5 rows and the panel scrolls when the window is shorter than that;
@@ -335,6 +348,7 @@
       <span><span class="dot" style="background:var(--pin-u)"></span>Unnamed courts</span>
       <span><span class="dot soon"></span>Opening soon (not open yet)</span>
       <span><span class="dot rep"></span>Reported opening soon (unconfirmed)</span>
+      <span>Zoomed in: &#10003; name confirmed, ? name guessed</span>
     </div>
     <div class="legend playlegend" id="wallLegend" aria-label="Hitting wall legend" hidden>
       <span>Hitting walls:</span>
@@ -843,8 +857,12 @@ function initMap() {
     // Dark glyph on gold and on hollow rings, white on the rest, so contrast stays above 3:1 on every pin colour.
     map.addLayer({id: "pts-glyph", type: "symbol", source: "v", filter: ["!", ["has", "point_count"]],
       layout: {"icon-image": ["concat", "g-", ["get", "g"], ["case", ["any", [">=", ["get", "up"], 1], ["==", ["get", "q"], "i"]], "-d", "-w"]],
-               "icon-size": ["interpolate", ["linear"], ["zoom"], 14.5, 0.6, 16, 0.85], "icon-allow-overlap": true, "icon-ignore-placement": true},
-      paint: {"icon-opacity": ["interpolate", ["linear"], ["zoom"], 14.5, 0, 15, 1]}});
+               "icon-size": ["interpolate", ["linear"], ["zoom"], 15.5, 0.7, 16, 0.85, 17, 1], "icon-allow-overlap": true, "icon-ignore-placement": true},   // from 15.5: at 15 the glyph was about 11 px in a 20 px pin
+      paint: {"icon-opacity": ["interpolate", ["linear"], ["zoom"], 15.5, 0, 16, 1]}});
+    // The glyph shows the sport, not the status (most pins are tennis), so confirmed and guessed names also get a small tick / "?" badge: a shape cue for people who cannot tell green from blue or gold. Rings (not open yet) are already hollow.
+    map.addLayer({id: "pts-status", type: "symbol", source: "v", filter: ["all", ["!", ["has", "point_count"]], ["==", ["get", "up"], 0], ["in", ["get", "q"], ["literal", ["c", "i"]]]],
+      layout: {"icon-image": ["concat", "st-", ["get", "q"]], "icon-offset": [9, -9], "icon-size": ["interpolate", ["linear"], ["zoom"], 15.5, 0.8, 17, 1], "icon-allow-overlap": true, "icon-ignore-placement": true},
+      paint: {"icon-opacity": ["interpolate", ["linear"], ["zoom"], 15.5, 0, 16, 1]}});
     addPinGlyphs();
     map.on("click", "clusters", e => {
       const f = map.queryRenderedFeatures(e.point, {layers: ["clusters"]})[0];
@@ -921,6 +939,12 @@ function addPinGlyphs() {   // the popup icon set drawn to small images, one whi
       + ICON[f].replace(/class="f"/g, 'fill="' + c + '" stroke="none"') + '</svg>';   // static strings above, no data
     const img = new Image(32, 32);
     img.onload = () => { if (!map.hasImage("g-" + f + "-" + suffix)) map.addImage("g-" + f + "-" + suffix, img, {pixelRatio: 2}); };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  }
+  for (const [q, c, mark] of [["c", "#1a7f37", '<path d="M4.6 8.2l2.3 2.3 4.5-4.9"/>'], ["i", "#7a5900", '<path d="M6 6.4a2.1 2.1 0 1 1 3 1.9c-.7.4-1 .8-1 1.5"/><circle cx="8" cy="12" r=".4"/>']]) {   // status badges: white disc, dark-enough ring and mark (>= 4.5:1 on white)
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="28" height="28"><circle cx="8" cy="8" r="7" fill="#fff" stroke="' + c + '" stroke-width="1.5"/><g fill="none" stroke="' + c + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + mark + '</g></svg>';
+    const img = new Image(28, 28);
+    img.onload = () => { if (!map.hasImage("st-" + q)) map.addImage("st-" + q, img, {pixelRatio: 2}); };
     img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
 }
@@ -1035,7 +1059,7 @@ function showVenue(v, fly) {
 function dist2(v, c) { const dx = (v.x - c.lng) * Math.cos(c.lat * Math.PI / 180), dy = v.y - c.lat; return dx * dx + dy * dy; }
 function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
-  show(["clusters", "cluster-count", "pts", "pts-glyph"], mode === "play");
+  show(["clusters", "cluster-count", "pts", "pts-glyph", "pts-status"], mode === "play");
   show(["ev-pts", "ev-label", "soc-pts", "soc-label"], mode === "watch");
   const walls_on = mode === "play" && wallsFiltered().length > 0;
   show(["wall-pts", "wall-label"], walls_on);
