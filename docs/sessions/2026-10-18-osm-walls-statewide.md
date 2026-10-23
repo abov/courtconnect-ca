@@ -1,0 +1,4 @@
+# 2026-10-18: statewide OSM hitting-wall extract (CA + NV)
+
+Ran `extract_osm_walls.py --area california` (30 tiles, ~1 h on free Overpass) and `--area nevada` (15 tiles): 881 CA + 9 NV elements. The metro-only file already held 888, so the statewide pass added only 2 OSM ways (one Orange County pin, 2 side-by-side handball walls near Aliso Viejo); wall pins 429 -> 430 (CA 422, NV 8). OSM is simply thin outside LA, SD and the Bay Area, so more walls there need the city-page passes, not more Overpass runs. The script overwrites its output, so the two runs were written to separate files and merged into `data/raw/osm_walls.csv` (superset of the old file, no rows lost, none outside CA/NV); re-running `--area metros` afterwards would shrink it again.
+Next: city-page passes per metro (one at a time); if the extract is re-run, merge rather than overwrite. Idea: make `extract_osm_walls.py` merge into the existing CSV instead of replacing it.

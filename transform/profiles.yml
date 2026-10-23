@@ -1,4 +1,4 @@
-# Local dev uses DuckDB (free, no cloud). Flip to Snowflake with:  dbt build --target snowflake
+# DuckDB is the only warehouse (ADR 0018; Snowflake retired 2026-10-14).
 courtconnect:
   target: duckdb
   outputs:
@@ -7,13 +7,3 @@ courtconnect:
       path: courtconnect.duckdb   # relative to where you run dbt (repo root)
       threads: 4
 
-    snowflake:
-      type: snowflake
-      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
-      user: "{{ env_var('SNOWFLAKE_USER') }}"
-      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
-      role: "{{ env_var('SNOWFLAKE_ROLE', 'COURTCONNECT_DEV') }}"
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'COURTCONNECT_WH') }}"
-      database: "{{ env_var('SNOWFLAKE_DATABASE', 'COURTCONNECT') }}"
-      schema: dev
-      threads: 4

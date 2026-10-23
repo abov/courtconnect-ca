@@ -144,12 +144,16 @@ def main() -> None:
     queue["model_guess"] = np.where(p >= LIKELY, "likely_confirm", np.where(p <= 1 - LIKELY, "likely_reject", "unclear"))
     queue["reasons"] = [reasons(i) for i in range(len(queue))]
     queue["certainty"] = np.abs(p - 0.5)
-    queue = queue.sort_values(["certainty", "venue_name"], ascending=[False, True]).reset_index(drop=True)
+    # a site already flagged dead (parked, hijacked, expired, no DNS) cannot settle the sport: sort those rows last
+    dead = {d for (d,) in con.execute("select lower(domain) from staging.stg_website_checks where status = 'dead'").fetchall()}
+    queue["website_status"] = np.where(queue["website_domain"].fillna("").str.lower().isin(dead), "dead", "")
+    queue = queue.sort_values(["website_status", "certainty", "venue_name"], ascending=[True, False, True]).reset_index(drop=True)
     queue["review_priority"] = queue.index + 1
     cols = ["review_priority", "model_guess", "p_confirm", "sport_name", "venue_name", "name", "city", "region",
-            "category", "website_domain", "best_rung_label", "reasons", "venue_id", "place_id"]
+            "category", "website_domain", "website_status", "best_rung_label", "reasons", "venue_id", "place_id"]
     queue[cols].rename(columns={"name": "place_name"}).to_csv(OUT, index=False, lineterminator="\r\n")
-    print(f"queue: {len(queue)} rows -> {OUT}  " + ", ".join(f"{k} {v}" for k, v in queue["model_guess"].value_counts().items()))
+    print(f"queue: {len(queue)} rows -> {OUT}  " + ", ".join(f"{k} {v}" for k, v in queue["model_guess"].value_counts().items())
+          + f"; {(queue['website_status'] == 'dead').sum()} with a dead site sorted last")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+# 2026-10-21: hitting walls, Reno + Santa Barbara pass (none new)
+
+Santa Barbara: all 75 park / sports-facility / rec-centre / beach pages on `sbparksandrec.santabarbaraca.gov` (listed from `/parks-recreation-spaces?page=N`, read by same-origin fetch in the browser pane; the city's site search is "Access Denied" and scripts get 403) mention hitting walls only at the Municipal Tennis and Pickleball Center ("multiple practice hitting walls"), already `santa-barbara-muni-practice-walls`. Oak Park and Pershing Park tennis pages list no wall. Reno (`reno.gov`, plain HTTP works): the athletics tennis, pickleball and index pages mention no wall, backboard or handball court. No seed rows added.
+Next: with LV, Clark, Ventura, Reno and SB also empty, city pages are exhausted for the cheap metros; walls now come from owner/community reports or imagery.

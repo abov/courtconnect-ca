@@ -10,6 +10,7 @@ select
     status,
     next_step,
     noted_on,
-    notes
+    notes,
+    directories_seen
 from {{ ref('stg_venue_leads') }}
 where status in ('new', 'needs_location', 'needs_visit')

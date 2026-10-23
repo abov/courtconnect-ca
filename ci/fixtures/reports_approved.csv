@@ -1,0 +1,6 @@
+Timestamp,Venue name,City,Map ID,What are you reporting?,Sport,Date you saw it,What did you see?,"Link to a public page (optional, https)","Name or handle to credit you (optional, shown publicly)",review,imported
+10/02/2025 14:03:11,Test Park Courts,Pasadena,aaaaaaaaaa,A racket sport is played here,,10/01/2025,Saw two pickleball games on the tennis courts on Saturday morning.,https://example.org/parks/test-park,courtfan,approved,
+10/03/2025 09:15:00,Some Club,Glendale,,Something is wrong or it closed,,10/02/2025,The sign on the gate says the club closed last month.,,,approved,
+10/04/2025 10:00:00,Nowhere Courts,Pasadena,,A racket sport is played here,Tennis,10/03/2025,Courts behind the library with a net and lines.,,,approved,
+10/05/2025 11:00:00,Test Park Courts,Pasadena,aaaaaaaaaa,A racket sport is played here,,10/04/2025,Call me on 626 555 0100 or mail me@example.com for details.,,,approved,
+10/06/2025 12:00:00,Test Park Courts,Pasadena,aaaaaaaaaa,A racket sport is played here,,10/05/2025,Saw people playing.,http://example.org/insecure,,approved,

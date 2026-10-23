@@ -1,0 +1,5 @@
+# 2026-10-17: parent park/school addresses + "Near <street>"
+
+Re-ran `extract_osm_parents.py` (CA 30,989 + NV 2,422 features, now with `addr:housenumber/street/city`; 35% carry an address) into the shared raw folder. New tier 1b in `int_venue_address`: a venue named after its enclosing park/school/club (`enclosing_feature`) takes that feature's mapped address (`address_source osm_parent`, 1,193 venues; replaced ~980 nearest-point and 54 Nominatim guesses; export key `ap`, popup says inferred). Pins with no address but a cached road get `near_street` (export `ns`, popup "Near <street>" + inferred note; trails/paths/loops skipped).
+Result: non-home pins with no street 428 -> 268 (233 now show a nearest road, 34 show nothing); no-city 94 -> 89; ALL-CAPS cities title-cased in the export. CI fixture `osm_parents.csv` got the three new columns.
+Next: owner to eyeball a popup with "Near ..." and an `ap` venue live; official pages for the remaining parks (34 with nothing); rerun `extract_osm_parents.py` + `reverse_geocode_blanks.py` after each refresh.

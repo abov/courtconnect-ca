@@ -6,7 +6,22 @@ term,sport,reliability
 australian racquetball,Australian Racquetball,ambiguous
 badminton,Badminton,distinctive
 ball badminton,Ball Badminton,ambiguous
-basque pelota,Basque Pelota,ambiguous
+basque pelota,Basque Pelota: Frontenis,ambiguous
+basque pelota,Basque Pelota: Grand Chistera,ambiguous
+basque pelota,Basque Pelota: Jai Alai,ambiguous
+basque pelota,Basque Pelota: Joko Garbi,ambiguous
+basque pelota,Basque Pelota: Pala Corta,ambiguous
+basque pelota,Basque Pelota: Paleta Cuero,ambiguous
+basque pelota,Basque Pelota: Paleta Goma,ambiguous
+basque pelota,Basque Pelota: Xare,ambiguous
+basque pelota frontenis,Basque Pelota: Frontenis,ambiguous
+basque pelota grand chistera,Basque Pelota: Grand Chistera,ambiguous
+basque pelota jai alai,Basque Pelota: Jai Alai,ambiguous
+basque pelota joko garbi,Basque Pelota: Joko Garbi,ambiguous
+basque pelota pala corta,Basque Pelota: Pala Corta,ambiguous
+basque pelota paleta cuero,Basque Pelota: Paleta Cuero,ambiguous
+basque pelota paleta goma,Basque Pelota: Paleta Goma,ambiguous
+basque pelota xare,Basque Pelota: Xare,ambiguous
 beach tennis,Beach Tennis,ambiguous
 biraq,Biraq,ambiguous
 crossminton,Crossminton,distinctive
@@ -16,19 +31,19 @@ floor pro mini tennis,Floor Pro Mini Tennis,ambiguous
 frescoball,Frescoball,ambiguous
 frescobol,Frescoball,distinctive
 frescotennis,Frescotennis,ambiguous
-frontenis,Frontenis,ambiguous
+frontenis,Basque Pelota: Frontenis,ambiguous
 goodminton,Goodminton,ambiguous
 hand tennis,Hand Tennis,ambiguous
 indiaca tennis,Indiaca Tennis,ambiguous
-jai alai,Jai alai,distinctive
+jai alai,Basque Pelota: Jai Alai,distinctive
 jazzminton,Jazzminton,ambiguous
 jokari,Jokari,distinctive
-kadima,Kadima,ambiguous
+kadima,Smashball,ambiguous
 ketball,Ketball,ambiguous
 knuckle racket,Knuckle Racket,ambiguous
 lite tennis,Lite Tennis,ambiguous
 loboton,Loboton,ambiguous
-matkot,Kadima,distinctive
+matkot,Smashball,distinctive
 micro pickleball,Micro Pickleball,ambiguous
 miniten thug,Miniten Thug,ambiguous
 naked tennis,Naked Tennis,ambiguous
@@ -38,8 +53,22 @@ padel,Padel,distinctive
 paleta front n,Paleta frontón,ambiguous
 paleta fronton,Paleta frontón,ambiguous
 pang pong,Pang Pong,ambiguous
-pelota,Basque Pelota,ambiguous
-pelota vasca,Basque Pelota,ambiguous
+pelota,Basque Pelota: Frontenis,ambiguous
+pelota,Basque Pelota: Grand Chistera,ambiguous
+pelota,Basque Pelota: Jai Alai,ambiguous
+pelota,Basque Pelota: Joko Garbi,ambiguous
+pelota,Basque Pelota: Pala Corta,ambiguous
+pelota,Basque Pelota: Paleta Cuero,ambiguous
+pelota,Basque Pelota: Paleta Goma,ambiguous
+pelota,Basque Pelota: Xare,ambiguous
+pelota vasca,Basque Pelota: Frontenis,ambiguous
+pelota vasca,Basque Pelota: Grand Chistera,ambiguous
+pelota vasca,Basque Pelota: Jai Alai,ambiguous
+pelota vasca,Basque Pelota: Joko Garbi,ambiguous
+pelota vasca,Basque Pelota: Pala Corta,ambiguous
+pelota vasca,Basque Pelota: Paleta Cuero,ambiguous
+pelota vasca,Basque Pelota: Paleta Goma,ambiguous
+pelota vasca,Basque Pelota: Xare,ambiguous
 pickle ball,Pickleball,distinctive
 pickleball,Pickleball,distinctive
 ping pong,Table Tennis,distinctive
@@ -52,7 +81,7 @@ racket club,Tennis,distinctive
 racket hockey,Racket Hockey,ambiguous
 racquet club,Tennis,distinctive
 racquetball,Racquetball,distinctive
-raketa,Kadima,ambiguous
+raketa,Smashball,ambiguous
 rapidball,Rapidball,ambiguous
 real tennis,Real Tennis,ambiguous
 ricochet,Ricochet,ambiguous
@@ -61,7 +90,7 @@ road tennis,Road Tennis,ambiguous
 sandball,Sandball,ambiguous
 shuttleball,Shuttleball,ambiguous
 skyball,Skyball,ambiguous
-smashball,Kadima,ambiguous
+smashball,Smashball,ambiguous
 smolball,Smolball,distinctive
 soft tennis,Soft Tennis,distinctive
 spec tennis,Spec Tennis,ambiguous
@@ -85,6 +114,7 @@ toccer,Toccer,ambiguous
 totem tennis,Totem Tennis,ambiguous
 touchtennis,Touchtennis,distinctive
 typti,Typti,ambiguous
+wackitball,Wackitball,ambiguous
 wacquetball,Wacquetball,ambiguous
 wall pong,Wall Pong,ambiguous
-xare,Xare,ambiguous
+xare,Basque Pelota: Xare,ambiguous

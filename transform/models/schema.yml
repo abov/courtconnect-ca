@@ -62,6 +62,129 @@ seeds:
       - name: reason
         tests: [not_null]
 
+  - name: place_no_group
+    description: Overture places that share a street address with another place but are a different business, so dim_place keeps each as its own pin.
+    columns:
+      - name: place_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_overture_places')
+                field: place_id
+      - name: reason
+        tests: [not_null]
+
+  - name: nominatim_addresses
+    description: >
+      Cache of Nominatim reverse geocodes for non-home pins that tiers 1-2 left without a street address. One row per pin queried,
+      misses included, so a rerun never re-queries. Only status 'address' (house number + street within 150 m) is used.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              arguments: {values: [address, street_only, too_far, no_match, city_only]}
+
+  - name: venue_address_official
+    description: >
+      Street addresses printed on a venue's own official page (park, city, club or school site), keyed by the hand-added venue_key. They
+      fill a pin whose address is blank or only inferred (int_venue_address, address_source 'official'); an address tagged in OSM or
+      listed by Overture is kept. Public pages only (ADR 0007); evidence says which page and when.
+    columns:
+      - name: venue_key
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('manual_venues')
+                field: venue_key
+      - name: address_line
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
+  - name: court_group_merge
+    description: >
+      Two OSM court groups that are one facility (a club's courts mapped more than 100 m apart), merged into one venue by int_court_pairs.
+      The duplicate-venue test flags such pairs once both groups carry the same name. Keyed by OSM court id (stable; not FK-tested because the CI fixture holds only a sample of courts); evidence says how it was checked.
+    columns:
+      - name: court_id_a
+        tests: [not_null]
+      - name: court_id_b
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
+  - name: venue_name_official
+    description: >
+      A name for an OSM court group that no dataset names, taken from a nearby high-confidence Overture club place (100-225 m away, so
+      the nearest-court rule left it unlinked), checked by hand against the pin's position (core.dim_venue, name_source 'manual').
+      The name is INFERRED from position unless `evidence` says the club's own page was read. Keyed by venue_id with the pin's lat/lon: a
+      row is ignored if the pin has moved. Public data only (ADR 0005, 0007).
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: venue_name
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
+  - name: venue_city_official
+    description: >
+      City of a named pin that no dataset gives a city for (remote parks, schools, golf courses), read from the venue's own page or a
+      public listing (int_venue_address, city). Keyed by venue_id with the pin's lat/lon: a row is ignored if the pin has moved. Public pages
+      only (ADR 0007); evidence says which page and when.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: city
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
+  - name: venue_place_boundary
+    description: >
+      The US Census place (incorporated city or census-designated place) whose boundary contains a pin that no other source gives a city,
+      or its county when no place does (ingestion/place_from_boundaries.py; Census cartographic boundary files, public domain). Last-resort
+      city in int_venue_address; the row is ignored if the pin has moved. A county shows as "<Name> County".
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: place_name
+        tests: [not_null]
+      - name: place_kind
+        tests:
+          - accepted_values:
+              arguments: {values: [place, county]}
+      - name: source
+        tests: [not_null]
+      - name: checked_on
+        tests: [not_null]
+
   - name: website_overrides
     description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
     columns:
@@ -78,17 +201,22 @@ seeds:
       A court or place that counts for sport `sport` also counts for `also_sport` (racquetball courts host 4-wall paddle). Derived rows
       are inferred, not separately observed; bridge_place_sport labels them match_type 'also_played'.
       `exclude_private_members` = yes skips members-only venues and club-style place names; `exclude_name_inferred` = yes skips places
-      whose source sport was inferred from the place name.
+      whose source sport was inferred from the place name. `only_surfaces` (e.g. grass;turf) limits the derived sport to courts with one of those
+      surfaces; places and courts with an unknown surface are skipped. `only_access` (e.g. public) limits the derived sport to courts and hand-added
+      venues with that access; unknown-access courts and Overture places (no access data) are skipped (Table Tennis -> Micro Pickleball).
 
   - name: osm_court_sport_overrides
     description: >
       A person found an OpenStreetMap sport tag wrong, so that court (court_id like way/123) is not counted for that sport.
+      Optional `correct_sport`: the sport the court really is (found from imagery or a public page); it then counts for that sport
+      at 'osm_tag_loose' strength (needs review).
 
   - name: venue_confirmations
     description: >
       A log of individual confirmations of venues in manual_venues, one row per person per check (ADR 0008). `confirmed_by` is a GitHub
       handle, never a real name or contact detail. The map shows how many different people confirmed a venue. A reviewer decides when
       the count justifies raising the venue's `confirmation` level in manual_venues; this file never changes it by itself.
+      `reported` rows are word-of-mouth reports (docs/community_reports_plan.md); the map does not count them as confirmations.
     columns:
       - name: venue_key
         tests: [not_null]
@@ -99,7 +227,32 @@ seeds:
           - not_null
           - accepted_values:
               arguments:
-                values: ['visited', 'official']
+                values: ['visited', 'official', 'reported']
+
+  - name: venue_opening_status
+    description: >
+      Hand-added venues (manual_venues, by venue_key) that are confirmed but NOT OPEN YET. The map still shows them, with a hollow pin and an
+      "Opening soon" badge, because the owner wants every padel, pop tennis and beach tennis place visible. 'Opening soon' = the club's own page (or an official page) says it is coming; 'Reported: opening soon' = only a directory or press listing says so (shown as a lighter pin). Only add a venue whose own page (or an
+      official page) says it is coming for 'Opening soon'; remove the row when it opens (and update the venue's `rules`). `evidence` says what the page said and `verified_on` when.
+    columns:
+      - name: venue_key
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('manual_venues')
+                field: venue_key
+      - name: opening_status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Opening soon', 'Reported: opening soon']
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
 
   - name: venue_leads
     description: >
@@ -117,7 +270,7 @@ seeds:
         tests:
           - accepted_values:
               arguments:
-                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'other']
+                values: ['owner', 'official_page', 'article', 'review', 'reddit', 'map', 'word_of_mouth', 'issue', 'community_form', 'other']   # issue = a GitHub issue (ci/issue_to_pr.py); community_form = ci/sync_reports.py
 
   - name: venue_actions
     description: >
@@ -152,7 +305,47 @@ seeds:
         tests:
           - accepted_values:
               values: ['reported', 'official', 'tagged', 'inferred']
+      - name: access
+        description: "Same vocabulary as venues and courts (access_type): public, customers, private (campus programs, apartments, not open to walk-up use), members, or blank = not known."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['public', 'customers', 'private', 'members']
       - name: evidence
+        tests: [not_null]
+
+  - name: player_platforms
+    description: >
+      Player-matching apps and sites shown under "Find people to play with" (social phase A, ADR 0015). Link-outs only: nothing is
+      scraped, no member data is stored. `evidence` quotes the public page read on `verified_on`; none of them is checked for a
+      California or Nevada player pool, and the app says so.
+    columns:
+      - name: platform
+        tests: [unique, not_null]
+      - name: sports
+        tests: [not_null]
+      - name: url
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
+  - name: player_groups
+    description: >
+      Public player-group links (Meetup, WhatsApp, Partiful, Facebook) that a club or organizer publishes itself, kept as leads for
+      a future groups shelf (ADR 0009 amendment 2026-10-21). Link-outs only: groups are never joined or read, no member data is
+      stored. `published_at` is the club page or bio that carries the link; a link that stops loading is removed, not guessed at.
+    columns:
+      - name: group_key
+        tests: [unique, not_null]
+      - name: url
+        tests: [not_null]
+      - name: published_at
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
         tests: [not_null]
 
   - name: watch_events
@@ -182,6 +375,43 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['confirmed', 'dates_not_confirmed']
+
+  - name: social_events
+    description: >
+      Recurring social get-togethers people can join (mixers, club nights, open play, social nights), curated by hand, one row per SERIES, not per date.
+      A discovery list only: every row links out to the organizer; nothing is signed up for or paid here. `schedule` is the organizer's own wording;
+      `last_listed_date` is the last session date their page lists (blank = no end shown); `age_focus` and `audience` are only what the organizer states, never guessed
+      (ADR 0021). `verified_on` records when the page was last read.
+    columns:
+      - name: series_key
+        tests: [unique, not_null]
+      - name: sport
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('all_racquet')", field: sport}
+      - name: schedule
+        tests: [not_null]
+      - name: kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['social_night', 'open_play', 'mixer', 'club_night', 'match_play', 'meetup']
+      - name: audience
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['women', 'men', 'mixed']
+      - name: age_focus
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['all_ages', 'juniors', '18_plus', '21_plus', '50_plus']
+      - name: source_kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['official_site', 'instagram', 'partiful', 'meetup', 'whatsapp', 'email', 'owner_report']
 
   - name: place_sport_overrides
     description: >
@@ -292,6 +522,13 @@ models:
           - accepted_values:
               arguments:
                 values: ['osm', 'osm+places', 'places_only', 'manual']
+      - name: indoor_basis
+        description: Where has_indoor comes from. has_indoor is true/false only with a basis; null (unknown) otherwise. page_quote and footprint are reserved for later evidence.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['osm_tag', 'manual_seed', 'page_quote', 'footprint', 'unknown']
       - name: name_source
         tests:
           - accepted_values:
@@ -334,6 +571,31 @@ models:
     columns:
       - name: place_id
         tests: [unique, not_null]
+
+  - name: stg_overture_addresses
+    description: Overture address points near map pins (house number + street), used only to fill pins that have no address.
+    columns:
+      - name: address_id
+        tests: [unique, not_null]
+
+  - name: int_venue_address
+    description: >
+      One row per venue: the street address to show and where it came from. Venues that already carry an address keep it
+      (address_source osm = tagged on the OSM court, overture_place = the Overture place record). Venues without one get the
+      nearest Overture address point within address_fill_radius_m (address_source overture_nearest, address_distance_m), else a cached
+      Nominatim reverse geocode (address_source nominatim). A street printed on the venue's own official page
+      (seeds/venue_address_official.csv, address_source official) beats the inferred tiers. A pin with no city gets one from the hand-added row,
+      a cached Nominatim lookup, or the nearest Overture address with a city within 1 km (5 km as a last resort for remote pins, then the Census place or county containing the pin), or a person-checked city in seeds/venue_city_official.csv.
+      Home-like pins (is_home_like) never get an inferred street, only a city.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: address_source
+        tests:
+          - accepted_values:
+              arguments: {values: [osm, overture_place, official, osm_parent, overture_nearest, nominatim]}
+      - name: address_distance_m
+        description: Metres from the pin to the filled address point; only set when address_source is overture_nearest or nominatim.
 
   - name: dim_place
     description: One row per Overture place, linked to an OSM venue when one is within place_match_radius_m metres.
@@ -414,6 +676,31 @@ models:
   - name: dim_wall
     description: One row per hitting wall (hand-curated plus OSM-mapped), kept apart from venues.
     columns:
+      - name: access
+        description: "Same vocabulary as venues (access_type); blank = not known (never read as public)."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['public', 'customers', 'private', 'members']
+      - name: region
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CA', 'NV']
+
+  - name: mart_wall_pins
+    description: >
+      One row per hitting-wall map pin (the app's walls). OSM walls of the same type within `wall_group_radius_m` of each other
+      (a row of handball courts at a school) share one pin at their centre; `wall_count` says how many walls stand there.
+    columns:
+      - name: wall_key
+        tests:
+          - unique
+          - not_null
+      - name: wall_count
+        tests:
+          - not_null
       - name: region
         tests:
           - not_null
@@ -460,6 +747,9 @@ models:
 
   - name: mart_watch_events
     description: Events to watch (pro and amateur tournaments, dome screenings). Link-out only, with date_status and location_precision saying how certain the data is (ADR 0006).
+
+  - name: mart_social_events
+    description: Recurring social get-togethers (mixers, club nights, open play). Link-out only; age_focus and audience are organizer-stated, never inferred.
 
   - name: mart_venue_leads
     description: Open research leads (claims we have not confirmed, such as whether a club is members only). Leads are never shown as facts on the map.

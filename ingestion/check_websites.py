@@ -25,6 +25,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 import duckdb
+from rawdir import raw_path
 
 FIELDS = ["domain", "status", "resolved_host", "checked_at"]
 # Resolver answers that mean "this name does not exist" (Linux/macOS and Windows codes). Anything else is inconclusive.
@@ -86,7 +87,7 @@ def _has(con, schema: str, table: str) -> bool:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--db", default="courtconnect.duckdb")
-    ap.add_argument("--out", default="data/raw/website_checks.csv")
+    ap.add_argument("--out", default=raw_path("website_checks.csv"))
     ap.add_argument("--max-age-days", type=int, default=14, help="skip domains checked more recently than this")
     ap.add_argument("--workers", type=int, default=24)
     args = ap.parse_args()

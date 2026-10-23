@@ -21,6 +21,16 @@ with osm as (
     left join {{ ref('osm_court_sport_overrides') }} o
         on trim(o.court_id) = c.court_id and trim(o.sport) = s.sport_name and lower(trim(o.verdict)) = 'reject'
     where o.court_id is null
+
+    union
+
+    -- a human re-identified a wrong OSM tag (correct_sport), from imagery or a page: counts as a loose label, so it stays in the review queue
+    select distinct c.venue_id, s.sport_id, 4 as rung
+    from {{ ref('osm_court_sport_overrides') }} o
+    join {{ ref('dim_court') }} c on c.court_id = trim(o.court_id)
+    join {{ ref('dim_sport') }} s on s.sport_name = trim(o.correct_sport)
+    where lower(trim(o.verdict)) = 'reject'
+      and nullif(trim(o.correct_sport), '') is not null
 ),
 
 places as (

@@ -8,15 +8,18 @@ polish: label what is guessed, and only mark something confirmed when you can sh
 2. **Confirm a venue** (no code needed): open an issue with the "Confirm a venue" form to say you visited it, or to point to the
    operator's own page.
 3. **Suggest a change** on the map: the "Suggest a change to this venue" link in a venue popup opens a prefilled form; a reviewer
-   approves it and a pull request is opened for you.
-4. **Edit the data** with a pull request (below). Approved reviewers merge.
+   approves it and a pull request is opened for you. Pick **Report a racket sport played here** to pass on what you saw or were told
+   (no link needed): it shows on the map as "Reported, not independently confirmed" until more people or an official page back it.
+4. **No GitHub account?** The popup's "Report without a GitHub account" link opens a Google Form (no sign-in, no email asked). The owner
+   checks each response for plausibility and spam, approves it, and it is imported the same way as a GitHub report.
+5. **Edit the data** with a pull request (below). Approved reviewers merge.
 
 ## Editing data
 Data lives in CSV seeds in `transform/seeds/`. Edit these, never the files noted as generated:
 - `manual_venues.csv`: venues no dataset knows. Set `confirmation` to `visited`, `official` or `reported`, with `confirmed_on` and `evidence`.
 - `venue_actions.csv`: link-outs (booking, open play, classes). Keep `verified_on` and `evidence`.
 - `venue_leads.csv`: claims not yet placed or checked. Leads are not shown on the map.
-- `watch_events.csv` (https links only), `place_sport_overrides.csv`, `sport_aliases.csv`.
+- `watch_events.csv` (https links only), `place_sport_overrides.csv`, `sport_aliases.csv`, `closed_places.csv` (Overture places that no longer exist).
 
 Do not edit `transform/seeds/all_racquet.csv`; it is overwritten from the Google Sheet.
 

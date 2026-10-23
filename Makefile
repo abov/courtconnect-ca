@@ -1,6 +1,7 @@
 # Windows users: run these from Git Bash, or copy the commands.
 PY ?= python
 DBT = dbt --project-dir transform --profiles-dir transform
+RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -8,9 +9,25 @@ setup:            ## one-time: create venv and install deps
 extract:          ## pull ALL CalNeva courts + named parent features from OpenStreetMap, then places from Overture (~20 min)
 	$(PY) ingestion/extract_osm_courts.py --area california
 	$(PY) ingestion/extract_osm_parents.py --area california
-	$(PY) ingestion/extract_osm_courts.py --area nevada --out data/raw/osm_courts_nv.csv
-	$(PY) ingestion/extract_osm_parents.py --area nevada --out data/raw/osm_parents_nv.csv
+	$(PY) ingestion/extract_osm_courts.py --area nevada --out $(RAW)/osm_courts_nv.csv
+	$(PY) ingestion/extract_osm_parents.py --area nevada --out $(RAW)/osm_parents_nv.csv
 	$(PY) ingestion/extract_overture_places.py
+	$(PY) ingestion/extract_overture_addresses.py
+
+fresh-db:         ## new worktree (or a stale/broken db): rebuild courtconnect.duckdb here from the shared raw CSVs + this branch's seeds (~1 min)
+	$(PY) ingestion/fresh_db.py
+
+extract-boundaries: ## Census place + county boundaries for CA/NV into data/raw (~13 MB download; yearly at most), then make load
+	$(PY) ingestion/extract_census_boundaries.py
+
+city-boundaries: ## city for pins that still have none, from the Census boundaries (writes seeds/venue_place_boundary.csv; then dbt build, make app-data)
+	$(PY) ingestion/place_from_boundaries.py
+
+extract-addresses: ## Overture address points near the pins, for the address fill (reads S3, ~1 min; run after the OSM/places extract, then make load)
+	$(PY) ingestion/extract_overture_addresses.py
+
+reverse-geocode: ## tier 3 address fill: cached Nominatim lookups for non-home blanks (1 request a second; runs the uncached pins only, capped at 100 per run; ask the owner for more)
+	$(PY) ingestion/reverse_geocode_blanks.py --limit 100
 
 extract-places:   ## pull racket-related CalNeva places from Overture Maps (reads S3 directly, ~1 min)
 	$(PY) ingestion/extract_overture_places.py
@@ -43,9 +60,6 @@ demo: extract load build   ## the one-command demo
 docs:
 	$(DBT) docs generate && $(DBT) docs serve
 
-snowflake-build:  ## run the same project on Snowflake
-	$(PY) ingestion/load_raw.py --target snowflake
-	$(DBT) build --target snowflake
 
 app-data:        ## export the venue finder to app/data/venues.json for the map
 	$(PY) ingestion/export_app_data.py
@@ -62,8 +76,14 @@ check-links:      ## verify every link-out in venue_actions.csv still loads
 rank-review:      ## order the sport review queue, clear-cut cases first -> docs/review_priority.csv (needs requirements-ml.txt)
 	$(PY) ingestion/rank_review_queue.py
 
+eval-match:      ## score the Overture place -> OSM match against ci/gold/place_osm_pairs.csv (report only; docs/gold_set_plan.md)
+	$(PY) ingestion/eval_match_gold.py
+
 quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 	$(PY) ingestion/export_quality_scorecard.py
+
+sync-reports:     ## import approved community-form reports (Google Form) as seed edits; needs REPORTS_CSV_URL in .env
+	$(PY) ci/sync_reports.py $(ARGS)
 
 issues:           ## check open GitHub issues: what is missing, already done, duplicate or waiting (needs gh, read-only)
 	$(PY) ci/check_issues.py

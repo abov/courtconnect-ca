@@ -17,17 +17,24 @@ with cells as (
 
 offsets as (
     select -1 as d union all select 0 union all select 1
+),
+
+-- The neighbour cell is computed in a CTE, not inside the join condition: with `b.cy = a.cy + dy.d` in the ON clause
+-- DuckDB did not hash-join and the model took ~90 s for 27k courts; this form takes well under a second.
+probe as (
+    select a.court_id, a.lat, a.lon, a.cy + dy.d as ny, a.cx + dx.d as nx
+    from cells a
+    cross join offsets dy
+    cross join offsets dx
 )
 
 select
     a.court_id as court_a,
     b.court_id as court_b
-from cells a
-cross join offsets dy
-cross join offsets dx
+from probe a
 join cells b
-    on b.cy = a.cy + dy.d
-   and b.cx = a.cx + dx.d
+    on b.cy = a.ny
+   and b.cx = a.nx
    and b.court_id <> a.court_id
 where sqrt(
           power((a.lat - b.lat) * 110540, 2)
@@ -49,3 +56,10 @@ where sqrt(
           power((a.lat - b.lat) * 110540, 2)
         + power((a.lon - b.lon) * cos(radians(a.lat)) * 111320, 2)
       ) <= {{ var('parent_merge_radius_m') }}
+
+union
+
+-- hand-checked merges of court groups that are one facility (seeds/court_group_merge.csv), both directions
+select court_id_a as court_a, court_id_b as court_b from {{ ref('court_group_merge') }}
+union
+select court_id_b as court_a, court_id_a as court_b from {{ ref('court_group_merge') }}

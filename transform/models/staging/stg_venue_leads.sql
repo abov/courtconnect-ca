@@ -12,5 +12,6 @@ select
     lower(trim(status))                                       as status,
     nullif(trim(next_step), '')                               as next_step,
     cast(noted_on as date)                                    as noted_on,
-    nullif(trim(notes), '')                                   as notes
+    nullif(trim(notes), '')                                   as notes,
+    cast(nullif(trim(directories_seen), '') as integer)       as directories_seen   -- public padel directories seen listing it (2026-10-17; not evidence)
 from {{ ref('venue_leads') }}

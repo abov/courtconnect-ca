@@ -23,34 +23,39 @@ MAP = [
     ("table_tennis", "Table Tennis", "high"),
     ("tennis_table", "Table Tennis", "high"),
     ("pickleball", "Pickleball", "high"),
-    ("padel", "Padel", "high"),
-    ("padel_tennis", "Padel", "high"),
+    # padel is NOT pop tennis: aerial-imagery padel tags are often wrong (docs/padel_scan.md), so medium until a club page or override confirms
+    ("padel", "Padel", "medium"),
     ("badminton", "Badminton", "high"),
     ("squash", "Squash", "high"),
     ("racquetball", "Racquetball", "high"),
     ("outdoor_racquetball", "Outdoor Racquetball", "high"),
     ("paddle_tennis", "Pop Tennis", "medium"),
+    ("paddletennis", "Pop Tennis", "medium"),
+    ("pop_tennis", "Pop Tennis", "medium"),
+    ("poptennis", "Pop Tennis", "medium"),
     ("platform_tennis", "Platform Tennis", "high"),
     ("beach_tennis", "Beach Tennis", "high"),
     ("beachtennis", "Beach Tennis", "high"),
-    ("pelota", "Basque Pelota", "medium"),
-    ("fronton", "Basque Pelota", "medium"),
-    ("basque_pelota", "Basque Pelota", "medium"),
-    ("frontenis", "Frontenis", "high"),
+    ("frontenis", "Basque Pelota: Frontenis", "high"),
     ("paddleball", "4-wall Paddleball", "medium"),
     ("tamburello", "Tamburello", "high"),
     ("real_tennis", "Real Tennis", "high"),
-    ("jai_alai", "Jai alai", "high"),
+    ("jai_alai", "Basque Pelota: Jai Alai", "high"),
     ("jeu_de_paume", "Hand Tennis", "medium"),
     ("soft_tennis", "Soft Tennis", "high"),
     ("swingball", "Totem Tennis", "medium"),
     ("touchtennis", "Touchtennis", "high"),
+] + [
+    # generic pelota / fronton tags do not say which variant is played; every Basque Pelota variant on the sheet is listed, labelled inferred (owner 2026-10-19)
+    (key, f"Basque Pelota: {v}", "medium")
+    for key in ("pelota", "fronton", "basque_pelota")
+    for v in ("Pala Corta", "Paleta Cuero", "Paleta Goma", "Grand Chistera", "Frontenis", "Jai Alai", "Joko Garbi", "Xare")
 ]
 
 
 def main() -> None:
     with (SEEDS / "all_racquet.csv").open(encoding="utf-8", newline="") as f:
-        sports = [r["sport"].strip() for r in csv.DictReader(f)]
+        sports = list(dict.fromkeys(r["sport"].strip() for r in csv.DictReader(f)))
 
     rows = []
     for key, prefix, conf in MAP:

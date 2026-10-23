@@ -7,8 +7,7 @@
 - [ ] A third party reported it: (link) — set `confirmation` to `reported`
 
 ## Checklist
-- [ ] I edited seeds only (not `all_racquet.csv`)
-- [ ] Each new or changed row has `evidence` and a date (`confirmed_on` or `verified_on`)
-- [ ] Public pages only: no logins used, no copied reviews or text, no Google Places data
+- [ ] Seeds only (not `all_racquet.csv`); each row has `evidence` + a date
+- [ ] Public pages only: no logins, no copied text or reviews
 - [ ] No personal information
 - [ ] `make build` passes

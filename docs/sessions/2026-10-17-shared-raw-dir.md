@@ -1,0 +1,1 @@
+Shared raw data folder: ingestion/rawdir.py resolves every script default to the main checkout data/raw (env COURTCONNECT_DATA_DIR overrides), so worktrees no longer keep stale copies; load_raw.py now refuses a >10% shrink without --force (guards the 888 -> 263 walls incident).

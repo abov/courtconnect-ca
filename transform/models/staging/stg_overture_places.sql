@@ -22,3 +22,5 @@ select
 from {{ source('raw', 'overture_places') }}
 where lat is not null and lon is not null
   and coalesce(lower(operating_status), 'open') not in ('closed', 'permanently_closed')
+  -- seeds/closed_places.csv: places that Overture still lists as open but that no longer exist (owner or public-page evidence)
+  and place_id not in (select place_id from {{ ref('closed_places') }})

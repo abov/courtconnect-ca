@@ -5,6 +5,9 @@
     python ingestion/extract_osm_walls.py --area california  # whole state, in tiles (slow on the free Overpass servers)
 
 Output: data/raw/osm_walls.csv (one row per OSM element). Walls are separate from courts: see transform/models/core/dim_wall.sql.
+The output file is MERGED, not overwritten: rows from this run replace the same OSM elements, rows outside the area just
+queried are kept (so `--area metros` never shrinks a statewide file), and rows inside the area that OSM no longer returns
+are dropped (deleted or retagged in OSM) unless a tile failed, in which case nothing is dropped.
 """
 from __future__ import annotations
 
@@ -15,6 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import overpass
+from rawdir import raw_path
 
 # LA, San Diego, San Francisco, and the south and east Bay (San Jose to Oakland): the boxes the metro pass used
 METROS = [overpass.BBOXES["la"], overpass.BBOXES["sd"], overpass.BBOXES["sf"], (37.2, -122.3, 37.6, -121.7), (37.6, -122.35, 38.0, -122.0)]
@@ -49,10 +53,31 @@ def to_row(el: dict, ts: str) -> dict:
     }
 
 
+def read_existing(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    with path.open(newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def in_tile(row: dict, tiles) -> bool:
+    lat, lon = float(row["lat"]), float(row["lon"])
+    return any(s <= lat <= n and w <= lon <= e for s, w, n, e in tiles)
+
+
+def merge_rows(old: list[dict], new: dict[tuple, dict], tiles, area: str, any_failed: bool) -> list[dict]:
+    """Rows of this run, plus old rows this run did not cover. An old row is dropped only if this run queried its place
+    (inside a tile and in a state the area keeps) and did not see it again, and no tile failed."""
+    kept = [r for r in old
+            if (r["osm_type"], int(r["osm_id"])) not in new
+            and (any_failed or not (in_tile(r, tiles) and r.get("region") in overpass.AREA_REGIONS[area]))]
+    return [*kept, *new.values()]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--area", choices=[*overpass.BBOXES, "metros", "california", "nevada"], default="la")
-    ap.add_argument("--out", default="data/raw/osm_walls.csv")
+    ap.add_argument("--out", default=raw_path("osm_walls.csv"))
     args = ap.parse_args()
 
     tiles = (METROS if args.area == "metros" else overpass.area_tiles(args.area))
@@ -71,11 +96,12 @@ def main() -> None:
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
+    rows = merge_rows(read_existing(out), seen, tiles, "california" if args.area == "metros" else args.area, bool(failed))
     with out.open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
-        w.writerows(seen.values())
-    print(f"Wrote {len(seen):,} rows to {out}")
+        w.writerows(rows)
+    print(f"Wrote {len(rows):,} rows to {out} ({len(seen):,} from this run)")
     if failed:
         print(f"WARNING: {len(failed)} tile(s) failed and are MISSING from the output: {failed}")
         raise SystemExit(2)

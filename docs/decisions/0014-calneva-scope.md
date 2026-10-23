@@ -1,6 +1,6 @@
 # 0014. CalNeva scope: California + Nevada
 
-Date: 2026-10-14. Status: accepted (2026-10-14); steps 1 (regions table, #65) and 2 (region column, #67) done 2026-10-14.
+Date: 2026-10-14. Status: accepted (2026-10-14); steps 1-4 done (regions table #65, region column #67, labels, Nevada extracts: 525 NV venues live as of 2026-10-17). Step 5 (Nevada seeds, leads, runbook) is done as of 2026-10-21: Reno, Henderson, Clark County and Washoe County parks seeded, Las Vegas events and social series in, the runbook covers both regions through the `REGIONS` table; Sparks parked; NV resort and casino gyms closed by the owner 2026-10-17. The 8 open NV leads wait on outside events (recheck January 2027). Open question 1 is answered: the repo/Pages rename to `courtconnect` comes after the beta (date TBD, with a redirect stub for the old Pages URL). The "Engines" line below is superseded by ADR 0018 (DuckDB only).
 
 ## Context
 CourtConnect covers California only. The owner wants the same coverage for Nevada (Las Vegas/Henderson, Reno/Sparks, Carson City, Lake Tahoe) and the product to be called "CalNeva". `docs/calneva_audit.md` lists every hard-coded California assumption (extract borders and boxes, two bbox tests, the `likely_in_california` flag, map bounds, labels). Nothing in the models or export carries a state today.
@@ -13,7 +13,7 @@ CourtConnect covers California only. The owner wants the same coverage for Nevad
 - **Labels:** user-facing and doc text says "CalNeva" where it means the covered region (app title, description, header, map label, Makefile help, coverage report heading, README, docs). Historical text stays: ADRs 0001-0013, past status lines, and California-only source lists in the tournament docs (Nevada rows are added beside them).
 - **Names kept stable:** repo, folder and Pages URL (`courtconnect-ca`) do not change until the owner decides.
 - **Order:** (1) region table and polygon clip with a check on known CA/NV points; (2) `region` column through raw, dim, export and app; (3) one PR renaming labels; (4) Nevada metro extracts (slices first, as for walls, statewide later); (5) Nevada seeds, tournaments, leads and runbook rows.
-- **Engines:** all model changes must still run unchanged on DuckDB and Snowflake. New raw columns need `load_raw.py --target snowflake` and a full refresh where a seed gains a column.
+- **Engines:** (superseded by ADR 0018, 2026-10: DuckDB only, no Snowflake target) a seed that gains a column still needs a full refresh.
 
 ## Open questions (owner)
 - Is "CalNeva" only the app and doc name, or also the repo and domain?

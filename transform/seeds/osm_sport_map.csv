@@ -3,25 +3,48 @@ tennis,Tennis,high
 table_tennis,Table Tennis,high
 tennis_table,Table Tennis,high
 pickleball,Pickleball,high
-padel,Padel,high
-padel_tennis,Padel,high
+padel,Padel,medium
 badminton,Badminton,high
 squash,Squash,high
 racquetball,Racquetball,high
 outdoor_racquetball,Outdoor Racquetball,high
 paddle_tennis,Pop Tennis,medium
+paddletennis,Pop Tennis,medium
+pop_tennis,Pop Tennis,medium
+poptennis,Pop Tennis,medium
 platform_tennis,Platform Tennis,high
 beach_tennis,Beach Tennis,high
 beachtennis,Beach Tennis,high
-pelota,Basque Pelota,medium
-fronton,Basque Pelota,medium
-basque_pelota,Basque Pelota,medium
-frontenis,Frontenis,high
+frontenis,Basque Pelota: Frontenis,high
 paddleball,4-wall Paddleball,medium
 tamburello,Tamburello,high
 real_tennis,Real Tennis,high
-jai_alai,Jai alai,high
+jai_alai,Basque Pelota: Jai Alai,high
 jeu_de_paume,Hand Tennis,medium
 soft_tennis,Soft Tennis,high
 swingball,Totem Tennis,medium
 touchtennis,Touchtennis,high
+pelota,Basque Pelota: Pala Corta,medium
+pelota,Basque Pelota: Paleta Cuero,medium
+pelota,Basque Pelota: Paleta Goma,medium
+pelota,Basque Pelota: Grand Chistera,medium
+pelota,Basque Pelota: Frontenis,medium
+pelota,Basque Pelota: Jai Alai,medium
+pelota,Basque Pelota: Joko Garbi,medium
+pelota,Basque Pelota: Xare,medium
+fronton,Basque Pelota: Pala Corta,medium
+fronton,Basque Pelota: Paleta Cuero,medium
+fronton,Basque Pelota: Paleta Goma,medium
+fronton,Basque Pelota: Grand Chistera,medium
+fronton,Basque Pelota: Frontenis,medium
+fronton,Basque Pelota: Jai Alai,medium
+fronton,Basque Pelota: Joko Garbi,medium
+fronton,Basque Pelota: Xare,medium
+basque_pelota,Basque Pelota: Pala Corta,medium
+basque_pelota,Basque Pelota: Paleta Cuero,medium
+basque_pelota,Basque Pelota: Paleta Goma,medium
+basque_pelota,Basque Pelota: Grand Chistera,medium
+basque_pelota,Basque Pelota: Frontenis,medium
+basque_pelota,Basque Pelota: Jai Alai,medium
+basque_pelota,Basque Pelota: Joko Garbi,medium
+basque_pelota,Basque Pelota: Xare,medium

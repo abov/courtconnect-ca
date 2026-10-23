@@ -7,13 +7,13 @@ Players of smaller racket sports cannot answer "where can I play this near me, a
 
 ## Users and constraints
 - **Users:** me and friends who play several sports; later, possibly the wider community (open source or paid, not decided).
-- **Constraints I set on purpose:** link out only (no bookings or payments); public pages only, never my own logins (ADR 0007); no Google Places data, whose terms forbid storing it (ADR 0005); every model must run unchanged on DuckDB and Snowflake.
+- **Constraints I set on purpose:** link out only (no bookings or payments); public pages only, never my own logins (ADR 0007); no Google Places data, whose terms forbid storing it (ADR 0005); every model ran unchanged on DuckDB and Snowflake until Snowflake was retired in October 2026 (ADR 0018); DuckDB is the only engine now.
 
 ## What I built
 | Layer | What | Why it matters |
 |---|---|---|
 | Ingestion | Python extract/load of OpenStreetMap courts and Overture places, plus a link checker | Repeatable raw layer; CI uses a small committed fixture, never a live API |
-| Warehouse | dbt (DuckDB for dev and CI, Snowflake for prod), 145 models/seeds/tests, `adapter.dispatch` macros | One codebase, two engines; tests guard the logic (clusters converge, every court has one venue, evidence required) |
+| Warehouse | dbt on DuckDB (dev, CI and the export; Snowflake was the original prod target, retired 2026-10), 145 models/seeds/tests, `adapter.dispatch` macros | One codebase built portable across two engines; tests guard the logic (clusters converge, every court has one venue, evidence required) |
 | Serving | Static MapLibre page fed by a 2 MB JSON export; GitHub Pages | Zero hosting cost; CI fails if the export is stale |
 | Operations | Bi-weekly refresh runbook, scheduled task, contributor workflow (issue form to PR), evidence checker | The data stays current without me guessing what changed |
 | Governance | 12 ADRs and a confirmation scale (visited / official / reported / inferred) | Every claim says how we know it |
