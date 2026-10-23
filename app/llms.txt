@@ -1,0 +1,17 @@
+# CourtConnect CalNeva
+
+> A free map of racket-sport venues in California and Nevada: find a court, watch a match, try a new sport, find people to play with. It links out to venues and organizers; it takes no bookings or payments.
+
+Everything is public and static. The whole dataset is one JSON file, rebuilt about twice a month. Keys are single letters to keep it small, so read the data dictionary first.
+
+- [Data dictionary](https://abov.github.io/courtconnect-ca/data-dictionary.md): what every key and code in venues.json means, with how-to-answer tips
+- [Dataset](https://abov.github.io/courtconnect-ca/data/venues.json): venues, sports, events to watch, social series, hitting walls, player-matching apps (about 2.4 MB)
+- [Map](https://abov.github.io/courtconnect-ca/): the web app
+- [Source and docs](https://github.com/abov/courtconnect-ca): code, decisions, issue form to suggest a change
+
+## Use with care
+
+- Data is inferred unless marked confirmed. A venue's `cf` key says whether it was visited, stated by the operator, or only reported; no `cf` means the pin comes from map data only. Say so when you answer.
+- Public access, hours and prices are often unknown. Do not state them as fact; point to the venue's website (`w`) or link-outs (`ac`).
+- Street addresses flagged `ai`, `ap` or `ns` are inferred (nearest address, enclosing park, or nearest road).
+- Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation, plus hand-curated entries. Keep that attribution when you reuse it.
