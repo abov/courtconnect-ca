@@ -72,7 +72,7 @@ Session notes: one file per session in `docs/sessions/` (read only the newest 1-
 
 *After beta (December; rank with beta findings, ADR 0015)*
 - Beta round (was 9, `docs/feedback_round.md`; dates TBD): send, collect, record findings (RICE, `docs/feedback_findings.md`). Owner: exclude own IP in GoatCounter.
-- Visual polish (was 3, `docs/ux_polish.md`): PR 5 popup grouping + status band, PR 6 sport glyph pins; owner eyeballs 375/320px + dark. Phone view: ring key and bottom-sheet popup done 2026-10-21; plain-language popup + filter labels done the same day.
+- Visual polish (was 3, `docs/ux_polish.md`): PR 5 popup grouping + status band and PR 6 sport glyph pins are built (2026-10-23); owner eyeballs 375/320px + dark. Phone view: ring key and bottom-sheet popup done 2026-10-21; plain-language popup + filter labels done the same day.
 - Watch events split on-site vs `screening` (was 7): `watch_format` value + accepted_values test + popup label, then Cosm events.
 - Event group labels (owner 2026-10-22, changed 2026-10-23): keep the action headers "To watch" / "To join" (they say what the user does; "Pro"/"Amateur" would merge spectating and playing). Done instead: the Level badge on watch events is filled for pro rows (`.badge.ev.pro`). Nothing left here.
 - Social phase B (ADR 0024, proposed): recommends stopping at phase A (built: Watch & Social view, `social_events.csv`, `player_platforms.csv`; `player_groups.csv` keeps filling via scheduled step 2d, no shelf planned). Link-out discovery filters only if the beta asks (question 7, `docs/feedback_round.md`); own accounts/matching rejected.

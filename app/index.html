@@ -169,6 +169,7 @@
   dialog::backdrop { background: rgba(0,0,0,.45); }
   .dlg-h { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
   .dlg-h h2 { margin: 0; font-size: 16px; }
+  .dlg-b h3 { margin: 14px 0 2px; font-size: 14px; }
   .dlg-b { padding: 14px 18px 18px; overflow: auto; max-height: calc(86vh - 60px); }
   table { border-collapse: collapse; width: 100%; font-size: 13px; }
   th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -251,7 +252,7 @@
   <header>
     <h1><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1>
     <div class="sub" id="headline">Find where to play racket sports in California and Nevada.</div>
-    <p class="sub welcome">We link out to venues; no bookings or payments.</p>
+    <p class="sub welcome">Every racket sport, every kind of court, from free parks to private clubs. Labelled by how sure we are. We link out and never take bookings or payments.</p>
     <div class="seg" role="group" aria-label="What are you looking for?">
       <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice, and apps to find people to play with">Places to play</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Events &amp; meetups</button>
@@ -340,12 +341,26 @@
   </div>
   <div id="shortlist" class="playonly" aria-label="Your shortlist" hidden></div>
   <ul id="list"></ul>
-  <footer><div id="stats"></div><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
+  <footer><div id="stats"></div><div><button class="link" id="openAbout" type="button">About CourtConnect</button> &middot; <button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
 
 <main id="map" aria-label="Map of racket-sport venues in California and Nevada"></main>
 
 <div id="toast" role="status" aria-live="polite" hidden></div>
+
+<dialog id="about" aria-labelledby="aboutTitle">
+  <div class="dlg-h"><h2 id="aboutTitle">About CourtConnect</h2><button class="link" id="closeAbout" type="button">Close</button></div>
+  <div class="dlg-b">
+    <p>One free map of every racket sport in California and Nevada: tennis, pickleball, padel, squash, badminton, table tennis and the lesser-known ones, on public parks, hitting walls, rec centers and private clubs. Each place says how sure we are (confirmed, official or reported) and when it was last checked. We link out to the venue's own page; we never take bookings or payments, and there are no accounts.</p>
+    <h3>For players</h3>
+    <p>Find a court, see what is on to watch, and find groups to play with. <button class="link" id="aboutUse" type="button">Use the map</button></p>
+    <h3>For clubs and facilities</h3>
+    <p>Is your club missing or wrong? Tell us with a link to your public page; we review it and update the listing when the page backs it up. <a id="aboutClub" href="#" target="_blank" rel="noopener noreferrer">Fix or add your listing</a> (no sign-in)</p>
+    <h3>For companies and organizers</h3>
+    <p>Running a tournament, league or open play? Send us the dates and your public page; we review it and list it as an event when the page backs it up. <a id="aboutEvent" href="#" target="_blank" rel="noopener noreferrer">Add an event</a> (no sign-in)</p>
+    <p class="meta">A listing or label changes only with public evidence. It cannot be bought, and there is no paid or featured placement.</p>
+  </div>
+</dialog>
 
 <dialog id="coverage" aria-labelledby="covTitle">
   <div class="dlg-h"><h2 id="covTitle">How complete is this data?</h2><button class="link" id="closeCoverage" type="button">Close</button></div>
@@ -776,7 +791,7 @@ function wallItems(list) {
 // ---------- map ----------
 let map, popup, current = [], mapReady = false, viewEv = [], viewSoc = [];
 function geojson(list) {
-  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
+  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0, g: pinFamily(v)}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
 function initMap() {
   map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: [[-124.6, 32.4], [-114.0, 42.2]],
@@ -798,10 +813,17 @@ function initMap() {
       layout: {"text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Regular"], "text-size": 12},
       paint: {"text-color": "#fff"}});
     map.addLayer({id: "pts", type: "circle", source: "v", filter: ["!", ["has", "point_count"]],
-      paint: {"circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 4, 14, 8],
+      paint: {"circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 4, 14, 8, 16, 12],
               "circle-stroke-color": ["case", ["==", ["get", "up"], 1], ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"], ["==", ["get", "up"], 2], "#57606a", "#fff"],
               "circle-stroke-width": ["case", ["==", ["get", "up"], 1], 3, ["==", ["get", "up"], 2], 3, 1.5],
                             "circle-color": ["case", [">=", ["get", "up"], 1], "#fff", ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"]]}});   // up 1 = confirmed but not open yet: hollow ring; up 2 = only reported by a directory: lighter, grey ring
+    // Sport glyph inside the pin from zoom ~15 (polish PR 6). Pin colour still carries the status; the glyph is a second, redundant cue.
+    // Dark glyph on gold and on hollow rings, white on the rest, so contrast stays above 3:1 on every pin colour.
+    map.addLayer({id: "pts-glyph", type: "symbol", source: "v", filter: ["!", ["has", "point_count"]],
+      layout: {"icon-image": ["concat", "g-", ["get", "g"], ["case", ["any", [">=", ["get", "up"], 1], ["==", ["get", "q"], "i"]], "-d", "-w"]],
+               "icon-size": ["interpolate", ["linear"], ["zoom"], 14.5, 0.6, 16, 0.85], "icon-allow-overlap": true, "icon-ignore-placement": true},
+      paint: {"icon-opacity": ["interpolate", ["linear"], ["zoom"], 14.5, 0, 15, 1]}});
+    addPinGlyphs();
     map.on("click", "clusters", e => {
       const f = map.queryRenderedFeatures(e.point, {layers: ["clusters"]})[0];
       map.getSource("v").getClusterExpansionZoom(f.properties.cluster_id).then(z => map.easeTo({center: f.geometry.coordinates, zoom: z + 0.5}));
@@ -870,6 +892,16 @@ function iconSpan(fams) {
   return sp;
 }
 const venueIcons = v => iconSpan(v.p.slice().sort((a, b) => (b[1] || 0) - (a[1] || 0)).map(p => familyOf(sports[p[0]].n)));
+const pinFamily = v => v.p.length ? familyOf(sports[v.p.slice().sort((a, b) => (b[1] || 0) - (a[1] || 0))[0][0]].n) : "other";   // same "main sport" rule as venueIcons
+function addPinGlyphs() {   // the popup icon set drawn to small images, one white and one dark variant per sport family
+  for (const f of Object.keys(ICON)) for (const [suffix, c] of [["w", "#ffffff"], ["d", "#1f2328"]]) {
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" fill="none" stroke="' + c + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+      + ICON[f].replace(/class="f"/g, 'fill="' + c + '" stroke="none"') + '</svg>';   // static strings above, no data
+    const img = new Image(32, 32);
+    img.onload = () => { if (!map.hasImage("g-" + f + "-" + suffix)) map.addImage("g-" + f + "-" + suffix, img, {pixelRatio: 2}); };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  }
+}
 function updateSportIcon() { const w = $("sporticon"), s = state.sport >= 0 ? sports[state.sport] : null; w.innerHTML = ""; w.hidden = !s; if (s) w.append(...iconSpan([familyOf(s.n)]).childNodes); }
 
 // Plays line keeps the sports and counts; same-court options and inferred variants are returned separately for the details section.
@@ -981,7 +1013,7 @@ function showVenue(v, fly) {
 function dist2(v, c) { const dx = (v.x - c.lng) * Math.cos(c.lat * Math.PI / 180), dy = v.y - c.lat; return dx * dx + dy * dy; }
 function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
-  show(["clusters", "cluster-count", "pts"], mode === "play");
+  show(["clusters", "cluster-count", "pts", "pts-glyph"], mode === "play");
   show(["ev-pts", "ev-label", "soc-pts", "soc-label"], mode === "watch");
   const walls_on = mode === "play" && wallsFiltered().length > 0;
   show(["wall-pts", "wall-label"], walls_on);
@@ -1418,6 +1450,11 @@ function initCoverage() {
     body.append(el("tr", {}, el("td", {text: s.n}), el("td", {}, el("span", {class: "st " + s.s, text: s.s})), el("td", {class: "n", text: fmt(s.v)}))));
   $("openCoverage").addEventListener("click", () => $("coverage").showModal());
   $("closeCoverage").addEventListener("click", () => $("coverage").close());
+  $("aboutClub").href = REPORT_FORM;
+  $("aboutEvent").href = REPORT_FORM;
+  $("openAbout").addEventListener("click", () => $("about").showModal());
+  $("closeAbout").addEventListener("click", () => $("about").close());
+  $("aboutUse").addEventListener("click", () => $("about").close());
   $("attr").replaceChildren(document.createTextNode(m.attribution + " Map: OpenFreeMap, © OpenMapTiles. "),
     el("a", {href: "https://github.com/abov/courtconnect-ca", target: "_blank", rel: "noopener noreferrer", text: "Source code"}),
     document.createTextNode(ANALYTICS_ON ? " Anonymous visit counts via GoatCounter (no cookies, no personal data)." : ""));

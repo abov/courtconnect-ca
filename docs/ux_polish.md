@@ -86,9 +86,9 @@ Ship **A** now (before or alongside the beta follow-ups), then take the popup/ca
 | 1 | Colour tokens (brand blue/gold, warm neutrals, dark pairs); replace hard-coded colours | AA contrast table in PR; light + dark at 375/320px |
 | 2 | Shape/spacing/shadow/motion; pill mode buttons and chips | touch targets still 44px; no wrap in header (see 2026-10-14g) |
 | 3 | Sport icon set in list, popup, dropdown | text kept next to every icon; no layout shift |
-| 4 | Friendlier empty/loading states and welcome line | honesty labels unchanged |
+| 4 | Friendlier empty/loading states and welcome line (built earlier: empty states with a Clear button, spinner, welcome line; list skeleton skipped) | honesty labels unchanged |
 | 5 (B) | Popup grouping and status band (built 2026-10-23; the active-filter chips already existed: `#active` / `renderActive`) | diff the popup text before/after: every line still present |
-| 6 (B) | Sport glyph pins at high zoom | pin colours still distinguishable (colour-blind simulation) |
+| 6 (B) | Sport glyph pins at high zoom (built 2026-10-23: `pts-glyph` layer from zoom 15, white glyph on green/blue/grey, dark on gold and hollow rings; pin colours unchanged, so the glyph only adds a cue; colour-blind simulation not run, owner eyeballs) | pin colours still distinguishable (colour-blind simulation) |
 
 **No-detail-lost check for every PR:** list the text labels and links the popup/list rendered before and after for 3 sample venues (confirmed, inferred, NV with link-outs) and paste the diff in the PR. After merge `pages.yml` deploys by itself; hard-refresh (Pages caches up to 10 min).
 
