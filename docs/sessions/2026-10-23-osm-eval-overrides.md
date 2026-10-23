@@ -1,5 +1,5 @@
-# 2026-10-23 OSM gold set + override check: no changes
+# 2026-10-23 OSM refresh, gold set, override cleanup
 
-- Gold set: not re-run. Raw `osm_courts*.csv` still 2026-10-14, `osm_parents*.csv` 2026-10-17 (only the wall/beach-volleyball scans are newer); standing result 129 pairs, 0 wrong, 4 missed.
-- Overrides: read-only check of all 144 `osm_court_sport_overrides.csv` objects against live OSM (api.openstreetmap.org, project User-Agent). One fix has landed: Jim Gilliam ways 1562970254/5 now `paddle_tennis;pop_tennis` (edited 2026-10-15). The other 142 rows' objects are unchanged since the 2026-10-09/14 extract.
-- Rows kept: our raw extract still says `padel` for those 2 ways, so dropping their rows now would put Padel back on the map. Drop them (and any others fixed by then) after the next OSM extract + `make load`, then re-run `make eval-match`.
+- Owner OK'd an OSM-only re-extract (CA+NV courts and parents; Overture places/addresses not re-run). Gold set after it: 129 pairs, 0 wrong merges, 4 missed (unchanged: Stanford West Campus, La Costa, Quail Lakes, Olympic Training Center).
+- Live OSM check of the 144 override objects: only Jim Gilliam ways 1562970254/5 were fixed (now `paddle_tennis;pop_tennis`, 2026-10-15). Their 2 rows are dropped; the pin is unchanged. The ways no longer carry `leisure=pitch`, so the extract skips them; a mapper could restore it.
+- Venues 10,267 -> 10,277 from normal OSM drift (23 moved/retagged, 33 new, 17 changed); `venues.json` re-exported. Next: `reverse_geocode_blanks.py` (+ `city-boundaries` if new cityless pins) per CLAUDE.md item 2.
