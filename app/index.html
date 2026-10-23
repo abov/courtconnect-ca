@@ -374,7 +374,7 @@ let DATA, sports, venues, events = [], socials = [], socialPins = [], walls = []
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
-let textOff = false, searchCentre = null, zips = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
+let textOff = false, searchCentre = null, zips = null, places = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
   const e = document.createElement(tag);
@@ -862,10 +862,11 @@ function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(
 // A name or city fits the map to every match. A ZIP (Census ZCTA centre, data/zips.json) fits to the pins within 6 km, or to the 5 nearest when none are that close.
 // Nothing found: the closest city name (typos), else the pins stay as the other filters leave them, with a note saying so.
 let qWords = [], qWordsFor = null;                                      // every typed word must appear (any order): "tennis manhattan" finds Manhattan Beach tennis courts
-const textMatch = s => { if (qWordsFor !== state.text) { qWordsFor = state.text; qWords = state.text.split(/\s+/).filter(Boolean); } return qWords.every(w => s.includes(w)); };
+const textMatch = s => { if (qWordsFor !== state.text) { qWordsFor = state.text; const z = zipToken(state.text); qWords = state.text.split(/\s+/).filter(w => w && w !== z); } return qWords.every(w => s.includes(w)); };
 const textHit = s => !state.text || textOff || textMatch(s);
 const evText = e => [e.n, e.v, e.c, e.sp, e.o].filter(Boolean).join(" ").toLowerCase();
 const isZip = t => /^\d{5}$/.test(t);
+const zipToken = t => { const w = t.split(/\s+/); return w.length > 1 && w.filter(isZip).length === 1 ? w.find(isZip) : null; };   // "94105 padel": the ZIP sets the centre, the other words still filter
 function distKm(p, c) { return Math.hypot((p.x - c.lng) * Math.cos(c.lat * Math.PI / 180) * 111.32, (p.y - c.lat) * 110.57); }
 const nearCmp = (a, b) => searchCentre ? distKm(a, searchCentre) - distKm(b, searchCentre) : 0;
 function editDist(a, b) {
@@ -909,6 +910,22 @@ async function zipPoint(q) {
   for (const k in zips) { const d = Math.abs(+k - n), l = lcp(k); if (!best || l > best.l || (l === best.l && d < best.d)) best = {l, d, k}; }
   return {at: zips[best.k], zip: best.k, exact: false};
 }
+// A typed city with no venue pins: the Census place list (data/places.json, [name, state, lat, lon]) still knows where it is. Exact name first, then a unique "starts with", then a one-or-two letter typo.
+async function placePoint(q) {
+  if (!places) { const r = await fetch("data/places.json"); if (!r.ok) throw new Error("HTTP " + r.status); places = await r.json(); }
+  const low = p => p[0].toLowerCase(), pick = list => list.length ? list[0] : null;   // the same name in both states: the first, and the note names the state
+  const exact = pick(places.filter(p => low(p) === q));
+  if (exact) return {p: exact, typo: false};
+  const starts = places.filter(p => low(p).startsWith(q));
+  if (q.length >= 3 && new Set(starts.map(low)).size === 1) return {p: starts[0], typo: false};
+  let best = null;
+  for (const p of places) { const d = editDist(q, low(p)); if (d <= (q.length >= 6 ? 2 : 1) && (!best || d < best.d)) best = {d, p}; }
+  return best && {p: best.p, typo: true};
+}
+function noVenueNote(q, pl, pool, c, play) {
+  const near = pool.length ? Math.round(Math.min(...pool.map(p => distKm(p, c)))) : null;
+  return (pl.typo ? "No match for “" + q + "”. Showing " : "") + pl.p[0] + ", " + pl.p[1] + (play ? ": no venues are mapped there yet." : ": no events or get-togethers are listed there yet.") + (near !== null ? " The nearest one is about " + near + " km away." : "");
+}
 let searchRun = 0;
 async function runSearch(zoom, open) {
   const my = ++searchRun, q = state.text, play = state.mode === "play";
@@ -916,21 +933,25 @@ async function runSearch(zoom, open) {
   const pins = () => play ? filtered() : [...eventsFiltered(), ...socialFiltered()];
   const all = play ? venues : [...upcomingEvents(), ...socials.filter(isCurrentSocial)], textOf = play ? (v => v.t) : evText;
   let pts = null, maxZoom = 15, note = "";
-  if (isZip(q)) {
-    textOff = true;
+  const zq = isZip(q) ? q : zipToken(q), rest = zq ? q.replace(zq, "").replace(/\s+/g, " ").trim() : "";   // "94105 padel": the ZIP sets the centre, "padel" still filters
+  if (zq) {
+    textOff = !rest;
     try {
-      const z = await zipPoint(q);
+      const z = await zipPoint(zq);
       if (my !== searchRun) return;
-      if (!z) note = "ZIP " + q + " is outside California and Nevada.";
+      if (!z) { textOff = true; note = "ZIP " + zq + " is outside California and Nevada."; }
       else {
         const c = {lat: z.at[0], lng: z.at[1]}; searchCentre = c; maxZoom = play ? 13 : 9;
-        const pool = pins(); let near = pool.filter(p => distKm(p, c) <= 6), within = near.length > 0;
+        let pool = pins(), lead = "";
+        if (rest && !pool.length) { textOff = true; pool = pins(); lead = "Nothing matches “" + rest + "” with the current filters. "; }
+        const what = rest && !lead ? " matching “" + rest + "”" : "";
+        let near = pool.filter(p => distKm(p, c) <= 6), within = near.length > 0;
         if (!within) near = pool.slice().sort((a, b) => distKm(a, c) - distKm(b, c)).slice(0, 5);
         pts = [{x: c.lng, y: c.lat}, ...near];
-        note = (z.exact ? "" : "ZIP " + q + " is not in the list; centred on the nearest ZIP (" + z.zip + "). ")
-          + (within ? near.length + (near.length === 1 ? " spot" : " spots") + " within 6 km of " + z.zip + "." : pool.length ? "Nothing within 6 km of " + z.zip + "; showing the " + near.length + " nearest." : "Nothing matches the current filters.");
+        note = lead + (z.exact ? "" : "ZIP " + zq + " is not in the list; centred on the nearest ZIP (" + z.zip + "). ")
+          + (within ? near.length + (near.length === 1 ? " spot" : " spots") + what + " within 6 km of " + z.zip + "." : pool.length ? "Nothing" + what + " within 6 km of " + z.zip + "; showing the " + near.length + " nearest." : "Nothing matches the current filters.");
       }
-    } catch (err) { if (my !== searchRun) return; note = "ZIP lookup is not available right now. Try a city or venue name."; }
+    } catch (err) { if (my !== searchRun) return; textOff = true; note = "ZIP lookup is not available right now. Try a city or venue name."; }
   } else if (q.length >= 2) {
     const hits = pins();
     if (hits.length) {
@@ -939,7 +960,13 @@ async function runSearch(zoom, open) {
     } else {
       textOff = true;
       const cand = all.filter(x => textMatch(textOf(x))), city = cand.length ? "" : closestCity(q, all);
+      let pl = null;
+      if (!cand.length) { try { pl = await placePoint(q); } catch (err) { pl = null; } if (my !== searchRun) return; }   // a city with no venue pins is still a place on the map
       if (cand.length) { pts = cand; note = "“" + q + "” matches " + cand.length + (cand.length === 1 ? " place" : " places") + ", but not with the current filters. Clear the filters to see " + (cand.length === 1 ? "it." : "them."); }
+      else if (pl && !pl.typo || pl && !city) {
+        const c = {lat: pl.p[2], lng: pl.p[3]}; searchCentre = c; maxZoom = play ? 11 : 8; pts = [{x: c.lng, y: c.lat}];
+        note = noVenueNote(q, pl, pins(), c, play);
+      }
       else if (city) { pts = all.filter(x => x.c === city); note = "No match for “" + q + "”. Showing " + city + ", the closest name."; }
       else note = "No match for “" + q + "”. Try a city, a venue name or a ZIP code.";
     }
@@ -948,7 +975,7 @@ async function runSearch(zoom, open) {
   setSearchNote(note);
   if (zoom && pts) fitTo(pts, maxZoom);
 }
-const reSearch = (zoom, open) => state.text ? runSearch(zoom, open) : refresh();   // a filter changed: re-check the search (zoom false keeps the map where it is)
+const reSearch = (zoom, open) => { if (state.text) return runSearch(zoom, open); ++searchRun; textOff = false; searchCentre = null; setSearchNote(""); refresh(); };   // a filter changed: re-check the search (zoom false keeps the map where it is)
 function applyMode(fit) {
   if (!mapReady) return;
   setLayersFor(state.mode); popup.remove();
