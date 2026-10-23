@@ -2,6 +2,29 @@
 
 For clubs, operators and players. Built from the venues we already know; nothing new is scraped. Everything here is **inferred**: known venues only (private clubs are undercounted), distances are straight-line miles (not drive times), and there is no population data yet.
 
+## How to use it
+Run `make build` (or `make fresh-db` in a new worktree), then query the DuckDB file `courtconnect.duckdb` (`view_db.bat`, or Python: `duckdb.connect("courtconnect.duckdb", read_only=True)`). Three starting points:
+
+```sql
+-- Operator: cities with plenty of racket activity and no known padel venue within 15 miles
+select city, racket_venues_in_city, nearest_mi
+from marts.mart_market_gaps
+where sport_name = 'Padel' and gap_status = 'no_venue_within_15mi' and racket_venues_in_city >= 20
+order by racket_venues_in_city desc;
+
+-- Club: how crowded is my sport around my venue?
+select venue_name, sport_name, same_sport_venues_5mi, same_sport_venues_15mi, nearest_same_sport_mi
+from marts.mart_venue_neighbors
+where venue_name ilike '%your club%';
+
+-- Player: other sports within reach of a venue
+select sport_name, venues_within_5mi, venues_within_15mi, nearest_mi
+from marts.mart_venue_nearby_sports
+where venue_id = '<venue_id>' order by nearest_mi;
+```
+
+To share a result, export it from DuckDB to CSV (`copy (...) to 'out.csv'`) and say it is inferred, with the date of the build.
+
 ## The tables (all in `marts`)
 - `mart_market_gaps`: one row per city x sport. `gap_status` is `served` (a venue in the city), `nearby` (none in the city, one within 15 miles) or `no_venue_within_15mi`. `racket_venues_in_city` is a rough activity proxy. The city point is the average of its venues' coordinates.
 - `mart_venue_neighbors`: per venue and sport, how many other venues offer that sport within 5 and 15 miles (the competition a club faces).
