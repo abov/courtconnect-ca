@@ -91,7 +91,7 @@ def route_with_model(question: str, model: str) -> dict:
     prompt = (
         "You route questions about racket-sport venues to ONE query template. Reply with JSON only: "
         '{"template": "<name>", "params": {"<param>": <value>}}. Use only the templates and parameters listed; '
-        "omit optional parameters you do not need; sport names are plain English like Padel, Pickleball, Tennis, Squash. "
+        "omit optional parameters you do not need (region is only CA or NV: omit it unless the question names a state); sport names are plain English like Padel, Pickleball, Tennis, Squash. "
         'If no template fits, reply {"template": "none", "params": {}}.\n\nTemplates:\n' + describe() + f"\n\nQuestion: {question}\nJSON:"
     )
     body = json.dumps({"model": model, "prompt": prompt, "format": "json", "stream": False, "options": {"temperature": 0}}).encode()
