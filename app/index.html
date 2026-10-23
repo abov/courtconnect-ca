@@ -1044,7 +1044,7 @@ function showWallNote() {
   n.hidden = !(s && WALL_SPORT[s.n]);
   if (!n.hidden) {
     const shown = wallsFor(s.n).reduce((n, w) => n + (w.wn || 1), 0), unknown = walls.filter(w => w.t.every(t => t === "other")).reduce((n, w) => n + (w.wn || 1), 0);
-    n.textContent = (s.n === "Outdoor Racquetball" ? "Orange pins are outdoor 1-wall and 3-wall courts where outdoor racquetball is played, " : s.n === "Knuckle Racket" ? "Orange pins are public 1-wall and 3-wall courts where Knuckle Racket can be played (walls not marked public are left out), " : "Orange pins are hitting walls you can also use alone, ") + "shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap across California and Nevada; ones nobody has mapped there are missing.";
+    n.textContent = (s.n === "Outdoor Racquetball" ? "Orange pins are outdoor 1-wall and 3-wall courts where outdoor racquetball is played, " : s.n === "Knuckle Racket" ? "Orange pins are public 1-wall and 3-wall courts where Knuckle Racket can be played (walls not marked public are left out), " : "Orange pins are hitting walls you can also use alone, ") + "shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap, city pages and visit reports across California and Nevada; ones nobody has mapped or reported are missing.";
   }
 }
 function setMode(m) {
