@@ -45,6 +45,7 @@ When they reply, ask what they did, not whether they liked it ("What did you sea
 4. What would make you open this instead of Google Maps, weekly?
 5. Would you pay for anything (club-managed listings, open-play alerts)? How much, honestly?
 6. Who else would use it?
+7. Did you find someone to play with through the site (a group, open play, an app we link)? Would you want to post that you are looking for a partner? (Evidence for ADR 0024; "no" is a useful answer.)
 
 ## Numbers (GoatCounter, directional only with 6 to 10 people; say so in the case study)
 | Question | Measure | First target |
