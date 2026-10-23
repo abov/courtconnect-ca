@@ -1,0 +1,4 @@
+# 2026-10-22 product brief and page-clarity proposal
+Wrote `docs/product_brief.md`: one-sentence product, breakdown of every layer (what/why/who/visible), diagnosis of why the page feels cluttered, and a 3-level target layout plus PR sequence. No app code changed.
+Next: owner answers the 4 questions at the end of the brief; then PR 1 (front-door clarity, `app/index.html` only), PR 2 (popup trust chip). Mind the beta window (findings 10-29..11-01).
+Built PR 1+2 in `app/index.html` (one change): mode buttons "Places to play" / "Events & meetups"; headline is the promise line; stats moved to the footer; wall note and About-sport card collapsed; "Filters (n on)"; popup confirmation chip is short, date and head-counts moved to "Details, sources and corrections". Checked in the browser as text, no console errors. Left for later: single merged Map key, welcome card (owner skipped), This week strip, Share a place.
