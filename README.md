@@ -13,8 +13,8 @@
 Pickleball, padel, tennis, squash and dozens of lesser-known racket sports are booming, but information about *where to play* is scattered and messy. This project collects it, cleans it, checks it, and says honestly how complete it is.
 
 ## Mission
-Help people in California and Nevada **find every place to play or watch racket sports, discover sports they haven't tried, and get together with others to play** ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md)).
-- **Every sport, not just the biggest:** pickleball is welcome, but tennis stays visible as a strong, established sport, and lesser-known sports (padel, squash, badminton, table tennis, racquetball, Pop Tennis, paddleball, Basque pelota and more) get room to be discovered.
+Help people in California and Nevada **find every place to play or watch racket sports, try something new, and meet others to play with**. Pickleball, tennis, padel, squash and many more all get a home here ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md)).
+- **Every sport, side by side:** pickleball and tennis are usually easy to find, and here padel, squash, badminton, table tennis, racquetball, Pop Tennis, paddleball, Basque pelota and more are just as easy to find, so there's always something new to try.
 - **Play together:** after "where can I play?" comes "who can I play with?". The next phase links to groups that already exist (open play, clinics, ladders, Meetup/WhatsApp groups); any accounts or matching of our own would come later, and only with its own decision record.
 
 ## What it does
