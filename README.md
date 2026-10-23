@@ -17,7 +17,7 @@ Tennis, padel, pickleball and squash and dozens of lesser-known and up-and-comin
 - **Honest about confidence:** pins show how much to trust each name and sport (confirmed, business listing, inferred). A **How complete is this data?** panel lists every sport, including those with no data yet.
 - **Link-outs** to a venue's own pages for open play, lessons and leagues, each with a `verified_on` date and an evidence note. **Watch a match** mode and a hitting-wall map.
 - **Quality checks:** dbt tests, a coverage report and a `make quality` scorecard catch bad data and stale entries.
-- **Market insights (inferred):** which racket sports are missing near a city, how many rival venues sit within 5 and 15 miles, and which other sports are nearby. A club sees its local competition and open niches, a player sees where to try something new, and `make market-snapshot` keeps a history to spot openings and closures. Known venues only, no population yet: [`docs/market_insights.md`](docs/market_insights.md).
+- **Market insights (inferred):** which racket sports are missing near a city, how many rival venues sit within 5 and 15 miles, and which other sports are nearby. A club sees its local competition and open niches, a player sees where to try something new, and `make market-snapshot` keeps a history to spot openings and closures. Known venues only, no population yet; ask in plain English with a free local model via `ingestion/ask.py` (it picks vetted queries, never writes SQL): [`docs/market_insights.md`](docs/market_insights.md).
 
 Mission: One map for every racket sport in California and Nevada: find a court, watch a match, try a new racket sport, and eventually find people to play with. Live counts: [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md).
 

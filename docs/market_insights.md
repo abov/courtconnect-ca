@@ -23,6 +23,9 @@ from marts.mart_venue_nearby_sports
 where venue_id = '<venue_id>' order by nearest_mi;
 ```
 
+### Ask in plain English (free, local)
+`python ingestion/ask.py "where is padel missing near big racket cities?"` sends the question to a free local model ([Ollama](https://ollama.com): install it, then `ollama pull qwen2.5:3b`; set `OLLAMA_MODEL` to use another). The model only **picks one of five vetted queries** (`--list` shows them) and fills in its parameters; it never writes SQL, so it cannot return a made-up number or touch the data. The query, its parameters and the inferred caveat are always printed, and the database is opened read-only. Nothing leaves your machine. Without Ollama, run a template directly: `python ingestion/ask.py --template sport_gaps sport=Padel min_racket_venues=30`. Needs `courtconnect.duckdb` (`make build`). The model step has not been run against a real model yet; the templates and the parameter checks have.
+
 To share a result, export it from DuckDB to CSV (`copy (...) to 'out.csv'`) and say it is inferred, with the date of the build.
 
 ## The tables (all in `marts`)
