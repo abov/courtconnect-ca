@@ -91,6 +91,9 @@
   .seg { display: flex; gap: 6px; margin-top: 10px; }
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
+  #list li.thisweek { background: color-mix(in srgb, var(--accent) 6%, var(--panel)); } #list li.thisweek .lh2 { margin: 0; padding: 8px 16px 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+  #list li.thisweek button { padding-top: 6px; padding-bottom: 6px; } #list li.thisweek .nm, #list li.thisweek .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #list li.thisweek button + button { border-top: 1px solid var(--line); }
   #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
   body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
@@ -543,8 +546,24 @@ function renderSocialList(ul) {
   }
   return list;
 }
+// "Coming up next": the 3 earliest-starting dated events still on or ahead, straight from the export (nothing inferred; recurring series have no dates, so they stay in the list below).
+// Only on the unfiltered view: once a sport or search is set, the list below already answers it.
+function renderComingUp(ul) {
+  if (state.sport >= 0 || state.text) return;
+  const next = upcomingEvents().filter(ev => ev.s).sort((a, b) => a.s.localeCompare(b.s) || a.n.localeCompare(b.n)).slice(0, 3);
+  if (!next.length) return;
+  const li = el("li", {class: "thisweek"}, el("p", {class: "lh2", text: "Coming up next"}));
+  for (const ev of next) {
+    const live = ev.s <= todayIso(), when = ev.s.slice(0, 4) === todayIso().slice(0, 4) && (ev.e || ev.s).slice(0, 4) === ev.s.slice(0, 4) ? fmtRange(ev).replace(/, \d{4}/g, "") : fmtRange(ev);   // year only when it is not this year
+    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: ev.n}), el("div", {class: "meta", text: (live ? "On now · " : "") + when + " · " + ev.c}));
+    btn.addEventListener("click", () => { track("this-week-open"); showEvent(ev, true); });
+    li.append(btn);
+  }
+  ul.append(li);
+}
 function renderWatchList() {
   const ul = $("list"); ul.replaceChildren();
+  renderComingUp(ul);
   viewEv = renderEventList(ul); viewSoc = renderSocialList(ul);
   if (!viewEv.length && !viewSoc.length) ul.append(emptyItem("No events or get-togethers match these filters. Try all sports.", "Show all sports"));
   updateCount();
