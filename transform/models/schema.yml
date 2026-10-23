@@ -600,6 +600,17 @@ models:
       - name: address_id
         tests: [unique, not_null]
 
+  - name: int_venue_display_name
+    description: >
+      Display name for inferred-name venues that share lower(name) + city with another venue: "<name> (<direction> courts, <N courts>[, #k])".
+      Direction is the 8-point compass bearing from the group centroid ("central" within 100 m), N is the mapped court count. Computed from
+      position and court count, not from a source, so name quality stays inferred. venue_id is never changed.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: display_name
+        tests: [not_null]
+
   - name: int_venue_address
     description: >
       One row per venue: the street address to show and where it came from. Venues that already carry an address keep it
@@ -739,7 +750,9 @@ models:
       - name: venue_id
         description: Stable id of the venue cluster (dim_venue).
       - name: venue_name
-        description: Best available name. See name_source for how trustworthy it is.
+        description: >
+          Best available name. See name_source for how trustworthy it is. An inferred (enclosing_feature) name shared by 2+ venues in a city
+          ends in a computed suffix, "(north courts, 6 courts)" (int_venue_display_name): position and court count, not a source.
       - name: name_source
         description: "How the name was found: court_name, operator, manual and places_directory are confirmed; enclosing_feature is a guess from the park or school the courts sit in; unnamed has none."
       - name: venue_source
