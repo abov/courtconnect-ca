@@ -1,4 +1,5 @@
 venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
+001acb5efbc579a6f062860f2751d514,33.134413,-117.17133,street_only,North City Drive,San Marcos,,way/1445771656,2026-10-22
 0043940eab32f748ecea62d4b0688589,36.06587,-115.312921,city_only,,,,,2026-10-17
 009c8bf0c54025f7e23bdabc13fe86ce,40.975783,-117.709395,city_only,,Winnemucca,,,2026-10-17
 00c8824fdc550db9ec12f6ba64c9dce8,36.190227,-115.124935,street_only,East Tonopah Avenue,North Las Vegas,,way/130208337,2026-10-17
@@ -14,6 +15,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 036fa62aed6e7802b3f8fa30dfc22d14,36.971138,-121.567582,address,5055 Santa Teresa Boulevard,Gilroy,77,node/412568308,2026-10-16
 03802a925e4bf9f0ee3015f108b70748,37.535998,-122.332612,street_only,Athletic Loop Road,San Mateo,,way/24370762,2026-10-16
 03b4622e1b941ff1d0e1786c790508c7,34.183054,-118.573101,street_only,Brahma Drive,Los Angeles,,way/1420901421,2026-10-16
+03ca52244cd275cd07e011bcf7ee6102,38.574711,-121.469777,address,915 27th Street,Sacramento,0,way/735371893,2026-10-22
 03e3b08c588821077462cb1aadda2634,33.751296,-116.358394,street_only,Pinehurst Lane,Palm Desert,,node/14111846054,2026-10-16
 0426fc5d13030a37d89e593fcb799fda,33.983835,-117.927569,street_only,Powder Canyon Motorway,,,way/469579814,2026-10-16
 0448a62873aef436a0f8ec84d7ace2b5,39.471146,-119.820754,street_only,Spinnaker Drive,Reno,,way/915637583,2026-10-16
@@ -92,6 +94,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 14d1c2aa04b95dde90b414a46f7a1a51,36.156974,-115.244861,city_only,,Las Vegas,,,2026-10-17
 14d9bb85039468f3cf2ff136886f545b,33.316085,-117.303225,city_only,,,,,2026-10-17
 14f19f269f2345f6c4db52a350ee89bc,32.776312,-117.236146,street_only,Hummingbird Lane,San Diego,,way/31285222,2026-10-16
+153f5e50444cf9097dd69f983b6eda2e,33.87054,-117.81714,street_only,Lakeview Avenue,Yorba Linda,,way/1455088803,2026-10-22
 155637218437d4e3c1e9fe3eaa434cbe,39.241076,-119.950908,city_only,,Incline Village,,,2026-10-17
 1571933c1b4601401a2e825dd98b1d5c,34.147593,-117.568389,street_only,Chaffey College Transit Center,Rancho Cucamonga,,way/844057257,2026-10-16
 1576af4509d766a3510a972aa904ee2f,36.991542,-122.064278,address,311 Rachel Carson College Quad,Santa Cruz,0,node/2364340669,2026-10-16
@@ -108,6 +111,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 1a263d8ba3a674f6240710c46ce8f346,41.41178,-122.391328,address,800 College Avenue,Weed,71,way/27569712,2026-10-16
 1a620075bf336677ec03b545a8718aa0,35.989634,-114.97787,street_only,Greenway Road,Henderson,,way/131782568,2026-10-16
 1a842c13c167a7452e821df291b49fa0,36.24654,-115.263063,street_only,Red Coach Avenue,Las Vegas,,way/846754815,2026-10-16
+1a8836bc59a11201a26b6807183c7a69,34.047296,-117.654568,address,1405 South Fern Avenue,Ontario,0,way/7511801,2026-10-22
 1b06f88fc67094a516c8ec7f646b7746,36.11175,-115.167013,city_only,,Paradise,,,2026-10-17
 1b9409603402db8ba36346ac6b646ff0,37.291003,-121.898812,address,2001 Cottle Avenue,San Jose,89,node/8895930299,2026-10-16
 1ba97e98bc481439d1917da999573888,36.044975,-114.978113,street_only,Grand Cadence Drive,Henderson,,way/14291603,2026-10-16
@@ -119,6 +123,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 1d2bd0aa20b36eebe0ad340767329540,33.268299,-116.360339,street_only,Di Giorgio Road,Borrego Springs,,relation/3735652,2026-10-16
 1d69957eb16b6800b984222fb8e42a95,36.013366,-115.091549,city_only,,Henderson,,,2026-10-17
 1e3dd1f1854f5ce6ea7c710597a9cc73,34.434505,-118.519442,street_only,Bouquet Canyon Road,Santa Clarita,,node/13422190034,2026-10-16
+1e9a0aa66ffe3c30280b3f7adfb6a72d,33.86861,-117.74876,address,8152 Santa Ana Canyon Road,Anaheim,79,node/10783356791,2026-10-22
 1eaf28080a94646b1bb06948e0627e2d,40.709778,-116.117862,street_only,B Street,Carlin,,way/1236635650,2026-10-16
 1ec072e95377b60f34c7acbae1a028a3,36.19195,-115.24328,address,1725 North Rainbow Boulevard,Las Vegas,0,way/1128345005,2026-10-16
 1ed3a16a4f3be0bc738bd513fe715e88,36.176451,-115.238936,city_only,,Las Vegas,,,2026-10-17
@@ -208,6 +213,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 38e103e797abeaec140e614a5fa75ad7,36.089694,-115.325784,street_only,Mesa Park Drive,Summerlin South,,way/1560302518,2026-10-16
 3a0433b2d11700410d674e150b199b18,34.411233,-119.51541,street_only,Franklin Trail,Carpinteria,,way/942792451,2026-10-16
 3a6098e8eccfaa38384f85a11db109e3,38.07587,-122.582513,street_only,Ignacio Boulevard,Novato,,way/655543081,2026-10-16
+3af2ce9c48eefd3a4dba33050ea76701,32.565182,-117.045758,address,179 Diza Road,San Diego,0,way/790659918,2026-10-22
 3bb11cfe6f1a78f98fb5415fa8f07b81,36.080726,-115.066525,street_only,Vo Tech School Road,Whitney,,way/27750011,2026-10-16
 3bbf0eba47b94b3cb0e5578a563aca0f,36.225616,-115.279666,street_only,West Gowan Road,Las Vegas,,way/1188773663,2026-10-16
 3bfea9b3f891a34439e239aa6c6e3028,39.752735,-122.190725,city_only,,Orland,,,2026-10-17
@@ -236,6 +242,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 42a6439766221acc1e1bbe389dbc89ca,36.12123,-115.042249,street_only,Falconer Avenue,Whitney,,way/1559421808,2026-10-16
 42b0af3aec98265fd1c742d546969d26,39.195285,-120.121632,street_only,Lakers Lane,,,way/507682142,2026-10-16
 42cbc0b8d061ac9818b7e28a879e5491,33.629656,-117.828597,street_only,Summit Park Drive,Irvine,,way/547514570,2026-10-16
+42d2fcb308d0ac9c6b88a78e8e7bdec0,38.712478,-121.269304,address,8046 Wonder Street,Citrus Heights,0,way/10514756,2026-10-22
 43007abf5ebf0db370b955c2cdfb18ae,38.988489,-119.20795,city_only,,,,,2026-10-17
 436d47eba11ceff06e317d9ee4023650,36.131931,-115.113358,city_only,,Winchester,,,2026-10-17
 44439a5f0aedf81b80b042a27f0fabbe,37.319276,-121.851015,street_only,Coyote Creek Trail,San Jose,,way/304339921,2026-10-16
@@ -267,15 +274,18 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 4dbabbca72c5f569602f0140c2543b8b,36.285968,-115.140322,street_only,Goldfield Street,North Las Vegas,,way/1241957391,2026-10-16
 4e3184524d47a1e68ea2d3a825010563,36.123837,-115.226756,city_only,,Spring Valley,,,2026-10-17
 4e6a4bdcd7ad30bc9da0f1bd1c6cb7ad,32.809029,-117.204575,address,4150 Ute Drive,San Diego,63,way/102523002,2026-10-16
+4e9d0af9d67eb168935b49a335bd9a96,33.957141,-118.286396,street_only,South Hoover Street,Los Angeles,,way/1474521615,2026-10-22
 4e9d453dd51d764df77b7340a0143499,36.189818,-115.062645,city_only,,Sunrise Manor,,,2026-10-17
 4ead3f5b7a9db2c4feda56299b4ecadd,36.139209,-115.119489,street_only,South Eastern Avenue,Winchester,,way/1064918833,2026-10-16
 4ebcb216e161469c140f87428020affc,37.256852,-121.855815,street_only,CA 85,San Jose,,way/542812227,2026-10-16
 4ebcc07e413a813a0c3c90153eb42b03,34.095232,-117.711664,street_only,East 2nd Street,Claremont,,way/380188682,2026-10-16
 4f26940d8ff2dad068ec66ce503988ea,39.606837,-119.251531,street_only,Veterans Memorial Highway,Fernley,,way/1448299640,2026-10-16
+4f550d07f14366cea9f1fcce7af8dbc4,33.86671,-117.93761,address,705 West Valencia Drive,Fullerton,44,way/1022091776,2026-10-22
 4f6cc842ffea0038b9f6b5f7b35dca50,39.252909,-119.948846,address,929 Northwood Boulevard,Incline Village,12,way/1065701280,2026-10-16
 4fc1c89beff3a9b30df927a63c222699,39.481907,-119.839643,city_only,,Reno,,,2026-10-17
 4fd50312014f7022a80ec999463adb7f,36.14092,-115.079789,street_only,Flamingo Arroyo Trail,Whitney,,way/130789547,2026-10-16
 50a83c38cad77e5cb6167abaa93a1c94,36.104021,-115.211179,street_only,Ridge Drive,Spring Valley,,way/1432657116,2026-10-16
+5168600286ae850c8eaa33e1d2f71973,33.901866,-117.58074,address,1045 Auburndale Street,Corona,0,way/844912877,2026-10-22
 51d562b4cb28a632e9138b1484017df7,32.78393,-116.890798,street_only,Willow Glen Drive,Matamo,,way/1468619454,2026-10-16
 51e9e7943e0c7ad87dbde856f4a162dd,36.234034,-115.181021,street_only,Simmons Street,North Las Vegas,,relation/18608398,2026-10-16
 52270d64146ed0bc9ea6b0cc8b4ffccf,36.232501,-115.293543,city_only,,Las Vegas,,,2026-10-17
@@ -315,6 +325,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 5aeb5882c4c59bf2d1ea60f51603e49e,39.510521,-119.643718,city_only,,,,,2026-10-17
 5aef25cde81d068f0aca20e303cc3212,39.520059,-119.841001,city_only,,Reno,,,2026-10-17
 5b93642e5275a44760f23e347f0742a0,39.158277,-119.75998,city_only,,Carson City,,,2026-10-17
+5bb59826ebb6b0a019fa0dd69bae27ca,33.70356,-117.78073,street_only,Escolar,Irvine,,way/1236153494,2026-10-22
 5bc2ccad5691f15b5270f0f8ac104f71,33.884166,-117.886913,address,800 North State College Boulevard,Fullerton,65,node/14250058040,2026-10-16
 5c0278f574e695abc841a3ef400a55e5,39.472274,-118.770362,street_only,East Richards Street,Fallon,,way/1448416296,2026-10-16
 5c434f2c6842902d622e6b7862e8afc7,38.66231,-121.285156,street_only,Madison Avenue,Fair Oaks,,way/1185430427,2026-10-16
@@ -370,6 +381,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 6b9b5bdae9d3023a6a20b6c9b7d01182,36.542372,-121.899918,street_only,Carmel Valley Road,,,way/36858048,2026-10-16
 6bebfe24e758d59a49db318cee84116e,34.406059,-118.569307,street_only,Campus Drive,Santa Clarita,,way/437661826,2026-10-16
 6c04ea6f146d62c6c9dad7974493534b,36.158239,-115.327691,address,10721 West Charleston Boulevard,Las Vegas,0,way/318443053,2026-10-16
+6c0c8bd08600245091e030f3596ffe16,33.67498,-117.67568,street_only,Catalina,Lake Forest,,way/586827257,2026-10-22
 6c5e3d2de3b22b628fa97a6b5d7f5e9a,36.094075,-115.115365,city_only,,Paradise,,,2026-10-17
 6c6660e13facb254fe7b555e43a5ccb3,37.353786,-122.036275,street_only,West Fremont Avenue,Sunnyvale,,way/45758787,2026-10-16
 6c7c90901980383d15d0ff2aa8baedbb,36.190218,-115.245753,city_only,,Las Vegas,,,2026-10-17
@@ -379,6 +391,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 6d24b786b3ee0ddb829804733863125b,33.439127,-117.618242,street_only,Avenida Pico,San Clemente,,way/1423562172,2026-10-16
 6d2cbabecf4c5001b2dd7fe48acae0dd,36.832417,-114.109925,street_only,Anthem Drive,Mesquite,,way/1377697632,2026-10-16
 6f47ed4cecb6a9c7137b84adabb17859,39.518626,-122.202384,city_only,,Willows,,,2026-10-17
+6f5e8e9d570a15bbc151ad16d0fa6c31,38.550663,-121.481006,address,2522 Marshall Way,Sacramento,7,way/455038125,2026-10-22
 6f8ac5279f5bd62278f8aa693f3148d6,33.596054,-117.166976,street_only,Bronco Way,Murrieta,,way/725727106,2026-10-16
 6fddacd1fb42c449a46a0ff503e67254,39.529154,-119.775434,city_only,,Sparks,,,2026-10-17
 705418d20b87109ffd74a2c6bb3ff8ae,36.200785,-115.227769,street_only,Rosalita Avenue,Las Vegas,,way/967829620,2026-10-16
@@ -405,6 +418,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 76f0c85a0ccc947196cc06727b56ba4e,37.332191,-121.829301,street_only,Cunningham Avenue,San Jose,,way/558687481,2026-10-16
 770bd9911dd8da67dcd9191bab63ab04,33.94505,-117.381644,too_far,,Riverside,228,way/44486183,2026-10-16
 7720ace1e8c1a157dcf2227a82d401a7,38.829409,-121.182735,street_only,Las Flores Road,Loomis,,way/28866829,2026-10-16
+775efded37c62905e5163136ad452730,33.974913,-118.03386,street_only,Richard M Nixon Drive,Whittier,,way/471523451,2026-10-22
 777a87b1eab5c60a9c7c9b8d6154629d,38.007071,-121.859396,street_only,East Leland Road,Pittsburg,,way/1413414542,2026-10-16
 781716991ac46b00d03dbe01d753f0b3,38.932848,-119.745341,street_only,Waterloo Lane,Gardnerville,,way/1436945347,2026-10-16
 7896c02a27cc8b5d97d954fcf2036198,36.008738,-114.93398,street_only,Colt Drive,Henderson,,node/12861550248,2026-10-16
@@ -422,6 +436,8 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 7ba25795157667631de4ef8e4814531c,35.382918,-120.858209,street_only,Cabrillo Highway,Morro Bay,,way/164966487,2026-10-16
 7c6b35a72e49135ac5e7c4307c12ca5b,36.151106,-115.317566,street_only,Homestretch Drive,Summerlin South,,way/27523887,2026-10-16
 7c7b0b7bef9db041ed5b14649e6ba37f,36.217124,-115.334581,street_only,Raywood Ash Drive,Las Vegas,,way/902489119,2026-10-16
+7cb2a25df7e4075a54675391926874f9,33.68048,-117.66109,street_only,Bake Parkway,Lake Forest,,node/13005745330,2026-10-22
+7cca5afc42e732b9d1d205113c113dd9,33.61233,-117.162321,address,28610 Baxter Road,Murrieta,0,way/1500651374,2026-10-22
 7d5ec6ef1b5f143becebe71d1b08b42c,40.195446,-122.212176,city_only,,,,,2026-10-17
 7d7ad6cb3dc7515a0b760b81fc2dc5d9,36.022449,-115.093558,street_only,Village View Drive,Henderson,,way/1080173467,2026-10-16
 7d943177379fca8f1718fdc004369275,36.137524,-115.222311,city_only,,Spring Valley,,,2026-10-17
@@ -441,6 +457,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 80514be7d71c580b9c8d2889e07ad5a4,39.541394,-119.776544,street_only,Elementary Drive,Reno,,way/560851227,2026-10-16
 80548cf85e7352b1ebe57959617b0fd7,35.999112,-114.817526,city_only,,Boulder City,,,2026-10-17
 80e5c9138d6dc6cfd0f4408d74fbe6bd,40.736791,-114.058198,city_only,,West Wendover,,,2026-10-17
+81007dd900c76cbc02fcac70694acaf2,32.928231,-117.078357,street_only,Cypress Canyon Road,San Diego,,way/217268861,2026-10-22
 81229b1b0e53097ea493d2db84e963ca,36.106927,-115.127257,city_only,,Paradise,,,2026-10-17
 819cb7579c3d38066a6c8895f2324953,36.204121,-115.020869,street_only,Los Feliz Street,Sunrise Manor,,way/130803786,2026-10-16
 81bc9bc696e501b6cc5d9c92accd79e6,37.923732,-121.757126,street_only,American Avenue,Brentwood,,way/31856162,2026-10-16
@@ -456,6 +473,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 83e6b0c22aa338262fcd3ab640dbc20e,39.455549,-119.789164,street_only,West Huffaker Lane,Reno,,way/1449649987,2026-10-16
 845ae3ceb1525b04c1990466bbb9b50f,38.07206,-122.23016,street_only,Maritime Academy Drive,Vallejo,,way/377564070,2026-10-16
 846af0fb2cb98e6179c0dbbe933d6d96,38.438887,-122.682434,too_far,,Santa Rosa,188,way/565843862,2026-10-16
+8486872be4015c14b3a68b1bc7097cc6,33.44462,-117.58316,street_only,Avenida la Pata,San Clemente,,way/133836159,2026-10-22
 84944caf44f910507ffbea0b6d6066f8,35.941825,-115.096891,city_only,,Henderson,,,2026-10-17
 84ff13e5dd1414e563673a269d8b8179,39.605051,-119.826355,street_only,Pinion Wood Drive,Reno,,way/393879437,2026-10-16
 85310de323db04c19d085f0b77e28c13,36.112805,-115.197285,city_only,,Spring Valley,,,2026-10-17
@@ -518,6 +536,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 97bf1bcd7a6077eef40a3daed63531f7,36.009749,-121.24186,city_only,,,,,2026-10-17
 97d498258abdf1d5ce7e1f10153bbd6c,39.167597,-119.777661,city_only,,Carson City,,,2026-10-17
 97fb76286c69cc70a9d3abd61799e946,33.991187,-117.850419,address,20671 Larkstone Drive,Diamond Bar,132,way/742073690,2026-10-16
+980e26a47799d98c6bde460aca86f1d7,33.916356,-117.262342,address,14075 Frederick Street,Moreno Valley,0,way/117793373,2026-10-22
 984183771a3f1c922083ce1a2940442d,36.053377,-115.247192,street_only,Mardon Avenue,Spring Valley,,way/583370878,2026-10-16
 9887bcd36d77b5e5cf80c2043a28e1dd,35.944642,-115.083271,city_only,,Henderson,,,2026-10-17
 9890038e876c3f5f4b3cc07c4f13fe98,36.01914,-115.079315,street_only,Amargosa Trail,Henderson,,node/11172792650,2026-10-16
@@ -547,12 +566,14 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 9eb2cebb0df1b4ab6adcd61fee56db33,35.975972,-115.120805,street_only,Echo Wind Avenue,Henderson,,way/154082764,2026-10-16
 9ebf19d212749c578628b4b000f847b9,39.74957,-122.157641,city_only,,,,,2026-10-17
 9ed3688c484b0a4bd773b3a9a754401d,36.172149,-115.335108,address,333 South Pavilion Center Drive,Las Vegas,81,way/1409643122,2026-10-16
+9ef4f20b98f95ea67bf7278ee7f5fdb4,32.770492,-117.1523,street_only,San Diego River Trail,San Diego,,way/1049239309,2026-10-22
 9f78b17c7092e0040a46252ec9e4e161,36.179111,-115.090075,address,3800 Harris Avenue,Las Vegas,130,way/130789321,2026-10-16
 9fa875d512a7c5cf35525c037760fbfa,36.150843,-115.180818,street_only,Bob Baskin Park fitness trail,Las Vegas,,way/897744264,2026-10-16
 a00fd373e0410c806a7c24675fced6a2,33.001157,-117.230718,street_only,El Camino Real,Rancho Santa Fe,,way/1323877047,2026-10-16
 a0280b9222158431478033de7b3384a2,36.062729,-115.10648,street_only,Monte Rosa Avenue,Paradise,,way/1443438637,2026-10-16
 a04dcae05487ec83404c63cd8c96de65,33.74191,-118.35147,address,32202 Forrestal Drive,Rancho Palos Verdes,1,way/1408467824,2026-10-16
 a05cb4ce38139bc02bfab3d093523960,35.95837,-115.184415,city_only,,,,,2026-10-17
+a0dd3a0995dab9434ce67692e1d6bad6,37.779645,-122.24016,street_only,Dennison Street,Oakland,,way/414276716,2026-10-22
 a0f44ebd4cdab4760e9c4e1fbda95f3a,36.062354,-115.299454,address,9525 West Maule Avenue,Las Vegas,79,way/27750750,2026-10-16
 a10443b0d8771707f1cb75bcad90e434,39.236306,-119.937874,city_only,,Incline Village,,,2026-10-17
 a11e644666411672b6131ddeeb0c7e3d,39.200526,-122.021957,street_only,8th Street,Colusa,,way/495574391,2026-10-16
@@ -565,12 +586,14 @@ a2b49919886e6572d4550f2effdbddeb,36.044286,-115.112984,city_only,,Henderson,,,20
 a2bb43e337eae8b4a2b9bd6944a14baa,36.290023,-115.279833,street_only,Oso Blanca Road,Las Vegas,,way/1558231694,2026-10-16
 a2e275b18dc89e5448a5b0adf508aa43,37.159531,-122.200593,street_only,Heartwood Hill,,,way/67502245,2026-10-16
 a2f602f2d8d6c161f9d1898dae171221,36.116997,-115.086435,city_only,,Whitney,,,2026-10-17
+a3730e217de0f1dc8b68718359971ff4,38.429125,-121.418648,street_only,Bruceville Road,Elk Grove,,way/686494102,2026-10-22
 a3ba820ea42fc3cd09eb0aa30769e4ec,36.02536,-115.12086,address,9065 South Eastern Avenue,Las Vegas,0,way/577522703,2026-10-16
 a4030e852f93cdaf8d46b7b1ed57b1f3,34.085979,-118.072088,street_only,Rosemead Boulevard,Rosemead,,way/1419124411,2026-10-16
 a422f159f59fd314190676ce858450a8,36.058873,-115.094665,city_only,,Henderson,,,2026-10-17
 a4b90b1e730ab2e1269b75ec1f8833cc,39.482237,-119.854931,street_only,Village Green Parkway,Reno,,way/304744356,2026-10-16
 a4d53821b5a8b4245287cd5142a4ceaa,33.992942,-117.731406,street_only,Peyton Drive,Chino Hills,,way/41019643,2026-10-16
 a50170c795afabd521b881785ee00eb4,36.077116,-115.017824,street_only,Sky Forest Drive,Henderson,,way/1560287968,2026-10-16
+a503145f3c6ccae52a7f6d0e1a1fea01,34.099401,-117.43232,address,17004 Arrow Boulevard,Fontana,0,way/474348769,2026-10-22
 a52ccf9a4f0bfa8b1a7e38300f6f2f17,33.14066,-117.16963,address,320 West San Marcos Boulevard,San Marcos,0,way/1373041053,2026-10-17
 a563708a90dc85189f554514c8b02baa,39.433858,-119.725155,city_only,,Reno,,,2026-10-17
 a5e2dabf3817d4823f489a7b7c195fc2,39.730219,-121.813626,street_only,CA 99,Chico,,way/1392307454,2026-10-16
@@ -620,7 +643,9 @@ b2e68978ae687eb3bbe4c6296eb1d664,39.558948,-119.721315,street_only,Baring Boulev
 b33f901721d5dd16353a1b47f4026c1b,38.977931,-119.935731,city_only,,,,,2026-10-17
 b3b54389da6212c5da7f004b35bd60cb,38.01108,-121.340483,street_only,Alexandria Place,Stockton,,way/469619571,2026-10-16
 b4679e9ec32a649f5f9a1a4c46475cd7,39.535613,-119.884404,street_only,Lancer Street,Reno,,way/1343388585,2026-10-16
+b4e1cb827fe4aaac0d750f32ed236b99,33.731983,-118.27659,address,1332 South Harbor Boulevard,Los Angeles,0,way/1498716592,2026-10-22
 b53882064e6ec88e5fea54f601bb3b34,34.440347,-118.517426,street_only,Centurion Way,Santa Clarita,,way/386586699,2026-10-16
+b6126ccfc3778b9a24474a1a1f281af9,33.751171,-117.93001,address,706 North Newhope Street,Santa Ana,2,way/930881428,2026-10-22
 b66b218205f3a8d6a6b1ffdb7c3c1a54,39.074931,-119.945234,city_only,,,,,2026-10-17
 b699ea6f935e72de9858f1959bc6527f,37.527517,-120.853851,street_only,Merced Way,Turlock,,way/1539862445,2026-10-16
 b6cd2917d7861f308c7332561ca23542,39.2472,-120.355386,city_only,,,,,2026-10-17
@@ -705,12 +730,14 @@ cfee736977f695a5b36d53a2acd39005,39.617103,-119.740171,city_only,,Spanish Spring
 d067424c46c00c2f9c9017a90efa2471,38.258231,-121.923932,city_only,,Fairfield,,,2026-10-17
 d078bbcee6ce722704d26dfc1c956c1d,37.378438,-118.493879,street_only,Sawmill Road,,,way/1418940384,2026-10-16
 d098dd036e9b7f648437bdfead759524,39.548927,-119.753183,street_only,Holman Way,Sparks,,way/483530038,2026-10-16
+d0afd1b1bbbd3db21c96240e39a58d48,32.927948,-117.217017,address,4770 Fairport Way,San Diego,0,way/121964277,2026-10-22
 d0d6e64295364ab09b0794c5b6039777,33.11017,-117.013531,street_only,Rockwood Road,San Diego,,way/1025729146,2026-10-16
 d0f8ace8f1d8246ac822857a34b8641e,34.206501,-118.45948,address,7477 Kester Avenue,Los Angeles,104,way/785824598,2026-10-16
 d1007ed83c5ee40aa8e64406adda69f3,36.797046,-114.07903,street_only,Roadrunner Trail,Mesquite,,way/483827787,2026-10-16
 d1d3f8d066dc966220c722998bdfc214,32.830194,-117.173897,address,4833 Doliva Drive,San Diego,98,node/596837856,2026-10-16
 d261d3b39006ee61781a44cb65fca62c,39.515546,-119.939202,street_only,Mogul Mountain Drive,Mogul,,way/954022894,2026-10-16
 d34de71ceb24c626eb7600a9632633e6,37.655756,-122.059472,too_far,,Hayward,318,relation/4009469,2026-10-16
+d39d4b49d6f625a991fe34b053d36700,34.102884,-117.543997,street_only,Rochester Avenue,Rancho Cucamonga,,way/100615217,2026-10-22
 d3cb4a990e34129fab5f10a87df011d1,38.668733,-121.07751,city_only,,,,,2026-10-17
 d3f1b9f835a2639ead0c89c866e2fc44,32.75195,-117.25081,address,5152 Brighton Avenue,San Diego,18,node/596530098,2026-10-17
 d42c520ea86084598c6cfa91984738db,33.802416,-118.305582,street_only,West 247th Street,Los Angeles,,way/685539319,2026-10-16
@@ -721,6 +748,7 @@ d4c0d62fc07da5a1646c09db42a275a1,35.995561,-115.198381,street_only,Valencia Hill
 d4edeb682b8c640fc817b2b4a7de6137,36.836993,-114.116507,street_only,Falcon Ridge Parkway,Mesquite,,way/1220057512,2026-10-16
 d558721c1ac4b309c3690931c3063bd6,35.685969,-121.167116,street_only,North Esplanade,,,way/90954903,2026-10-16
 d55ce9faa8f90e7ec359e10c0e4a65ee,37.720491,-122.413145,street_only,Philosopher's Way,San Francisco,,node/4265327207,2026-10-16
+d5668d79b876cf6db4b34890f50a71b9,33.86861,-117.74876,address,8152 Santa Ana Canyon Road,Anaheim,79,node/10783356791,2026-10-22
 d5753d09ccdbb0225b30521366aa4587,33.704967,-115.636431,city_only,,,,,2026-10-17
 d576e51c3155be6353d9302c61e6c476,39.95036,-120.966284,too_far,,Quincy,150,way/1153061972,2026-10-16
 d5b10d1cbcc78b96bf0b99bac8d99340,36.106326,-115.210182,city_only,,Spring Valley,,,2026-10-17
@@ -729,13 +757,16 @@ d67a89b6d99cffdc48e1563357074aeb,35.971074,-114.834358,street_only,Avenue G,Boul
 d6c0eaf8ec5d401f5b8cb2899d574214,38.902055,-120.995792,city_only,,,,,2026-10-17
 d71349b0d49f73a527b84da1748a602d,39.528103,-119.990015,city_only,,,,,2026-10-17
 d7b490ff9cc45f86e1ea111f3c2698d9,33.920892,-118.175149,street_only,Los Angeles River Horse Path,Paramount,,way/895047931,2026-10-16
+d82003172a0ebef4d3ac50676689e641,32.745883,-117.110725,address,3901 Landis Street,San Diego,86,node/596122025,2026-10-22
 d84c9ed95de903807e9972028dd43196,39.530509,-119.951207,city_only,,Reno,,,2026-10-17
 d8603859d5b04f59561387a4e195390d,36.022593,-115.166127,city_only,,Enterprise,,,2026-10-17
+d86d77f0325f172c32d3e04231630964,33.048327,-117.076881,address,18448 West Bernardo Drive,San Diego,0,way/1021800012,2026-10-22
 d92eb2df11dcf7eef4bcfb8e68bb9d75,36.063724,-115.095025,city_only,,Henderson,,,2026-10-17
 d9ce7f247f7cc1b981e7a3accb078d13,32.851387,-117.207512,street_only,Notre Dame Avenue,San Diego,,way/31817816,2026-10-16
 d9cfaff1980e4f56140cf56479bd6c33,39.537358,-119.740702,city_only,,Sparks,,,2026-10-17
 d9ffd92145e67ca608c86dc26d0b3ad1,36.131853,-115.108754,street_only,McLeod Drive,Winchester,,way/1560296057,2026-10-16
 da57f9858b03efc524934fb551e0bec1,33.91026,-117.478057,address,4145 La Sierra Avenue,Riverside,38,way/79473180,2026-10-16
+da5c8a6bd3a441711156a0051e30bf58,33.499601,-117.121778,street_only,Rancho Vista Road,Temecula,,way/72491229,2026-10-22
 da6719690429982c6e4b34557c8a3cb2,33.858452,-117.548089,address,1820 Rimpau Avenue,Corona,63,way/44486341,2026-10-16
 da91a76502589ca06ff7944045b71400,36.030255,-115.151132,street_only,Hidden Palms Parkway,Enterprise,,way/1108097158,2026-10-16
 dab22a08f7e3ce93599d51e54232fc61,35.768026,-119.218828,too_far,,Delano,208,way/175370641,2026-10-16
@@ -748,6 +779,7 @@ dd44b3639bd1d5308f604a9fab7f6b07,38.743733,-121.080182,city_only,,,,,2026-10-17
 dd6da8f26261007d2ede027f88351730,39.050735,-119.944984,city_only,,,,,2026-10-17
 dd818859555239c9be2da861f91bab10,38.996228,-119.952016,city_only,,,,,2026-10-17
 de41a7f6a31de9ac9c255a20d9bc9be6,33.732487,-116.35817,street_only,Phyllis Jackson Lane,Palm Desert,,way/105807732,2026-10-16
+de9996f9f6cbcdeb624bb7756d3d0369,38.719012,-121.328445,street_only,Ridgepoint Drive,,,way/555894320,2026-10-22
 df0da4693f7b114445e0be33092a12d8,35.934381,-115.119479,street_only,Via Firenze,Henderson,,way/730882845,2026-10-16
 df304fff61476bdec2814c28a8620736,36.13066,-115.058458,city_only,,Whitney,,,2026-10-17
 e15ca568d8664d580b80f35ea8ffa78c,39.051973,-120.114164,city_only,,,,,2026-10-17
@@ -794,6 +826,7 @@ eadfd95461098c9a71761dc430357fb4,37.543224,-122.039299,address,6201 Lafayette Av
 eb10371773e3b1b4000add5013b14e9b,38.644497,-121.103076,street_only,Healthy Way,Folsom,,way/1555351864,2026-10-16
 eb22e91be51f98526c6648ddf8da4546,39.363852,-119.829823,street_only,Wetzel Court,,,way/916080083,2026-10-16
 eb3bbbdbb01e0da9b58da83f7f306e83,38.616389,-121.054053,city_only,,,,,2026-10-17
+ec238f29165e9fb11272a64408ff107b,38.685703,-121.295912,address,6601 Thalia Way,Citrus Heights,0,way/225156979,2026-10-22
 ec974108ca89bb9388f16725faba7083,36.202269,-115.245709,city_only,,Las Vegas,,,2026-10-17
 ecc0156bb4ca3eb1c9abb4ae360a7812,36.816071,-114.072752,street_only,Colleen Court,Mesquite,,way/1567483211,2026-10-16
 ed0ebca10e25cb0518783087ab723ee7,38.658757,-121.738598,street_only,Pioneer Avenue,Woodland,,way/761409135,2026-10-16
@@ -809,6 +842,7 @@ eed2d840257366b4013e8fa534034533,35.149373,-114.623393,street_only,Arie Avenue,L
 ef2e14d4d5e01a050591f45db6e68cf2,35.961892,-115.080221,street_only,Anthem Club Drive,Henderson,,way/1452623948,2026-10-16
 ef4886c72e19fd84119f1350d4a415fd,36.058314,-115.101665,city_only,,Paradise,,,2026-10-17
 ef90afca5dfb35eecbddc73844ba1d48,36.904372,-119.122702,city_only,,,,,2026-10-17
+efec6aadb396622978c5adfee6efa2d0,33.82242,-117.92176,address,851 West Bellevue Drive,Anaheim,34,way/1146748328,2026-10-22
 f0db880da327311e26f257a89d40563f,36.058295,-114.975025,street_only,East Sunset Road,Henderson,,way/1447538190,2026-10-16
 f0ed2fb1b93d360add04a36690c44a8a,39.258038,-119.925407,city_only,,Incline Village,,,2026-10-17
 f1a5d9c9aa6ca4afe34a1c592f1fad31,36.037894,-115.24421,too_far,,Las Vegas,217,way/191499603,2026-10-16
@@ -830,6 +864,7 @@ f57d114bacd64d847ae745f77251824a,36.17045,-115.27905,street_only,Venetian Strada
 f5cc1d32b405b77b05b7803979fb3d83,36.203522,-115.095804,street_only,East Carey Avenue,Sunrise Manor,,way/724760806,2026-10-16
 f689f3b0472a6596f392eddedc115853,36.10613,-115.251741,street_only,New Forest Drive,Spring Valley,,way/1560298585,2026-10-16
 f6f5aba09a4a011865ca31f93d620f6b,38.602561,-121.308004,street_only,Sierra Madre Court,Rancho Cordova,,way/137331890,2026-10-16
+f71ccaeac010562218f76b996bd49250,33.751171,-117.93001,address,706 North Newhope Street,Santa Ana,2,way/930881428,2026-10-22
 f725ee360939ef8c3b5225a289d308f6,35.996395,-115.111049,address,1001 Coronado Center Drive,Henderson,60,node/13293572434,2026-10-16
 f7439b0817594b8efe78cacfc6f897c8,34.127278,-118.707977,street_only,Lost Hills Road,Calabasas,,way/229033134,2026-10-16
 f78fd83e494d87f340e1ff4733395dcd,36.20003,-115.292693,street_only,Hillpointe Road,Las Vegas,,way/1157996825,2026-10-16
