@@ -725,10 +725,12 @@ function shareNode(v) {
   return el("p", {class: "sharerow"}, sv, b, msg);
 }
 function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
+// Wall counts read from OSM tags alone are an assumption (one-wall unless a source says otherwise), so say so.
+function wallTypeLabel(w, t) { return (WALL_TYPE[t] || t) + (w.cf === "tagged" && t === "one_wall" ? " (assumed)" : ""); }
 function wallNode(w) {
   const box = el("div"), approx = /approx/.test(w.pr), acc = wallAccess(w);
   box.append(el("h2", {text: w.n}));
-  box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
+  box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
   box.append(el("p", {class: "meta", text: [w.wn ? w.wn + " walls (one pin)" : "", w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
   box.append(el("p", {class: "meta", text: ["Access: " + (WALL_ACCESS_LABEL[w.ac] || "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (OSM tag, not checked)" : ""),
     "Lights: " + triState(w.l), "Free: " + triState(w.f), w.su ? "Surface: " + w.su : ""].filter(Boolean).join(" · ")}));
@@ -737,7 +739,7 @@ function wallNode(w) {
   const src = el("details", {class: "srcs"}, el("summary", {text: "Details and corrections"}));   // long explanations, one tap away
   if (approx) src.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   if (w.wn) src.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)."}));
-  src.append(el("p", {class: "meta", text: w.cf === "tagged" ? "Sport is as tagged in OpenStreetMap; wall type, condition and public access were not checked." : "Sports listed are what the wall is thought to suit."}));
+  src.append(el("p", {class: "meta", text: w.cf === "tagged" ? "Sport is as tagged in OpenStreetMap. OpenStreetMap does not say how many walls a handball court has, so we assume one wall until a source or visit report says otherwise; condition and public access were not checked." : "Sports listed are what the wall is thought to suit."}));
   if (w.cf === "tagged") src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
   box.append(src);
   return box;
@@ -753,7 +755,7 @@ function wallItems(list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
       el("div", {class: "meta", text: [w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
-      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: WALL_TYPE[t] || t})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : null));
+      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : null));
     btn.addEventListener("click", () => showWall(w, true));
     out.push(el("li", {}, btn));
   }
