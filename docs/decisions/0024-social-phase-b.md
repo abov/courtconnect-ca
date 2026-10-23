@@ -34,6 +34,6 @@ Why not copy connectplayers.ca: it and `player_platforms.csv`'s other nine entri
 
 ## Consequences
 - CLAUDE.md "Open" list: replace the "Social / open-source next step (phase B, own ADR)" line with "Social phase B: ADR 0024 (proposed) recommends stopping at phase A; option B (discovery filters, link-out only) only if the beta asks for it; own accounts/matching rejected." Once the owner accepts, mark the line done.
-- Beta questions to add to `docs/feedback_round.md`: "Did you find someone to play with through the site? Would you want to post that you are looking for a partner?" so the reopen test has data.
+- Beta question 7 in `docs/feedback_round.md` (added with this ADR): "Did you find someone to play with through the site? Would you want to post that you are looking for a partner?" so the reopen test has data.
 - No new seeds, models, app code or data stored. ADR 0015's "until phase B has an ADR, no user accounts or personal data" still holds; this ADR, if accepted, keeps it true.
 - Risk of the recommendation: if the beta shows strong demand, stopping at phase A leaves a gap that other apps fill. That is acceptable under the budget and safety limits, and the reopen test above is the way back in.
