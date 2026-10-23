@@ -26,7 +26,7 @@ Numbers are dated and come from the notes linked in each row.
 | Finding | What it means |
 |---|---|
 | **No single source is enough.** 25,971 OSM court records became 9,941 venues; only 4,362 had a name, and Overture added 435 venues OSM had no court for ([snapshot, 10-14](docs/coverage_snapshot.md)). | OSM knows where courts are, business listings know names. Joining them is the product. |
-| **The map is mostly tennis.** Of the 76 sports on the master sheet, 19 are covered and 45 have nothing found ([snapshot](docs/coverage_snapshot.md)). | Gaps are the story for lesser-known sports, so the app shows them instead of hiding them. |
+| **The map is mostly tennis.** Of the 81 sports on the master sheet, 35 are covered and 39 have nothing found ([snapshot](docs/coverage_snapshot.md)). | Gaps are the story for lesser-known sports, so the app shows them instead of hiding them. |
 | **Duplicates were inflating the count.** Merging courts inside one park or school, and places at one street address, cut venues from 10,542 to 10,235 (-3%). A guard test now fails if two venues share a name within 150 m. | Fix the cause, then add a test so it cannot return. |
 | **About 90% of venues had no street address** ([ML plan](docs/ml_plan.md)). | Most are park and school courts. Now 4,057 of 10,273 venues show one (OSM tags, nearest Overture address or Nominatim, the last two labelled "inferred"); homes show the city only, by design. Filling the rest needs a different source, not a better lookup. |
 | **Pickleball hides on tennis courts.** Painted lines are rarely tagged, so a re-extract cannot find them; city park pages and owner reports did ([ML plan](docs/ml_plan.md)). | Refreshing data does not fix a data gap; a different source does. |
