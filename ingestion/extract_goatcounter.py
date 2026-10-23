@@ -36,7 +36,7 @@ def fetch(token: str, start: date, end: date) -> list[dict]:
     rows: list[dict] = []
     exclude: list[int] = []
     while True:
-        params = {"start": start.isoformat(), "end": end.isoformat(), "limit": PAGE, "daily": "true"}
+        params = {"start": start.isoformat(), "end": end.isoformat(), "limit": PAGE, "group": "day"}
         if exclude:
             params["exclude_paths"] = ",".join(map(str, exclude))
         r = requests.get(url, headers=headers, params=params, timeout=30)
