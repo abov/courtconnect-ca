@@ -113,6 +113,7 @@
   .dot.soon { background: #fff; border: 2px solid var(--pin-c); width: 8px; height: 8px; }   /* hollow ring = confirmed but not open yet */
   .dot.rep { background: #fff; border: 2px solid #8c959f; width: 8px; height: 8px; }   /* grey ring = only reported by a directory (no transparency: it must stay visible on the light map and the dark panel) */
   .badge.ev { color: var(--ev); border-color: var(--ev); }
+  .badge.ev.pro { background: var(--ev); color: var(--chip); font-weight: 600; }   /* pro events stand out; the other levels stay outlined */
   .badge.soc { color: var(--soc); border-color: var(--soc); }
   .soc-item + .soc-item { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 4px; }
   .soc-item.compact > summary { display: flex; flex-direction: column; gap: 0; cursor: pointer; list-style: none; padding: 3px 18px 3px 0; position: relative; line-height: 1.3; }
@@ -550,7 +551,7 @@ function eventGeojson(list) {
 function eventNode(ev) {
   const box = el("div");
   box.append(el("h2", {text: ev.n}));
-  box.append(el("div", {}, el("span", {class: "badge ev", text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
+  box.append(el("div", {}, el("span", {class: "badge ev" + (ev.l === "pro" ? " pro" : ""), text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
   box.append(el("p", {}, el("b", {text: fmtRange(ev)})));
   const cityPin = /city/.test(ev.pr);
   box.append(el("p", {class: "meta", text: (cityPin ? ev.c + " · venue TBA (pin shows the city)" : ev.v + ", " + ev.c)}));
@@ -581,7 +582,7 @@ function renderEventList(ul) {                                          // rows 
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: ev.n}),
       el("div", {class: "meta", text: fmtRange(ev) + " \u00b7 " + ev.c}),
-      el("div", {}, el("span", {class: "badge ev", text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
+      el("div", {}, el("span", {class: "badge ev" + (ev.l === "pro" ? " pro" : ""), text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
     btn.addEventListener("click", () => showEvent(ev, true));
     ul.append(el("li", {}, btn));
   }
