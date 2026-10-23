@@ -2,6 +2,8 @@
 
 Status: **PR 1 and PR 2 built 2026-10-22 (mode names, promise headline, stats to footer, wall note collapsed, About card collapsed, "Filters (n)", short confirmation chip); PR 3 (welcome card) skipped by owner, legends merged into one "Map key" button in the list bar and "Share this place" built 2026-10-22; "Coming up next" strip (the brief's "This week" strip) built 2026-10-22.** Source: `app/index.html` read as text, ADR 0015, `docs/ux_polish.md`, `docs/competitor_scan.md`, `app/data/venues.json` meta (generated 2026-10-22). Builds on, does not replace, the visual polish plan.
 
+**Focus helpers (added 2026-10-22, built in the PR 3 slot): see §4b.**
+
 ## 1. The one-sentence product
 
 > **Find a place to play any racket sport in California and Nevada, see what is on, and find people to play with.**
@@ -96,6 +98,19 @@ A dismissible 3-line card on first load: "Pick a sport, tap a pin, follow the li
 2. **Share a place** button in the popup (copies a link that opens centred on that pin). Players recruit players; this is the cheapest growth loop and needs no accounts. (Share-card/OG preview shipped in #321; a deep-link param may already be possible via `?ref=`, check before building.)
 3. **"Missing your court? Add it"** as an early, friendly call to action (it already exists as "Suggest a change"; surface it once, in the footer and empty state).
 4. **Sport count as a hook:** "39 racket sports with places on the map" as a one-line proud stat in the footer or About, not the headline.
+
+## 4b. Focus helpers for easily distracted visitors (ADHD-friendly; built 2026-10-22)
+
+Goal: help someone who is easily pulled away finish the job (pick a place, get a plan) without losing their place. Design rules from that: fewer choices at once, never make them hold things in their head, make the way back obvious, remember where they were. **Not** engagement tricks: no streaks, notifications, reminders, autoplay or dark patterns. Nothing is sent anywhere; all state is `localStorage` in the visitor's browser (wrapped in try/catch, so the page works with storage blocked), consistent with ADR 0013.
+
+| Helper | What it does | Why it helps |
+|---|---|---|
+| **Shortlist** (header button, "Save to shortlist" in every venue popup, "Saved" badge in the list) | Park up to 30 places; open or remove them from one list; "Copy list to send to a friend" gives names plus share links | Replaces "open another tab so I don't lose it", which is how people stray |
+| **Welcome-back card** | After a Website / Directions / Join link opens in a new tab and the visitor returns (4+ s away), a card says "Welcome back. You were looking at X" with Save / Keep looking | Brings them back to where they were with one tap; correction forms do not trigger it |
+| **Focus mode** (header toggle, remembered) | Lists the 5 nearest places with "Show 5 more"; hides the sport notes, filters, clear-filters row and the long counts line; active-filter chips stay | Choice overload: 40 rows and ~20 controls become 5 rows and the essentials. Off by default so the beta baseline is unchanged |
+| **Pick up where you left off** | A return visit with no link restores the last sport / search / filters with a one-line "Start over"; the note goes once they change anything | Removes the "start again from scratch" cost of coming back; a `#venue=` or `#sport=` link always wins |
+
+New anonymous events (short names only): `shortlist-add`, `shortlist-open`, `shortlist-copy`, `focus-on`, `welcome-back`. Possible next steps, not built: a "next best place" button in the popup, a "plan" view (shortlist plus directions), a quiet-map option (no cluster animation). Wall pins and Watch-mode events cannot be saved yet.
 
 ## 5. How to ship it (PM view)
 

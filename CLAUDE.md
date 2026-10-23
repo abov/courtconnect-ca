@@ -39,6 +39,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0021, all accepted except 0001, su
 - One task per session. Keep sessions small: when context passes ~200-300k tokens, write the session note and tell me to start a fresh session.
 - At the end of a session, write a 2-3 line note in a NEW file `docs/sessions/YYYY-MM-DD-<topic>.md` (what changed, what is next). Never edit another session's note or add lines to a shared log: that is what caused merge conflicts. Update "Open, in order" below only when priorities change.
 - Use a lighter model for simple edits; save the biggest for hard problems.
+- Keep summaries short everywhere (owner 2026-10-22): chat replies lead with the result and use at most ~5 bullets, wrap-up recaps are 1-2 sentences, PR descriptions 2-4 bullets, commit messages one line plus at most two. No tables or per-feature breakdowns unless asked; offer detail instead.
 
 ## Where things are
 - `ingestion/`   Python extract/load/export scripts (`ingestion/oneoff/`: one-time research scans, not in any make target; outside requests use `ingestion/useragent.py`)
