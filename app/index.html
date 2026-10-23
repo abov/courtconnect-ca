@@ -80,7 +80,7 @@
   .sico[hidden], .sico:empty { display: none; }
   .sico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
   .sico svg .f { fill: currentColor; stroke: none; }
-  .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > .playonly { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
+  .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > div { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
   .mapkey > summary { padding: 6px 16px; } .mapkey .legend { padding-top: 0; }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
@@ -232,12 +232,13 @@
       <p id="wallnote" class="note" hidden></p>
     </div>
     <div class="searchrow">
-      <div class="playonly">
-        <label class="l" for="q">Search name or city</label>
-        <input id="q" type="search" placeholder="e.g. Manhattan Beach" autocomplete="off">
+      <div>
+        <label class="l" for="q">Search name, city or ZIP</label>
+        <input id="q" type="search" placeholder="e.g. Manhattan Beach or 90266" autocomplete="off">
       </div>
       <button class="chip" id="nearMe" type="button" title="Centre the map on your location (used only in your browser)">Near me</button>
     </div>
+    <p id="searchnote" class="note" hidden aria-live="polite"></p>
     <details class="playonly" id="moreFilters">
     <summary id="moreSummary">More filters</summary>
     <div style="display:grid; gap:10px; margin-top:10px">
@@ -369,6 +370,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
 let DATA, sports, venues, events = [], socials = [], socialPins = [], walls = [], platforms = [];
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
 const $ = id => document.getElementById(id);
+let textOff = false, searchCentre = null, zips = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
   const e = document.createElement(tag);
@@ -397,7 +399,7 @@ function matches(v, sm, tm, vf, sport = state.sport) {
   if (state.on.has("web") && !v.w) return false;
   if (state.on.has("named") && v.q === "u") return false;
   if (state.offers.size && (noPrograms(sport) || ![...state.offers].some(c => v.o.includes(c)))) return false;
-  if (state.text && !v.t.includes(state.text)) return false;
+  if (state.text && !textOff && !textMatch(v.t)) return false;
   return true;
 }
 function filtered() {
@@ -415,7 +417,7 @@ const isUpcoming = ev => !ev.e || ev.e >= todayIso();                   // recom
 function upcomingEvents() { return events.filter(isUpcoming); }
 function eventsFiltered() {
   const name = state.sport >= 0 ? sports[state.sport].n : null;
-  return upcomingEvents().filter(ev => !name || ev.sp === name).sort((a, b) => (a.s || "9999").localeCompare(b.s || "9999") || a.n.localeCompare(b.n));
+  return upcomingEvents().filter(ev => (!name || ev.sp === name) && textHit(evText(ev))).sort((a, b) => nearCmp(a, b) || (a.s || "9999").localeCompare(b.s || "9999") || a.n.localeCompare(b.n));
 }
 function fmtDate(iso, o) { return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", Object.assign({timeZone: "UTC"}, o)); }
 function fmtRange(ev) {
@@ -479,7 +481,7 @@ const SOCIAL_SRC = {official_site: "the organizer's own site", instagram: "the o
 const isCurrentSocial = s => !s.ll || s.ll >= todayIso();                // recomputed in the browser, like watch events
 function socialFiltered() {
   const name = state.sport >= 0 ? sports[state.sport].n : null;
-  return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name)).sort((a, b) => a.c.localeCompare(b.c) || a.v.localeCompare(b.v) || a.n.localeCompare(b.n));
+  return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name) && textHit(evText(s))).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.v.localeCompare(b.v) || a.n.localeCompare(b.n));
 }
 function socialGroups(list) {                                            // one pin per venue; every series there shares its popup
   const g = new Map();
@@ -675,9 +677,10 @@ function initMap() {
     map.on("moveend", debounce(() => state.mode === "play" ? renderList() : updateCount(), 150));
     mapReady = true;
     applyMode(false);
+    if (state.text) runSearch(true);   // a shared #q= link zooms to its result
   });
 }
-function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+function debounce(fn, ms) { let t; const f = (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; f.cancel = () => clearTimeout(t); return f; }
 
 // ---------- venue details ----------
 // Sport icons: monoline, decorative (aria-hidden); the sport name is always shown as text next to them.
@@ -809,6 +812,97 @@ function setLayersFor(mode) {
   $("wallLegend").hidden = !walls_on;
 }
 function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
+// ---------- search: name, city or ZIP; the map zooms to what it finds ----------
+// A name or city fits the map to every match. A ZIP (Census ZCTA centre, data/zips.json) fits to the pins within 6 km, or to the 5 nearest when none are that close.
+// Nothing found: the closest city name (typos), else the pins stay as the other filters leave them, with a note saying so.
+let qWords = [], qWordsFor = null;                                      // every typed word must appear (any order): "tennis manhattan" finds Manhattan Beach tennis courts
+const textMatch = s => { if (qWordsFor !== state.text) { qWordsFor = state.text; qWords = state.text.split(/\s+/).filter(Boolean); } return qWords.every(w => s.includes(w)); };
+const textHit = s => !state.text || textOff || textMatch(s);
+const evText = e => [e.n, e.v, e.c, e.sp, e.o].filter(Boolean).join(" ").toLowerCase();
+const isZip = t => /^\d{5}$/.test(t);
+function distKm(p, c) { return Math.hypot((p.x - c.lng) * Math.cos(c.lat * Math.PI / 180) * 111.32, (p.y - c.lat) * 110.57); }
+const nearCmp = (a, b) => searchCentre ? distKm(a, searchCentre) - distKm(b, searchCentre) : 0;
+function editDist(a, b) {
+  let prev = Array.from({length: b.length + 1}, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const row = [i];
+    for (let j = 1; j <= b.length; j++) row[j] = Math.min(prev[j] + 1, row[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prev = row;
+  }
+  return prev[b.length];
+}
+function closestCity(q, items) {
+  let best = null;
+  for (const c of new Set(items.map(x => x.c).filter(Boolean))) {
+    const d = editDist(q, c.toLowerCase());
+    if (d <= (q.length >= 6 ? 2 : 1) && (!best || d < best.d)) best = {d, c};
+  }
+  return best && best.c;
+}
+// "reno" also matches Moreno Valley: zoom to the places whose city (or name) is exactly, then starts with, what was typed; the pins still show every match
+function focusOn(hits, q) {
+  const city = x => (x.c || "").toLowerCase(), name = x => (x.n || "").toLowerCase();
+  const exact = hits.filter(x => city(x) === q || name(x) === q);
+  if (exact.length) return exact;
+  const starts = hits.filter(x => city(x).startsWith(q) || name(x).startsWith(q));
+  return starts.length ? starts : hits;
+}
+function setSearchNote(t) { const n = $("searchnote"); n.textContent = t; n.hidden = !t; }
+function fitTo(pts, maxZoom) {
+  if (!mapReady || !pts.length) return;
+  const b = new maplibregl.LngLatBounds(); pts.forEach(p => b.extend([p.x, p.y]));
+  const c = map.getContainer(), pad = Math.min(90, Math.floor(Math.min(c.clientWidth, c.clientHeight) / 4));
+  popup.remove(); map.fitBounds(b, {padding: pad, maxZoom, duration: 600});
+}
+async function zipPoint(q) {
+  const n = +q; if (n < 88900 || n > 96199) return null;   // not California or Nevada
+  if (!zips) { const r = await fetch("data/zips.json"); if (!r.ok) throw new Error("HTTP " + r.status); zips = await r.json(); }
+  if (zips[q]) return {at: zips[q], zip: q, exact: true};
+  let best = null;
+  const lcp = k => { let i = 0; while (i < 5 && k[i] === q[i]) i++; return i; };   // ZIPs sharing the longest prefix are in the same area: 89999 gets a Nevada ZIP, not 90001
+  for (const k in zips) { const d = Math.abs(+k - n), l = lcp(k); if (!best || l > best.l || (l === best.l && d < best.d)) best = {l, d, k}; }
+  return {at: zips[best.k], zip: best.k, exact: false};
+}
+let searchRun = 0;
+async function runSearch(zoom, open) {
+  const my = ++searchRun, q = state.text, play = state.mode === "play";
+  textOff = false; searchCentre = null; setSearchNote("");
+  const pins = () => play ? filtered() : [...eventsFiltered(), ...socialFiltered()];
+  const all = play ? venues : [...upcomingEvents(), ...socials.filter(isCurrentSocial)], textOf = play ? (v => v.t) : evText;
+  let pts = null, maxZoom = 15, note = "";
+  if (isZip(q)) {
+    textOff = true;
+    try {
+      const z = await zipPoint(q);
+      if (my !== searchRun) return;
+      if (!z) note = "ZIP " + q + " is outside California and Nevada.";
+      else {
+        const c = {lat: z.at[0], lng: z.at[1]}; searchCentre = c; maxZoom = play ? 13 : 9;
+        const pool = pins(); let near = pool.filter(p => distKm(p, c) <= 6), within = near.length > 0;
+        if (!within) near = pool.slice().sort((a, b) => distKm(a, c) - distKm(b, c)).slice(0, 5);
+        pts = [{x: c.lng, y: c.lat}, ...near];
+        note = (z.exact ? "" : "ZIP " + q + " is not in the list; centred on the nearest ZIP (" + z.zip + "). ")
+          + (within ? near.length + (near.length === 1 ? " spot" : " spots") + " within 6 km of " + z.zip + "." : pool.length ? "Nothing within 6 km of " + z.zip + "; showing the " + near.length + " nearest." : "Nothing matches the current filters.");
+      }
+    } catch (err) { if (my !== searchRun) return; note = "ZIP lookup is not available right now. Try a city or venue name."; }
+  } else if (q.length >= 2) {
+    const hits = pins();
+    if (hits.length) {
+      pts = focusOn(hits, q);
+      if (open && play && hits.length === 1) { refresh(); showVenue(hits[0], true); return; }
+    } else {
+      textOff = true;
+      const cand = all.filter(x => textMatch(textOf(x))), city = cand.length ? "" : closestCity(q, all);
+      if (cand.length) { pts = cand; note = "“" + q + "” matches " + cand.length + (cand.length === 1 ? " place" : " places") + ", but not with the current filters. Clear the filters to see " + (cand.length === 1 ? "it." : "them."); }
+      else if (city) { pts = all.filter(x => x.c === city); note = "No match for “" + q + "”. Showing " + city + ", the closest name."; }
+      else note = "No match for “" + q + "”. Try a city, a venue name or a ZIP code.";
+    }
+  }
+  refresh();
+  setSearchNote(note);
+  if (zoom && pts) fitTo(pts, maxZoom);
+}
+const reSearch = (zoom, open) => state.text ? runSearch(zoom, open) : refresh();   // a filter changed: re-check the search (zoom false keeps the map where it is)
 function applyMode(fit) {
   if (!mapReady) return;
   setLayersFor(state.mode); popup.remove();
@@ -938,7 +1032,7 @@ function renderActive() {
   box.replaceChildren(...items.map(([label, undo]) => {
     const b = el("button", {class: "chip", type: "button", title: "Remove this filter", text: label});
     b.setAttribute("aria-label", "Remove filter: " + label);
-    b.addEventListener("click", () => { undo(); syncControls(); refresh(); });
+    b.addEventListener("click", () => { undo(); syncControls(); reSearch(false); });
     return b;
   }));
   if (items.length > 1) { const c = el("button", {class: "chip clear", type: "button", text: "Clear all"}); c.addEventListener("click", () => $("reset").click()); box.append(c); }
@@ -947,6 +1041,7 @@ function renderActive() {
 function syncControls() {
   renderActive();
   $("sport").value = String(state.sport); $("q").value = state.text;
+  if (!state.text) { textOff = false; searchCentre = null; setSearchNote(""); }
   document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "watch");   // Watch & Social is one combined view
   const nOn = state.on.size + state.offers.size;
   $("moreSummary").textContent = nOn ? "More filters (" + nOn + " on)" : "More filters";
@@ -1050,19 +1145,25 @@ function showWallNote() {
 function setMode(m) {
   if (state.mode === m) return;
   state.mode = m; populateSports(); syncControls(); applyMode(true);
+  if (state.text) runSearch(true);
 }
 function initControls() {
   const sel = $("sport");
   populateSports();
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
-  sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); refresh(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); });
-  $("q").addEventListener("input", debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); refresh(); }, 200));
+  sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); if (state.sport >= 0 && sports[state.sport]) track("sport", sports[state.sport].n); showAnywhere(); if (state.text) runSearch(true); else { refresh(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
+  const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
+  $("q").addEventListener("input", typed);
+  $("q").addEventListener("keydown", e => {   // Enter: search now (a single venue also opens its popup) and close the phone keyboard
+    if (e.key !== "Enter") return;
+    e.preventDefault(); typed.cancel(); state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true, true); e.target.blur();
+  });
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
-    const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); refresh();
+    const k = b.dataset.k; state.on.has(k) ? state.on.delete(k) : state.on.add(k); syncControls(); reSearch(false);
   });
     for (const b of document.querySelectorAll("[data-o]")) b.addEventListener("click", () => {
-    const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); refresh();
+    const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); reSearch(false);
   });
   $("listtoggle").addEventListener("click", () => {
     const off = $("panel").classList.toggle("listoff");
