@@ -844,7 +844,7 @@ function initMap() {
                   paint: {"line-color": "#2f6f5e", "line-width": 1.25, "line-opacity": 0.75}});
     map.addSource("v", {type: "geojson", data: geojson(current), cluster: true, clusterRadius: 38, clusterMaxZoom: 13});
     map.addLayer({id: "clusters", type: "circle", source: "v", filter: ["has", "point_count"],
-      paint: {"circle-color": "#0969da", "circle-opacity": 0.78, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
+      paint: {"circle-color": "#24292f", "circle-opacity": 0.85, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
               "circle-radius": ["step", ["get", "point_count"], 14, 25, 18, 150, 23, 600, 29]}});
     map.addLayer({id: "cluster-count", type: "symbol", source: "v", filter: ["has", "point_count"],
       layout: {"text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Regular"], "text-size": 12},
