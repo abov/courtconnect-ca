@@ -23,3 +23,10 @@ Not paste-ready: the three sheet years that disagree with the one source found (
 ## Written to the sheet (2026-10-22)
 
 With the Google Sheets connector on, wrote the blank cells only, one cell at a time, matched by Sport name and checked by reading the range back. 12 cells written: url for Australian Racquetball (P20), Downside Ball Game (P30), Paleta frontón (P33), Road Tennis (P34), Jokari (P47), Outdoor Racquetball (P54), Pang Pong (P55), Pitton (P56), Qianball (P58), Taiji Bailong (P72), Totem Tennis (P77); Rules for Smolball (Q65). The other 7 of the 19 high/medium cells (Org and Active Loc for Outdoor Racquetball, Qianball, Taiji Bailong, 360Ball, Shuttleball) had already been filled with the same values by someone else, so nothing was overwritten. The 19 low-confidence proposals and the three year conflicts (Knuckle Racket, Eclipseball, 360Ball) were not written. Next `make sync-sports` will pick these up; check the Basque Pelota rename then.
+
+## Overwrites approved by the owner (2026-10-23)
+
+- P20 Australian Racquetball url: the link written earlier (`squash.org.au/w/participation/Racquetball`) returns 404 (the squash.org.au site appears gone); replaced with `https://www.squashaus.com.au/`. All other 11 written links load.
+- Yr Origin: Knuckle Racket G49 2004 -> 2009 and Eclipseball G40 1980 -> 1985, both from the Topend Sports page (single user-submitted source, not independently confirmed). 360Ball (G38, sheet 2011; Topend says created 1990, recreated 2010) left alone until the owner picks a value.
+- Still not written: 19 low-confidence proposals in `docs/sheet_paste_low_confidence.csv`. Recommended subset of 7 (Frescoball, Smashball, Table Squash, Toccer urls; Toccer Org; Eclipseball and Racket Hockey urls) awaits a yes. Rapidball's url proposal 404s; drop it.
+- Front-end note at `app/index.html:811` says walls come from OpenStreetMap only; 33 of them (`manual_walls.csv`) come from city pages and visit reports. Not edited.
