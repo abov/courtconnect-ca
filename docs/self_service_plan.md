@@ -47,7 +47,7 @@ Outside the runbook but on the "Open, in order" list:
 - **About two thirds of the steps are M.** They already have a pass/fail result (dbt, CI, the shrink guard, the freshness check), so the gate exists; what is missing is a runner, a budget and auto-merge.
 - **The E steps all wait on one piece: the page reader (ADR 0017)** and a stored quote per fact. Build it once and most of the E rows open up.
 - **The only J steps left in a refresh** are adding a sport to the sheet, closing a venue on thin evidence, and anything that changes the rules. Those are the escalations.
-- **Gaps to fix first (cheap):** a scorecard no-regression check as a script, a check that every sport name matches the sheet, the CLAUDE.md status lines moved out of the shared file, and the runbook's remaining Snowflake lines removed (retired 2026-10-14).
+- **Gaps to fix first (cheap):** a scorecard no-regression check as a script, a check that every sport name matches the sheet, the CLAUDE.md status lines moved out of the shared file, and the runbook's Snowflake lines removed (done 2026-10-21, ADR 0018).
 
 ## Order
 1. Fix the cheap gaps above (small PRs, each human-merged as today).

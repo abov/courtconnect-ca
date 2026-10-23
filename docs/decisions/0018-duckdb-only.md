@@ -1,6 +1,6 @@
 # 0018. DuckDB is the only warehouse (Snowflake retired)
 
-Date: 2026-10-17. Status: accepted (records the 2026-10-14 retirement; amends ADR 0001).
+Date: 2026-10-17. Status: accepted (records the 2026-10-14 retirement; amends ADR 0001). Code removal done 2026-10-21.
 
 ## Context
 ADR 0001 ("Develop on DuckDB, deploy to Snowflake") said every model runs unchanged on both engines. On 2026-10-14 Snowflake was retired (access may be gone) and CLAUDE.md started saying "DuckDB only, never build or sync Snowflake", but no ADR recorded it, so ADR 0001 still reads as current. Nothing has run on Snowflake since: CI is DuckDB only, the map reads `app/data/venues.json` exported from DuckDB, and the monthly refresh builds on DuckDB.
@@ -25,4 +25,4 @@ What Snowflake code still exists (grep, 2026-10-17):
 + CLAUDE.md, README and ADR 0001 agree. New SQL can use DuckDB features (for example richer string, list and spatial functions) without a portability check.
 + One engine to test; "identical on both engines" claims in ADRs 0003, 0004 and 0005 stay true as history.
 - If the project later needs a cloud warehouse, portability will have to be rebuilt and re-tested; that would need a new ADR.
-- Until the follow-up PR lands, dead Snowflake code and `SNOWFLAKE_*` keys remain in the repo; they are not exercised and may rot.
+- The dead Snowflake code and `SNOWFLAKE_*` keys are gone (removal done 2026-10-21, PR #304; leftover doc lines in ADR 0014, `docs/case_study.md` and `docs/self_service_plan.md` fixed 2026-10-22). ADRs 0001/0003/0004/0005 keep their Snowflake wording as history.

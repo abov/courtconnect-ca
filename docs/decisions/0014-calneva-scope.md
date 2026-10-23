@@ -13,7 +13,7 @@ CourtConnect covers California only. The owner wants the same coverage for Nevad
 - **Labels:** user-facing and doc text says "CalNeva" where it means the covered region (app title, description, header, map label, Makefile help, coverage report heading, README, docs). Historical text stays: ADRs 0001-0013, past status lines, and California-only source lists in the tournament docs (Nevada rows are added beside them).
 - **Names kept stable:** repo, folder and Pages URL (`courtconnect-ca`) do not change until the owner decides.
 - **Order:** (1) region table and polygon clip with a check on known CA/NV points; (2) `region` column through raw, dim, export and app; (3) one PR renaming labels; (4) Nevada metro extracts (slices first, as for walls, statewide later); (5) Nevada seeds, tournaments, leads and runbook rows.
-- **Engines:** all model changes must still run unchanged on DuckDB and Snowflake. New raw columns need `load_raw.py --target snowflake` and a full refresh where a seed gains a column.
+- **Engines:** (superseded by ADR 0018, 2026-10: DuckDB only, no Snowflake target) a seed that gains a column still needs a full refresh.
 
 ## Open questions (owner)
 - Is "CalNeva" only the app and doc name, or also the repo and domain?
