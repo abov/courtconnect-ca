@@ -140,9 +140,11 @@ Done:
 - [x] Social phase A: find people to play with (player-matching app links, Watch & Social view with recurring open-play series); anything further, such as own accounts, only after a separate decision ([ADR 0024](docs/decisions/0024-social-phase-b.md))
 - [x] Visual polish PRs 1-6 (brand tokens, shape and motion, sport icons, friendlier states, popup grouping and status band, glyph pins), front-door promise lines and About dialog, Near me, add to home screen, axe accessibility pass
 - [x] Market insights v1, `llms.txt` and a data dictionary, extra analytics events, a draft-mode refresh agent
+- [x] Phone and accessibility follow-ups: 44 px touch targets, a tick / "?" badge on zoomed pins so status does not rely on colour, Near me distances (nearest-first lists), better glyph and chip contrast, and a computed "(north courts, 6 courts)" suffix that tells apart venues sharing an inferred name
+- [x] Load time measured on throttled Slow 4G / Fast 3G: fine for the beta ([`docs/sessions/2026-10-23-load-time.md`](docs/sessions/2026-10-23-load-time.md))
 
 Next, in order (details in [`CLAUDE.md`](CLAUDE.md) "Open, in order"):
-- [ ] Touch targets of at least 44 px on phones, a status cue that does not rely on colour, then Near me distance sorting
+- [ ] Beta prep (owner): exclude your own visits in GoatCounter on each device, then send the invites
 - [ ] Beta feedback round with friends (December; [`docs/feedback_round.md`](docs/feedback_round.md)), then rank what to build with the findings
 - [ ] Facility scans (UC and CSU campuses, military MWR) and club-named venues, one family at a time
 - [ ] Confirm the refresh agent's cadence and spend cap, then schedule it
