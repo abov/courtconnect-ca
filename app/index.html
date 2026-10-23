@@ -143,6 +143,14 @@
   #active .chip.clear { background: none; border-color: transparent; color: var(--accent); }
   #active .chip.clear::after { content: ""; }
   footer { display: grid; gap: 4px; }
+  /* Venue popup: a status band at the top (green confirmed name, blue listed business, gold guessed name, grey unnamed: the pin colours) and sections split by thin rules. The colour repeats the text badge, never replaces it. */
+  .vhead { --band: var(--muted); margin: -14px -16px 8px; padding: 10px 16px 6px; border-top: 4px solid var(--band); border-radius: var(--r-md) var(--r-md) 0 0; background: var(--panel); }
+  .vhead.st-c { --band: var(--ok); } .vhead.st-p { --band: var(--accent); } .vhead.st-i { --band: var(--warn); }
+  @supports (background: color-mix(in srgb, red 10%, white)) { .vhead { background: color-mix(in srgb, var(--band) 11%, var(--bg)); } }
+  .vhead .badge { background: var(--bg); }   /* chips keep their own contrast on the tinted band */
+  .vhead h2 { margin-bottom: 6px; } .vhead > .meta { margin: 5px 0 0; }
+  .vsec { margin-top: 8px; padding-top: 2px; border-top: 1px solid var(--line); } .vsec:empty { display: none; }
+  .vhead + .vsec { border-top: 0; margin-top: 0; }
   details.srcs { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--line); }
   details.srcs summary { color: var(--accent); }
   @media (pointer: coarse) { .chip, select, input[type=search] { min-height: 44px; } #list button { padding-top: 13px; padding-bottom: 13px; } }
@@ -900,7 +908,9 @@ function venueNode(v) {
   const box = el("div"), more = [];                                       // more = the long explanations, kept one tap away in the details section
   const leaving = ev => { const a = ev.target.closest && ev.target.closest("a[target=_blank]"); if (a && !a.closest("details.srcs")) lastOut = v; };   // a link-out (not a correction form): remember the place for the welcome-back card
   box.addEventListener("click", leaving); box.addEventListener("auxclick", leaving);
-  box.append(el("h2", {text: v.n || "Unnamed courts"}));
+  const head = el("div", {class: "vhead st-" + v.q}), plays = el("div", {class: "vsec"}), go = el("div", {class: "vsec"});   // status band (same colour meaning as the pin), what is played, then where to go; Join & follow and the details follow
+  box.append(head, plays, go);
+  head.append(el("h2", {text: v.n || "Unnamed courts"}));
   const badges = [el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})];
   if (v.cf) {
     badges.push(el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf]}));   // short chip; the date and head-counts move to the details line below
@@ -908,31 +918,31 @@ function venueNode(v) {
   }
   if (v.up) badges.push(el("span", {class: "badge warn", text: v.up}));
   if (v.xu) badges.push(el("span", {class: "badge warn", text: "Public access not confirmed"}));
-  box.append(el("div", {}, ...badges));
+  head.append(el("div", {}, ...badges));
   if (v.up) {
-    box.append(el("p", {class: "meta", text: (v.ul ? "Not open yet; not confirmed by the club" : "Not open yet, per the club") + " (checked " + (v.ud || "recently") + ")"}));
+    head.append(el("p", {class: "meta", text: (v.ul ? "Not open yet; not confirmed by the club" : "Not open yet, per the club") + " (checked " + (v.ud || "recently") + ")"}));
     more.push(v.ul
       ? "Not open yet, and not confirmed by the club's own page: a directory or press listing (checked " + (v.ud || "recently") + ") says it is coming. The location is approximate and the court count, address and date may change or never happen."
       : "Not open yet. The club's own page (checked " + (v.ud || "recently") + ") says it is coming; court counts, address and opening date can change, and the pin may be approximate. Check the club before you go.");
   }
   const place = [v.a || (v.ns ? "Near " + v.ns : ""), v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014); ns = nearest road, no address known
   const tag = v.ai ? "address inferred, " + (v.ad < 10 ? "at the pin" : "~" + v.ad + " m from pin") : v.ap ? "address of the surrounding site (inferred)" : !v.a && v.ns ? "nearest road (inferred)" : "";
-  if (place) box.append(el("p", {class: "meta", text: place + (tag ? " · " + tag : "")}));
+  if (place) head.append(el("p", {class: "meta", text: place + (tag ? " · " + tag : "")}));
   if (v.ai) more.push("Nearest address (inferred), " + (v.ad < 10 ? "at the pin" : "about " + v.ad + " m from the pin") + ": the street address above is the closest address point we know, not confirmed for these courts.");
   if (v.ap) more.push("Address of the surrounding park, school or club (as mapped in OpenStreetMap, inferred): these courts are inside it, but the address is not confirmed for the courts themselves.");
   if (!v.a && v.ns) more.push("No street address known (inferred): the road name is the nearest street to the pin, not an address.");
   if (v.al) more.push("Also listed as: " + v.al);
   const sp = sportParts(v);
-  box.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sp.main)));
+  plays.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sp.main)));
   more.push(...sp.extra);
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
-  if (f.length) box.append(el("p", {text: f.join(" · ")}));
-  if (v.o && !noPrograms()) box.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
-  if (v.ru) box.append(el("p", {}, el("b", {text: "Notes: "}), document.createTextNode(v.ru)));
+  if (f.length) plays.append(el("p", {text: f.join(" · ")}));
+  if (v.o && !noPrograms()) plays.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
+  if (v.ru) plays.append(el("p", {}, el("b", {text: "Notes: "}), document.createTextNode(v.ru)));
   const url = v.w ? safeUrl(v.w) : "";
-  if (url) box.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
-  box.append(directionsNode(v.y, v.x, v.n, false));
-  box.append(shareNode(v));
+  if (url) go.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
+  go.append(directionsNode(v.y, v.x, v.n, false));
+  go.append(shareNode(v));
   if (v.ac && v.ac.length && !noPrograms()) {
     const join = el("div", {class: "join"}, el("h3", {text: "Join & follow"}));
     for (const [type, title, aurl, provider, st, en, price] of v.ac) {
