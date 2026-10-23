@@ -2,8 +2,10 @@
 -- known from the tags: sport=american_handball is used for 1-wall, 3-wall and 4-wall courts alike, and OSM has no wall-count tag.
 -- Owner decision 2026-10-22 (replaces 2026-10-14, when every one was called three-wall): with no public page or visit report
 -- either way, a handball / wallball court is assumed ONE-wall (the app labels it "assumed"). A three_wall type needs a reported
--- or official source in manual_walls.csv. Backboard stays 'backboard' when the name or tags say so.
+-- or official source in manual_walls.csv, or an imagery read in osm_wall_overrides.csv (`inferred`, evidence + date). Backboard stays
+-- 'backboard' when the name or tags say so.
 -- Blank lit / fee means unknown (never read as no). The pin is the mapped feature, so the location is exact.
+with base as (
 select
     'osm-' || osm_type || '-' || cast(cast(osm_id as bigint) as varchar)                      as wall_key,
     md5('wall/osm-' || osm_type || '-' || cast(cast(osm_id as bigint) as varchar))            as wall_id,
@@ -43,3 +45,15 @@ select
         || '. Only the tags are known: the number of walls (assumed one), condition and whether it is open to the public were not checked.'      as evidence,
     {{ region_code('region') }}                                                               as region
 from {{ source('raw', 'osm_walls') }}
+)
+
+select
+    b.wall_key, b.wall_id, b.wall_name, b.city, b.lat, b.lon, b.location_precision,
+    coalesce(o.wall_type, b.wall_type)                   as wall_type,
+    b.sports_suited, b.near_venue_name, b.surface, b.is_lit, b.free_to_use, b.access,
+    coalesce(o.confirmation, b.confirmation)             as confirmation,
+    coalesce(cast(o.verified_on as date), b.reported_on) as reported_on,
+    coalesce(o.evidence, b.evidence)                     as evidence,
+    b.region
+from base b
+left join {{ ref('osm_wall_overrides') }} o on o.wall_key = b.wall_key

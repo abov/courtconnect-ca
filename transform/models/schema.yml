@@ -314,6 +314,28 @@ seeds:
       - name: evidence
         tests: [not_null]
 
+  - name: osm_wall_overrides
+    description: >
+      Wall type of OpenStreetMap handball walls where imagery or a public page settles it (OSM has no wall-count tag; unlisted walls stay
+      assumed one-wall). One row per OSM element; elements that stand together must share a type. `confirmation` is inferred for an imagery read.
+    columns:
+      - name: wall_key
+        tests: [unique, not_null]
+      - name: wall_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['one_wall', 'three_wall', 'backboard']
+      - name: confirmation
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['reported', 'official', 'inferred']
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: player_platforms
     description: >
       Player-matching apps and sites shown under "Find people to play with" (social phase A, ADR 0015). Link-outs only: nothing is
