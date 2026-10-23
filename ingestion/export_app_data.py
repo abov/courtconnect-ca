@@ -21,6 +21,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
               f free 1/0 (absent = unknown), ac access, cf confirmation, d reported on, ev evidence, wn walls at this pin (absent = 1)}]   (hitting walls for solo practice)
   platforms : [{n name, sp [sport indexes], d what it does, p price note, u https link, vo verified on}]   (player-matching apps, link-outs only)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
+                (q i names shared in a city carry a computed "(north courts, 6 courts)" suffix: position + court count, not a source)
      s source: o OpenStreetMap, p places, b both, m hand-curated
      f venue bits: 1 lit, 2 public, 4 free, 8 members-only (marked private/members, not marked public)      p[i][2] sport bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf
 """

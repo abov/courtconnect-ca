@@ -12,7 +12,7 @@ Array; a sport's **index** is its id everywhere else (`venues[].p[][0]`, `platfo
 ## venues
 `i` id, `n` name (empty = unnamed), `y` lat, `x` lon, `c` city, `r` region (CA/NV), `a` street address, `w` website (only if working), `o` offerings string, `f` venue bits, `p` sports at the venue, `ac` link-outs, `ru` rules/notes (hand-curated), `xu` 1 = public access not confirmed.
 
-- `q` name quality: `c` confirmed court/operator name or hand-curated, `p` business listing, `i` inferred from nearby park/school, `u` unnamed.
+- `q` name quality: `c` confirmed court/operator name or hand-curated, `p` business listing, `i` inferred from nearby park/school, `u` unnamed. When several `i` pins in one city share a name, `n` ends in a suffix such as `(north courts, 6 courts)` (or `, #2` if still equal): it is computed from the pin's position relative to the group and its mapped court count, not from any source, and `q` stays `i`.
 - `s` source: `o` OpenStreetMap, `p` places directory (Overture), `b` both, `m` hand-curated.
 - `f` bits: 1 lit, 2 public, 4 free, 8 members-only. Test with bitwise AND (`f & 2` = public).
 - `p` = `[[sportIndex, courts, surfaceMask], ...]`. surfaceMask bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf. `courts` 0 = count unknown.

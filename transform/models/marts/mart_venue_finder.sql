@@ -19,7 +19,7 @@ with osm_facts as (
 
 select
     v.venue_id,
-    coalesce(v.venue_name, 'Unnamed courts')                  as venue_name,
+    coalesce(dn.display_name, v.venue_name, 'Unnamed courts')  as venue_name,   -- same-name inferred pins get a computed position + court-count suffix (int_venue_display_name); name_source stays inferred
     v.name_source,
     v.venue_source,
     s.sport_name,
@@ -59,6 +59,7 @@ select
 from {{ ref('bridge_venue_sport') }} bvs
 join {{ ref('dim_venue') }} v on v.venue_id = bvs.venue_id
 join {{ ref('int_venue_address') }} a on a.venue_id = bvs.venue_id
+left join {{ ref('int_venue_display_name') }} dn on dn.venue_id = bvs.venue_id
 join {{ ref('dim_sport') }} s on s.sport_id = bvs.sport_id
 left join osm_facts f on f.venue_id = bvs.venue_id and f.sport_id = bvs.sport_id
 -- exclude_private_members = yes (Pitton on badminton courts): a members-only venue does not get the sport by inference, even when its

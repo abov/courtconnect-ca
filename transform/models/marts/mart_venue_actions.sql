@@ -2,7 +2,7 @@
 select
     a.action_key,
     a.venue_id,
-    v.venue_name,
+    coalesce(dn.display_name, v.venue_name) as venue_name,
     v.city,
     a.action_type,
     a.title,
@@ -16,3 +16,4 @@ select
     a.verified_on
 from {{ ref('stg_venue_actions') }} a
 join {{ ref('dim_venue') }} v on v.venue_id = a.venue_id
+left join {{ ref('int_venue_display_name') }} dn on dn.venue_id = a.venue_id
