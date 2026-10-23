@@ -39,7 +39,7 @@ UX notes: mobile 375/320px first (card collapsed by default on phones, expanded 
 3. Dropdown shows all 76 (two groups) + empty-state card + suggest-a-place prefill.
 4. Blurbs for the remaining 55 sports.
 5. Venue searches for not-mapped sports, one family per session (Part 1 step 5).
-6. Re-run `pages.yml` after merge; confirm PR MERGED before calling it shipped.
+6. `pages.yml` deploys by itself after merge (check the run); confirm PR MERGED before calling it shipped.
 
 ## Decisions (owner, 2026-10-16)
 
