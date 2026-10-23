@@ -1,0 +1,4 @@
+# 2026-10-22: "Coming up next" strip (product brief build step 3, part)
+
+Added a compact strip at the top of the Watch & Social list in `app/index.html` (`renderComingUp`): the 3 earliest dated events still on or ahead (ongoing ones say "On now"), tap = fly to the pin + popup via `showEvent`, GoatCounter event `this-week-open` (no names). Dates come straight from the export; hidden when nothing is upcoming, and while a sport or search is set (the list below already answers it). Recurring social series have no dates, so they are not in the strip.
+Titled "Coming up next", not "This week": the next 3 can be weeks away, and a "This week" label would then be untrue. Checked as DOM only at 375/320/1100px, light and dark, no console errors. Next: welcome card and Share a place stay with the other brief steps.
