@@ -161,6 +161,13 @@ seeds:
         place_name: varchar
         evidence: varchar
         verified_on: varchar
+    osm_wall_overrides:      # imagery / source reads of an OSM wall's type (stg_osm_walls)
+      +column_types:
+        wall_key: varchar
+        wall_type: varchar
+        confirmation: varchar
+        evidence: varchar
+        verified_on: varchar
     place_sport_overrides:   # starts empty: pin the types so an empty file is not guessed as INTEGER
       +column_types:
         place_id: varchar
