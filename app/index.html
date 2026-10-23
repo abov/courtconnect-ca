@@ -6,6 +6,10 @@
 <title>CourtConnect CalNeva</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10151c" media="(prefers-color-scheme: dark)">
 <meta name="description" content="Find where to play racket sports in California and Nevada: tennis, pickleball, padel, beach tennis and more, with honest notes on how complete the data is.">
 <!-- Pages URL appears here and in og:url / og:image: update all three when the repo is renamed (roadmap item 1). -->
 <link rel="canonical" href="https://abov.github.io/courtconnect-ca/">
@@ -55,6 +59,7 @@
   .chip { font: inherit; font-size: 13.5px; padding: 6px 12px; min-height: 34px; border-radius: var(--r-pill); border: 1px solid var(--line);
           background: var(--chip); color: var(--text); cursor: pointer;
           transition: background-color var(--ease), border-color var(--ease), transform var(--ease); }
+  a { color: var(--accent); }   /* the browser default blue fails contrast on the dark background (axe, 2026-10-23) */
   .chip:hover { border-color: var(--accent); }
   .chip:active { transform: scale(.97); }
   .chip[aria-pressed=true] { background: var(--chip-on); border-color: var(--accent); color: var(--text); font-weight: 600; }
@@ -364,7 +369,7 @@
 
 <dialog id="coverage" aria-labelledby="covTitle">
   <div class="dlg-h"><h2 id="covTitle">How complete is this data?</h2><button class="link" id="closeCoverage" type="button">Close</button></div>
-  <div class="dlg-b">
+  <div class="dlg-b" tabindex="0">
     <p id="covIntro"></p>
     <table><thead><tr><th>Sport</th><th>Status</th><th class="n">Venues</th></tr></thead><tbody id="covBody"></tbody></table>
     <p class="meta" style="margin-top:12px">Statuses: <b>covered</b> 5+ venues; <b>sparse</b> 1&ndash;4; <b>tagged_none_found</b> the map community has a tag for it but nothing is mapped here;
@@ -1450,10 +1455,11 @@ function initControls() {
   });
   for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
   $("nearMe").addEventListener("click", () => {
-    if (!navigator.geolocation) return alert("Your browser does not support location.");
+    if (!navigator.geolocation) return setSearchNote("Your browser does not support location. Search by city or ZIP instead.");
+    setSearchNote("");
     navigator.geolocation.getCurrentPosition(
       pos => map.flyTo({center: [pos.coords.longitude, pos.coords.latitude], zoom: 12}),   // used only in your browser, never sent anywhere
-      () => alert("Could not get your location. You can still search by city."), {timeout: 8000});
+      () => setSearchNote("Could not get your location (check that location is allowed for this site). You can still search by city or ZIP."), {timeout: 8000});
   });
 }
 function initCoverage() {
