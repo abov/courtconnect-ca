@@ -24,7 +24,7 @@ Goal: add courts that gyms and athletic clubs host (racquetball first; also squa
 1. Scan the chain's club pages to a scratch CSV (id, name, address, phone, sports listed). Keep only CA/NV rows that list a sport this project covers.
 2. Skip clubs already on the map for that sport (match by address/name in `marts.mart_venue_finder`).
 3. Geocode, write rows to `manual_venues.csv` (CRLF endings!) and a `venue_actions.csv` link-out to the club page (keep `verified_on` + `evidence`).
-4. `dbt build --select` narrow check, then full build once; `make app-data`; commit `app/data/venues.json`; re-run `pages.yml` after merge.
+4. `dbt build --select` narrow check, then full build once; `make app-data`; commit `app/data/venues.json`; `pages.yml` deploys by itself after merge; check the run.
 5. Record closed/unclear clubs in `venue_leads.csv`, update the table above and "Current status".
 
 ## Open questions

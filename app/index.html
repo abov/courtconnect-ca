@@ -64,7 +64,10 @@
   button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
   button.link:hover { text-decoration: underline; }
   #listbar { display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--line); }
-  #listbar #listtoggle { flex: none; margin: 6px 14px 0 0; font-size: 12.5px; }
+  #listbar .barlinks { flex: none; display: flex; align-items: center; margin: 4px 8px 0 0; }
+  #listbar .link { padding: 4px 6px; font-size: 12.5px; }
+  @media (max-width: 360px) { #listbar .barlinks { flex-direction: column; align-items: flex-end; } }   /* narrow phones: stacked, so the count text keeps its width */
+  #mapkey { border-bottom: 1px solid var(--line); } #mapkey .legend { padding-bottom: 4px; } #mapkey .legend:last-child { padding-bottom: 8px; }
   #panel.listoff #list { display: none; }
   #count { flex: 1; padding: 8px 16px; font-size: 12.5px; color: var(--muted); }
   #count b { color: var(--text); }
@@ -81,7 +84,6 @@
   .sico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
   .sico svg .f { fill: currentColor; stroke: none; }
   .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > div { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
-  .mapkey > summary { padding: 6px 16px; } .mapkey .legend { padding-top: 0; }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
@@ -89,6 +91,9 @@
   .seg { display: flex; gap: 6px; margin-top: 10px; }
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
+  #list li.thisweek { background: color-mix(in srgb, var(--accent) 6%, var(--panel)); } #list li.thisweek .lh2 { margin: 0; padding: 8px 16px 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+  #list li.thisweek button { padding-top: 6px; padding-bottom: 6px; } #list li.thisweek .nm, #list li.thisweek .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #list li.thisweek button + button { border-top: 1px solid var(--line); }
   #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
   body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
@@ -122,10 +127,11 @@
   .maplibregl-popup-content .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
   .maplibregl-popup-content a.btn { display: inline-block; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); transition: background-color var(--ease), opacity var(--ease); color: var(--accent); text-decoration: none; font-weight: 600; }
   .maplibregl-popup-content a.btn.primary { background: var(--accent); color: var(--on-accent); }
+  .maplibregl-popup-content .sharerow { margin: 6px 0 0; display: flex; align-items: center; gap: 8px; }
+  .maplibregl-popup-content button.share { font: inherit; font-weight: 600; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; transition: background-color var(--ease); }
+  .maplibregl-popup-content button.share:hover { background: var(--hover); }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); padding: 6px 16px 10px; }
   .legend[hidden] { display: none; }
-  .ringkey { display: none; }   /* phones only: the map key is hidden there, so the two ring pins get a one-line key */
-  body.watch .ringkey { display: none; }
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
@@ -195,8 +201,8 @@
     select, input[type=search] { font-size: 16px; }
     #active, #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
-    .legend, .mapkey, .welcome { display: none; }
-    .ringkey { display: flex; padding: 0 14px 6px; }
+    .welcome { display: none; }
+    #mapkey .legend { padding-left: 14px; padding-right: 14px; }
     /* phones: the popup is a bottom sheet over the list, so it fits without scrolling inside the small map and the pin stays in view above it */
     .maplibregl-popup { position: fixed !important; top: auto !important; bottom: 0; left: 0; right: 0; transform: none !important; max-width: none !important; z-index: 5; }
     .maplibregl-popup-tip { display: none; }
@@ -277,12 +283,9 @@
     <div class="row playonly"><button class="link" id="reset" type="button">Clear filters</button></div>
   </div>
 
-  <div id="listbar"><div id="count" aria-live="polite"></div><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div>
-  <div class="legend ringkey" aria-label="Ring pins"><span><span class="dot soon"></span>Opening soon</span><span><span class="dot rep"></span>Reported, unconfirmed</span></div>
-  <ul id="list"></ul>
-  <details class="mapkey playonly">
-    <summary>Map key</summary>
-    <div class="legend" aria-label="Map legend">
+  <div id="listbar"><div id="count" aria-live="polite"></div><div class="barlinks"><button class="link playonly" id="keytoggle" type="button" aria-expanded="false" aria-controls="mapkey">Map key</button><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div></div>
+  <div id="mapkey" class="playonly" hidden>
+    <div class="legend" aria-label="Pin colours and rings">
       <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
       <span><span class="dot" style="background:var(--pin-p)"></span>Listed business</span>
       <span><span class="dot" style="background:var(--pin-i)"></span>Name guessed from park/school</span>
@@ -290,14 +293,15 @@
       <span><span class="dot soon"></span>Opening soon (not open yet)</span>
       <span><span class="dot rep"></span>Reported opening soon (unconfirmed)</span>
     </div>
-  </details>
-  <div class="legend playlegend" id="wallLegend" aria-label="Hitting wall legend" hidden>
-    <span>Hitting walls:</span>
-    <span><span class="dot" style="background:var(--pin-c)"></span>Confirmed</span>
-    <span><span class="dot" style="background:var(--pin-p)"></span>Reported by a player</span>
-    <span><span class="dot" style="background:var(--pin-i)"></span>From OpenStreetMap tags, unchecked</span>
-    <span><span class="dot" style="background:var(--pin-u)"></span>Restricted access</span>
+    <div class="legend playlegend" id="wallLegend" aria-label="Hitting wall legend" hidden>
+      <span>Hitting walls:</span>
+      <span><span class="dot" style="background:var(--pin-c)"></span>Confirmed</span>
+      <span><span class="dot" style="background:var(--pin-p)"></span>Reported by a player</span>
+      <span><span class="dot" style="background:var(--pin-i)"></span>From OpenStreetMap tags, unchecked</span>
+      <span><span class="dot" style="background:var(--pin-u)"></span>Restricted access</span>
+    </div>
   </div>
+  <ul id="list"></ul>
   <footer><div id="stats"></div><div><button class="link" id="openCoverage" type="button">How complete is this data?</button></div><div id="attr"></div></footer>
 </aside>
 
@@ -369,6 +373,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
 let DATA, sports, venues, events = [], socials = [], socialPins = [], walls = [], platforms = [];
 const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
 const $ = id => document.getElementById(id);
+let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let textOff = false, searchCentre = null, zips = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
@@ -541,8 +546,24 @@ function renderSocialList(ul) {
   }
   return list;
 }
+// "Coming up next": the 3 earliest-starting dated events still on or ahead, straight from the export (nothing inferred; recurring series have no dates, so they stay in the list below).
+// Only on the unfiltered view: once a sport or search is set, the list below already answers it.
+function renderComingUp(ul) {
+  if (state.sport >= 0 || state.text) return;
+  const next = upcomingEvents().filter(ev => ev.s).sort((a, b) => a.s.localeCompare(b.s) || a.n.localeCompare(b.n)).slice(0, 3);
+  if (!next.length) return;
+  const li = el("li", {class: "thisweek"}, el("p", {class: "lh2", text: "Coming up next"}));
+  for (const ev of next) {
+    const live = ev.s <= todayIso(), when = ev.s.slice(0, 4) === todayIso().slice(0, 4) && (ev.e || ev.s).slice(0, 4) === ev.s.slice(0, 4) ? fmtRange(ev).replace(/, \d{4}/g, "") : fmtRange(ev);   // year only when it is not this year
+    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: ev.n}), el("div", {class: "meta", text: (live ? "On now · " : "") + when + " · " + ev.c}));
+    btn.addEventListener("click", () => { track("this-week-open"); showEvent(ev, true); });
+    li.append(btn);
+  }
+  ul.append(li);
+}
 function renderWatchList() {
   const ul = $("list"); ul.replaceChildren();
+  renderComingUp(ul);
   viewEv = renderEventList(ul); viewSoc = renderSocialList(ul);
   if (!viewEv.length && !viewSoc.length) ul.append(emptyItem("No events or get-togethers match these filters. Try all sports.", "Show all sports"));
   updateCount();
@@ -571,6 +592,22 @@ function directionsNode(y, x, name, approx) {
     a("https://www.google.com/maps/dir/?api=1&destination=" + ll, "Google Maps"), document.createTextNode(" · "),
     a("https://maps.apple.com/?daddr=" + ll + "&q=" + encodeURIComponent(name || "Courts"), "Apple Maps"),
     approx ? document.createTextNode(" (pin is approximate)") : null);
+}
+// Share a place: a link that opens the map on this pin (#venue=<map id>). ?ref=friend (allowlisted above) lets the visit counts show how many visits come from shared links.
+// Phones get the system share sheet; elsewhere the link is copied, and if copying is blocked it is shown in a prompt. Nothing about the visitor is sent anywhere.
+function shareUrl(v) { return location.origin + location.pathname + "?ref=friend#venue=" + encodeURIComponent(v.i); }
+function shareNode(v) {
+  const label = "Share this place", b = el("button", {class: "share", type: "button", text: label}), msg = el("span", {class: "meta", role: "status"});
+  b.addEventListener("click", async () => {
+    const url = shareUrl(v), title = (v.n || "Courts") + (v.c ? ", " + v.c : "");
+    track("share");
+    try {
+      if (navigator.share && matchMedia("(pointer: coarse)").matches) { await navigator.share({title: title + " on CourtConnect", url}); return; }
+      await navigator.clipboard.writeText(url);
+      msg.textContent = "Link copied"; setTimeout(() => { msg.textContent = ""; }, 2500);
+    } catch (e) { if (e.name !== "AbortError") window.prompt("Copy this link", url); }
+  });
+  return el("p", {class: "sharerow"}, b, msg);
 }
 function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
 function wallNode(w) {
@@ -677,6 +714,9 @@ function initMap() {
     mapReady = true;
     applyMode(false);
     if (state.text) runSearch(true);   // a shared #q= link zooms to its result
+    const shared = sharedVenue && state.mode === "play" ? venues.find(v => v.i === sharedVenue) : null;   // an unknown id (venue removed since) is ignored
+    sharedVenue = "";
+    if (shared) showVenue(shared, true);
   });
 }
 function debounce(fn, ms) { let t; const f = (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; f.cancel = () => clearTimeout(t); return f; }
@@ -772,6 +812,7 @@ function venueNode(v) {
   const url = v.w ? safeUrl(v.w) : "";
   if (url) box.append(el("p", {}, el("a", {href: url, target: "_blank", rel: "noopener noreferrer", text: "Website"})));
   box.append(directionsNode(v.y, v.x, v.n, false));
+  box.append(shareNode(v));
   if (v.ac && v.ac.length && !noPrograms()) {
     const join = el("div", {class: "join"}, el("h3", {text: "Join & follow"}));
     for (const [type, title, aurl, provider, st, en, price] of v.ac) {
@@ -812,7 +853,10 @@ function setLayersFor(mode) {
   const walls_on = mode === "play" && wallsFiltered().length > 0;
   show(["wall-pts", "wall-label"], walls_on);
   $("wallLegend").hidden = !walls_on;
+  if (walls_on && !wallKeySeen) { wallKeySeen = true; setKey(true); }   // wall pins reuse the venue colours with other meanings: show the key once, the first time they appear
 }
+let wallKeySeen = false;
+function setKey(open) { $("mapkey").hidden = !open; $("keytoggle").setAttribute("aria-expanded", String(open)); }
 function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
 // ---------- search: name, city or ZIP; the map zooms to what it finds ----------
 // A name or city fits the map to every match. A ZIP (Census ZCTA centre, data/zips.json) fits to the pins within 6 km, or to the 5 nearest when none are that close.
@@ -1008,6 +1052,7 @@ function readHash() {
   for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
   state.text = (p.get("q") || "").toLowerCase();
+  sharedVenue = p.get("venue") || "";   // a "Share this place" link
   if (p.get("access") === "members") state.on.add("members");  // old links
 }
 // Surface chips only make sense for tennis and for "All racket sports" (owner 2026-10-21); regular tennis is never played on sand.
@@ -1172,6 +1217,7 @@ function initControls() {
     $("listtoggle").textContent = off ? "Show list" : "Hide list";
     $("listtoggle").setAttribute("aria-expanded", String(!off));
   });
+  $("keytoggle").addEventListener("click", () => { const open = $("mapkey").hidden; setKey(open); if (open) track("map-key"); });
   $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   $("nearMe").addEventListener("click", () => {

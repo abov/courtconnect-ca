@@ -90,7 +90,7 @@ Ship **A** now (before or alongside the beta follow-ups), then take the popup/ca
 | 5 (B) | Popup grouping and status band; active-filter chips | diff the popup text before/after: every line still present |
 | 6 (B) | Sport glyph pins at high zoom | pin colours still distinguishable (colour-blind simulation) |
 
-**No-detail-lost check for every PR:** list the text labels and links the popup/list rendered before and after for 3 sample venues (confirmed, inferred, NV with link-outs) and paste the diff in the PR. Re-run `pages.yml` after merge and hard-refresh (Pages caches up to 10 min).
+**No-detail-lost check for every PR:** list the text labels and links the popup/list rendered before and after for 3 sample venues (confirmed, inferred, NV with link-outs) and paste the diff in the PR. After merge `pages.yml` deploys by itself; hard-refresh (Pages caches up to 10 min).
 
 ## Open questions for the owner
 
