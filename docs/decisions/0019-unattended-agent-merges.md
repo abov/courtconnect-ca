@@ -40,7 +40,7 @@ An agent opens a PR. A separate deterministic **merge gate** (a script run in CI
 
 ### 5. Safety net instead of pre-approval
 - **Audit trail:** one bot identity with a fine-grained token (contents + pull requests only, no admin, no workflow edits); every change is a PR with class, evidence and gate results in the body.
-- **Revert:** a one-line command and a documented drill (`docs/self_service_plan.md` to be extended): revert the merge commit, rebuild, re-run `pages.yml`.
+- **Revert:** a one-line command and a documented drill (`docs/self_service_plan.md` to be extended): revert the merge commit, rebuild; the revert merge redeploys through `pages.yml` (it runs on pushes that touch `app/**`).
 - **Weekly audit digest:** a random sample (at least 10%, minimum 5) of that week's auto-merged PRs is re-checked by an independent AI pass and by the page itself; the owner gets a short digest of disagreements. This is how review time stays near zero and still catches drift.
 - **Budget and kill switch:** hard weekly spend cap and PR cap (owner); a failed gate, a revert, or `AGENTS_ENABLED=false` stops all agents.
 - **Unchanged rules:** no owner logins (ADR 0007), no Google Places data (ADR 0005), project User-Agent only, no personal data stored, no `.env` read, links out and no bookings or payments. Secrets reach agents only as runner secrets, never in prompts or PRs.

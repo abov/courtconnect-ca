@@ -30,7 +30,7 @@ We need real usage numbers (for deciding what to build, for the feedback round, 
 
 ## Owner setup (once)
 1. Create a free account at goatcounter.com and a site; pick a code (the part before `.goatcounter.com`).
-2. Set `GOATCOUNTER_CODE` in `app/index.html`, merge, and re-run `pages.yml`.
+2. Set `GOATCOUNTER_CODE` in `app/index.html`, and merge (`pages.yml` deploys it).
 3. Events are sent from the page, so no extra GoatCounter setting is needed. Keep the dashboard private, or make it public if you want to link it from the case study.
 
 ## Consequences

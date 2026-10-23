@@ -29,7 +29,7 @@ Goal (ADR 0015, long-term): the project runs itself with as little human review 
 | 7 | `make quality`, `make report` | M | run, diff the scorecard against the last line | needs a written no-regression rule (venue count, SLAs, stale share) |
 | 7 | Undated hand-added rows: re-date, or turn into a lead | E | re-read source, re-date with quote, else propose a lead | "leave stale" vs "make a lead" is a small judgment: default to leave stale |
 | 8 | Export (`make app-data`), commit `venues.json` | M | run; `ci/check_export_fresh.py` already checks it | `venues.json` collides between PRs: one refresh PR at a time, agents rebase on main and rebuild, never hand-resolve |
-| 9 | Commit, PR, re-run `pages.yml`, confirm merged | M | open PR, merge when gates pass, re-run Pages, confirm the run | needs auto-merge on required checks instead of `--admin` |
+| 9 | Commit, PR, confirm merged and the `pages.yml` run | M | open PR, merge when gates pass, confirm the Pages run (it starts by itself) | needs auto-merge on required checks instead of `--admin` |
 | 9 | Add 2 lines to CLAUDE.md "Current status" | M | write the numbers | shared file, conflict-prone: move the log to a generated file (e.g. a new line in `docs/data_quality_trend.csv`) and drop the CLAUDE.md edit |
 
 Outside the runbook but on the "Open, in order" list:
