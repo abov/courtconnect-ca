@@ -119,6 +119,7 @@ Data lives in seeds under `transform/seeds/`; edit them, then `make build` and `
 | Add an event to watch | `watch_events.csv` |
 | Confirm or reject an uncertain match | `place_sport_overrides.csv` |
 | Mark an Overture place as closed | `closed_places.csv` (with evidence) |
+| Correct a court count for one sport at a venue | `venue_court_counts.csv` (with evidence; add the missing sport via `manual_venues.csv`) |
 
 Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routine: [`docs/monthly_refresh.md`](docs/monthly_refresh.md). Decisions: short records in [`docs/decisions/`](docs/decisions) (ADRs 0001 to 0024; 0001 is superseded by 0018; 0023 and 0024 are proposed).
 

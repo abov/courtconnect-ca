@@ -143,6 +143,27 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: venue_court_counts
+    description: >
+      A person's court count for one sport at one venue where the OpenStreetMap count is wrong (core.bridge_venue_sport replaces the count for a
+      sport the venue already has, and sports derived from it follow). Keyed by venue_id with the pin's lat/lon: a row is ignored if the venue's
+      courts are no longer there. Reported counts (imagery, owner visits) say so in evidence; public data only (ADR 0005, 0007).
+    columns:
+      - name: venue_id
+        tests: [not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: sport
+        tests: [not_null]
+      - name: courts
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: venue_city_official
     description: >
       City of a named pin that no dataset gives a city for (remote parks, schools, golf courses), read from the venue's own page or a
