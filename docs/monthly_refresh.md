@@ -18,7 +18,7 @@ Run from Git Bash in the main checkout (where `courtconnect.duckdb` is). `make` 
 6. **Build.** Narrow first if seeds changed (`dbt build --select <changed>+`), then the full `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` once. A seed that gained a column needs `--full-refresh`.
 7. **Scorecard and reports.** `make quality` and `make report`, then `python ci/check_scorecard_regression.py` (venues fell more than 1%, "seen in 35 days" fell, more SLAs fail, or a dbt test fails; `--base-ref origin/main` compares with main's last line). A failure is explained in the PR or fixed, never ignored (ADR 0019 gate 4). Look at "Stale or undated venues" in `docs/data_quality.md`: give undated hand-added rows a `confirmed_on` only when you re-read their source, otherwise leave them stale (the breach is the honest result) or turn them into a lead.
 8. **Export.** `make app-data`, commit `app/data/venues.json` (CI runs `ci/check_export_fresh.py`).
-9. **Ship.** Commit, push, open a PR titled `Monthly refresh YYYY-MM`. After it merges, re-run `pages.yml`. Add 2 lines to CLAUDE.md "Current status": date, venues, freshness %, SLAs met.
+9. **Ship.** Commit, push, open a PR titled `Monthly refresh YYYY-MM`. After it merges, `pages.yml` deploys by itself (the PR changes `app/data/venues.json`); check that run succeeded. Add 2 lines to CLAUDE.md "Current status": date, venues, freshness %, SLAs met.
 
 ## What each source contributes to freshness
 | Source | Date used | Moves when |

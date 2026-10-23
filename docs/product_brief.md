@@ -1,6 +1,6 @@
 # Product brief: what CourtConnect is, why each piece exists, and how to make the page clear (2026-10-22)
 
-Status: **PR 1 and PR 2 built 2026-10-22 (mode names, promise headline, stats to footer, wall note collapsed, About card collapsed, "Filters (n)", short confirmation chip); PR 3 (welcome card) skipped by owner, legends merged into one "Map key" button in the list bar and "Share this place" built 2026-10-22; "This week" strip not built.** Source: `app/index.html` read as text, ADR 0015, `docs/ux_polish.md`, `docs/competitor_scan.md`, `app/data/venues.json` meta (generated 2026-10-22). Builds on, does not replace, the visual polish plan.
+Status: **PR 1 and PR 2 built 2026-10-22 (mode names, promise headline, stats to footer, wall note collapsed, About card collapsed, "Filters (n)", short confirmation chip); PR 3 (welcome card) skipped by owner, legends merged into one "Map key" button in the list bar and "Share this place" built 2026-10-22; "Coming up next" strip (the brief's "This week" strip) built 2026-10-22.** Source: `app/index.html` read as text, ADR 0015, `docs/ux_polish.md`, `docs/competitor_scan.md`, `app/data/venues.json` meta (generated 2026-10-22). Builds on, does not replace, the visual polish plan.
 
 **Focus helpers (added 2026-10-22, built in the PR 3 slot): see §4b.**
 
