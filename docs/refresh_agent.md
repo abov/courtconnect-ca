@@ -7,7 +7,7 @@ The prompt for the scheduled `courtconnect-refresh` task. It runs `docs/monthly_
 | Setting | Value |
 |---|---|
 | `EXTRACT_AUTHORIZED` | `no` (set to `yes` only with the owner's OK; step 3 then runs the documented extract when the raw data is 20+ days old) |
-| Weekly / monthly spend cap | $5 / $20 (ADR 0019, owner 2026-10-18) |
+| Weekly / monthly spend cap | $5 / $10 (owner 2026-10-23; stricter than ADR 0019's $20 a month, which stays the project-wide ceiling) |
 | Agent PR cap | 10 PRs in 7 days |
 
 ## Rules (CLAUDE.md and ADR 0019, repeated because the agent starts cold)
@@ -23,7 +23,7 @@ Run commands from Git Bash with the main checkout's venv first on PATH (`export 
 **0. Preflight. Stop (report why, open nothing) if any fails.**
 1. Kill switch, fails closed: `gh variable get AGENTS_ENABLED` must print `true`.
 2. `git fetch origin main`. `gh pr list --state open --search "head:claude/refresh-"` must be empty (one refresh PR at a time: `venues.json` collides between PRs). `gh pr list --state all --search "head:claude/refresh-" --limit 20` must show fewer than 10 created in the last 7 days.
-3. Spend: sum `est_cost_usd` in `docs/agent_log.csv` for the last 7 days (< $5) and 30 days (< $20). If `mcp__ccd_session_mgmt__get_usage` is available, use the real figure instead. This run is estimated at $1.50 without an extract; abort if it would pass either cap.
+3. Spend: sum `est_cost_usd` in `docs/agent_log.csv` for the last 7 days (< $5) and 30 days (< $10). If `mcp__ccd_session_mgmt__get_usage` is available, use the real figure instead. This run is estimated at $1.50 without an extract; abort if it would pass either cap.
 4. Fill the outcome of the previous log row: `gh pr view <number> --json state,mergedAt,commits` -> `accepted_unchanged` (merged, only the agent's commits), `edited` (merged, other commits added), `rejected` (closed unmerged), or leave `open`. Do this edit in step 9 with the new row, never in a separate PR.
 
 **1. Branch and database.** `git worktree add .claude/worktrees/refresh-YYYY-MM-DD -b claude/refresh-YYYY-MM-DD origin/main` (inside the main checkout, so the scripts find the shared `data/raw` and the main checkout's `.env`). `python ingestion/fresh_db.py` (~1 min). Note the last line of `docs/data_quality_trend.csv`.
@@ -54,7 +54,7 @@ Classify the PR: **R0** if gate 4 passes and nothing else failed. **R3 escalate*
 **9. Ship.** Append to `docs/agent_log.csv` (`date,pr,class,gates,outcome,est_cost_usd`; outcome `open`; update the previous row per preflight 4). Commit (one-line message, end with `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`), push, open the PR titled `Refresh YYYY-MM-DD` with 2-4 bullets: class + gate results; venues, "seen in 35 days" and SLAs met (from the new trend line); issue counts and failing links; "needs owner decision" (R3 reasons, stale rows, a freshness breach date). End the PR body with `🤖 Generated with [Claude Code](https://claude.com/claude-code)`. Do not add the 2 lines to CLAUDE.md "Current status": the trend line is the log (self-service plan, step 9). Never merge. Then `git worktree remove` the worktree. Finish with a 5-line summary.
 
 ## Proposed schedule
-Twice a month, matching the runbook ("twice a month") but off the tournament task's 1st and 15th so the two PRs never collide on `venues.json`: **the 8th and the 22nd at 09:00** (cron `0 9 8,22 * *`). Expected cost: about $1.50 a run without an extract, so about $3 a month against the $20 cap; an extract run adds no model cost but about 15 minutes of the owner's machine, which must be on.
+Twice a month, matching the runbook ("twice a month") but off the tournament task's 1st and 15th so the two PRs never collide on `venues.json`: **the 8th and the 22nd at 09:00** (cron `0 9 8,22 * *`). Expected cost: about $1.50 a run without an extract, so about $3 a month against the $10 cap; an extract run adds no model cost but about 15 minutes of the owner's machine, which must be on.
 
 ## Wrapper (the scheduled task's `SKILL.md`)
 ```
