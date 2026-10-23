@@ -1,0 +1,3 @@
+# 2026-10-23: suffix for same-name inferred venues
+Inferred names (`enclosing_feature`) shared by 2+ venues in a city now show "(north courts, 6 courts[, #k])" via `int_venue_display_name`, used by `mart_venue_finder` and `mart_venue_actions`; `dim_venue.venue_name`, `venue_id` and name quality (`i`) are unchanged. Test `assert_inferred_names_unique_in_city`; dictionary, `llms.txt` and export docstring say the suffix is computed, not sourced.
+Next: `mart_venue_confidence` still carries the raw name (internal). 33 same-name groups remain (chain branches, business listings, hand-named pins), by design.
