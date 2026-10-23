@@ -82,6 +82,9 @@ eval-match:      ## score the Overture place -> OSM match against ci/gold/place_
 quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 	$(PY) ingestion/export_quality_scorecard.py
 
+market-snapshot:  ## append today's venue counts (city x sport) to docs/market_snapshots.csv; run once per refresh after dbt build
+	$(PY) ingestion/snapshot_market.py
+
 sync-reports:     ## import approved community-form reports (Google Form) as seed edits; needs REPORTS_CSV_URL in .env
 	$(PY) ci/sync_reports.py $(ARGS)
 
