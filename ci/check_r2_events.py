@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DECISIONS = {"added", "out_of_region", "past", "duplicate", "not_racket", "pending"}
 TID = re.compile(r"r2sports\.com/r2-push\.asp\?TID=(\d+)", re.I)
 # Rows that predate this check and link to the R2 search page. Put the event's TID in info_url (and a row in r2_seen.csv) and delete the entry.
-GRANDFATHERED = {"golden-state-open-racquetball-2026", "nightmare-before-christmas-racquetball-2026", "racquetball-players-championship-2027"}
+GRANDFATHERED = {"nightmare-before-christmas-racquetball-2026", "racquetball-players-championship-2027"}
 
 
 def rows(path):
