@@ -1,6 +1,6 @@
 tid,event_key,name,decision,seen_on,note
 54262,golden-state-open-racquetball-2026,Golden State Open Presented by JMB,added,2026-10-24,Racquetball Nov 4-8 2026 Pleasanton CA; already in watch_events.csv (dates match); TID link added
 54415,,NCHA 44th Annual Hall of Fame Tournament,not_racket,2026-10-24,Handball (hand-struck) Nov 6-8 2026 San Mateo Elks; handball is not a racket sport in the sheet; revisit if the owner wants handball listed
-54385,nightmare-before-christmas-racquetball-2026,The Nightmare Before Christmas Racquetball,added,2026-10-24,Roseville Dec 11-13; existing row still links the search page (grandfathered)
-54405,racquetball-players-championship-2027,The Players Championship Racquetball,added,2026-10-24,Fountain Valley Apr 29-May 2 2027; existing row still links the search page (grandfathered)
-54323,,,pending,2026-10-24,Listed in the CA racquetball search but R2 rate-limited before it could be read; read it next run
+54385,nightmare-before-christmas-racquetball-2026,The Nightmare Before Christmas,added,2026-10-24,Racquetball Dec 11-13 2026 Roseville CA (Johnson Ranch Sports Club)
+54405,racquetball-players-championship-2027,The Players Championship,added,2026-10-24,Racquetball Apr 29-May 2 2027 Fountain Valley CA (R2 lists the venue as "Los Cab")
+54323,outdoor-nationals-huntington-beach-2027,2027 Outdoor Nationals by 3Wall Ball,added,2026-10-24,Outdoor racquetball Jul 9-11 2027 Marina Park Huntington Beach CA; info_url stays the organizer site 3wallball.com and the TID is in source_note
