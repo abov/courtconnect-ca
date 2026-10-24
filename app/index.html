@@ -1217,7 +1217,7 @@ function applyMode(fit) {
     const list = wallsFiltered();
     if (list.length) fitWalls(list); else map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
   }
-  refresh(); syncSportMore();   // the player-apps part is play-only, so switching mode can empty the disclosure
+  refresh(); showWallNote();   // Watch and Social return early from refresh(), so the orange-pin note (play-only) is updated here
 }
 function renderList() {
   if (state.mode !== "play") return;
