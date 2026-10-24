@@ -753,6 +753,8 @@ function renderWatchList() {
   renderComingUp(ul);
   viewEv = renderEventList(ul); viewSoc = renderSocialList(ul);
   if (!viewEv.length && !viewSoc.length) ul.append(emptyItem("No events or get-togethers match these filters. Try all sports.", "Show all sports"));
+  ul.append(el("li", {class: "meta"}, document.createTextNode("Know a tournament we are missing? "),
+    el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?template=report-an-event.yml", target: "_blank", rel: "noopener noreferrer", text: "Tell us about it"}), document.createTextNode(".")));
   updateCount();
 }
 
