@@ -67,9 +67,7 @@
   .chip:focus-visible, select:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
   button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
-  button.link:hover, button.link[aria-pressed=true] { text-decoration: underline; }
-  button.link[aria-pressed=true] { font-weight: 600; }
-  #tools[hidden] { display: none; }
+  button.link:hover { text-decoration: underline; }
   #listbar { display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--line); }
   #listbar .barlinks { flex: none; display: flex; align-items: center; margin: 4px 8px 0 0; }
   #listbar .link { padding: 4px 6px; font-size: 12.5px; }
@@ -278,8 +276,9 @@
       <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice, and apps to find people to play with">Places to play</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Events &amp; meetups</button>
     </div>
-    <div class="tools playonly" id="tools" role="group" aria-label="Stay on track" hidden>
+    <div class="tools playonly" id="tools" role="group" aria-label="Stay on track">
       <button class="chip" id="shortlistToggle" type="button" aria-expanded="false" aria-controls="shortlist" title="Places you saved, kept in this browser only">&#9733; Shortlist (0)</button>
+      <button class="chip" id="focusToggle" type="button" aria-pressed="false" title="Show 5 places at a time and hide the extras, so there is less to read">Focus mode</button>
     </div>
   </header>
 
@@ -341,7 +340,7 @@
     <button id="reset" type="button" hidden>Clear filters</button>   <!-- script hook only: the active-filter chips ("x" per filter, "Clear all") are the visible way -->
   </div>
 
-  <div id="listbar"><div id="count" aria-live="polite"></div><div class="barlinks"><button class="link playonly" id="focusToggle" type="button" aria-pressed="false" title="Show 5 places at a time and hide the extras, so there is less to read">Focus mode</button><button class="link playonly" id="keytoggle" type="button" aria-expanded="false" aria-controls="mapkey">Map key</button><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div></div>
+  <div id="listbar"><div id="count" aria-live="polite"></div><div class="barlinks"><button class="link playonly" id="keytoggle" type="button" aria-expanded="false" aria-controls="mapkey">Map key</button><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div></div>
   <div id="mapkey" class="playonly" hidden>
     <div class="legend" aria-label="Pin colours and rings">
       <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
@@ -502,7 +501,7 @@ function toggleSaved(v) {
 function syncShortlist() {
   const n = shortIds.filter(i => byId[i]).length;
   $("shortlistToggle").textContent = "★ Shortlist (" + n + ")";
-  $("tools").hidden = !n && $("shortlist").hidden;   // an empty shortlist is not worth a row
+  $("shortlistToggle").hidden = !n && $("shortlist").hidden;   // an empty shortlist is not worth a chip
   document.querySelectorAll("button.save[data-id]").forEach(saveLabel);   // the popup and nudge buttons follow the list
   renderShortlist();
   if (mapReady && state.mode === "play") renderList();   // the "Saved" badge in the list
