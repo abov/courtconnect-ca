@@ -107,6 +107,7 @@
   #sport option.nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; }
   .sportinfo { margin-top: 8px; } .sportinfo summary { font-size: 12.5px; }
+  .sportinfo h4 { margin: 10px 0 0; font-size: 12.5px; }
   .sportinfo p { margin: 6px 0 0; } .sportinfo .facts { color: var(--muted); }
   .sportinfo .links { display: flex; flex-wrap: wrap; gap: 4px 12px; } .sportinfo .links a { color: var(--accent); }
   .sportinfo .links small { color: var(--muted); }
@@ -148,7 +149,8 @@
   #active .chip::after { content: " \00d7"; font-weight: 700; }
   #active .chip.clear { background: none; border-color: transparent; color: var(--accent); }
   #active .chip.clear::after { content: ""; }
-  footer { display: grid; gap: 4px; }
+  footer { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+  footer #attr { flex-basis: 100%; }
   /* Venue popup: a status band at the top (green confirmed name, blue listed business, gold guessed name, grey unnamed: the pin colours) and sections split by thin rules. The colour repeats the text badge, never replaces it. */
   .vhead { --band: var(--muted); margin: -14px -16px 8px; padding: 10px 16px 6px; border-top: 4px solid var(--band); border-radius: var(--r-md) var(--r-md) 0 0; background: var(--panel); }
   .vhead.st-c { --band: var(--ok); } .vhead.st-p { --band: var(--accent); } .vhead.st-i { --band: var(--warn); }
@@ -294,9 +296,12 @@
         <button class="chip" id="sportTop" type="button" aria-pressed="false" hidden></button>
       </div>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
-      <details id="people" class="playonly note sportinfo" hidden><summary id="people-t">Find people to play with</summary><div id="people-b"></div></details>
       <p id="anywhere" class="note" hidden></p>
-      <details id="wallnote" class="note sportinfo" hidden><summary>About the orange pins</summary><div id="wallnote-b"></div></details>
+      <details id="sportmore" class="note sportinfo" hidden><summary id="sportmore-t">More about this sport</summary>
+        <div id="sportinfo" hidden><h4 id="sportinfo-t"></h4><div id="sportinfo-b"></div></div>
+        <div id="wallnote" hidden><h4>About the orange pins</h4><div id="wallnote-b"></div></div>
+        <div id="people" class="playonly" hidden><h4 id="people-t">Find people to play with</h4><div id="people-b"></div></div>
+      </details>
     </div>
     <div class="searchrow">
       <div>
@@ -341,7 +346,6 @@
     </div>
     </div>
     </details>
-    <details id="sportinfo" class="note sportinfo" hidden><summary id="sportinfo-t"></summary><div id="sportinfo-b"></div></details>
     <button id="reset" type="button" hidden>Clear filters</button>   <!-- script hook only: the active-filter chips ("x" per filter, "Clear all") are the visible way -->
   </div>
 
@@ -1213,7 +1217,7 @@ function applyMode(fit) {
     const list = wallsFiltered();
     if (list.length) fitWalls(list); else map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
   }
-  refresh();
+  refresh(); syncSportMore();   // the player-apps part is play-only, so switching mode can empty the disclosure
 }
 function renderList() {
   if (state.mode !== "play") return;
@@ -1421,7 +1425,7 @@ function showSportInfo() {
     }
     body.append(row);
   }
-  box.open = false;   // one line until tapped, so the sport picker area stays short (product brief, level 2)
+  $("sportmore").open = false;   // one line until tapped, so the sport picker area stays short (product brief, level 2)
 }
 // "Find people to play with" (social phase A, ADR 0015): link-outs to player-matching apps for the chosen sport. CourtConnect stores no members and
 // has not checked how many players each app has in California or Nevada, so the list says so.
@@ -1439,6 +1443,12 @@ function showPeople() {
       el("span", {class: "facts", text: sp + " · " + p.p + " · read " + p.vo})));
   }
 }
+// The sport blurb, the wall note and the player-matching apps share one disclosure under the picker, shown only while one of them has something to say.
+function syncSportMore() {
+  const box = $("sportmore"), s = state.sport >= 0 ? sports[state.sport] : null;
+  box.hidden = [...box.querySelectorAll(":scope > div")].every(d => d.hidden || getComputedStyle(d).display === "none");
+  $("sportmore-t").textContent = s ? "More about " + s.n : "Find people to play with";
+}
 function showAnywhere() {
   showSportInfo();
   showPeople();
@@ -1452,6 +1462,7 @@ function showAnywhere() {
     n.append(document.createTextNode("No place for " + s.n + " is listed in California or Nevada yet. Know one? "),
       el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Tell us about it"}), document.createTextNode("."));
   }
+  syncSportMore();
 }
 function showNoPrograms() {
   const n = $("noprog"), name = noPrograms() ? sports[state.sport].n : "";
@@ -1465,6 +1476,7 @@ function showWallNote() {
     const shown = wallsFor(s.n).reduce((n, w) => n + (w.wn || 1), 0), unknown = walls.filter(w => w.t.every(t => t === "other")).reduce((n, w) => n + (w.wn || 1), 0);
     $("wallnote-b").textContent = (s.n === "Outdoor Racquetball" ? "Orange pins are outdoor 1-wall and 3-wall courts where outdoor racquetball is played, " : s.n === "Knuckle Racket" ? "Orange pins are public 1-wall and 3-wall courts where Knuckle Racket can be played (walls not marked public are left out), " : "Orange pins are hitting walls you can also use alone, ") + "shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap, city pages and visit reports across California and Nevada; ones nobody has mapped or reported are missing.";
   }
+  syncSportMore();
 }
 function setMode(m) {
   if (state.mode === m) return;
