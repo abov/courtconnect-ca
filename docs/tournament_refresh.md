@@ -34,6 +34,13 @@ Cost rules: no subagents, no screenshots, no extended web search. Read pages as 
 ## Nevada (added 2026-10-15)
 Same governing-body steps, filtered to Nevada, plus: https://www.bounce.game/city/las-vegas-nevada-us and `/city/reno-nevada-us` (WebFetch; lists amateur pickleball with the venue on each event page; third-party, so label unconfirmed), OmniPong with `, NV` in the city (browser pane, same fetch as table tennis), https://www.thesphere.com/events (flag any racket sport or screening). R2 Sports: do NOT loop state/sport searches; one request per sport at most, because it IP-blocks for repeated reCAPTCHA pages. USTA Intermountain needs the section id in the playtennis.usta.com URL (find it by picking Intermountain once in the Section menu).
 
+## Finding new event sites (added 2026-10-24, owner request)
+`docs/event_sources.csv` lists every site the runs read (domain, kind, sports, region, method, `status` active / blocked / candidate / rejected, `last_checked`, `last_yielded`). `ci/check_event_sources.py` fails if an event links to a site that is not listed, so a new source cannot slip in. Each cycle (Part 2):
+1. One standard web search per sport ("California <sport> tournament <year>", then "Nevada ..."; no extended search). Any organizer or platform domain not in the list is added with `status = candidate` and a note; at most 5 new candidates per cycle.
+2. Read each `candidate` (public pages only, never sign in): if it lists CA/NV events, set it `active`, record the method, and add the events; if not, set it `rejected` with a note.
+3. Set `last_checked` for every source read this cycle; set `last_yielded` when it produced an event. A source `active` for 3 cycles with no `last_yielded` is a candidate for `rejected`.
+4. Domains from `event-report` issues and from `docs/r2_seen.csv` notes go in the same way.
+
 ## Known gaps
 Events people send us: the Watch list links to the "Report a tournament or event" form (label `event-report`); `make issues` lists them (step 2b), including any R2 TID, which goes into `docs/r2_seen.csv`.
 
