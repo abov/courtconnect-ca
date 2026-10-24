@@ -67,7 +67,9 @@
   .chip:focus-visible, select:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
   button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
-  button.link:hover { text-decoration: underline; }
+  button.link:hover, button.link[aria-pressed=true] { text-decoration: underline; }
+  button.link[aria-pressed=true] { font-weight: 600; }
+  #tools[hidden] { display: none; }
   #listbar { display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--line); }
   #listbar .barlinks { flex: none; display: flex; align-items: center; margin: 4px 8px 0 0; }
   #listbar .link { padding: 4px 6px; font-size: 12.5px; }
@@ -212,7 +214,7 @@
   #toast { position: fixed; top: 12px; left: 0; right: 0; margin: 0 auto; width: min(92vw, 420px); z-index: 6; background: var(--bg); color: var(--text);
            border: 2px solid var(--hi); border-radius: var(--r-md); box-shadow: var(--shadow); padding: 10px 14px; animation: pop var(--ease); }
   #toast .chips { margin-top: 8px; }
-  body.focus:not(.watch) .sportinfo, body.focus:not(.watch) #anywhere, body.focus:not(.watch) #moreFilters, body.focus:not(.watch) #clearrow,
+  body.focus:not(.watch) .sportinfo, body.focus:not(.watch) #anywhere, body.focus:not(.watch) #moreFilters,
   body.focus:not(.watch) .welcome, body.focus:not(.watch) #count { display: none; }
   body.focus:not(.watch) #listbar .barlinks { margin-left: auto; }
   /* Touch: every standalone control gets a 44 px target (the `.tools` / `.searchrow` chip rules above are more specific than the generic coarse rule, so they are repeated here). Text links inside popup lines keep their look and grow only their hit area. */
@@ -276,9 +278,8 @@
       <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice, and apps to find people to play with">Places to play</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Events &amp; meetups</button>
     </div>
-    <div class="tools playonly" role="group" aria-label="Stay on track">
+    <div class="tools playonly" id="tools" role="group" aria-label="Stay on track" hidden>
       <button class="chip" id="shortlistToggle" type="button" aria-expanded="false" aria-controls="shortlist" title="Places you saved, kept in this browser only">&#9733; Shortlist (0)</button>
-      <button class="chip" id="focusToggle" type="button" aria-pressed="false" title="Show 5 places at a time and hide the extras, so there is less to read">Focus mode</button>
     </div>
   </header>
 
@@ -337,10 +338,10 @@
     </div>
     </details>
     <details id="sportinfo" class="note sportinfo" hidden><summary id="sportinfo-t"></summary><div id="sportinfo-b"></div></details>
-    <div class="row playonly" id="clearrow"><button class="link" id="reset" type="button">Clear filters</button></div>
+    <button id="reset" type="button" hidden>Clear filters</button>   <!-- script hook only: the active-filter chips ("x" per filter, "Clear all") are the visible way -->
   </div>
 
-  <div id="listbar"><div id="count" aria-live="polite"></div><div class="barlinks"><button class="link playonly" id="keytoggle" type="button" aria-expanded="false" aria-controls="mapkey">Map key</button><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div></div>
+  <div id="listbar"><div id="count" aria-live="polite"></div><div class="barlinks"><button class="link playonly" id="focusToggle" type="button" aria-pressed="false" title="Show 5 places at a time and hide the extras, so there is less to read">Focus mode</button><button class="link playonly" id="keytoggle" type="button" aria-expanded="false" aria-controls="mapkey">Map key</button><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div></div>
   <div id="mapkey" class="playonly" hidden>
     <div class="legend" aria-label="Pin colours and rings">
       <span><span class="dot" style="background:var(--pin-c)"></span>Name confirmed</span>
@@ -499,7 +500,9 @@ function toggleSaved(v) {
   store.set("shortlist", shortIds); syncShortlist(); return true;
 }
 function syncShortlist() {
-  $("shortlistToggle").textContent = "★ Shortlist (" + shortIds.filter(i => byId[i]).length + ")";
+  const n = shortIds.filter(i => byId[i]).length;
+  $("shortlistToggle").textContent = "★ Shortlist (" + n + ")";
+  $("tools").hidden = !n && $("shortlist").hidden;   // an empty shortlist is not worth a row
   document.querySelectorAll("button.save[data-id]").forEach(saveLabel);   // the popup and nudge buttons follow the list
   renderShortlist();
   if (mapReady && state.mode === "play") renderList();   // the "Saved" badge in the list
@@ -1483,6 +1486,7 @@ function initControls() {
   $("shortlistToggle").addEventListener("click", () => {
     const open = $("shortlist").hidden; $("shortlist").hidden = !open;
     $("shortlistToggle").setAttribute("aria-expanded", String(open));
+    syncShortlist();
     if (open) track("shortlist-open");
   });
   for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
@@ -1539,6 +1543,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   }
   readHash(); initControls(); initCoverage(); syncControls();
   setFocusUI(); syncShortlist(); if (resumed) showResume();
+  if (store.get("welcomed", false)) document.querySelector(".welcome").hidden = true; else store.set("welcomed", true);   // the intro line shows on the first visit only (About keeps it)
   initMap();
   if (state.mode === "watch") renderWatchList();
   $("loading").remove();
