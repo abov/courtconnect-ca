@@ -1,3 +1,3 @@
 tid,event_key,name,decision,seen_on,note
-54262,,,pending,2026-10-24,Racquetball event link sent by the owner; read the page (name/dates/venue) and set decision to added / out_of_region / past / duplicate / not_racket
-54415,,,pending,2026-10-24,Racquetball event link sent by the owner; read the page (name/dates/venue) and set decision to added / out_of_region / past / duplicate / not_racket
+54262,golden-state-open-racquetball-2026,Golden State Open Presented by JMB,added,2026-10-24,Racquetball Nov 4-8 2026 Pleasanton CA; already in watch_events.csv (dates match); TID link added
+54415,,NCHA 44th Annual Hall of Fame Tournament,not_racket,2026-10-24,Handball (hand-struck) Nov 6-8 2026 San Mateo Elks; handball is not a racket sport in the sheet; revisit if the owner wants handball listed
