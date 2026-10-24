@@ -9,6 +9,7 @@ jobs:
         with: {python-version: "3.12"}
       - run: python ci/check_seed_evidence.py
       - run: python ci/check_sport_names.py
+      - run: python ci/check_r2_events.py
       - run: python ci/check_export_fresh.py
       - run: python ci/check_review_priority.py
       - run: python ci/test_sync_reports.py
