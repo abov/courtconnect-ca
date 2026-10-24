@@ -1,1 +1,2 @@
 date,pr,class,gates,outcome,est_cost_usd
+2026-10-24,,R3,"regression gate failed (SLAs failing 1->2); other gates pass",open,1.50

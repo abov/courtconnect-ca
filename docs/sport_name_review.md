@@ -1,4 +1,4 @@
-# Sport name review (2026-10-22)
+# Sport name review (2026-10-24)
 
 The master list (`all_racquet`, synced from the Google Sheet) has 81 racket sports. OpenStreetMap (our first court source) has a tag for **26** of them. These are the **55 that are not on the sport map**, and why.
 
@@ -25,7 +25,7 @@ If a sport goes by another name, add it to `transform/seeds/sport_aliases.csv`; 
 | 15 | Spec Tennis | 2-4 | No OpenStreetMap tag exists |
 | 16 | 360Ball | 2-4 | No OpenStreetMap tag exists |
 | 17 | Biraq | 2-4 | I could not verify this spelling - please check |
-| 18 | Eclipseball | - | No OpenStreetMap tag exists and no website listed |
+| 18 | Eclipseball | - | No OpenStreetMap tag exists |
 | 19 | Floor Pro Mini Tennis | - | No OpenStreetMap tag exists and no website listed |
 | 20 | Frescotennis | 2-4 | No OpenStreetMap tag exists and no website listed |
 | 21 | Goodminton | 2-4 | No OpenStreetMap tag exists and no website listed |
@@ -42,7 +42,7 @@ If a sport goes by another name, add it to `transform/seeds/sport_aliases.csv`; 
 | 32 | Pitton | 2-4 | I could not verify this name - please check the spelling |
 | 33 | Pro Sunball | 2-4 | No OpenStreetMap tag exists and no website listed |
 | 34 | Qianball | 2-4 | Transliterated name - please check the spelling |
-| 35 | Racket Hockey | 4 | No OpenStreetMap tag exists and no website listed |
+| 35 | Racket Hockey | 4 | No OpenStreetMap tag exists |
 | 36 | Rapidball | 2+ | No OpenStreetMap tag exists and no website listed |
 | 37 | Ricochet | 2+ | No OpenStreetMap tag exists and no website listed |
 | 38 | Sandball | 2-4 | No OpenStreetMap tag exists and no website listed |
@@ -53,12 +53,12 @@ If a sport goes by another name, add it to `transform/seeds/sport_aliases.csv`; 
 | 43 | Street Racket | 2+ | No OpenStreetMap tag exists |
 | 44 | Street Tennis | 2-4 | No OpenStreetMap tag exists and no website listed |
 | 45 | String Paddleball | 1 | No OpenStreetMap tag exists and no website listed |
-| 46 | Table Squash | 2-4 | No OpenStreetMap tag exists and no website listed |
+| 46 | Table Squash | 2-4 | No OpenStreetMap tag exists |
 | 47 | Taiji Bailong | 2 | No OpenStreetMap tag exists |
 | 48 | Tenis criollo | 2-4 | No OpenStreetMap tag exists |
 | 49 | Tennis Baseball | 18 | No OpenStreetMap tag exists and no website listed |
 | 50 | Tennis Triples | 6 | No OpenStreetMap tag exists and no website listed |
-| 51 | Toccer | 20 | No OpenStreetMap tag exists and no website listed |
+| 51 | Toccer | 20 | No OpenStreetMap tag exists |
 | 52 | Wacquetball | 2-4 | No OpenStreetMap tag exists and no website listed |
 | 53 | Wall Pong | 2+ | No OpenStreetMap tag exists and no website listed |
 | 54 | Riftball | 2-4 | No OpenStreetMap tag exists and no website listed |
