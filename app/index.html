@@ -94,6 +94,7 @@
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
   .badge.i { color: var(--warn); border-color: var(--warn); }
   .seg { display: flex; gap: 6px; margin-top: 10px; }
+  .quick { margin-bottom: 8px; }
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
   #list li.thisweek { background: color-mix(in srgb, var(--accent) 6%, var(--panel)); } #list li.thisweek .lh2 { margin: 0; padding: 8px 16px 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
@@ -273,12 +274,12 @@
     <div class="sub" id="headline">Find where to play racket sports in California and Nevada.</div>
     <p class="sub welcome">Every racket sport, every kind of court, from free parks to private clubs. Labelled by how sure we are. We link out and never take bookings or payments.</p>
     <div class="seg" role="group" aria-label="What are you looking for?">
-      <button class="chip" id="modePlay" type="button" aria-pressed="true" title="Find a place to play or practice, including hitting walls for solo practice, and apps to find people to play with">Places to play</button>
-      <button class="chip" id="modeWatch" type="button" aria-pressed="false" title="Watch a match, or find mixers, club nights and open play to join">Events &amp; meetups</button>
+      <button class="chip" id="modePlay" type="button" aria-pressed="true">Places to play</button>
+      <button class="chip" id="modeWatch" type="button" aria-pressed="false">Events &amp; meetups</button>
     </div>
     <div class="tools playonly" id="tools" role="group" aria-label="Stay on track">
-      <button class="chip" id="shortlistToggle" type="button" aria-expanded="false" aria-controls="shortlist" title="Places you saved, kept in this browser only">&#9733; Shortlist (0)</button>
-      <button class="chip" id="focusToggle" type="button" aria-pressed="false" title="Show 5 places at a time and hide the extras, so there is less to read">Focus mode</button>
+      <button class="chip" id="shortlistToggle" type="button" aria-expanded="false" aria-controls="shortlist">&#9733; Shortlist (0)</button>
+      <button class="chip" id="focusToggle" type="button" aria-pressed="false">Focus mode</button>
     </div>
   </header>
 
@@ -288,6 +289,10 @@
     <p id="resume" class="note" role="status" hidden></p>
     <div>
       <label class="l" for="sport">Sport</label>
+      <div class="seg quick" id="quicksport" role="group" aria-label="Quick sport picks">
+        <button class="chip" id="sportMonth" type="button" aria-pressed="false" hidden></button>
+        <button class="chip" id="sportTop" type="button" aria-pressed="false" hidden></button>
+      </div>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
       <details id="people" class="playonly note sportinfo" hidden><summary id="people-t">Find people to play with</summary><div id="people-b"></div></details>
       <p id="anywhere" class="note" hidden></p>
@@ -298,7 +303,7 @@
         <label class="l" for="q">Search name, city or ZIP</label>
         <input id="q" type="search" placeholder="e.g. Manhattan Beach or 90266" autocomplete="off">
       </div>
-      <button class="chip" id="nearMe" type="button" title="Centre the map on your location (used only in your browser)">Near me</button>
+      <button class="chip" id="nearMe" type="button">Near me</button>
     </div>
     <p id="searchnote" class="note" hidden aria-live="polite"></p>
     <details class="playonly" id="moreFilters">
@@ -1336,7 +1341,7 @@ function renderActive() {
     for (const o of state.offers) { const b = document.querySelector('[data-o="' + o + '"]'); if (b) items.push([b.textContent, () => state.offers.delete(o)]); }
   }
   box.replaceChildren(...items.map(([label, undo]) => {
-    const b = el("button", {class: "chip", type: "button", title: "Remove this filter", text: label});
+    const b = el("button", {class: "chip", type: "button", "aria-label": "Remove filter: " + label, text: label});
     b.setAttribute("aria-label", "Remove filter: " + label);
     b.addEventListener("click", () => { undo(); syncControls(); reSearch(false); });
     return b;
@@ -1352,9 +1357,22 @@ function syncControls() {
   const nOn = state.on.size + state.offers.size;
   $("moreSummary").textContent = nOn ? "Filters (" + nOn + " on)" : "Filters";
   if (nOn && !matchMedia("(max-width: 800px)").matches) $("moreFilters").open = true;
+  syncQuickSports();
   $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode !== "play");
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
   for (const b of document.querySelectorAll("[data-o]")) b.setAttribute("aria-pressed", state.offers.has(b.dataset.o));
+}
+// Two quick picks above the full list: the monthly featured sport (data/featured_sport.json, set at each monthly run) and the most popular sport, always Tennis.
+let featured = null;
+const QUICK = [["sportMonth", () => featured && featured.sport, "Racket sport of the month: "], ["sportTop", () => "Tennis", "Most popular: "]];
+function syncQuickSports() {
+  const sel = $("sport");
+  for (const [id, name, prefix] of QUICK) {
+    const b = $(id), n = name(), i = n ? sports.findIndex(s => s.n === n) : -1;
+    b.hidden = i < 0 || ![...sel.options].some(o => o.value === String(i));   // watch view lists only sports with events
+    b.dataset.i = String(i); b.textContent = prefix + (n || "");
+    b.setAttribute("aria-pressed", state.sport === i);
+  }
 }
 function populateSports() {
   const sel = $("sport"); sel.replaceChildren();
@@ -1456,9 +1474,10 @@ function setMode(m) {
 function initControls() {
   const sel = $("sport");
   populateSports();
+  for (const [id] of QUICK) $(id).addEventListener("click", e => { const i = +e.currentTarget.dataset.i; sel.value = String(state.sport === i ? -1 : i); sel.dispatchEvent(new Event("change")); });
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
-  sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
+  sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); syncQuickSports(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
   $("q").addEventListener("keydown", e => {   // Enter: search now (a single venue also opens its popup) and close the phone keyboard
@@ -1527,7 +1546,9 @@ function initCoverage() {
 
 // ---------- boot ----------
 let byKey = {};
-fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(d => {
+const featuredP = fetch("data/featured_sport.json", {cache: "no-cache"}).then(r => r.ok ? r.json() : null).catch(() => null);   // optional: without it only the Tennis button shows
+fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(async d => {
+  featured = await featuredP;
   DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; socials = d.social || []; walls = d.walls || []; platforms = d.platforms || [];
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
