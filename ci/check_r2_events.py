@@ -2,7 +2,7 @@
 
 Every R2 event the refresh reads gets one row in docs/r2_seen.csv (tid, decision), so the next run only has to look at
 TIDs it has not decided on. This check fails when:
-  - a watch_events row sourced from R2 does not link to its own r2-push.asp?TID= page (the generic search page is not a source),
+  - a watch_events row sourced from R2 does not link to its own r2-push.asp?TID= page (the generic search page is not a source; the TID may sit in source_note when info_url is the organizer's own site),
   - a TID in watch_events is missing from r2_seen.csv, or is not marked `added` with that event_key,
   - an r2_seen row marked `added` has no matching watch_events row,
   - a decision is not one of the allowed values.
@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DECISIONS = {"added", "out_of_region", "past", "duplicate", "not_racket", "pending"}
 TID = re.compile(r"r2sports\.com/r2-push\.asp\?TID=(\d+)", re.I)
 # Rows that predate this check and link to the R2 search page. Put the event's TID in info_url (and a row in r2_seen.csv) and delete the entry.
-GRANDFATHERED = {"nightmare-before-christmas-racquetball-2026", "racquetball-players-championship-2027"}
+GRANDFATHERED = set()
 
 
 def rows(path):
@@ -41,7 +41,7 @@ def main(root=ROOT):
     keys = set()
     for i, r in enumerate(rows(root / "transform" / "seeds" / "watch_events.csv"), start=2):
         keys.add(r["event_key"])
-        links = f"{r['info_url']} {r['tickets_url']}"
+        links = f"{r['info_url']} {r['tickets_url']} {r['source_note']}"   # an organizer-site info_url may carry the R2 link in source_note
         if "r2sports.com" not in links:
             continue
         m = TID.search(links)
