@@ -240,8 +240,11 @@
     #list { flex: 1 0 440px; }
   }
   @media (min-width: 801px) and (max-height: 900px) {
-    .welcome { display: none; }
+    .welcome, #headline { display: none; }
     header { padding-top: 8px; padding-bottom: 6px; } .controls { padding-top: 8px; padding-bottom: 8px; gap: 6px; }
+    /* the picker and the search box say what they are; the labels stay for screen readers */
+    label[for=sport], label[for=q] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .tools { margin-top: 6px; } .quick { margin-bottom: 6px; } .quick .chip { padding-top: 4px; padding-bottom: 4px; }
     #count { padding-top: 5px; padding-bottom: 5px; }
   }
   @media (max-width: 800px) {
@@ -306,7 +309,7 @@
     <div class="searchrow">
       <div>
         <label class="l" for="q">Search name, city or ZIP</label>
-        <input id="q" type="search" placeholder="e.g. Manhattan Beach or 90266" autocomplete="off">
+        <input id="q" type="search" placeholder="Search name, city or ZIP (e.g. 90266)" autocomplete="off">
       </div>
       <button class="chip" id="nearMe" type="button">Near me</button>
     </div>
@@ -1079,9 +1082,9 @@ function setLayersFor(mode) {
   const walls_on = mode === "play" && wallsFiltered().length > 0;
   show(["wall-pts", "wall-label"], walls_on);
   $("wallLegend").hidden = !walls_on;
-  if (walls_on && !wallKeySeen) { wallKeySeen = true; setKey(true); }   // wall pins reuse the venue colours with other meanings: show the key once, the first time they appear
+  if (walls_on && !wallKeySeen) { wallKeySeen = true; store.set("keySeen", true); setKey(true); }   // wall pins reuse the venue colours with other meanings: show the key once, on the first visit (it used to reopen on every load and pushed the list down ~145 px)
 }
-let wallKeySeen = false;
+let wallKeySeen = store.get("keySeen", false) === true;
 function setKey(open) { $("mapkey").hidden = !open; $("keytoggle").setAttribute("aria-expanded", String(open)); }
 function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
 // ---------- search: name, city or ZIP; the map zooms to what it finds ----------
