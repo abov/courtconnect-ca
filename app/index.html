@@ -143,12 +143,8 @@
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
-  #active { padding: 8px 16px 2px; border-bottom: 0; }
-  #active[hidden], .chip[hidden] { display: none; }
-  #active .chip { padding-right: 8px; background: var(--chip-on); border-color: var(--accent); }
-  #active .chip::after { content: " \00d7"; font-weight: 700; }
-  #active .chip.clear { background: none; border-color: transparent; color: var(--accent); }
-  #active .chip.clear::after { content: ""; }
+  .chip[hidden] { display: none; }
+  #moreSummary .link { margin-left: 10px; font-weight: 400; }   /* "Clear" sits on the Filters line: no extra row of chips */
   footer { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
   footer #attr { flex-basis: 100%; }
   /* Venue popup: a status band at the top (green confirmed name, blue listed business, gold guessed name, grey unnamed: the pin colours) and sections split by thin rules. The colour repeats the text badge, never replaces it. */
@@ -257,7 +253,7 @@
     .seg .chip { flex: 1; padding: 6px 4px; font-size: 13px; }
     /* iOS Safari zooms the page when a field under 16px gets focus */
     select, input[type=search] { font-size: 16px; }
-    #active, #count { padding-left: 14px; padding-right: 14px; }
+    #count { padding-left: 14px; padding-right: 14px; }
     #list button { padding-left: 11px; padding-right: 14px; }
     .welcome { display: none; }
     #mapkey .legend { padding-left: 14px; padding-right: 14px; }
@@ -288,8 +284,6 @@
     </div>
   </header>
 
-  <div id="active" class="chips playonly" role="group" aria-label="Active filters" hidden></div>
-
   <div class="controls">
     <p id="resume" class="note" role="status" hidden></p>
     <div>
@@ -315,7 +309,7 @@
     </div>
     <p id="searchnote" class="note" hidden aria-live="polite"></p>
     <details class="playonly" id="moreFilters">
-    <summary id="moreSummary">Filters</summary>
+    <summary id="moreSummary"><span id="moreLabel">Filters</span><button class="link" id="clearFilters" type="button" hidden>Clear</button></summary>
     <div style="display:grid; gap:10px; margin-top:10px">
     <div id="surfBox">
       <span class="l">Surface</span>
@@ -349,7 +343,7 @@
     </div>
     </div>
     </details>
-    <button id="reset" type="button" hidden>Clear filters</button>   <!-- script hook only: the active-filter chips ("x" per filter, "Clear all") are the visible way -->
+    <button id="reset" type="button" hidden>Clear filters</button>   <!-- script hook only: the "Clear" link on the Filters line is the visible way -->
   </div>
 
   <div id="listbar"><div id="count" aria-live="polite"></div><div class="barlinks"><button class="link playonly" id="keytoggle" type="button" aria-expanded="false" aria-controls="mapkey">Map key</button><button class="link" id="listtoggle" type="button" aria-expanded="true" aria-controls="list">Hide list</button></div></div>
@@ -652,10 +646,11 @@ function emptyItem(msg, label) {
   b.addEventListener("click", () => $("reset").click());
   return el("li", {class: "empty"}, el("p", {text: msg}), b);
 }
-function renderEventList(ul) {                                          // rows for the watch half of the combined Watch & Social list
-  const list = eventsFiltered();
-  if (list.length) ul.append(el("li", {class: "lh", text: "To watch"}));
-  for (const ev of list) {
+const inMapView = x => map.getBounds().contains([x.x, x.y]);
+function renderEventList(ul) {                                          // rows for the watch half of the combined Watch & Social list: only what is inside the map view; returns every match (the map pins)
+  const list = eventsFiltered(), shown = list.filter(inMapView);
+  if (shown.length) ul.append(el("li", {class: "lh", text: "To watch"}));
+  for (const ev of shown) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: ev.n}),
       el("div", {class: "meta", text: fmtRange(ev) + " \u00b7 " + ev.c}),
@@ -727,9 +722,9 @@ function showSocial(g, fly) {
   popup.setLngLat([g.x, g.y]).setDOMContent(socialNode(g)).addTo(map);
 }
 function renderSocialList(ul) {
-  const list = socialFiltered();
-  if (list.length) ul.append(el("li", {class: "lh", text: "To join"}));
-  for (const s of list) {
+  const list = socialFiltered(), shown = list.filter(inMapView);
+  if (shown.length) ul.append(el("li", {class: "lh", text: "To join"}));
+  for (const s of shown) {
     const btn = el("button", {type: "button"}, el("div", {class: "nm", text: s.n}), el("div", {class: "meta", text: s.sc + " · " + s.v + ", " + s.c}), socialBadges(s));
     btn.addEventListener("click", () => showSocial(socialPins.find(g => g.items.includes(s)) || socialGroups([s])[0], true));
     ul.append(el("li", {}, btn));
@@ -737,8 +732,7 @@ function renderSocialList(ul) {
   return list;
 }
 // "Coming up next": the 3 earliest-starting dated events still on or ahead inside the map view, for the sport and search that are set (all sports when none), straight from the export (nothing inferred; recurring series have no dates, so they stay in the list below).
-// It always stays at the top of the Watch list (sticky, and an empty message instead of vanishing) and is rebuilt in place when the map moves.
-let comingLi = null;
+// It always stays at the top of the Watch list (sticky, and an empty message instead of vanishing) and is rebuilt with the list when the map moves.
 function buildComingUp() {
   const view = map.getBounds(), name = state.sport >= 0 ? sports[state.sport].n : "";
   const next = eventsFiltered().filter(ev => ev.s && view.contains([ev.x, ev.y])).sort((a, b) => a.s.localeCompare(b.s) || a.n.localeCompare(b.n)).slice(0, 3);
@@ -752,15 +746,12 @@ function buildComingUp() {
   }
   return li;
 }
-function updateComingUp() {
-  if (!comingLi || !comingLi.isConnected) return;
-  const li = buildComingUp(); comingLi.replaceWith(li); comingLi = li;
-}
 function renderWatchList() {
   const ul = $("list"); ul.replaceChildren();
-  comingLi = buildComingUp(); ul.append(comingLi);
+  ul.append(buildComingUp());
   viewEv = renderEventList(ul); viewSoc = renderSocialList(ul);
   if (!viewEv.length && !viewSoc.length) ul.append(emptyItem("No events or get-togethers match these filters. Try all sports.", "Show all sports"));
+  else if (!viewEv.some(inMapView) && !viewSoc.some(inMapView)) ul.append(el("li", {class: "empty"}, el("p", {text: "Nothing in this view. Zoom out or pan the map to see more."})));
   ul.append(el("li", {class: "meta"}, document.createTextNode("Know a tournament we are missing? "),
     el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?template=report-an-event.yml", target: "_blank", rel: "noopener noreferrer", text: "Tell us about it"}), document.createTextNode(".")));
   updateCount();
@@ -923,7 +914,7 @@ function initMap() {
     map.on("click", "wall-pts", e => showWall(walls[e.features[0].properties.k], false));
     map.on("mouseenter", "wall-pts", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "wall-pts", () => map.getCanvas().style.cursor = "");
-    map.on("moveend", debounce(() => state.mode === "play" ? renderList() : (updateCount(), updateComingUp()), 150));
+    map.on("moveend", debounce(() => state.mode === "play" ? renderList() : renderWatchList(), 150));   // Watch: the lists, the count and "Coming up next" all follow the view
     mapReady = true;
     applyMode(false);
     if (state.text) runSearch(true);   // a shared #q= link zooms to its result
@@ -1344,24 +1335,11 @@ function syncSurface() {
   }
   $("surfBox").hidden = !show;
 }
+// What is picked already shows in place (the Sport menu, the search box, pressed chips, "Filters (N on)"), so there is no separate row of filter chips; one "Clear" link on the Filters line resets them.
 function renderActive() {
   syncSurface();
-  const box = $("active"); if (!box) return;
-  const items = [];
-  if (state.mode === "play") {
-    if (state.sport >= 0 && sports[state.sport]) items.push([sports[state.sport].n, () => { state.sport = -1; }]);
-    if (state.text) items.push(["“" + state.text + "”", () => { state.text = ""; }]);
-    for (const k of state.on) { const b = document.querySelector('[data-k="' + k + '"]'); if (b) items.push([b.textContent, () => state.on.delete(k)]); }
-    for (const o of state.offers) { const b = document.querySelector('[data-o="' + o + '"]'); if (b) items.push([b.textContent, () => state.offers.delete(o)]); }
-  }
-  box.replaceChildren(...items.map(([label, undo]) => {
-    const b = el("button", {class: "chip", type: "button", "aria-label": "Remove filter: " + label, text: label});
-    b.setAttribute("aria-label", "Remove filter: " + label);
-    b.addEventListener("click", () => { undo(); syncControls(); reSearch(false); });
-    return b;
-  }));
-  if (items.length > 1) { const c = el("button", {class: "chip clear", type: "button", text: "Clear all"}); c.addEventListener("click", () => $("reset").click()); box.append(c); }
-  box.hidden = !items.length;
+  const any = state.mode === "play" && (state.sport >= 0 || state.text || state.on.size || state.offers.size);
+  $("clearFilters").hidden = !any;
 }
 function syncControls() {
   renderActive();
@@ -1369,7 +1347,7 @@ function syncControls() {
   if (!state.text) { textOff = false; searchCentre = null; setSearchNote(""); }
   document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "watch");   // Watch & Social is one combined view
   const nOn = state.on.size + state.offers.size;
-  $("moreSummary").textContent = nOn ? "Filters (" + nOn + " on)" : "Filters";
+  $("moreLabel").textContent = nOn ? "Filters (" + nOn + " on)" : "Filters";
   if (nOn && !matchMedia("(max-width: 800px)").matches) $("moreFilters").open = true;
   syncQuickSports();
   $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode !== "play");
@@ -1520,6 +1498,7 @@ function initControls() {
     $("listtoggle").setAttribute("aria-expanded", String(!off));
   });
   $("keytoggle").addEventListener("click", () => { const open = $("mapkey").hidden; setKey(open); if (open) track("map-key"); });
+  $("clearFilters").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); $("reset").click(); });
   $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   $("focusToggle").addEventListener("click", () => setFocus(!focusMode));
