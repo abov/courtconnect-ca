@@ -164,6 +164,51 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: search_metros
+    description: >
+      The 14 Google Trends metros that cover California and Nevada (Google's metro codes) with one anchor city each. A venue belongs to the nearest
+      anchor within 120 miles (mart_search_vs_coverage): our own approximation, NOT the Nielsen/Google metro boundaries (Nielsen owns those).
+    columns:
+      - name: metro_code
+        tests: [unique, not_null]
+      - name: metro_name
+        tests: [not_null]
+      - name: anchor_lat
+        tests: [not_null]
+      - name: anchor_lon
+        tests: [not_null]
+
+  - name: search_interest
+    description: >
+      Google Trends "interest by metro", hand-collected from the public Trends pages (docs/search_interest_plan.md): one row per query geo, metro and
+      sport. index_value is relative sampled search interest, 100 = the top metro of that query (blank = Trends had no data, never 0). The California and
+      Nevada queries use different scales; int_search_interest puts them on one. Not search volumes, not a count of players.
+    columns:
+      - name: query_geo
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['US-CA', 'US-NV']
+      - name: metro_code
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('search_metros')
+                field: metro_code
+      - name: sport
+        tests: [not_null]
+      - name: index_value
+      - name: query_set
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['A', 'B']
+      - name: exported_on
+        tests: [not_null]
+      - name: source_url
+        tests: [not_null]
+
   - name: venue_city_official
     description: >
       City of a named pin that no dataset gives a city for (remote parks, schools, golf courses), read from the venue's own page or a
@@ -692,6 +737,22 @@ models:
           - accepted_values:
               arguments:
                 values: ['covered', 'sparse', 'possible_only', 'tagged_none_found', 'not_found']
+
+  - name: mart_search_vs_coverage
+    description: >
+      One row per (Google Trends metro, sport): relative search interest next to the venues we have near that metro's anchor city. A planning signal for
+      where to look for missing venues (gap_candidate); thin sports are noisy. Not exported to the app.
+    columns:
+      - name: sport_name
+        tests: [not_null]
+      - name: metro_code
+        tests: [not_null]
+      - name: confidence
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['ok', 'thin']
+      - name: interest_index
 
   - name: mart_venue_confidence
     description: >
