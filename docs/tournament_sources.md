@@ -131,3 +131,14 @@ Last run: 2026-10-24. Added 2 events, 9 Instagram link-outs, 3 player-group link
 - **Failed:** @fremonttta (profile loads but no posts to a logged-out reader, twice).
 - **New-venue social handles:** read the websites of the clubs added since 2026-10-19 (about 35 private and public clubs; city park and rec rows have no social accounts of their own). Added Instagram for The Claremont Club, Lake Forest Beach & Tennis Club (@lfcarecreation), Bakersfield Racquet Club, Coto de Caza, Berkeley CC, Chamisal, Santa Barbara Polo & Racquet Club, Anthem CC, Rancho Colorados Tennis (all linked from the club's own site, profiles load). Not added: Nellie Gail Ranch (@nelliegailranch is the whole HOA), Facebook pages (not swept), clubs whose sites carry no link. Sites that refused the project user agent (403): Alpine Hills, Orinda CC, Pebble Beach, Riviera, Chabot Canyon.
 - **Player groups (club's own site, links not opened):** The Padel Courts (WhatsApp community), Cali Padel Club (WhatsApp channel), Padel Up (WhatsApp chat; the page's structured data lists a second invite, not stored). `player_groups.csv` was empty, so there was nothing to recheck. No Meetup, Partiful or Facebook group links found on the other club sites.
+
+## Pass 11 (2026-10-25)
+### Part 1 (tennis, pickleball, PPA, ITF)
+Last run: 2026-10-25. Added 0 events; re-dated 29 upcoming rows (`verified_on` 2026-10-25) whose dates match their source.
+- **USA Pickleball (CA list; the NV filter returns the same list; page 2 does not load by URL):** Nationals, PB4ALL, collegiate San Diego, Coachella Monterey unchanged. WPA Carlsbad Indoor (Ramona, Sep 25-27) is past. Golden Ticket page: Las Vegas, San Diego, APP SoCal Open, HUB unchanged.
+- **PPA schedule:** 7 CA events, dates unchanged (Junior PPA Finals, Malibu, Carvana Masters, Newport Beach Open, Sacramento Open, PPA Finals, Sacramento Challenger); venues still unlisted for four.
+- **USTA SoCal (playtennis, 27+ results to Nov 30):** every Level 1-6 event already in; WTN and Level 7 skipped.
+- **USTA NorCal sheet:** Level 4-5 Oct-Dec rows unchanged (Laguna Creek, Operation Pride x2).
+- **Nevada tennis:** Intermountain section could not be selected in the playtennis filter (menu is a site link, not a filter); web search shows only league Tri-Level championships in Las Vegas Nov 6-8 and 13-15 (league, not added). Las Vegas Senior Open already in.
+- **ITF:** Wikipedia Oct-Dec 2026 pages list only Redding, Bakersfield and the Las Vegas-area M25 (DragonRidge row, already in); nothing new, fact-sheet pages not re-opened. No 2027 ITF, USTA Pro Circuit or ITF Beach Tennis calendar yet (recheck in December).
+- **Failed / unread:** USTA Intermountain filter; USA Pickleball page 2.
