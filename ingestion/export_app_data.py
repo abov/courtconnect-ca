@@ -92,9 +92,12 @@ def main() -> None:
             sports[sport_index[name]].update({"w": where, "wn": note})
 
     # sports played on another sport's courts: b = indexes of the court sports they share (the panel groups them, not counts them again)
-    for name, base in con.execute("select trim(also_sport), trim(sport) from raw.sport_also_played").fetchall():
+    # st = same equipment, equally valid (Teqis on a Teqpong table): the popup lists it next to the base sport, not as an optional note
+    for name, base, same in con.execute("select trim(also_sport), trim(sport), lower(trim(coalesce(same_table, ''))) from raw.sport_also_played").fetchall():
         if name in sport_index and base in sport_index:
             sports[sport_index[name]].setdefault("b", []).append(sport_index[base])
+            if same == "yes":
+                sports[sport_index[name]]["st"] = 1
 
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, region, address_line,

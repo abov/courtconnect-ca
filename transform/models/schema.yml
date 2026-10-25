@@ -270,6 +270,8 @@ seeds:
       whose source sport was inferred from the place name. `only_surfaces` (e.g. grass;turf) limits the derived sport to courts with one of those
       surfaces; places and courts with an unknown surface are skipped. `only_access` (e.g. public) limits the derived sport to courts and hand-added
       venues with that access; unknown-access courts and Overture places (no access data) are skipped (Table Tennis -> Micro Pickleball).
+      `same_table` = yes: the two sports share one piece of equipment and are equally valid there (Teqpong / Teqis on a Teqboard), so the map
+      lists them together in the Plays line (one shared court count) instead of as an optional note.
 
   - name: osm_court_sport_overrides
     description: >
