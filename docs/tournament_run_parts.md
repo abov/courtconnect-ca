@@ -1,22 +1,27 @@
 # Scheduled runs: five parts (owner 2026-10-24)
 
-The single 1st/15th run (tournaments for every sport + data refresh) stopped after one source on 2026-10-24: too big for one session at the low-usage settings. It is now five scheduled tasks on consecutive days, all appending to ONE tournament PR per cycle, then the data refresh stacked on it. Each task prompt only says "read `docs/tournament_run_parts.md` from origin/main and do PART N"; the steps live here so they are versioned and reviewed.
+The single 1st/15th run (tournaments for every sport + data refresh) stopped after one source on 2026-10-24: too big for one session at the low-usage settings. It is now five tasks chained one after another from the 1st and 15th, all appending to ONE tournament PR per cycle, then the data refresh stacked on it. Each task prompt only says "read `docs/tournament_run_parts.md` from origin/main and do PART N"; the steps live here so they are versioned and reviewed.
 
-| Part | Task id | Days (09:00 local) | Covers |
-|------|---------|--------------------|--------|
-| 1 | `courtconnect-tournament-refresh` | 1st, 15th | USTA SoCal/NorCal, USA Pickleball, PPA, ITF pro tour |
-| 2 | `courtconnect-tournament-refresh-2` | 2nd, 16th | USA Badminton, R2 Sports, table tennis, Silicon Valley Open / US Squash, skyball, Club Locker squash |
-| 3 | `courtconnect-tournament-refresh-3` | 3rd, 17th | USA Padel calendar, beach tennis organizers, padel rechecks and lead rechecks |
-| 4 | `courtconnect-tournament-refresh-4` | 4th, 18th | Instagram sweep, new-venue social handles, player-group links |
-| 5 | `courtconnect-data-refresh` | 5th, 19th | data refresh (`docs/refresh_agent.md`), stacked on the tournament PR |
+| Part | Task id | Starts | Covers |
+|------|---------|--------|--------|
+| 1 | `courtconnect-tournament-refresh` | cron: 09:00 on the 1st and 15th | USTA SoCal/NorCal, USA Pickleball, PPA, ITF pro tour |
+| 2 | `courtconnect-tournament-refresh-2` | triggered by Part 1 | USA Badminton, R2 Sports, table tennis, Silicon Valley Open / US Squash, skyball, Club Locker squash |
+| 3 | `courtconnect-tournament-refresh-3` | triggered by Part 2 | USA Padel calendar, beach tennis organizers, padel rechecks and lead rechecks |
+| 4 | `courtconnect-tournament-refresh-4` | triggered by Part 3 | Instagram sweep, new-venue social handles, player-group links |
+| 5 | `courtconnect-data-refresh` | triggered by Part 4 | data refresh (`docs/refresh_agent.md`), stacked on the tournament PR |
 
-Spend: each part is estimated at $1-1.50; the $5 weekly / $10 monthly caps of `docs/refresh_agent.md` count Part 5 only, ADR 0019's $20 a month is the ceiling for all five. If the month's total runs past it, drop Part 4 to the 1st of the month. The app must be open on those days (a missed run starts at the next launch).
+**Chain (owner 2026-10-24):** only Part 1 has a schedule. Each part, as its LAST step, starts the next one, so the parts run in order and never overlap. Parts 2-5 carry a placeholder one-time date far in the future (2099) so they can only be started by a trigger; do not give them a cron.
+- Last step of parts 1-4: write the final summary first, then start the next part: load the tool with ToolSearch (`select:mcp__scheduled-tasks__run_scheduled_task`) and call it with the next task id from the table. Do this even when the part found nothing or opened no PR. Do NOT start the next part if this part stopped on an error, a failed preflight or a permission prompt it could not pass: say "NEXT PART NOT STARTED" and why. If the tool is not available or the call is refused, say "NEXT PART NOT STARTED: <reason>" in the summary.
+- Part 5 is last and starts nothing.
+- Never start a part that is already running (the call is refused; that is fine, report it).
+
+Spend: each part is estimated at $1-1.50; the $5 weekly / $10 monthly caps of `docs/refresh_agent.md` count Part 5 only, ADR 0019's $20 a month is the ceiling for all five. If the month's total runs past it, drop Part 4 from the chain. The app must be open on the 1st and 15th (a missed Part 1 starts at the next launch, and the rest follow).
 
 ## Rules for every part
 Work in `C:\dev\courtconnect-ca` (Git Bash for commands; dbt is `.venv/Scripts/dbt ... --project-dir transform --profiles-dir transform`, there is no make). Read CLAUDE.md first and follow it (never read .env, no Google Places data, public pages only, no owner logins, honesty over polish). Cost rules: no subagents, no screenshots, no extended web search, read pages as text, narrowest check first. **Do the whole part: read every source listed for it. Do not stop early to save usage; if you truly cannot finish, list exactly which sources were not read in the PR body and the session note.** Do NOT merge any PR, do NOT run make extract/load, do NOT re-run the Pages workflow, never use --force or --admin.
 
 ## Branch and PR (parts 1-4)
-The cycle date is the most recent 1st or 15th (so on the 3rd it is the 1st; on the 17th it is the 15th). One branch `claude/tournaments-<cycle date>` and one PR per cycle.
+The cycle date is the date Part 1 started (the 1st or 15th; if you are started by hand on another day, today). One branch `claude/tournaments-<cycle date>` and one PR per cycle.
 1. `git fetch origin`. If `origin/claude/tournaments-<cycle date>` exists and its PR is open: `git worktree add ../cc-tournaments-<cycle date>-pN -b claude/tournaments-<cycle date>-pN origin/claude/tournaments-<cycle date>` and push with `git push origin HEAD:claude/tournaments-<cycle date>`. Otherwise (Part 1 always, or an earlier part found nothing, or its PR was already merged): create the worktree from `origin/main` and push to a new branch `claude/tournaments-<today>`.
 2. Use the main checkout's .venv. Copy courtconnect.duckdb from the main checkout for the build and delete the copy before committing. Seeds keep CRLF line endings.
 3. Add events with the same columns as `transform/seeds/watch_events.csv`: verify dates and venue at the organizer or governing body; label inferred locations and tentative dates (`date_status`); https links only; `source_note` says what was read where; `verified_on` today. Update changed dates on existing rows. When an existing upcoming row is still correct at its source (the page you read this run shows the same dates), set its `verified_on` to today: the "oldest upcoming-event check" SLA (14 days) counts that column, and a refresh PR fails the scorecard gate (2026-10-25: five PPA/BNP rows aged to 16 days) if rows are read but not re-dated. Do not add events from third-party aggregators without reading the organizer page; put those in `docs/tournament_sources.md` as leads. Any new place reference in `venue_actions.csv` must also be in `ci/fixtures/overture_places.csv`.
