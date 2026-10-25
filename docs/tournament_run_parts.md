@@ -2,20 +2,18 @@
 
 The single 1st/15th run (tournaments for every sport + data refresh) stopped after one source on 2026-10-24: too big for one session at the low-usage settings. It is now five tasks chained one after another from the 1st and 15th, all appending to ONE tournament PR per cycle, then the data refresh stacked on it. Each task prompt only says "read `docs/tournament_run_parts.md` from origin/main and do PART N"; the steps live here so they are versioned and reviewed.
 
-| Part | Task id | Starts (interim, 2026-10-25) | Covers |
+| Part | Task id | Starts | Covers |
 |------|---------|--------|--------|
-| 1 | `courtconnect-tournament-refresh` | cron 09:00 on the 1st and 15th | USTA SoCal/NorCal, USA Pickleball, PPA, ITF pro tour |
-| 2 | `courtconnect-tournament-refresh-2` | cron 10:30, same days | USA Badminton, R2 Sports, table tennis, Silicon Valley Open / US Squash, skyball, Club Locker squash |
-| 3 | `courtconnect-tournament-refresh-3` | cron 12:00 | USA Padel calendar, beach tennis organizers, padel rechecks and lead rechecks |
-| 4 | `courtconnect-tournament-refresh-4` | cron 13:30 | Instagram sweep, new-venue social handles, player-group links |
-| 5 | `courtconnect-data-refresh` | cron 15:00 | data refresh (`docs/refresh_agent.md`), stacked on the tournament PR |
-
-**Interim schedule (owner 2026-10-25: "do what you recommend for now, but I would eventually like this to run itself"):** the chain below could not start the next part unattended (see "Approval needed"), so Parts 2-5 run on their own crons 90 minutes apart on the 1st and 15th (a part takes 10-40 minutes, so they do not overlap). **While Parts 2-5 have their own cron, skip the "start the next part" last step.** Target (self-running): the owner adds the allow rule, Parts 2-5 lose their crons (set a 2099 one-time date, which keeps their approvals), and the last step is used again. Beyond that, "runs itself" also needs: a failure alert (a part that ends with "not read" sources or a red gate should notify the owner, not wait to be noticed), and the auto-merge classes of ADR 0019 switched on by the owner so the PRs do not wait for a person.
+| 1 | `courtconnect-tournament-refresh` | cron: 09:00 on the 1st and 15th | USTA SoCal/NorCal, USA Pickleball, PPA, ITF pro tour |
+| 2 | `courtconnect-tournament-refresh-2` | triggered by Part 1 | USA Badminton, R2 Sports, table tennis, Silicon Valley Open / US Squash, skyball, Club Locker squash |
+| 3 | `courtconnect-tournament-refresh-3` | triggered by Part 2 | USA Padel calendar, beach tennis organizers, padel rechecks and lead rechecks |
+| 4 | `courtconnect-tournament-refresh-4` | triggered by Part 3 | Instagram sweep, new-venue social handles, player-group links |
+| 5 | `courtconnect-data-refresh` | triggered by Part 4 | data refresh (`docs/refresh_agent.md`), stacked on the tournament PR |
 
 **Chain (owner 2026-10-24):** only Part 1 has a schedule. Each part, as its LAST step, starts the next one, so the parts run in order and never overlap. Parts 2-5 carry a placeholder one-time date far in the future (2099) so they can only be started by a trigger; do not give them a cron.
 - Last step of parts 1-4: write the final summary first, then start the next part: load the tool with ToolSearch (`select:mcp__scheduled-tasks__run_scheduled_task`) and call it with the next task id from the table. Do this even when the part found nothing or opened no PR. Do NOT start the next part if this part stopped on an error, a failed preflight or a permission prompt it could not pass: say "NEXT PART NOT STARTED" and why. If the tool is not available or the call is refused, say "NEXT PART NOT STARTED: <reason>" in the summary.
 - Part 5 is last and starts nothing.
-- **Approval needed (found 2026-10-25):** the first chain test stopped at Part 1's last step, "NEXT PART NOT STARTED: starting Part 2 needed a person's approval". Starting a task is a tool call that asks for approval, and nobody watches a scheduled run. It works unattended only when `mcp__scheduled-tasks__run_scheduled_task` is allowed by a permission rule in the owner's Claude Code settings (the owner's call; nothing here changes settings). Until then, start the next part by hand after each one.
+- **Approval (found 2026-10-25):** the first chain test stopped at Part 1's last step, "NEXT PART NOT STARTED: starting Part 2 needed a person's approval", because nobody watches a scheduled run. The owner then added `mcp__scheduled-tasks__run_scheduled_task` to `permissions.allow` in `~/.claude/settings.json` (a copy of this rule belongs on any new machine). If a part reports "NEXT PART NOT STARTED", either the rule is missing or the owner's `autoMode` rules blocked it: start the next part by hand and, until it is fixed, put Parts 2-5 back on staggered crons (09:00, 10:30, 12:00, 13:30, 15:00 on the 1st and 15th) and skip the last step.
 - Never start a part that is already running (the call is refused; that is fine, report it).
 
 Spend: each part is estimated at $1-1.50; the $5 weekly / $10 monthly caps of `docs/refresh_agent.md` count Part 5 only, ADR 0019's $20 a month is the ceiling for all five. If the month's total runs past it, drop Part 4 from the chain. The app must be open on the 1st and 15th (a missed Part 1 starts at the next launch, and the rest follow).
