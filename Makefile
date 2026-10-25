@@ -85,6 +85,8 @@ quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 usage:            ## export GoatCounter daily counts and print the usage metrics (needs GOATCOUNTER_API_TOKEN in .env; docs/goat_analysis.md)
 	$(PY) ingestion/extract_goatcounter.py
 	$(PY) ingestion/goat_report.py $(ARGS)
+interest:         ## print Google Trends search interest vs venues per metro (docs/search_interest_plan.md; re-export the seed about quarterly)
+	$(PY) ingestion/search_interest_report.py
 
 market-snapshot:  ## append today's venue counts (city x sport) to docs/market_snapshots.csv; run once per refresh after dbt build
 	$(PY) ingestion/snapshot_market.py
