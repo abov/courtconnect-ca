@@ -966,11 +966,12 @@ function updateSportIcon() { const w = $("sporticon"), s = state.sport >= 0 ? sp
 
 // Plays line keeps the sports and counts; same-court options and inferred variants are returned separately for the details section.
 function sportParts(v) {
-  const have = new Set(v.p.map(p => p[0])), extras = {}, plain = [];
+  const have = new Set(v.p.map(p => p[0])), extras = {}, twins = {}, plain = [];
   for (const p of v.p) {
     const bases = (sports[p[0]].b || []).filter(b => have.has(b));
-    if (bases.length) bases.forEach(b => (extras[b] = extras[b] || []).push(sports[p[0]].n));
-    else plain.push(p);
+    if (!bases.length) plain.push(p);
+    else if (sports[p[0]].st) bases.forEach(b => (twins[b] = twins[b] || []).push(sports[p[0]].n));   // same equipment, equally valid (Teqis on a Teqpong table): named next to the base sport
+    else bases.forEach(b => (extras[b] = extras[b] || []).push(sports[p[0]].n));
   }
   const cnt = c => v.up ? (c ? " (" + c + " courts planned)" : " (planned)") : c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court; not open yet: planned
   // variants of one game ("Basque Pelota: Xare", "Basque Pelota: Jai Alai"…) share the same court: show it once, variants as inferred options
@@ -980,7 +981,7 @@ function sportParts(v) {
   const parts = solo.map(p => {
     const x = extras[p[0]];
     if (x) extra.push(sports[p[0]].n + " courts, optional: " + x.join(", "));
-    return sports[p[0]].n + cnt(p[1]);
+    return [sports[p[0]].n, ...(twins[p[0]] || [])].join(" / ") + cnt(p[1]);
   }), counts = solo.map(p => p[1] || 0);
   for (const [k, ps] of Object.entries(fam)) {
     const c = Math.max(...ps.map(p => p[1] || 0)); counts.push(c);
