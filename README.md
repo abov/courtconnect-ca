@@ -13,73 +13,50 @@
 Tennis, padel, pickleball and squash and dozens of lesser-known and up-and-coming racket sports are booming, but information about *where to play* is scattered and messy. Court finders each cover one sport, or only places you can book. This project is one free map of all of them, from free park courts and hitting walls to private clubs. It collects the data, cleans it, checks it, and says honestly how complete it is.
 
 ## Who it is for
-| Audience | They ask | What they get |
-|---|---|---|
-| **Player** | "Where can I play, and with whom?" | The map and filters, a Play / Watch / Social view, directions, link-outs to open play, leagues and lessons |
-| **Curious player** | "Is there any padel, squash or pop tennis near me?" | All 81 sports on the master sheet in one picker, each with an About card; sports with no place yet say so instead of faking pins |
-| **Spectator** | "What can I watch?" | 80 dated pro and amateur events with the organizer's own link |
-| **Club or organizer** | "Are we listed, and is it right?" | A free pin, an honest label, and a no-account path to fix or add a listing or an event (in the About dialog) |
-| **Researcher or builder** | "Can I use the data?" | One public JSON file, a data dictionary and an `llms.txt` ([below](#for-builders-and-ai-tools)) |
+- **Players:** find a court, filter by sport, surface and access, then follow link-outs to open play, leagues and lessons.
+- **Curious players:** every sport on the master sheet is in one picker with an About card; sports with no place yet say so instead of faking pins.
+- **Spectators:** dated pro and amateur events, each with the organizer's own link.
+- **Clubs and organizers:** a free pin, an honest label, and a no-account way to fix or add a listing.
+- **Researchers and builders:** one public JSON file, a data dictionary and an `llms.txt` ([below](#for-builders-and-ai-tools)).
 
-Not offered, on purpose: bookings, payments, accounts, rankings or paid placement. A label changes only with public evidence ([value proposition](docs/value_proposition.md), [product brief](docs/product_brief.md)).
+Not offered, on purpose: bookings, payments, accounts, rankings or paid placement ([value proposition](docs/value_proposition.md), [product brief](docs/product_brief.md)).
 
 ## What it does
-Live numbers (2026-10-23): **10,277 venues** (CA 9,732, NV 545), 4,536 with a name, 1,650 confirmed, 4,291 with a street address; **39 of 81 sports** have at least one venue; 80 watch events, 21 recurring social series, 923 hitting walls (448 pins), 276 link-outs, 10 player-finding apps. Counts by sport: [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md).
+Live numbers (2026-10-23): **10,277 venues** (CA 9,732, NV 545), 1,650 confirmed, **39 of 81 sports** with at least one venue, 80 watch events, 21 social series, 923 hitting walls, 276 link-outs. By sport: [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md).
 
-- **Venue map** from two open sources (OpenStreetMap and Overture Maps) plus hand-curated entries, with courts grouped into venues by proximity. Filter by sport, surface, indoor/outdoor, access, or search by name, city or ZIP. Filters live in the URL, so any view is shareable.
-- **Honest about confidence:** pins show how much to trust each name and sport (confirmed, business listing, inferred). A **How complete is this data?** panel lists every sport, including those with no data yet.
-- **Play / Watch / Social:** Play finds courts; Watch lists upcoming pro and amateur events; Social shows recurring open-play series and player-matching apps (social phase A, [ADR 0015](docs/decisions/0015-mission-and-social-phase.md)). A separate **hitting-wall** layer serves solo practice.
-- **Link-outs** to a venue's own pages for open play, lessons and leagues, each with a `verified_on` date and an evidence note.
-- **Popup built for decisions:** a status band (confirmed / listed business / inferred), sports and courts grouped, rules and access as written on the venue's page, directions in the user's own maps app, "Share this place", a shortlist, and a suggest-a-change link.
-- **Phone-first:** bottom-sheet popup, **Near me** (the location stays in the browser), dark mode, sport glyph pins at high zoom, and add to home screen (web manifest, no service worker). An automated accessibility check (axe-core) passes in light and dark; a layout, contrast and colour-blind check is in [`docs/sessions/`](docs/sessions).
-- **Market insights (inferred):** which racket sports are missing near a city, how many rival venues sit within 5 and 15 miles, and which other sports are nearby. A club sees its local competition and open niches, a player sees where to try something new, and `make market-snapshot` keeps a history to spot openings and closures. Known venues only, no population yet; ask in plain English with a free local model via `ingestion/ask.py` (it picks vetted queries, never writes SQL): [`docs/market_insights.md`](docs/market_insights.md).
-- **Quality checks:** dbt tests, a coverage report and a `make quality` scorecard with freshness service levels catch bad data and stale entries ([`docs/data_quality.md`](docs/data_quality.md)).
-
-Mission ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md)): one map for every racket sport in California and Nevada: find a court, watch a match, try a new racket sport, and find people to play with.
+- **Venue map** from OpenStreetMap, Overture Maps and hand-curated entries, with courts grouped into venues. Filter by sport, surface, indoor/outdoor, access, or search by name, city or ZIP; filters live in the URL.
+- **Honest about confidence:** pins show how much to trust each name and sport (confirmed, business listing, inferred), and a **How complete is this data?** panel lists every sport, including those with no data.
+- **Play / Watch / Social** views, plus a **hitting-wall** layer for solo practice ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md)).
+- **Link-outs** to a venue's own pages, each with a `verified_on` date and evidence note; popups show rules and access as the venue wrote them.
+- **Phone-first:** bottom-sheet popup, **Near me** (location stays in the browser), dark mode, add to home screen; axe-core accessibility check passes in light and dark.
+- **Market insights (inferred):** which sports are missing near a city and how many rival venues are nearby ([`docs/market_insights.md`](docs/market_insights.md)).
+- **Quality checks:** dbt tests, a coverage report and a `make quality` scorecard with freshness SLAs ([`docs/data_quality.md`](docs/data_quality.md)).
 
 ## What the data showed
-Numbers are dated and come from the notes linked in each row.
-
-| Finding | What it means |
-|---|---|
-| **No single source is enough.** 27,493 OSM court and facility records plus Overture places became 10,268 venues; 4,526 had a name ([snapshot, 10-22](docs/coverage_snapshot.md)). | OSM knows where courts are, business listings know names. Joining them is the product. |
-| **The map is mostly tennis.** Of the 81 sports on the master sheet, 35 are covered and 39 have nothing found ([snapshot](docs/coverage_snapshot.md)). | Gaps are the story for lesser-known sports, so the app shows them instead of hiding them. |
-| **Duplicates were inflating the count.** Merging courts inside one park or school, and places at one street address, cut venues from 10,542 to 10,235 (-3%). A guard test now fails if two venues share a name within 150 m. | Fix the cause, then add a test so it cannot return. |
-| **About 90% of venues had no street address** ([ML plan](docs/ml_plan.md)). | Most are park and school courts. Now 4,291 of 10,277 venues show one (OSM tags, nearest Overture address or Nominatim, the last two labelled "inferred"), and every pin has a city; homes show the city only, by design. Filling the rest needs a different source, not a better lookup. |
-| **Pickleball hides on tennis courts.** Painted lines are rarely tagged, so a re-extract cannot find them; city park pages and owner reports did ([ML plan](docs/ml_plan.md)). | Refreshing data does not fix a data gap; a different source does. |
-| **Gyms and public facilities hold niche sports.** Chain and city pages added racquetball (105 venues: CA 90, NV 15) plus YMCA pickleball ([gym scan](docs/gym_chain_scan.md)). | Chain-by-chain scans beat generic search for sports like racquetball. |
-| **Websites go bad.** One club domain was hijacked and another belonged to a club in a different state. | Links are checked and flagged (`make check-websites`), not trusted. |
+- **No single source is enough.** OSM knows where courts are, business listings know names; joining them is the product (27,493 OSM records plus Overture places became about 10,300 venues).
+- **The map is mostly tennis.** Gaps are the story for lesser-known sports, so the app shows them instead of hiding them ([snapshot](docs/coverage_snapshot.md)).
+- **Duplicates inflated the count.** Merging courts in one park and places at one address cut venues about 3%; a guard test now fails if two venues share a name within 150 m.
+- **Most venues lacked a street address.** Now 4,291 show one (OSM tags, nearest Overture address or Nominatim, the last two labelled inferred) and every pin has a city; homes show the city only, by design ([ML plan](docs/ml_plan.md)).
+- **Refreshing data does not fix a data gap; a different source does.** Pickleball hides on tennis courts and racquetball in gyms; city park pages, chain scans and owner reports found them ([gym scan](docs/gym_chain_scan.md)).
+- **Websites go bad.** Links are checked and flagged (`make check-websites`), not trusted.
 
 ## ML strategy: small models suggest, people decide
-Rule: **a model may rank or suggest; it never writes to the map.** Anything inferred is labelled as such. Full plan: [`docs/ml_plan.md`](docs/ml_plan.md).
-
-| Phase | What | Result so far |
-|---|---|---|
-| 1. Review-queue ranker (built) | Logistic regression on 90 human confirm/reject labels orders about 200 uncertain sport matches, so review time goes to the clearest cases first. | Leave-one-out accuracy 86%, AUC 0.93. |
-| 2. LLM reads public pages (built, not run at scale) | Extracts sport, court count and access from a venue's own page; every field needs an exact quote that code checks is on the page ([ADR 0017](docs/decisions/0017-llm-page-reader.md)). | Free rules engine measured; the Claude run waits on an API key, a spend cap and a precision bar. |
-| 3. Courts in aerial photos (pilot) | Object detector on free NAIP imagery, trained on OSM court shapes. | Hawthorne: found 8 of 9 mapped tennis courts and 2 new sites; sport and access cannot be seen. |
-
-Lessons worth keeping:
-- **Label skew bites.** Every early Tennis label was a reject, so the ranker learned "Tennis means reject". Confirming real tennis clubs fixed it (Tennis likely-rejects 25 to 4). Check what a model learned, not just its score.
-- **No leaks.** The confidence score is not a feature, because human overrides already feed it.
-- **Honest limits.** The aerial pilot finds single digits of new sites per city, not hundreds, so it is a lead generator for OSM, not a data source.
+Rule: **a model may rank or suggest; it never writes to the map.** Anything inferred is labelled. Full plan: [`docs/ml_plan.md`](docs/ml_plan.md).
+- **Review-queue ranker (built):** logistic regression on 90 human labels orders uncertain sport matches (leave-one-out accuracy 86%, AUC 0.93).
+- **LLM page reader (built, not run at scale):** every extracted field needs an exact quote that code checks is on the page; waits on an API key, spend cap and precision bar ([ADR 0017](docs/decisions/0017-llm-page-reader.md)).
+- **Aerial-photo pilot:** finds courts but not sport or access, so it only leads people to fix OSM, not a data source.
+- **Lesson:** check what a model learned, not just its score. Skewed labels taught the ranker "Tennis means reject" until real clubs were confirmed.
 
 ## How it fits together
 ![Architecture: sources, Python ingestion, a dbt project on DuckDB, and the static map app](docs/architecture.svg)
-
-```
-OSM, Overture, Census, Google Sheet, hand-edited seeds (each with evidence)
-  -> Python ingestion -> raw CSV -> DuckDB -> dbt (staging, intermediate, core, marts)
-  -> export -> venues.json -> static MapLibre page on GitHub Pages
-```
 
 | Stage | Where | Gate |
 |---|---|---|
 | Ingest | [`ingestion/`](ingestion) | `load_raw.py` refuses to shrink a table by more than 10% |
 | Transform | [`transform/`](transform) | dbt tests, hand-labelled gold set for the place-to-court match |
-| Ship | [`app/`](app), [`.github/workflows/`](.github/workflows) | CI on a small fixture dataset, export freshness, scorecard no-regression |
+| Ship | [`app/`](app), [`.github/workflows/`](.github/workflows) | CI on a fixture dataset, export freshness, scorecard no-regression |
 
-There is no server or API: the map reads one exported file, `app/data/venues.json`. Phone numbers are never exported. Layout and layer table: [`docs/architecture.md`](docs/architecture.md); all tools and strategies: [`docs/tools_and_strategies.md`](docs/tools_and_strategies.md). The problem, choices and trade-offs in longer form: [`docs/case_study.md`](docs/case_study.md).
+No server or API: the map reads one exported file, `app/data/venues.json`. More: [architecture](docs/architecture.md), [tools and strategies](docs/tools_and_strategies.md), [case study](docs/case_study.md).
 
 ## Workflow and automation
 - **Twice-monthly refresh:** sync sports, extract, load, fill addresses, build, export, quality scorecard, PR, CI, deploy ([runbook](docs/monthly_refresh.md)).
