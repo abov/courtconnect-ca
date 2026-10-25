@@ -1,0 +1,75 @@
+# ADR 0019 merge gate: a deterministic script, not a model, decides whether an agent's refresh PR may merge itself.
+# Runs after the `ci` workflow finishes on a pull request from a `claude/refresh-*` branch. The rules come from main's copy of
+# ci/check_refresh_diff.py (the PR cannot change the rules it is judged by; touching ci/ or .github/ leaves the R0 allowlist anyway).
+#   - Always: comments the verdict (R0 or R3 escalate) on the PR. That is "shadow mode".
+#   - Merges (squash) only when ALL hold: ci succeeded, verdict R0, base is main, repo variable AGENTS_ENABLED == 'true' (kill switch)
+#     and repo variable AGENT_AUTOMERGE_R0 == 'true' (the owner's switch; unset = shadow only).
+# A merge made with GITHUB_TOKEN does not trigger the push-based pages.yml, so this job dispatches it explicitly.
+# Needs branch protection on main with no required review (required status check `dbt-build` stays); see docs/decisions/0019-unattended-agent-merges.md.
+name: agent-merge-gate
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+jobs:
+  gate:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      startsWith(github.event.workflow_run.head_branch, 'claude/refresh-')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR_BRANCH: ${{ github.event.workflow_run.head_branch }}
+      PR_SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - name: Find the pull request
+        id: pr
+        run: |
+          json=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$PR_BRANCH" --state open --json number,baseRefName,headRefOid --jq '.[0]')
+          [ -n "$json" ] && [ "$json" != "null" ] || { echo "no open PR for $PR_BRANCH"; echo "found=no" >> "$GITHUB_OUTPUT"; exit 0; }
+          # the CI run must be for the PR's current head, not an older push
+          [ "$(echo "$json" | jq -r .headRefOid)" = "$PR_SHA" ] || { echo "stale run"; echo "found=no" >> "$GITHUB_OUTPUT"; exit 0; }
+          echo "found=yes" >> "$GITHUB_OUTPUT"
+          echo "number=$(echo "$json" | jq -r .number)" >> "$GITHUB_OUTPUT"
+          echo "base=$(echo "$json" | jq -r .baseRefName)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        if: steps.pr.outputs.found == 'yes'
+        with: {ref: main, path: trusted}
+      - uses: actions/checkout@v4
+        if: steps.pr.outputs.found == 'yes'
+        with: {ref: "${{ github.event.workflow_run.head_sha }}", path: pr, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        if: steps.pr.outputs.found == 'yes'
+        with: {python-version: "3.12"}
+      - name: Classify (main's script, the PR's files)
+        if: steps.pr.outputs.found == 'yes'
+        id: gate
+        working-directory: pr
+        run: |
+          git fetch --no-tags origin main
+          set +e
+          python ../trusted/ci/check_refresh_diff.py --base-ref origin/main > ../gate.txt 2>&1
+          code=$?
+          set -e
+          cat ../gate.txt
+          if [ "$code" -eq 0 ] && [ "${{ steps.pr.outputs.base }}" = "main" ]; then echo "verdict=R0" >> "$GITHUB_OUTPUT"; else echo "verdict=R3" >> "$GITHUB_OUTPUT"; fi
+      - name: Comment the verdict
+        if: steps.pr.outputs.found == 'yes'
+        env: {VERDICT: "${{ steps.gate.outputs.verdict }}", ENABLED: "${{ vars.AGENTS_ENABLED }}", SWITCH: "${{ vars.AGENT_AUTOMERGE_R0 }}"}
+        run: |
+          if [ "$VERDICT" = "R0" ] && [ "$ENABLED" = "true" ] && [ "$SWITCH" = "true" ]; then act="Merging now (R0 auto-merge is on)."
+          elif [ "$VERDICT" = "R0" ]; then act="Shadow mode: would auto-merge; a person still merges (set repo variable AGENT_AUTOMERGE_R0=true to switch on, AGENTS_ENABLED must be true)."
+          else act="Escalated: a person decides."; fi
+          { echo "**Merge gate (ADR 0019): $VERDICT** on $PR_SHA"; echo; echo '```'; cat gate.txt; echo '```'; echo; echo "$act"; } > comment.md
+          gh pr comment "${{ steps.pr.outputs.number }}" --repo "$GITHUB_REPOSITORY" --body-file comment.md
+      - name: Merge and deploy
+        if: steps.pr.outputs.found == 'yes' && steps.gate.outputs.verdict == 'R0' && vars.AGENTS_ENABLED == 'true' && vars.AGENT_AUTOMERGE_R0 == 'true'
+        run: |
+          gh pr merge "${{ steps.pr.outputs.number }}" --repo "$GITHUB_REPOSITORY" --squash --delete-branch --match-head-commit "$PR_SHA"
+          gh workflow run pages.yml --repo "$GITHUB_REPOSITORY" --ref main
