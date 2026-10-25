@@ -522,7 +522,7 @@ function renderShortlist() {
     const open = el("button", {type: "button", class: "sl-open"}, el("div", {class: "nm", text: name}), el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}));
     open.addEventListener("click", () => showVenue(v, true));
     const rm = el("button", {type: "button", class: "sl-rm", "aria-label": "Remove " + name + " from shortlist", title: "Remove", text: "×"});
-    rm.addEventListener("click", () => toggleSaved(v));
+    rm.addEventListener("click", () => { toggleSaved(v); fitTo(shortIds.map(i => byId[i]).filter(Boolean), 15); });   // re-frame the places that are left
     ul.append(el("li", {}, open, rm));
   }
   const copy = el("button", {type: "button", class: "chip", text: "Copy list to send to a friend"}), msg = el("span", {class: "meta", role: "status"});
@@ -1512,7 +1512,7 @@ function initControls() {
     const open = $("shortlist").hidden; $("shortlist").hidden = !open;
     $("shortlistToggle").setAttribute("aria-expanded", String(open));
     syncShortlist();
-    if (open) track("shortlist-open");
+    if (open) { track("shortlist-open"); fitTo(shortIds.map(i => byId[i]).filter(Boolean), 15); }   // zoom to every saved place
   });
   for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
   $("nearMe").addEventListener("click", () => {
