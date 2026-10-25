@@ -97,6 +97,16 @@ Last run: 2026-10-19. Added 3 events, 1 lead update, 1 link fix. Owner request; 
 - **Facebook:** not swept. Public Page content needs a login popup to be dismissed and is mostly empty logged out.
 
 ## Pass 10 (2026-10-24)
+### Part 1 (tennis, pickleball, PPA, ITF)
+Last run: 2026-10-24. Added 6 events (watch_events.csv now 90): 4 pickleball, 2 tennis.
+- **USA Pickleball (CA and NV lists, Golden Ticket page, event pages):** added APP Southern California Open (Golden Ticket, Seal Beach, Jun 3-6 2027) and USA Pickleball Golden Ticket Las Vegas (Sunset Park, Feb 23-28 2027). The tournament lists show every date one day early; the event pages were used. Lead, not added: 2026-27 APP Selkirk U.S. Collegiate Championships Las Vegas (Mar 11-26 2027, The Flying Pickle, address "Coming Soon"). Existing rows unchanged (Nationals, PB4ALL, collegiate San Diego, Coachella Valley x2, Golden Tickets San Diego and HUB).
+- **PPA (ppatour.com/events, 40 events):** added Junior PPA Finals (TTC Newport Beach, Dec 3-5 2026, level inferred junior) and Sacramento PPA Challenger (Life Time Roseville, Jun 18-20 2027; venue from the pickleballtournaments.com registration page). Malibu, Rancho Mirage, Newport Beach Open, Sacramento Open and Finals dates unchanged; still no venue listed for the last four.
+- **USTA SoCal (28 results to Nov 30):** added the Level 5 MPTA Open (Match Point Tennis Academy, Santa Ana, Nov 13-15). All other Level 1-6 rows already in. WTN and Level 7 skipped.
+- **USTA Intermountain (30 results; section id found by picking it once in the Section menu):** only Nevada event is the Level 3 Las Vegas Senior Open (Darling Tennis Center, Oct 26-30), added.
+- **USTA NorCal sheet (2026):** Level 4-5 rows unchanged (Laguna Creek age Oct 23-25, Operation Pride Nov 14-16 and Nov 20-22 already in).
+- **ITF:** web search and the Wikipedia Oct-Dec 2026 ITF pages show no new CA or NV event beyond Redding, Bakersfield and the DragonRidge M25 (Henderson, already in); the Las Vegas W35 (Oct 5-11) and M25 are past. itftennis.com fact-sheet pages were not re-opened because no new event appeared and the existing rows were read on 2026-10-17. No 2027 ITF, USTA Pro Circuit or ITF Beach Tennis calendar yet (look again in December).
+- **Failed / unread:** none. Biola Prize Money Open (Oct 24-25) is a WTN event, skipped.
+
 ### Part 2 (badminton, R2 Sports, table tennis, squash, skyball)
 Last run: 2026-10-24. Added 2 badminton events, linked the Golden State Open to its R2 page, logged 5 R2 TIDs.
 - **Badminton (usabadminton.org adult and junior schedules, updated 10/22):** added YONEX SoCal ORC (Arena Badminton & Sports Club, Pomona, Jan 16-18 2027) and Dave Freeman Jr. SoCal OLC (San Diego Badminton Club, Apr 2-4 2027). 2027 NorCal OLC (Mar 5-7) has no host yet: lead. LA International Series and Bay Badminton Championships dates unchanged (prospectus PDFs cannot be read as text). Nevada: none.
