@@ -1172,21 +1172,27 @@ async function runSearch(zoom, open) {
       if (my !== searchRun) return;
       if (!z) { textOff = true; note = "ZIP " + zq + " is outside California and Nevada."; trackD("search-miss", "zip-outside"); }
       else {
-        const c = {lat: z.at[0], lng: z.at[1]}; searchCentre = c; maxZoom = play ? 13 : 9;
+        const c = {lat: z.at[0], lng: z.at[1]}; searchCentre = c; maxZoom = play ? 13 : 11;
         let pool = pins(), lead = "";
         if (rest && !pool.length) { textOff = true; pool = pins(); lead = "Nothing matches “" + rest + "” with the current filters. "; }
         const what = rest && !lead ? " matching “" + rest + "”" : "";
-        let near = pool.filter(p => distKm(p, c) <= 6), within = near.length > 0;
-        if (!within) near = pool.slice().sort((a, b) => distKm(a, c) - distKm(b, c)).slice(0, 5);
+        let near = pool.filter(p => distKm(p, c) <= 6), within = near.length > 0, far = null;
+        if (!within) {   // the map always lands on the ZIP; the nearest pins join the view only when they are close enough to still read as "around here"
+          far = pool.length ? Math.round(Math.min(...pool.map(p => distKm(p, c)))) : null;
+          near = pool.filter(p => distKm(p, c) <= 40).sort((a, b) => distKm(a, c) - distKm(b, c)).slice(0, 5);
+          if (!near.length) maxZoom = play ? 11 : 9;
+        }
         pts = [{x: c.lng, y: c.lat}, ...near];
         note = lead + (z.exact ? "" : "ZIP " + zq + " is not in the list; centred on the nearest ZIP (" + z.zip + "). ")
-          + (within ? near.length + (near.length === 1 ? " spot" : " spots") + what + " within 6 km of " + z.zip + "." : pool.length ? "Nothing" + what + " within 6 km of " + z.zip + "; showing the " + near.length + " nearest." : "Nothing matches the current filters.");
+          + (within ? near.length + (near.length === 1 ? " spot" : " spots") + what + " within 6 km of " + z.zip + "." : far !== null ? "Nothing" + what + " within 6 km of " + z.zip + "; the nearest is about " + far + " km away." : "Nothing matches the current filters.");
       }
     } catch (err) { if (my !== searchRun) return; textOff = true; note = "ZIP lookup is not available right now. Try a city or venue name."; }
   } else if (q.length >= 2) {
     const hits = pins();
     if (hits.length) {
       pts = focusOn(hits, q);
+      textOff = true;   // the typed text only steers the zoom; the map keeps every pin the other filters allow, so zooming out or panning never loses places
+      if (hits.length < pins().length) note = hits.length + (hits.length === 1 ? " match" : " matches") + " for “" + q + "”, zoomed to. Other spots stay on the map.";
       if (open && play && hits.length === 1) { refresh(); showVenue(hits[0], true); return; }
     } else {
       textOff = true;
