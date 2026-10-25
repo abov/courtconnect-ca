@@ -1,16 +1,16 @@
 # Data quality scorecard
 
-Generated 2026-10-24 by `make quality` (`ingestion/export_quality_scorecard.py`) from the current DuckDB build. Targets are stated service levels, not guarantees: they are set in the script and a breach is reported, not hidden.
+Generated 2026-10-25 by `make quality` (`ingestion/export_quality_scorecard.py`) from the current DuckDB build. Targets are stated service levels, not guarantees: they are set in the script and a breach is reported, not hidden.
 
 ## Service levels
 
 | Measure | Now | Target | Status |
 |---|---|---|---|
-| OSM extract age | 1 days | <= 90 days | OK |
-| Oldest current link-out check | 14 days | <= 60 days | OK |
-| Oldest upcoming-event check | 12 days | <= 14 days | OK |
-| Oldest current social-series check | 3 days | <= 35 days | OK |
-| Website link-check age | -1 days | <= 60 days | OK |
+| OSM extract age | 2 days | <= 90 days | OK |
+| Oldest current link-out check | 15 days | <= 60 days | OK |
+| Oldest upcoming-event check | 13 days | <= 14 days | OK |
+| Oldest current social-series check | 4 days | <= 35 days | OK |
+| Website link-check age | 0 days | <= 60 days | OK |
 | Dead venue websites (of checked) | 0.0 % | <= 10.0 % | OK |
 | Venues seen in the last 35 days | 100.0 % | >= 99.0 % | OK |
 | Venues with a real name | 16.1 % | >= 25.0 % | **BREACH** |
@@ -49,11 +49,11 @@ Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-
 
 ## Freshness
 
-- OSM extract: 1 days old.
-- Current link-outs: 285; 0 older than 60 days.
-- Upcoming events: 85; 0 not re-checked in 14+ days.
+- OSM extract: 2 days old.
+- Current link-outs: 284; 0 older than 60 days.
+- Upcoming events: 83; 0 not re-checked in 14+ days.
 - Current social series: 21; 0 not re-checked in 35+ days.
-- Website liveness check: -1 days old; 0 of 882 checked venue sites dead (0.0%).
+- Website liveness check: 0 days old; 0 of 882 checked venue sites dead (0.0%).
 - Venues seen by any source in the last 35 days: 10,284 of 10,288 (100.0%); oldest date 2026-09-23; 4 undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check (monthly runbook: docs/monthly_refresh.md).
 
 Stale or undated venues (first 4):
