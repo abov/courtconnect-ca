@@ -14,5 +14,6 @@ Everything is public and static. The whole dataset is one JSON file, rebuilt abo
 - Data is inferred unless marked confirmed. A venue's `cf` key says whether it was visited, stated by the operator, or only reported; no `cf` means the pin comes from map data only. Say so when you answer.
 - Public access, hours and prices are often unknown. Do not state them as fact; point to the venue's website (`w`) or link-outs (`ac`).
 - Street addresses flagged `ai`, `ap` or `ns` are inferred (nearest address, enclosing park, or nearest road).
+- A venue's `wl` key means hitting walls (solo practice) stand at it; they are listed in `walls`, are not courts, and `tagged`/`inferred` ones come from map tags or guesses and were not checked. Say so.
 - A name ending in "(north courts, 6 courts)" is an inferred name made unique by position and court count, not a source; `q` stays `i`.
 - Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation, plus hand-curated entries. Keep that attribution when you reuse it.

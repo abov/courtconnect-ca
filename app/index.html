@@ -768,6 +768,12 @@ function wallAccess(w) { return w.ac === "public" ? "public" : WALL_ACCESS_LABEL
 // Knuckle Racket (owner 2026-10-20) is played on 1-wall and 3-wall courts too, but only walls mapped public (WALL_PUBLIC_ONLY).
 const WALL_SPORT = {"1-wall Paddleball": ["one_wall", "backboard"], "3-wall Paddleball": ["three_wall"], "Outdoor Racquetball": ["one_wall", "three_wall"], "Knuckle Racket": ["one_wall", "three_wall"]};
 const WALL_PUBLIC_ONLY = ["Knuckle Racket"];
+// Venue popup line: walls standing at this venue (v.wl = [[types, walls, confirmation], ...], from int_wall_venue_link). A pointer to the wall layer; walls never count as courts.
+const WALL_LINK_TYPE = {one_wall: "one-wall", three_wall: "three-wall", backboard: "backboard", other: "handball-type"};
+const WALL_LINK_CONF = {tagged: "from OpenStreetMap tags, not checked", inferred: "inferred", reported: "reported, not verified", official: "official source"};
+function wallLinkText(wl) {
+  return wl.map(([types, n, cf]) => n + " " + types.split(";").map(t => WALL_LINK_TYPE[t] || t).join(" / ") + " (" + (WALL_LINK_CONF[cf] || cf) + ")").join("; ");
+}
 function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t)) && (!WALL_PUBLIC_ONLY.includes(name) || wallAccess(w) === "public")) : []; }
 function wallsFiltered() { return state.mode === "play" && state.sport >= 0 ? wallsFor(sports[state.sport].n) : []; }
 function wallGeojson(list) {
@@ -1032,6 +1038,10 @@ function venueNode(v) {
   more.push(...sp.extra);
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
   if (f.length) plays.append(el("p", {text: f.join(" · ")}));
+  if (v.wl) {
+    plays.append(el("p", {}, el("b", {text: "Hitting walls on site: "}), document.createTextNode(wallLinkText(v.wl))));
+    more.push("Hitting walls: " + (v.wl.some(w => w[2] === "tagged" || w[2] === "inferred") ? "the tagged or inferred ones are not checked (condition, count and public access unknown). " : "") + "They are solo-practice walls, shown as orange pins when you pick a wall sport, and are not counted as courts here.");
+  }
   if (v.o && !noPrograms()) plays.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
   if (v.ru) plays.append(el("p", {}, el("b", {text: "Notes: "}), document.createTextNode(v.ru)));
   const url = v.w ? safeUrl(v.w) : "";

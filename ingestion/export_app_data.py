@@ -12,6 +12,8 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   venues  : [{i, n, q, s, y, x, c, r, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
      a street address; ai 1 + ad metres = nearest address point (inferred); ap 1 = address of the enclosing park/school/club (inferred); ns = nearest road name when no address (shown "Near <street>", inferred)
      r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet, or 'Reported: opening soon' with ul 1 = only a directory said so (ud = date checked)
+     wl hitting walls on site (int_wall_venue_link): [[wall types joined by ';', walls at this venue, confirmation tagged/inferred/reported/official], ...], only on venues with a
+        wall pin at them; a pointer to the walls layer, never counted as courts or in sport totals (tagged = from OpenStreetMap tags, not checked)
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
   social  : [{n series name, sp sport, k kind, o organizer, v venue, c city, y, x, pr location precision, sc schedule (organizer's wording), ll last listed date, sl skill level,
@@ -180,6 +182,16 @@ def main() -> None:
         entries[vid].append([sport_index[sport], int(courts or 0), mask])
         venues[vid]["_o"] = venues[vid].get("_o", set()) | {c for c in (venues[vid]["o"] or "")}
 
+    # Walls standing at a listed venue (int_wall_venue_link): shown in that venue's popup as "Hitting walls on site", grouped by wall type and confirmation.
+    # A pointer only: walls are not courts, so nothing here touches `p` or the sport and venue counts.
+    wall_links: dict[str, dict] = defaultdict(dict)
+    for vid, wtype, conf, count in con.execute("""
+            select l.venue_id, w.wall_type, w.confirmation, w.wall_count
+            from intermediate.int_wall_venue_link l join marts.mart_wall_pins w on w.wall_key = l.wall_key
+            order by l.venue_id, w.wall_type, w.confirmation""").fetchall():
+        key = (wtype, conf)
+        wall_links[vid][key] = wall_links[vid].get(key, 0) + int(count)
+
     out_venues = []
     for vid, v in venues.items():
         v["p"] = sorted(entries[vid])
@@ -199,6 +211,8 @@ def main() -> None:
                 v["rn"] = reporters[vid]        # number of different people who reported it (word of mouth, not confirmed)
             if manual[vid]["u"]:
                 v["xu"] = 1                      # public access not confirmed on the source map
+        if vid in wall_links:
+            v["wl"] = [[t, n, c] for (t, c), n in wall_links[vid].items()]   # hitting walls on site: [wall types, walls, confirmation]
         if vid in opening:
             v["up"] = opening[vid][0]            # not open yet: the badge text; the popup adds the caveat
             v["ud"] = opening[vid][2]            # date the page was read

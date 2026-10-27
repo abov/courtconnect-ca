@@ -21,6 +21,7 @@ Array; a sport's **index** is its id everywhere else (`venues[].p[][0]`, `platfo
 - Confirmation `cf`: `v` visited in person (`cd` = date), `o` stated by the operator, `r` reported only. `cn` / `rn` = number of different people who confirmed / reported. Absent = from map data only.
 - Inferred address: `ai` 1 + `ad` metres = nearest address point; `ap` 1 = address of the enclosing park/school/club; `ns` = nearest road ("Near <street>"); `al` = other listed names at the same address (merged duplicates).
 - Not open yet: `up` badge text ("Reported: opening soon" with `ul` 1 = only a directory or press listing says so), `ud` = date checked.
+- Hitting walls on site: `wl` = `[[wallTypes, walls, confirmation], ...]` (wallTypes joined by `;`, e.g. `backboard;one_wall` = type not settled; confirmation `tagged` = from OpenStreetMap tags, not checked, `inferred`, `reported`, `official`). Present only on venues with a wall pin at them (matched by the pin's near-venue name, else nearest listed venue within 150 m). It points to the `walls` list; walls are not courts and are not in `p`, `v` or any sport count.
 
 ## events (to watch)
 `n` name, `sp` sport name, `l` level (pro, amateur, junior, college, exhibition), `f` watch format, `v` venue, `c` city, `y`/`x`, `pr` location precision, `s`/`e` start/end date, `d` date status, `t` ticket info, `u` info link, `k` tickets link, `vo` verified on. Every event links out to its organizer.
