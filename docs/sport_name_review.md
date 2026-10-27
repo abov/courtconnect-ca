@@ -1,6 +1,6 @@
 # Sport name review (2026-10-25)
 
-The master list (`all_racquet`, synced from the Google Sheet) has 81 racket sports. OpenStreetMap (our first court source) has a tag for **26** of them. These are the **55 that are not on the sport map**, and why.
+The master list (`all_racquet`, synced from the Google Sheet) has 82 racket sports. OpenStreetMap (our first court source) has a tag for **26** of them. These are the **56 that are not on the sport map**, and why.
 
 **How to read it.** "No OpenStreetMap tag exists" means the sport is real but nobody has a way to map its courts there, so we need another source (Google Places keyword search, club directories, governing-body sites). It does **not** mean your spelling is wrong. Rows that say "please check" are names I could not verify.
 

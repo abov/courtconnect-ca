@@ -19,13 +19,13 @@ Who it is for, in order of how many people they are:
 
 ## 2. What exists today and why (the full breakdown)
 
-Numbers are from the live export: **10,257 venues** (4,521 with a known name, 1,620 confirmed), **39 of 81 sports** with at least one venue, **80 watch events**, **21 social entries**, **927 hitting walls**, **276 link-outs** (leagues, clinics, open play, etc.), 10 player-finding platforms.
+Numbers are from the live export: **10,257 venues** (4,521 with a known name, 1,620 confirmed), **39 of 82 sports** with at least one venue, **80 watch events**, **21 social entries**, **927 hitting walls**, **276 link-outs** (leagues, clinics, open play, etc.), 10 player-finding platforms.
 
 | Layer | What it is | Why it exists | Who it serves | Visible to visitor? |
 |---|---|---|---|---|
 | Venue map (OSM + Overture + hand-curated) | 10k pins across CA + NV | The core promise: "every place" (ADR 0015). Without it nothing else matters. | Player, curious | Yes, the map |
 | Confirmation levels + "inferred" labels | Confirmed / listed business / guessed name / unnamed | Honesty rule (ADR 0007): never present a guess as fact. This is the trust differentiator against directory sites. | Everyone, silently | Yes, and too loudly (see §3) |
-| Sport picker (81 sports) + About card | Pickleball is not the whole story | Sport discovery, tennis and lesser-known sports stay findable | Curious | Yes |
+| Sport picker (82 sports) + About card | Pickleball is not the whole story | Sport discovery, tennis and lesser-known sports stay findable | Curious | Yes |
 | Link-outs (`venue_actions`) | Website, leagues, clinics, open play, lessons | CourtConnect links out and takes no bookings or payments, so the *action* lives on the venue's page | Player | Yes, in the popup ("Join & follow") |
 | Watch & Social view | Dated events (80) plus recurring groups (21) | Answers "what is on" and "who can I play with" without building accounts (social phase A, closed 2026-10-21) | Spectator, gatherer | Yes (mode button) |
 | Player platforms + "Find people to play with" | 10 apps/groups linked per sport | Same, link-out only | Gatherer | Yes (note under the sport picker) |
@@ -46,7 +46,7 @@ Before a first-time visitor sees one court, the side panel shows roughly **20 th
 
 Four root causes:
 1. **It is built from the data model outward, not from the visitor's question.** Confirmation levels, sources and map keys are the builder's concerns and sit at the same level as "find a court".
-2. **The headline is a scorecard.** "10,257 venues · 4,521 named (1,620 confirmed) · 39 of 81 sports found" tells the owner how the data is doing; a visitor cannot act on it, and "named" and "confirmed" are insider words. It is the first thing read.
+2. **The headline is a scorecard.** "10,257 venues · 4,521 named (1,620 confirmed) · 39 of 82 sports found" tells the owner how the data is doing; a visitor cannot act on it, and "named" and "confirmed" are insider words. It is the first thing read.
 3. **Four audiences share one panel** (player, spectator, gatherer, contributor), and the player's controls are mixed with the others'.
 4. **Legends are scattered** (ring key under the count, map key under the list, wall legend, popup badges), so the visitor has to learn the colour system before trusting any pin.
 
