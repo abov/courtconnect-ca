@@ -19,10 +19,11 @@ from pathlib import Path
 
 import requests
 
+from overpass import REGIONS
 from useragent import HEADERS as UA
 
 URL = "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2023_Gazetteer/2023_Gaz_place_national.zip"
-STATES = {"CA", "NV"}
+STATES = set(REGIONS)  # region codes from ingestion/regions.json
 SUFFIX = re.compile(r"\s+(city|town|village|borough|municipality|CDP|city and borough|urban county|consolidated government \(balance\)|metropolitan government \(balance\)|unified government \(balance\))$", re.I)
 OUT = Path(__file__).resolve().parent.parent / "app" / "data" / "places.json"
 

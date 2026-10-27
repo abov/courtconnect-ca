@@ -1,8 +1,10 @@
 """Shared helpers for talking to the Overpass API (OpenStreetMap)."""
 from __future__ import annotations
 
+import json
 import sys
 import time
+from pathlib import Path
 
 import requests
 from rawdir import raw_path
@@ -14,27 +16,17 @@ URLS = [  # ordered by observed reliability; the first healthy one wins
     "https://z.overpass-api.de/api/interpreter",
 ]
 
-# Regions we cover. bbox = south, west, north, east. The border relation is the real filter; the bbox only
-# bounds the tiles. Nevada relation 165473 checked on OSM (name=Nevada, admin_level=4, ISO3166-2=US-NV).
-REGIONS = {
-    "CA": {"bbox": (32.5, -124.5, 42.1, -114.0), "relation": 165475, "cache": raw_path("ca_border.wkt")},
-    "NV": {"bbox": (35.0, -120.01, 42.0, -114.03), "relation": 165473, "cache": raw_path("nv_border.wkt")},
-}
+# The covered area lives in regions.json (docs/fork_guide.md). REGIONS: code -> bbox (south, west, north, east),
+# OSM border relation (the real filter; the bbox only bounds the tiles) and border cache file.
+_CFG = json.loads((Path(__file__).parent / "regions.json").read_text(encoding="utf-8"))
+REGIONS = {code: {"bbox": tuple(c["bbox"]), "relation": c["relation"], "cache": raw_path(c["cache"])}
+           for code, c in _CFG["regions"].items()}
+STATE_AREAS = {c["name"]: code for code, c in _CFG["regions"].items()}  # --area value -> region code
+BBOXES = {k: tuple(m["bbox"]) for k, m in _CFG["metros"].items()}  # named metros, south, west, north, east
 
-# south, west, north, east
-BBOXES = {
-    "la": (33.70, -118.67, 34.34, -118.15),
-    "sf": (37.60, -122.55, 37.90, -122.30),
-    "sd": (32.55, -117.30, 33.05, -116.95),
-    "lv": (35.95, -115.40, 36.35, -114.85),      # Las Vegas / Henderson
-    "reno": (39.40, -119.95, 39.70, -119.65),    # Reno / Sparks
-    "carson": (39.10, -119.85, 39.25, -119.70),  # Carson City
-    "tahoe": (38.85, -120.20, 39.35, -119.85),   # Lake Tahoe, straddles the CA/NV line
-}
-
-# Which state(s) a named area may keep rows from (the polygon clip decides, per point).
-AREA_REGIONS = {"california": ("CA",), "nevada": ("NV",), "la": ("CA",), "sf": ("CA",), "sd": ("CA",),
-                "lv": ("NV",), "reno": ("NV",), "carson": ("NV",), "tahoe": ("CA", "NV")}
+# Which region(s) a named area may keep rows from (the polygon clip decides, per point).
+AREA_REGIONS = {**{name: (code,) for name, code in STATE_AREAS.items()},
+                **{k: tuple(m["states"]) for k, m in _CFG["metros"].items()}}
 
 
 def tiles(region: str, lat_step: float = 1.6, lon_step: float = 2.1):
@@ -53,8 +45,8 @@ def tiles(region: str, lat_step: float = 1.6, lon_step: float = 2.1):
 
 
 def area_tiles(area: str):
-    """Tiles for an --area value: a state name (california/nevada) or a BBOXES metro key."""
-    return tiles(AREA_REGIONS[area][0]) if area in ("california", "nevada") else [BBOXES[area]]
+    """Tiles for an --area value: a region name from regions.json (e.g. california) or a BBOXES metro key."""
+    return tiles(STATE_AREAS[area]) if area in STATE_AREAS else [BBOXES[area]]
 
 
 def keep(lat, lon, area: str) -> bool:
@@ -147,7 +139,7 @@ def in_region(lat, lon, region: str) -> bool:
 
 
 def region_at(lat, lon):
-    """'CA', 'NV' or None (neither). Cheap bbox pre-check, then the polygon."""
+    """A region code from regions.json ('CA', 'NV') or None (none). Cheap bbox pre-check, then the polygon."""
     if lat is None or lon is None:
         return None
     for code, cfg in REGIONS.items():

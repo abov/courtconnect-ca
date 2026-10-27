@@ -76,7 +76,7 @@ def merge_rows(old: list[dict], new: dict[tuple, dict], tiles, area: str, any_fa
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--area", choices=[*overpass.BBOXES, "metros", "california", "nevada"], default="la")
+    ap.add_argument("--area", choices=[*overpass.BBOXES, "metros", *overpass.STATE_AREAS], default="la")
     ap.add_argument("--out", default=raw_path("osm_walls.csv"))
     args = ap.parse_args()
 
