@@ -965,7 +965,7 @@ function addPinGlyphs() {   // the popup icon set drawn to small images, one whi
 function updateSportIcon() { const w = $("sporticon"), s = state.sport >= 0 ? sports[state.sport] : null; w.innerHTML = ""; w.hidden = !s; if (s) w.append(...iconSpan([familyOf(s.n)]).childNodes); }
 
 // Plays line keeps the sports and counts; same-court options and inferred variants are returned separately for the details section.
-function sportParts(v) {
+function sportParts(v, withOptional = true) {
   const have = new Set(v.p.map(p => p[0])), extras = {}, twins = {}, plain = [];
   for (const p of v.p) {
     const bases = (sports[p[0]].b || []).filter(b => have.has(b));
@@ -979,9 +979,8 @@ function sportParts(v) {
   for (const p of plain) { const k = famOf(sports[p[0]].n); if (k) (fam[k] = fam[k] || []).push(p); else solo.push(p); }
   const extra = [];
   const parts = solo.map(p => {
-    const x = extras[p[0]];
-    if (x) extra.push(sports[p[0]].n + " courts, optional: " + x.join(", "));
-    return [sports[p[0]].n, ...(twins[p[0]] || [])].join(" / ") + cnt(p[1]);
+    const x = extras[p[0]];   // same courts, also playable: shown in the Plays line, marked optional (it used to sit only in the details section)
+    return [sports[p[0]].n, ...(twins[p[0]] || [])].join(" / ") + cnt(p[1]) + (x && withOptional ? " (optional on these courts: " + x.join(", ") + ")" : "");
   }), counts = solo.map(p => p[1] || 0);
   for (const [k, ps] of Object.entries(fam)) {
     const c = Math.max(...ps.map(p => p[1] || 0)); counts.push(c);
@@ -992,7 +991,7 @@ function sportParts(v) {
   const total = counts.reduce((a, c) => a + c, 0);
   return {main: parts.join(", ") + (counts.filter(Boolean).length > 1 ? " · " + total + " courts listed" : ""), extra};
 }
-const sportLine = v => sportParts(v).main;
+const sportLine = v => sportParts(v, false).main;   // list rows stay short: the optional sports show in the popup's Plays line
 const famOf = n => { const i = n.indexOf(": "); return i > 0 ? n.slice(0, i) : null; };
 function facts(v, entry) {
   const out = [], m = entry ? entry[2] : v.m;
