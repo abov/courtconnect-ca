@@ -56,6 +56,8 @@ Rule: **a model may rank or suggest; it never writes to the map.** Anything infe
 | Transform | [`transform/`](transform) | dbt tests, hand-labelled gold set for the place-to-court match |
 | Ship | [`app/`](app), [`.github/workflows/`](.github/workflows) | CI on a fixture dataset, export freshness, scorecard no-regression |
 
+Scale (measured 2026-10-28, Overture `2026-10-21.0`): the extracts query the 88M-place and 475M-address Overture parquet on S3 in place and fetch about 2% of those themes (743 MB of 39.6 GB); the data we keep is small. Method and caveats: [planet-scale benchmark](docs/planet_scale_benchmark.md).
+
 No server or API: the map reads one exported file, `app/data/venues.json`. More: [architecture](docs/architecture.md), [tools and strategies](docs/tools_and_strategies.md), [case study](docs/case_study.md).
 
 ## Workflow and automation
