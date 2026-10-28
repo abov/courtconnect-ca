@@ -825,6 +825,34 @@ models:
               arguments:
                 values: ['CA', 'NV']
 
+  - name: int_wall_venue_link
+    description: >
+      Links a hitting-wall pin to the one listed venue it stands at (by `near_venue_name`, else nearest within `wall_venue_link_radius_m`),
+      for the venue popup's "Hitting walls on site" line. A pointer only: walls are not courts and move no venue or sport count.
+    columns:
+      - name: wall_key
+        description: One link per wall pin.
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('mart_wall_pins')
+                field: wall_key
+      - name: venue_id
+        description: A venue the app lists (no orphan ids).
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('mart_venue_finder')
+                field: venue_id
+      - name: link_basis
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['name', 'distance']
+
   - name: mart_venue_finder
     description: >
       The table behind the map. One row per venue and sport (a venue with tennis and pickleball has two rows). Venues are clusters of nearby
