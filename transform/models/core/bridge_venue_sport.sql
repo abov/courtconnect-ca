@@ -48,6 +48,13 @@ manual_also as (
       -- only_access set (Micro Pickleball: public): the hand-added venue must be marked with one of those access values
       and (nullif(trim(a.only_access), '') is null
            or list_has_any(string_split(m.access_types, ';'), string_split(replace(a.only_access, ' ', ''), ';')))
+      -- manual_venue_sport_blocks.csv: a person marked this venue's derived sport as a question mark (access or court unidentified)
+      and not exists (
+          select 1
+          from {{ ref('manual_venue_sport_blocks') }} k
+          join {{ ref('int_manual_venue_match') }} km on km.venue_key = trim(k.venue_key)
+          where km.effective_venue_id = m.venue_id and trim(k.sport) = d.sport_name
+      )
 ),
 
 unioned as (
