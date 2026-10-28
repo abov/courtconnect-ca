@@ -279,6 +279,17 @@ seeds:
       Optional `correct_sport`: the sport the court really is (found from imagery or a public page); it then counts for that sport
       at 'osm_tag_loose' strength (needs review).
 
+  - name: manual_venue_sport_blocks
+    description: >
+      Question marks on hand-added venues: a sport derived through sport_also_played (Rapidball on a squash venue) is not passed on to that
+      venue until a person identifies its access or courts. `venue_key` is the manual_venues key, `sport` the derived sport (exact name from the
+      master list), `reason` says what is unknown. The venue's own listed sports are unaffected. Drop the row once the venue is identified.
+    columns:
+      - name: venue_key
+        tests:
+          - relationships:
+              arguments: {to: "ref('stg_manual_venues')", field: venue_key}
+
   - name: venue_confirmations
     description: >
       A log of individual confirmations of venues in manual_venues, one row per person per check (ADR 0008). `confirmed_by` is a GitHub
