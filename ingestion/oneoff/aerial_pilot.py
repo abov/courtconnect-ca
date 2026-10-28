@@ -21,19 +21,18 @@ from pathlib import Path
 
 import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # shared helpers in ingestion/
-from rawdir import raw_path
 from useragent import HEADERS as UA
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 CACHE = ROOT / "data" / "aerial" / "cache"
 OUT = ROOT / "data" / "aerial"
-KNOWN_NV = Path(raw_path("osm_courts_nv.csv"))   # optional: OSM court points already on the map
 SITE_GAP_M = 40      # detection boxes closer than this (edge to edge) are one site (one complex)
 OVERPASS = ["https://overpass-api.de/api/interpreter", "https://z.overpass-api.de/api/interpreter"]
 
 TRAIN_BBOX = (33.78, -118.47, 34.05, -118.22)   # south, west, north, east (LA basin around Hawthorne)
 HAWTHORNE = (33.893, -118.380, 33.934, -118.318)
-AREAS = {"hawthorne": HAWTHORNE}   # test areas by name; --area NAME --bbox S,W,N,E adds one (UTM 11N covers LA and Las Vegas)
+AREAS = {"hawthorne": HAWTHORNE}   # test areas by name; --area NAME --bbox S,W,N,E adds one
+EPSG = 26911   # UTM zone of the area being worked on, set by set_zone(): 10N west of 120 W, else 11N (LA, San Diego, Las Vegas, Reno)
 RES = 0.6
 CHIP = 256
 RACKET = {"tennis", "pickleball", "padel", "badminton", "squash", "racquetball", "paddle_tennis",
@@ -63,17 +62,48 @@ def area_of(a):
         AREAS[name] = tuple(float(v) for v in a.bbox.split(","))
     if name not in AREAS:
         raise SystemExit(f"unknown area {name!r}: pass --bbox S,W,N,E")
+    set_zone(AREAS[name])
     return name, AREAS[name]
+
+
+def set_zone(bb):
+    """Pick the UTM zone from the bbox centre; an area that straddles 120 W would need quads from both zones, so refuse it."""
+    global EPSG
+    s, w, n, e = bb
+    if (w < -120 < e):
+        raise SystemExit("bbox crosses 120 W (UTM zones 10N/11N): split it into one area per zone")
+    EPSG = 26910 if e <= -120 else 26911
 
 
 def to_utm():
     from pyproj import Transformer
-    return Transformer.from_crs("EPSG:4326", "EPSG:26911", always_xy=True)
+    return Transformer.from_crs("EPSG:4326", f"EPSG:{EPSG}", always_xy=True)
 
 
 def to_wgs():
     from pyproj import Transformer
-    return Transformer.from_crs("EPSG:26911", "EPSG:4326", always_xy=True)
+    return Transformer.from_crs(f"EPSG:{EPSG}", "EPSG:4326", always_xy=True)
+
+
+def train_files(a):
+    """-> (bbox, pitches json, chips npy, chips meta, default model out) for the training area named by --train.
+    The LA-basin set keeps its original file names; another region gets its own, keyed by name."""
+    name = a.train
+    if name == "la":
+        bb = TRAIN_BBOX
+        files = (OUT / "osm_pitches_train_area.json", CACHE / "train_imgs.npy", CACHE / "train_meta.json", CACHE / "model.pt")
+    else:
+        bbf = OUT / f"train_{name}_bbox.json"
+        if getattr(a, "train_bbox", None):
+            bb = tuple(float(v) for v in a.train_bbox.split(","))
+        elif bbf.exists():
+            bb = tuple(json.load(open(bbf)))
+        else:
+            raise SystemExit(f"training area {name!r}: pass --train-bbox S,W,N,E")
+        files = (OUT / f"osm_pitches_train_{name}.json", CACHE / f"train_{name}_imgs.npy",
+                 CACHE / f"train_{name}_meta.json", CACHE / f"model_{name}.pt")
+    set_zone(bb)
+    return (bb,) + files
 
 
 def pitch_class(tags):
@@ -128,6 +158,12 @@ class Naip:
                                 datetime="2022-01-01/2022-12-31", max_items=200).items())
         if not items:
             raise SystemExit("no NAIP 2022 items for bbox")
+        same = [it for it in items if it.properties.get("proj:epsg", EPSG) == EPSG]
+        if len(same) < len(items):
+            print(f"  skipping {len(items) - len(same)} quads in another UTM zone", flush=True)
+        items = same
+        if not items:
+            raise SystemExit("no NAIP 2022 items in this UTM zone for bbox")
         self.items = items
         self.ds = {}
         self.bounds = {}
@@ -201,9 +237,11 @@ def stage_osm(a):
     OUT.mkdir(parents=True, exist_ok=True)
     name, (s, w, n, e) = area_of(a)
     if a.train_area:
-        ts, tw, tn, te = TRAIN_BBOX
+        (ts, tw, tn, te), pitches_json, *_ = train_files(a)
+        if a.train != "la":
+            json.dump([ts, tw, tn, te], open(OUT / f"train_{a.train}_bbox.json", "w"))
         j = overpass(f'[out:json][timeout:240];way["leisure"="pitch"]({ts},{tw},{tn},{te});out geom tags;')
-        json.dump(j, open(OUT / "osm_pitches_train_area.json", "w"))
+        json.dump(j, open(pitches_json, "w"))
     j = overpass(f'[out:json][timeout:120];way["leisure"="pitch"]({s},{w},{n},{e});out geom tags;')
     json.dump(j, open(OUT / f"osm_pitches_{name}.json", "w"))
     # context areas, to tell public/institutional land from the rest (private homes are never candidates)
@@ -217,20 +255,26 @@ def stage_osm(a):
 def stage_chips(a):
     rng = random.Random(SEED)
     CACHE.mkdir(parents=True, exist_ok=True)
-    pitches = load_pitches(OUT / "osm_pitches_train_area.json")
+    tbb, pitches_json, imgs_npy, meta_json, _ = train_files(a)
+    train_epsg = EPSG
+    pitches = load_pitches(pitches_json)
     name, bb = area_of(a)
+    if EPSG != train_epsg:
+        raise SystemExit("training area and test area are in different UTM zones")
     hx0, hy0, hx1, hy1 = bbox_utm(bb)
     pad = CHIP * RES
-    inside = lambda p: hx0 - pad < p["xs"].mean() < hx1 + pad and hy0 - pad < p["ys"].mean() < hy1 + pad
-    train = [p for p in pitches if not inside(p)]
+    inside = lambda x, y: hx0 - pad < x < hx1 + pad and hy0 - pad < y < hy1 + pad   # never train on the test area
+    train = [p for p in pitches if not inside(p["xs"].mean(), p["ys"].mean())]
     by = {c: [p for p in train if p["cls"] == c] for c in (1, 2, 3)}
     rng.shuffle(by[1]); rng.shuffle(by[2]); rng.shuffle(by[3])
     picks = by[1][:a.n_racket] + by[2][:a.n_basket] + by[3][:a.n_other]
     centers = [(p["xs"].mean(), p["ys"].mean()) for p in picks]
-    tx0, ty0, tx1, ty1 = bbox_utm(TRAIN_BBOX)
-    for _ in range(a.n_random):
-        centers.append((rng.uniform(tx0, tx1), rng.uniform(ty0, ty1)))
-    naip = Naip(TRAIN_BBOX)
+    tx0, ty0, tx1, ty1 = bbox_utm(tbb)
+    while len(centers) < len(picks) + a.n_random:
+        c = (rng.uniform(tx0, tx1), rng.uniform(ty0, ty1))
+        if not inside(*c):
+            centers.append(c)
+    naip = Naip(tbb)
     imgs, meta = [], []
     for i, (cx, cy) in enumerate(centers):
         jx, jy = rng.uniform(-40, 40) * RES, rng.uniform(-40, 40) * RES
@@ -245,8 +289,8 @@ def stage_chips(a):
         imgs.append(im); meta.append((x_ul, y_ul))
         if (i + 1) % 100 == 0:
             print(f"  chips {len(imgs)}/{i + 1}", flush=True)
-    np.save(CACHE / "train_imgs.npy", np.stack(imgs))
-    json.dump(meta, open(CACHE / "train_meta.json", "w"))
+    np.save(imgs_npy, np.stack(imgs))
+    json.dump(meta, open(meta_json, "w"))
     print(f"train chips: {len(imgs)}")
     mosaic_for(a)
 
@@ -293,9 +337,11 @@ def stage_train(a):
     import torch
     torch.set_num_threads(a.threads)
     random.seed(SEED); torch.manual_seed(SEED)
-    imgs = np.load(CACHE / "train_imgs.npy")
-    meta = json.load(open(CACHE / "train_meta.json"))
-    pitches = load_pitches(OUT / "osm_pitches_train_area.json")
+    _, pitches_json, imgs_npy, meta_json, default_out = train_files(a)
+    model_out = Path(a.out) if a.out else default_out
+    imgs = np.load(imgs_npy)
+    meta = json.load(open(meta_json))
+    pitches = load_pitches(pitches_json)
     data = []
     for im, (x_ul, y_ul) in zip(imgs, meta):
         near = [p for p in pitches if abs(p["xs"].mean() - x_ul) < 400 and abs(p["ys"].mean() - y_ul) < 400]
@@ -305,9 +351,13 @@ def stage_train(a):
     random.shuffle(data)
     val, tr = data[:n_val], data[n_val:]
     print(f"train {len(tr)} chips, val {len(val)}; racket boxes in train: {sum((l == 1).sum() for _, _, l in tr)}")
-    model = build_model(pretrained=True)
+    if a.init:   # fine-tune: start from earlier weights (e.g. the LA model) instead of the generic backbone
+        model = build_model(pretrained=False)
+        model.load_state_dict(torch.load(a.init))
+    else:
+        model = build_model(pretrained=True)
     params = [p for p in model.parameters() if p.requires_grad]
-    opt = torch.optim.SGD(params, lr=0.003, momentum=0.9, weight_decay=1e-4)
+    opt = torch.optim.SGD(params, lr=a.lr, momentum=0.9, weight_decay=1e-4)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs)
     bs = 4
     for ep in range(a.epochs):
@@ -332,7 +382,7 @@ def stage_train(a):
             tot += float(loss.detach())
         sched.step()
         print(f"epoch {ep + 1}/{a.epochs} loss {tot / math.ceil(len(tr) / bs):.3f}", flush=True)
-        torch.save(model.state_dict(), CACHE / "model.pt")
+        torch.save(model.state_dict(), model_out)
     # quick chip-level check on the held-out 10% (random chips from the same area, not the Hawthorne test)
     model.eval()
     tp = fp = fn = 0
@@ -402,16 +452,6 @@ def context_of(cx, cy, ctx):
     return kinds[0] if kinds else "none"
 
 
-def load_known(tr):
-    """UTM points of OSM courts already extracted for the map (optional file)."""
-    import csv
-    if not KNOWN_NV.exists():
-        return []
-    rows = [(float(r["lon"]), float(r["lat"])) for r in csv.DictReader(open(KNOWN_NV, encoding="utf-8"))]
-    xs, ys = tr.transform([r[0] for r in rows], [r[1] for r in rows])
-    return list(zip(xs, ys))
-
-
 def stage_detect(a):
     import csv
     from collections import Counter
@@ -457,6 +497,7 @@ def stage_detect(a):
     gt = [g for g in gt if 0 <= (g[0][0] + g[0][2]) / 2 <= W and 0 <= (g[0][1] + g[0][3]) / 2 <= H]
     gt_r = [g for g in gt if g[1] == 1]
     print(f"OSM pitches in area: {len(gt)}; racket courts: {len(gt_r)} {dict(Counter(g[2] for g in gt_r))}")
+    by_sport = {}
 
     gap_px = SITE_GAP_M / RES
     osites = cluster_sites([g[0] for g in gt_r], gap_px)
@@ -468,6 +509,11 @@ def stage_detect(a):
             m = max(((iou(box, g[0]), k) for k, g in enumerate(gt_r) if k not in used), default=(0, -1))
             if m[0] >= 0.3:
                 tp += 1; used.add(m[1])
+        if thr == 0.5:   # recall by sport: do the misses sit in pickleball (small, often painted on tennis courts)?
+            for k, g in enumerate(gt_r):
+                s = by_sport.setdefault(g[2] or "?", [0, 0])
+                s[1] += 1
+                s[0] += k in used
         # site level: a detected site is right if one of its boxes overlaps an OSM court; an OSM site is found if any of its courts is overlapped
         dsites = cluster_sites([x[0] for x in d], gap_px)
         d_hit = sum(any(iou(d[i][0], g[0]) >= 0.1 for i in grp for g in gt_r) for grp in dsites)
@@ -476,6 +522,9 @@ def stage_detect(a):
                     "det_sites_on_osm": d_hit, "osm_sites": len(osites), "osm_sites_found": o_hit}
         print(f"score>={thr}: boxes {len(d)}, matched OSM {tp} (precision vs OSM {tp / max(1, len(d)):.2f}, recall {tp / max(1, len(gt_r)):.2f}); "
               f"sites: detected {len(dsites)}, on OSM courts {d_hit}; OSM sites {len(osites)}, found {o_hit}")
+
+    print("recall @0.5 by OSM sport tag: " + ", ".join(f"{k} {v[0]}/{v[1]}" for k, v in sorted(by_sport.items())))
+    res["recall_by_sport_0.5"] = by_sport
 
     # candidates: racket detections on no OSM pitch of any kind, merged into one row per site
     ctx = []
@@ -486,7 +535,7 @@ def stage_detect(a):
             xs, ys = tr.transform([p["lon"] for p in g], [p["lat"] for p in g])
             kind = e["tags"].get("leisure") or e["tags"].get("amenity") or e["tags"].get("landuse")
             ctx.append((min(xs), min(ys), max(xs), max(ys), kind))
-    known = load_known(tr)
+    known = [(p["xs"].mean(), p["ys"].mean()) for p in load_pitches(OUT / f"osm_pitches_{name}.json") if p["cls"] == 1]  # mapped racket courts in this area
     to_ll = to_wgs()
     cand = [d for d in dets if d[2] == 1 and d[1] >= a.min_score and not any(iou(d[0], g[0]) >= 0.1 for g in gt)]
     rows, groups = [], []
@@ -505,6 +554,10 @@ def stage_detect(a):
                                      "not in a mapped park/school (residential or unmapped land): may be a private yard, HOA or resort court, do NOT add to OSM without a public source"),
                      "status": "inferred", "sport": "unknown", "access": "unknown"})
         groups.append((bx, (x0, y0, x1, y1)))
+    if a.context_only:   # residential/unmapped candidates are mostly private yards or HOAs
+        keep = [i for i, r in enumerate(rows) if r["osm_context"] in PUBLIC_CTX]
+        print(f"--context-only: {len(keep)} of {len(rows)} sites are in a mapped park/school/sports area")
+        rows, groups = [rows[i] for i in keep], [groups[i] for i in keep]
     order = sorted(range(len(rows)), key=lambda i: -rows[i]["max_score"])
     rows, groups = [rows[i] for i in order], [groups[i] for i in order]
     crops = CACHE / f"crops_{name}"
@@ -536,16 +589,23 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sp = ap.add_subparsers(dest="stage", required=True)
     o = sp.add_parser("osm"); o.set_defaults(f=stage_osm)
-    o.add_argument("--train-area", action="store_true", help="also fetch the LA-basin training pitches")
+    o.add_argument("--train-area", action="store_true", help="also fetch the training pitches (--train NAME)")
     m = sp.add_parser("mosaic"); m.set_defaults(f=stage_mosaic)
     c = sp.add_parser("chips"); c.set_defaults(f=stage_chips)
     c.add_argument("--n-racket", type=int, default=450); c.add_argument("--n-basket", type=int, default=120)
     c.add_argument("--n-other", type=int, default=100); c.add_argument("--n-random", type=int, default=150)
     t = sp.add_parser("train"); t.set_defaults(f=stage_train)
     t.add_argument("--epochs", type=int, default=8); t.add_argument("--threads", type=int, default=8)
+    t.add_argument("--init", help="weights to fine-tune from (e.g. data/aerial/cache/model.pt, the LA model); use a lower --lr")
+    t.add_argument("--lr", type=float, default=0.003)
+    t.add_argument("--out", help="weights file to write (default model.pt for la, else model_<train>.pt)")
+    for q in (sp.choices["osm"], c, t):
+        q.add_argument("--train", default="la", help="training-area name; la = the LA basin (built in), another name needs --train-bbox S,W,N,E once")
+        q.add_argument("--train-bbox", help="S,W,N,E of a new training area (WGS84)")
     d = sp.add_parser("detect"); d.set_defaults(f=stage_detect)
     d.add_argument("--threads", type=int, default=8); d.add_argument("--min-score", type=float, default=0.5)
     d.add_argument("--model", help="weights file (default data/aerial/cache/model.pt)")
+    d.add_argument("--context-only", action="store_true", help="keep only candidates inside a mapped park/school/sports area")
     for q in (sp.choices["osm"], sp.choices["mosaic"], c, d):
         q.add_argument("--area", default="hawthorne", help="test-area name (files are keyed by it)")
         q.add_argument("--bbox", help="S,W,N,E of the test area (WGS84); built-in for hawthorne")

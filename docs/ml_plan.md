@@ -91,6 +91,12 @@ Same script, now with `--area NAME --bbox S,W,N,E`, run on a 5.4 x 6.7 km area i
 - **Verdict:** at this setting the Hawthorne model is not good enough for Las Vegas as is: it finds under half of mapped courts and about 2 residential candidates per 36 km2. If continued, fine-tune on Las Vegas chips outside the test area first (not done), and check recall by sport. Everything stays `inferred`; nothing is in seeds, `venues.json` or the map.
 - Output: `docs/aerial_candidates_lv89123.csv`. Reproduce: `ingestion/oneoff/aerial_pilot.py osm|mosaic|detect --area lv89123 --bbox 36.01,-115.17,36.07,-115.11`.
 
+### Downey/Norwalk and Elk Grove rescans (2026-10-27)
+The script now picks the UTM zone from the bbox (10N or 11N; a bbox across 120 W is refused), takes `--train NAME --train-bbox` for a regional training set, `train --init model.pt --lr` to fine-tune, `detect --context-only`, and prints recall by OSM sport.
+- **Downey/Norwalk (LA model, no tuning):** recall 0.82, precision 0.52 vs OSM (40 tennis courts); 12 candidates on no OSM pitch, the 3 in a park/school were a pool, a duplicate of Downey Tennis Center and an unconfirmable school court row. Nothing to add.
+- **Elk Grove (Sacramento), zone 10N:** LA model recall 0.27 (tennis 13/34, pickleball 0/14); after fine-tuning on 738 Sacramento chips (4 epochs) recall 0.29 (pickleball 1/14), no real gain. The 2 park/school candidates were a roof and a pool.
+- **Verdict:** stop rule hit (fewer than 3 confirmed venues). Not worth scaling: it cannot see pickleball, and tuning does not fix the tennis misses. New courts come from city pages and community reports. Output: `docs/aerial_candidates_downey_norwalk.csv`, `docs/aerial_candidates_elk_grove.csv`.
+
 ### Manual imagery sweep (2026-10-18, Sherman Oaks / Van Nuys area; write-up removed, in git history)
 44 views on Esri World Imagery z19 (viewing only): painted court floors are easy to see, walls are not (a 16 ft wall is a 1-2 pixel line), and 5 of the first 12 views were private backyard courts. So no blanket sweep for walls; the cheap routes are the owner's Google Maps sightings (measure on Esri, add a `reported` row), city facility pages, and OSM edits upstream (ADR 0011).
 
