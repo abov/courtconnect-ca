@@ -2,7 +2,7 @@
 
 **Find where to play, who to play with, and where to watch, for every racket sport in California and Nevada** ("CalNeva", [ADR 0014](docs/decisions/0014-calneva-scope.md)).
 
-**[Open the live map](https://abov.github.io/courtconnect-ca/)**
+**[Open the live map](https://abov.github.io/courtconnect-ca/)** · [Data model and lineage (dbt docs)](https://abov.github.io/courtconnect-ca/dbt-docs/)
 
 | Play | Watch |
 |---|---|
