@@ -1568,3 +1568,1573 @@ date,region,city,sport_name,venues,courts,public_venues,members_only_venues
 2026-10-23,NV,Winnemucca,Tennis,1,2,0,0
 2026-10-23,NV,Yerington,Tennis,1,2,0,0
 2026-10-23,NV,Zephyr Cove,Tennis,1,2,0,0
+2026-10-29,CA,1-WS-1,Pickleball,1,1,0,1
+2026-10-29,CA,3-YL-2,Tennis,2,2,0,1
+2026-10-29,CA,4S Ranch,Pickleball,1,20,0,0
+2026-10-29,CA,4S Ranch,Tennis,1,10,0,0
+2026-10-29,CA,ACAMPO,Tennis,1,1,0,1
+2026-10-29,CA,ANDERSON,Tennis,1,4,0,0
+2026-10-29,CA,ARBUCKLE,Tennis,1,6,0,0
+2026-10-29,CA,ARCATA,Pickleball,1,1,1,0
+2026-10-29,CA,ARCATA,Table Tennis,1,1,1,0
+2026-10-29,CA,ARCATA,Tennis,2,6,2,0
+2026-10-29,CA,ATWATER,Tennis,5,22,0,0
+2026-10-29,CA,AUBERRY,Tennis,1,1,0,0
+2026-10-29,CA,AUBURN,Pickleball,1,6,0,0
+2026-10-29,CA,AUBURN,Tennis,8,22,0,0
+2026-10-29,CA,AVENAL,Tennis,1,4,0,0
+2026-10-29,CA,AVERY,Tennis,1,3,0,0
+2026-10-29,CA,AVILA BEACH,Pickleball,1,2,0,0
+2026-10-29,CA,AVILA BEACH,Tennis,2,4,0,1
+2026-10-29,CA,Acton,Tennis,1,2,0,0
+2026-10-29,CA,Adelanto,Tennis,1,8,0,0
+2026-10-29,CA,Agoura Hills,Pickleball,1,1,0,0
+2026-10-29,CA,Agoura Hills,Racquetball,1,0,0,1
+2026-10-29,CA,Agoura Hills,Tennis,10,24,0,2
+2026-10-29,CA,Alameda,Pickleball,4,3,0,0
+2026-10-29,CA,Alameda,Table Tennis,1,0,0,0
+2026-10-29,CA,Alameda,Tennis,17,68,4,0
+2026-10-29,CA,Alamo,Pickleball,1,1,0,0
+2026-10-29,CA,Alamo,Tennis,13,26,0,8
+2026-10-29,CA,Albany,Tennis,5,7,0,1
+2026-10-29,CA,Alhambra,Pickleball,1,3,0,0
+2026-10-29,CA,Alhambra,Racquetball,1,0,0,1
+2026-10-29,CA,Alhambra,Tennis,10,30,1,2
+2026-10-29,CA,Aliso Viejo,Racquetball,1,0,0,0
+2026-10-29,CA,Aliso Viejo,Squash,1,0,0,0
+2026-10-29,CA,Aliso Viejo,Tennis,13,26,0,2
+2026-10-29,CA,Alpaugh,Tennis,1,2,0,0
+2026-10-29,CA,Alpine,Tennis,2,2,0,0
+2026-10-29,CA,Altadena,Pickleball,2,5,0,1
+2026-10-29,CA,Altadena,Tennis,5,6,0,1
+2026-10-29,CA,American Canyon,Pickleball,1,2,0,0
+2026-10-29,CA,American Canyon,Tennis,4,10,0,0
+2026-10-29,CA,Anaheim,Badminton,1,0,0,0
+2026-10-29,CA,Anaheim,Pickleball,5,14,2,1
+2026-10-29,CA,Anaheim,Racquetball,1,0,0,0
+2026-10-29,CA,Anaheim,Table Tennis,4,0,3,0
+2026-10-29,CA,Anaheim,Tennis,24,103,1,2
+2026-10-29,CA,Anaheim Hills,Racquetball,1,0,0,1
+2026-10-29,CA,Angwin,Tennis,1,6,0,0
+2026-10-29,CA,Antelope,Tennis,7,19,2,0
+2026-10-29,CA,Antioch,Tennis,9,29,0,0
+2026-10-29,CA,Apple Valley,Tennis,7,22,0,2
+2026-10-29,CA,Aptos,Pickleball,1,1,0,1
+2026-10-29,CA,Aptos,Tennis,16,50,0,3
+2026-10-29,CA,Arcadia,Badminton,1,0,0,0
+2026-10-29,CA,Arcadia,Pickleball,20,28,0,18
+2026-10-29,CA,Arcadia,Tennis,76,131,2,66
+2026-10-29,CA,Arroyo Grande,Tennis,41,53,0,0
+2026-10-29,CA,Atascadero,Pickleball,1,0,0,0
+2026-10-29,CA,Atascadero,Tennis,17,21,0,0
+2026-10-29,CA,Atherton,Pickleball,4,4,0,0
+2026-10-29,CA,Atherton,Tennis,62,119,0,11
+2026-10-29,CA,Auburn Lake Trails,Pickleball,1,4,0,0
+2026-10-29,CA,Auburn Lake Trails,Tennis,1,1,0,0
+2026-10-29,CA,Avalon,Pickleball,1,4,0,0
+2026-10-29,CA,Avalon,Tennis,6,7,0,0
+2026-10-29,CA,Azusa,Tennis,5,22,0,0
+2026-10-29,CA,BALLARD,Tennis,3,3,0,0
+2026-10-29,CA,BALLICO,Tennis,1,1,0,0
+2026-10-29,CA,BANNING,Pickleball,1,6,0,0
+2026-10-29,CA,BANNING,Tennis,8,28,1,0
+2026-10-29,CA,BASS LAKE,Tennis,1,2,0,1
+2026-10-29,CA,BEALE AFB,Tennis,2,5,0,0
+2026-10-29,CA,BEAUMONT,Pickleball,2,5,0,0
+2026-10-29,CA,BEAUMONT,Tennis,9,33,0,0
+2026-10-29,CA,BELMONT,Badminton,1,0,1,0
+2026-10-29,CA,BELMONT,Pickleball,2,9,1,0
+2026-10-29,CA,BELMONT,Tennis,7,16,1,0
+2026-10-29,CA,BEN LOMOND,Tennis,2,4,0,0
+2026-10-29,CA,BENBOW,Tennis,1,1,0,0
+2026-10-29,CA,BIGGS,Tennis,1,2,0,0
+2026-10-29,CA,BISHOP,Tennis,3,8,0,0
+2026-10-29,CA,BLUE LAKE,Tennis,1,2,0,0
+2026-10-29,CA,BOLINAS,Tennis,1,1,0,0
+2026-10-29,CA,BONNY DOON,Tennis,1,1,0,0
+2026-10-29,CA,BOULDER CREEK,Tennis,7,14,0,0
+2026-10-29,CA,BRISBANE,Tennis,2,3,0,0
+2026-10-29,CA,BUELLTON,Tennis,1,1,0,0
+2026-10-29,CA,BUENA PARK,Pickleball,1,1,0,0
+2026-10-29,CA,BUENA PARK,Tennis,8,26,0,0
+2026-10-29,CA,BURNEY,Tennis,1,1,0,0
+2026-10-29,CA,Bakersfield,Badminton,1,0,0,1
+2026-10-29,CA,Bakersfield,Basque Pelota: Frontenis,1,1,0,0
+2026-10-29,CA,Bakersfield,Basque Pelota: Grand Chistera,1,1,0,0
+2026-10-29,CA,Bakersfield,Basque Pelota: Jai Alai,1,1,0,0
+2026-10-29,CA,Bakersfield,Basque Pelota: Joko Garbi,1,1,0,0
+2026-10-29,CA,Bakersfield,Basque Pelota: Pala Corta,1,1,0,0
+2026-10-29,CA,Bakersfield,Basque Pelota: Paleta Cuero,1,1,0,0
+2026-10-29,CA,Bakersfield,Basque Pelota: Paleta Goma,1,1,0,0
+2026-10-29,CA,Bakersfield,Basque Pelota: Xare,1,1,0,0
+2026-10-29,CA,Bakersfield,Pickleball,7,23,0,2
+2026-10-29,CA,Bakersfield,Tennis,48,205,2,7
+2026-10-29,CA,Baldwin Park,Racquetball,1,0,0,1
+2026-10-29,CA,Baldwin Park,Tennis,2,10,0,0
+2026-10-29,CA,Barstow,Tennis,3,9,0,1
+2026-10-29,CA,Bay Point,Tennis,1,4,0,0
+2026-10-29,CA,Bear Valley,Tennis,1,4,0,0
+2026-10-29,CA,Beatrice,Tennis,1,6,0,0
+2026-10-29,CA,Bell Gardens,Tennis,4,11,0,0
+2026-10-29,CA,Bellflower,Tennis,3,18,1,0
+2026-10-29,CA,Benicia,Pickleball,2,1,0,0
+2026-10-29,CA,Benicia,Tennis,5,13,0,0
+2026-10-29,CA,Berkeley,Pickleball,5,9,0,2
+2026-10-29,CA,Berkeley,Racquetball,1,0,0,1
+2026-10-29,CA,Berkeley,Squash,1,0,0,1
+2026-10-29,CA,Berkeley,Table Tennis,3,0,0,1
+2026-10-29,CA,Berkeley,Tennis,21,73,1,6
+2026-10-29,CA,Beverly Hills,Badminton,2,2,0,0
+2026-10-29,CA,Beverly Hills,Pickleball,5,6,0,0
+2026-10-29,CA,Beverly Hills,Tennis,149,267,0,42
+2026-10-29,CA,Big Bear City,Pickleball,1,8,0,0
+2026-10-29,CA,Big Bear City,Tennis,2,9,0,0
+2026-10-29,CA,Big Bear Lake,Tennis,13,23,0,0
+2026-10-29,CA,Bloomington,Tennis,1,3,0,0
+2026-10-29,CA,Blue Jay,Tennis,1,6,0,0
+2026-10-29,CA,Blythe,Tennis,1,2,0,0
+2026-10-29,CA,Bodega,Tennis,1,1,0,0
+2026-10-29,CA,Bodega Bay,Tennis,2,3,0,2
+2026-10-29,CA,Bonita,Pickleball,1,1,0,0
+2026-10-29,CA,Bonita,Tennis,4,10,1,0
+2026-10-29,CA,Bonsall,Tennis,1,1,0,0
+2026-10-29,CA,Boonville,Tennis,1,3,0,0
+2026-10-29,CA,Boron,Tennis,2,5,0,0
+2026-10-29,CA,Borrego Springs,Pickleball,3,18,0,0
+2026-10-29,CA,Borrego Springs,Tennis,10,22,0,0
+2026-10-29,CA,Brawley,Tennis,2,10,0,0
+2026-10-29,CA,Brea,Pickleball,2,3,0,0
+2026-10-29,CA,Brea,Tennis,15,39,0,0
+2026-10-29,CA,Brentwood,Pickleball,1,1,0,0
+2026-10-29,CA,Brentwood,Tennis,7,26,0,0
+2026-10-29,CA,Bridgeport,Tennis,1,2,0,0
+2026-10-29,CA,Brooks,Tennis,1,1,0,0
+2026-10-29,CA,Burbank,Pickleball,1,1,0,0
+2026-10-29,CA,Burbank,Squash,1,1,0,0
+2026-10-29,CA,Burbank,Table Tennis,1,2,0,0
+2026-10-29,CA,Burbank,Tennis,9,36,0,0
+2026-10-29,CA,Burlingame,Badminton,1,0,0,0
+2026-10-29,CA,Burlingame,Pickleball,1,0,0,1
+2026-10-29,CA,Burlingame,Table Tennis,3,1,1,0
+2026-10-29,CA,Burlingame,Tennis,10,35,0,1
+2026-10-29,CA,CALIFORNIA CITY,Tennis,1,2,0,0
+2026-10-29,CA,CALIMESA,Tennis,1,1,0,0
+2026-10-29,CA,CAPITOLA,Tennis,1,4,0,0
+2026-10-29,CA,CARMEL-BY-THE-SEA,Tennis,1,2,0,0
+2026-10-29,CA,CARNELIAN BAY,Pickleball,1,1,0,0
+2026-10-29,CA,CARNELIAN BAY,Tennis,4,11,0,0
+2026-10-29,CA,CARUTHERS,Tennis,1,7,0,0
+2026-10-29,CA,CASSEL,Tennis,1,1,0,1
+2026-10-29,CA,CAYUCOS,Tennis,3,4,0,0
+2026-10-29,CA,CERES,Pickleball,1,1,0,1
+2026-10-29,CA,CERES,Tennis,5,18,0,0
+2026-10-29,CA,CHESTER,Pickleball,1,4,0,0
+2026-10-29,CA,CHESTER,Tennis,1,1,0,0
+2026-10-29,CA,CHOWCHILLA,Tennis,1,7,0,0
+2026-10-29,CA,CITY OF ANGELS,Tennis,1,5,0,0
+2026-10-29,CA,CITY OF MARYSVILLE,Tennis,1,2,0,1
+2026-10-29,CA,CITY OF SHASTA LAKE,Pickleball,1,6,0,0
+2026-10-29,CA,CITY OF SHASTA LAKE,Tennis,2,5,0,0
+2026-10-29,CA,CLEARLAKE,Tennis,1,1,1,0
+2026-10-29,CA,COACHELLA,Badminton,1,4,0,0
+2026-10-29,CA,COACHELLA,Tennis,4,9,0,0
+2026-10-29,CA,COALINGA,Pickleball,1,2,0,0
+2026-10-29,CA,COARSEGOLD,Tennis,1,2,0,0
+2026-10-29,CA,CORTE MADERA,Tennis,5,7,0,3
+2026-10-29,CA,COTTONWOOD,Tennis,1,4,0,0
+2026-10-29,CA,CRESCENT CITY,Pickleball,1,4,0,0
+2026-10-29,CA,CRESCENT CITY,Tennis,3,6,0,1
+2026-10-29,CA,CRESTON,Tennis,2,2,0,0
+2026-10-29,CA,Calabasas,Badminton,1,1,0,1
+2026-10-29,CA,Calabasas,Pickleball,8,23,0,0
+2026-10-29,CA,Calabasas,Tennis,67,113,0,8
+2026-10-29,CA,Calexico,Tennis,3,10,0,0
+2026-10-29,CA,Calistoga,Pickleball,3,3,0,0
+2026-10-29,CA,Calistoga,Tennis,20,23,0,0
+2026-10-29,CA,Calpine,Tennis,1,1,0,0
+2026-10-29,CA,Camarillo,Pickleball,5,15,0,0
+2026-10-29,CA,Camarillo,Tennis,26,55,1,1
+2026-10-29,CA,Cambria,Pickleball,1,0,0,0
+2026-10-29,CA,Cambria,Tennis,3,2,0,0
+2026-10-29,CA,Cameron Park,Pickleball,1,8,1,0
+2026-10-29,CA,Cameron Park,Tennis,5,12,1,0
+2026-10-29,CA,Campbell,Badminton,1,0,0,0
+2026-10-29,CA,Campbell,Pickleball,3,13,0,0
+2026-10-29,CA,Campbell,Tennis,6,11,0,0
+2026-10-29,CA,Canoga Park,Table Tennis,1,1,0,0
+2026-10-29,CA,Canoga Park,Tennis,4,8,0,0
+2026-10-29,CA,Canyon Country,Pickleball,1,1,1,0
+2026-10-29,CA,Canyon Country,Tennis,7,19,1,3
+2026-10-29,CA,Canyon Lake,Pickleball,2,1,0,1
+2026-10-29,CA,Canyon Lake,Tennis,1,6,0,0
+2026-10-29,CA,Cardiff by the Sea,Tennis,1,1,1,0
+2026-10-29,CA,Carlsbad,Crossminton,1,0,0,0
+2026-10-29,CA,Carlsbad,Pickleball,8,15,1,2
+2026-10-29,CA,Carlsbad,Tennis,47,123,5,5
+2026-10-29,CA,Carmel,Tennis,24,57,0,9
+2026-10-29,CA,Carmel Valley,Tennis,27,36,1,16
+2026-10-29,CA,Carmichael,Pickleball,4,7,1,1
+2026-10-29,CA,Carmichael,Tennis,13,24,1,3
+2026-10-29,CA,Carpinteria,Pickleball,1,2,0,0
+2026-10-29,CA,Carpinteria,Tennis,5,10,1,1
+2026-10-29,CA,Carson,Padel,1,4,1,0
+2026-10-29,CA,Carson,Pickleball,2,16,1,0
+2026-10-29,CA,Carson,Tennis,9,35,0,0
+2026-10-29,CA,Castaic,Tennis,2,7,0,0
+2026-10-29,CA,Castro Valley,Pickleball,1,1,0,0
+2026-10-29,CA,Castro Valley,Tennis,12,30,0,0
+2026-10-29,CA,Cathedral City,Pickleball,4,31,0,0
+2026-10-29,CA,Cathedral City,Tennis,17,48,0,0
+2026-10-29,CA,Cazadero,Tennis,1,1,0,0
+2026-10-29,CA,Cerritos,Pickleball,1,10,0,0
+2026-10-29,CA,Cerritos,Racquetball,1,0,0,1
+2026-10-29,CA,Cerritos,Tennis,10,53,0,0
+2026-10-29,CA,Chatsworth,Badminton,1,1,0,0
+2026-10-29,CA,Chatsworth,Pickleball,1,1,1,0
+2026-10-29,CA,Chatsworth,Tennis,28,99,1,3
+2026-10-29,CA,Chico,Pickleball,5,34,0,1
+2026-10-29,CA,Chico,Table Tennis,5,5,0,3
+2026-10-29,CA,Chico,Tennis,18,47,0,9
+2026-10-29,CA,Chino,Badminton,1,1,0,0
+2026-10-29,CA,Chino,Basque Pelota: Frontenis,2,2,0,1
+2026-10-29,CA,Chino,Basque Pelota: Grand Chistera,2,2,0,1
+2026-10-29,CA,Chino,Basque Pelota: Jai Alai,2,2,0,1
+2026-10-29,CA,Chino,Basque Pelota: Joko Garbi,2,2,0,1
+2026-10-29,CA,Chino,Basque Pelota: Pala Corta,2,2,0,1
+2026-10-29,CA,Chino,Basque Pelota: Paleta Cuero,2,2,0,1
+2026-10-29,CA,Chino,Basque Pelota: Paleta Goma,2,2,0,1
+2026-10-29,CA,Chino,Basque Pelota: Xare,2,2,0,1
+2026-10-29,CA,Chino,Table Tennis,1,1,0,0
+2026-10-29,CA,Chino,Tennis,11,29,1,2
+2026-10-29,CA,Chino Hills,Pickleball,1,1,0,0
+2026-10-29,CA,Chino Hills,Tennis,9,24,0,1
+2026-10-29,CA,Chula Vista,Padel,1,3,1,0
+2026-10-29,CA,Chula Vista,Pickleball,4,8,1,0
+2026-10-29,CA,Chula Vista,Racquetball,1,0,0,1
+2026-10-29,CA,Chula Vista,Tennis,32,91,13,1
+2026-10-29,CA,Citrus Heights,Pickleball,4,15,4,0
+2026-10-29,CA,Citrus Heights,Tennis,11,20,5,0
+2026-10-29,CA,Claremont,Pickleball,2,13,0,0
+2026-10-29,CA,Claremont,Tennis,18,79,2,2
+2026-10-29,CA,Clarksburg,Tennis,1,2,0,0
+2026-10-29,CA,Cloverdale,Tennis,4,9,0,0
+2026-10-29,CA,Clovis,Tennis,7,57,0,1
+2026-10-29,CA,Colfax,Tennis,1,6,0,0
+2026-10-29,CA,Colton,Tennis,4,12,0,0
+2026-10-29,CA,Colusa,Tennis,3,8,0,0
+2026-10-29,CA,Commerce,Racquetball,1,0,1,0
+2026-10-29,CA,Commerce,Tennis,1,1,1,0
+2026-10-29,CA,Compton,Tennis,6,24,0,0
+2026-10-29,CA,Concord,Pickleball,7,30,0,0
+2026-10-29,CA,Concord,Tennis,13,44,1,0
+2026-10-29,CA,Copperopolis,Tennis,1,0,0,0
+2026-10-29,CA,Corcoran,Tennis,7,11,0,1
+2026-10-29,CA,Corning,Tennis,3,9,0,0
+2026-10-29,CA,Corona,Pickleball,7,24,2,1
+2026-10-29,CA,Corona,Tennis,28,80,7,2
+2026-10-29,CA,Coronado,Pickleball,4,21,0,0
+2026-10-29,CA,Coronado,Tennis,10,37,0,0
+2026-10-29,CA,Corral De Tierra,Pickleball,1,0,0,1
+2026-10-29,CA,Corral De Tierra,Tennis,1,13,0,1
+2026-10-29,CA,Costa Mesa,Pickleball,13,45,1,2
+2026-10-29,CA,Costa Mesa,Racquetball,1,0,0,1
+2026-10-29,CA,Costa Mesa,Tennis,23,69,0,3
+2026-10-29,CA,Cotati,Tennis,2,3,0,0
+2026-10-29,CA,Coto de Caza,Tennis,3,13,0,2
+2026-10-29,CA,Covina,Pickleball,1,1,1,0
+2026-10-29,CA,Covina,Pop Tennis,1,1,1,0
+2026-10-29,CA,Covina,Tennis,6,28,1,0
+2026-10-29,CA,Crestline,Tennis,1,1,0,0
+2026-10-29,CA,Crockett,Tennis,1,2,0,0
+2026-10-29,CA,Crowley Lake,Tennis,1,1,0,0
+2026-10-29,CA,Culver City,Padel,1,3,1,0
+2026-10-29,CA,Culver City,Pickleball,1,1,0,1
+2026-10-29,CA,Culver City,Pop Tennis,3,9,3,0
+2026-10-29,CA,Culver City,Tennis,10,23,3,2
+2026-10-29,CA,Cupertino,Badminton,1,0,0,0
+2026-10-29,CA,Cupertino,Pickleball,3,16,1,1
+2026-10-29,CA,Cupertino,Table Tennis,3,3,1,0
+2026-10-29,CA,Cupertino,Tennis,24,88,0,4
+2026-10-29,CA,Cypress,Pickleball,4,27,1,0
+2026-10-29,CA,Cypress,Tennis,8,46,1,2
+2026-10-29,CA,DALY CITY,Tennis,9,33,0,0
+2026-10-29,CA,DAVENPORT,Tennis,1,1,0,0
+2026-10-29,CA,DEATH VALLEY,Tennis,2,3,0,0
+2026-10-29,CA,DENAIR,Tennis,2,5,0,0
+2026-10-29,CA,DIABLO GRANDE,Tennis,1,1,0,0
+2026-10-29,CA,DORRIS,Tennis,1,2,0,0
+2026-10-29,CA,DOS PALOS,Tennis,1,4,0,0
+2026-10-29,CA,DUNSMUIR,Tennis,2,3,0,0
+2026-10-29,CA,DURHAM,Tennis,2,3,1,0
+2026-10-29,CA,DUTCH FLAT,Tennis,2,2,0,0
+2026-10-29,CA,Dana Point,Pickleball,1,4,0,0
+2026-10-29,CA,Dana Point,Tennis,10,33,0,0
+2026-10-29,CA,Danville,Pickleball,4,9,1,1
+2026-10-29,CA,Danville,Tennis,30,84,2,8
+2026-10-29,CA,Davis,Badminton,1,16,0,1
+2026-10-29,CA,Davis,Pickleball,1,4,0,0
+2026-10-29,CA,Davis,Racquetball,1,8,0,1
+2026-10-29,CA,Davis,Squash,1,4,0,1
+2026-10-29,CA,Davis,Table Tennis,2,4,0,1
+2026-10-29,CA,Davis,Tennis,21,62,0,1
+2026-10-29,CA,Del Mar,Pickleball,2,5,0,0
+2026-10-29,CA,Del Mar,Tennis,34,52,1,2
+2026-10-29,CA,Delano,Tennis,4,28,0,0
+2026-10-29,CA,Descanso,Tennis,2,2,0,1
+2026-10-29,CA,Desert Center,Tennis,2,5,0,0
+2026-10-29,CA,Desert Hot Springs,Pickleball,3,9,1,0
+2026-10-29,CA,Desert Hot Springs,Tennis,12,21,0,1
+2026-10-29,CA,Diablo,Tennis,4,11,0,2
+2026-10-29,CA,Diamond Bar,Pickleball,2,5,0,0
+2026-10-29,CA,Diamond Bar,Racquetball,1,0,0,1
+2026-10-29,CA,Diamond Bar,Tennis,61,101,0,7
+2026-10-29,CA,Dinuba,Tennis,4,10,0,0
+2026-10-29,CA,Discovery Bay,Pickleball,1,6,0,0
+2026-10-29,CA,Discovery Bay,Tennis,3,11,0,0
+2026-10-29,CA,Dixon,Pickleball,2,5,0,0
+2026-10-29,CA,Dixon,Tennis,5,16,0,0
+2026-10-29,CA,Downey,Racquetball,1,0,0,1
+2026-10-29,CA,Downey,Tennis,6,30,0,1
+2026-10-29,CA,Downieville,Tennis,1,1,0,0
+2026-10-29,CA,Duarte,Tennis,5,7,0,0
+2026-10-29,CA,Dublin,Badminton,1,0,0,0
+2026-10-29,CA,Dublin,Tennis,11,25,1,0
+2026-10-29,CA,EDWARDS,Tennis,4,9,0,0
+2026-10-29,CA,EL PORTAL,Tennis,1,2,0,0
+2026-10-29,CA,ELK,Tennis,1,1,0,0
+2026-10-29,CA,EMIGRANT GAP,Tennis,1,1,0,1
+2026-10-29,CA,ESCALON,Tennis,2,7,0,0
+2026-10-29,CA,ETNA,Pickleball,1,8,0,0
+2026-10-29,CA,ETNA,Tennis,1,2,0,0
+2026-10-29,CA,Earp,Tennis,1,1,0,0
+2026-10-29,CA,East Los Angeles,Tennis,1,2,0,0
+2026-10-29,CA,East Palo Alto,Pickleball,2,4,0,1
+2026-10-29,CA,East Palo Alto,Tennis,1,4,0,0
+2026-10-29,CA,East Quincy,Tennis,1,4,0,0
+2026-10-29,CA,East Tulare County,Pickleball,1,1,0,1
+2026-10-29,CA,East Tulare County,Tennis,1,4,0,1
+2026-10-29,CA,Eastvale,Racquetball,1,0,0,1
+2026-10-29,CA,Eastvale,Tennis,4,6,0,1
+2026-10-29,CA,El Cajon,Pickleball,3,21,1,0
+2026-10-29,CA,El Cajon,Tennis,17,82,1,1
+2026-10-29,CA,El Centro,Tennis,4,22,0,0
+2026-10-29,CA,El Cerrito,Tennis,9,19,0,1
+2026-10-29,CA,El Dorado,Tennis,1,7,0,0
+2026-10-29,CA,El Dorado County,Pickleball,1,2,0,0
+2026-10-29,CA,El Dorado County,Tennis,8,12,0,1
+2026-10-29,CA,El Dorado Hills,Pickleball,1,1,0,0
+2026-10-29,CA,El Dorado Hills,Tennis,3,4,0,0
+2026-10-29,CA,El Macero,Pickleball,1,1,0,0
+2026-10-29,CA,El Macero,Tennis,1,1,0,0
+2026-10-29,CA,El Monte,Badminton,2,0,0,0
+2026-10-29,CA,El Monte,Table Tennis,1,0,0,0
+2026-10-29,CA,El Monte,Tennis,2,14,0,0
+2026-10-29,CA,El Segundo,Pickleball,3,21,2,0
+2026-10-29,CA,El Segundo,Pop Tennis,1,1,1,0
+2026-10-29,CA,El Segundo,Table Tennis,1,2,1,0
+2026-10-29,CA,El Segundo,Tennis,4,14,1,0
+2026-10-29,CA,El Sobrante,Tennis,1,6,0,0
+2026-10-29,CA,Elk Grove,Pickleball,12,45,9,0
+2026-10-29,CA,Elk Grove,Table Tennis,1,0,1,0
+2026-10-29,CA,Elk Grove,Tennis,28,115,11,0
+2026-10-29,CA,Emerald Bay,Tennis,2,4,0,0
+2026-10-29,CA,Emeryville,Badminton,1,0,0,0
+2026-10-29,CA,Emeryville,Table Tennis,1,1,0,0
+2026-10-29,CA,Emeryville,Tennis,2,6,0,0
+2026-10-29,CA,Encinitas,Pickleball,10,31,1,2
+2026-10-29,CA,Encinitas,Racquetball,1,0,0,1
+2026-10-29,CA,Encinitas,Tennis,55,77,1,3
+2026-10-29,CA,Encino,Tennis,33,77,0,20
+2026-10-29,CA,Escondido,Badminton,1,0,1,0
+2026-10-29,CA,Escondido,Pickleball,8,23,4,1
+2026-10-29,CA,Escondido,Racquetball,1,0,0,1
+2026-10-29,CA,Escondido,Tennis,15,56,3,2
+2026-10-29,CA,Eureka,Tennis,6,16,1,0
+2026-10-29,CA,Exeter,Pickleball,1,4,1,0
+2026-10-29,CA,Exeter,Tennis,2,10,1,0
+2026-10-29,CA,FELTON,Tennis,1,6,0,0
+2026-10-29,CA,FERNDALE,Tennis,1,4,0,0
+2026-10-29,CA,FIDDLETOWN,Tennis,1,1,0,0
+2026-10-29,CA,FIREBAUGH,Tennis,1,6,0,0
+2026-10-29,CA,FORESTHILL,Tennis,1,2,0,0
+2026-10-29,CA,FORT BRAGG,Pickleball,1,2,0,0
+2026-10-29,CA,FORT BRAGG,Tennis,7,16,0,1
+2026-10-29,CA,FORT JONES,Tennis,1,2,0,1
+2026-10-29,CA,FORTUNA,Tennis,1,6,0,0
+2026-10-29,CA,FRENCH CAMP,Tennis,1,1,0,0
+2026-10-29,CA,FRIANT,Tennis,3,4,0,0
+2026-10-29,CA,Fair Oaks,Pickleball,3,11,0,2
+2026-10-29,CA,Fair Oaks,Tennis,10,36,0,3
+2026-10-29,CA,Fairfax,Tennis,2,9,0,1
+2026-10-29,CA,Fairfield,Tennis,31,111,0,0
+2026-10-29,CA,Fallbrook,Pickleball,1,0,0,0
+2026-10-29,CA,Fallbrook,Tennis,11,17,0,1
+2026-10-29,CA,Farmersville,Tennis,1,1,0,0
+2026-10-29,CA,Fawnskin,Tennis,2,2,0,0
+2026-10-29,CA,Fillmore,Tennis,2,3,0,0
+2026-10-29,CA,Folsom,Pickleball,2,11,2,0
+2026-10-29,CA,Folsom,Table Tennis,1,4,1,0
+2026-10-29,CA,Folsom,Tennis,27,90,4,1
+2026-10-29,CA,Fontana,Pickleball,2,14,0,0
+2026-10-29,CA,Fontana,Racquetball,4,8,0,3
+2026-10-29,CA,Fontana,Tennis,16,44,5,2
+2026-10-29,CA,Forest Falls,Tennis,1,1,0,0
+2026-10-29,CA,Forestville,Tennis,1,4,0,0
+2026-10-29,CA,Fort Hunter Liggett,Tennis,2,3,0,0
+2026-10-29,CA,Fort Irwin,Tennis,5,8,0,0
+2026-10-29,CA,Foster City,Pickleball,2,3,0,0
+2026-10-29,CA,Foster City,Tennis,19,30,3,1
+2026-10-29,CA,Fountain Valley,Badminton,1,3,1,0
+2026-10-29,CA,Fountain Valley,Pickleball,4,42,2,0
+2026-10-29,CA,Fountain Valley,Racquetball,2,1,1,1
+2026-10-29,CA,Fountain Valley,Table Tennis,1,0,0,0
+2026-10-29,CA,Fountain Valley,Tennis,9,53,1,0
+2026-10-29,CA,Fowler,Tennis,1,6,0,0
+2026-10-29,CA,Frazier Park,Tennis,1,1,0,0
+2026-10-29,CA,Fremont,Badminton,3,0,0,0
+2026-10-29,CA,Fremont,Pickleball,2,10,0,0
+2026-10-29,CA,Fremont,Racquetball,1,0,0,1
+2026-10-29,CA,Fremont,Squash,1,0,0,0
+2026-10-29,CA,Fremont,Table Tennis,3,0,0,0
+2026-10-29,CA,Fremont,Tennis,41,141,0,3
+2026-10-29,CA,Fresno,Badminton,2,0,0,0
+2026-10-29,CA,Fresno,Pickleball,4,14,0,1
+2026-10-29,CA,Fresno,Racquetball,1,2,0,1
+2026-10-29,CA,Fresno,Table Tennis,1,0,0,1
+2026-10-29,CA,Fresno,Tennis,73,288,0,4
+2026-10-29,CA,Fresno County,Tennis,1,1,0,0
+2026-10-29,CA,Fullerton,Badminton,1,9,0,1
+2026-10-29,CA,Fullerton,Pickleball,3,12,1,1
+2026-10-29,CA,Fullerton,Racquetball,3,2,1,1
+2026-10-29,CA,Fullerton,Table Tennis,3,1,0,0
+2026-10-29,CA,Fullerton,Tennis,24,84,1,1
+2026-10-29,CA,GALT,Tennis,3,19,0,0
+2026-10-29,CA,GARBERVILLE,Tennis,1,2,0,0
+2026-10-29,CA,GASQUET,Pickleball,1,1,0,0
+2026-10-29,CA,GREENVILLE,Tennis,1,2,0,0
+2026-10-29,CA,GRIDLEY,Tennis,1,2,1,0
+2026-10-29,CA,GRIZZLY RANCH,Tennis,1,2,0,0
+2026-10-29,CA,GROVELAND,Pickleball,1,6,0,0
+2026-10-29,CA,GROVELAND,Tennis,1,2,0,0
+2026-10-29,CA,GROVER BEACH,Tennis,3,7,0,0
+2026-10-29,CA,GUALALA,Tennis,1,2,0,0
+2026-10-29,CA,Garden Grove,Badminton,1,0,1,0
+2026-10-29,CA,Garden Grove,Pickleball,5,17,1,0
+2026-10-29,CA,Garden Grove,Racquetball,1,0,0,1
+2026-10-29,CA,Garden Grove,Tennis,12,53,0,0
+2026-10-29,CA,Gardena,Tennis,7,20,0,0
+2026-10-29,CA,Geyserville,Pickleball,1,1,0,0
+2026-10-29,CA,Geyserville,Tennis,5,7,0,0
+2026-10-29,CA,Gilroy,Pickleball,1,12,0,0
+2026-10-29,CA,Gilroy,Tennis,14,37,0,0
+2026-10-29,CA,Glen Ellen,Tennis,8,8,0,0
+2026-10-29,CA,Glendale,Badminton,1,3,0,1
+2026-10-29,CA,Glendale,Pickleball,2,4,0,1
+2026-10-29,CA,Glendale,Racquetball,2,2,0,2
+2026-10-29,CA,Glendale,Table Tennis,2,0,0,1
+2026-10-29,CA,Glendale,Tennis,26,58,2,3
+2026-10-29,CA,Glendora,Racquetball,2,0,0,1
+2026-10-29,CA,Glendora,Tennis,11,37,0,1
+2026-10-29,CA,Glenn County,Tennis,1,1,0,0
+2026-10-29,CA,Gold River,Pickleball,2,10,0,1
+2026-10-29,CA,Gold River,Tennis,4,24,0,2
+2026-10-29,CA,Goleta,Pickleball,6,12,0,0
+2026-10-29,CA,Goleta,Tennis,17,44,1,1
+2026-10-29,CA,Gonzales,Tennis,1,8,0,0
+2026-10-29,CA,Granada Hills,Pickleball,1,4,0,0
+2026-10-29,CA,Granada Hills,Tennis,9,13,0,4
+2026-10-29,CA,Grand Terrace,Tennis,2,1,0,0
+2026-10-29,CA,Granite Bay,Pickleball,2,2,0,0
+2026-10-29,CA,Granite Bay,Tennis,11,20,0,3
+2026-10-29,CA,Grass Valley,Pickleball,1,2,0,0
+2026-10-29,CA,Grass Valley,Table Tennis,1,0,0,0
+2026-10-29,CA,Grass Valley,Tennis,12,29,0,1
+2026-10-29,CA,Greenbrae,Tennis,2,1,0,0
+2026-10-29,CA,Greenfield,Tennis,4,4,0,0
+2026-10-29,CA,Guerneville,Tennis,3,4,0,0
+2026-10-29,CA,Gustine,Tennis,3,9,0,0
+2026-10-29,CA,HICKMAN,Tennis,1,1,0,0
+2026-10-29,CA,HILLSBOROUGH,Pickleball,1,1,0,0
+2026-10-29,CA,HILLSBOROUGH,Tennis,50,75,0,11
+2026-10-29,CA,HOLLISTER RANCH,Tennis,1,1,0,0
+2026-10-29,CA,HOMEWOOD,Tennis,3,4,0,2
+2026-10-29,CA,HOPE RANCH,Pickleball,1,1,0,1
+2026-10-29,CA,HOPE RANCH,Tennis,46,63,0,13
+2026-10-29,CA,HOPLAND,Tennis,2,2,0,0
+2026-10-29,CA,Hacienda Heights,Tennis,24,43,0,0
+2026-10-29,CA,Half Moon Bay,Tennis,3,15,0,0
+2026-10-29,CA,Hamilton City,Tennis,1,2,0,0
+2026-10-29,CA,Hanford,Pickleball,2,12,0,0
+2026-10-29,CA,Hanford,Tennis,8,20,0,0
+2026-10-29,CA,Harbor City,Racquetball,1,0,0,1
+2026-10-29,CA,Harbor City,Tennis,2,3,0,1
+2026-10-29,CA,Hawkins Bar,Tennis,1,1,0,0
+2026-10-29,CA,Hawthorne,Pickleball,3,10,3,0
+2026-10-29,CA,Hawthorne,Racquetball,1,0,1,0
+2026-10-29,CA,Hawthorne,Tennis,4,9,2,0
+2026-10-29,CA,Hayward,Badminton,1,0,0,1
+2026-10-29,CA,Hayward,Pickleball,2,8,0,0
+2026-10-29,CA,Hayward,Racquetball,1,0,0,1
+2026-10-29,CA,Hayward,Table Tennis,1,0,0,1
+2026-10-29,CA,Hayward,Tennis,28,81,1,3
+2026-10-29,CA,Healdsburg,Tennis,17,24,0,0
+2026-10-29,CA,Helendale,Tennis,1,0,0,0
+2026-10-29,CA,Hemet,Pickleball,6,28,1,1
+2026-10-29,CA,Hemet,Racquetball,1,0,0,1
+2026-10-29,CA,Hemet,Tennis,20,44,3,1
+2026-10-29,CA,Hercules,Tennis,4,6,0,0
+2026-10-29,CA,Herlong,Tennis,1,2,0,0
+2026-10-29,CA,Hermosa Beach,Beach Tennis,1,0,0,0
+2026-10-29,CA,Hermosa Beach,Pickleball,2,5,0,0
+2026-10-29,CA,Hermosa Beach,Tennis,3,1,0,0
+2026-10-29,CA,Hesperia,Tennis,5,18,0,0
+2026-10-29,CA,Highland,Tennis,2,5,0,1
+2026-10-29,CA,Hollister,Tennis,11,24,1,1
+2026-10-29,CA,Holtville,Tennis,1,4,0,0
+2026-10-29,CA,Hughson,Table Tennis,1,0,0,0
+2026-10-29,CA,Huntington Beach,Pickleball,10,19,0,2
+2026-10-29,CA,Huntington Beach,Racquetball,3,0,2,0
+2026-10-29,CA,Huntington Beach,Tennis,32,100,3,4
+2026-10-29,CA,Huntington Park,Tennis,1,5,0,0
+2026-10-29,CA,INDEPENDENCE,Tennis,1,2,0,0
+2026-10-29,CA,INVERNESS,Tennis,5,7,0,1
+2026-10-29,CA,IONE,Tennis,2,3,0,0
+2026-10-29,CA,ISLA VISTA,Table Tennis,1,1,0,0
+2026-10-29,CA,ISLETON,Tennis,1,2,0,0
+2026-10-29,CA,ISV,Racquetball,1,0,0,1
+2026-10-29,CA,ISV,Squash,1,1,0,1
+2026-10-29,CA,ISV,Table Tennis,2,3,0,1
+2026-10-29,CA,ISV,Tennis,2,14,0,1
+2026-10-29,CA,Idyllwild,Pickleball,1,1,1,0
+2026-10-29,CA,Idyllwild,Tennis,2,2,0,0
+2026-10-29,CA,Imperial,Tennis,1,8,0,0
+2026-10-29,CA,Imperial Beach,Pickleball,1,0,0,1
+2026-10-29,CA,Indian Wells,Pickleball,5,20,0,0
+2026-10-29,CA,Indian Wells,Tennis,29,90,0,0
+2026-10-29,CA,Indio,Pickleball,9,24,0,1
+2026-10-29,CA,Indio,Tennis,38,88,0,1
+2026-10-29,CA,Inglewood,Pickleball,1,8,0,0
+2026-10-29,CA,Inglewood,Tennis,9,35,0,0
+2026-10-29,CA,Irvine,Badminton,3,12,2,0
+2026-10-29,CA,Irvine,Pickleball,30,101,8,3
+2026-10-29,CA,Irvine,Racquetball,9,11,5,4
+2026-10-29,CA,Irvine,Squash,1,0,0,1
+2026-10-29,CA,Irvine,Table Tennis,4,5,1,0
+2026-10-29,CA,Irvine,Tennis,89,320,10,14
+2026-10-29,CA,Irwindale,Badminton,1,0,0,0
+2026-10-29,CA,Irwindale,Tennis,1,1,1,0
+2026-10-29,CA,JACKSON,Tennis,2,5,0,0
+2026-10-29,CA,JAMESTOWN,Tennis,2,3,0,0
+2026-10-29,CA,Jamul,Tennis,8,13,0,0
+2026-10-29,CA,Janesville,Tennis,1,1,0,0
+2026-10-29,CA,Joshua Tree,Tennis,5,6,0,0
+2026-10-29,CA,Julian,Tennis,2,2,0,0
+2026-10-29,CA,June Lake,Tennis,3,4,0,0
+2026-10-29,CA,Jurupa Valley,Tennis,4,12,0,0
+2026-10-29,CA,KENTFIELD,Tennis,5,13,0,0
+2026-10-29,CA,KERMAN,Tennis,1,8,0,0
+2026-10-29,CA,KERNVILLE,Pickleball,1,1,0,0
+2026-10-29,CA,KETTLEMAN CITY,Tennis,1,1,0,0
+2026-10-29,CA,KINGS BEACH,Tennis,1,2,0,0
+2026-10-29,CA,Kelseyville,Pickleball,1,0,0,0
+2026-10-29,CA,Kelseyville,Tennis,6,19,0,0
+2026-10-29,CA,Kenwood,Tennis,3,3,0,2
+2026-10-29,CA,Kern County,Tennis,1,1,0,0
+2026-10-29,CA,King City,Tennis,3,7,0,0
+2026-10-29,CA,Kingsburg,Tennis,1,0,0,0
+2026-10-29,CA,Kirkwood,Tennis,1,4,0,0
+2026-10-29,CA,LA GRANGE,Tennis,1,1,0,0
+2026-10-29,CA,LA HONDA,Tennis,3,3,0,0
+2026-10-29,CA,LA PALMA,Tennis,1,2,0,0
+2026-10-29,CA,LA SELVA BCH,Tennis,3,5,0,0
+2026-10-29,CA,LAKE ALMANOR COUNTRY CLUB,Pickleball,1,8,0,1
+2026-10-29,CA,LAKE ALMANOR COUNTRY CLUB,Tennis,1,3,0,1
+2026-10-29,CA,LAKE NACIMIENTO,Tennis,1,1,0,0
+2026-10-29,CA,LAKE PILLSBURY,Tennis,1,2,0,0
+2026-10-29,CA,LAKEPORT,Tennis,1,2,0,0
+2026-10-29,CA,LATHROP,Tennis,2,3,0,0
+2026-10-29,CA,LEGGETT,Tennis,1,1,0,0
+2026-10-29,CA,LINCOLN,Pickleball,6,23,1,5
+2026-10-29,CA,LINCOLN,Tennis,6,19,1,4
+2026-10-29,CA,LITTLE RIVER,Tennis,1,2,0,0
+2026-10-29,CA,LOLETA,Tennis,1,1,0,0
+2026-10-29,CA,LOMPOC,Tennis,3,10,0,0
+2026-10-29,CA,LONE PINE,Tennis,1,1,1,0
+2026-10-29,CA,LOS OLIVOS,Tennis,1,6,0,0
+2026-10-29,CA,LOS OSOS,Tennis,4,6,0,2
+2026-10-29,CA,LUCERNE,Tennis,1,2,0,1
+2026-10-29,CA,La Canada Flintridge,Pickleball,2,1,1,1
+2026-10-29,CA,La Canada Flintridge,Racquetball,1,0,0,1
+2026-10-29,CA,La Canada Flintridge,Tennis,12,37,1,6
+2026-10-29,CA,La Cañada Flintridge,Tennis,1,6,0,0
+2026-10-29,CA,La Crescenta,Tennis,3,7,0,0
+2026-10-29,CA,La Habra,Pickleball,1,15,0,0
+2026-10-29,CA,La Habra,Racquetball,1,0,0,1
+2026-10-29,CA,La Habra,Tennis,7,20,0,3
+2026-10-29,CA,La Jolla,Badminton,1,1,0,1
+2026-10-29,CA,La Jolla,Pickleball,9,29,0,6
+2026-10-29,CA,La Jolla,Racquetball,1,0,0,1
+2026-10-29,CA,La Jolla,Squash,1,0,0,1
+2026-10-29,CA,La Jolla,Table Tennis,3,6,0,0
+2026-10-29,CA,La Jolla,Tennis,39,141,1,15
+2026-10-29,CA,La Mesa,Pickleball,3,12,3,0
+2026-10-29,CA,La Mesa,Tennis,17,34,3,0
+2026-10-29,CA,La Mirada,Pickleball,1,6,0,0
+2026-10-29,CA,La Mirada,Tennis,9,34,0,1
+2026-10-29,CA,La Puente,Tennis,3,15,0,0
+2026-10-29,CA,La Quinta,Badminton,1,4,0,0
+2026-10-29,CA,La Quinta,Pickleball,10,47,0,0
+2026-10-29,CA,La Quinta,Tennis,26,105,0,1
+2026-10-29,CA,La Selva Beach,Tennis,2,3,0,0
+2026-10-29,CA,La Verne,Pickleball,1,2,0,0
+2026-10-29,CA,La Verne,Tennis,4,18,0,0
+2026-10-29,CA,Ladera Ranch,Pickleball,1,6,0,0
+2026-10-29,CA,Ladera Ranch,Table Tennis,1,1,0,0
+2026-10-29,CA,Ladera Ranch,Tennis,3,11,0,1
+2026-10-29,CA,Lafayette,Pickleball,1,1,0,0
+2026-10-29,CA,Lafayette,Tennis,17,28,1,5
+2026-10-29,CA,Laguna Beach,Pickleball,3,9,0,0
+2026-10-29,CA,Laguna Beach,Tennis,11,22,0,0
+2026-10-29,CA,Laguna Hills,Badminton,1,1,0,0
+2026-10-29,CA,Laguna Hills,Pickleball,1,8,0,1
+2026-10-29,CA,Laguna Hills,Tennis,10,27,0,3
+2026-10-29,CA,Laguna Niguel,Pickleball,6,25,1,1
+2026-10-29,CA,Laguna Niguel,Tennis,19,59,1,2
+2026-10-29,CA,Laguna Woods,Pickleball,1,7,0,1
+2026-10-29,CA,Laguna Woods,Pop Tennis,1,7,0,1
+2026-10-29,CA,Laguna Woods,Tennis,1,10,0,0
+2026-10-29,CA,Lake Arrowhead,Tennis,4,12,0,2
+2026-10-29,CA,Lake California,Tennis,1,2,0,0
+2026-10-29,CA,Lake County,Tennis,1,1,0,0
+2026-10-29,CA,Lake Elsinore,Pickleball,2,4,0,0
+2026-10-29,CA,Lake Elsinore,Racquetball,1,0,0,1
+2026-10-29,CA,Lake Elsinore,Tennis,11,29,0,0
+2026-10-29,CA,Lake Forest,Badminton,2,1,0,0
+2026-10-29,CA,Lake Forest,Pickleball,13,30,8,2
+2026-10-29,CA,Lake Forest,Racquetball,1,0,0,1
+2026-10-29,CA,Lake Forest,Tennis,37,69,3,11
+2026-10-29,CA,Lakeside,Tennis,3,15,0,0
+2026-10-29,CA,Lakewood,Badminton,1,0,0,0
+2026-10-29,CA,Lakewood,Pickleball,2,0,0,0
+2026-10-29,CA,Lakewood,Tennis,5,30,0,0
+2026-10-29,CA,Lancaster,Pickleball,2,2,0,0
+2026-10-29,CA,Lancaster,Racquetball,1,0,0,1
+2026-10-29,CA,Lancaster,Table Tennis,1,0,0,0
+2026-10-29,CA,Lancaster,Tennis,9,45,1,1
+2026-10-29,CA,Landers,Tennis,1,1,0,0
+2026-10-29,CA,Larkspur,Beach Tennis,1,0,0,0
+2026-10-29,CA,Larkspur,Tennis,5,20,0,1
+2026-10-29,CA,Las Flores,Tennis,1,1,0,0
+2026-10-29,CA,Lawndale,Tennis,2,3,0,0
+2026-10-29,CA,Lee Vining,Tennis,1,1,0,0
+2026-10-29,CA,Lemon Grove,Tennis,1,4,0,0
+2026-10-29,CA,Lemoore,Tennis,4,14,0,0
+2026-10-29,CA,Linda,Tennis,1,4,0,0
+2026-10-29,CA,Lindsay,Tennis,1,6,0,0
+2026-10-29,CA,Livermore,Badminton,1,0,0,0
+2026-10-29,CA,Livermore,Pickleball,1,1,0,0
+2026-10-29,CA,Livermore,Racquetball,1,0,0,1
+2026-10-29,CA,Livermore,Tennis,16,50,0,3
+2026-10-29,CA,Lodi,Pickleball,2,10,1,0
+2026-10-29,CA,Lodi,Tennis,11,34,1,1
+2026-10-29,CA,Loma Linda,Pickleball,3,5,0,0
+2026-10-29,CA,Loma Linda,Tennis,8,15,0,0
+2026-10-29,CA,Lomita,Tennis,3,2,0,0
+2026-10-29,CA,Long Beach,Badminton,1,4,0,0
+2026-10-29,CA,Long Beach,Pickleball,7,27,0,1
+2026-10-29,CA,Long Beach,Racquetball,3,0,0,3
+2026-10-29,CA,Long Beach,Tennis,45,168,0,6
+2026-10-29,CA,Loomis,Tennis,1,6,0,0
+2026-10-29,CA,Los Alamitos,Pickleball,1,2,1,0
+2026-10-29,CA,Los Alamitos,Table Tennis,1,0,1,0
+2026-10-29,CA,Los Alamitos,Tennis,3,16,1,0
+2026-10-29,CA,Los Altos,Pickleball,3,6,0,2
+2026-10-29,CA,Los Altos,Racquetball,1,0,0,1
+2026-10-29,CA,Los Altos,Tennis,30,57,0,14
+2026-10-29,CA,Los Altos Hills,Pickleball,1,1,0,0
+2026-10-29,CA,Los Altos Hills,Tennis,74,99,0,7
+2026-10-29,CA,Los Angeles,Badminton,3,0,1,1
+2026-10-29,CA,Los Angeles,Padel,6,6,1,1
+2026-10-29,CA,Los Angeles,Pickleball,27,44,5,6
+2026-10-29,CA,Los Angeles,Pop Tennis,4,9,3,0
+2026-10-29,CA,Los Angeles,Racquetball,6,0,0,5
+2026-10-29,CA,Los Angeles,Squash,3,0,1,2
+2026-10-29,CA,Los Angeles,Table Tennis,7,1,0,1
+2026-10-29,CA,Los Angeles,Tennis,346,839,10,90
+2026-10-29,CA,Los Angeles County,Tennis,1,1,0,0
+2026-10-29,CA,Los Banos,Tennis,3,10,0,0
+2026-10-29,CA,Los Gatos,Pickleball,14,21,0,2
+2026-10-29,CA,Los Gatos,Squash,1,0,0,0
+2026-10-29,CA,Los Gatos,Tennis,54,91,0,3
+2026-10-29,CA,Los Molinos,Tennis,1,1,0,0
+2026-10-29,CA,Loyalton,Tennis,1,1,0,0
+2026-10-29,CA,Lucerne Valley,Tennis,2,6,0,0
+2026-10-29,CA,Lynwood,Tennis,2,12,0,0
+2026-10-29,CA,MARCH AIR RESERVE BASE,Tennis,2,6,0,0
+2026-10-29,CA,MARSHALL,Tennis,1,2,0,0
+2026-10-29,CA,MC FARLAND,Tennis,1,4,0,0
+2026-10-29,CA,MCCLELLAN,Tennis,1,4,0,0
+2026-10-29,CA,MCCLOUD,Tennis,1,2,0,0
+2026-10-29,CA,MCKINLEYVILLE,Tennis,1,6,0,0
+2026-10-29,CA,MEADOW VISTA,Pickleball,1,4,0,0
+2026-10-29,CA,MEADOW VISTA,Tennis,1,1,0,0
+2026-10-29,CA,MENDOCINO,Tennis,1,1,0,0
+2026-10-29,CA,MH,Tennis,2,9,0,0
+2026-10-29,CA,MIDDLETOWN,Tennis,2,3,0,0
+2026-10-29,CA,MILLVILLE,Tennis,1,1,0,0
+2026-10-29,CA,MISSION CANYON,Pickleball,1,1,0,1
+2026-10-29,CA,MOHAWK,Tennis,1,2,0,0
+2026-10-29,CA,MOKELUMNE HILL,Tennis,1,2,0,0
+2026-10-29,CA,MONTAGUE,Pickleball,1,4,1,0
+2026-10-29,CA,MONTAGUE,Tennis,1,1,1,0
+2026-10-29,CA,MONTE SERENO,Tennis,6,8,0,1
+2026-10-29,CA,MONTGOMERY CREEK,Tennis,1,1,0,0
+2026-10-29,CA,MOSS BEACH,Tennis,1,1,0,1
+2026-10-29,CA,MOUNTAIN CENTER,Tennis,4,4,0,1
+2026-10-29,CA,MURPHYS,Pickleball,1,3,0,0
+2026-10-29,CA,MURPHYS,Tennis,2,3,0,0
+2026-10-29,CA,Madera,Pickleball,1,0,0,0
+2026-10-29,CA,Madera,Table Tennis,1,1,0,0
+2026-10-29,CA,Madera,Tennis,4,22,0,1
+2026-10-29,CA,Malibu,Pickleball,9,10,0,4
+2026-10-29,CA,Malibu,Table Tennis,2,2,0,2
+2026-10-29,CA,Malibu,Tennis,119,197,0,29
+2026-10-29,CA,Mammoth Lakes,Pickleball,1,1,0,0
+2026-10-29,CA,Mammoth Lakes,Tennis,13,22,0,2
+2026-10-29,CA,Manhattan Beach,Badminton,1,0,0,0
+2026-10-29,CA,Manhattan Beach,Beach Tennis,1,0,0,0
+2026-10-29,CA,Manhattan Beach,Pickleball,3,3,1,1
+2026-10-29,CA,Manhattan Beach,Pop Tennis,1,1,1,0
+2026-10-29,CA,Manhattan Beach,Racquetball,1,0,0,1
+2026-10-29,CA,Manhattan Beach,Squash,1,0,0,1
+2026-10-29,CA,Manhattan Beach,Tennis,7,44,1,1
+2026-10-29,CA,Manteca,Pickleball,3,7,0,0
+2026-10-29,CA,Manteca,Tennis,7,27,0,0
+2026-10-29,CA,Marina,Tennis,5,8,0,1
+2026-10-29,CA,Marina Del Rey,Padel,1,0,0,0
+2026-10-29,CA,Marina Del Rey,Pickleball,1,2,0,0
+2026-10-29,CA,Marina Del Rey,Pop Tennis,2,6,0,2
+2026-10-29,CA,Marina Del Rey,Tennis,15,38,0,3
+2026-10-29,CA,Mariposa,Tennis,2,4,0,0
+2026-10-29,CA,Markleeville,Tennis,1,2,0,0
+2026-10-29,CA,Martinez,Pickleball,1,2,0,0
+2026-10-29,CA,Martinez,Tennis,14,27,0,0
+2026-10-29,CA,Marysville,Tennis,1,8,0,0
+2026-10-29,CA,Matamo,Tennis,1,11,0,0
+2026-10-29,CA,Mather,Pickleball,1,0,1,0
+2026-10-29,CA,Mather,Racquetball,1,0,1,0
+2026-10-29,CA,Mather,Tennis,1,2,0,0
+2026-10-29,CA,Menifee,Pickleball,5,18,1,1
+2026-10-29,CA,Menifee,Tennis,14,37,1,2
+2026-10-29,CA,Menlo Park,Badminton,2,1,0,0
+2026-10-29,CA,Menlo Park,Pickleball,4,4,1,0
+2026-10-29,CA,Menlo Park,Table Tennis,1,0,0,0
+2026-10-29,CA,Menlo Park,Tennis,23,49,1,1
+2026-10-29,CA,Mentone,Tennis,3,10,0,0
+2026-10-29,CA,Merced,Pickleball,3,14,0,0
+2026-10-29,CA,Merced,Tennis,8,46,0,0
+2026-10-29,CA,Mill Valley,Pickleball,1,1,0,0
+2026-10-29,CA,Mill Valley,Tennis,12,42,0,2
+2026-10-29,CA,Millbrae,Tennis,4,13,0,2
+2026-10-29,CA,Milpitas,Badminton,2,0,0,0
+2026-10-29,CA,Milpitas,Pickleball,3,25,1,0
+2026-10-29,CA,Milpitas,Table Tennis,6,0,0,0
+2026-10-29,CA,Milpitas,Tennis,13,36,1,3
+2026-10-29,CA,Mission Viejo,Badminton,1,2,0,0
+2026-10-29,CA,Mission Viejo,Pickleball,3,4,2,1
+2026-10-29,CA,Mission Viejo,Racquetball,1,0,0,1
+2026-10-29,CA,Mission Viejo,Tennis,19,56,3,1
+2026-10-29,CA,Modesto,Pickleball,5,37,0,0
+2026-10-29,CA,Modesto,Tennis,21,98,3,1
+2026-10-29,CA,Modjeska Canyon,Tennis,2,2,0,0
+2026-10-29,CA,Monrovia,Racquetball,1,0,0,1
+2026-10-29,CA,Monrovia,Tennis,5,15,0,1
+2026-10-29,CA,Montclair,Tennis,2,10,0,0
+2026-10-29,CA,Monte Rio,Tennis,1,2,0,0
+2026-10-29,CA,Montebello,Tennis,4,16,0,1
+2026-10-29,CA,Montecito,Pickleball,7,11,0,6
+2026-10-29,CA,Montecito,Tennis,83,105,0,6
+2026-10-29,CA,Monterey,Pickleball,1,1,0,0
+2026-10-29,CA,Monterey,Tennis,22,50,1,9
+2026-10-29,CA,Monterey Park,Badminton,1,1,0,0
+2026-10-29,CA,Monterey Park,Pickleball,2,7,0,1
+2026-10-29,CA,Monterey Park,Racquetball,1,0,0,1
+2026-10-29,CA,Monterey Park,Tennis,6,15,0,0
+2026-10-29,CA,Moorpark,Pickleball,2,6,0,0
+2026-10-29,CA,Moorpark,Tennis,16,27,0,4
+2026-10-29,CA,Moraga,Tennis,8,23,0,2
+2026-10-29,CA,Moreno Valley,Badminton,1,0,1,0
+2026-10-29,CA,Moreno Valley,Tennis,11,45,0,0
+2026-10-29,CA,Morgan Hill,Badminton,1,1,0,0
+2026-10-29,CA,Morgan Hill,Pickleball,2,1,0,1
+2026-10-29,CA,Morgan Hill,Tennis,27,45,0,2
+2026-10-29,CA,Morongo Valley,Tennis,1,2,0,0
+2026-10-29,CA,Morro Bay,Pickleball,1,4,0,0
+2026-10-29,CA,Morro Bay,Tennis,3,5,0,0
+2026-10-29,CA,Moss Landing,Tennis,1,1,0,0
+2026-10-29,CA,Mount Shasta,Tennis,1,3,0,0
+2026-10-29,CA,Mountain View,Pickleball,2,3,0,1
+2026-10-29,CA,Mountain View,Table Tennis,2,1,1,0
+2026-10-29,CA,Mountain View,Tennis,21,60,0,2
+2026-10-29,CA,Mt Shasta,Pickleball,1,8,0,0
+2026-10-29,CA,Mt Shasta,Tennis,1,2,0,0
+2026-10-29,CA,Murrieta,Pickleball,4,14,1,0
+2026-10-29,CA,Murrieta,Racquetball,2,0,0,1
+2026-10-29,CA,Murrieta,Tennis,15,60,3,1
+2026-10-29,CA,NEWMAN,Tennis,1,4,0,0
+2026-10-29,CA,NICASIO,Tennis,6,6,0,1
+2026-10-29,CA,NORTH FORK,Tennis,1,2,0,0
+2026-10-29,CA,NORTH HIGHLANDS,Tennis,1,3,0,0
+2026-10-29,CA,Napa,Pickleball,7,12,0,0
+2026-10-29,CA,Napa,Tennis,101,153,0,4
+2026-10-29,CA,National City,Pickleball,1,1,0,0
+2026-10-29,CA,National City,Tennis,6,17,1,1
+2026-10-29,CA,Nevada City,Tennis,3,4,0,0
+2026-10-29,CA,Newark,Badminton,1,2,0,0
+2026-10-29,CA,Newark,Tennis,8,33,0,0
+2026-10-29,CA,Newbury Park,Badminton,1,1,0,1
+2026-10-29,CA,Newbury Park,Pickleball,2,3,0,0
+2026-10-29,CA,Newbury Park,Tennis,17,30,0,1
+2026-10-29,CA,Newhall,Tennis,9,16,0,0
+2026-10-29,CA,Newport Beach,Pickleball,16,112,3,4
+2026-10-29,CA,Newport Beach,Racquetball,3,0,3,0
+2026-10-29,CA,Newport Beach,Table Tennis,3,4,0,0
+2026-10-29,CA,Newport Beach,Tennis,54,155,7,13
+2026-10-29,CA,Niland,Pickleball,1,8,0,0
+2026-10-29,CA,Niland,Tennis,1,2,0,0
+2026-10-29,CA,Nipomo,Tennis,9,17,0,0
+2026-10-29,CA,Norco,Racquetball,1,0,0,1
+2026-10-29,CA,Norco,Tennis,4,14,0,0
+2026-10-29,CA,North Hills,Tennis,9,24,0,2
+2026-10-29,CA,North Hollywood,Tennis,4,3,0,0
+2026-10-29,CA,North Tustin,Pickleball,3,2,0,2
+2026-10-29,CA,North Tustin,Tennis,32,47,0,27
+2026-10-29,CA,Northridge,Racquetball,2,1,0,2
+2026-10-29,CA,Northridge,Tennis,16,39,0,1
+2026-10-29,CA,Norwalk,Tennis,5,34,0,0
+2026-10-29,CA,Novato,Pickleball,1,6,0,0
+2026-10-29,CA,Novato,Tennis,30,68,0,4
+2026-10-29,CA,OAKDALE,Tennis,5,11,0,0
+2026-10-29,CA,OAKHURST,Tennis,2,7,0,1
+2026-10-29,CA,OCEANO,Tennis,1,1,0,1
+2026-10-29,CA,OLANCHA,Tennis,1,1,0,0
+2026-10-29,CA,OLIVEHURST,Tennis,1,1,0,0
+2026-10-29,CA,OLIVENHAIN,Tennis,2,2,0,0
+2026-10-29,CA,ORANGE COVE,Tennis,1,2,0,0
+2026-10-29,CA,ORCUTT,Tennis,3,14,0,0
+2026-10-29,CA,OREGON HOUSE,Tennis,1,1,0,0
+2026-10-29,CA,Oak Hills,Tennis,1,8,0,0
+2026-10-29,CA,Oak Park,Pickleball,1,0,0,0
+2026-10-29,CA,Oak Park,Tennis,6,15,0,0
+2026-10-29,CA,Oakland,Padel,1,2,0,0
+2026-10-29,CA,Oakland,Pickleball,5,9,1,2
+2026-10-29,CA,Oakland,Table Tennis,1,2,1,0
+2026-10-29,CA,Oakland,Tennis,44,114,1,20
+2026-10-29,CA,Oakley,Tennis,4,31,0,0
+2026-10-29,CA,Occidental,Tennis,1,2,0,0
+2026-10-29,CA,Oceanside,Padel,1,0,0,0
+2026-10-29,CA,Oceanside,Pickleball,4,18,1,0
+2026-10-29,CA,Oceanside,Racquetball,1,0,0,1
+2026-10-29,CA,Oceanside,Table Tennis,1,0,0,0
+2026-10-29,CA,Oceanside,Tennis,28,45,3,1
+2026-10-29,CA,Ojai,Pickleball,3,6,0,0
+2026-10-29,CA,Ojai,Tennis,47,98,0,2
+2026-10-29,CA,Olympic Valley,Tennis,9,15,1,3
+2026-10-29,CA,One Hundred Palms,Tennis,1,8,0,0
+2026-10-29,CA,Ontario,Pickleball,6,7,3,2
+2026-10-29,CA,Ontario,Tennis,18,49,4,4
+2026-10-29,CA,Orange,Badminton,1,0,0,0
+2026-10-29,CA,Orange,Pickleball,8,23,3,3
+2026-10-29,CA,Orange,Racquetball,1,0,0,1
+2026-10-29,CA,Orange,Tennis,31,87,3,13
+2026-10-29,CA,Orange Park Acres,Tennis,6,6,0,5
+2026-10-29,CA,Orangevale,Pickleball,2,3,0,0
+2026-10-29,CA,Orangevale,Tennis,9,14,0,0
+2026-10-29,CA,Orinda,Pickleball,1,1,0,0
+2026-10-29,CA,Orinda,Tennis,28,65,0,9
+2026-10-29,CA,Orland,Tennis,2,8,0,0
+2026-10-29,CA,Oroville,Pickleball,1,4,0,0
+2026-10-29,CA,Oroville,Tennis,5,22,0,0
+2026-10-29,CA,Other,Pickleball,1,2,0,0
+2026-10-29,CA,Other,Tennis,2,5,0,0
+2026-10-29,CA,Owens River,Tennis,1,1,0,1
+2026-10-29,CA,Oxnard,Badminton,1,3,0,0
+2026-10-29,CA,Oxnard,Pickleball,1,2,0,1
+2026-10-29,CA,Oxnard,Tennis,32,89,1,1
+2026-10-29,CA,PAICINES,Tennis,1,1,0,0
+2026-10-29,CA,PAINTED CAVE,Tennis,1,1,0,0
+2026-10-29,CA,PALO CEDRO,Tennis,1,8,0,0
+2026-10-29,CA,PARADISE,Tennis,2,14,0,0
+2026-10-29,CA,PARADISE CANYON,Tennis,1,1,0,0
+2026-10-29,CA,PARADISE PARK,Tennis,2,2,0,0
+2026-10-29,CA,PARLIER,Tennis,1,2,0,0
+2026-10-29,CA,PATTERSON,Tennis,1,4,0,0
+2026-10-29,CA,PESCADERO,Tennis,1,2,0,0
+2026-10-29,CA,PINE MTN CLUB,Tennis,1,2,0,0
+2026-10-29,CA,PLACENTIA,Tennis,3,11,0,0
+2026-10-29,CA,POINT REYES STATION,Tennis,3,3,0,0
+2026-10-29,CA,PORTOLA,Tennis,1,1,0,0
+2026-10-29,CA,POTTER VALLEY,Tennis,1,2,0,0
+2026-10-29,CA,Pacific Grove,Tennis,4,13,0,1
+2026-10-29,CA,Pacific Palisades,Pickleball,1,6,0,0
+2026-10-29,CA,Pacific Palisades,Tennis,15,36,1,2
+2026-10-29,CA,Pacifica,Tennis,3,15,0,0
+2026-10-29,CA,Pacoima,Tennis,1,2,0,0
+2026-10-29,CA,Pala,Tennis,1,2,0,0
+2026-10-29,CA,Palm Desert,Padel,1,1,0,0
+2026-10-29,CA,Palm Desert,Pickleball,25,158,0,2
+2026-10-29,CA,Palm Desert,Table Tennis,1,1,0,0
+2026-10-29,CA,Palm Desert,Tennis,66,261,0,5
+2026-10-29,CA,Palm Springs,Padel,1,0,0,1
+2026-10-29,CA,Palm Springs,Pickleball,22,69,0,2
+2026-10-29,CA,Palm Springs,Tennis,124,263,0,6
+2026-10-29,CA,Palmdale,Pickleball,1,14,0,0
+2026-10-29,CA,Palmdale,Tennis,8,31,0,0
+2026-10-29,CA,Palo Alto,Badminton,1,0,0,1
+2026-10-29,CA,Palo Alto,Pickleball,3,8,0,1
+2026-10-29,CA,Palo Alto,Racquetball,1,2,0,0
+2026-10-29,CA,Palo Alto,Table Tennis,1,0,0,0
+2026-10-29,CA,Palo Alto,Tennis,33,95,1,1
+2026-10-29,CA,Palos Verdes Estates,Tennis,1,12,0,1
+2026-10-29,CA,Palos Verdes Peninsula,Badminton,1,1,0,1
+2026-10-29,CA,Palos Verdes Peninsula,Pickleball,5,5,0,5
+2026-10-29,CA,Palos Verdes Peninsula,Tennis,88,171,0,25
+2026-10-29,CA,Panorama City,Tennis,3,9,1,0
+2026-10-29,CA,Paramount,Tennis,3,16,0,1
+2026-10-29,CA,Pasadena,Pickleball,22,32,0,19
+2026-10-29,CA,Pasadena,Racquetball,1,0,0,1
+2026-10-29,CA,Pasadena,Table Tennis,1,0,0,0
+2026-10-29,CA,Pasadena,Tennis,97,202,1,75
+2026-10-29,CA,Paso Robles,Pickleball,2,2,0,0
+2026-10-29,CA,Paso Robles,Tennis,36,54,0,2
+2026-10-29,CA,Pebble Beach,Tennis,13,39,0,7
+2026-10-29,CA,Penngrove,Tennis,1,1,0,0
+2026-10-29,CA,Perris,Tennis,6,13,0,0
+2026-10-29,CA,Petaluma,Tennis,17,34,0,1
+2026-10-29,CA,Phelan,Tennis,1,6,0,0
+2026-10-29,CA,Pico Rivera,Racquetball,1,0,0,1
+2026-10-29,CA,Pico Rivera,Tennis,1,12,0,0
+2026-10-29,CA,Piedmont,Tennis,24,37,1,15
+2026-10-29,CA,Pine Valley,Tennis,1,1,0,0
+2026-10-29,CA,Pinecrest,Pickleball,2,5,0,0
+2026-10-29,CA,Pinecrest,Tennis,3,6,0,0
+2026-10-29,CA,Pinole,Tennis,1,0,0,0
+2026-10-29,CA,Pismo Beach,Tennis,7,10,1,0
+2026-10-29,CA,Pittsburg,Tennis,7,17,0,0
+2026-10-29,CA,Placer County,Tennis,1,1,0,0
+2026-10-29,CA,Placerville,Tennis,2,8,0,0
+2026-10-29,CA,Playa Del Rey,Pop Tennis,2,3,0,2
+2026-10-29,CA,Playa Del Rey,Table Tennis,1,0,1,0
+2026-10-29,CA,Playa Del Rey,Tennis,7,21,0,3
+2026-10-29,CA,Playa Vista,Pop Tennis,1,1,0,0
+2026-10-29,CA,Playa Vista,Tennis,2,2,1,0
+2026-10-29,CA,Pleasant Hill,Pickleball,2,0,0,1
+2026-10-29,CA,Pleasant Hill,Table Tennis,1,0,0,0
+2026-10-29,CA,Pleasant Hill,Tennis,6,21,0,0
+2026-10-29,CA,Pleasanton,Badminton,1,0,0,0
+2026-10-29,CA,Pleasanton,Racquetball,2,0,0,1
+2026-10-29,CA,Pleasanton,Table Tennis,3,0,0,0
+2026-10-29,CA,Pleasanton,Tennis,17,55,0,2
+2026-10-29,CA,Pomona,Badminton,1,0,0,0
+2026-10-29,CA,Pomona,Tennis,10,40,0,0
+2026-10-29,CA,Pope Valley,Tennis,5,6,0,3
+2026-10-29,CA,Port Hueneme,Pickleball,1,10,0,0
+2026-10-29,CA,Port Hueneme,Tennis,6,14,0,0
+2026-10-29,CA,Port Hueneme CBC Base,Tennis,1,2,0,0
+2026-10-29,CA,Porter Ranch,Pickleball,2,2,1,0
+2026-10-29,CA,Porter Ranch,Tennis,9,28,0,1
+2026-10-29,CA,Porterville,Pickleball,1,4,0,0
+2026-10-29,CA,Porterville,Tennis,6,38,1,0
+2026-10-29,CA,Porterville,Teqpong,1,1,1,0
+2026-10-29,CA,Portola Valley,Pickleball,6,7,0,2
+2026-10-29,CA,Portola Valley,Tennis,46,64,0,5
+2026-10-29,CA,Poway,Pickleball,3,3,1,0
+2026-10-29,CA,Poway,Tennis,16,44,1,2
+2026-10-29,CA,Quincy,Tennis,1,4,0,0
+2026-10-29,CA,RANCHO MURIETA,Pickleball,1,8,0,0
+2026-10-29,CA,RANCHO MURIETA,Tennis,2,8,0,0
+2026-10-29,CA,REDWOOD VALLEY,Tennis,1,2,0,0
+2026-10-29,CA,RIO DELL,Tennis,1,2,0,0
+2026-10-29,CA,RIO LINDA,Tennis,1,1,0,0
+2026-10-29,CA,RIPON,Tennis,2,8,0,0
+2026-10-29,CA,RIVERBANK,Tennis,5,13,0,1
+2026-10-29,CA,ROSAMOND,Tennis,2,5,1,0
+2026-10-29,CA,ROSS,Pickleball,2,2,0,0
+2026-10-29,CA,ROSS,Platform Tennis,1,0,0,0
+2026-10-29,CA,ROSS,Tennis,8,13,0,0
+2026-10-29,CA,ROVANA,Tennis,1,2,0,0
+2026-10-29,CA,Rains Houses,Tennis,1,1,0,0
+2026-10-29,CA,Ramona,Pickleball,1,5,0,0
+2026-10-29,CA,Ramona,Tennis,5,17,0,0
+2026-10-29,CA,Rancho Cordova,Badminton,1,0,0,0
+2026-10-29,CA,Rancho Cordova,Pickleball,1,2,1,0
+2026-10-29,CA,Rancho Cordova,Tennis,9,24,1,0
+2026-10-29,CA,Rancho Cucamonga,Badminton,1,1,0,0
+2026-10-29,CA,Rancho Cucamonga,Pickleball,4,7,2,0
+2026-10-29,CA,Rancho Cucamonga,Tennis,35,77,1,13
+2026-10-29,CA,Rancho Mirage,Padel,1,0,0,0
+2026-10-29,CA,Rancho Mirage,Pickleball,11,64,0,0
+2026-10-29,CA,Rancho Mirage,Tennis,45,171,0,0
+2026-10-29,CA,Rancho Mission Viejo,Pickleball,2,9,0,0
+2026-10-29,CA,Rancho Mission Viejo,Tennis,2,4,0,0
+2026-10-29,CA,Rancho Palos Verdes,Badminton,1,2,0,0
+2026-10-29,CA,Rancho Palos Verdes,Pickleball,1,2,1,0
+2026-10-29,CA,Rancho Palos Verdes,Pop Tennis,2,5,1,0
+2026-10-29,CA,Rancho Palos Verdes,Tennis,30,55,2,5
+2026-10-29,CA,Rancho Santa Fe,Padel,2,5,0,2
+2026-10-29,CA,Rancho Santa Fe,Pickleball,7,18,0,3
+2026-10-29,CA,Rancho Santa Fe,Tennis,147,208,0,31
+2026-10-29,CA,Rancho Santa Margarita,Pickleball,1,4,0,0
+2026-10-29,CA,Rancho Santa Margarita,Tennis,10,24,0,0
+2026-10-29,CA,Red Bluff,Tennis,3,9,0,0
+2026-10-29,CA,Redding,Pickleball,3,14,1,1
+2026-10-29,CA,Redding,Tennis,21,65,0,1
+2026-10-29,CA,Redlands,Pickleball,3,11,0,0
+2026-10-29,CA,Redlands,Racquetball,1,0,0,1
+2026-10-29,CA,Redlands,Tennis,36,83,0,1
+2026-10-29,CA,Redondo Beach,Pickleball,3,5,1,1
+2026-10-29,CA,Redondo Beach,Racquetball,2,2,1,0
+2026-10-29,CA,Redondo Beach,Tennis,7,34,1,1
+2026-10-29,CA,Redwood City,Badminton,1,6,0,0
+2026-10-29,CA,Redwood City,Beach Tennis,1,0,0,0
+2026-10-29,CA,Redwood City,Pickleball,2,4,0,1
+2026-10-29,CA,Redwood City,Squash,1,0,0,0
+2026-10-29,CA,Redwood City,Tennis,21,44,5,2
+2026-10-29,CA,Reedley,Tennis,2,22,0,0
+2026-10-29,CA,Reseda,Tennis,8,20,0,0
+2026-10-29,CA,Rialto,Tennis,5,21,0,0
+2026-10-29,CA,Richmond,Pickleball,1,4,0,1
+2026-10-29,CA,Richmond,Tennis,14,31,0,1
+2026-10-29,CA,Ridgecrest,Tennis,6,29,1,1
+2026-10-29,CA,Rio Vista,Pickleball,1,4,0,0
+2026-10-29,CA,Rio Vista,Tennis,4,8,0,0
+2026-10-29,CA,Riverside,Pickleball,4,18,2,0
+2026-10-29,CA,Riverside,Racquetball,5,0,0,5
+2026-10-29,CA,Riverside,Squash,1,0,0,1
+2026-10-29,CA,Riverside,Tennis,58,159,1,11
+2026-10-29,CA,Robbins,Tennis,2,3,0,0
+2026-10-29,CA,Rocklin,Pickleball,3,12,0,1
+2026-10-29,CA,Rocklin,Tennis,10,36,1,0
+2026-10-29,CA,Rodeo,Tennis,1,2,0,0
+2026-10-29,CA,Rohnert Park,Badminton,2,10,0,0
+2026-10-29,CA,Rohnert Park,Pickleball,3,30,1,0
+2026-10-29,CA,Rohnert Park,Tennis,20,53,1,1
+2026-10-29,CA,Rolling Hills Estates,Pickleball,1,0,1,0
+2026-10-29,CA,Rolling Hills Estates,Tennis,1,8,1,0
+2026-10-29,CA,Rosemead,Racquetball,1,0,0,1
+2026-10-29,CA,Rosemead,Table Tennis,1,0,0,0
+2026-10-29,CA,Rosemead,Tennis,4,15,0,1
+2026-10-29,CA,Roseville,Pickleball,9,49,0,2
+2026-10-29,CA,Roseville,Table Tennis,1,1,0,0
+2026-10-29,CA,Roseville,Tennis,26,84,0,3
+2026-10-29,CA,Rossmoor,Tennis,1,2,0,0
+2026-10-29,CA,Rowland Heights,Tennis,6,11,0,0
+2026-10-29,CA,Royal Oaks,Tennis,1,1,0,0
+2026-10-29,CA,Running Springs,Tennis,2,3,0,0
+2026-10-29,CA,Ruth,Tennis,1,2,0,0
+2026-10-29,CA,SAMOA,Tennis,2,3,0,0
+2026-10-29,CA,SAN ANDREAS,Tennis,1,4,0,0
+2026-10-29,CA,SAN ANSELMO,Tennis,6,17,0,0
+2026-10-29,CA,SAN BRUNO,Tennis,3,10,0,0
+2026-10-29,CA,SAN GERONIMO,Tennis,1,1,0,0
+2026-10-29,CA,SAN GREGORIO,Tennis,1,1,0,0
+2026-10-29,CA,SAN JUAN BAUTISTA,Pickleball,1,6,0,0
+2026-10-29,CA,SAN MARTIN,Tennis,1,4,0,0
+2026-10-29,CA,SAN QUENTIN,Tennis,2,2,0,1
+2026-10-29,CA,SANTA BARBARA UNINCORPORATED,Pickleball,3,3,0,2
+2026-10-29,CA,SANTA BARBARA UNINCORPORATED,Tennis,41,66,1,5
+2026-10-29,CA,SANTA MARGARITA,Tennis,2,2,0,0
+2026-10-29,CA,SANTA YNEZ,Pickleball,1,2,0,0
+2026-10-29,CA,SANTA YNEZ,Tennis,16,22,0,0
+2026-10-29,CA,SAUSALITO,Tennis,5,11,0,0
+2026-10-29,CA,SELMA,Pickleball,1,4,0,0
+2026-10-29,CA,SELMA,Tennis,2,10,0,0
+2026-10-29,CA,SHAFTER,Pickleball,1,2,1,0
+2026-10-29,CA,SHAFTER,Tennis,2,7,0,1
+2026-10-29,CA,SHANDON,Tennis,3,3,0,0
+2026-10-29,CA,SHAVER LAKE,Tennis,1,1,0,0
+2026-10-29,CA,SLOUGHHOUSE,Tennis,2,2,0,0
+2026-10-29,CA,SOLVANG,Pickleball,1,2,0,0
+2026-10-29,CA,SOLVANG,Tennis,2,10,0,0
+2026-10-29,CA,SOQUEL,Pickleball,1,1,0,1
+2026-10-29,CA,SOQUEL,Tennis,1,6,0,0
+2026-10-29,CA,STINSON BEACH,Tennis,1,4,0,0
+2026-10-29,CA,STRATFORD,Tennis,1,1,0,0
+2026-10-29,CA,SUMMERLAND,Table Tennis,1,1,1,0
+2026-10-29,CA,SUMMERLAND,Tennis,2,4,0,1
+2026-10-29,CA,SUTTER CREEK,Tennis,1,4,0,0
+2026-10-29,CA,Sacramento,Pickleball,24,56,9,1
+2026-10-29,CA,Sacramento,Racquetball,3,4,0,3
+2026-10-29,CA,Sacramento,Table Tennis,2,0,1,0
+2026-10-29,CA,Sacramento,Tennis,130,340,13,6
+2026-10-29,CA,Sacramento,Teqpong,1,0,1,0
+2026-10-29,CA,Salinas,Tennis,34,77,0,13
+2026-10-29,CA,San Ardo,Tennis,1,1,0,0
+2026-10-29,CA,San Bernardino,Outdoor Racquetball,2,3,2,0
+2026-10-29,CA,San Bernardino,Pickleball,2,9,2,0
+2026-10-29,CA,San Bernardino,Table Tennis,1,1,0,0
+2026-10-29,CA,San Bernardino,Tennis,19,79,7,0
+2026-10-29,CA,San Carlos,Badminton,2,1,0,0
+2026-10-29,CA,San Carlos,Table Tennis,1,0,0,0
+2026-10-29,CA,San Carlos,Tennis,7,20,0,0
+2026-10-29,CA,San Clemente,Badminton,1,1,1,0
+2026-10-29,CA,San Clemente,Pickleball,5,18,1,0
+2026-10-29,CA,San Clemente,Pop Tennis,2,3,1,1
+2026-10-29,CA,San Clemente,Tennis,18,46,1,2
+2026-10-29,CA,San Diego,Badminton,8,9,1,1
+2026-10-29,CA,San Diego,Beach Tennis,1,0,0,0
+2026-10-29,CA,San Diego,Padel,5,15,3,0
+2026-10-29,CA,San Diego,Pickleball,47,125,13,7
+2026-10-29,CA,San Diego,Racquetball,7,3,0,5
+2026-10-29,CA,San Diego,Table Tennis,8,6,4,0
+2026-10-29,CA,San Diego,Tennis,246,739,28,31
+2026-10-29,CA,San Dimas,Racquetball,1,0,0,0
+2026-10-29,CA,San Dimas,Tennis,9,21,0,0
+2026-10-29,CA,San Fernando,Tennis,3,7,1,1
+2026-10-29,CA,San Francisco,Badminton,1,0,0,0
+2026-10-29,CA,San Francisco,Padel,3,0,1,0
+2026-10-29,CA,San Francisco,Pickleball,11,31,2,5
+2026-10-29,CA,San Francisco,Racquetball,2,2,0,1
+2026-10-29,CA,San Francisco,Squash,2,1,0,1
+2026-10-29,CA,San Francisco,Table Tennis,6,6,1,0
+2026-10-29,CA,San Francisco,Tennis,101,262,60,9
+2026-10-29,CA,San Gabriel,Pickleball,6,17,0,4
+2026-10-29,CA,San Gabriel,Tennis,15,34,0,8
+2026-10-29,CA,San Jacinto,Pickleball,1,6,0,0
+2026-10-29,CA,San Jacinto,Tennis,8,15,0,0
+2026-10-29,CA,San Jose,Badminton,6,11,0,0
+2026-10-29,CA,San Jose,Padel,1,6,1,0
+2026-10-29,CA,San Jose,Pickleball,18,47,1,7
+2026-10-29,CA,San Jose,Racquetball,3,0,0,3
+2026-10-29,CA,San Jose,Table Tennis,5,5,1,0
+2026-10-29,CA,San Jose,Tennis,138,403,1,26
+2026-10-29,CA,San José,Tennis,1,7,0,0
+2026-10-29,CA,San Juan Capistrano,Pickleball,1,1,0,0
+2026-10-29,CA,San Juan Capistrano,Tennis,16,37,0,3
+2026-10-29,CA,San Leandro,Pickleball,1,2,0,1
+2026-10-29,CA,San Leandro,Tennis,9,38,0,2
+2026-10-29,CA,San Lorenzo,Tennis,2,10,0,0
+2026-10-29,CA,San Luis Obispo,Pickleball,3,2,1,1
+2026-10-29,CA,San Luis Obispo,Racquetball,1,6,0,1
+2026-10-29,CA,San Luis Obispo,Squash,1,1,0,1
+2026-10-29,CA,San Luis Obispo,Tennis,45,70,3,15
+2026-10-29,CA,San Marcos,Padel,1,4,0,0
+2026-10-29,CA,San Marcos,Pickleball,3,0,3,0
+2026-10-29,CA,San Marcos,Racquetball,1,0,0,1
+2026-10-29,CA,San Marcos,Tennis,20,56,3,2
+2026-10-29,CA,San Marino,Pickleball,17,18,0,17
+2026-10-29,CA,San Marino,Tennis,64,126,1,57
+2026-10-29,CA,San Mateo,Pickleball,3,4,1,1
+2026-10-29,CA,San Mateo,Tennis,30,64,1,1
+2026-10-29,CA,San Pablo,Tennis,2,10,0,0
+2026-10-29,CA,San Pedro,Padel,1,6,0,0
+2026-10-29,CA,San Pedro,Racquetball,1,0,0,1
+2026-10-29,CA,San Pedro,Tennis,13,17,0,4
+2026-10-29,CA,San Rafael,Padel,1,0,0,0
+2026-10-29,CA,San Rafael,Pickleball,2,0,0,1
+2026-10-29,CA,San Rafael,Table Tennis,1,0,0,0
+2026-10-29,CA,San Rafael,Tennis,38,86,0,5
+2026-10-29,CA,San Ramon,Table Tennis,1,0,0,0
+2026-10-29,CA,San Ramon,Tennis,22,57,1,0
+2026-10-29,CA,San Simeon,Tennis,2,3,0,1
+2026-10-29,CA,San Ysidro,Tennis,1,2,1,0
+2026-10-29,CA,Sanger,Tennis,2,14,0,0
+2026-10-29,CA,Santa Ana,Badminton,1,0,0,0
+2026-10-29,CA,Santa Ana,Pickleball,13,35,6,0
+2026-10-29,CA,Santa Ana,Racquetball,1,3,0,0
+2026-10-29,CA,Santa Ana,Tennis,26,86,7,0
+2026-10-29,CA,Santa Barbara,Pickleball,13,45,2,6
+2026-10-29,CA,Santa Barbara,Tennis,53,104,3,33
+2026-10-29,CA,Santa Clara,Pickleball,2,16,0,1
+2026-10-29,CA,Santa Clara,Table Tennis,3,1,0,0
+2026-10-29,CA,Santa Clara,Tennis,25,87,1,2
+2026-10-29,CA,Santa Clara County,Pickleball,1,1,0,0
+2026-10-29,CA,Santa Clara County,Tennis,1,2,0,0
+2026-10-29,CA,Santa Clarita,Pickleball,3,5,0,0
+2026-10-29,CA,Santa Clarita,Racquetball,1,0,0,1
+2026-10-29,CA,Santa Clarita,Table Tennis,1,2,0,0
+2026-10-29,CA,Santa Clarita,Tennis,15,26,0,1
+2026-10-29,CA,Santa Cruz,Badminton,2,2,0,0
+2026-10-29,CA,Santa Cruz,Pickleball,2,2,0,0
+2026-10-29,CA,Santa Cruz,Table Tennis,2,1,0,0
+2026-10-29,CA,Santa Cruz,Tennis,28,58,0,0
+2026-10-29,CA,Santa Fe Springs,Badminton,1,0,0,0
+2026-10-29,CA,Santa Fe Springs,Tennis,1,2,0,0
+2026-10-29,CA,Santa Maria,Pickleball,1,6,0,0
+2026-10-29,CA,Santa Maria,Tennis,10,34,0,0
+2026-10-29,CA,Santa Monica,Beach Tennis,2,0,0,0
+2026-10-29,CA,Santa Monica,Pickleball,3,16,1,1
+2026-10-29,CA,Santa Monica,Racquetball,1,2,0,1
+2026-10-29,CA,Santa Monica,Table Tennis,1,1,0,0
+2026-10-29,CA,Santa Monica,Tennis,32,59,1,2
+2026-10-29,CA,Santa Paula,Table Tennis,1,1,0,1
+2026-10-29,CA,Santa Paula,Tennis,1,1,0,0
+2026-10-29,CA,Santa Rosa,Pickleball,7,19,0,0
+2026-10-29,CA,Santa Rosa,Tennis,70,154,0,4
+2026-10-29,CA,Santee,Pickleball,2,8,2,0
+2026-10-29,CA,Santee,Racquetball,1,0,0,1
+2026-10-29,CA,Santee,Tennis,6,34,2,0
+2026-10-29,CA,Saratoga,Badminton,1,1,1,0
+2026-10-29,CA,Saratoga,Pickleball,4,7,0,1
+2026-10-29,CA,Saratoga,Table Tennis,2,2,0,0
+2026-10-29,CA,Saratoga,Tennis,30,76,0,4
+2026-10-29,CA,Scotts Valley,Tennis,14,18,0,0
+2026-10-29,CA,Seal Beach,Pickleball,3,32,1,0
+2026-10-29,CA,Seal Beach,Tennis,7,28,1,0
+2026-10-29,CA,Seaside,Tennis,6,24,0,2
+2026-10-29,CA,Sebastopol,Table Tennis,2,3,0,0
+2026-10-29,CA,Sebastopol,Tennis,16,25,0,3
+2026-10-29,CA,Sherman Oaks,Pickleball,1,1,0,1
+2026-10-29,CA,Sherman Oaks,Tennis,6,10,0,2
+2026-10-29,CA,Shingle Springs,Pickleball,1,8,0,0
+2026-10-29,CA,Shingle Springs,Tennis,1,11,0,0
+2026-10-29,CA,Sierra Madre,Pickleball,2,2,0,2
+2026-10-29,CA,Sierra Madre,Tennis,4,7,0,2
+2026-10-29,CA,Sierraville,Tennis,1,1,1,0
+2026-10-29,CA,Signal Hill,Tennis,2,3,0,2
+2026-10-29,CA,Simi Valley,Pickleball,10,51,0,1
+2026-10-29,CA,Simi Valley,Tennis,46,80,0,9
+2026-10-29,CA,Soda Springs,Tennis,3,4,0,0
+2026-10-29,CA,Solana Beach,Pickleball,3,5,0,1
+2026-10-29,CA,Solana Beach,Tennis,10,41,0,1
+2026-10-29,CA,Soledad,Tennis,2,4,0,0
+2026-10-29,CA,Somis,Tennis,9,9,0,5
+2026-10-29,CA,Sonoma,Pickleball,2,2,0,0
+2026-10-29,CA,Sonoma,Table Tennis,1,1,0,0
+2026-10-29,CA,Sonoma,Tennis,60,73,0,1
+2026-10-29,CA,Sonora,Tennis,4,10,0,0
+2026-10-29,CA,South El Monte,Table Tennis,1,0,0,0
+2026-10-29,CA,South El Monte,Tennis,2,22,0,0
+2026-10-29,CA,South Gate,Pickleball,2,11,0,0
+2026-10-29,CA,South Gate,Tennis,4,18,0,1
+2026-10-29,CA,South Lake Tahoe,Tennis,9,24,0,0
+2026-10-29,CA,South Pasadena,Pickleball,7,18,0,6
+2026-10-29,CA,South Pasadena,Tennis,23,46,0,13
+2026-10-29,CA,South San Francisco,Badminton,4,1,0,0
+2026-10-29,CA,South San Francisco,Basque Pelota: Frontenis,1,1,0,0
+2026-10-29,CA,South San Francisco,Basque Pelota: Grand Chistera,1,1,0,0
+2026-10-29,CA,South San Francisco,Basque Pelota: Jai Alai,1,1,0,0
+2026-10-29,CA,South San Francisco,Basque Pelota: Joko Garbi,1,1,0,0
+2026-10-29,CA,South San Francisco,Basque Pelota: Pala Corta,1,1,0,0
+2026-10-29,CA,South San Francisco,Basque Pelota: Paleta Cuero,1,1,0,0
+2026-10-29,CA,South San Francisco,Basque Pelota: Paleta Goma,1,1,0,0
+2026-10-29,CA,South San Francisco,Basque Pelota: Xare,1,1,0,0
+2026-10-29,CA,South San Francisco,Padel,1,0,0,0
+2026-10-29,CA,South San Francisco,Pickleball,1,10,0,0
+2026-10-29,CA,South San Francisco,Table Tennis,1,2,0,0
+2026-10-29,CA,South San Francisco,Tennis,11,31,0,0
+2026-10-29,CA,South Wawona,Tennis,1,1,0,0
+2026-10-29,CA,Spreckels,Tennis,1,1,0,0
+2026-10-29,CA,Spring Valley,Pickleball,3,13,0,1
+2026-10-29,CA,Spring Valley,Tennis,8,44,0,0
+2026-10-29,CA,Springville,Tennis,1,2,0,0
+2026-10-29,CA,St Helena,Pickleball,2,2,0,1
+2026-10-29,CA,St Helena,Tennis,52,69,0,0
+2026-10-29,CA,Stanford,Badminton,1,0,0,0
+2026-10-29,CA,Stanford,Squash,1,7,0,1
+2026-10-29,CA,Stanford,Table Tennis,2,2,1,0
+2026-10-29,CA,Stanford,Tennis,6,38,0,3
+2026-10-29,CA,Stanton,Tennis,2,13,0,0
+2026-10-29,CA,Stevenson Ranch,Badminton,1,1,0,1
+2026-10-29,CA,Stevenson Ranch,Pickleball,1,1,0,1
+2026-10-29,CA,Stevenson Ranch,Tennis,3,9,0,1
+2026-10-29,CA,Stockton,Padel,1,4,1,0
+2026-10-29,CA,Stockton,Pickleball,2,10,1,0
+2026-10-29,CA,Stockton,Tennis,45,109,1,7
+2026-10-29,CA,Stones Landing,Tennis,1,1,0,0
+2026-10-29,CA,Strathmore,Tennis,1,4,0,0
+2026-10-29,CA,Studio City,Tennis,6,16,0,1
+2026-10-29,CA,Sugarloaf,Tennis,1,1,0,0
+2026-10-29,CA,Sun Valley,Tennis,1,1,0,0
+2026-10-29,CA,Sunland,Tennis,4,5,0,1
+2026-10-29,CA,Sunnyvale,Badminton,3,2,0,1
+2026-10-29,CA,Sunnyvale,Padel,1,0,1,0
+2026-10-29,CA,Sunnyvale,Pickleball,3,15,0,1
+2026-10-29,CA,Sunnyvale,Racquetball,1,0,0,1
+2026-10-29,CA,Sunnyvale,Table Tennis,2,2,1,0
+2026-10-29,CA,Sunnyvale,Tennis,29,68,2,3
+2026-10-29,CA,Susanville,Racquetball,1,0,0,0
+2026-10-29,CA,Susanville,Tennis,1,2,0,0
+2026-10-29,CA,Sutter,Tennis,1,4,0,0
+2026-10-29,CA,Sylmar,Badminton,1,0,0,0
+2026-10-29,CA,Sylmar,Tennis,4,8,1,0
+2026-10-29,CA,TAFT,Racquetball,1,5,0,0
+2026-10-29,CA,TAFT,Tennis,3,11,0,0
+2026-10-29,CA,TALMAGE,Tennis,1,1,0,0
+2026-10-29,CA,TEPUSQUET CANYON,Tennis,1,1,0,0
+2026-10-29,CA,THERMAL,Tennis,2,2,0,1
+2026-10-29,CA,THORNTON,Tennis,1,1,0,0
+2026-10-29,CA,TOLLHOUSE,Tennis,1,6,0,0
+2026-10-29,CA,TOMALES,Tennis,1,4,0,0
+2026-10-29,CA,TORO CANYON,Tennis,20,29,0,4
+2026-10-29,CA,TRANQUILLITY,Tennis,1,5,0,0
+2026-10-29,CA,TRES PINOS,Tennis,2,3,0,0
+2026-10-29,CA,TRINIDAD,Tennis,1,1,1,0
+2026-10-29,CA,TRONA,Tennis,1,2,0,0
+2026-10-29,CA,TULELAKE,Tennis,1,1,0,0
+2026-10-29,CA,TUOLUMNE,Tennis,1,3,0,0
+2026-10-29,CA,Tahoe City,Pickleball,1,4,0,1
+2026-10-29,CA,Tahoe City,Tennis,16,34,0,2
+2026-10-29,CA,Tahoe Vista,Tennis,1,5,0,0
+2026-10-29,CA,Tarzana,Badminton,1,1,0,0
+2026-10-29,CA,Tarzana,Pickleball,7,17,0,2
+2026-10-29,CA,Tarzana,Tennis,32,69,0,3
+2026-10-29,CA,Tehachapi,Pickleball,1,4,0,0
+2026-10-29,CA,Tehachapi,Tennis,2,10,0,0
+2026-10-29,CA,Tehama County,Pickleball,1,1,0,0
+2026-10-29,CA,Tehama County,Tennis,3,10,0,0
+2026-10-29,CA,Temecula,Pickleball,11,44,3,4
+2026-10-29,CA,Temecula,Racquetball,1,0,0,1
+2026-10-29,CA,Temecula,Table Tennis,1,1,0,0
+2026-10-29,CA,Temecula,Tennis,51,112,3,26
+2026-10-29,CA,Temple City,Pickleball,2,5,0,1
+2026-10-29,CA,Temple City,Tennis,2,12,0,0
+2026-10-29,CA,Templeton,Pickleball,1,8,0,0
+2026-10-29,CA,Templeton,Tennis,14,17,0,1
+2026-10-29,CA,The Sea Ranch,Tennis,3,6,0,0
+2026-10-29,CA,Thousand Oaks,Pickleball,4,7,0,1
+2026-10-29,CA,Thousand Oaks,Tennis,36,92,0,1
+2026-10-29,CA,Thousand Palms,Tennis,1,0,0,0
+2026-10-29,CA,Tiburon,Pickleball,1,1,0,0
+2026-10-29,CA,Tiburon,Tennis,18,37,0,1
+2026-10-29,CA,Topanga,Tennis,2,1,0,0
+2026-10-29,CA,Torrance,Badminton,1,3,0,1
+2026-10-29,CA,Torrance,Padel,1,0,0,1
+2026-10-29,CA,Torrance,Pickleball,6,9,2,3
+2026-10-29,CA,Torrance,Pop Tennis,2,2,1,1
+2026-10-29,CA,Torrance,Racquetball,1,0,0,1
+2026-10-29,CA,Torrance,Squash,1,0,0,1
+2026-10-29,CA,Torrance,Table Tennis,2,1,0,1
+2026-10-29,CA,Torrance,Tennis,19,79,3,3
+2026-10-29,CA,Trabuco Canyon,Pickleball,1,0,0,0
+2026-10-29,CA,Trabuco Canyon,Tennis,1,0,0,0
+2026-10-29,CA,Tracy,Badminton,1,0,0,0
+2026-10-29,CA,Tracy,Pickleball,2,9,0,0
+2026-10-29,CA,Tracy,Tennis,26,58,0,8
+2026-10-29,CA,Travis AFB,Tennis,4,10,0,0
+2026-10-29,CA,Trinity Center,Tennis,1,1,0,0
+2026-10-29,CA,Truckee,Pickleball,2,4,0,0
+2026-10-29,CA,Truckee,Tennis,10,30,0,0
+2026-10-29,CA,Tujunga,Pickleball,1,0,0,1
+2026-10-29,CA,Tujunga,Tennis,2,5,0,0
+2026-10-29,CA,Tulare,Tennis,6,30,0,0
+2026-10-29,CA,Tulare County,Tennis,1,2,0,0
+2026-10-29,CA,Turlock,Pickleball,1,1,0,0
+2026-10-29,CA,Turlock,Tennis,10,31,0,4
+2026-10-29,CA,Tustin,Pickleball,7,31,1,0
+2026-10-29,CA,Tustin,Tennis,16,33,1,4
+2026-10-29,CA,Twain Harte,Tennis,1,0,0,0
+2026-10-29,CA,Twentynine Palms,Tennis,6,16,0,1
+2026-10-29,CA,UPPER LAKE,Tennis,1,1,0,0
+2026-10-29,CA,Ukiah,Tennis,10,28,0,1
+2026-10-29,CA,Union City,Badminton,1,0,1,0
+2026-10-29,CA,Union City,Tennis,5,13,1,0
+2026-10-29,CA,Universal City,Tennis,1,2,0,0
+2026-10-29,CA,Upland,Pickleball,1,6,0,0
+2026-10-29,CA,Upland,Tennis,22,39,0,2
+2026-10-29,CA,VANDENBERG VILLAGE,Tennis,2,4,0,0
+2026-10-29,CA,VILLA PARK,Tennis,3,10,0,2
+2026-10-29,CA,Vacaville,Pickleball,2,2,0,0
+2026-10-29,CA,Vacaville,Tennis,25,50,1,0
+2026-10-29,CA,Valencia,Pickleball,3,14,0,2
+2026-10-29,CA,Valencia,Racquetball,1,0,0,1
+2026-10-29,CA,Valencia,Tennis,11,28,0,2
+2026-10-29,CA,Vallejo,Pickleball,3,3,1,0
+2026-10-29,CA,Vallejo,Table Tennis,1,2,0,0
+2026-10-29,CA,Vallejo,Tennis,14,33,1,0
+2026-10-29,CA,Valley Center,Pickleball,1,1,0,0
+2026-10-29,CA,Valley Center,Tennis,2,1,0,0
+2026-10-29,CA,Valley Springs,Tennis,1,0,0,0
+2026-10-29,CA,Valley Village,Tennis,1,1,0,0
+2026-10-29,CA,Van Nuys,Racquetball,1,0,0,1
+2026-10-29,CA,Van Nuys,Tennis,15,49,0,6
+2026-10-29,CA,Vandenberg AFB,Tennis,2,4,0,0
+2026-10-29,CA,Venice,Pop Tennis,1,11,1,0
+2026-10-29,CA,Venice,Tennis,1,6,0,0
+2026-10-29,CA,Venice,Teqpong,1,0,1,0
+2026-10-29,CA,Ventura,Pickleball,3,3,0,0
+2026-10-29,CA,Ventura,Racquetball,1,0,0,1
+2026-10-29,CA,Ventura,Tennis,19,65,0,5
+2026-10-29,CA,Ventura County,Tennis,2,4,0,0
+2026-10-29,CA,Victorville,Tennis,9,33,0,1
+2026-10-29,CA,Visalia,Pickleball,5,10,1,1
+2026-10-29,CA,Visalia,Tennis,11,53,1,2
+2026-10-29,CA,Vista,Pickleball,5,20,0,1
+2026-10-29,CA,Vista,Tennis,13,43,1,1
+2026-10-29,CA,WALNUT GROVE,Tennis,2,2,0,0
+2026-10-29,CA,WATERFORD,Tennis,3,7,0,0
+2026-10-29,CA,WILLITS,Badminton,1,1,0,0
+2026-10-29,CA,WILLITS,Tennis,2,6,0,0
+2026-10-29,CA,WILLOW CREEK,Tennis,1,2,1,0
+2026-10-29,CA,WILTON,Pickleball,1,6,0,0
+2026-10-29,CA,WILTON,Tennis,4,6,0,0
+2026-10-29,CA,WINCHESTER,Pickleball,2,3,1,0
+2026-10-29,CA,WINCHESTER,Tennis,3,8,0,0
+2026-10-29,CA,WISHON,Tennis,1,1,0,0
+2026-10-29,CA,WOODACRE,Tennis,1,2,0,0
+2026-10-29,CA,WOODBRIDGE,Pickleball,1,2,0,0
+2026-10-29,CA,WOODBRIDGE,Tennis,2,7,0,1
+2026-10-29,CA,WOODSIDE,Pickleball,8,8,0,0
+2026-10-29,CA,WOODSIDE,Tennis,113,128,0,4
+2026-10-29,CA,Walker,Tennis,1,1,0,0
+2026-10-29,CA,Walnut,Tennis,6,25,0,0
+2026-10-29,CA,Walnut Creek,Beach Tennis,2,0,0,0
+2026-10-29,CA,Walnut Creek,Pickleball,3,5,0,1
+2026-10-29,CA,Walnut Creek,Tennis,22,73,0,1
+2026-10-29,CA,Warner Springs,Tennis,1,4,0,0
+2026-10-29,CA,Watsonville,Pickleball,2,8,0,0
+2026-10-29,CA,Watsonville,Tennis,21,36,0,1
+2026-10-29,CA,Weaverville,Pickleball,1,8,0,0
+2026-10-29,CA,Weaverville,Tennis,1,2,0,0
+2026-10-29,CA,Weed,Tennis,1,4,0,0
+2026-10-29,CA,West Covina,Racquetball,1,0,0,1
+2026-10-29,CA,West Covina,Tennis,9,19,0,0
+2026-10-29,CA,West Hills,Tennis,16,21,0,0
+2026-10-29,CA,West Hollywood,Pickleball,3,2,0,0
+2026-10-29,CA,West Hollywood,Tennis,19,28,0,0
+2026-10-29,CA,West Sacramento,Padel,1,4,1,0
+2026-10-29,CA,West Sacramento,Tennis,4,17,0,0
+2026-10-29,CA,Westlake Village,Pickleball,1,3,0,0
+2026-10-29,CA,Westlake Village,Tennis,24,49,0,1
+2026-10-29,CA,Westminster,Pickleball,2,3,0,0
+2026-10-29,CA,Westminster,Table Tennis,1,0,0,0
+2026-10-29,CA,Westminster,Tennis,6,24,0,1
+2026-10-29,CA,Wherry Housing,Tennis,1,1,0,0
+2026-10-29,CA,Whittier,Padel,1,5,0,0
+2026-10-29,CA,Whittier,Racquetball,1,1,0,1
+2026-10-29,CA,Whittier,Tennis,20,64,0,0
+2026-10-29,CA,Wildomar,Tennis,1,6,0,0
+2026-10-29,CA,Willows,Tennis,2,7,0,0
+2026-10-29,CA,Wilmington,Tennis,2,12,0,0
+2026-10-29,CA,Windsor,Pickleball,1,1,0,1
+2026-10-29,CA,Windsor,Tennis,3,9,0,0
+2026-10-29,CA,Winnetka,Tennis,3,7,0,0
+2026-10-29,CA,Winters,Pickleball,1,1,0,0
+2026-10-29,CA,Winters,Tennis,2,3,0,0
+2026-10-29,CA,Woodland,Pickleball,2,16,0,1
+2026-10-29,CA,Woodland,Tennis,15,30,0,0
+2026-10-29,CA,Woodland Hills,Racquetball,1,0,0,1
+2026-10-29,CA,Woodland Hills,Tennis,62,118,0,7
+2026-10-29,CA,YORKVILLE,Tennis,1,1,0,0
+2026-10-29,CA,YREKA,Tennis,2,13,0,0
+2026-10-29,CA,Yorba Linda,Pickleball,7,17,5,0
+2026-10-29,CA,Yorba Linda,Racquetball,1,0,0,1
+2026-10-29,CA,Yorba Linda,Tennis,16,33,1,0
+2026-10-29,CA,Yountville,Pickleball,1,4,0,0
+2026-10-29,CA,Yountville,Tennis,8,8,0,0
+2026-10-29,CA,Yuba City,Pickleball,2,10,0,0
+2026-10-29,CA,Yuba City,Tennis,6,27,0,1
+2026-10-29,CA,Yucaipa,Pickleball,2,9,0,0
+2026-10-29,CA,Yucaipa,Table Tennis,1,0,0,0
+2026-10-29,CA,Yucaipa,Tennis,6,18,0,0
+2026-10-29,CA,Yucca Valley,Pickleball,2,7,0,0
+2026-10-29,CA,Yucca Valley,Tennis,6,16,0,0
+2026-10-29,NV,Austin,Tennis,1,1,0,0
+2026-10-29,NV,Battle Mountain,Tennis,1,2,0,0
+2026-10-29,NV,Beatty,Tennis,1,1,0,0
+2026-10-29,NV,Boulder City,Pickleball,1,1,0,0
+2026-10-29,NV,Boulder City,Racquetball,1,0,1,0
+2026-10-29,NV,Boulder City,Tennis,5,20,1,0
+2026-10-29,NV,Carlin,Tennis,1,1,0,0
+2026-10-29,NV,Carson City,Pickleball,1,8,0,0
+2026-10-29,NV,Carson City,Tennis,7,22,1,2
+2026-10-29,NV,Churchill County,Tennis,1,4,0,0
+2026-10-29,NV,Clark County,Pickleball,1,1,0,0
+2026-10-29,NV,Clark County,Tennis,4,4,0,1
+2026-10-29,NV,Douglas County,Pickleball,1,1,0,0
+2026-10-29,NV,Douglas County,Tennis,4,5,0,0
+2026-10-29,NV,Elko,Basque Pelota: Frontenis,1,1,0,0
+2026-10-29,NV,Elko,Basque Pelota: Grand Chistera,1,1,0,0
+2026-10-29,NV,Elko,Basque Pelota: Jai Alai,1,1,0,0
+2026-10-29,NV,Elko,Basque Pelota: Joko Garbi,1,1,0,0
+2026-10-29,NV,Elko,Basque Pelota: Pala Corta,1,1,0,0
+2026-10-29,NV,Elko,Basque Pelota: Paleta Cuero,1,1,0,0
+2026-10-29,NV,Elko,Basque Pelota: Paleta Goma,1,1,0,0
+2026-10-29,NV,Elko,Basque Pelota: Xare,1,1,0,0
+2026-10-29,NV,Elko,Squash,1,0,0,0
+2026-10-29,NV,Elko,Tennis,2,8,0,0
+2026-10-29,NV,Ely,Tennis,1,1,0,0
+2026-10-29,NV,Enterprise,Pickleball,1,2,0,0
+2026-10-29,NV,Enterprise,Tennis,13,24,0,1
+2026-10-29,NV,Eureka,Tennis,1,1,0,0
+2026-10-29,NV,Fallon,Tennis,1,2,0,0
+2026-10-29,NV,Fernley,Tennis,1,2,0,0
+2026-10-29,NV,Franktown,Tennis,1,1,1,0
+2026-10-29,NV,Gardnerville,Tennis,1,4,0,0
+2026-10-29,NV,Gardnerville Ranchos,Tennis,1,2,0,0
+2026-10-29,NV,Genoa,Tennis,1,2,0,0
+2026-10-29,NV,Gerlach,Tennis,1,1,0,0
+2026-10-29,NV,Glenbrook,Tennis,2,7,1,1
+2026-10-29,NV,Golden Valley,Tennis,1,2,1,0
+2026-10-29,NV,Henderson,Pickleball,20,63,11,3
+2026-10-29,NV,Henderson,Racquetball,6,0,5,1
+2026-10-29,NV,Henderson,Table Tennis,2,6,1,0
+2026-10-29,NV,Henderson,Tennis,61,191,24,3
+2026-10-29,NV,Incline Village,Pickleball,1,16,0,0
+2026-10-29,NV,Incline Village,Tennis,9,19,0,3
+2026-10-29,NV,Indian Hills,Tennis,1,2,0,0
+2026-10-29,NV,Indian Springs,Tennis,1,2,0,0
+2026-10-29,NV,Jackpot,Tennis,1,2,0,0
+2026-10-29,NV,Johnson Lane,Tennis,1,2,0,0
+2026-10-29,NV,KINGS BEACH,Pickleball,1,2,0,0
+2026-10-29,NV,KINGS BEACH,Tennis,2,4,0,0
+2026-10-29,NV,Kingsbury,Tennis,3,3,0,0
+2026-10-29,NV,Las Vegas,Badminton,2,0,0,0
+2026-10-29,NV,Las Vegas,Padel,1,0,0,0
+2026-10-29,NV,Las Vegas,Pickleball,32,116,9,4
+2026-10-29,NV,Las Vegas,Racquetball,9,10,2,7
+2026-10-29,NV,Las Vegas,Squash,1,0,0,1
+2026-10-29,NV,Las Vegas,Table Tennis,3,3,1,0
+2026-10-29,NV,Las Vegas,Tennis,111,365,6,3
+2026-10-29,NV,Laughlin,Pickleball,1,3,0,0
+2026-10-29,NV,Laughlin,Tennis,3,7,0,0
+2026-10-29,NV,Lemmon Valley,Tennis,1,1,1,0
+2026-10-29,NV,Lincoln County,Tennis,1,1,0,1
+2026-10-29,NV,Lovelock,Tennis,1,1,0,0
+2026-10-29,NV,Lyon County,Tennis,2,8,0,0
+2026-10-29,NV,Mesquite,Pickleball,4,11,1,2
+2026-10-29,NV,Mesquite,Tennis,6,21,1,2
+2026-10-29,NV,Minden,Tennis,1,4,0,0
+2026-10-29,NV,Moapa Valley,Pickleball,2,3,1,0
+2026-10-29,NV,Moapa Valley,Tennis,4,12,1,0
+2026-10-29,NV,Mogul,Tennis,1,1,1,0
+2026-10-29,NV,Nixon,Tennis,1,2,0,0
+2026-10-29,NV,North Las Vegas,Badminton,1,0,1,0
+2026-10-29,NV,North Las Vegas,Pickleball,5,14,1,0
+2026-10-29,NV,North Las Vegas,Racquetball,1,0,0,1
+2026-10-29,NV,North Las Vegas,Table Tennis,1,0,1,0
+2026-10-29,NV,North Las Vegas,Tennis,20,66,6,0
+2026-10-29,NV,Nye County,Tennis,1,4,0,0
+2026-10-29,NV,Pahrump,Tennis,2,6,0,0
+2026-10-29,NV,Paradise,Pickleball,2,16,0,0
+2026-10-29,NV,Paradise,Tennis,29,53,0,0
+2026-10-29,NV,Reno,Padel,1,0,0,0
+2026-10-29,NV,Reno,Pickleball,21,82,9,1
+2026-10-29,NV,Reno,Racquetball,1,0,0,1
+2026-10-29,NV,Reno,Tennis,56,146,18,4
+2026-10-29,NV,Round Hill Village,Tennis,1,2,0,0
+2026-10-29,NV,Round Mountain,Tennis,1,2,0,0
+2026-10-29,NV,Smith Valley,Pickleball,1,2,0,0
+2026-10-29,NV,Smith Valley,Tennis,1,1,0,0
+2026-10-29,NV,Spanish Springs,Pickleball,1,2,0,0
+2026-10-29,NV,Sparks,Pickleball,1,2,1,0
+2026-10-29,NV,Sparks,Tennis,15,32,0,0
+2026-10-29,NV,Spring Creek,Tennis,1,1,0,0
+2026-10-29,NV,Spring Valley,Pickleball,1,6,0,0
+2026-10-29,NV,Spring Valley,Tennis,35,73,1,2
+2026-10-29,NV,Storey County,Tennis,1,1,0,0
+2026-10-29,NV,Summerlin South,Pickleball,2,12,0,0
+2026-10-29,NV,Summerlin South,Tennis,9,28,0,1
+2026-10-29,NV,Sunrise Manor,Tennis,9,32,0,0
+2026-10-29,NV,Tonopah,Tennis,1,1,0,0
+2026-10-29,NV,Verdi,Tennis,4,4,0,2
+2026-10-29,NV,Washoe County,Tennis,1,1,0,0
+2026-10-29,NV,West Wendover,Tennis,1,2,0,0
+2026-10-29,NV,Whitney,Pickleball,1,4,0,0
+2026-10-29,NV,Whitney,Tennis,15,40,0,0
+2026-10-29,NV,Winchester,Pickleball,1,0,0,0
+2026-10-29,NV,Winchester,Tennis,13,26,0,0
+2026-10-29,NV,Winnemucca,Pickleball,1,1,0,0
+2026-10-29,NV,Winnemucca,Tennis,1,2,0,0
+2026-10-29,NV,Yerington,Tennis,1,2,0,0
+2026-10-29,NV,Zephyr Cove,Tennis,1,2,0,0

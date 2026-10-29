@@ -35,3 +35,4 @@ A venue known only from an undated reported row has no date and counts as stale 
 | Month | Venues | Seen in 35 days | SLAs met | Notes |
 |---|---|---|---|---|
 | 2026-10 (baseline, no refresh run) | 9,941 | 99.9% (9 undated reported rows) | 6 of 7 | OSM extract 2026-10-09, Overture release 2026-09-23 |
+| 2026-10-29 (first refresh, Overture + addresses only) | 10,288 | 100% | 6 of 8 | OSM extract 2026-10-23 kept (6 days old), Overture release 2026-10-21.0; breaches: named share 16.1%, oldest event check 16 days (4 table tennis/pickleball sources are script or PDF pages) |
