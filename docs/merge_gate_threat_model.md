@@ -8,7 +8,7 @@ The public map: venue facts, event dates and the links that send people to other
 ## How the gate works
 An agent opens a PR from a `claude/refresh-*` branch. When `ci` passes, a workflow runs main's copy of `ci/check_refresh_diff.py` against the PR's files. If every changed file is on a short allowlist and the export diff is under the caps (venues: 2% added or removed, 5% changed, 1% drop, 0.5% gaining a URL; every other array: 20% of rows and 5 new URLs), it squash-merges that exact commit and redeploys Pages. Otherwise it comments "escalate" and a person decides.
 
-**State today:** `AGENTS_ENABLED` and `AGENT_AUTOMERGE_R0` are both `true` (the second set 2026-10-25), so R0 auto-merge is on. It has not merged anything: the last five gate runs were skipped, and the last 12 merged PRs were merged by the owner, including the monthly refresh.
+**State today:** `AGENTS_ENABLED` and `AGENT_AUTOMERGE_R0` are both `true` (the second set 2026-10-25), so R0 auto-merge is on. It has merged one PR: #410 ("Refresh 2026-10-25", 6 files, 4 venues changed), merged by `github-actions` about a minute after it opened, the same minute as the gate's R0 comment. The 100 most recent gate runs were all skipped (they were not refresh PRs), and `docs/agent_log.csv` still lists #410 as `open`. Correction 2026-10-29: an earlier draft of this page said it had merged nothing.
 
 ## Who is trusted
 - **Untrusted:** web pages the agent reads, issue text, forks.
