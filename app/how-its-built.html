@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://abov.github.io/courtconnect-ca/how-its-built.html">
 <meta property="og:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
 <style>
-  /* Same tokens and fonts as index.html so the two pages read as one site. No scripts, no cookies, no third-party requests. */
+  /* Same tokens and fonts as index.html so the two pages read as one site. No cookies, no third-party requests. */
   @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500 800; font-display: swap; src: url(fonts/plus-jakarta-sans-latin.woff2) format("woff2"); }
   :root {
     --font-body: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -53,7 +53,7 @@
   .stats div { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 14px; }
   .stats dt { font-size: 13px; color: var(--muted); }
   .stats dd { margin: 2px 0 0; font: 700 22px/1.2 var(--font-head); }
-  .stats dd small { display: block; font: 400 13px/1.4 var(--font-body); color: var(--muted); margin-top: 2px; }
+  .stats small { display: block; font: 400 13px/1.4 var(--font-body); color: var(--muted); margin-top: 2px; }
 
   /* Pipeline: a numbered list that stacks on phones, so text never shrinks to fit a diagram. */
   .flow { list-style: none; counter-reset: step; margin: 14px 0 0; padding: 0; display: grid; gap: 0; }
@@ -86,14 +86,14 @@
 
 <main class="wrap">
   <h2 id="numbers">The numbers, with dates</h2>
-  <p class="meta">From the data-quality scorecard and project checks of 2026-10-29. They are a snapshot, not a live feed: the repository regenerates them with <code>make quality</code>.</p>
+  <p class="meta">From the data-quality scorecard and project checks of <span id="asof">2026-10-29</span>. They are written by <code>make stats</code> from the project's own checks at each refresh, and CI fails if they fall behind the scorecard.</p>
   <dl class="stats">
-    <div><dt>Venues on the map</dt><dd>10,288<small>41 of 82 sports have at least one venue</small></dd></div>
-    <div><dt>Service levels met</dt><dd>7 of 8<small>the miss is real: 16.2% of venues have a real name, goal 25%</small></dd></div>
-    <div><dt>Place-to-court matching</dt><dd>0 wrong merges<small>129 hand-labelled pairs, 4 missed matches</small></dd></div>
-    <div><dt>Big source, small footprint</dt><dd>743 MB<small>fetched of 39.6 GB of Overture places and addresses</small></dd></div>
-    <div><dt>Warehouse</dt><dd>53 models<small>34 seeds, 32 custom SQL tests plus column tests</small></dd></div>
-    <div><dt>Decisions on record</dt><dd>26 ADRs<small>one of them reverses an earlier choice</small></dd></div>
+    <div><dt>Venues on the map</dt><dd id="s-venues">10,288</dd><small id="s-venues-n">41 of 82 sports have at least one venue</small></div>
+    <div><dt>Service levels met</dt><dd id="s-sla">7 of 8</dd><small id="s-sla-n">16.2% of venues have a real name (goal 25%)</small></div>
+    <div><dt>Place-to-court matching</dt><dd id="s-gold">0 wrong merges</dd><small id="s-gold-n">129 hand-labelled pairs, 4 missed matches</small></div>
+    <div><dt>Big source, small footprint</dt><dd id="s-big">743 MB</dd><small id="s-big-n">fetched of 39.6 GB of Overture places and addresses</small></div>
+    <div><dt>Warehouse</dt><dd id="s-models">53 models</dd><small id="s-models-n">34 seeds, 254 dbt tests passing</small></div>
+    <div><dt>Decisions on record</dt><dd id="s-adrs">26 ADRs</dd><small>one of them reverses an earlier choice</small></div>
   </dl>
 
   <h2 id="flow">From source to map</h2>
@@ -151,14 +151,35 @@
   <h2 id="more">Go deeper</h2>
   <ul class="plain">
     <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/case_study.md">Case study</a>: the problem, trade-offs and incidents, in one read.</li>
-    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/architecture.md">Architecture</a>, the <a href="dbt-docs/">dbt docs and lineage</a> (built from small sample data, structure only) and the <a href="data-dictionary.md">data dictionary</a>.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/architecture.md">Architecture</a>, the <a href="dbt-docs/">dbt docs and lineage</a> (built from small sample data, structure only) and the <a href="https://github.com/abov/courtconnect-ca/blob/main/app/data-dictionary.md">data dictionary</a>.</li>
     <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_quality.md">Data-quality scorecard</a> and the <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/planet_scale_benchmark.md">planet-scale benchmark</a> with its caveats.</li>
     <li><a href="https://github.com/abov/courtconnect-ca">Source code</a>.</li>
   </ul>
 </main>
 
 <footer>
-  <div class="wrap">Map data &copy; OpenStreetMap contributors and Overture Maps Foundation; see the <a href="https://github.com/abov/courtconnect-ca/blob/main/NOTICE.md">notice</a>. This page sets no cookies and loads no scripts or outside resources.</div>
+  <div class="wrap">Map data &copy; OpenStreetMap contributors and Overture Maps Foundation; see the <a href="https://github.com/abov/courtconnect-ca/blob/main/NOTICE.md">notice</a>. This page sets no cookies and requests nothing from other sites; one small script reads <code>data/build_stats.json</code> from this site to fill in the numbers.</div>
 </footer>
+<script>
+// Numbers come from data/build_stats.json (ingestion/build_stats.py). The dated numbers already in the HTML are the fallback if the fetch fails.
+(function () {
+  var set = function (id, text) { var e = document.getElementById(id); if (e) e.textContent = text; };
+  var n = function (v) { return Number(v).toLocaleString("en-US"); };
+  fetch("data/build_stats.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+    set("asof", d.as_of);
+    set("s-venues", n(d.venues));
+    set("s-venues-n", d.sports_with_venues + " of " + d.sports_total + " sports have at least one venue");
+    set("s-sla", d.sla_met + " of " + d.sla_total);
+    set("s-sla-n", d.named_pct + "% of venues have a real name (goal 25%)");
+    set("s-gold", d.gold.wrong_merges + " wrong merges");
+    set("s-gold-n", d.gold.pairs + " hand-labelled pairs, " + d.gold.missed + " missed matches");
+    set("s-big", n(d.overture.fetched_mb) + " MB");
+    set("s-big-n", "fetched of " + d.overture.themes_gb + " GB of Overture places and addresses");
+    set("s-models", d.models + " models");
+    set("s-models-n", d.seeds + " seeds, " + d.tests_pass + " dbt tests passing" + (d.tests_fail ? ", " + d.tests_fail + " failing" : ""));
+    set("s-adrs", d.adrs + " ADRs");
+  }).catch(function () { /* keep the dated fallback */ });
+})();
+</script>
 </body>
 </html>

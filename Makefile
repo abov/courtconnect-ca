@@ -85,6 +85,9 @@ eval-match:      ## score the Overture place -> OSM match against ci/gold/place_
 quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 	$(PY) ingestion/export_quality_scorecard.py
 
+stats:            ## regenerate app/data/build_stats.json (numbers on app/how-its-built.html); run after make quality
+	$(PY) ingestion/build_stats.py
+
 usage:            ## export GoatCounter daily counts and print the usage metrics (needs GOATCOUNTER_API_TOKEN in .env; docs/goat_analysis.md)
 	$(PY) ingestion/extract_goatcounter.py
 	$(PY) ingestion/goat_report.py $(ARGS)
