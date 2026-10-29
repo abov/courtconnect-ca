@@ -6,6 +6,7 @@ Everything is public and static. The whole dataset is one JSON file, rebuilt abo
 
 - [Data dictionary](https://abov.github.io/courtconnect-ca/data-dictionary.md): what every key and code in venues.json means, with how-to-answer tips
 - [Dataset](https://abov.github.io/courtconnect-ca/data/venues.json): venues, sports, events to watch, social series, hitting walls, player-matching apps (about 2.4 MB)
+- [Change feed](https://abov.github.io/courtconnect-ca/data/changes.json): what changed between refreshes (new, no longer listed, changed venues, events and social series), newest first, 180 days kept; a change is what the data now says, not proof of a change on the ground
 - [Map](https://abov.github.io/courtconnect-ca/): the web app
 - [Source and docs](https://github.com/abov/courtconnect-ca): code, decisions, issue form to suggest a change
 

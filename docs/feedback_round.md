@@ -47,6 +47,13 @@ When they reply, ask what they did, not whether they liked it ("What did you sea
 6. Who else would use it?
 7. Did you find someone to play with through the site (a group, open play, an app we link)? Would you want to post that you are looking for a partner? (Evidence for ADR 0024; "no" is a useful answer.)
 
+### Ask-first ideas (questions 8 to 11: one line each, a quick yes / maybe / no is enough; skip if the person is short on time)
+These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is built for them; the answers decide whether they are.
+8. When you look for people to play with, what matters: their level, their age group, both, or neither? Where do you look today (an app, Facebook, WhatsApp, Reddit, Meetup, your club)? If nobody near you has a group, would a ready-to-post "start one" kit with a suggested court help? (`docs/player_finding_plan.md`)
+9. If you often look at one sport, would a single dismissible card suggesting a related sport nearby ("Like Pickleball? Try Padel, 2 miles away") be helpful, annoying, or ignored? Where would you expect it? (`docs/sport_recommendation_plan.md`, section 6)
+10. Would you want an email when something changes at a spot you saved, or when a new court opens near you? How often is too often? (ADR 0025; "no" is a useful answer)
+11. Would a rough cost label ("Free / $ / $$ / $$$") on each place help you choose? Would you trust it if it said "estimated"? (No tier is built; members-only places would get none.)
+
 ## Numbers (GoatCounter, directional only with 6 to 10 people; say so in the case study)
 | Question | Measure | First target |
 |---|---|---|
