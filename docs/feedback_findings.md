@@ -3,7 +3,7 @@
 Plan and method: `docs/feedback_round.md`. Fill in when the round starts.
 
 Round: start ____, end ____. GoatCounter own-IP excluded since ____.
-Baseline (`docs/data_quality.md`, 2026-10-29): venues 10,279, named 16.1% (target 25%, breach), upcoming events 71. Known SLA breaches at baseline: Overture places last seen 2026-09-23 (97.1% of venues fresh vs 99%), oldest event check 17 days (14 allowed); 5 of 8 service levels met.
+Baseline (scorecard run locally 2026-10-29 via `make quality`; not committed because the CI no-regression gate rejects it until the refresh clears the breaches): venues 10,279, named 16.1% (target 25%, breach), upcoming events 71. Known SLA breaches at baseline: Overture places last seen 2026-09-23 (97.1% of venues fresh vs 99%), oldest event check 17 days (14 allowed); 5 of 8 service levels met.
 
 ## Log
 | Date | Who (sport, area) | Type | What happened | Sev (1-3) | Source | Status / PR |
