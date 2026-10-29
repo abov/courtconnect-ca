@@ -48,7 +48,7 @@ Raw sources land untouched, dbt cleans, matches and tests them, and one export f
 - **Review-queue ranker:** logistic regression on 90 human labels, leave-one-out accuracy 86%, AUC 0.93. It only orders work for a reviewer. Checking what it learned, not just its score, showed skewed labels had taught it "Tennis means reject".
 - **LLM page reader:** every extracted field needs an exact quote that code verifies is on the page (ADR 0017). Built; not run at scale until a spend cap and precision bar are agreed.
 - **Aerial-imagery pilot:** measured (LV recall 46%), rescans found 0 new venues, so I dropped it. Killing a pilot on numbers is a result too.
-- **Agent governance (ADR 0019):** a model never merges; a deterministic gate script decides, using risk classes, path allowlists, diff caps, scorecard no-regression and evidence rules. Today agents open PRs and people merge; routine refresh PRs can auto-merge only after the owner switches that on, and risky classes always escalate.
+- **Agent governance (ADR 0019):** a model never merges; a deterministic gate script decides, using risk classes, path allowlists, diff caps, scorecard no-regression and evidence rules. Auto-merge of routine refresh PRs (class R0) was switched on by the owner on 2026-10-25 and has not merged a PR yet; every other class is merged by a person and risky classes always escalate. A review of what the gate does and does not check: [`merge_gate_threat_model.md`](merge_gate_threat_model.md).
 
 ## How quality is measured and kept
 - **Tests:** dbt singular tests guard the logic (clusters converge, every court has one venue, confirmed venues need evidence, no duplicate names within 150 m); CI runs on a small committed fixture and never calls a live source.
