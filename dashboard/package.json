@@ -1,0 +1,22 @@
+{
+  "name": "courtconnect-dashboard",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Evidence.dev (community edition, MIT) scorecard prototype for CourtConnect. Reads aggregate CSVs only.",
+  "scripts": {
+    "sources": "evidence sources",
+    "dev": "evidence dev",
+    "build": "evidence build",
+    "preview": "evidence preview"
+  },
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=18.0.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "@evidence-dev/core-components": "5.4.2",
+    "@evidence-dev/csv": "1.0.16",
+    "@evidence-dev/evidence": "40.1.8"
+  }
+}
