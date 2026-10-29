@@ -1,0 +1,3 @@
+# 2026-10-29 Change sources (ADR 0026)
+- Added ADR 0026 (proposed): OSM changes via snapshot diff (not minutely replication), Overture via release diff. Built `ingestion/overture_release_diff.py` (`extract_overture_places.py` now exposes `fetch_places`); first run 2026-09-23.1 -> 2026-10-21.0: 59 new, 21 gone, 17 moved >100 m, 12 renamed, 0 closed. Output `data/raw/overture_release_diff.csv`, nothing public.
+- Next, only if ADR 0025 goes ahead: OSM snapshot-diff script (copy the old CSV aside before extract), venue-id stability check + first-seen date, then join both diffs to venue ids -> `changes.json`.
