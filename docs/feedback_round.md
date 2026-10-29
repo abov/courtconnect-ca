@@ -5,7 +5,7 @@ Goal: learn whether CourtConnect helps people find a place to play, watch or fin
 ## Owner checklist before sending
 - [ ] GoatCounter (ADR 0013, site `courts`, https://courts.goatcounter.com): exclude your own visits: open the live site once on each device and browser you use (laptop, phone) with `#toggle-goatcounter` added to the address, e.g. `https://abov.github.io/courtconnect-ca/#toggle-goatcounter`; GoatCounter then says tracking is disabled in that browser (it sets a local flag, so it survives changing IP; visit the same link again to turn counting back on); optionally also add your home IP under Settings > Ignore IPs (it changes, and a phone on mobile data uses another one). Date done: ____ (laptop), ____ (phone). Do not quote usage numbers from before it.
 - [ ] Write the start date and the baseline from `docs/data_quality.md` (venues, named %, events) at the top of `feedback_findings.md`.
-- [ ] Open the live map on your phone once and check the invite steps still match the screens (mode names Play / Watch, "Suggest a change" in the popup).
+- [ ] Open the live map on your phone once and check the invite steps still match the screens (buttons "Places to play" / "Events & meetups" / "Find players", "Suggest a change" in the popup).
 - [ ] Hard-refresh after the last deploy (Pages caches up to 10 minutes).
 
 ## Who (6 to 10 people, ask first, no mailing list)
@@ -25,7 +25,7 @@ Swap in their sport (step 1) and a place they know (step 2). Give each person th
 > 1. Find a place near you to play [their sport] this week. Is there one you didn't know?
 > 2. Look up [a club or court you know]. Is it there and correct?
 > 3. Open a place and tap a link (website, open play, a club's Instagram). Did it go where you expected?
-> 4. Tap "Watch" and look for an event or group. Anything useful?
+> 4. Tap "Events & meetups" (or "Find players") and look for an event or group. Anything useful?
 > 5. Optional: if something is wrong, tap "Suggest a change" on that place.
 >
 > A text back is fine: did you find what you wanted, what was missing or wrong, would you use it again and for what, anything confusing (like "confirmed" vs "inferred")?
