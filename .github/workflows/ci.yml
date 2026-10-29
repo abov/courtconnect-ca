@@ -20,6 +20,7 @@ jobs:
       - run: python ingestion/build_stats.py --check
       - run: python ci/check_review_priority.py
       - run: python ci/test_sync_reports.py
+      - run: python ci/test_check_refresh_diff.py  # merge-gate classifier (ADR 0019), synthetic exports, offline
       - run: python ingestion/eval_match_gold.py --check
       # ADR 0019 gate 4: fires only when this branch appends a scorecard line worse than main's last line.
       - run: |
