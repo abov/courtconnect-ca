@@ -46,15 +46,8 @@ def norm(s: str) -> str:
     return " " + re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", (s or "").lower())).strip() + " "
 
 
-def main() -> None:
-    sys.stdout.reconfigure(encoding="utf-8")
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--release", default=None)
-    ap.add_argument("--out", default=raw_path("overture_places.csv"))
-    args = ap.parse_args()
-    release = args.release or latest_release()
-    print(f"Overture release {release}")
-
+def fetch_places(release: str) -> list[tuple]:
+    """Kept places (rows in FIELDS order) for one release, read straight from S3."""
     cats = {r["overture_category"] for r in csv.DictReader((SEEDS / "overture_category_map.csv").open(encoding="utf-8"))}
     terms = [r["term"] for r in csv.DictReader((SEEDS / "sport_search_terms.csv").open(encoding="utf-8"))]
     needles = [" " + t + " " for t in terms]
@@ -89,6 +82,19 @@ def main() -> None:
             continue
         keep.append((*r, release, region))   # address_region = Overture's address text; region = border polygon (ADR 0014)
     print(f"kept {len(keep):,} (racket category or sport word in the name); {outside:,} dropped outside the CA/NV borders")
+    return keep
+
+
+def main() -> None:
+    sys.stdout.reconfigure(encoding="utf-8")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--release", default=None)
+    ap.add_argument("--out", default=raw_path("overture_places.csv"))
+    args = ap.parse_args()
+    release = args.release or latest_release()
+    print(f"Overture release {release}")
+
+    keep = fetch_places(release)
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

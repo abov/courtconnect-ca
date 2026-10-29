@@ -100,7 +100,7 @@ Data lives in seeds under `transform/seeds/`; edit them, then `make build` and `
 | Mark an Overture place as closed | `closed_places.csv` (with evidence) |
 | Correct a court count for one sport at a venue | `venue_court_counts.csv` (with evidence; add the missing sport via `manual_venues.csv`) |
 
-Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routine: [`docs/monthly_refresh.md`](docs/monthly_refresh.md). Decisions: short records in [`docs/decisions/`](docs/decisions) (ADRs 0001 to 0025; 0001 is superseded by 0018; 0023 to 0025 are proposed).
+Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routine: [`docs/monthly_refresh.md`](docs/monthly_refresh.md). Decisions: short records in [`docs/decisions/`](docs/decisions) (ADRs 0001 to 0026; 0001 is superseded by 0018; 0023 to 0026 are proposed).
 
 ## Principles
 - **Honesty over polish:** inferred data is labelled as inferred.
