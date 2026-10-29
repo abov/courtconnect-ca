@@ -12,6 +12,10 @@ jobs:
       - run: python ci/check_r2_events.py
       - run: python ci/check_event_sources.py
       - run: python ci/check_export_fresh.py
+      # ADR 0025/0026: change feed is well formed and venue ids stayed stable against main.
+      - run: |
+          git fetch --no-tags --depth=1 origin main
+          python ingestion/build_changes.py --check --base-ref origin/main
       - run: python ci/check_review_priority.py
       - run: python ci/test_sync_reports.py
       - run: python ingestion/eval_match_gold.py --check
