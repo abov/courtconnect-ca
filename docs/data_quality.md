@@ -51,7 +51,7 @@ Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-
 
 - OSM extract: 6 days old.
 - Current link-outs: 281; 0 older than 60 days.
-- Upcoming events: 71; 2 not re-checked in 14+ days.
+- Upcoming events: 71; 1 not re-checked in 14+ days.
 - Current social series: 21; 0 not re-checked in 35+ days.
 - Website liveness check: 4 days old; 0 of 882 checked venue sites dead (0.0%).
 - Venues seen by any source in the last 35 days: 10,296 of 10,300 (100.0%); oldest date 2026-10-10; 4 undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check (monthly runbook: docs/monthly_refresh.md).
@@ -73,11 +73,11 @@ Stale or undated venues (first 4):
 | resolved | 75 |
 | needs_location | 10 |
 | rejected | 9 |
-| confirmed | 1 |
 | needs_visit | 1 |
+| confirmed | 1 |
 
 ## Tests
 
-Last dbt run: 254 tests passed, 0 warned, 0 failed.
+Last dbt run: 10 tests passed, 0 warned, 0 failed.
 
 History: [data_quality_trend.csv](data_quality_trend.csv) (one row per run).
