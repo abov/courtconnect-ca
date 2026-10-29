@@ -16,6 +16,8 @@ jobs:
       - run: |
           git fetch --no-tags --depth=1 origin main
           python ingestion/build_changes.py --check --base-ref origin/main
+      # The numbers on how-its-built.html come from this file: it must be dated like the newest scorecard row.
+      - run: python ingestion/build_stats.py --check
       - run: python ci/check_review_priority.py
       - run: python ci/test_sync_reports.py
       - run: python ingestion/eval_match_gold.py --check
@@ -29,3 +31,5 @@ jobs:
       # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
       - run: python ingestion/load_raw.py --data-dir ci/fixtures
       - run: dbt build --project-dir transform --profiles-dir transform
+      # The published dbt docs must describe every model and seed (reads the manifest dbt build just wrote).
+      - run: python ci/check_dbt_descriptions.py

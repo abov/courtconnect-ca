@@ -12,6 +12,14 @@
 
 Tennis, padel, pickleball and squash and dozens of lesser-known and up-and-coming racket sports are booming, but information about *where to play* is scattered and messy. Court finders each cover one sport, or only places you can book. This project is one free map of all of them, from free park courts and hitting walls to private clubs. It collects the data, cleans it, checks it, and says honestly how complete it is.
 
+## At a glance (for engineers and data people)
+A solo, end-to-end data product: Python ingestion, a tested dbt warehouse on DuckDB, a static map, and a gated, agent-assisted refresh. No server, $0 hosting.
+- **Entity resolution, measured:** a hand-labelled gold set scores the place-to-court matcher (129 pairs, 0 wrong merges, 4 missed).
+- **Big source, small footprint:** DuckDB queries 40 GB of Overture parquet on S3 in place and fetches about 2% of it ([benchmark](docs/planet_scale_benchmark.md)).
+- **Quality as a contract:** 32 custom dbt tests, 11 CI gate scripts and a scorecard with stated service levels; the one breach (venue names) is reported, not hidden ([scorecard](docs/data_quality.md)).
+- **Decisions on record:** 26 ADRs, including one that reverses an earlier choice ([ADR 0018](docs/decisions/0018-duckdb-only.md)) and one on when agents may merge ([ADR 0019](docs/decisions/0019-unattended-agent-merges.md)).
+- **Start here:** [case study](docs/case_study.md) · [architecture](docs/architecture.md) · [data dictionary](app/data-dictionary.md) · [dbt docs and lineage](https://abov.github.io/courtconnect-ca/dbt-docs/)
+
 ## Who it is for
 - **Players:** find a court, filter by sport, surface and access, then follow link-outs to open play, leagues and lessons.
 - **Curious players:** every sport on the master sheet is in one picker with an About card; sports with no place yet say so instead of faking pins.
@@ -24,7 +32,7 @@ Not offered, on purpose: bookings, payments, accounts, rankings or paid placemen
 ## What it does
 Live numbers (2026-10-23): **10,277 venues** (CA 9,732, NV 545), 1,650 confirmed, **39 of 82 sports** with at least one venue, 80 watch events, 21 social series, 923 hitting walls, 276 link-outs. By sport: [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md).
 
-- **Venue map** from OpenStreetMap, Overture Maps and hand-curated entries, with courts grouped into venues. Filter by sport, surface, indoor/outdoor, access, or search by name, city or ZIP; filters live in the URL.
+- **Venue map** from OpenStreetMap (OSM), Overture Maps and hand-curated entries, with courts grouped into venues. Filter by sport, surface, indoor/outdoor, access, or search by name, city or ZIP; filters live in the URL.
 - **Honest about confidence:** pins show how much to trust each name and sport (confirmed, business listing, inferred), and a **How complete is this data?** panel lists every sport, including those with no data.
 - **Play / Watch / Social** views, plus a **hitting-wall** layer for solo practice ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md)).
 - **Link-outs** to a venue's own pages, each with a `verified_on` date and evidence note; popups show rules and access as the venue wrote them.
@@ -49,6 +57,8 @@ Rule: **a model may rank or suggest; it never writes to the map.** Anything infe
 
 ## How it fits together
 ![Architecture: sources, Python ingestion, a dbt project on DuckDB, and the static map app](docs/architecture.svg)
+
+**Sources** (all open or public): **OpenStreetMap** (written "OSM" in the docs; same thing, the community-edited open map that knows where courts are), **Overture Maps** (an open dataset of places and addresses that knows business names), US Census boundaries, and hand-checked seed files that each carry evidence.
 
 | Stage | Where | Gate |
 |---|---|---|

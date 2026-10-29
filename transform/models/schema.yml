@@ -538,6 +538,32 @@ seeds:
           - relationships:
               arguments: {to: "ref('all_racquet')", field: sport}
 
+  - name: closed_places
+    description: >
+      Overture places that no longer exist but are still listed as open. Excluded from the map. One row per place_id; each row needs
+      `evidence` (what shows it closed) and `verified_on`.
+
+  - name: osm_sport_map
+    description: >
+      Maps an OpenStreetMap `sport=` tag value to a sport on the master sheet, with a confidence. stg_osm_courts keeps only OSM
+      records whose tag maps to a racket sport here. Built by ingestion/build_osm_sport_map.py.
+
+  - name: overture_category_map
+    description: >
+      Overture place categories that mean a racket-sport court or club (for example tennis_court), mapped to a sport.
+      ingestion/extract_overture_places.py reads it to decide which categories to pull.
+
+  - name: sport_search_terms
+    description: >
+      Business-name words that suggest a place offers a sport, with a `reliability`: distinctive words ("padel") are strong evidence;
+      ambiguous ones ("Real Tennis" in "Camino Real Tennis Center") are kept as weak evidence and never count as a venue until a
+      person confirms them (mart_places_to_review). Built by ingestion/build_search_terms.py from the sheet and sport_aliases.
+
+  - name: sport_play_anywhere
+    description: >
+      Sports that need no fixed court (for example any beach), with the note the app shows. Read by ingestion/export_app_data.py;
+      see ADR 0020.
+
 models:
   - name: stg_sports
     description: Cleaned sports reference data (typos fixed, text parsed into typed columns, de-duplicated).
@@ -943,3 +969,107 @@ models:
     columns:
       - name: venue_id
         tests: [not_null]
+
+  - name: stg_osm_courts
+    description: >
+      One row per OpenStreetMap element (a single court or a facility such as a sports centre), tags standardised. Keeps only records whose
+      sport tag maps to a racket sport on the sheet (osm_sport_map; ADR 0004) and drops the same court drawn twice.
+
+  - name: stg_osm_parents
+    description: Named areas (parks, schools, clubs, sports centres) with bounding boxes, grouped into a kind_group. Used to name unnamed courts.
+
+  - name: stg_osm_walls
+    description: >
+      Hitting walls mapped in OpenStreetMap (handball and wall courts, tennis backboards). OSM does not say how many walls a court has, so
+      with no other source a handball or wallball court is assumed one-wall and labelled "assumed". Blank lit or fee means unknown.
+
+  - name: stg_manual_venues
+    description: >
+      Venues no data source knows about, added by hand in seeds/manual_venues.csv, one row per (venue, sport). `evidence` says how well each
+      entry is backed up; `access` is public, unknown or private.
+
+  - name: stg_manual_walls
+    description: >
+      Hitting walls for solo practice (one-wall, three-wall, backboards) curated in seeds/manual_walls.csv. A wall is not a court, so it
+      lives apart from venues. Blank is_lit or free_to_use means unknown, never "no".
+
+  - name: stg_watch_events
+    description: >
+      Matches and tournaments people can go and watch, curated in seeds/watch_events.csv, each with a link to the organizer's own page.
+      Nothing is sold or reserved; info_url and tickets_url are link-outs.
+
+  - name: stg_social_events
+    description: >
+      Recurring social get-togethers (mixers, club nights, open play), one row per series and not per date, each linking to the organizer's
+      own page. CourtConnect takes no signups or payments.
+
+  - name: stg_venue_actions
+    description: >
+      What you can do at a venue (join a league, take a clinic, find open play, book a lesson), with the provider's own link. Link-outs only
+      (ADR 0006). A row points at a hand-added venue or an Overture place; `evidence` and `verified_on` say how we know.
+
+  - name: stg_venue_confirmations
+    description: One row per person, method (visited, official, reported) and day confirming a hand-added venue. Feeds the confirmation level.
+
+  - name: stg_venue_leads
+    description: >
+      The sleuthing backlog: things reported but not yet located or confirmed. A lead is never shown as a pin; once confirmed it becomes a
+      manual_venues row.
+
+  - name: stg_google_place_ids
+    description: >
+      Google place IDs for our venues, the only Google Places content the terms allow storing. Dormant: empty until ingestion/google_place_ids.py
+      is run with an API key, which the project does not do for now (ADR 0005).
+
+  - name: int_court_pairs
+    description: >
+      Every pair of courts within venue_radius_m of each other, plus pairs inside the same named school, park or club within
+      parent_merge_radius_m. Courts are bucketed into a grid so each is compared only with its own and the 8 neighbouring cells, which
+      scales to a whole state.
+
+  - name: int_court_clusters
+    description: >
+      Groups courts into facilities: connected components of the court-pairs graph, found in plain SQL by 8 label-propagation passes (each court
+      adopts the smallest label among its neighbours). assert_clusters_converged proves 8 passes were enough.
+
+  - name: int_court_parent
+    description: >
+      For each court or facility, the smallest named park, school or club whose bounding box contains it. An approximation, labelled
+      enclosing_feature downstream and never a confirmed court name. Golf courses, resorts and hotels are used only when nothing else contains the court.
+
+  - name: int_place_venue_match
+    description: >
+      Links each Overture place to the OSM venue it is part of, using four rules in order: distance, same_name, facility_name (named after the
+      court's park, school or centre, or sharing its address) and inside_facility (pin inside a small park or school footprint, racquet-sport
+      records only). `match_rule` records which rule fired. Every radius and rule was judged against the gold set (docs/gold_set_plan.md).
+
+  - name: int_wall_clusters
+    description: >
+      Groups OSM walls of the same type that stand side by side (a school's row of handball courts) into one map pin, using the same
+      label-propagation idea as int_court_clusters. Hand-added walls are never grouped. assert_wall_clusters_converged proves enough passes ran.
+
+  - name: int_venue_pairs_15mi
+    description: >
+      Helper for the market marts: every (venue, sport at another venue) pair within 15 miles, straight-line. Only sports a venue is directly
+      listed for count, so "also played" inferences do not inflate the numbers.
+
+  - name: int_search_interest
+    description: >
+      Google Trends interest by metro on one scale (docs/search_interest_plan.md). Relative and sampled, not volumes or people. Las Vegas, from
+      the Nevada query, is rescaled onto the California scale through Reno. `index_source` and `confidence` say how each value was made.
+
+  - name: mart_court_finder
+    description: One row per (court, sport) with everything a player needs (surface, lighting, access, court count). What the app uses to draw individual courts.
+
+  - name: mart_places_to_review
+    description: >
+      Places with weak sport evidence: a business name contains an ambiguous sport word ("Camino Real Tennis Center" is not Real Tennis).
+      Never counted as a venue until a person confirms or rejects them in seeds/place_sport_overrides.csv.
+
+  - name: mart_sport_coverage
+    description: >
+      "How complete is our data?" One row per racket sport, including sports with zero venues found. venues_found counts only evidence we trust:
+      OSM courts and places with a racket category or a distinctive sport word.
+
+  - name: mart_sport_surface_coverage
+    description: Courts and venues per sport, split by playing surface and indoor or outdoor setting. Answers "any indoor clay in California?".

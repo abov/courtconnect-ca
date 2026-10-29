@@ -14,6 +14,7 @@ from pathlib import Path
 
 ALLOW = [  # files an R0 refresh may touch (generated outputs, the trend line, the log, the session note)
     "app/data/venues.json",
+    "app/data/build_stats.json",                # make stats (numbers on the How it's built page)
     "docs/data_quality.md",
     "docs/data_quality_trend.csv",
     "docs/coverage_snapshot.md",

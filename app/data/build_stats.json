@@ -1,0 +1,28 @@
+{
+ "as_of": "2026-10-29",
+ "venues": 10288,
+ "sports_with_venues": 41,
+ "sports_total": 82,
+ "named_pct": 16.2,
+ "sla_met": 7,
+ "sla_total": 8,
+ "tests_pass": 254,
+ "tests_fail": 0,
+ "models": 53,
+ "seeds": 34,
+ "custom_tests": 32,
+ "adrs": 26,
+ "ci_checks": 11,
+ "gold": {
+  "pairs": 129,
+  "wrong_merges": 0,
+  "missed": 4,
+  "stale": 0
+ },
+ "overture": {
+  "release": "2026-10-21.0",
+  "run_on": "2026-10-28",
+  "fetched_mb": 743,
+  "themes_gb": 39.6
+ }
+}
