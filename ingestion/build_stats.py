@@ -10,6 +10,8 @@ Nothing is typed in by hand. Every number comes from a file or check that alread
   gold set    ingestion/eval_match_gold.py against the local DuckDB; when the database is missing or locked the
               previous values in this file are kept (CI never builds the full warehouse)
   Overture    docs/planet_scale_benchmark.json (bytes the real extracts fetched vs the size of the themes)
+  history     every row of docs/data_quality_trend.csv, for app/run-history.html
+  agent_runs  every row of docs/agent_log.csv (re-run this script after the refresh agent appends its log row)
 The page shows `as_of` beside the numbers, and --check fails when the file is older than the newest scorecard row,
 so a refresh that runs `make quality` but forgets `make stats` is caught, not shipped.
 """
@@ -27,12 +29,32 @@ TREND = ROOT / "docs" / "data_quality_trend.csv"
 VENUES = ROOT / "app" / "data" / "venues.json"
 BENCH = ROOT / "docs" / "planet_scale_benchmark.json"
 KEYS = ["as_of", "venues", "sports_with_venues", "sports_total", "named_pct", "sla_met", "sla_total", "tests_pass", "tests_fail",
-        "models", "seeds", "custom_tests", "adrs", "ci_checks", "gold", "overture"]
+        "models", "seeds", "custom_tests", "adrs", "ci_checks", "gold", "overture", "history", "agent_runs"]
+AGENT_LOG = ROOT / "docs" / "agent_log.csv"
+HISTORY_INT = ["venues", "sports_with_venues", "events_upcoming", "actions_current", "extract_age_days", "sla_met", "sla_total",
+               "tests_pass", "tests_warn", "tests_fail"]
+HISTORY_FLOAT = ["named_pct", "sites_dead_pct", "seen_35d_pct"]  # seen_35d_pct is blank on the first row: kept as null
 
 
 def last_trend_row() -> dict:
     rows = list(csv.DictReader(TREND.open(encoding="utf-8")))
     return rows[-1]
+
+
+def history_rows() -> list[dict]:
+    """Every scorecard row, numbers as numbers (blank = None), oldest first."""
+    out = []
+    for r in csv.DictReader(TREND.open(encoding="utf-8")):
+        row = {"date": r["date"]}
+        row.update({k: int(r[k]) for k in HISTORY_INT})
+        row.update({k: (float(r[k]) if r[k] != "" else None) for k in HISTORY_FLOAT})
+        out.append(row)
+    return out
+
+
+def agent_run_rows() -> list[dict]:
+    rows = list(csv.DictReader(AGENT_LOG.open(encoding="utf-8")))
+    return [{**r, "pr": int(r["pr"]) if r["pr"].isdigit() else None, "est_cost_usd": float(r["est_cost_usd"])} for r in rows]
 
 
 def gold_numbers(previous: dict | None) -> dict:
@@ -79,6 +101,8 @@ def build() -> dict:
         "ci_checks": len(list((ROOT / "ci").glob("check_*.py"))),
         "gold": gold_numbers(previous),
         "overture": overture_numbers(),
+        "history": history_rows(),
+        "agent_runs": agent_run_rows(),
     }
 
 
@@ -96,6 +120,10 @@ def check() -> None:
         for k in ("venues", "sports_total", "models", "seeds", "adrs"):
             if not isinstance(d[k], int) or d[k] <= 0:
                 problems.append(f"{k} must be a positive integer")
+        if d["history"] != history_rows():
+            problems.append("history differs from docs/data_quality_trend.csv: run `make stats`")
+        if d["agent_runs"] != agent_run_rows():
+            problems.append("agent_runs differs from docs/agent_log.csv: run `make stats` after the agent appends its log row")
         if d["gold"].get("wrong_merges") is None or d["gold"].get("missed") is None:
             problems.append("gold needs wrong_merges and missed")
     if problems:

@@ -12,17 +12,149 @@
  "seeds": 34,
  "custom_tests": 32,
  "adrs": 26,
- "ci_checks": 11,
+ "ci_checks": 12,
  "gold": {
   "pairs": 129,
   "wrong_merges": 0,
   "missed": 4,
-  "stale": 0
+  "stale": 2
  },
  "overture": {
   "release": "2026-10-21.0",
   "run_on": "2026-10-28",
   "fetched_mb": 743,
   "themes_gb": 39.6
- }
+ },
+ "history": [
+  {
+   "date": "2026-10-13",
+   "venues": 9941,
+   "sports_with_venues": 21,
+   "events_upcoming": 43,
+   "actions_current": 92,
+   "extract_age_days": 4,
+   "sla_met": 5,
+   "sla_total": 6,
+   "tests_pass": 94,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 11.6,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": null
+  },
+  {
+   "date": "2026-10-14",
+   "venues": 10466,
+   "sports_with_venues": 21,
+   "events_upcoming": 44,
+   "actions_current": 120,
+   "extract_age_days": 0,
+   "sla_met": 6,
+   "sla_total": 7,
+   "tests_pass": 112,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 11.6,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 99.9
+  },
+  {
+   "date": "2026-10-18",
+   "venues": 10230,
+   "sports_with_venues": 22,
+   "events_upcoming": 54,
+   "actions_current": 213,
+   "extract_age_days": 4,
+   "sla_met": 6,
+   "sla_total": 7,
+   "tests_pass": 183,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 14.1,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 99.9
+  },
+  {
+   "date": "2026-10-21",
+   "venues": 10201,
+   "sports_with_venues": 38,
+   "events_upcoming": 76,
+   "actions_current": 276,
+   "extract_age_days": 7,
+   "sla_met": 7,
+   "sla_total": 8,
+   "tests_pass": 199,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 14.7,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 100.0
+  },
+  {
+   "date": "2026-10-24",
+   "venues": 10277,
+   "sports_with_venues": 39,
+   "events_upcoming": 85,
+   "actions_current": 285,
+   "extract_age_days": 1,
+   "sla_met": 7,
+   "sla_total": 8,
+   "tests_pass": 231,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 16.1,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 100.0
+  },
+  {
+   "date": "2026-10-25",
+   "venues": 10277,
+   "sports_with_venues": 39,
+   "events_upcoming": 83,
+   "actions_current": 284,
+   "extract_age_days": 2,
+   "sla_met": 7,
+   "sla_total": 8,
+   "tests_pass": 231,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 16.1,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 100.0
+  },
+  {
+   "date": "2026-10-29",
+   "venues": 10288,
+   "sports_with_venues": 41,
+   "events_upcoming": 71,
+   "actions_current": 281,
+   "extract_age_days": 6,
+   "sla_met": 7,
+   "sla_total": 8,
+   "tests_pass": 254,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 16.2,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 100.0
+  }
+ ],
+ "agent_runs": [
+  {
+   "date": "2026-10-24",
+   "pr": 404,
+   "class": "R0",
+   "gates": "pass",
+   "outcome": "edited",
+   "est_cost_usd": 1.5
+  },
+  {
+   "date": "2026-10-25",
+   "pr": 410,
+   "class": "R0",
+   "gates": "pass",
+   "outcome": "open",
+   "est_cost_usd": 1.5
+  }
+ ]
 }
