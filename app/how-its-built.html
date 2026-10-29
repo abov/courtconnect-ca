@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How CourtConnect is built</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10151c" media="(prefers-color-scheme: dark)">
+<meta name="description" content="How CourtConnect CalNeva is built: open data in, a tested dbt warehouse on DuckDB, one static JSON file out, and gates that decide what ships. Measured numbers, decisions and limits.">
+<link rel="canonical" href="https://abov.github.io/courtconnect-ca/how-its-built.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CourtConnect CalNeva">
+<meta property="og:title" content="How CourtConnect is built">
+<meta property="og:description" content="Open data in, a tested dbt warehouse on DuckDB, one static file out. Measured numbers, decisions and limits.">
+<meta property="og:url" content="https://abov.github.io/courtconnect-ca/how-its-built.html">
+<meta property="og:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
+<style>
+  /* Same tokens and fonts as index.html so the two pages read as one site. No scripts, no cookies, no third-party requests. */
+  @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500 800; font-display: swap; src: url(fonts/plus-jakarta-sans-latin.woff2) format("woff2"); }
+  :root {
+    --font-body: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-head: "Plus Jakarta Sans", var(--font-body);
+    --bg: #fbfaf7; --panel: #ffffff; --text: #1f2328; --muted: #59636e; --line: #d6d1c4; --accent: #1F5FA8; --on-accent: #ffffff;
+    --warn: #855700; --hi: #F2B134; --tint: #e6eefa;
+    --r-sm: 8px; --r-md: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #10151c; --panel: #171e27; --text: #e6edf3; --muted: #9aa3ad; --line: #3a424d; --accent: #6aa5ee; --on-accent: #0d1117;
+            --warn: #d29922; --tint: #1b3556; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.6 var(--font-body); color: var(--text); background: var(--bg); }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  header { border-bottom: 3px solid var(--hi); background: linear-gradient(180deg, color-mix(in srgb, var(--hi) 16%, var(--panel)), var(--panel)); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  header .wrap { padding-top: 14px; padding-bottom: 18px; }
+  .back { font-size: 14px; }
+  h1, h2, h3 { font-family: var(--font-head); letter-spacing: -.015em; line-height: 1.25; }
+  h1 { font-size: clamp(26px, 6vw, 34px); font-weight: 800; margin: 10px 0 6px; color: var(--accent); }
+  h2 { font-size: 21px; font-weight: 700; margin: 36px 0 10px; }
+  h3 { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .lede { font-size: 17px; color: var(--muted); margin: 0; max-width: 60ch; }
+  main { padding-bottom: 48px; }
+  p { margin: 8px 0; max-width: 68ch; }
+  .meta { color: var(--muted); font-size: 13.5px; }
+
+  /* Numbers: plain tiles, each states what it measures and when. */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 14px 0 0; padding: 0; }
+  .stats div { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 14px; }
+  .stats dt { font-size: 13px; color: var(--muted); }
+  .stats dd { margin: 2px 0 0; font: 700 22px/1.2 var(--font-head); }
+  .stats dd small { display: block; font: 400 13px/1.4 var(--font-body); color: var(--muted); margin-top: 2px; }
+
+  /* Pipeline: a numbered list that stacks on phones, so text never shrinks to fit a diagram. */
+  .flow { list-style: none; counter-reset: step; margin: 14px 0 0; padding: 0; display: grid; gap: 0; }
+  .flow li { counter-increment: step; position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md);
+             padding: 12px 14px 12px 52px; margin-bottom: 22px; }
+  .flow li::before { content: counter(step); position: absolute; left: 14px; top: 12px; width: 26px; height: 26px; border-radius: 50%;
+                     background: var(--accent); color: var(--on-accent); font: 700 14px/26px var(--font-head); text-align: center; }
+  .flow li:not(:last-child)::after { content: "\2193"; position: absolute; left: 20px; bottom: -22px; width: 14px; text-align: center; color: var(--muted); font-size: 16px; line-height: 22px; }
+  .flow li:last-child { margin-bottom: 0; }
+  .flow p { margin: 2px 0; }
+  .gate { font-size: 14px; color: var(--muted); }
+  .gate b { color: var(--text); font-weight: 600; }
+
+  ul.plain { padding-left: 20px; margin: 8px 0; }
+  ul.plain li { margin: 5px 0; max-width: 68ch; }
+  .note { background: color-mix(in srgb, var(--warn) 10%, var(--panel)); border: 1px solid var(--warn); border-radius: var(--r-md); padding: 4px 14px 8px; margin-top: 12px; }
+  .note h3 { color: var(--warn); }
+  code { font: 13.5px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--tint); padding: 1px 5px; border-radius: 4px; }
+  footer { border-top: 1px solid var(--line); padding: 16px 0 28px; font-size: 13.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="back" href="./">&larr; Back to the map</a>
+    <h1>How CourtConnect is built</h1>
+    <p class="lede">Open data in, a tested warehouse in the middle, one static file out, and gates that decide what ships. Everything here is measured or marked as not yet measured.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2 id="numbers">The numbers, with dates</h2>
+  <p class="meta">From the data-quality scorecard and project checks of 2026-10-29. They are a snapshot, not a live feed: the repository regenerates them with <code>make quality</code>.</p>
+  <dl class="stats">
+    <div><dt>Venues on the map</dt><dd>10,288<small>41 of 82 sports have at least one venue</small></dd></div>
+    <div><dt>Service levels met</dt><dd>7 of 8<small>the miss is real: 16.2% of venues have a real name, goal 25%</small></dd></div>
+    <div><dt>Place-to-court matching</dt><dd>0 wrong merges<small>129 hand-labelled pairs, 4 missed matches</small></dd></div>
+    <div><dt>Big source, small footprint</dt><dd>743 MB<small>fetched of 39.6 GB of Overture places and addresses</small></dd></div>
+    <div><dt>Warehouse</dt><dd>53 models<small>34 seeds, 32 custom SQL tests plus column tests</small></dd></div>
+    <div><dt>Decisions on record</dt><dd>26 ADRs<small>one of them reverses an earlier choice</small></dd></div>
+  </dl>
+
+  <h2 id="flow">From source to map</h2>
+  <ol class="flow">
+    <li>
+      <h3>Open and public sources</h3>
+      <p><b>OpenStreetMap</b> (OSM) knows where courts are. <b>Overture Maps</b> knows business names and addresses. US Census boundaries fill in cities. Hand-checked seed files add what no dataset knows, each with an evidence link and a date.</p>
+      <p class="gate"><b>Gate:</b> public pages and open data only. No Google Places data, no one's logged-in accounts.</p>
+    </li>
+    <li>
+      <h3>Ingest (Python)</h3>
+      <p>Extract and load scripts land the raw data untouched. The Overture files are queried in place on S3, so a laptop fetches about 2% of the themes it reads.</p>
+      <p class="gate"><b>Gate:</b> the loader refuses to shrink a table by more than 10%.</p>
+    </li>
+    <li>
+      <h3>Transform (dbt on DuckDB)</h3>
+      <p>Staging cleans each source. Intermediate models build a proximity graph, cluster courts into venues and match Overture places to them. Core and mart models are what the export reads.</p>
+      <p class="gate"><b>Gate:</b> dbt tests (clusters converge, every court has one venue, confirmed venues need evidence) and a gold set that scores the matcher.</p>
+    </li>
+    <li>
+      <h3>Export</h3>
+      <p>One JSON file of about 2.4 MB, with a data dictionary and an <code>llms.txt</code> so people and AI tools can read it.</p>
+      <p class="gate"><b>Gate:</b> CI fails if the committed export is stale.</p>
+    </li>
+    <li>
+      <h3>Serve</h3>
+      <p>A static MapLibre page on GitHub Pages. No server, no accounts, no bookings or payments. Location for &ldquo;Near me&rdquo; stays in the browser.</p>
+      <p class="gate"><b>Gate:</b> CI builds on a small fixture dataset and never calls a live source.</p>
+    </li>
+    <li>
+      <h3>Refresh, twice a month</h3>
+      <p>A written runbook, plus scheduled agent runs that read public pages and open pull requests with evidence. A deterministic gate script, not a model, decides what may merge. Today people still merge.</p>
+      <p class="gate"><b>Gate:</b> tests, freshness limits, a scorecard that must not regress, a cap on how much a change may touch, and evidence on every row.</p>
+    </li>
+  </ol>
+
+  <h2 id="decisions">Decisions worth reading</h2>
+  <ul class="plain">
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/decisions/0003-venue-clustering-by-proximity.md">ADR 0003</a>: turn individual courts into venues by distance, and accept some wrong merges and splits.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/decisions/0007-confirmation-levels-and-leads.md">ADR 0007</a>: honesty over polish. Every claim says how we know it, and inferred means inferred.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/decisions/0005-overture-places-and-google-terms.md">ADR 0005</a>: what was left out on purpose (Google Places) and why.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/decisions/0018-duckdb-only.md">ADR 0018</a>: kept SQL portable across two engines, then retired the second when nothing ran on it.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/decisions/0017-llm-page-reader.md">ADR 0017</a> and <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/decisions/0019-unattended-agent-merges.md">ADR 0019</a>: models suggest, code and people decide, and when an agent may merge.</li>
+  </ul>
+
+  <div class="note">
+    <h3>What is not done or not measured yet</h3>
+    <ul class="plain">
+      <li>Usage and friend feedback: a beta round is planned for December. No visitor numbers are quoted until they exist.</li>
+      <li>The LLM page reader is built but has not been run at scale, and the aerial-imagery pilot was dropped after it found no new venues.</li>
+      <li>Names are the weak spot: most OSM courts are unnamed, so many pins carry a name inferred from the park or school and are labelled that way.</li>
+    </ul>
+  </div>
+
+  <h2 id="more">Go deeper</h2>
+  <ul class="plain">
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/case_study.md">Case study</a>: the problem, trade-offs and incidents, in one read.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/architecture.md">Architecture</a>, the <a href="dbt-docs/">dbt docs and lineage</a> (built from small sample data, structure only) and the <a href="data-dictionary.md">data dictionary</a>.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_quality.md">Data-quality scorecard</a> and the <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/planet_scale_benchmark.md">planet-scale benchmark</a> with its caveats.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca">Source code</a>.</li>
+  </ul>
+</main>
+
+<footer>
+  <div class="wrap">Map data &copy; OpenStreetMap contributors and Overture Maps Foundation; see the <a href="https://github.com/abov/courtconnect-ca/blob/main/NOTICE.md">notice</a>. This page sets no cookies and loads no scripts or outside resources.</div>
+</footer>
+</body>
+</html>
