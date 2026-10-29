@@ -1,0 +1,3 @@
+# 2026-10-29 Refresh before the beta
+- Overture 2026-10-21.0 places + addresses extracted and loaded (OSM kept: 6 days old); links/websites checked (83 dead sites of 932); 8 pins reverse-geocoded; events re-read: 6 re-dated, SoCal CRC badminton marked POSTPONED, Coachella Grand Prix follows the current USA Pickleball listing (Nov 13-15, Monterey CC), past BT Cali Halloween event and its link-out dropped. Removed an orphaned Gearbox override and Badminton Alley's social links (a gear shop, gone from Overture).
+- Still breaching: named share 16.1% and the oldest event check (USATT x3 on omnipong, PickleX on Fever: script/PDF pages not re-read). Next: re-read those four in the scheduled tournament task, then invite the beta.
