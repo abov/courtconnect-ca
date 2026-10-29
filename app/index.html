@@ -28,7 +28,11 @@
 <meta name="twitter:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V" crossorigin="anonymous">
 <style>
+  /* Headings, sport names and buttons use Plus Jakarta Sans (SIL OFL 1.1, fonts/OFL.txt), hosted here so no visitor data goes to a font service. Body text stays on the system font. */
+  @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500 800; font-display: swap; src: url(fonts/plus-jakarta-sans-latin.woff2) format("woff2"); }
   :root {
+    --font-body: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-head: "Plus Jakarta Sans", var(--font-body);
     /* Brand: logo blue #1F5FA8 + gold #F2B134 (favicon.svg). Pin colours carry meaning: keep them distinct. */
     --bg: #fbfaf7; --panel: #ffffff; --text: #1f2328; --muted: #59636e; --line: #d6d1c4; --accent: #1F5FA8; --on-accent: #ffffff;
     --ok: #1a7f37; --warn: #855700; --bad: #cf222e; --ev: #8250df; --soc: #0a7d6e; --chip: #ffffff; --chip-on: #e6eefa;
@@ -43,13 +47,15 @@
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
-  body { font: 15px/1.5 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--text); background: var(--bg);
+  body { font: 15px/1.5 var(--font-body); color: var(--text); background: var(--bg);
          display: grid; grid-template-columns: 390px 1fr; }
   #panel { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
   #map { min-height: 0; }
   header { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
-  h1 { font-size: 18px; margin: 0 0 2px; color: var(--accent); }
-  header { border-bottom: 3px solid var(--hi); }
+  h1 { font: 800 22px/1.2 var(--font-head); letter-spacing: -.02em; margin: 0 0 4px; color: var(--accent); }
+  header { border-bottom: 3px solid var(--hi); background: linear-gradient(180deg, color-mix(in srgb, var(--hi) 16%, var(--panel)), var(--panel)); }
+  h2, h3, h4, .nm, .seg .chip, .callout b, #list li.lh, #list li.thisweek .lh2, label.l, .join h3 { font-family: var(--font-head); }
+  .nm { letter-spacing: -.005em; }
   .sub { color: var(--muted); font-size: 13px; }
   .controls { padding: 12px 16px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
   label.l { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 3px; }
@@ -93,7 +99,18 @@
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
   .badge.i { color: var(--warn); border-color: var(--warn); }
-  .seg { display: flex; gap: 6px; margin-top: 10px; }
+  .seg { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .seg .chip.find { display: inline-flex; align-items: center; justify-content: center; gap: 5px; border-color: var(--accent); color: var(--accent); }   /* opens the Find players dialog: an action, not a view, so it never shows as pressed */
+  .seg .chip.find:hover { background: var(--hover); } .seg .chip.find svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .callout { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; margin-top: 8px; text-align: left; border-radius: var(--r-md); border-color: var(--accent); padding: 8px 12px;
+             background: color-mix(in srgb, var(--accent) 9%, var(--chip)); }
+  .callout b { font-size: 14px; } .callout b::after { content: " \203A"; } .callout .sub { font-size: 12px; color: var(--muted); }
+  .maplibregl-popup-content button.peoplelink { font: inherit; font-weight: 600; margin-top: 6px; padding: 5px 12px; border-radius: var(--r-pill); border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--bg)); color: var(--accent); cursor: pointer; }
+  .maplibregl-popup-content button.peoplelink:hover { background: var(--hover); }
+  .pcard { padding: 10px 0; border-top: 1px solid var(--line); } .pcard h4 { margin: 0 0 2px; font-size: 14px; } .pcard p { margin: 4px 0; }
+  .pcard .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; } .pcard a.btn { display: inline-block; padding: 5px 12px; border-radius: var(--r-sm); border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-weight: 600; }
+  .pcard a.btn.primary { background: var(--accent); color: var(--on-accent); }
+  .dlg-b .apps p { margin: 6px 0; } .dlg-b .facts { color: var(--muted); font-size: 12.5px; }
   .quick { margin-bottom: 8px; }
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
@@ -159,7 +176,7 @@
   details.srcs { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--line); }
   details.srcs summary { color: var(--accent); }
   @media (pointer: coarse) { .chip, select, input[type=search] { min-height: 44px; } #list button { padding-top: 13px; padding-bottom: 13px; } }
-  .maplibregl-popup-content { background: var(--bg); color: var(--text); font: 13px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 290px; border-radius: var(--r-md); box-shadow: var(--shadow); padding: 14px 16px; animation: pop var(--ease); }
+  .maplibregl-popup-content { background: var(--bg); color: var(--text); font: 13px/1.45 var(--font-body); max-width: 290px; border-radius: var(--r-md); box-shadow: var(--shadow); padding: 14px 16px; animation: pop var(--ease); }
   @keyframes pop { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
   .maplibregl-popup-content { max-height: min(55vh, 470px); overflow-y: auto; }
   .maplibregl-popup-content h2 { font-size: 15px; margin: 0 0 4px; padding-right: 14px; }
@@ -277,6 +294,7 @@
     <div class="seg" role="group" aria-label="What are you looking for?">
       <button class="chip" id="modePlay" type="button" aria-pressed="true">Places to play</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false">Events &amp; meetups</button>
+      <button class="chip find" id="modePlayers" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M17 14.2c2.4.2 4.2 2.2 4.2 4.8"/></svg>Find players</button>
     </div>
     <div class="tools playonly" id="tools" role="group" aria-label="Stay on track">
       <button class="chip" id="shortlistToggle" type="button" aria-expanded="false" aria-controls="shortlist">&#9733; Shortlist (0)</button>
@@ -293,11 +311,11 @@
         <button class="chip" id="sportTop" type="button" aria-pressed="false" hidden></button>
       </div>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
+      <button class="chip callout" id="peopleBtn" type="button" aria-haspopup="dialog" hidden></button>
       <p id="anywhere" class="note" hidden></p>
       <details id="sportmore" class="note sportinfo" hidden><summary id="sportmore-t">More about this sport</summary>
         <div id="sportinfo" hidden><h4 id="sportinfo-t"></h4><div id="sportinfo-b"></div></div>
         <div id="wallnote" hidden><h4>About the orange pins</h4><div id="wallnote-b"></div></div>
-        <div id="people" class="playonly" hidden><h4 id="people-t">Find people to play with</h4><div id="people-b"></div></div>
       </details>
     </div>
     <div class="searchrow">
@@ -385,6 +403,19 @@
     <h3>For companies and organizers</h3>
     <p>Running a tournament, league or open play? Send us the dates and your public page; we review it and list it as an event when the page backs it up. <a id="aboutEvent" href="#" target="_blank" rel="noopener noreferrer">Add an event</a> (no sign-in)</p>
     <p class="meta">A listing or label changes only with public evidence. It cannot be bought, and there is no paid or featured placement.</p>
+  </div>
+</dialog>
+
+<dialog id="players" aria-labelledby="playersTitle">
+  <div class="dlg-h"><h2 id="playersTitle">Find people to play with</h2><button class="link" id="closePlayers" type="button">Close</button></div>
+  <div class="dlg-b">
+    <label class="l" for="playersSport">Sport</label>
+    <select id="playersSport"></select>
+    <h3>Groups and open plays</h3>
+    <div id="playersGroups"></div>
+    <h3>Apps that match players</h3>
+    <div id="playersApps" class="apps"></div>
+    <p class="meta" style="margin-top:12px">Groups come from the organizer's own public page, with the date we last checked. CourtConnect stores no members, takes no sign-ups and has not checked how many players each app has in California or Nevada. <a id="playersTell" href="#" target="_blank" rel="noopener noreferrer">Know a group we are missing?</a> (no sign-in)</p>
   </div>
 </dialog>
 
@@ -1047,6 +1078,12 @@ function venueNode(v) {
   if (url) go.append(el("p", {}, el("a", {href: url, "data-kind": "website", target: "_blank", rel: "noopener noreferrer", text: "Website"})));
   go.append(directionsNode(v.y, v.x, v.n, false));
   go.append(shareNode(v));
+  const ps = [state.sport, ...v.p.map(p => p[0])].find(i => i >= 0 && v.p.some(p => p[0] === i) && peopleCount(i));   // the picked sport if played here, else the first sport here that has groups or apps
+  if (ps !== undefined) {
+    const find = el("button", {class: "peoplelink", type: "button", text: "Find people to play " + sports[ps].n});
+    find.addEventListener("click", () => openPlayers(ps, "popup"));
+    go.append(el("p", {}, find));
+  }
   if (v.ac && v.ac.length && !noPrograms()) {
     const join = el("div", {class: "join"}, el("h3", {text: "Join & follow"}));
     for (const [type, title, aurl, provider, st, en, price] of v.ac) {
@@ -1431,27 +1468,63 @@ function showSportInfo() {
   }
   $("sportmore").open = false;   // one line until tapped, so the sport picker area stays short (product brief, level 2)
 }
-// "Find people to play with" (social phase A, ADR 0015): link-outs to player-matching apps for the chosen sport. CourtConnect stores no members and
-// has not checked how many players each app has in California or Nevada, so the list says so.
+// "Find people to play with" (social phase A, ADR 0015): recurring groups and open plays (the social series) plus link-outs to player-matching apps, for one sport.
+// It is a dialog with three doors: the "Find players" button in the header, the callout under the sport picker, and a link in every venue popup.
+// CourtConnect stores no members and has not checked how many players each app has in California or Nevada, so the dialog says so.
+const playerGroups = idx => {
+  const name = idx >= 0 && sports[idx] ? sports[idx].n : null;
+  return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name)).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.n.localeCompare(b.n));
+};
+const playerApps = idx => platforms.filter(p => idx < 0 || p.sp.includes(idx));
+const countWord = (n, one, many) => n + " " + (n === 1 ? one : many);
+const peopleCount = idx => playerGroups(idx).length + playerApps(idx).length;
+// The callout under the sport picker: always one tap from the picked sport, with the counts so it is clear there is something behind it.
 function showPeople() {
-  const box = $("people"), s = state.sport >= 0 ? sports[state.sport] : null;
-  const list = platforms.filter(p => !s || p.sp.includes(state.sport));
-  box.hidden = !list.length;
-  if (box.hidden) return;
-  $("people-t").textContent = "Find people to play with" + (s ? " (" + s.n + ")" : "");
-  const body = $("people-b"); body.replaceChildren();
-  body.append(el("p", {class: "facts", text: "Apps that match players."}));
-  for (const p of list) {
+  const b = $("peopleBtn"), i = state.sport, g = playerGroups(i).length, a = playerApps(i).length;
+  b.hidden = !(g + a);
+  if (b.hidden) return;
+  b.replaceChildren(el("b", {text: i >= 0 && sports[i] ? "Find people to play " + sports[i].n : "Find people to play with"}),
+    el("span", {class: "sub", text: [g ? countWord(g, "group", "groups") : "", a ? countWord(a, "app", "apps") : ""].filter(Boolean).join(" · ")}));
+}
+function playerCard(s) {
+  const card = el("div", {class: "pcard"}), where = [s.v, s.c].filter(Boolean).join(", "), dist = distLabel(s);
+  card.append(el("h4", {text: s.n}), el("p", {class: "meta", text: where + (dist ? " · " + dist : "")}), socialBadges(s), el("p", {}, el("b", {text: s.sc})), ...socialDetails(s));
+  const show = el("button", {class: "link", type: "button", text: "Show on the map"});
+  show.addEventListener("click", () => {
+    $("players").close();
+    if (state.mode !== "watch") setMode("watch");
+    showSocial(socialPins.find(g => g.items.includes(s)) || socialGroups([s])[0], true);
+  });
+  card.append(el("p", {}, show));
+  return card;
+}
+function renderPlayers() {
+  const idx = +$("playersSport").value, groups = playerGroups(idx), apps = playerApps(idx), name = idx >= 0 ? sports[idx].n : "";
+  $("playersTitle").textContent = "Find people to play " + (name || "with");
+  const gb = $("playersGroups"), ab = $("playersApps"); gb.replaceChildren(); ab.replaceChildren();
+  if (!groups.length) gb.append(el("p", {class: "meta", text: "No recurring group or open play is listed" + (name ? " for " + name : "") + " yet."}));
+  for (const s of groups) gb.append(playerCard(s));
+  if (!apps.length) ab.append(el("p", {class: "meta", text: "No matching app is listed" + (name ? " for " + name : "") + " yet."}));
+  for (const p of apps) {
     const sp = p.sp.map(i => sports[i].n).join(", ");
-    body.append(el("p", {}, el("a", {href: p.u, target: "_blank", rel: "noopener noreferrer", text: p.n}), document.createTextNode(": " + p.d + ". "),
+    ab.append(el("p", {}, el("a", {href: p.u, "data-kind": "player-app", target: "_blank", rel: "noopener noreferrer", text: p.n}), document.createTextNode(": " + p.d + ". "),
       el("span", {class: "facts", text: sp + " · " + p.p + " · read " + p.vo})));
   }
 }
-// The sport blurb, the wall note and the player-matching apps share one disclosure under the picker, shown only while one of them has something to say.
+function openPlayers(idx, src) {
+  const sel = $("playersSport"), counts = sports.map((s, i) => peopleCount(i));
+  sel.replaceChildren(el("option", {value: "-1", text: "All sports (" + peopleCount(-1) + ")"}));
+  sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[i]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[i] + ")"})); });
+  sel.value = String(idx >= 0 && counts[idx] ? idx : -1);
+  renderPlayers();
+  $("players").showModal();
+  trackD("players-open", src);
+}
+// The sport blurb and the wall note share one disclosure under the picker, shown only while one of them has something to say.
 function syncSportMore() {
   const box = $("sportmore"), s = state.sport >= 0 ? sports[state.sport] : null;
   box.hidden = [...box.querySelectorAll(":scope > div")].every(d => d.hidden || getComputedStyle(d).display === "none");
-  $("sportmore-t").textContent = s ? "More about " + s.n : "Find people to play with";
+  $("sportmore-t").textContent = s ? "More about " + s.n : "More about this sport";
 }
 function showAnywhere() {
   showSportInfo();
@@ -1493,6 +1566,11 @@ function initControls() {
   for (const [id] of QUICK) $(id).addEventListener("click", e => { const i = +e.currentTarget.dataset.i; sel.value = String(state.sport === i ? -1 : i); sel.dispatchEvent(new Event("change")); });
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
+  $("modePlayers").addEventListener("click", () => openPlayers(state.sport, "header"));
+  $("peopleBtn").addEventListener("click", () => openPlayers(state.sport, "sport"));
+  $("playersSport").addEventListener("change", renderPlayers);
+  $("closePlayers").addEventListener("click", () => $("players").close());
+  $("playersTell").href = REPORT_FORM;
   sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); syncQuickSports(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
