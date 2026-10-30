@@ -26,6 +26,16 @@ seeds:
         confirmation: varchar
         confirmed_on: varchar
         region: varchar
+        venue_key: varchar
+        venue_name: varchar
+        sport: varchar
+        city: varchar
+        lat: varchar
+        lon: varchar
+        location_precision: varchar
+        surface_type: varchar
+        setting: varchar
+        evidence: varchar
     venue_confirmations:     # all text; cast in staging
       +column_types:
         venue_key: varchar
@@ -39,12 +49,28 @@ seeds:
         source_url: varchar
         city: varchar
         directories_seen: varchar
+        lead_id: varchar
+        name: varchar
+        sport: varchar
+        claim: varchar
+        source_type: varchar
+        status: varchar
+        next_step: varchar
+        notes: varchar
     venue_actions:           # dates stay text in the seed; the staging model casts them
       +column_types:
         start_date: varchar
         end_date: varchar
         verified_on: varchar
         price_info: varchar
+        action_key: varchar
+        venue_ref_type: varchar
+        venue_ref: varchar
+        action_type: varchar
+        title: varchar
+        provider: varchar
+        url: varchar
+        evidence: varchar
     manual_venue_no_merge:   # all text
       +column_types:
         venue_key: varchar
@@ -117,6 +143,19 @@ seeds:
         verified_on: varchar
         lat: varchar
         lon: varchar
+        event_key: varchar
+        event_name: varchar
+        sport: varchar
+        level: varchar
+        watch_format: varchar
+        venue_name: varchar
+        city: varchar
+        location_precision: varchar
+        date_status: varchar
+        ticket_info: varchar
+        info_url: varchar
+        tickets_url: varchar
+        source_note: varchar
     social_events:           # all text; dates and numbers are cast in stg_social_events
       +column_types:
         lat: varchar
@@ -124,6 +163,23 @@ seeds:
         last_listed_date: varchar
         courts: varchar
         verified_on: varchar
+        series_key: varchar
+        series_name: varchar
+        sport: varchar
+        kind: varchar
+        organizer: varchar
+        venue_name: varchar
+        city: varchar
+        location_precision: varchar
+        schedule: varchar
+        skill_level: varchar
+        audience: varchar
+        age_focus: varchar
+        price_info: varchar
+        source_kind: varchar
+        info_url: varchar
+        signup_url: varchar
+        source_note: varchar
     player_platforms:        # all text (social phase A, ADR 0015); the app shows them as a link-out list
       +column_types:
         platform: varchar
@@ -155,6 +211,14 @@ seeds:
         region: varchar
         near_venue_name: varchar
         reported_on: varchar
+        wall_key: varchar
+        wall_name: varchar
+        city: varchar
+        location_precision: varchar
+        wall_type: varchar
+        sports_suited: varchar
+        confirmation: varchar
+        evidence: varchar
     closed_places:   # Overture places that no longer exist; staging drops them (pin the types so an empty file is not guessed as INTEGER)
       +column_types:
         place_id: varchar
@@ -173,6 +237,51 @@ seeds:
         place_id: varchar
         sport: varchar
         verdict: varchar
+        evidence: varchar
+        verified_on: varchar
+    manual_venue_sport_blocks:   # starts empty in a fork: columns are pinned so an empty file is not guessed as INTEGER (numbers stay numbers)
+      +column_types:
+        venue_key: varchar
+        sport: varchar
+        reason: varchar
+    osm_court_sport_overrides:   # starts empty in a fork: columns are pinned so an empty file is not guessed as INTEGER (numbers stay numbers)
+      +column_types:
+        court_id: varchar
+        sport: varchar
+        verdict: varchar
+        reason: varchar
+        correct_sport: varchar
+    search_interest:   # starts empty in a fork: columns are pinned so an empty file is not guessed as INTEGER (numbers stay numbers)
+      +column_types:
+        query_geo: varchar
+        metro_code: integer
+        sport: varchar
+        term: varchar
+        index_value: integer
+        query_set: varchar
+        period: varchar
+        exported_on: varchar
+        source_url: varchar
+    search_metros:   # starts empty in a fork: columns are pinned so an empty file is not guessed as INTEGER (numbers stay numbers)
+      +column_types:
+        metro_code: integer
+        metro_name: varchar
+        anchor_name: varchar
+        anchor_lat: double
+        anchor_lon: double
+    venue_court_counts:   # starts empty in a fork: columns are pinned so an empty file is not guessed as INTEGER (numbers stay numbers)
+      +column_types:
+        venue_id: varchar
+        lat: double
+        lon: double
+        sport: varchar
+        courts: integer
+        evidence: varchar
+        verified_on: varchar
+    venue_opening_status:   # starts empty in a fork: columns are pinned so an empty file is not guessed as INTEGER (numbers stay numbers)
+      +column_types:
+        venue_key: varchar
+        opening_status: varchar
         evidence: varchar
         verified_on: varchar
 

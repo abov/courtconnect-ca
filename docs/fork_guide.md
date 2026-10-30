@@ -1,12 +1,21 @@
 # Fork guide: run this for your own area or sport
 
-Status: draft (2026-10-27). The region config was moved out of code and checked to give the same values as before. A full fork build has not been tried yet, so treat the steps below as a checklist and fix what you hit.
+Status: draft (2026-10-29). The region config was moved out of code and checked to give the same values as before. Steps 1 and 2 now have a script (`ingestion/init_fork.py`, below). On a scratch copy I ran it for a made-up Texas region and built the CI fixture data with dbt: 333 nodes passed, 1 test failed and 7 nodes were skipped; the failure is `assert_padel_has_supporting_signal`, which needs the California research seeds the script empties (swap `ci/fixtures` for your own area to get a meaningful result). A real extract for another area has not been tried, so treat the rest as a checklist and fix what you hit.
 
 The code is MIT (`LICENSE`). The data keeps its own licenses: keep the notices in `NOTICE.md` (OpenStreetMap is ODbL, Overture is mostly CDLA-Permissive-2.0). Do not store Google Places content (ADR 0005).
 
 ## What you get
 
 Python ingestion -> dbt on DuckDB -> one `app/data/venues.json` -> a static MapLibre page. No server, no accounts, no paid service needed. Every pin carries a confirmation level, and inferred data is labelled as inferred. Seed edits need `evidence` + `verified_on`, so changes are reviewable.
+
+## Quick start: `init_fork.py` does steps 1 and 2
+
+```bash
+python ingestion/init_fork.py --region TX texas 25.8 -106.7 36.6 -93.5 114690            # dry run: lists every change
+python ingestion/init_fork.py --region TX texas 25.8 -106.7 36.6 -93.5 114690 --apply    # does it (needs a clean git tree)
+```
+
+`--region CODE NAME SOUTH WEST NORTH EAST OSM_RELATION` can repeat; `--metro KEY S W N E CODE` adds a named sub-area for quick runs. It rewrites `ingestion/regions.json` and empties the CA/NV research seeds, keeping the header rows (the dbt config pins their columns as text, so empty files build). It does not touch the mapping seeds, `ci/gold`, `ci/fixtures`, the sports sheet or your keys; it prints what is left. To use this repo as a starting point on GitHub, mark it a template repository in its settings (the owner's decision), then run the script in your copy. Tested offline by `ci/test_init_fork.py`.
 
 ## 1. Set your area (one file)
 
