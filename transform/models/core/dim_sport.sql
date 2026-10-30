@@ -17,6 +17,14 @@ select
     base_gear,
     gear_on_amazon_or_online,
     competitive_status,
+    -- INFERRED tier from the sheet only (no venue or event data): 'established' = a world-federation sport (class World Official, competing),
+    -- 'organized' = competing with a named governing body that is not flagged defunct/unsure, 'casual' = everything else.
+    case
+        when competitive_status = 'Competitive' and popularity_class = 'World Official' then 'established'
+        when competitive_status = 'Competitive' and governing_body is not null
+             and governing_body not like '%?%' and lower(governing_body) not like '%defunct%' then 'organized'
+        else 'casual'
+    end                                                       as competitive_tier,
     year_origin,
     official_url
 from {{ ref('stg_sports') }}
