@@ -28,6 +28,8 @@ cleaned as (
         nullif(trim(base_gear), '')                           as base_gear,
         nullif(trim(net_type), '')                            as net_type,
         {{ to_inches('net_ht') }}                             as net_height_in,
+        -- '5ft 7in / 5ft 11in' lists two heights (e.g. women / men): the first stays in net_height_in, the second goes here
+        {{ to_inches("nullif(trim(split_part(net_ht, '/', 2)), '')") }} as net_height_alt_in,
         upper(trim(gear_avail_ao)) = 'Y'                      as gear_on_amazon_or_online,
 
         -- typo-proof: 'Competitve' / 'Non-Competitve' / blank
