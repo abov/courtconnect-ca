@@ -1,0 +1,48 @@
+{
+  "note": "SQL for app/ask-the-data.html. The page runs it in the browser (DuckDB-WASM); ci/check_ask_the_data.py runs the same text against data/venues.json with Python DuckDB, so a changed export key breaks CI, not the page. {{FILE}} is replaced with the venues.json path or registered file name.",
+  "setup": [
+    "CREATE TABLE raw AS SELECT * FROM read_json('{{FILE}}', maximum_object_size=67108864)",
+    "CREATE TABLE sports AS SELECT sport_id, s.n AS sport, s.b AS shares_courts_with FROM (SELECT unnest(range(len(sports))) AS sport_id, unnest(sports) AS s FROM raw)",
+    "CREATE TABLE venues AS SELECT v.i AS venue_id, nullif(v.n, '') AS name, v.q AS name_quality, v.s AS source, v.c AS city, v.r AS region, v.y AS lat, v.x AS lon, (v.f & 2) > 0 AS is_public, (v.f & 4) > 0 AS is_free, (v.f & 8) > 0 AS members_only, coalesce(v.xu, 0) = 1 AS access_unconfirmed, coalesce(v.w, '') <> '' AS has_website, coalesce(len(v.ac), 0) AS link_outs, v.cf AS confirmation FROM (SELECT unnest(venues) AS v FROM raw)",
+    "CREATE TABLE venue_sports AS SELECT venue_id, p[1] AS sport_id, p[2] AS courts, p[3] AS surface_mask FROM (SELECT v.i AS venue_id, unnest(v.p) AS p FROM (SELECT unnest(venues) AS v FROM raw))",
+    "CREATE VIEW venue_sport_names AS SELECT vs.venue_id, s.sport, s.shares_courts_with, vs.courts, vs.surface_mask FROM venue_sports vs JOIN sports s USING (sport_id)"
+  ],
+  "tables": {
+    "venues": "venue_id, name (blank = unnamed), name_quality (c confirmed or hand-curated, p business listing, i inferred from a nearby park or school, u unnamed), source (o OpenStreetMap, p places directory, b both, m hand-curated), city, region, lat, lon, is_public, is_free, members_only, access_unconfirmed, has_website, link_outs, confirmation (v visited, o stated by the operator, r reported only; blank = map data only)",
+    "sports": "sport_id, sport, shares_courts_with (list of sport ids whose courts this sport is played on; NULL = a court sport of its own)",
+    "venue_sports": "venue_id, sport_id, courts (0 = count unknown), surface_mask",
+    "venue_sport_names": "view: venue_sports with the sport name and shares_courts_with"
+  },
+  "questions": [
+    {
+      "title": "Which sports have the most venues?",
+      "note": "One row per sport at a venue, so a venue with tennis and pickleball counts once for each. Sports played on another sport's courts (Hand Tennis on tennis courts, for example) are left out, or they would repeat the tennis count.",
+      "sql": "SELECT sport, count(*) AS venues FROM venue_sport_names WHERE shares_courts_with IS NULL GROUP BY sport ORDER BY venues DESC, sport LIMIT 15"
+    },
+    {
+      "title": "Which cities have the most venues?",
+      "note": "City names come from the data sources; every pin has one.",
+      "sql": "SELECT region, city, count(*) AS venues FROM venues GROUP BY region, city ORDER BY venues DESC, city LIMIT 15"
+    },
+    {
+      "title": "How sure are the names?",
+      "note": "Most OpenStreetMap courts are unnamed, so many pins carry a name inferred from the park or school. The map labels those as inferred.",
+      "sql": "SELECT CASE name_quality WHEN 'c' THEN 'Confirmed or hand-curated' WHEN 'p' THEN 'Business listing' WHEN 'i' THEN 'Inferred from a nearby park or school' ELSE 'Unnamed' END AS name_is, count(*) AS venues, round(100.0 * count(*) / sum(count(*)) OVER (), 1) AS percent FROM venues GROUP BY name_quality ORDER BY venues DESC"
+    },
+    {
+      "title": "How many courts are known, by sport?",
+      "note": "Mapped courts only, as OpenStreetMap or a person gave them, for sports with courts of their own. Rows with an unknown count are listed separately, not guessed.",
+      "sql": "SELECT sport, sum(courts) AS courts_mapped, count(*) FILTER (WHERE courts > 0) AS venues_with_count, count(*) FILTER (WHERE courts = 0) AS venues_count_unknown FROM venue_sport_names WHERE shares_courts_with IS NULL GROUP BY sport ORDER BY courts_mapped DESC, sport LIMIT 15"
+    },
+    {
+      "title": "How much has anyone checked?",
+      "note": "Most pins are map data only. A visit, an operator's statement or a report is shown as that, and nothing stronger.",
+      "sql": "SELECT CASE confirmation WHEN 'v' THEN 'Visited in person' WHEN 'o' THEN 'Stated by the operator' WHEN 'r' THEN 'Reported only' ELSE 'Map data only' END AS checked, count(*) AS venues FROM venues GROUP BY confirmation ORDER BY venues DESC"
+    },
+    {
+      "title": "Where can I play padel?",
+      "note": "Padel is a walled glass court. Name quality says how far to trust each name (see the third question).",
+      "sql": "SELECT coalesce(v.name, '(unnamed)') AS venue, v.city, v.region, v.name_quality, vs.courts FROM venue_sport_names vs JOIN venues v USING (venue_id) WHERE vs.sport = 'Padel' ORDER BY v.region, v.city, venue LIMIT 25"
+    }
+  ]
+}

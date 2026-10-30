@@ -125,7 +125,7 @@
     </li>
     <li>
       <h3>Refresh, twice a month</h3>
-      <p>A written runbook, plus scheduled agent runs that read public pages and open pull requests with evidence. A deterministic gate script, not a model, decides whether a routine refresh PR may merge itself. That switch was turned on on 2026-10-25 and has not merged a PR yet; everything else is merged by a person.</p>
+      <p>A written runbook, plus scheduled agent runs that read public pages and open pull requests with evidence. A deterministic gate script, not a model, decides whether a routine refresh PR may merge itself. That switch was turned on on 2026-10-25 and has merged one PR so far (a routine refresh on 2026-10-25); everything else is merged by a person.</p>
       <p class="gate"><b>Gate:</b> tests, freshness limits, a scorecard that must not regress, a cap on how much a change may touch, and evidence on every row.</p>
     </li>
   </ol>
@@ -152,6 +152,9 @@
   <ul class="plain">
     <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/case_study.md">Case study</a>: the problem, trade-offs and incidents, in one read.</li>
     <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/architecture.md">Architecture</a>, the <a href="dbt-docs/">dbt docs and lineage</a> (built from small sample data, structure only) and the <a href="https://github.com/abov/courtconnect-ca/blob/main/app/data-dictionary.md">data dictionary</a>.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/running_costs.md">What it costs to run</a>: hosting, data, CI and the capped AI agents, with what is not measured.</li>
+    <li><a href="run-history.html">Run history</a>: the scorecard after each refresh and the refresh agent's logged runs.</li>
+    <li><a href="ask-the-data.html">Ask the data</a>: run SQL on the public venue export in your browser (DuckDB-WebAssembly, about 36 MB, loads on request).</li>
     <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_quality.md">Data-quality scorecard</a> and the <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/planet_scale_benchmark.md">planet-scale benchmark</a> with its caveats.</li>
     <li><a href="https://github.com/abov/courtconnect-ca">Source code</a>.</li>
   </ul>

@@ -38,6 +38,9 @@ Array; a sport's **index** is its id everywhere else (`venues[].p[][0]`, `platfo
 ## changes.json (change feed)
 File `data/changes.json`, built by `ingestion/build_changes.py` after each refresh. `meta` has `generated`, `base` (what it was compared with), `this_run` counts and `id_drift` (venues whose id changed; should be ~0). `changes` is newest first, 180 days kept: `d` date, `k` kind (`venue_new`, `venue_gone`, `venue_changed`, `event_new`, `event_changed`, `event_removed`, `social_new`, `social_removed`), `i` venue id (matches `venues[].i`; venues only), `n` name, `c` city, `l` label (`confirmed`, `reported`, `inferred`: the data's own), `t` detail. `venue_gone` means the source stopped listing it, a lead and not proof of closure. No personal data.
 
+## Query it in the browser
+`ask-the-data.html` loads this file into DuckDB-WebAssembly and flattens it into `venues`, `sports` and `venue_sports` tables; the SQL is in `ask-the-data-queries.json` and `ci/check_ask_the_data.py` runs it on every change. A sport with `b` set is played on another sport's courts, so leave it out when counting courts or venues.
+
 ## Answering well
 - To find courts for a sport: look up its index in `sports`, then filter `venues` where any `p[i][0]` equals it; compute distance from `y`/`x`.
 - Say what is inferred. Use `q`, `cf`, `ai`/`ap`/`ns` and `xu`; do not turn guesses into facts.

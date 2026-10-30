@@ -20,12 +20,15 @@ jobs:
       - run: python ingestion/build_stats.py --check
       - run: python ci/check_review_priority.py
       - run: python ci/test_sync_reports.py
+      - run: python ci/test_check_refresh_diff.py  # merge-gate classifier (ADR 0019), synthetic exports, offline
+      - run: python ci/test_init_fork.py  # fork script (docs/fork_guide.md), offline
       - run: python ingestion/eval_match_gold.py --check
       # ADR 0019 gate 4: fires only when this branch appends a scorecard line worse than main's last line.
       - run: |
           git fetch --no-tags --depth=1 origin main
           python ci/check_scorecard_regression.py --base-ref origin/main
       - run: pip install dbt-core dbt-duckdb "duckdb<2" pandas python-dotenv
+      - run: python ci/check_ask_the_data.py  # app/ask-the-data.html: its SQL runs on the export, vendored engine files match their checksums
       - run: python ci/check_page_reader.py  # ADR 0017 guard rail, offline (needs requests, pulled in by dbt)
       # CI never calls OpenStreetMap: it loads a small committed sample of real OSM data
       # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
