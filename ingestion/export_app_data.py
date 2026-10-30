@@ -8,7 +8,8 @@ Websites are exported only when `website_usable` is set, so dead links never rea
 File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source, d blurb, f facts {p players, c court, g gear, o governing body, y year, ou official site},
-              u links {l learn more, r rules, c court size, g gear} (https only)}], ordered by venues found
+              u links {l learn more, r rules, c court size, g gear} (https only),
+              t INFERRED competitive tier 1 established (world-federation sport) / 2 organized (competing, named governing body) / 3 casual; from the sheet only, never a venue claim}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, r, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
      a street address; ai 1 + ad metres = nearest address point (inferred); ap 1 = address of the enclosing park/school/club (inferred); ns = nearest road name when no address (shown "Near <street>", inferred)
      r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet, or 'Reported: opening soon' with ul 1 = only a directory said so (ud = date checked)
@@ -88,6 +89,10 @@ def main() -> None:
     sport_index = {r[0]: i for i, r in enumerate(gaps)}
     sports = [{"n": r[0], "v": int(r[2]), "s": r[1], "r": r[3]} for r in gaps]
     add_sport_details(con, sports, sport_index)
+    tier_no = {"established": 1, "organized": 2, "casual": 3}
+    for name, tier in con.execute("select sport_name, competitive_tier from core.dim_sport").fetchall():
+        if name in sport_index:
+            sports[sport_index[name]]["t"] = tier_no[tier]
     # sports that need no fixed court (any beach): w = where, wn = note; the map lists them without pinpointing a place
     for name, where, note in con.execute("select trim(sport), trim(where_played), trim(note) from raw.sport_play_anywhere").fetchall():
         if name in sport_index:

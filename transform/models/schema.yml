@@ -583,6 +583,13 @@ models:
         tests: [unique, not_null]
       - name: sport_name
         tests: [not_null]
+      - name: competitive_tier
+        description: INFERRED from the sheet's popularity_class, competing and org columns (established / organized / casual); never a claim about any venue.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['established', 'organized', 'casual']
 
   - name: ref_sport_fit
     description: >

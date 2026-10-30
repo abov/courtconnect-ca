@@ -310,6 +310,13 @@
         <button class="chip" id="sportMonth" type="button" aria-pressed="false" hidden></button>
         <button class="chip" id="sportTop" type="button" aria-pressed="false" hidden></button>
       </div>
+      <div class="seg quick" id="tiers" role="group" aria-label="Level of play (inferred from the sport sheet)">
+        <button class="chip" type="button" data-t="0" aria-pressed="true">All levels</button>
+        <button class="chip" type="button" data-t="1" aria-pressed="false" title="Sports with a world federation and organized competition (inferred)">Established</button>
+        <button class="chip" type="button" data-t="2" aria-pressed="false" title="Competitive sports with a named governing body (inferred)">Organized</button>
+        <button class="chip" type="button" data-t="3" aria-pressed="false" title="Casual or recreational sports, no governing body listed (inferred)">Casual</button>
+      </div>
+      <p id="tiernote" class="note" hidden></p>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
       <button class="chip callout" id="peopleBtn" type="button" aria-haspopup="dialog" hidden></button>
       <p id="anywhere" class="note" hidden></p>
@@ -502,7 +509,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson", washoe_county: "Washoe County Regional Parks", clark_county: "Clark County Parks & Recreation", suncity_summerlin: "Sun City Summerlin", lifetime_site: "Life Time", nlv_gov: "City of North Las Vegas"};
 
 let DATA, sports, venues, events = [], socials = [], socialPins = [], walls = [], platforms = [];
-const state = {mode: "play", sport: -1, text: "", on: new Set(), offers: new Set()};
+const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers: new Set()};   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
@@ -1427,20 +1434,30 @@ function populateSports() {
     const up = [...upcomingEvents(), ...socials.filter(isCurrentSocial)], counts = {};
     up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
     sel.append(el("option", {value: "-1", text: "All sports"}));
-    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n]) sel.append(el("option", {value: String(i), text: s.n})); });
-    if (state.sport >= 0 && !counts[sports[state.sport].n]) state.sport = -1;
+    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n] && tierOk(s)) sel.append(el("option", {value: String(i), text: s.n})); });
+    if (state.sport >= 0 && !(counts[sports[state.sport].n] && tierOk(sports[state.sport]))) state.sport = -1;
   } else {
     const narrowed = !!(state.text || state.on.size || state.offers.size);
     sel.append(el("option", {value: "-1", text: "All racket sports"}));
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => {
       const mapped = s.v > 0 || s.w || wallsFor(s.n).length > 0;
+      if (!tierOk(s)) return;
       if (!mapped && narrowed) return;   // with a filter on, only sports that can match stay
       // sports with no place found yet stay listed, greyed, so people can discover them (they get an explainer card, never fake pins)
       sel.append(el("option", mapped ? {value: String(i), text: s.n} : {value: String(i), text: s.n + " (none yet)", class: "nomap"}));   // the suffix covers phones, which ignore option colours
     });
   }
-  sel.value = String(state.sport); updateSportIcon();
+  if (![...sel.options].some(o => o.value === String(state.sport))) state.sport = -1;
+  sel.value = String(state.sport); updateSportIcon(); syncTiers();
   showAnywhere();
+}
+// Level of play: INFERRED from the sport sheet (world federation / named governing body / neither), never a claim about a venue or a player's level.
+const TIER_NOTE = {1: "Established: sports with a world federation and organized competition.", 2: "Organized: competitive sports with a named governing body.", 3: "Casual: recreational sports with no governing body listed."};
+const tierOk = s => !state.tier || s.t === state.tier;
+function syncTiers() {
+  for (const b of document.querySelectorAll("#tiers [data-t]")) b.setAttribute("aria-pressed", +b.dataset.t === state.tier);
+  const n = $("tiernote"); n.hidden = !state.tier;
+  if (state.tier) n.textContent = TIER_NOTE[state.tier] + " Inferred from the sport sheet, not confirmed.";
 }
 const SPORT_LINKS = [["r", "Rules"], ["c", "Court size"], ["g", "Gear"], ["l", "Learn more"]];
 // "About <sport>": our own one-line blurb + the sheet's facts + link-outs to the rules, court and gear pages (never copied text).
@@ -1451,6 +1468,7 @@ function showSportInfo() {
   if (f.c) facts.push("Typical court " + f.c + (/^[\d.]+[x×][\d.]+$/.test(f.c) ? " ft" : ""));
   if (f.g) facts.push("Typical gear: " + f.g);
   if (f.o) facts.push("Governing body: " + f.o);
+  if (s && s.t) facts.push("Level (inferred): " + ["", "Established", "Organized", "Casual"][s.t]);
   const links = SPORT_LINKS.filter(([k]) => u[k]);
   if (f.ou) links.push(["ou", "Official site"]);
   box.hidden = !(s && (s.d || facts.length || links.length));
@@ -1566,6 +1584,11 @@ function initControls() {
   const sel = $("sport");
   populateSports();
   for (const [id] of QUICK) $(id).addEventListener("click", e => { const i = +e.currentTarget.dataset.i; sel.value = String(state.sport === i ? -1 : i); sel.dispatchEvent(new Event("change")); });
+  for (const b of document.querySelectorAll("#tiers [data-t]")) b.addEventListener("click", () => {
+    state.tier = state.tier === +b.dataset.t ? 0 : +b.dataset.t; trackD("tier", String(state.tier));
+    const before = state.sport; populateSports(); syncQuickSports();
+    if (state.sport !== before) sel.dispatchEvent(new Event("change"));
+  });
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
   $("modePlayers").addEventListener("click", () => openPlayers(state.sport, "header"));
