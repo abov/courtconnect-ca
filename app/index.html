@@ -616,7 +616,9 @@ function setMask() { let m = 0; for (const k of ["indoor", "outdoor"]) if (state
 const noPrograms = (sport = state.sport) => sport >= 0 && !!sports[sport] && !!(sports[sport].b && sports[sport].b.length);
 function matches(v, sm, tm, vf, sport = state.sport) {
   let mask;
-  if (sport >= 0) { const e = v.p.find(p => p[0] === sport); if (!e) return false; mask = e[2]; } else mask = v.m;
+  if (sport >= 0) { const e = v.p.find(p => p[0] === sport); if (!e) return false; mask = e[2]; }
+  else if (state.tier) { mask = v.p.reduce((a, p) => sports[p[0]].t === state.tier && !(sports[p[0]].b || []).length ? a | p[2] : a, 0); if (!mask) return false; }   // all sports, narrowed to the inferred tier; sports played on another sport's courts (b) don't count, or every tennis court would be "casual"
+  else mask = v.m;
   if (sm && !(mask & sm)) return false;
   if (tm && !(mask & tm)) return false;
   if (vf && (v.f & vf) !== vf) return false;
@@ -644,7 +646,7 @@ const isUpcoming = ev => !ev.e || ev.e >= todayIso();                   // recom
 function upcomingEvents() { return events.filter(isUpcoming); }
 function eventsFiltered() {
   const name = state.sport >= 0 ? sports[state.sport].n : null;
-  return upcomingEvents().filter(ev => (!name || ev.sp === name) && textHit(evText(ev))).sort((a, b) => nearCmp(a, b) || (a.s || "9999").localeCompare(b.s || "9999") || a.n.localeCompare(b.n));
+  return upcomingEvents().filter(ev => (!name || ev.sp === name) && evTierOk(ev) && textHit(evText(ev))).sort((a, b) => nearCmp(a, b) || (a.s || "9999").localeCompare(b.s || "9999") || a.n.localeCompare(b.n));
 }
 function fmtDate(iso, o) { return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", Object.assign({timeZone: "UTC"}, o)); }
 function fmtRange(ev) {
@@ -710,7 +712,7 @@ const SOCIAL_SRC = {official_site: "the organizer's own site", instagram: "the o
 const isCurrentSocial = s => !s.ll || s.ll >= todayIso();                // recomputed in the browser, like watch events
 function socialFiltered() {
   const name = state.sport >= 0 ? sports[state.sport].n : null;
-  return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name) && textHit(evText(s))).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.v.localeCompare(b.v) || a.n.localeCompare(b.n));
+  return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name) && evTierOk(s) && textHit(evText(s))).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.v.localeCompare(b.v) || a.n.localeCompare(b.n));
 }
 function socialGroups(list) {                                            // one pin per venue; every series there shares its popup
   const g = new Map();
@@ -1318,6 +1320,7 @@ function venueCourts(v) {
   const have = new Set(v.p.map(p => p[0]));
   const fam = {}; let solo = 0;   // variants of one game ("Basque Pelota: …") share a court: count the family once, by its largest count
   for (const p of v.p) {
+    if (state.tier && (sports[p[0]].t !== state.tier || (sports[p[0]].b || []).length)) continue;
     if ((sports[p[0]].b || []).some(b => have.has(b))) continue;
     const k = famOf(sports[p[0]].n);
     if (k) fam[k] = Math.max(fam[k] || 0, p[1] || 0); else solo += p[1] || 0;
@@ -1400,7 +1403,7 @@ function syncSurface() {
 // What is picked already shows in place (the Sport menu, the search box, pressed chips, "Filters (N on)"), so there is no separate row of filter chips; one "Clear" link on the Filters line resets them.
 function renderActive() {
   syncSurface();
-  const any = state.mode === "play" && (state.sport >= 0 || state.text || state.on.size || state.offers.size);
+  const any = state.mode === "play" && (state.sport >= 0 || state.tier || state.text || state.on.size || state.offers.size);
   $("clearFilters").hidden = !any;
 }
 function syncControls() {
@@ -1452,8 +1455,9 @@ function populateSports() {
   showAnywhere();
 }
 // Level of play: INFERRED from the sport sheet (world federation / named governing body / neither), never a claim about a venue or a player's level.
-const TIER_NOTE = {1: "Established: sports with a world federation and organized competition.", 2: "Organized: competitive sports with a named governing body.", 3: "Casual: recreational sports with no governing body listed."};
+const TIER_NOTE = {1: "Established: sports with a world federation and organized competition.", 2: "Organized: competitive sports with a named governing body.", 3: "Casual: recreational sports with no governing body listed. Most are played on another sport's courts, so they have few pins of their own; pick one from the list to see where."};
 const tierOk = s => !state.tier || s.t === state.tier;
+const evTierOk = ev => { if (!state.tier) return true; const s = sports.find(x => x.n === ev.sp); return !!s && s.t === state.tier; };
 function syncTiers() {
   for (const b of document.querySelectorAll("#tiers [data-t]")) b.setAttribute("aria-pressed", +b.dataset.t === state.tier);
   const n = $("tiernote"); n.hidden = !state.tier;
@@ -1587,7 +1591,7 @@ function initControls() {
   for (const b of document.querySelectorAll("#tiers [data-t]")) b.addEventListener("click", () => {
     state.tier = state.tier === +b.dataset.t ? 0 : +b.dataset.t; trackD("tier", String(state.tier));
     const before = state.sport; populateSports(); syncQuickSports();
-    if (state.sport !== before) sel.dispatchEvent(new Event("change"));
+    if (state.sport !== before) sel.dispatchEvent(new Event("change")); else { renderActive(); refresh(); if (state.mode !== "play") applyMode(true); }
   });
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
@@ -1618,7 +1622,7 @@ function initControls() {
   });
   $("keytoggle").addEventListener("click", () => { const open = $("mapkey").hidden; setKey(open); if (open) track("map-key"); });
   $("clearFilters").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); $("reset").click(); });
-  $("reset").addEventListener("click", () => { state.sport = -1; state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
+  $("reset").addEventListener("click", () => { state.sport = -1; state.tier = 0; populateSports(); state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   $("focusToggle").addEventListener("click", () => setFocus(!focusMode));
   $("shortlistToggle").addEventListener("click", () => {
