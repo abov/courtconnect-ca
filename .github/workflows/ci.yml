@@ -28,6 +28,7 @@ jobs:
           git fetch --no-tags --depth=1 origin main
           python ci/check_scorecard_regression.py --base-ref origin/main
       - run: pip install dbt-core dbt-duckdb "duckdb<2" pandas python-dotenv
+      - run: python ci/check_ask_the_data.py  # app/ask-the-data.html: its SQL runs on the export, vendored engine files match their checksums
       - run: python ci/check_page_reader.py  # ADR 0017 guard rail, offline (needs requests, pulled in by dbt)
       # CI never calls OpenStreetMap: it loads a small committed sample of real OSM data
       # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
