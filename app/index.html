@@ -335,7 +335,7 @@
         <button class="chip" data-k="sand" aria-pressed="false">Sand / beach</button>
         <button class="chip" data-k="clay" aria-pressed="false">Clay</button>
         <button class="chip" data-k="grass" aria-pressed="false">Grass</button>
-        <button class="chip" data-k="hard" aria-pressed="false">Hard</button>
+        <button class="chip" data-k="hard" aria-pressed="false" title="Includes tennis courts with no surface listed, which are most likely hard (a guess, not confirmed)">Hard (likely)</button>
       </div>
     </div>
     <div>
@@ -603,6 +603,13 @@ function showResume() {
 // ---------- filtering ----------
 function surfMask() { let m = 0; for (const k of ["sand", "clay", "grass", "hard"]) if (state.on.has(k)) m |= SURF[k]; return m; }
 function setMask() { let m = 0; for (const k of ["indoor", "outdoor"]) if (state.on.has(k)) m |= SURF[k]; return m; }
+// Only 702 of ~9,400 tennis venues list a surface and most courts that are not clay or grass are hard, so the Hard chip also takes tennis venues with
+// no surface listed (owner 2026-10-30). The guess is made here, never in the export; the popup labels it as a guess.
+const SURF_KNOWN = SURF.sand | SURF.clay | SURF.grass | SURF.hard | SURF.turf;
+let tennisIdx = -2;
+const tennisAt = () => (tennisIdx === -2 && sports.length && (tennisIdx = sports.findIndex(s => s.n === "Tennis")), tennisIdx);
+function tennisEntry(v) { const t = tennisAt(); return t < 0 ? null : v.p.find(p => p[0] === t) || null; }
+const surfaceUnlisted = v => { const e = tennisEntry(v); return !!e && !(e[2] & SURF_KNOWN); };
 // Sports played on another sport's courts (sport_also_played.csv; the export gives them b = the host sports: Typti, Pitton, Loboton, Soft Tennis...)
 // have no programs of their own (owner 2026-10-20): the venue's offers and join links belong to the host sport. The "What they offer" filters
 // then match nothing and the offers are not shown.
@@ -610,7 +617,7 @@ const noPrograms = (sport = state.sport) => sport >= 0 && !!sports[sport] && !!(
 function matches(v, sm, tm, vf, sport = state.sport) {
   let mask;
   if (sport >= 0) { const e = v.p.find(p => p[0] === sport); if (!e) return false; mask = e[2]; } else mask = v.m;
-  if (sm && !(mask & sm)) return false;
+  if (sm && !(mask & sm) && !((sm & SURF.hard) && (sport < 0 || sport === tennisAt()) && surfaceUnlisted(v))) return false;
   if (tm && !(mask & tm)) return false;
   if (vf && (v.f & vf) !== vf) return false;
   const wantPub = state.on.has("public"), wantMem = state.on.has("members");  // both on = either; one on = just that
@@ -1070,6 +1077,10 @@ function venueNode(v) {
   more.push(...sp.extra);
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
   if (f.length) plays.append(el("p", {text: f.join(" · ")}));
+  if ((state.sport < 0 || sports[state.sport].n === "Tennis") && surfaceUnlisted(v)) {
+    plays.append(el("p", {class: "meta", text: "Tennis surface not listed; most courts here are hard (a guess, not confirmed)."}));
+    more.push("Tennis surface (inferred): no surface is listed for these courts. Most tennis courts that are not clay or grass are hard, so the Hard (likely) filter includes them, but this is a guess, not confirmed.");
+  }
   if (v.wl) {
     plays.append(el("p", {}, el("b", {text: "Hitting walls on site: "}), document.createTextNode(wallLinkText(v.wl))));
     more.push("Hitting walls: " + (v.wl.some(w => w[2] === "tagged" || w[2] === "inferred") ? "the tagged or inferred ones are not checked (condition, count and public access unknown). " : "") + "They are solo-practice walls, shown as orange pins when you pick a wall sport, and are not counted as courts here.");
