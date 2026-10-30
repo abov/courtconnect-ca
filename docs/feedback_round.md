@@ -5,7 +5,7 @@ Goal: learn whether CourtConnect helps people find a place to play, watch or fin
 ## Owner checklist before sending
 - [ ] GoatCounter (ADR 0013, site `courts`, https://courts.goatcounter.com): exclude your own visits: open the live site once on each device and browser you use (laptop, phone) with `#toggle-goatcounter` added to the address, e.g. `https://abov.github.io/courtconnect-ca/#toggle-goatcounter`; GoatCounter then says tracking is disabled in that browser (it sets a local flag, so it survives changing IP; visit the same link again to turn counting back on); optionally also add your home IP under Settings > Ignore IPs (it changes, and a phone on mobile data uses another one). Date done: ____ (laptop), ____ (phone). Do not quote usage numbers from before it.
 - [ ] Write the start date and the baseline from `docs/data_quality.md` (venues, named %, events) at the top of `feedback_findings.md`.
-- [ ] Open the live map on your phone once and check the invite steps still match the screens (buttons "Places to play" / "Events & meetups" / "Find players", "Suggest a change" in the popup).
+- [ ] Open the live map on your phone once and check the invite steps still match the screens (buttons "Places to play" / "Events & meetups" / "Find players" / "Find by court", the Established / Organized / Casual chips, "Suggest a change" in the popup).
 - [ ] Hard-refresh after the last deploy (Pages caches up to 10 minutes).
 
 ## Who (6 to 10 people, ask first, no mailing list)
@@ -27,6 +27,7 @@ Swap in their sport (step 1) and a place they know (step 2). Give each person th
 > 3. Open a place and tap a link (website, open play, a club's Instagram). Did it go where you expected?
 > 4. Tap "Events & meetups" (or "Find players") and look for an event or group. Anything useful?
 > 5. Optional: if something is wrong, tap "Suggest a change" on that place.
+> 6. Optional: tap "Find by court", type a court size you know (like 40x20) and see if the sports it lists make sense.
 >
 > A text back is fine: did you find what you wanted, what was missing or wrong, would you use it again and for what, anything confusing (like "confirmed" vs "inferred")?
 >
@@ -47,6 +48,10 @@ When they reply, ask what they did, not whether they liked it ("What did you sea
 6. Who else would use it?
 7. Did you find someone to play with through the site (a group, open play, an app we link)? Would you want to post that you are looking for a partner? (Evidence for ADR 0024; "no" is a useful answer.)
 
+### Built since the first draft (questions 12 and 13: one line each)
+12. Do the Established / Organized / Casual chips help you pick a sport, or confuse you? They are inferred from the sport sheet (world federation, named governing body), not from pro play: would you want a real pro-tour label? (`docs/sessions/2026-10-30-sport-level-tiers.md`)
+13. Did you ever want to search by court size or net height, or ask "I have a tennis court, what else fits?" Did "Find by court" give results that made sense? (`docs/sessions/2026-10-30-find-by-court.md`)
+
 ### Ask-first ideas (questions 8 to 11: one line each, a quick yes / maybe / no is enough; skip if the person is short on time)
 These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is built for them; the answers decide whether they are.
 8. When you look for people to play with, what matters: their level, their age group, both, or neither? Where do you look today (an app, Facebook, WhatsApp, Reddit, Meetup, your club)? If nobody near you has a group, would a ready-to-post "start one" kit with a suggested court help? (`docs/player_finding_plan.md`)
@@ -62,6 +67,7 @@ These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is bui
 | Where do people look? | `sport` events vs venues per sport | top 3 requested sports have 20+ venues |
 | Do people contribute? | `suggest-change` + `report-form` + `osm-edit` | at least 3 in two weeks |
 | Do the extras land? | `this-week-open`, `shortlist-add`, `share` | note counts, no target yet |
+| Do the new finders land? | `tier/*`, `court-open/*`, `court-pick/*`, `suggest-pick/*` | note counts, no target yet |
 
 ## How to record (in `docs/feedback_findings.md`)
 1. **Log** one row per finding: date, who (sport + area, no names or initials), type (bug / missing place / wrong data / confusing label / feature idea / pricing), what happened, severity 1-3, source (call / message / analytics). Nothing people would not want public.
