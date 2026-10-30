@@ -94,6 +94,13 @@
   .sico[hidden], .sico:empty { display: none; }
   .sico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
   .sico svg .f { fill: currentColor; stroke: none; }
+  .sugwrap { position: relative; }
+  .sug { position: absolute; left: 0; right: 0; top: 100%; z-index: 30; margin: 2px 0 0; padding: 4px; list-style: none; max-height: 280px; overflow: auto;
+         background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); box-shadow: var(--shadow); }
+  .sug li { padding: 7px 10px; cursor: pointer; border-radius: var(--r-sm); min-height: 24px; }
+  .sug li[aria-selected=true], .sug li:hover { background: var(--panel); }
+  .sug .meta { display: block; }
+  @media (pointer: coarse) { .sug li { min-height: 44px; } }
   .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > div { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
@@ -328,9 +335,10 @@
       </details>
     </div>
     <div class="searchrow">
-      <div>
+      <div class="sugwrap">
         <label class="l" for="q">Search name, city or ZIP</label>
-        <input id="q" type="search" placeholder="Search name, city or ZIP (e.g. 90266)" autocomplete="off">
+        <input id="q" type="search" placeholder="Search name, city or ZIP (e.g. 90266)" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="qsug" aria-autocomplete="list">
+        <ul id="qsug" class="sug" role="listbox" aria-label="Suggestions" hidden></ul>
       </div>
       <button class="chip" id="nearMe" type="button">Near me</button>
     </div>
@@ -1289,6 +1297,53 @@ async function runSearch(zoom, open) {
   setSearchNote(note);
   if (zoom && pts) fitTo(pts, maxZoom);
 }
+// ---------- search suggestions: venue names and cities as you type (play view only; picking one is the same as typing it and pressing Enter) ----------
+let sugItems = [], sugActive = -1, cityCounts = null;
+function suggest(raw) {
+  const q = raw.trim().toLowerCase();
+  if (state.mode !== "play" || q.length < 2 || isZip(q) || zipToken(q)) return [];
+  if (!cityCounts) { cityCounts = new Map(); for (const v of venues) if (v.c) cityCounts.set(v.c, (cityCounts.get(v.c) || 0) + 1); }
+  const words = q.split(/\s+/), out = [];
+  [...cityCounts].filter(([c]) => c.toLowerCase().startsWith(q)).sort((a, b) => b[1] - a[1]).slice(0, 2).forEach(([c, n]) => out.push({kind: "city", c, n}));
+  const seen = new Set(), hits = [];
+  for (const v of venues) {
+    if (!v.n || !words.every(w => v.t.includes(w))) continue;
+    if (state.sport >= 0 && !v.p.some(p => p[0] === state.sport)) continue;
+    const key = v.n + "|" + v.c; if (seen.has(key)) continue; seen.add(key);
+    const nm = v.n.toLowerCase();
+    hits.push({v, rank: nm.startsWith(q) ? 0 : nm.split(/\W+/).some(w => w.startsWith(words[0])) ? 1 : 2});
+  }
+  hits.sort((a, b) => a.rank - b.rank || a.v.n.localeCompare(b.v.n));
+  hits.slice(0, 6).forEach(h => out.push({kind: "venue", v: h.v}));
+  return out;
+}
+function closeSug() { sugItems = []; sugActive = -1; $("qsug").hidden = true; $("q").setAttribute("aria-expanded", "false"); $("q").removeAttribute("aria-activedescendant"); }
+function renderSug() {
+  const ul = $("qsug"); sugItems = suggest($("q").value); sugActive = -1; ul.replaceChildren();
+  if (!sugItems.length) { closeSug(); return; }
+  sugItems.forEach((it, i) => {
+    const sub = it.kind === "city" ? "City · " + fmt(it.n) + (it.n === 1 ? " venue" : " venues")
+      : it.v.c + (it.v.p.some(p => !(sports[p[0]].b || []).length) ? " · " + it.v.p.filter(p => !(sports[p[0]].b || []).length).slice(0, 2).map(p => sports[p[0]].n).join(", ") : "");
+    const li = el("li", {role: "option", id: "qsug-" + i, "aria-selected": "false"}, el("b", {text: it.kind === "city" ? it.c : it.v.n}), el("span", {class: "meta", text: sub}));
+    li.addEventListener("pointerdown", e => e.preventDefault());   // keep focus in the box so the list does not close before the click lands
+    li.addEventListener("click", () => pickSug(i));
+    ul.append(li);
+  });
+  ul.hidden = false; $("q").setAttribute("aria-expanded", "true");
+}
+function moveSug(d) {
+  if (!sugItems.length) return;
+  sugActive = (sugActive + 1 + d + sugItems.length + 1) % (sugItems.length + 1) - 1;   // wraps through "none" (-1), so Enter can still mean a plain search
+  [...$("qsug").children].forEach((li, i) => li.setAttribute("aria-selected", String(i === sugActive)));
+  if (sugActive >= 0) { $("q").setAttribute("aria-activedescendant", "qsug-" + sugActive); $("qsug").children[sugActive].scrollIntoView({block: "nearest"}); } else $("q").removeAttribute("aria-activedescendant");
+}
+async function pickSug(i) {
+  const it = sugItems[i]; if (!it) return;
+  const name = it.kind === "city" ? it.c : it.v.n;
+  closeSug(); $("q").value = name; $("q").blur(); state.text = name.toLowerCase(); renderActive(); trackD("suggest-pick", it.kind);
+  await runSearch(true);
+  if (it.kind === "venue") showVenue(it.v, true);
+}
 const reSearch = (zoom, open) => { if (state.text) return runSearch(zoom, open); ++searchRun; textOff = false; searchCentre = null; setSearchNote(""); refresh(); };   // a filter changed: re-check the search (zoom false keeps the map where it is)
 function applyMode(fit) {
   if (!mapReady) return;
@@ -1682,8 +1737,14 @@ function initControls() {
   sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); syncQuickSports(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
+  $("q").addEventListener("input", debounce(renderSug, 120));
+  $("q").addEventListener("blur", () => setTimeout(closeSug, 150));
   $("q").addEventListener("keydown", e => {   // Enter: search now (a single venue also opens its popup) and close the phone keyboard
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { if (!$("qsug").hidden) { e.preventDefault(); moveSug(e.key === "ArrowDown" ? 1 : -1); } return; }
+    if (e.key === "Escape" && !$("qsug").hidden) { closeSug(); return; }
+    if (e.key === "Enter" && sugActive >= 0) { e.preventDefault(); typed.cancel(); pickSug(sugActive); return; }
     if (e.key !== "Enter") return;
+    closeSug();
     e.preventDefault(); typed.cancel(); state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true, true); e.target.blur();
   });
   for (const b of document.querySelectorAll("[data-k]")) b.addEventListener("click", () => {
