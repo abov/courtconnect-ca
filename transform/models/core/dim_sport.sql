@@ -10,6 +10,7 @@ select
     court_width_ft,
     net_type,
     net_height_in,
+    net_height_alt_in,
     surface_lc like '%concrete%'                              as plays_on_concrete,
     surface_lc like '%sand%'                                  as plays_on_sand,
     surface_lc like '%grass%'                                 as plays_on_grass,
