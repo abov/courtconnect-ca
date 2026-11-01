@@ -163,6 +163,7 @@ Last run: 2026-11-01. Added 0 events; changed 1 (Fremont Thanksgiving Teams); re
 - **Squash:** US Squash 2026-27 junior calendar has no CA events; CSA schedule none in CA/NV. Skyball: NYC-only, none scheduled. **Club Locker: failed** (only a cookie banner without a decline option; home redirects to login).
 - **New-source search (3 standard searches):** candidates read: csasquash.com rejected; usracquetball.org unreachable (www host did not resolve); pushitreplays.com added as candidate (aggregator, unread). No `event-report` issues open.
 - **Unread:** tournamentsoftware.com, pickleballbrackets.com, eventbrite.com candidates (not read this run).
+- **New-source follow-up (cloud, 2026-11-01):** WebFetch of tournamentsoftware.com, pickleballbrackets.com, pushitreplays.com, usracquetball.org and eventbrite.com all failed (host does not resolve in the sandbox; allow the hosts or read by hand), so all stay `candidate`. 3 more standard searches (CA racquetball Dec, NV table tennis/badminton/squash, CA squash 2027): nothing new; US Open Table Tennis (Dec 16-21, Mandalay Bay) already in; CA/NV racquetball state championships were Aug 21-23 (past). Added candidates mypickleballconnect.com and active.com.
 
 ### Part 3 (padel, beach tennis, lead rechecks)
 Last run: 2026-11-01. Added 0 events; changed 0. **Sources NOT read: the cloud sandbox's network policy blocks every site except search (HTTP 403 on CONNECT; host did not resolve in WebFetch).** Needs the owner to allow the hosts or to run Part 3 by hand.
