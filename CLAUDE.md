@@ -50,6 +50,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0026, all accepted except 0001, su
 - `ingestion/`   Python extract/load/export scripts (`ingestion/oneoff/`: one-time research scans, not in any make target; outside requests use `ingestion/useragent.py`)
 - `transform/`   dbt project (models, seeds, macros, tests)
 - `app/`         static map page
+- `app/i18n/strings.json`   UI translations (machine-drafted, ADR 0027): English text is the key; changing a `t("...")` string or static label means updating its row (`python ci/check_i18n.py`)
 - `ci/fixtures`  small sample data for CI
 
 ## Current status
