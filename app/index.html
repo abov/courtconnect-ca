@@ -296,7 +296,7 @@
 
 <aside id="panel" aria-label="Filters and results">
   <header>
-    <h1><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1>
+    <h1 translate="no"><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1>
     <div class="sub" id="headline">Find where to play racket sports in California and Nevada.</div>
     <p class="sub welcome">Every racket sport, every kind of court, from free parks to private clubs. Labelled by how sure we are. We link out and never take bookings or payments.</p>
     <div class="seg" role="group" aria-label="What are you looking for?">
@@ -421,6 +421,8 @@
     <p>Running a tournament, league or open play? Send us the dates and your public page; we review it and list it as an event when the page backs it up. <a id="aboutEvent" href="#" target="_blank" rel="noopener noreferrer">Add an event</a> (no sign-in)</p>
     <h3>For builders</h3>
     <p>Open data in, a tested dbt warehouse, one static file out. <a href="how-its-built.html">How it's built</a>, with the numbers and the limits.</p>
+    <h3>Other languages</h3>
+    <p>CourtConnect is written in English and has no translation of its own. Your browser can translate it: in Chrome or Edge use the address-bar Translate button (on a phone, the &#8942; menu, then Translate); in Safari, the <b>aA</b> menu, then Translate; in Firefox, the Translate button in the address bar. Pick Spanish, Portuguese, French, Italian, German or any other language it offers. Names of places, events and groups are left as written. Machine translation can be wrong, and venue notes come from English sources.</p>
     <p class="meta">A listing or label changes only with public evidence. It cannot be bought, and there is no paid or featured placement.</p>
   </div>
 </dialog>
@@ -585,7 +587,7 @@ function renderShortlist() {
   const ul = el("ul");
   for (const v of saved) {
     const name = v.n || "Unnamed courts" + (v.c ? " in " + v.c : "");
-    const open = el("button", {type: "button", class: "sl-open"}, el("div", {class: "nm", text: name}), el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}));
+    const open = el("button", {type: "button", class: "sl-open"}, el("div", {class: "nm", text: name, translate: v.n ? "no" : "yes"}), el("div", {class: "meta", text: [v.c, sportLine(v)].filter(Boolean).join(" · ")}));
     open.addEventListener("click", () => showVenue(v, true));
     const rm = el("button", {type: "button", class: "sl-rm", "aria-label": "Remove " + name + " from shortlist", title: "Remove", text: "×"});
     rm.addEventListener("click", () => { toggleSaved(v); fitTo(shortIds.map(i => byId[i]).filter(Boolean), 15); });   // re-frame the places that are left
@@ -688,7 +690,7 @@ function eventGeojson(list) {
 }
 function eventNode(ev) {
   const box = el("div");
-  box.append(el("h2", {text: ev.n}));
+  box.append(el("h2", {text: ev.n, translate: "no"}));
   box.append(el("div", {}, el("span", {class: "badge ev" + (ev.l === "pro" ? " pro" : ""), text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
   box.append(el("p", {}, el("b", {text: fmtRange(ev)})));
   const cityPin = /city/.test(ev.pr);
@@ -720,7 +722,7 @@ function renderEventList(ul) {                                          // rows 
   if (shown.length) ul.append(el("li", {class: "lh", text: "To watch"}));
   for (const ev of shown) {
     const btn = el("button", {type: "button"},
-      el("div", {class: "nm", text: ev.n}),
+      el("div", {class: "nm", text: ev.n, translate: "no"}),
       el("div", {class: "meta", text: fmtRange(ev) + " \u00b7 " + ev.c}),
       el("div", {}, el("span", {class: "badge ev" + (ev.l === "pro" ? " pro" : ""), text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
     btn.addEventListener("click", () => showEvent(ev, true));
@@ -767,14 +769,14 @@ function socialDetails(s) {                                              // ever
 }
 function socialNode(g) {
   const compact = phoneWidth() && g.items.length > 1, box = el("div", compact ? {class: "soc-pop"} : {});
-  box.append(el("h2", {text: g.v}), el("p", {class: "meta", text: g.c}));
+  box.append(el("h2", {text: g.v, translate: "no"}), el("p", {class: "meta", text: g.c, translate: "no"}));
   for (const s of g.items) {
     if (!compact) {
-      box.append(el("div", {class: "soc-item"}, el("p", {}, el("b", {text: s.n})), socialBadges(s), el("p", {}, el("b", {text: s.sc})), ...socialDetails(s)));
+      box.append(el("div", {class: "soc-item"}, el("p", {}, el("b", {text: s.n, translate: "no"})), socialBadges(s), el("p", {}, el("b", {text: s.sc})), ...socialDetails(s)));
       continue;
     }
     const stated = [SOCIAL_AGE[s.ag] || s.ag, SOCIAL_AUD[s.au] || s.au].filter(Boolean);   // only what the organizer states, kept visible when collapsed
-    const sum = el("summary", {}, el("span", {class: "nm", text: s.n}), el("span", {class: "meta", text: [s.sc, ...stated].join(" · ")}));
+    const sum = el("summary", {}, el("span", {class: "nm", text: s.n, translate: "no"}), el("span", {class: "meta", text: [s.sc, ...stated].join(" · ")}));
     box.append(el("details", {class: "soc-item compact"}, sum, socialBadges(s), ...socialDetails(s)));
   }
   box.addEventListener("toggle", e => {                                  // one series open at a time keeps the popup short
@@ -793,7 +795,7 @@ function renderSocialList(ul) {
   const list = socialFiltered(), shown = list.filter(inMapView);
   if (shown.length) ul.append(el("li", {class: "lh", text: "To join"}));
   for (const s of shown) {
-    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: s.n}), el("div", {class: "meta", text: s.sc + " · " + s.v + ", " + s.c}), socialBadges(s));
+    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: s.n, translate: "no"}), el("div", {class: "meta", text: s.sc + " · " + s.v + ", " + s.c}), socialBadges(s));
     btn.addEventListener("click", () => showSocial(socialPins.find(g => g.items.includes(s)) || socialGroups([s])[0], true));
     ul.append(el("li", {}, btn));
   }
@@ -808,7 +810,7 @@ function buildComingUp() {
   if (!next.length) li.append(el("p", {class: "meta none", text: "No dated events in this area. Zoom out or move the map to see more."}));
   for (const ev of next) {
     const live = ev.s <= todayIso(), when = ev.s.slice(0, 4) === todayIso().slice(0, 4) && (ev.e || ev.s).slice(0, 4) === ev.s.slice(0, 4) ? fmtRange(ev).replace(/, \d{4}/g, "") : fmtRange(ev);   // year only when it is not this year
-    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: ev.n}), el("div", {class: "meta", text: (live ? "On now · " : "") + when + " · " + ev.c}));
+    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: ev.n, translate: "no"}), el("div", {class: "meta", text: (live ? "On now · " : "") + when + " · " + ev.c}));
     btn.addEventListener("click", () => { track("this-week-open"); showEvent(ev, true); });
     li.append(btn);
   }
@@ -879,7 +881,7 @@ function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
 function wallTypeLabel(w, t) { return (WALL_TYPE[t] || t) + (w.cf === "tagged" && t === "one_wall" ? " (assumed)" : ""); }
 function wallNode(w) {
   const box = el("div"), approx = /approx/.test(w.pr), acc = wallAccess(w);
-  box.append(el("h2", {text: w.n}));
+  box.append(el("h2", {text: w.n, translate: "no"}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
   box.append(el("p", {class: "meta", text: [w.wn ? w.wn + " walls (one pin)" : "", w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
   box.append(el("p", {class: "meta", text: ["Access: " + (WALL_ACCESS_LABEL[w.ac] || "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (OSM tag, not checked)" : ""),
@@ -903,7 +905,7 @@ function wallItems(list) {
   const out = [];
   for (const w of list) {
     const btn = el("button", {type: "button"},
-      el("div", {class: "nm", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
+      el("div", {class: "nm", translate: "no", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
       el("div", {class: "meta", text: [distLabel(w), w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
       el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : null));
     btn.addEventListener("click", () => showWall(w, true));
@@ -1078,7 +1080,7 @@ function venueNode(v) {
   box.addEventListener("click", leaving); box.addEventListener("auxclick", leaving);
   const head = el("div", {class: "vhead st-" + v.q}), plays = el("div", {class: "vsec"}), go = el("div", {class: "vsec"});   // status band (same colour meaning as the pin), what is played, then where to go; Join & follow and the details follow
   box.append(head, plays, go);
-  head.append(el("h2", {text: v.n || "Unnamed courts"}));
+  head.append(el("h2", {text: v.n || "Unnamed courts", translate: v.n ? "no" : "yes"}));
   const badges = [el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})];
   if (v.cf) {
     badges.push(el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf]}));   // short chip; the date and head-counts move to the details line below
@@ -1324,7 +1326,7 @@ function renderSug() {
   sugItems.forEach((it, i) => {
     const sub = it.kind === "city" ? "City · " + fmt(it.n) + (it.n === 1 ? " venue" : " venues")
       : it.v.c + (it.v.p.some(p => !(sports[p[0]].b || []).length) ? " · " + it.v.p.filter(p => !(sports[p[0]].b || []).length).slice(0, 2).map(p => sports[p[0]].n).join(", ") : "");
-    const li = el("li", {role: "option", id: "qsug-" + i, "aria-selected": "false"}, el("b", {text: it.kind === "city" ? it.c : it.v.n}), el("span", {class: "meta", text: sub}));
+    const li = el("li", {role: "option", id: "qsug-" + i, "aria-selected": "false"}, el("b", {text: it.kind === "city" ? it.c : it.v.n, translate: "no"}), el("span", {class: "meta", text: sub}));
     li.addEventListener("pointerdown", e => e.preventDefault());   // keep focus in the box so the list does not close before the click lands
     li.addEventListener("click", () => pickSug(i));
     ul.append(li);
@@ -1370,7 +1372,7 @@ function renderList() {
   ul.replaceChildren(...lead, ...wallItems(walls));
   for (const v of top) {
     const btn = el("button", {type: "button", class: "q" + v.q},
-      el("div", {class: "nm"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
+      el("div", {class: "nm", translate: v.n ? "no" : "yes"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
       el("div", {class: "meta", text: [distLabel(v), v.c, sportLine(v)].filter(Boolean).join(" · ")}),
       el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), isSaved(v) ? el("span", {class: "badge sv", text: "★ Saved"}) : null, v.up ? el("span", {class: "badge warn", text: v.up}) : null, noPrograms() ? null : v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
@@ -1585,7 +1587,7 @@ function showPeople() {
 }
 function playerCard(s) {
   const card = el("div", {class: "pcard"}), where = [s.v, s.c].filter(Boolean).join(", "), dist = distLabel(s);
-  card.append(el("h4", {text: s.n}), el("p", {class: "meta", text: where + (dist ? " · " + dist : "")}), socialBadges(s), el("p", {}, el("b", {text: s.sc})), ...socialDetails(s));
+  card.append(el("h4", {text: s.n, translate: "no"}), el("p", {class: "meta", text: where + (dist ? " · " + dist : "")}), socialBadges(s), el("p", {}, el("b", {text: s.sc})), ...socialDetails(s));
   const show = el("button", {class: "link", type: "button", text: "Show on the map"});
   show.addEventListener("click", () => {
     $("players").close();
