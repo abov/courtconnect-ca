@@ -167,6 +167,11 @@
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid var(--panel); box-shadow: 0 0 0 1px var(--line); }
   footer { padding: 8px 16px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
   footer a { color: var(--accent); }
+  .hrow { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .hrow h1 { flex: 1; min-width: 0; }
+  .langbtn { display: flex; align-items: center; gap: 4px; flex: none; margin-top: 1px; padding: 0 6px; min-height: 32px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--accent); }
+  .langbtn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+  .langbtn select { font: 600 12px var(--font-head, inherit); color: var(--text, inherit); background: transparent; border: 0; max-width: 98px; cursor: pointer; }
   .chip[hidden] { display: none; }
   #moreSummary .link { margin-left: 10px; font-weight: 400; }   /* "Clear" sits on the Filters line: no extra row of chips */
   footer { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
@@ -280,7 +285,7 @@
 
 <aside id="panel" aria-label="Filters and results">
   <header>
-    <h1 translate="no"><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1>
+    <div class="hrow"><h1 translate="no"><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">CourtConnect CalNeva</h1><label class="langbtn" title="Translations are machine-drafted; English is the original."><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><select id="lang" aria-label="Language" translate="no"></select></label></div>
     <div class="sub" id="headline">Find where to play racket sports in California and Nevada.</div>
     <p class="sub welcome">Every racket sport, every kind of court, from free parks to private clubs. Labelled by how sure we are. We link out and never take bookings or payments.</p>
     <div class="seg" role="group" aria-label="What are you looking for?">
@@ -403,7 +408,8 @@
     <h3>For builders</h3>
     <p>Open data in, a tested dbt warehouse, one static file out. <a href="how-its-built.html">How it's built</a>, with the numbers and the limits.</p>
     <h3>Other languages</h3>
-    <p>CourtConnect is written in English and has no translation of its own. Your browser can translate it: in Chrome or Edge use the address-bar Translate button (on a phone, the &#8942; menu, then Translate); in Safari, the <b>aA</b> menu, then Translate; in Firefox, the Translate button in the address bar. Pick Spanish, Portuguese, French, Italian, German or any other language it offers. Names of places, events and groups are left as written. Machine translation can be wrong, and venue notes come from English sources.</p>
+    <p>CourtConnect is available in English, Spanish, Portuguese (Brazil), French, Italian and German: use the language menu at the top of the panel. The translations are machine-drafted and have not been reviewed by native speakers; English is the original. Long explanations, venue notes and sport descriptions stay in English.</p>
+    <p>For any other language, your browser can translate the page: in Chrome or Edge use the address-bar Translate button (on a phone, the &#8942; menu, then Translate); in Safari, the aA menu, then Translate; in Firefox, the Translate button in the address bar. Names of places, events and groups are left as written. Machine translation can be wrong.</p>
     <p class="meta">A listing or label changes only with public evidence. It cannot be bought, and there is no paid or featured placement.</p>
   </div>
 </dialog>
@@ -531,7 +537,7 @@ function el(tag, props, ...kids) {
   return e;
 }
 function safeUrl(u) { try { const x = new URL(u.includes("//") ? u : "http://" + u); return /^https?:$/.test(x.protocol) ? x.href : ""; } catch { return ""; } }
-const fmt = n => n.toLocaleString("en-US");
+const fmt = n => n.toLocaleString(LOCALE);
 
 // ---------- focus helpers: for visitors who get distracted easily (docs/product_brief.md, PR 3) ----------
 // A nudge back after a link-out and "pick up where you left off". The list shows 5 places at a time (it was an opt-in Focus mode until 2026-11-01; the shortlist was removed the same day, to come back as Favorites).
@@ -540,15 +546,52 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem("cc." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem("cc." + k, JSON.stringify(v)); } catch { /* storage blocked: this visit still works */ } },
 };
+// ---------- language ----------
+// English is the source text and also the key: t("Near me") looks the phrase up in i18n/strings.json and falls back to the English itself, so a missing entry never
+// breaks the page. The other languages are machine-drafted (the About card says so). Sport names, venue notes and long explanations stay English.
+const LANGS = [["en", "English", "en-US"], ["es", "Español", "es"], ["pt-BR", "Português (BR)", "pt-BR"], ["fr", "Français", "fr"], ["it", "Italiano", "it"], ["de", "Deutsch", "de"]];
+function pickLang() {   // ?lang= first, then the saved choice, then the browser's own list; anything unsupported is English
+  const find = c => { c = String(c || "").toLowerCase(); const l = LANGS.find(x => x[0].toLowerCase() === c) || LANGS.find(x => x[0].toLowerCase().split("-")[0] === c.split("-")[0]); return l ? l[0] : ""; };
+  let want = ""; try { want = new URLSearchParams(location.search).get("lang") || ""; } catch (err) { /* ignore */ }
+  return find(want) || find(store.get("lang", "")) || [...(navigator.languages || [navigator.language])].map(c => find(c)).find(Boolean) || "en";
+}
+const LANG = pickLang(), LOCALE = LANGS.find(l => l[0] === LANG)[2], PLURAL = new Intl.PluralRules(LOCALE);
+document.documentElement.lang = LANG;
+const DICT = {};
+const t = (en, vars) => { const s = DICT[en] || en; return vars ? s.replace(/\{(\w+)\}/g, (m, k) => k in vars ? vars[k] : m) : s; };
+const pick = (n, one, many) => PLURAL.select(n) === "one" ? one : many;   // the language's own plural rule (French says "0 lieu")
+const tn = (n, one, many, vars) => t(pick(n, one, many), Object.assign({n: fmt(n)}, vars));
+const richT = (en, vars) => t(en).split(/(\{\w+\})/).filter(Boolean).map(p => { const m = /^\{(\w+)\}$/.exec(p); return m && m[1] in vars ? el("b", {text: String(vars[m[1]])}) : document.createTextNode(p); });   // numbers in bold
+const richTn = (n, one, many, vars) => richT(pick(n, one, many), Object.assign({n: fmt(n)}, vars));
+const dictP = LANG === "en" ? Promise.resolve() : fetch("i18n/strings.json").then(r => r.ok ? r.json() : null).then(j => {
+  const i = j ? j._langs.indexOf(LANG) : -1;
+  if (i >= 0) for (const [k, v] of Object.entries(j)) if (k[0] !== "_" && v[i]) DICT[k] = v[i];
+}).catch(() => { /* no dictionary: the page stays English */ });
+function translateStatic() {   // the page's own text and labels, by exact (whitespace-normalised) English match
+  if (LANG === "en") return;
+  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {acceptNode: n => /^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT});
+  for (let n; (n = w.nextNode());) { const k = n.nodeValue.replace(/\s+/g, " ").trim(); if (k && DICT[k]) n.nodeValue = n.nodeValue.replace(/\S[\s\S]*\S|\S/, () => DICT[k]); }
+  for (const x of document.querySelectorAll("[aria-label],[title],[placeholder]")) for (const a of ["aria-label", "title", "placeholder"]) { const v = x.getAttribute(a); if (v && DICT[v]) x.setAttribute(a, DICT[v]); }
+}
+dictP.then(translateStatic);
+function translateTables() {   // the label tables above hold English; swap them in place once, before anything is drawn
+  for (const o of [QNAME, QTIP, QSHORT, CONFIRM, SRC, OFFER, ACTION, FORMAT, LEVEL, SOCIAL_KIND, SOCIAL_AGE, SOCIAL_AUD, WALL_TYPE, WALL_CONF, WALL_ACCESS_LABEL, TIER_NOTE]) for (const k of Object.keys(o)) o[k] = t(o[k]);
+}
+function initLang() {
+  const sel = $("lang");
+  for (const [code, label] of [...LANGS].sort((a, b) => a[1].localeCompare(b[1]))) sel.append(el("option", {value: code, text: label}));
+  sel.value = LANG;
+  sel.addEventListener("change", () => { store.set("lang", sel.value); const u = new URL(location.href); u.searchParams.set("lang", sel.value); location.href = u.href; });   // a reload in the new language keeps the filters (they are in the #hash)
+}
 const LIST_STEP = 5, AWAY_MS = 4000;
 let listShown = LIST_STEP, lastOut = null, leftAt = 0;
 // After a link-out opens in another tab, the way back should be obvious: a small card names the place and lets them carry on.
 function hideToast() { clearTimeout(showToast.t); $("toast").hidden = true; }
 function showToast(v) {
-  const t = $("toast"), keep = el("button", {class: "chip", type: "button", text: "Keep looking"});
+  const t = $("toast"), keep = el("button", {class: "chip", type: "button", text: t("Keep looking")});
   keep.addEventListener("click", hideToast);
-  t.replaceChildren(el("div", {class: "nm", text: "Welcome back. You were looking at " + (v.n || "these courts") + "."}),
-    el("div", {class: "meta", text: "Pick up where you left off."}),
+  t.replaceChildren(el("div", {class: "nm", text: t("Welcome back. You were looking at {name}.", {name: v.n || t("these courts")})}),
+    el("div", {class: "meta", text: t("Pick up where you left off.")}),
     el("div", {class: "chips"}, keep));
   t.hidden = false; clearTimeout(showToast.t); showToast.t = setTimeout(hideToast, 30000);
 }
@@ -559,14 +602,14 @@ document.addEventListener("visibilitychange", () => {
 function hideResume() { $("resume").hidden = true; }
 function showResume() {
   const n = state.on.size + state.offers.size;
-  const bits = [state.mode === "watch" ? "Events & meetups" : "", state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", state.text ? "“" + state.text + "”" : "", n ? n + (n === 1 ? " filter" : " filters") : ""].filter(Boolean);
+  const bits = [state.mode === "watch" ? t("Events & meetups") : "", state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", state.text ? "“" + state.text + "”" : "", n ? tn(n, "{n} filter", "{n} filters") : ""].filter(Boolean);
   if (!bits.length) return;
-  const b = el("button", {class: "link", type: "button", text: "Start over"});
+  const b = el("button", {class: "link", type: "button", text: t("Start over")});
   b.addEventListener("click", () => {
     hideResume(); store.set("hash", ""); $("reset").click();
     if (state.mode !== "play") setMode("play"); else if (mapReady) map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
   });
-  $("resume").replaceChildren(el("span", {text: "Picked up where you left off: " + bits.join(" · ") + "."}), b);
+  $("resume").replaceChildren(el("span", {text: t("Picked up where you left off: {bits}.", {bits: bits.join(" · ")})}), b);
   $("resume").hidden = false;
 }
 
@@ -611,9 +654,10 @@ function eventsFiltered() {
   const name = state.sport >= 0 ? sports[state.sport].n : null;
   return upcomingEvents().filter(ev => (!name || ev.sp === name) && evTierOk(ev) && textHit(evText(ev))).sort((a, b) => nearCmp(a, b) || (a.s || "9999").localeCompare(b.s || "9999") || a.n.localeCompare(b.n));
 }
-function fmtDate(iso, o) { return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", Object.assign({timeZone: "UTC"}, o)); }
+function fmtDate(iso, o) { return new Date(iso + "T00:00:00Z").toLocaleDateString(LOCALE, Object.assign({timeZone: "UTC"}, o)); }
 function fmtRange(ev) {
-  if (!ev.s) return "Dates to be confirmed";
+  if (!ev.s) return t("Dates to be confirmed");
+  if (LOCALE !== "en-US" && ev.e && ev.e !== ev.s) { try { return new Intl.DateTimeFormat(LOCALE, {month: "short", day: "numeric", year: "numeric", timeZone: "UTC"}).formatRange(new Date(ev.s + "T00:00:00Z"), new Date(ev.e + "T00:00:00Z")); } catch (err) { /* no formatRange here: the English layout below */ } }
   if (!ev.e || ev.e === ev.s) return fmtDate(ev.s, {month: "short", day: "numeric", year: "numeric"});
   const a = new Date(ev.s + "T00:00:00Z"), b = new Date(ev.e + "T00:00:00Z");
   if (a.getUTCFullYear() === b.getUTCFullYear() && a.getUTCMonth() === b.getUTCMonth()) return fmtDate(ev.s, {month: "short"}) + " " + a.getUTCDate() + " \u2013 " + b.getUTCDate() + ", " + a.getUTCFullYear();
@@ -629,15 +673,15 @@ function eventNode(ev) {
   box.append(el("div", {}, el("span", {class: "badge ev" + (ev.l === "pro" ? " pro" : ""), text: LEVEL[ev.l] || ev.l}), el("span", {class: "badge", text: ev.sp}), el("span", {class: "badge", text: FORMAT[ev.f] || ev.f})));
   box.append(el("p", {}, el("b", {text: fmtRange(ev)})));
   const cityPin = /city/.test(ev.pr);
-  box.append(el("p", {class: "meta", text: (cityPin ? ev.c + " · venue TBA (pin shows the city)" : ev.v + ", " + ev.c)}));
-  if (SCREENING.has(ev.f)) box.append(el("p", {class: "meta", text: "Shown on a screen here; not played at this venue."}));
+  box.append(el("p", {class: "meta", text: (cityPin ? ev.c + " · " + t("venue TBA (pin shows the city)") : ev.v + ", " + ev.c)}));
+  if (SCREENING.has(ev.f)) box.append(el("p", {class: "meta", text: t("Shown on a screen here; not played at this venue.")}));
   if (ev.t) box.append(el("p", {text: ev.t}));
   const row = el("div", {class: "btnrow"});
   const info = ev.u ? safeUrl(ev.u) : "", tix = ev.k ? safeUrl(ev.k) : "";
-  if (tix) row.append(el("a", {class: "btn primary", href: tix, "data-kind": "tickets", target: "_blank", rel: "noopener noreferrer", text: "Tickets"}));
-  if (info) row.append(el("a", {class: "btn", href: info, "data-kind": "event-page", target: "_blank", rel: "noopener noreferrer", text: "Event page"}));
+  if (tix) row.append(el("a", {class: "btn primary", href: tix, "data-kind": "tickets", target: "_blank", rel: "noopener noreferrer", text: t("Tickets")}));
+  if (info) row.append(el("a", {class: "btn", href: info, "data-kind": "event-page", target: "_blank", rel: "noopener noreferrer", text: t("Event page")}));
   box.append(row);
-  box.append(el("p", {class: "meta", text: "Checked " + fmtDate(ev.vo, {month: "short", day: "numeric"})}));
+  box.append(el("p", {class: "meta", text: t("Checked {date}", {date: fmtDate(ev.vo, {month: "short", day: "numeric"})})}));
   return box;
 }
 function showEvent(ev, fly) {
@@ -654,7 +698,7 @@ function emptyItem(msg, label) {
 const inMapView = x => map.getBounds().contains([x.x, x.y]);
 function renderEventList(ul) {                                          // rows for the watch half of the combined Watch & Social list: only what is inside the map view; returns every match (the map pins)
   const list = eventsFiltered(), shown = list.filter(inMapView);
-  if (shown.length) ul.append(el("li", {class: "lh", text: "To watch"}));
+  if (shown.length) ul.append(el("li", {class: "lh", text: t("To watch")}));
   for (const ev of shown) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", text: ev.n, translate: "no"}),
@@ -694,12 +738,12 @@ function socialBadges(s) {
 const phoneWidth = () => window.matchMedia("(max-width: 800px)").matches;
 const popupRoom = () => [0, Math.round(map.getContainer().clientHeight * (phoneWidth() ? 0 : 0.22))];   // desktop: leave room above the pin for the popup; phones: it is a bottom sheet, so the pin is centred
 function socialDetails(s) {                                              // everything below the name and schedule, shared by both layouts
-  const parts = [], bits = [s.sl, s.pi, s.ll ? "Listed through " + fmtDate(s.ll, {month: "short", day: "numeric"}) : ""].filter(Boolean);
+  const parts = [], bits = [s.sl, s.pi, s.ll ? t("Listed through {date}", {date: fmtDate(s.ll, {month: "short", day: "numeric"})}) : ""].filter(Boolean);
   if (bits.length) parts.push(el("p", {class: "meta", text: bits.join(" · ")}));
   const row = el("div", {class: "btnrow"}), signup = s.g ? safeUrl(s.g) : "", info = s.u ? safeUrl(s.u) : "";
-  if (signup) row.append(el("a", {class: "btn primary", href: signup, "data-kind": "signup", target: "_blank", rel: "noopener noreferrer", text: "Sign up"}));
-  if (info) row.append(el("a", {class: "btn", href: info, "data-kind": "details", target: "_blank", rel: "noopener noreferrer", text: "Details"}));
-  parts.push(row, el("p", {class: "meta", text: "Checked " + fmtDate(s.vo, {month: "short", day: "numeric"}), title: "Found on " + (SOCIAL_SRC[s.sk] || s.sk)}));
+  if (signup) row.append(el("a", {class: "btn primary", href: signup, "data-kind": "signup", target: "_blank", rel: "noopener noreferrer", text: t("Sign up")}));
+  if (info) row.append(el("a", {class: "btn", href: info, "data-kind": "details", target: "_blank", rel: "noopener noreferrer", text: t("Details")}));
+  parts.push(row, el("p", {class: "meta", text: t("Checked {date}", {date: fmtDate(s.vo, {month: "short", day: "numeric"})}), title: "Found on " + (SOCIAL_SRC[s.sk] || s.sk)}));
   return parts;
 }
 function socialNode(g) {
@@ -718,7 +762,7 @@ function socialNode(g) {
     if (e.target.open) for (const d of box.querySelectorAll("details[open]")) if (d !== e.target) d.open = false;
   }, true);
   const courts = Math.max(...g.items.map(s => s.ct || 0));
-  if (courts) box.append(el("p", {class: "meta", text: courts + (courts === 1 ? " court" : " courts")}));
+  if (courts) box.append(el("p", {class: "meta", text: tn(courts, "{n} court", "{n} courts")}));
   return box;
 }
 function showSocial(g, fly) {
@@ -728,7 +772,7 @@ function showSocial(g, fly) {
 }
 function renderSocialList(ul) {
   const list = socialFiltered(), shown = list.filter(inMapView);
-  if (shown.length) ul.append(el("li", {class: "lh", text: "To join"}));
+  if (shown.length) ul.append(el("li", {class: "lh", text: t("To join")}));
   for (const s of shown) {
     const btn = el("button", {type: "button"}, el("div", {class: "nm", text: s.n, translate: "no"}), el("div", {class: "meta", text: s.sc + " · " + s.v + ", " + s.c}), socialBadges(s));
     btn.addEventListener("click", () => showSocial(socialPins.find(g => g.items.includes(s)) || socialGroups([s])[0], true));
@@ -741,11 +785,11 @@ function renderSocialList(ul) {
 function buildComingUp() {
   const view = map.getBounds(), name = state.sport >= 0 ? sports[state.sport].n : "";
   const next = eventsFiltered().filter(ev => ev.s && view.contains([ev.x, ev.y])).sort((a, b) => a.s.localeCompare(b.s) || a.n.localeCompare(b.n)).slice(0, 3);
-  const li = el("li", {class: "thisweek"}, el("p", {class: "lh2", text: "Coming up next" + (name ? " · " + name : "") + " · in this area"}));
-  if (!next.length) li.append(el("p", {class: "meta none", text: "No dated events in this area. Zoom out or move the map to see more."}));
+  const li = el("li", {class: "thisweek"}, el("p", {class: "lh2", text: t("Coming up next") + (name ? " · " + name : "") + " · " + t("in this area")}));
+  if (!next.length) li.append(el("p", {class: "meta none", text: t("No dated events in this area. Zoom out or move the map to see more.")}));
   for (const ev of next) {
     const live = ev.s <= todayIso(), when = ev.s.slice(0, 4) === todayIso().slice(0, 4) && (ev.e || ev.s).slice(0, 4) === ev.s.slice(0, 4) ? fmtRange(ev).replace(/, \d{4}/g, "") : fmtRange(ev);   // year only when it is not this year
-    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: ev.n, translate: "no"}), el("div", {class: "meta", text: (live ? "On now · " : "") + when + " · " + ev.c}));
+    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: ev.n, translate: "no"}), el("div", {class: "meta", text: (live ? t("On now") + " · " : "") + when + " · " + ev.c}));
     btn.addEventListener("click", () => { track("this-week-open"); showEvent(ev, true); });
     li.append(btn);
   }
@@ -755,10 +799,10 @@ function renderWatchList() {
   const ul = $("list"); ul.replaceChildren();
   ul.append(buildComingUp());
   viewEv = renderEventList(ul); viewSoc = renderSocialList(ul);
-  if (!viewEv.length && !viewSoc.length) ul.append(emptyItem("No events or get-togethers match these filters. Try all sports.", "Show all sports"));
-  else if (!viewEv.some(inMapView) && !viewSoc.some(inMapView)) ul.append(el("li", {class: "empty"}, el("p", {text: "Nothing in this view. Zoom out or pan the map to see more."})));
-  ul.append(el("li", {class: "meta"}, document.createTextNode("Know a tournament we are missing? "),
-    el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?template=report-an-event.yml", target: "_blank", rel: "noopener noreferrer", text: "Tell us about it"}), document.createTextNode(".")));
+  if (!viewEv.length && !viewSoc.length) ul.append(emptyItem(t("No events or get-togethers match these filters. Try all sports."), t("Show all sports")));
+  else if (!viewEv.some(inMapView) && !viewSoc.some(inMapView)) ul.append(el("li", {class: "empty"}, el("p", {text: t("Nothing in this view. Zoom out or pan the map to see more.")})));
+  ul.append(el("li", {class: "meta"}, document.createTextNode(t("Know a tournament we are missing?") + " "),
+    el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?template=report-an-event.yml", target: "_blank", rel: "noopener noreferrer", text: t("Tell us about it")}), document.createTextNode(".")));
   updateCount();
 }
 
@@ -787,44 +831,44 @@ function wallGeojson(list) {
 // Directions open the user's own maps app at the pin's coordinates (no address lookup, nothing stored; ADR 0005).
 function directionsNode(y, x, name, approx) {
   const ll = y + "," + x, a = (href, text) => el("a", {href, target: "_blank", rel: "noopener noreferrer", text});
-  return el("p", {class: "meta"}, el("b", {text: "Directions: "}),
+  return el("p", {class: "meta"}, el("b", {text: t("Directions:") + " "}),
     a("https://www.google.com/maps/dir/?api=1&destination=" + ll, "Google Maps"), document.createTextNode(" · "),
     a("https://maps.apple.com/?daddr=" + ll + "&q=" + encodeURIComponent(name || "Courts"), "Apple Maps"),
-    approx ? document.createTextNode(" (pin is approximate)") : null);
+    approx ? document.createTextNode(" (" + t("pin is approximate") + ")") : null);
 }
 // Share a place: a link that opens the map on this pin (#venue=<map id>). ?ref=friend (allowlisted above) lets the visit counts show how many visits come from shared links.
 // Phones get the system share sheet; elsewhere the link is copied, and if copying is blocked it is shown in a prompt. Nothing about the visitor is sent anywhere.
 function shareUrl(v) { return location.origin + location.pathname + "?ref=friend#venue=" + encodeURIComponent(v.i); }
 function shareNode(v) {
-  const label = "Share this place", b = el("button", {class: "share", type: "button", text: label}), msg = el("span", {class: "meta", role: "status"});
+  const label = t("Share this place"), b = el("button", {class: "share", type: "button", text: label}), msg = el("span", {class: "meta", role: "status"});
   b.addEventListener("click", async () => {
     const url = shareUrl(v), title = (v.n || "Courts") + (v.c ? ", " + v.c : "");
     track("share");
     try {
       if (navigator.share && matchMedia("(pointer: coarse)").matches) { await navigator.share({title: title + " on CourtConnect", url}); return; }
       await navigator.clipboard.writeText(url);
-      msg.textContent = "Link copied"; setTimeout(() => { msg.textContent = ""; }, 2500);
-    } catch (e) { if (e.name !== "AbortError") window.prompt("Copy this link", url); }
+      msg.textContent = t("Link copied"); setTimeout(() => { msg.textContent = ""; }, 2500);
+    } catch (e) { if (e.name !== "AbortError") window.prompt(t("Copy this link"), url); }
   });
   return el("p", {class: "sharerow"}, b, msg);
 }
-function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
+function triState(v) { return v === 1 ? t("Yes") : v === 0 ? t("No") : t("Not known"); }
 // Wall counts read from OSM tags alone are an assumption (one-wall unless a source says otherwise), so say so.
 function wallTypeLabel(w, t) { return (WALL_TYPE[t] || t) + (w.cf === "tagged" && t === "one_wall" ? " (assumed)" : ""); }
 function wallNode(w) {
   const box = el("div"), approx = /approx/.test(w.pr), acc = wallAccess(w);
   box.append(el("h2", {text: w.n, translate: "no"}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
-  box.append(el("p", {class: "meta", text: [w.wn ? w.wn + " walls (one pin)" : "", w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
-  box.append(el("p", {class: "meta", text: ["Access: " + (WALL_ACCESS_LABEL[w.ac] || "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (OSM tag, not checked)" : ""),
-    "Lights: " + triState(w.l), "Free: " + triState(w.f), w.su ? "Surface: " + w.su : ""].filter(Boolean).join(" · ")}));
+  box.append(el("p", {class: "meta", text: [w.wn ? w.wn + " walls (one pin)" : "", w.nv ? t("Near {street}", {street: w.nv}) : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
+  box.append(el("p", {class: "meta", text: [t("Access:") + " " + (WALL_ACCESS_LABEL[w.ac] || t("Not known")) + (w.cf === "tagged" && acc !== "unknown" ? " (" + t("OSM tag, not checked") + ")" : ""),
+    t("Lights:") + " " + triState(w.l), t("Free:") + " " + triState(w.f), w.su ? t("Surface:") + " " + w.su : ""].filter(Boolean).join(" · ")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + (w.cf === "tagged" ? ", not checked" : "") + " (" + w.d + ")"}));
   box.append(directionsNode(w.y, w.x, w.n, approx));
-  const src = el("details", {class: "srcs"}, el("summary", {text: "Details and corrections"}));   // long explanations, one tap away
+  const src = el("details", {class: "srcs"}, el("summary", {text: t("Details and corrections")}));   // long explanations, one tap away
   if (approx) src.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   if (w.wn) src.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)."}));
   src.append(el("p", {class: "meta", text: w.cf === "tagged" ? "Sport is as tagged in OpenStreetMap. OpenStreetMap does not say how many walls a handball court has, so we assume one wall until a source or visit report says otherwise; condition and public access were not checked." : "Sports listed are what the wall is thought to suit."}));
-  if (w.cf === "tagged") src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
+  if (w.cf === "tagged") src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: t("Fix or improve this on OpenStreetMap")})));
   box.append(src);
   return box;
 }
@@ -839,7 +883,7 @@ function wallItems(list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", translate: "no", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
       el("div", {class: "meta", text: [distLabel(w), w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
-      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : null));
+      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: t("Restricted access")}) : null));
     btn.addEventListener("click", () => showWall(w, true));
     out.push(el("li", {}, btn));
   }
@@ -981,30 +1025,30 @@ function sportParts(v, withOptional = true) {
     else if (sports[p[0]].st) bases.forEach(b => (twins[b] = twins[b] || []).push(sports[p[0]].n));   // same equipment, equally valid (Teqis on a Teqpong table): named next to the base sport
     else bases.forEach(b => (extras[b] = extras[b] || []).push(sports[p[0]].n));
   }
-  const cnt = c => v.up ? (c ? " (" + c + " courts planned)" : " (planned)") : c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court; not open yet: planned
+  const cnt = c => " (" + (v.up ? (c ? tn(c, "{n} court planned", "{n} courts planned") : t("planned")) : c ? tn(c, "{n} court", "{n} courts") : t("at least 1 court")) + ")";   // no count listed: the venue still has a court; not open yet: planned
   // variants of one game ("Basque Pelota: Xare", "Basque Pelota: Jai Alai"…) share the same court: show it once, variants as inferred options
   const fam = {}, solo = [];
   for (const p of plain) { const k = famOf(sports[p[0]].n); if (k) (fam[k] = fam[k] || []).push(p); else solo.push(p); }
   const extra = [];
   const parts = solo.map(p => {
     const x = extras[p[0]];   // same courts, also playable: shown in the Plays line, marked optional (it used to sit only in the details section)
-    return [sports[p[0]].n, ...(twins[p[0]] || [])].join(" / ") + cnt(p[1]) + (x && withOptional ? " (optional on these courts: " + x.join(", ") + ")" : "");
+    return [sports[p[0]].n, ...(twins[p[0]] || [])].join(" / ") + cnt(p[1]) + (x && withOptional ? " (" + t("optional on these courts: {list}", {list: x.join(", ")}) + ")" : "");
   }), counts = solo.map(p => p[1] || 0);
   for (const [k, ps] of Object.entries(fam)) {
     const c = Math.max(...ps.map(p => p[1] || 0)); counts.push(c);
     if (ps.length < 2) { parts.push(sports[ps[0][0]].n + cnt(c)); continue; }
     parts.push(k + cnt(c));
-    extra.push(k + " may suit these variants, court size unconfirmed (inferred): " + ps.map(p => sports[p[0]].n.slice(k.length + 2)).join(", "));
+    extra.push(t("{k} may suit these variants, court size unconfirmed (inferred): {list}", {k, list: ps.map(p => sports[p[0]].n.slice(k.length + 2)).join(", ")}));
   }
   const total = counts.reduce((a, c) => a + c, 0);
-  return {main: parts.join(", ") + (counts.filter(Boolean).length > 1 ? " · " + total + " courts listed" : ""), extra};
+  return {main: parts.join(", ") + (counts.filter(Boolean).length > 1 ? " · " + tn(total, "{n} court listed", "{n} courts listed") : ""), extra};
 }
 const sportLine = v => sportParts(v, false).main;   // list rows stay short: the optional sports show in the popup's Plays line
 const famOf = n => { const i = n.indexOf(": "); return i > 0 ? n.slice(0, i) : null; };
 function facts(v, entry) {
   const out = [], m = entry ? entry[2] : v.m;
-  for (const [k, label] of [["indoor", "Indoor"], ["outdoor", "Outdoor"], ["sand", "Sand"], ["clay", "Clay"], ["grass", "Grass"], ["hard", "Hard court"]]) if (m & SURF[k]) out.push(label);
-  if (v.f & 1) out.push("Lights"); if (v.f & 2) out.push("Public"); if (v.f & 8) out.push("Private / members");  return out;
+  for (const [k, label] of [["indoor", "Indoor"], ["outdoor", "Outdoor"], ["sand", "Sand"], ["clay", "Clay"], ["grass", "Grass"], ["hard", "Hard court"]]) if (m & SURF[k]) out.push(t(label));
+  if (v.f & 1) out.push(t("Lights")); if (v.f & 2) out.push(t("Public")); if (v.f & 8) out.push(t("Private / members"));  return out;
 }
 function venueNode(v) {
   const box = el("div"), more = [];                                       // more = the long explanations, kept one tap away in the details section
@@ -1012,51 +1056,51 @@ function venueNode(v) {
   box.addEventListener("click", leaving); box.addEventListener("auxclick", leaving);
   const head = el("div", {class: "vhead st-" + v.q}), plays = el("div", {class: "vsec"}), go = el("div", {class: "vsec"});   // status band (same colour meaning as the pin), what is played, then where to go; Join & follow and the details follow
   box.append(head, plays, go);
-  head.append(el("h2", {text: v.n || "Unnamed courts", translate: v.n ? "no" : "yes"}));
+  head.append(el("h2", {text: v.n || t("Unnamed courts"), translate: v.n ? "no" : "yes"}));
   const badges = [el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})];
   if (v.cf) {
     badges.push(el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf]}));   // short chip; the date and head-counts move to the details line below
     more.push(CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "") + ".");
   }
   if (v.up) badges.push(el("span", {class: "badge warn", text: v.up}));
-  if (v.xu) badges.push(el("span", {class: "badge warn", text: "Public access not confirmed"}));
+  if (v.xu) badges.push(el("span", {class: "badge warn", text: t("Public access not confirmed")}));
   head.append(el("div", {}, ...badges));
   if (v.up) {
-    head.append(el("p", {class: "meta", text: (v.ul ? "Not open yet; not confirmed by the club" : "Not open yet, per the club") + " (checked " + (v.ud || "recently") + ")"}));
+    head.append(el("p", {class: "meta", text: t(v.ul ? "Not open yet; not confirmed by the club (checked {d})" : "Not open yet, per the club (checked {d})", {d: v.ud || t("recently")})}));
     more.push(v.ul
       ? "Not open yet, and not confirmed by the club's own page: a directory or press listing (checked " + (v.ud || "recently") + ") says it is coming. The location is approximate and the court count, address and date may change or never happen."
       : "Not open yet. The club's own page (checked " + (v.ud || "recently") + ") says it is coming; court counts, address and opening date can change, and the pin may be approximate. Check the club before you go.");
   }
-  const place = [v.a || (v.ns ? "Near " + v.ns : ""), v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014); ns = nearest road, no address known
-  const tag = v.ai ? "address inferred, " + (v.ad < 10 ? "at the pin" : "~" + v.ad + " m from pin") : v.ap ? "address of the surrounding site (inferred)" : !v.a && v.ns ? "nearest road (inferred)" : "";
+  const place = [v.a || (v.ns ? t("Near {street}", {street: v.ns}) : ""), v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014); ns = nearest road, no address known
+  const tag = v.ai ? (v.ad < 10 ? t("address inferred, at the pin") : t("address inferred, ~{m} m from pin", {m: v.ad})) : v.ap ? t("address of the surrounding site (inferred)") : !v.a && v.ns ? t("nearest road (inferred)") : "";
   if (place) head.append(el("p", {class: "meta", text: place + (tag ? " · " + tag : "")}));
   if (v.ai) more.push("Nearest address (inferred), " + (v.ad < 10 ? "at the pin" : "about " + v.ad + " m from the pin") + ": the street address above is the closest address point we know, not confirmed for these courts.");
   if (v.ap) more.push("Address of the surrounding park, school or club (as mapped in OpenStreetMap, inferred): these courts are inside it, but the address is not confirmed for the courts themselves.");
   if (!v.a && v.ns) more.push("No street address known (inferred): the road name is the nearest street to the pin, not an address.");
   if (v.al) more.push("Also listed as: " + v.al);
   const sp = sportParts(v);
-  plays.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sp.main)));
+  plays.append(el("p", {}, el("b", {text: t("Plays:") + " "}), venueIcons(v), document.createTextNode(sp.main)));
   more.push(...sp.extra);
   const f = facts(v, state.sport >= 0 ? v.p.find(p => p[0] === state.sport) : null);
   if (f.length) plays.append(el("p", {text: f.join(" · ")}));
   if (v.wl) {
-    plays.append(el("p", {}, el("b", {text: "Hitting walls on site: "}), document.createTextNode(wallLinkText(v.wl))));
+    plays.append(el("p", {}, el("b", {text: t("Hitting walls on site:") + " "}), document.createTextNode(wallLinkText(v.wl))));
     more.push("Hitting walls: " + (v.wl.some(w => w[2] === "tagged" || w[2] === "inferred") ? "the tagged or inferred ones are not checked (condition, count and public access unknown). " : "") + "They are solo-practice walls, shown as orange pins when you pick a wall sport, and are not counted as courts here.");
   }
-  if (v.o && !noPrograms()) plays.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
-  if (v.ru) plays.append(el("p", {}, el("b", {text: "Notes: "}), document.createTextNode(v.ru)));
+  if (v.o && !noPrograms()) plays.append(el("p", {}, el("b", {text: t("Offers:") + " "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
+  if (v.ru) plays.append(el("p", {}, el("b", {text: t("Notes:") + " "}), document.createTextNode(v.ru)));
   const url = v.w ? safeUrl(v.w) : "";
-  if (url) go.append(el("p", {}, el("a", {href: url, "data-kind": "website", target: "_blank", rel: "noopener noreferrer", text: "Website"})));
+  if (url) go.append(el("p", {}, el("a", {href: url, "data-kind": "website", target: "_blank", rel: "noopener noreferrer", text: t("Website")})));
   go.append(directionsNode(v.y, v.x, v.n, false));
   go.append(shareNode(v));
   const ps = [state.sport, ...v.p.map(p => p[0])].find(i => i >= 0 && v.p.some(p => p[0] === i) && peopleCount(i));   // the picked sport if played here, else the first sport here that has groups or apps
   if (ps !== undefined) {
-    const find = el("button", {class: "peoplelink", type: "button", text: "Find people to play " + sports[ps].n});
+    const find = el("button", {class: "peoplelink", type: "button", text: t("Find people to play {sport}", {sport: sports[ps].n})});
     find.addEventListener("click", () => openPlayers(ps, "popup"));
     go.append(el("p", {}, find));
   }
   if (v.ac && v.ac.length && !noPrograms()) {
-    const join = el("div", {class: "join"}, el("h3", {text: "Join & follow"}));
+    const join = el("div", {class: "join"}, el("h3", {text: t("Join & follow")}));
     for (const [type, title, aurl, provider, st, en, price] of v.ac) {
       const href = safeUrl(aurl); if (!href) continue;
       const when = st ? fmtRange({s: st, e: en}) : "";
@@ -1065,17 +1109,17 @@ function venueNode(v) {
     }
     box.append(join);
   }
-  const src = el("details", {class: "srcs"}, el("summary", {text: "Details, sources and corrections"}));
+  const src = el("details", {class: "srcs"}, el("summary", {text: t("Details, sources and corrections")}));
   for (const t of more) src.append(el("p", {class: "meta", text: t}));
-  src.append(el("p", {class: "meta", text: "Source: " + SRC[v.s]+ (v.q === "i" ? ". Name is a guess from the park or school the courts sit inside." : "")}));
+  src.append(el("p", {class: "meta", text: t("Source: {src}", {src: SRC[v.s]}) + (v.q === "i" ? ". " + t("Name is a guess from the park or school the courts sit inside.") : "")}));
   const q = new URLSearchParams({template: "suggest-a-change.yml", title: "Change: " + (v.n || "Unnamed courts") + (v.c ? " (" + v.c + ")" : ""), venue: v.n || "", city: v.c || "", map_id: v.i});
-  src.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change"}), document.createTextNode(" (GitHub form)")));
+  src.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: t("Suggest a change")}), document.createTextNode(" (" + t("GitHub form") + ")")));
   const rq = new URLSearchParams({usp: "pp_url", "entry.643805557": v.n || "", "entry.251841484": v.c || "", "entry.401515442": v.i});   // Venue name, City, Map ID of the report form
-  src.append(el("p", {class: "meta"}, el("a", {href: REPORT_FORM + "?" + rq, target: "_blank", rel: "noopener noreferrer", text: "Report without a GitHub account"}), document.createTextNode(" (Google Form)")));
+  src.append(el("p", {class: "meta"}, el("a", {href: REPORT_FORM + "?" + rq, target: "_blank", rel: "noopener noreferrer", text: t("Report without a GitHub account")}), document.createTextNode(" (" + t("Google Form") + ")")));
   if (v.s === "o" || v.s === "b") {
-    src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (needs a free OSM account; add only what you have seen or the venue's own page says)")));
+    src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: t("Fix or improve this on OpenStreetMap")}), document.createTextNode(" (" + t("needs a free OSM account; add only what you have seen or the venue's own page says") + ")")));
   }
-  src.append(el("p", {class: "meta", text: "A reviewer checks every suggested change. CourtConnect takes no registrations or payments; the provider does."}));
+  src.append(el("p", {class: "meta", text: t("A reviewer checks every suggested change. CourtConnect takes no registrations or payments; the provider does.")}));
   box.append(src);
   return box;
 }
@@ -1173,7 +1217,7 @@ async function placePoint(q) {
 }
 function noVenueNote(q, pl, pool, c, play) {
   const near = pool.length ? Math.round(Math.min(...pool.map(p => distKm(p, c)))) : null;
-  return (pl.typo ? "No match for “" + q + "”. Showing " : "") + pl.p[0] + ", " + pl.p[1] + (play ? ": no venues are mapped there yet." : ": no events or get-togethers are listed there yet.") + (near !== null ? " The nearest one is about " + near + " km away." : "");
+  return (pl.typo ? t("No match for “{q}”. Showing", {q}) + " " : "") + pl.p[0] + ", " + pl.p[1] + ": " + (play ? t("no venues are mapped there yet.") : t("no events or get-togethers are listed there yet.")) + (near !== null ? " " + t("The nearest one is about {km} km away.", {km: near}) : "");
 }
 let searchRun = 0;
 async function runSearch(zoom, open) {
@@ -1188,11 +1232,11 @@ async function runSearch(zoom, open) {
     try {
       const z = await zipPoint(zq);
       if (my !== searchRun) return;
-      if (!z) { textOff = true; note = "ZIP " + zq + " is outside California and Nevada."; trackD("search-miss", "zip-outside"); }
+      if (!z) { textOff = true; note = t("ZIP {zip} is outside California and Nevada.", {zip: zq}); trackD("search-miss", "zip-outside"); }
       else {
         const c = {lat: z.at[0], lng: z.at[1]}; searchCentre = c; maxZoom = play ? 13 : 11;
         let pool = pins(), lead = "";
-        if (rest && !pool.length) { textOff = true; pool = pins(); lead = "Nothing matches “" + rest + "” with the current filters. "; }
+        if (rest && !pool.length) { textOff = true; pool = pins(); lead = t("Nothing matches “{q}” with the current filters.", {q: rest}) + " "; }
         const what = rest && !lead ? " matching “" + rest + "”" : "";
         let near = pool.filter(p => distKm(p, c) <= 6), within = near.length > 0, far = null;
         if (!within) {   // the map always lands on the ZIP; the nearest pins join the view only when they are close enough to still read as "around here"
@@ -1201,30 +1245,32 @@ async function runSearch(zoom, open) {
           if (!near.length) maxZoom = play ? 11 : 9;
         }
         pts = [{x: c.lng, y: c.lat}, ...near];
-        note = lead + (z.exact ? "" : "ZIP " + zq + " is not in the list; centred on the nearest ZIP (" + z.zip + "). ")
-          + (within ? near.length + (near.length === 1 ? " spot" : " spots") + what + " within 6 km of " + z.zip + "." : far !== null ? "Nothing" + what + " within 6 km of " + z.zip + "; the nearest is about " + far + " km away." : "Nothing matches the current filters.");
+        const withQ = !!what;
+        note = lead + (z.exact ? "" : t("ZIP {zip} is not in the list; centred on the nearest ZIP ({near}).", {zip: zq, near: z.zip}) + " ")
+          + (within ? tn(near.length, withQ ? "{n} spot matching “{q}” within 6 km of {zip}." : "{n} spot within 6 km of {zip}.", withQ ? "{n} spots matching “{q}” within 6 km of {zip}." : "{n} spots within 6 km of {zip}.", {q: rest, zip: z.zip})
+            : far !== null ? t(withQ ? "Nothing matching “{q}” within 6 km of {zip}; the nearest is about {km} km away." : "Nothing within 6 km of {zip}; the nearest is about {km} km away.", {q: rest, zip: z.zip, km: far}) : t("Nothing matches the current filters."));
       }
-    } catch (err) { if (my !== searchRun) return; textOff = true; note = "ZIP lookup is not available right now. Try a city or venue name."; }
+    } catch (err) { if (my !== searchRun) return; textOff = true; note = t("ZIP lookup is not available right now. Try a city or venue name."); }
   } else if (q.length >= 2) {
     const hits = pins();
     if (hits.length) {
       pts = focusOn(hits, q);
       textOff = true;   // the typed text only steers the zoom; the map keeps every pin the other filters allow, so zooming out or panning never loses places
-      if (hits.length < pins().length) note = hits.length + (hits.length === 1 ? " match" : " matches") + " for “" + q + "”, zoomed to. Other spots stay on the map.";
+      if (hits.length < pins().length) note = tn(hits.length, "{n} match for “{q}”, zoomed to. Other spots stay on the map.", "{n} matches for “{q}”, zoomed to. Other spots stay on the map.", {q});
       if (open && play && hits.length === 1) { refresh(); showVenue(hits[0], true); return; }
     } else {
       textOff = true;
       const cand = all.filter(x => textMatch(textOf(x))), city = cand.length ? "" : closestCity(q, all);
       let pl = null;
       if (!cand.length) { try { pl = await placePoint(q); } catch (err) { pl = null; } if (my !== searchRun) return; }   // a city with no venue pins is still a place on the map
-      if (cand.length) { pts = cand; note = "“" + q + "” matches " + cand.length + (cand.length === 1 ? " place" : " places") + ", but not with the current filters. Clear the filters to see " + (cand.length === 1 ? "it." : "them."); }
+      if (cand.length) { pts = cand; note = tn(cand.length, "“{q}” matches {n} place, but not with the current filters. Clear the filters to see it.", "“{q}” matches {n} places, but not with the current filters. Clear the filters to see them.", {q}); }
       else if (pl && !pl.typo || pl && !city) {
         const c = {lat: pl.p[2], lng: pl.p[3]}; searchCentre = c; maxZoom = play ? 11 : 8; pts = [{x: c.lng, y: c.lat}];
         note = noVenueNote(q, pl, pins(), c, play);
         trackD("search-miss", "place-no-" + (play ? "venues" : "events"));   // a real place with nothing listed: the coverage gap
       }
-      else if (city) { pts = all.filter(x => x.c === city); note = "No match for “" + q + "”. Showing " + city + ", the closest name."; }
-      else { note = "No match for “" + q + "”. Try a city, a venue name or a ZIP code."; trackD("search-miss", "no-match"); }
+      else if (city) { pts = all.filter(x => x.c === city); note = t("No match for “{q}”. Showing {city}, the closest name.", {q, city}); }
+      else { note = t("No match for “{q}”. Try a city, a venue name or a ZIP code.", {q}); trackD("search-miss", "no-match"); }
     }
   }
   refresh();
@@ -1256,7 +1302,7 @@ function renderSug() {
   const ul = $("qsug"); sugItems = suggest($("q").value); sugActive = -1; ul.replaceChildren();
   if (!sugItems.length) { closeSug(); return; }
   sugItems.forEach((it, i) => {
-    const sub = it.kind === "city" ? "City · " + fmt(it.n) + (it.n === 1 ? " venue" : " venues")
+    const sub = it.kind === "city" ? t("City") + " · " + tn(it.n, "{n} venue", "{n} venues")
       : it.v.c + (it.v.p.some(p => !(sports[p[0]].b || []).length) ? " · " + it.v.p.filter(p => !(sports[p[0]].b || []).length).slice(0, 2).map(p => sports[p[0]].n).join(", ") : "");
     const li = el("li", {role: "option", id: "qsug-" + i, "aria-selected": "false"}, el("b", {text: it.kind === "city" ? it.c : it.v.n, translate: "no"}), el("span", {class: "meta", text: sub}));
     li.addEventListener("pointerdown", e => e.preventDefault());   // keep focus in the box so the list does not close before the click lands
@@ -1304,20 +1350,20 @@ function renderList() {
   ul.replaceChildren(...wallItems(walls));
   for (const v of top) {
     const btn = el("button", {type: "button", class: "q" + v.q},
-      el("div", {class: "nm", translate: v.n ? "no" : "yes"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
+      el("div", {class: "nm", translate: v.n ? "no" : "yes"}, venueIcons(v), document.createTextNode(v.n || (v.c ? t("Unnamed courts in {c}", {c: v.c}) : t("Unnamed courts")))),
       el("div", {class: "meta", text: [distLabel(v), v.c, sportLine(v)].filter(Boolean).join(" · ")}),
-      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.up ? el("span", {class: "badge warn", text: v.up}) : null, noPrograms() ? null : v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
+      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.up ? el("span", {class: "badge warn", text: v.up}) : null, noPrograms() ? null : v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: t("Join online")}) : (v.o ? el("span", {class: "badge", text: t("Offers lessons/play")}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
   }
   if (total > listShown) {
-    const more = el("button", {type: "button", text: "Show " + LIST_STEP + " more"});
+    const more = el("button", {type: "button", text: t("Show {n} more", {n: LIST_STEP})});
     more.addEventListener("click", () => { listShown += LIST_STEP; renderList(); });
     ul.append(el("li", {class: "empty"}, more));   // reuses the centred pill-button row of the empty state
   }
   if (!top.length && !wallsInView.length) ul.append(current.length || wallsFiltered().length
-    ? el("li", {class: "empty"}, el("p", {text: "Nothing in this view. Zoom out or pan the map to see more."}))
-    : emptyItem(state.text ? "No venues match “" + state.text + "” yet. Try a nearby city, or clear the filters." : "No venues match these filters yet. Try zooming out or clearing a filter.", "Clear filters"));
+    ? el("li", {class: "empty"}, el("p", {text: t("Nothing in this view. Zoom out or pan the map to see more.")}))
+    : emptyItem(state.text ? t("No venues match “{q}” yet. Try a nearby city, or clear the filters.", {q: state.text}) : t("No venues match these filters yet. Try zooming out or clearing a filter."), t("Clear filters")));
   if (key !== renderList.key) { renderList.key = key; ul.scrollTop = 0; }   // a new view starts at its top rows
   updateCount();
 }
@@ -1338,24 +1384,23 @@ function venueCourts(v) {
 function updateCount() {
   if (!map) return;
   const b = map.getBounds(), box = $("count"), pin = x => b.contains([x.x, x.y]);
-  const noun = (n, one, many) => n === 1 ? one : many;
   if (state.mode === "play") {
     const inView = current.filter(pin);
     let courts = 0, known = 0;
     for (const v of inView) { const c = venueCourts(v); courts += c || 1; if (c) known++; }   // a venue with no listed count has at least 1 court
-    const kids = [el("b", {text: fmt(inView.length)}), document.createTextNode(noun(inView.length, " venue", " venues") + " in view" + (inView.length !== current.length ? " of " + fmt(current.length) : ""))];
-    if (inView.length) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === inView.length ? " (all venues list a count)" : " (" + fmt(known) + noun(known, " venue lists", " venues list") + " a count; the rest count as 1)")));
+    const part = inView.length !== current.length, kids = richTn(inView.length, part ? "{n} venue in view of {total}" : "{n} venue in view", part ? "{n} venues in view of {total}" : "{n} venues in view", {total: fmt(current.length)});
+    if (inView.length) kids.push(document.createTextNode(" · "), ...richTn(courts, "at least {n} court", "at least {n} courts", {}), document.createTextNode(" " + (known === inView.length ? t("(all venues list a count)") : "(" + tn(known, "{n} venue lists a count; the rest count as 1", "{n} venues list a count; the rest count as 1") + ")")));
     const ws = wallsFiltered();
     if (ws.length) {
       const wsum = list => list.reduce((s, w) => s + (w.wn || 1), 0), wn = wsum(ws.filter(pin)), wall = wsum(ws);
-      const wt = [el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + " in view" + (wn !== wall ? " of " + fmt(wall) : "") + " for solo practice")];
+      const wp = wn !== wall, wt = richTn(wn, wp ? "{n} hitting wall in view of {total} for solo practice" : "{n} hitting wall in view for solo practice", wp ? "{n} hitting walls in view of {total} for solo practice" : "{n} hitting walls in view for solo practice", {total: fmt(wall)});
       box.replaceChildren(...(current.length ? [...kids, document.createTextNode(" · "), ...wt] : wt));
     } else box.replaceChildren(...kids);
     return;
   }
   const ne = viewEv.filter(pin).length, ns = viewSoc.filter(pin).length;
-  box.replaceChildren(el("b", {text: fmt(ne)}), document.createTextNode(noun(ne, " event", " events") + " to watch (dated) and "), el("b", {text: fmt(ns)}),
-    document.createTextNode(noun(ns, " get-together", " get-togethers") + " to join (recurring series) in view"));
+  box.replaceChildren(...richTn(ne, "{n} event to watch (dated)", "{n} events to watch (dated)", {}), document.createTextNode(" " + t("and") + " "),
+    ...richTn(ns, "{n} get-together to join (recurring series)", "{n} get-togethers to join (recurring series)", {}), document.createTextNode(" " + t("in view")));
 }
 function refresh() {
   renderActive();
@@ -1413,7 +1458,7 @@ function renderActive() {
   const any = state.mode === "play" && (state.sport >= 0 || state.tier || state.text || state.on.size || state.offers.size);
   $("clearFilters").hidden = !any;
   const nOn = filtersOn();
-  $("moreLabel").textContent = nOn ? "Filters (" + nOn + " on)" : "Filters";
+  $("moreLabel").textContent = nOn ? t("Filters ({n} on)", {n: nOn}) : t("Filters");
 }
 const filtersOn = () => state.on.size + state.offers.size + (state.tier ? 1 : 0);
 function syncControls() {
@@ -1435,7 +1480,7 @@ function syncQuickSports() {
   for (const [id, name, prefix] of QUICK) {
     const b = $(id), n = name(), i = n ? sports.findIndex(s => s.n === n) : -1;
     b.hidden = i < 0 || ![...sel.options].some(o => o.value === String(i));   // watch view lists only sports with events
-    b.dataset.i = String(i); b.textContent = prefix + (n || "");
+    b.dataset.i = String(i); b.textContent = t(prefix.trim()) + " " + (n || "");
     b.setAttribute("aria-pressed", state.sport === i);
   }
 }
@@ -1444,18 +1489,18 @@ function populateSports() {
   if (state.mode === "watch") {
     const up = [...upcomingEvents(), ...socials.filter(isCurrentSocial)], counts = {};
     up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
-    sel.append(el("option", {value: "-1", text: "All sports"}));
+    sel.append(el("option", {value: "-1", text: t("All sports")}));
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n] && tierOk(s)) sel.append(el("option", {value: String(i), text: s.n})); });
     if (state.sport >= 0 && !(counts[sports[state.sport].n] && tierOk(sports[state.sport]))) state.sport = -1;
   } else {
     const narrowed = !!(state.text || state.on.size || state.offers.size);
-    sel.append(el("option", {value: "-1", text: "All racket sports"}));
+    sel.append(el("option", {value: "-1", text: t("All racket sports")}));
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => {
       const mapped = s.v > 0 || s.w || wallsFor(s.n).length > 0;
       if (!tierOk(s)) return;
       if (!mapped && narrowed) return;   // with a filter on, only sports that can match stay
       // sports with no place found yet stay listed, greyed, so people can discover them (they get an explainer card, never fake pins)
-      sel.append(el("option", mapped ? {value: String(i), text: s.n} : {value: String(i), text: s.n + " (none yet)", class: "nomap"}));   // the suffix covers phones, which ignore option colours
+      sel.append(el("option", mapped ? {value: String(i), text: s.n} : {value: String(i), text: s.n + " (" + t("none yet") + ")", class: "nomap"}));   // the suffix covers phones, which ignore option colours
     });
   }
   if (![...sel.options].some(o => o.value === String(state.sport))) state.sport = -1;
@@ -1470,24 +1515,24 @@ const evTierOk = ev => { if (!tierNow()) return true; const s = sports.find(x =>
 function syncTiers() {
   for (const b of document.querySelectorAll("#tiers [data-t]")) b.setAttribute("aria-pressed", +b.dataset.t === state.tier);
   const n = $("tiernote"); n.hidden = !state.tier;
-  if (state.tier) n.textContent = TIER_NOTE[state.tier] + " Inferred from the sport sheet, not confirmed.";
+  if (state.tier) n.textContent = TIER_NOTE[state.tier] + " " + t("Inferred from the sport sheet, not confirmed.");
 }
 const SPORT_LINKS = [["r", "Rules"], ["c", "Court size"], ["g", "Gear"], ["l", "Learn more"]];
 // "About <sport>": our own one-line blurb + the sheet's facts + link-outs to the rules, court and gear pages (never copied text).
 function showSportInfo() {
   const box = $("sportinfo"), s = state.sport >= 0 ? sports[state.sport] : null, f = (s && s.f) || {}, u = (s && s.u) || {};
   const facts = [];
-  if (f.p) facts.push(f.p + " players");
-  if (f.c) facts.push("Typical court " + f.c + (/^[\d.]+[x×][\d.]+$/.test(f.c) ? " ft" : ""));
-  if (f.g) facts.push("Typical gear: " + f.g);
-  if (f.o) facts.push("Governing body: " + f.o);
-  if (s && s.t) facts.push("How organized (inferred): " + ["", "Established", "Organized", "Casual"][s.t]);
+  if (f.p) facts.push(t("{n} players", {n: f.p}));
+  if (f.c) facts.push(t("Typical court {c}", {c: f.c + (/^[\d.]+[x×][\d.]+$/.test(f.c) ? " ft" : "")}));
+  if (f.g) facts.push(t("Typical gear: {g}", {g: f.g}));
+  if (f.o) facts.push(t("Governing body: {o}", {o: f.o}));
+  if (s && s.t) facts.push(t("How organized (inferred): {l}", {l: t(["", "Established", "Organized", "Casual"][s.t])}));
   const links = SPORT_LINKS.filter(([k]) => u[k]);
   if (f.ou) links.push(["ou", "Official site"]);
   box.hidden = !(s && (s.d || facts.length || links.length));
   if (box.hidden) return;
   const body = $("sportinfo-b"); body.replaceChildren();
-  $("sportinfo-t").textContent = "About " + s.n;
+  $("sportinfo-t").textContent = t("About {sport}", {sport: s.n});
   if (s.d) body.append(el("p", {text: s.d}));
   if (facts.length) body.append(el("p", {class: "facts", text: facts.join(" · ")}));
   if (links.length) {
@@ -1495,7 +1540,7 @@ function showSportInfo() {
     for (const [k, label] of links) {
       const url = k === "ou" ? f.ou : u[k];
       let host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) { continue; }
-      row.append(el("a", {href: url, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(label + " "), el("small", {text: "(" + host + ")"})));
+      row.append(el("a", {href: url, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(t(label) + " "), el("small", {text: "(" + host + ")"})));
     }
     body.append(row);
   }
@@ -1509,20 +1554,20 @@ const playerGroups = idx => {
   return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name)).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.n.localeCompare(b.n));
 };
 const playerApps = idx => platforms.filter(p => idx < 0 || p.sp.includes(idx));
-const countWord = (n, one, many) => n + " " + (n === 1 ? one : many);
+const countWord = (n, one, many) => tn(n, "{n} " + one, "{n} " + many);
 const peopleCount = idx => playerGroups(idx).length + playerApps(idx).length;
 // The callout under the sport picker: always one tap from the picked sport, with the counts so it is clear there is something behind it.
 function showPeople() {
   const b = $("peopleBtn"), i = state.sport, g = playerGroups(i).length, a = playerApps(i).length;
   b.hidden = !(g + a);
   if (b.hidden) return;
-  b.replaceChildren(el("b", {text: i >= 0 && sports[i] ? "Find people to play " + sports[i].n : "Find people to play with"}),
+  b.replaceChildren(el("b", {text: i >= 0 && sports[i] ? t("Find people to play {sport}", {sport: sports[i].n}) : t("Find people to play with")}),
     el("span", {class: "sub", text: [g ? countWord(g, "group", "groups") : "", a ? countWord(a, "app", "apps") : ""].filter(Boolean).join(" · ")}));
 }
 function playerCard(s) {
   const card = el("div", {class: "pcard"}), where = [s.v, s.c].filter(Boolean).join(", "), dist = distLabel(s);
   card.append(el("h4", {text: s.n, translate: "no"}), el("p", {class: "meta", text: where + (dist ? " · " + dist : "")}), socialBadges(s), el("p", {}, el("b", {text: s.sc})), ...socialDetails(s));
-  const show = el("button", {class: "link", type: "button", text: "Show on the map"});
+  const show = el("button", {class: "link", type: "button", text: t("Show on the map")});
   show.addEventListener("click", () => {
     $("players").close();
     if (state.mode !== "watch") setMode("watch");
@@ -1533,15 +1578,15 @@ function playerCard(s) {
 }
 function renderPlayers() {
   const idx = +$("playersSport").value, groups = playerGroups(idx), apps = playerApps(idx), name = idx >= 0 ? sports[idx].n : "";
-  $("playersTitle").textContent = "Find people to play " + (name || "with");
+  $("playersTitle").textContent = name ? t("Find people to play {sport}", {sport: name}) : t("Find people to play with");
   const gb = $("playersGroups"), ab = $("playersApps"); gb.replaceChildren(); ab.replaceChildren();
-  if (!groups.length) gb.append(el("p", {class: "meta", text: "No recurring group or open play is listed" + (name ? " for " + name : "") + " yet."}));
+  if (!groups.length) gb.append(el("p", {class: "meta", text: name ? t("No recurring group or open play is listed for {sport} yet.", {sport: name}) : t("No recurring group or open play is listed yet.")}));
   for (const s of groups) gb.append(playerCard(s));
-  if (!apps.length) ab.append(el("p", {class: "meta", text: "No matching app is listed" + (name ? " for " + name : "") + " yet."}));
+  if (!apps.length) ab.append(el("p", {class: "meta", text: name ? t("No matching app is listed for {sport} yet.", {sport: name}) : t("No matching app is listed yet.")}));
   for (const p of apps) {
     const sp = p.sp.map(i => sports[i].n).join(", ");
     ab.append(el("p", {}, el("a", {href: p.u, "data-kind": "player-app", target: "_blank", rel: "noopener noreferrer", text: p.n}), document.createTextNode(": " + p.d + ". "),
-      el("span", {class: "facts", text: sp + " · " + p.p + " · read " + p.vo})));
+      el("span", {class: "facts", text: sp + " · " + p.p + " · " + t("read {date}", {date: p.vo})})));
   }
 }
 // ---------- Find by court: size / net -> sports (INFERRED from each sport's standard court in the sheet, never measured at a venue) ----------
@@ -1573,25 +1618,25 @@ function pickSport(i) {
 function renderCourt() {
   const box = $("courtOut"), size = parseSize($("courtSize").value), netTxt = $("courtNet").value.trim(), net = parseNet(netTxt);
   box.replaceChildren();
-  if (!size) { box.append(el("p", {class: "meta", text: "Enter a size such as 40x20, or pick a court you know."})); return; }
-  if (netTxt && net === null) box.append(el("p", {class: "meta", text: "Could not read the net height, so it is ignored. Try 5ft 11in or 36in."}));
+  if (!size) { box.append(el("p", {class: "meta", text: t("Enter a size such as 40x20, or pick a court you know.")})); return; }
+  if (netTxt && net === null) box.append(el("p", {class: "meta", text: t("Could not read the net height, so it is ignored. Try 5ft 11in or 36in.")}));
   const res = courtMatches(size, netTxt && net !== null ? net : null), show = res.filter((r, n) => r.kind === "same" || n < 14);
-  box.append(el("h3", {text: res.length ? res.length + (res.length === 1 ? " sport fits" : " sports fit") + " a " + size[0] + " x " + size[1] + " ft court" : "No sport on our sheet fits " + size[0] + " x " + size[1] + " ft"}));
+  box.append(el("h3", {text: res.length ? tn(res.length, "{n} sport fits a {w} x {h} ft court", "{n} sports fit a {w} x {h} ft court", {w: size[0], h: size[1]}) : t("No sport on our sheet fits {w} x {h} ft", {w: size[0], h: size[1]})}));
   for (const {s, i, kind} of show) {
-    const net2 = s.nh ? " · net " + s.nh.map(fmtNet).join(" / ") : " · net not listed";
-    const where = s.v > 0 ? fmt(s.v) + (s.v === 1 ? " venue" : " venues") + " mapped" : s.w ? "No fixed court needed" : "None mapped yet";
+    const net2 = s.nh ? " · " + t("net {h}", {h: s.nh.map(fmtNet).join(" / ")}) : " · " + t("net not listed");
+    const where = s.v > 0 ? tn(s.v, "{n} venue mapped", "{n} venues mapped") : s.w ? t("No fixed court needed") : t("None mapped yet");
     box.append(el("div", {class: "crow"},
-      el("div", {}, el("b", {text: s.n + " "}), el("span", {class: "badge", text: kind === "same" ? "Standard size" : "Fits inside"})),
-      el("div", {class: "meta", text: s.cd[0] + " x " + s.cd[1] + " ft" + net2 + " · " + where + ((s.b || []).length ? " · played on another sport's courts" : "")}),
-      el("button", {class: "chip", type: "button", text: "Show on map"})));
+      el("div", {}, el("b", {text: s.n + " "}), el("span", {class: "badge", text: kind === "same" ? t("Standard size") : t("Fits inside")})),
+      el("div", {class: "meta", text: s.cd[0] + " x " + s.cd[1] + " ft" + net2 + " · " + where + ((s.b || []).length ? " · " + t("played on another sport's courts") : "")}),
+      el("button", {class: "chip", type: "button", text: t("Show on map")})));
     box.lastChild.querySelector("button").addEventListener("click", () => pickSport(i));
   }
-  if (res.length > show.length) box.append(el("p", {class: "meta", text: (res.length - show.length) + " more fit; enter a closer size to narrow the list."}));
+  if (res.length > show.length) box.append(el("p", {class: "meta", text: t("{n} more fit; enter a closer size to narrow the list.", {n: res.length - show.length})}));
 }
 function openCourt(src) {
   const like = $("courtLike");
   if (!like.options.length) {
-    like.append(el("option", {value: "", text: "Pick a sport's court…"}));
+    like.append(el("option", {value: "", text: t("Pick a sport's court…")}));
     sports.map((s, i) => [s, i]).filter(([s]) => s.cd).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"}))
       .forEach(([s, i]) => like.append(el("option", {value: String(i), text: s.n + " (" + s.cd[0] + " x " + s.cd[1] + " ft)"})));
   }
@@ -1599,7 +1644,7 @@ function openCourt(src) {
 }
 function openPlayers(idx, src) {
   const sel = $("playersSport"), counts = sports.map((s, i) => peopleCount(i));
-  sel.replaceChildren(el("option", {value: "-1", text: "All sports (" + peopleCount(-1) + ")"}));
+  sel.replaceChildren(el("option", {value: "-1", text: t("All sports ({n})", {n: peopleCount(-1)})}));
   sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[i]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[i] + ")"})); });
   sel.value = String(idx >= 0 && counts[idx] ? idx : -1);
   renderPlayers();
@@ -1610,7 +1655,7 @@ function openPlayers(idx, src) {
 function syncSportMore() {
   const box = $("sportmore"), s = state.sport >= 0 ? sports[state.sport] : null;
   box.hidden = [...box.querySelectorAll(":scope > div")].every(d => d.hidden || getComputedStyle(d).display === "none");
-  $("sportmore-t").textContent = s ? "More about " + s.n : "More about this sport";
+  $("sportmore-t").textContent = s ? t("More about {sport}", {sport: s.n}) : t("More about this sport");
 }
 function showAnywhere() {
   showSportInfo();
@@ -1622,15 +1667,15 @@ function showAnywhere() {
   if (s && s.w) n.textContent = s.wn;
   else if (none) {
     const q = new URLSearchParams({template: "report-a-venue.yml", sport: s.n});
-    n.append(document.createTextNode("No place for " + s.n + " is listed in California or Nevada yet. Know one? "),
-      el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Tell us about it"}), document.createTextNode("."));
+    n.append(document.createTextNode(t("No place for {sport} is listed in California or Nevada yet. Know one?", {sport: s.n}) + " "),
+      el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: t("Tell us about it")}), document.createTextNode("."));
   }
   syncSportMore();
 }
 function showNoPrograms() {
   const n = $("noprog"), name = noPrograms() ? sports[state.sport].n : "";
   n.hidden = !name;
-  if (name) n.textContent = "No " + name + " clinics, lessons, classes or leagues are known in California or Nevada, so these filters show nothing for it. Venues listed for " + name + " are regular courts of another sport.";
+  if (name) n.textContent = t("No {sport} clinics, lessons, classes or leagues are known in California or Nevada, so these filters show nothing for it. Venues listed for {sport} are regular courts of another sport.", {sport: name});
 }
 function showWallNote() {
   const n = $("wallnote"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
@@ -1693,7 +1738,7 @@ function initControls() {
   });
   $("listtoggle").addEventListener("click", () => {
     const off = $("panel").classList.toggle("listoff");
-    $("listtoggle").textContent = off ? "Show list" : "Hide list";
+    $("listtoggle").textContent = off ? t("Show list") : t("Hide list");
     $("listtoggle").setAttribute("aria-expanded", String(!off));
   });
   $("keytoggle").addEventListener("click", () => { const open = $("mapkey").hidden; setKey(open); if (open) track("map-key"); });
@@ -1702,25 +1747,24 @@ function initControls() {
   $("offerBox").hidden = !venues.some(v => v.o);
   for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
   $("nearMe").addEventListener("click", () => {
-    if (!navigator.geolocation) return setSearchNote("Your browser does not support location. Search by city or ZIP instead.");
+    if (!navigator.geolocation) return setSearchNote(t("Your browser does not support location. Search by city or ZIP instead."));
     setSearchNote("");
     navigator.geolocation.getCurrentPosition(
       pos => {   // used only in your browser, never sent anywhere
         userPos = {lat: pos.coords.latitude, lng: pos.coords.longitude};
-        setSearchNote("Distances are straight-line from your location, which stays in your browser.");
+        setSearchNote(t("Distances are straight-line from your location, which stays in your browser."));
         map.flyTo({center: [userPos.lng, userPos.lat], zoom: 12});   // the flight ends in a refresh, so the list re-sorts and the distances appear
       },
-      () => setSearchNote("Could not get your location (check that location is allowed for this site). You can still search by city or ZIP."), {timeout: 8000});
+      () => setSearchNote(t("Could not get your location (check that location is allowed for this site). You can still search by city or ZIP.")), {timeout: 8000});
   });
 }
 function initCoverage() {
   const m = DATA.meta;
   // the numbers are proof, not the opener: they sit in the footer next to the coverage dialog (product brief, 2026-10-22)
-  $("stats").textContent = fmt(m.venues) + " places mapped · " + m.sports_with_venues + " of " + m.sports_total + " racket sports found"
-    + (DATA.venues.some(v => v.r === "NV") ? "" : " · California only so far; Nevada coming next");   // honest until Nevada data loads (ADR 0014)
-  $("covIntro").textContent = "This map combines OpenStreetMap courts with the Overture Maps places dataset. " + fmt(m.named) + " of " + fmt(m.venues) +
-    " venues have a name, and only " + fmt(m.confirmed) + " of those names are confirmed; the rest are guessed from the park or school the courts sit in. " +
-    "Only " + m.sports_with_venues + " of " + m.sports_total + " racket sports have any venue here. Data as of " + m.generated + ".";
+  $("stats").textContent = t("{venues} places mapped · {a} of {b} racket sports found", {venues: fmt(m.venues), a: m.sports_with_venues, b: m.sports_total})
+    + (DATA.venues.some(v => v.r === "NV") ? "" : " · " + t("California only so far; Nevada coming next"));   // honest until Nevada data loads (ADR 0014)
+  $("covIntro").textContent = t("This map combines OpenStreetMap courts with the Overture Maps places dataset. {named} of {venues} venues have a name, and only {confirmed} of those names are confirmed; the rest are guessed from the park or school the courts sit in. Only {a} of {b} racket sports have any venue here. Data as of {date}.",
+    {named: fmt(m.named), venues: fmt(m.venues), confirmed: fmt(m.confirmed), a: m.sports_with_venues, b: m.sports_total, date: m.generated});
   const body = $("covBody");
   const order = {covered: 0, sparse: 1, possible_only: 2, tagged_none_found: 3, not_found: 4};
   [...sports].sort((a, b) => (order[a.s] - order[b.s]) || (b.v - a.v)).forEach(s =>
@@ -1733,7 +1777,7 @@ function initCoverage() {
   $("closeAbout").addEventListener("click", () => $("about").close());
   $("aboutUse").addEventListener("click", () => $("about").close());
   $("attr").replaceChildren(document.createTextNode(m.attribution + " Map: OpenFreeMap, © OpenMapTiles. "),
-    el("a", {href: "https://github.com/abov/courtconnect-ca", target: "_blank", rel: "noopener noreferrer", text: "Source code"}),
+    el("a", {href: "https://github.com/abov/courtconnect-ca", target: "_blank", rel: "noopener noreferrer", text: t("Source code")}),
     document.createTextNode(ANALYTICS_ON ? " Anonymous visit counts via GoatCounter (no cookies, no personal data)." : ""));
 }
 
@@ -1742,6 +1786,7 @@ let byKey = {};
 const featuredP = fetch("data/featured_sport.json", {cache: "no-cache"}).then(r => r.ok ? r.json() : null).catch(() => null);   // optional: without it only the Tennis button shows
 fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(async d => {
   featured = await featuredP;
+  await dictP; translateTables();
   DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; socials = d.social || []; walls = d.walls || []; platforms = d.platforms || [];
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
@@ -1753,7 +1798,8 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
     const last = store.get("hash", "");
     if (last && typeof last === "string") { history.replaceState(null, "", "#" + last); resumed = true; }
   }
-  readHash(); initControls(); initCoverage(); syncControls();
+  readHash(); initControls(); initCoverage(); initLang(); syncControls();
+  if (LANG !== "en") trackD("lang", LANG);
   if (resumed) showResume();
   if (store.get("welcomed", false)) document.querySelector(".welcome").hidden = true; else store.set("welcomed", true);   // the intro line shows on the first visit only (About keeps it)
   initMap();
