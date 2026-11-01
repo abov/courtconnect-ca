@@ -1,18 +1,18 @@
 {
- "as_of": "2026-10-29",
+ "as_of": "2026-11-01",
  "venues": 10288,
  "sports_with_venues": 41,
- "sports_total": 82,
+ "sports_total": 83,
  "named_pct": 16.2,
- "sla_met": 7,
+ "sla_met": 6,
  "sla_total": 8,
- "tests_pass": 254,
+ "tests_pass": 256,
  "tests_fail": 0,
  "models": 53,
  "seeds": 34,
  "custom_tests": 32,
  "adrs": 26,
- "ci_checks": 12,
+ "ci_checks": 13,
  "gold": {
   "pairs": 129,
   "wrong_merges": 0,
@@ -137,6 +137,22 @@
    "named_pct": 16.2,
    "sites_dead_pct": 0.0,
    "seen_35d_pct": 100.0
+  },
+  {
+   "date": "2026-11-01",
+   "venues": 10288,
+   "sports_with_venues": 41,
+   "events_upcoming": 73,
+   "actions_current": 283,
+   "extract_age_days": 9,
+   "sla_met": 6,
+   "sla_total": 8,
+   "tests_pass": 256,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 16.2,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 100.0
   }
  ],
  "agent_runs": [
@@ -153,6 +169,14 @@
    "pr": 410,
    "class": "R0",
    "gates": "pass",
+   "outcome": "open",
+   "est_cost_usd": 1.5
+  },
+  {
+   "date": "2026-11-01",
+   "pr": null,
+   "class": "R3",
+   "gates": "fail (scorecard regression: SLAs failing 1->2)",
    "outcome": "open",
    "est_cost_usd": 1.5
   }
