@@ -49,8 +49,8 @@ When they reply, ask what they did, not whether they liked it ("What did you sea
 7. Did you find someone to play with through the site (a group, open play, an app we link)? Would you want to post that you are looking for a partner? (Evidence for ADR 0024; "no" is a useful answer.)
 
 ### Built since the first draft (questions 12 and 13: one line each)
-12. Do the Established / Organized / Casual chips (in Filters, "How organized the sport is") help you pick a sport, or confuse you? They are inferred from the sport sheet (world federation, named governing body), not from pro play: would you want a real pro-tour label? (`docs/sessions/2026-10-30-sport-level-tiers.md`)
-13. Did you ever want to search by court size or net height, or ask "I have a tennis court, what else fits?" Did "Find by court" give results that made sense? (`docs/sessions/2026-10-30-find-by-court.md`)
+12. Do the Established / Organized / Casual chips (in Filters, "How organized the sport is") help you pick a sport, or confuse you? They are inferred from the sport sheet (world federation, named governing body), not from pro play: would you want a real pro-tour label? (`docs/archive/session_digest.md`)
+13. Did you ever want to search by court size or net height, or ask "I have a tennis court, what else fits?" Did "Find by court" give results that made sense? (`docs/archive/session_digest.md`)
 
 ### Ask-first ideas (questions 8 to 11: one line each, a quick yes / maybe / no is enough; skip if the person is short on time)
 These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is built for them; the answers decide whether they are.

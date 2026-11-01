@@ -1,4 +1,4 @@
-"""City fill by boundary lookup (docs/sessions/2026-10-17-city-fill-last-94.md follow-up).
+"""City fill by boundary lookup (docs/archive/session_digest.md follow-up).
 
 For pins that still have no city after every other source in `int_venue_address`, find the US Census place (incorporated city or
 census-designated place) whose boundary contains the pin; if none does, the county. Results go to transform/seeds/venue_place_boundary.csv

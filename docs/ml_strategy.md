@@ -76,7 +76,7 @@ Notes on the table:
 - **Tracks 1 and 3 reinforce each other.** The ranker picks which pages the reader reads first; the reader's accepted facts become new ranker labels. That is the flywheel in one loop.
 - **Track 4 is the quiet enabler.** ADR 0019 gates cover a build that fails; they do not cover a build that passes and is wrong (for example an Overture release that silently drops a category). A drift check closes that hole and is cheap statistics, not deep learning.
 - **Track 6 is deliberately low.** It is the most "ML-looking" idea and the least useful today. Say so out loud so effort goes where the measured gap is.
-- **Local open model** (free middle path in `docs/sessions/2026-10-18-page-reader-pilot.md`): try it for track 1 only if the paid engine's cost or the cap becomes the limit. Same `verify()`, same quote check.
+- **Local open model** (free middle path in `docs/archive/session_digest.md`): try it for track 1 only if the paid engine's cost or the cap becomes the limit. Same `verify()`, same quote check.
 
 ### Track 1 in detail: the reader roadmap
 1. **Freeze the reader gold set.** The 34 hand-settled pages, plus 30 fresh ones nobody tuned on (held out for good). Record per field: expected value or "not on page".
