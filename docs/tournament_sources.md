@@ -142,3 +142,34 @@ Last run: 2026-10-25. Added 0 events; re-dated 29 upcoming rows (`verified_on` 2
 - **Nevada tennis:** Intermountain section could not be selected in the playtennis filter (menu is a site link, not a filter); web search shows only league Tri-Level championships in Las Vegas Nov 6-8 and 13-15 (league, not added). Las Vegas Senior Open already in.
 - **ITF:** Wikipedia Oct-Dec 2026 pages list only Redding, Bakersfield and the Las Vegas-area M25 (DragonRidge row, already in); nothing new, fact-sheet pages not re-opened. No 2027 ITF, USTA Pro Circuit or ITF Beach Tennis calendar yet (recheck in December).
 - **Failed / unread:** USTA Intermountain filter; USA Pickleball page 2.
+
+## Pass 12 (2026-11-01)
+### Part 1 (tennis, pickleball, PPA, ITF)
+Last run: 2026-11-01. Added 2 events, updated 1 (Carvana venue), re-dated 31 upcoming rows whose source still shows the same dates.
+- **USA Pickleball (CA list):** Nationals (Oct 31-Nov 8), collegiate San Diego (Oct 31-Nov 1) and Coachella Valley Grand Prix (Nov 13-15) unchanged. Page 2 not read. Golden Ticket page: Las Vegas, San Diego, APP SoCal Open, HUB unchanged.
+- **PPA:** schedule dates unchanged for 7 CA events. The Carvana Pickleball Masters event page now names Mission Hills Country Club (Rancho Mirage) and ticket tiers from $25: row updated (map point stays the city centre). Newport Beach Open, Sacramento Open, PPA Finals and Sacramento Challenger still list no venue.
+- **USTA SoCal (playtennis, 29 results to Dec 31):** added WAC Open Championships (Westlake Village, Dec 4-6, Level 6 $3,000) and 34th Anaheim Hills Winter Adult Open (Placentia, Dec 12-14, Level 6 prize money). Other Level 1-6 events already in; WTN and Level 7 skipped.
+- **USTA NorCal sheet:** Level 4-5 rows only Operation Pride x2 (in).
+- **Nevada tennis:** web search finds only Tri-Level league championships in Las Vegas (Nov 6-8, 13-15; league, tentative): not added.
+- **ITF:** Wikipedia Oct-Dec 2026 women's and men's pages show nothing new for CA or NV (Redding, Bakersfield, Henderson already in; the tails of the pages' December sections were cut off by the reader). No 2027 ITF World Tennis Tour or USTA Pro Circuit schedule found (the USTA PDF is a bid application, unreadable). The ITF 2027 Beach Tennis provisional calendar PDF (itftennis.com/media/17567) exists but the browser pane downloads it instead of showing it: NOT read, owner to open it or recheck in December.
+- **Failed / unread:** USA Pickleball page 2, ITF beach tennis 2027 PDF, itftennis.com fact-sheets (no new event).
+
+### Part 2 (badminton, R2, table tennis, squash)
+Last run: 2026-11-01. Added 0 events; changed 1 (Fremont Thanksgiving Teams); re-dated 15 rows whose source still matches.
+- **USA Badminton adult + junior schedules:** all 6 CA rows unchanged (NorCal ORC, Bay championships, LA International, SoCal ORC 2027, Freeman OLC 2027; SoCal CRC El Monte still POSTPONED). Lead, not added: 2027 NorCal OLC (Mar 5-7 2027, host TBD). No Nevada events.
+- **R2 Sports (curl, 8 sports, all states):** CA rows are the 4 racquetball TIDs already logged in `r2_seen.csv`; squash, table tennis, padel, badminton, paddle tennis: none; paddleball and pickleball rows are out of region. No NV, no pending TIDs.
+- **Omnipong (full CA/NV list):** dates match for all added rows. Changed: Fremont Thanksgiving Teams is now Nov 27-29 at Fremont Table Tennis Academy (club page; no longer the Newark hall). OCTTA Dec Open stays unconfirmed (Omnipong 12/26-27; club schedule page 404 after a host change). Leads, venue unconfirmed after searches: Sac Fall Open (Nov 7), FMQTTA Winter Open (Fullerton, Nov 7-8), ASLT San Diego (Nov 6-7), LATTA monthly opens (El Monte, club at 10180 Valley Blvd), Anaheim Senior (Nov 21-22), Long Beach TTC (Los Alamitos, Mar 20-21 2027).
+- **Organizer pages read:** icctt.org (only Autumn Open, past), fremonttabletennis.com, 888ttc.com (NorCal Challenge Nov 1; SV Open page has no dates), siliconvalleyopen.com (Oct 20-24, past).
+- **Squash:** US Squash 2026-27 junior calendar has no CA events; CSA schedule none in CA/NV. Skyball: NYC-only, none scheduled. **Club Locker: failed** (only a cookie banner without a decline option; home redirects to login).
+- **New-source search (3 standard searches):** candidates read: csasquash.com rejected; usracquetball.org unreachable (www host did not resolve); pushitreplays.com added as candidate (aggregator, unread). No `event-report` issues open.
+- **Unread:** tournamentsoftware.com, pickleballbrackets.com, eventbrite.com candidates (not read this run).
+
+### Part 3 (padel, beach tennis, lead rechecks)
+Last run: 2026-11-01. Added 0 events; changed 0. **Sources NOT read: the cloud sandbox's network policy blocks every site except search (HTTP 403 on CONNECT; host did not resolve in WebFetch).** Needs the owner to allow the hosts or to run Part 3 by hand.
+- **Unread (blocked):** padelusa.org/calendar, beachtennislove.com, beachtennissantamonica.com, olabeachtennis.com, btcaliclub.com, baypadel.com, nationalpadelleague.us, usteqballfederation.com (table finder + events). Also not read: the Bay Padel Dogpatch page and every club's own page for the 3 "Reported" pins (Ballers DTLA, King of Padel West Harbor, WynPadel Westin Rancho Mirage), the padel clubs in `venue_leads.csv`, the Teq pins' evidence pages (Porterville city page, Venice, 916 Teqers) and the `teq-*` leads. No pin, lead or status row was changed.
+- **Standard web search (1):** Padel N9NE San Marcos: aggregator (padelbrowser.com) says it targets a November 2026 opening at 222 North City Drive Suite 107, four courts, founding memberships on pre-sale; no official opening announcement seen. Press/directory claim only, so `venue_opening_status.csv` is not changed (rule: official page only).
+
+### Part 4 (Instagram sweep, new-venue handles, player groups)
+Last run: 2026-11-01. Added 0; changed 0. **Sources NOT read: the cloud sandbox blocks every site except search (www.instagram.com, thepadelcourts.com and curl to meetup.com/calipadel.com all fail to resolve/connect).**
+- **Unread:** all 62 provider=instagram link-outs in `venue_actions.csv` (sweep not run); new-venue social handles; recheck of the 3 `player_groups.csv` rows (thepadelcourts.com, calipadel.com and the third club page). No row changed or removed.
+- Needs the owner to allow the hosts or to run Part 4 by hand in the browser pane.

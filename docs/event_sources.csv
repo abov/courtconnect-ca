@@ -7,14 +7,14 @@ bounce.game,Bounce (Las Vegas/Reno amateur pickleball),platform,Pickleball,NV,We
 tixr.com,Tixr ticketing,ticketing,Pickleball,unknown,link only,active,,2026-10-12,Ticket link on an event row; the event is found elsewhere
 feverup.com,Fever ticketing,ticketing,Pickleball,NV,link only,active,,2026-10-14,Ticket link on an event row; the event is found elsewhere
 mpv.tickets.com,Tickets.com,ticketing,Squash,CA,link only,active,,2026-10-12,Ticket link for the Silicon Valley Open
-usabadminton.org,USA Badminton adult + junior schedules,governing_body,Badminton,CA,WebFetch,active,,2026-10-24,Schedule has no states; prospectus pages give the city
-omnipong.com,OmniPong USATT tournament list,platform,Table Tennis,CA+NV,browser pane fetch,active,,2026-10-19,Organizer page wins on venue and dates
+usabadminton.org,USA Badminton adult + junior schedules,governing_body,Badminton,CA,WebFetch,active,2026-11-01,2026-11-01,Schedule has no states; prospectus pages give the city
+omnipong.com,OmniPong USATT tournament list,platform,Table Tennis,CA+NV,browser pane fetch,active,2026-11-01,2026-10-19,Organizer page wins on venue and dates
 usatt.org,USA Table Tennis,governing_body,Table Tennis,CA+NV,WebFetch,active,,2026-10-15,
-888ttc.com,888 TTC (NorCal Challenge Series),organizer,Table Tennis,CA,WebFetch,active,,2026-10-19,
-icctt.org,ICC Table Tennis,organizer,Table Tennis,CA,WebFetch,active,,2026-10-19,
-fremonttabletennis.com,Fremont Table Tennis,organizer,Table Tennis,CA,WebFetch,active,,2026-10-19,
-octabletennisacademy.com,OC Table Tennis Academy,organizer,Table Tennis,CA,WebFetch,active,,2026-10-19,
-r2sports.com,R2 Sports,platform,Racquetball;Squash;Table Tennis;Padel;Badminton;Paddle Tennis;Paddleball;Pickleball,CA+NV,curl method (docs/tournament_refresh.md R2 row),active,2026-10-24,2026-10-24,Do not loop searches: IP-blocks on reCAPTCHA
+888ttc.com,888 TTC (NorCal Challenge Series),organizer,Table Tennis,CA,WebFetch,active,2026-11-01,2026-10-19,
+icctt.org,ICC Table Tennis,organizer,Table Tennis,CA,WebFetch,active,2026-11-01,2026-10-19,
+fremonttabletennis.com,Fremont Table Tennis,organizer,Table Tennis,CA,WebFetch,active,2026-11-01,2026-11-01,
+octabletennisacademy.com,OC Table Tennis Academy,organizer,Table Tennis,CA,WebFetch,active,2026-11-01,2026-10-19,
+r2sports.com,R2 Sports,platform,Racquetball;Squash;Table Tennis;Padel;Badminton;Paddle Tennis;Paddleball;Pickleball,CA+NV,curl method (docs/tournament_refresh.md R2 row),active,2026-11-01,2026-10-24,Do not loop searches: IP-blocks on reCAPTCHA
 3wallball.com,3WallBall / World Outdoor Racquetball,organizer,Outdoor Racquetball,CA,WebFetch,active,,2026-10-19,
 padelusa.org,Padel USA calendar,platform,Padel,CA+NV,browser pane (4 pages of 20),active,,2026-10-19,Calendar-only rows are dates_not_confirmed
 uspa-tournaments.worldpadelrating.com,USPA / World Padel Rating tournaments,platform,Padel,CA,browser pane,active,,2026-10-19,Lists only ~2 weeks ahead
@@ -28,18 +28,20 @@ instagram.com,Instagram (public pages only),social,Padel;Pickleball,CA+NV,Instag
 itftennis.com,ITF tournament fact-sheets,governing_body,Tennis,CA+NV,browser pane one page at a time; scripts hit a bot check,blocked,2026-10-24,2026-10-17,Do not curl or work around the bot check; facts only
 bnpparibasopen.com,BNP Paribas Open,organizer,Tennis,CA,WebFetch,active,,2026-10-09,
 lavercup.com,Laver Cup,organizer,Tennis,CA,WebFetch,active,,2026-10-15,
-siliconvalleyopen.com,Silicon Valley Open (squash),organizer,Squash,CA,WebFetch,active,,2026-10-12,
+siliconvalleyopen.com,Silicon Valley Open (squash),organizer,Squash,CA,WebFetch,active,2026-11-01,2026-10-12,
 brctennisclub.com,BRC Tennis Club,organizer,Tennis,CA,WebFetch,active,,2026-10-17,
 dragonridgeopen.com,Dragon Ridge Open,organizer,Tennis,NV,WebFetch,active,,2026-10-17,
-clublocker.com,Club Locker (squash),platform,Squash,CA+NV,browser pane; script-loaded list,active,,,Never sign in; note as failed source if it will not load
-ussquash.org,US Squash calendar,governing_body,Squash,CA+NV,WebFetch,active,,,Junior calendar
-skyball.us,Skyball,organizer,Skyball,CA,browser pane (click Show past),active,,,
+clublocker.com,Club Locker (squash),platform,Squash,CA+NV,browser pane; script-loaded list,blocked,2026-11-01,,2026-11-01: /tournaments shows only a cookie-consent banner (no decline option) and the home page redirects to login; list not readable without consent/login
+ussquash.org,US Squash calendar,governing_body,Squash,CA+NV,WebFetch,active,2026-11-01,,Junior calendar
+skyball.us,Skyball,organizer,Skyball,CA,browser pane (click Show past),active,2026-11-01,,"2026-11-01: ""No tournaments currently scheduled""; NYC-only events"
 cosm.com,Cosm Los Angeles,venue,Tennis;Pickleball;Padel;Badminton;Squash,CA,browser pane regex,active,,,Dome screenings only
 thesphere.com,Sphere Las Vegas,venue,Tennis;Pickleball;Padel;Badminton;Squash,NV,WebFetch,active,,,Flag racket sports or screenings
 ustanorcal.com,USTA NorCal,governing_body,Tennis,CA,WebFetch to find the sheet link,active,2026-10-24,,
-usracquetball.org,USA Racquetball event calendar,governing_body,Racquetball,CA+NV,not read yet,candidate,,,Organizes Nightmare Before Christmas and Players Championship; found via R2
+usracquetball.org,USA Racquetball event calendar,governing_body,Racquetball,CA+NV,not read yet,candidate,2026-11-01,,"Organizes Nightmare Before Christmas and Players Championship; found via R2; www host did not resolve 2026-11-01, no event list read"
 tournamentsoftware.com,Tournament Software,platform,Badminton;Table Tennis;Squash;Tennis,CA+NV,not read yet,candidate,,,Common for badminton and table tennis; check public tournament lists
 pickleballbrackets.com,Pickleball Brackets,platform,Pickleball,CA+NV,not read yet,candidate,,,Many local pickleball tournaments register here
 eventbrite.com,Eventbrite,platform,All,CA+NV,not read yet,candidate,,,Club events and clinics; verify the organizer page before adding
 over---under.com,Over Under events,organizer,Padel,CA,browser pane (events list),active,2026-10-24,2026-10-24,Lifestyle events company; hosts the OU Padel Open at The Padel Courts
 pickleballtournaments.com,PickleballTournaments.com (registration pages for PPA and USA Pickleball events),platform,Pickleball,CA+NV,"browser pane, event page only (venue and dates)",active,2026-10-24,2026-10-24,Used for the venue of the Sacramento PPA Challenger; the PPA schedule is the primary source
+csasquash.com,College Squash Association schedule,governing_body,Squash,none,WebFetch,rejected,2026-11-01,,No CA/NV events on the 2026-27 championship schedule (2026-11-01)
+pushitreplays.com,PUSHIT racket sports events hub,aggregator,All,unknown,not read,candidate,2026-11-01,,Aggregator found by search; read the organizer page before adding any event
