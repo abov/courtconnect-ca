@@ -14,6 +14,9 @@ extract:          ## pull ALL CalNeva courts + named parent features from OpenSt
 	$(PY) ingestion/extract_overture_places.py
 	$(PY) ingestion/extract_overture_addresses.py
 
+fetch-data:        ## download the public raw-data bundle (GitHub Release) into data/raw instead of running the extract; then make fresh-db
+	$(PY) ingestion/fetch_data_bundle.py
+
 fresh-db:         ## new worktree (or a stale/broken db): rebuild courtconnect.duckdb here from the shared raw CSVs + this branch's seeds (~1 min)
 	$(PY) ingestion/fresh_db.py
 
