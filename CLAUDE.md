@@ -41,8 +41,8 @@ Decisions are in `docs/decisions/` (ADRs 0001-0026, all accepted except 0001, su
   - Prefer one batched tool call over many; stop once the task is done instead of extra "nice to have" work.
   - If a task looks expensive (many pages to research, big refactor), propose the cheaper scoped version first and wait for my OK.
 - Read only the lines you need from big files; don't dump whole CSVs, logs or `venues.json`.
-- One task per session. Keep sessions small: when context passes ~200-300k tokens, write the session note and tell me to start a fresh session.
-- At the end of a session, write a 2-3 line note in a NEW file `docs/sessions/YYYY-MM-DD-<topic>.md` (what changed, what is next). Never edit another session's note or add lines to a shared log: that is what caused merge conflicts. Update "Open, in order" below only when priorities change.
+- One task per session. Keep sessions small: when context passes ~200-300k tokens, tell me to start a fresh session.
+- No session note for ordinary work: put what changed and what is next in the PR description. Only the automated routines write `docs/sessions/` notes (their handshake, see `docs/sessions/README.md`). Never add lines to a shared log (that caused merge conflicts). Update "Open, in order" below only when priorities change.
 - Use a lighter model for simple edits; save the biggest for hard problems.
 - Keep summaries short everywhere (owner 2026-10-22): chat replies lead with the result and use at most ~5 bullets, wrap-up recaps are 1-2 sentences, PR descriptions 2-4 bullets, commit messages one line plus at most two. No tables or per-feature breakdowns unless asked; offer detail instead.
 
@@ -53,13 +53,13 @@ Decisions are in `docs/decisions/` (ADRs 0001-0026, all accepted except 0001, su
 - `ci/fixtures`  small sample data for CI
 
 ## Current status
-Session notes: one file per session in `docs/sessions/` (read only the newest 1-2 when picking up). Older log: `docs/archive/status_history.md`. Plan: `~/.claude/plans/create-a-revised-plan-temporal-yao.md`.
+Hand-off is the PR description and `git log`; `docs/sessions/` holds only the routines' notes. Older log: `docs/archive/status_history.md`. Plan: `~/.claude/plans/create-a-revised-plan-temporal-yao.md`.
 
 **Working practices**
 - Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash). A new worktree has no `courtconnect.duckdb`: run `python ingestion/fresh_db.py` (`make fresh-db`; ~1 min, loads the shared raw CSVs and runs the full dbt build) instead of copying one. Raw CSVs live in ONE shared folder, the main checkout's `data/raw` (`ingestion/rawdir.py`; override with `COURTCONNECT_DATA_DIR`): extract/load scripts from any worktree read and write it, and `load_raw.py` refuses to shrink a table by more than 10% unless `--force`.
 - Seed column changes need `--full-refresh`. Snowflake was retired 2026-10-14 and its code removed 2026-10-21 (ADR 0018): DuckDB only.
 - Commit `app/data/venues.json` after `make app-data`. `pages.yml` deploys by itself when a merge to main touches `app/**` (or the workflow); check the latest run after merging (a newer run cancels an older one). `gh workflow run pages.yml` still runs it by hand. Confirm a PR is MERGED before calling it shipped.
-- Before starting a task: `git fetch`, check `git log origin/main --since=1.day --oneline` and `gh pr list`, and skim the newest `docs/sessions/` notes, so you don't redo work another session already landed (2026-10-17: city fill and the Padel guard-rail test were each built twice).
+- Before starting a task: `git fetch`, check `git log origin/main --since=1.day --oneline` and `gh pr list`, so you don't redo work another session already landed (2026-10-17: city fill and the Padel guard-rail test were each built twice).
 - Avoid merge conflicts: sync with main (rebase or merge) right before opening and again before merging a PR. `app/data/venues.json` is generated and any two PRs that touch it collide: never hand-resolve it; take main's copy, rebuild (`dbt build --full-refresh`), re-run `make app-data`, commit.
 - Dirty main checkout: `git worktree add ../x -b branch origin/main`, use the main `.venv`.
 

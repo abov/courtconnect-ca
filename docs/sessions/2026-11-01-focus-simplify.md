@@ -1,5 +1,0 @@
-# 2026-11-01 Focus chip and shortlist removed
-
-`app/index.html`: the Focus mode chip is gone; the list now shows the 5 nearest places with "Show 5 more" by default. The Shortlist (chip, panel, popup Save button, "Saved" badge, copy-list) was removed too; the welcome-back card now just says "Keep looking". Brief §4b updated. Checked in the preview (5 rows, popup, no console errors); not eyeballed at 375 px or dark.
-Next: rebuild as **Favorites** after the beta (decide scope then); compare the 5-row default against the old 40 in beta findings, and go to 8 rows if 5 feels thin.
-Also: the Established / Organized / Casual chips moved from under the Sport picker into Filters ("How organized the sport is"; the "All" chip is gone, tap again to clear; Play only, Watch ignores it; counted in "Filters (N on)"), and the About fact reads "How organized (inferred)", so the Established / Organized / Casual chips no longer read as beginner-to-advanced. Real ability levels are a later feature (`docs/player_finding_plan.md`). Typti exports as Casual (sheet: Competitive, but no governing body listed).
