@@ -1,0 +1,2 @@
+Part 3 re-run (2026-11-01, hosts reachable this time): beach tennis and Bay Padel/club pages read; added Bay Padel Sunnyvale padel tournament (Nov 14-15) and Treasure Island pickleball memorial (Nov 8), re-dated 4 beach tennis rows, Oakland Padel soft opening now mid-December, new lead Conquer Padel Reno.
+Not read: padelusa.org calendar (script widget serves a stub to headless browsers), nationalpadelleague.us row, Teq federation finder/events (empty), book.baypadel.us (bot check). Owner decision: count Bay Padel Dogpatch outdoor courts?

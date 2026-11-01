@@ -1,0 +1,2 @@
+Part 4 re-run (2026-11-01, after the first run had no network): Instagram returned 429 to scripts, so the 49-handle sweep is "needs browser, not read"; added Instagram link-outs for WynPadel Rancho Mirage and CSULB SRWC; rechecked 3 player groups (2 refreshed, thepadelcourts.com unreachable, not read).
+Next: owner reads the Instagram profiles by hand; Parts 3's unread sources still wait for a browser.

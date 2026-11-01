@@ -37,11 +37,13 @@ skyball.us,Skyball,organizer,Skyball,CA,browser pane (click Show past),active,20
 cosm.com,Cosm Los Angeles,venue,Tennis;Pickleball;Padel;Badminton;Squash,CA,browser pane regex,active,,,Dome screenings only
 thesphere.com,Sphere Las Vegas,venue,Tennis;Pickleball;Padel;Badminton;Squash,NV,WebFetch,active,,,Flag racket sports or screenings
 ustanorcal.com,USTA NorCal,governing_body,Tennis,CA,WebFetch to find the sheet link,active,2026-10-24,,
-usracquetball.org,USA Racquetball event calendar,governing_body,Racquetball,CA+NV,not read yet,candidate,2026-11-01,,"Organizes Nightmare Before Christmas and Players Championship; found via R2; www host did not resolve 2026-11-01, no event list read"
-tournamentsoftware.com,Tournament Software,platform,Badminton;Table Tennis;Squash;Tennis,CA+NV,not read yet,candidate,,,Common for badminton and table tennis; check public tournament lists
-pickleballbrackets.com,Pickleball Brackets,platform,Pickleball,CA+NV,not read yet,candidate,,,Many local pickleball tournaments register here
-eventbrite.com,Eventbrite,platform,All,CA+NV,not read yet,candidate,,,Club events and clinics; verify the organizer page before adding
+usracquetball.org,USA Racquetball event calendar,governing_body,Racquetball,CA+NV,not read yet,candidate,2026-11-01,,"Organizes Nightmare Before Christmas and Players Championship; found via R2; www host did not resolve 2026-11-01, no event list read [cloud 2026-11-01: host does not resolve in sandbox, not read]"
+tournamentsoftware.com,Tournament Software,platform,Badminton;Table Tennis;Squash;Tennis,CA+NV,not read yet,candidate,2026-11-01,,Common for badminton and table tennis; check public tournament lists [cloud 2026-11-01: host does not resolve in sandbox; not read]
+pickleballbrackets.com,Pickleball Brackets,platform,Pickleball,CA+NV,not read yet,candidate,2026-11-01,,Many local pickleball tournaments register here [cloud 2026-11-01: host does not resolve in sandbox; not read]
+eventbrite.com,Eventbrite,platform,All,CA+NV,not read yet,candidate,2026-11-01,,Club events and clinics; verify the organizer page before adding [cloud 2026-11-01: host does not resolve in sandbox; not read]
 over---under.com,Over Under events,organizer,Padel,CA,browser pane (events list),active,2026-10-24,2026-10-24,Lifestyle events company; hosts the OU Padel Open at The Padel Courts
 pickleballtournaments.com,PickleballTournaments.com (registration pages for PPA and USA Pickleball events),platform,Pickleball,CA+NV,"browser pane, event page only (venue and dates)",active,2026-10-24,2026-10-24,Used for the venue of the Sacramento PPA Challenger; the PPA schedule is the primary source
 csasquash.com,College Squash Association schedule,governing_body,Squash,none,WebFetch,rejected,2026-11-01,,No CA/NV events on the 2026-27 championship schedule (2026-11-01)
-pushitreplays.com,PUSHIT racket sports events hub,aggregator,All,unknown,not read,candidate,2026-11-01,,Aggregator found by search; read the organizer page before adding any event
+pushitreplays.com,PUSHIT racket sports events hub,aggregator,All,unknown,not read,candidate,2026-11-01,,Aggregator found by search; read the organizer page before adding any event [cloud 2026-11-01: host does not resolve in sandbox; not read]
+mypickleballconnect.com,My Pickleball Connect,aggregator,Pickleball,CA+NV,not read,candidate,,,"Aggregator in search results; read the organizer page before adding any event"
+active.com,Active Network (City of Reno PRCS listings),platform,Table Tennis;Tennis,NV,not read,candidate,,,"Reno rec table tennis sessions look like classes not tournaments; read before adding"
