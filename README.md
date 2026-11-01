@@ -106,7 +106,7 @@ make extract-boundaries extract-addresses   # Census boundaries + Overture addre
 make load             # raw CSVs -> DuckDB
 make build            # dbt seeds + models + tests -> courtconnect.duckdb
 ```
-`make demo` runs extract, load and build in one go. If you already have the raw CSVs in `data/raw` (or a folder named by `COURTCONNECT_DATA_DIR`), `make fresh-db` rebuilds the database in about a minute. To try changes without a long extract, `python ingestion/load_raw.py --data-dir ci/fixtures` then `make build` uses the small sample set CI builds from. The `.duckdb` file is a build output and is never committed.
+Shortcut with no extract: once a data bundle is published as a GitHub Release, `make fetch-data` (`ingestion/fetch_data_bundle.py`, `--repo` for a fork) downloads it into `data/raw`, then `make fresh-db`. The maintainer builds the bundle with `python ingestion/make_data_bundle.py`. `make demo` runs extract, load and build in one go. If you already have the raw CSVs in `data/raw` (or a folder named by `COURTCONNECT_DATA_DIR`), `make fresh-db` rebuilds the database in about a minute. To try changes without a long extract, `python ingestion/load_raw.py --data-dir ci/fixtures` then `make build` uses the small sample set CI builds from. The `.duckdb` file is a build output and is never committed.
 
 ## Editing the data
 Data lives in seeds under `transform/seeds/`; edit them, then `make build` and `make app-data`.
