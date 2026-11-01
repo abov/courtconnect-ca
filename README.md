@@ -97,6 +97,17 @@ make app        # open http://localhost:8765
 ```
 `make build` runs the dbt seeds, models and tests; it is the main check after any change to `transform/`. A new checkout without a database: `make fresh-db` (about a minute; loads the shared raw CSVs and runs the full build). On Windows, `view_db.bat` opens `courtconnect.duckdb` read-only in the DuckDB UI (close it before running dbt).
 
+## Build the database from scratch
+You do not need a copy of anyone's `courtconnect.duckdb`, and the raw data is not stored in this repo (`data/raw` is gitignored). The database is rebuilt from public sources:
+```bash
+pip install -r requirements.txt
+make extract          # OSM (Overpass) + Overture places; ~15-20 min, public sources only
+make extract-boundaries extract-addresses   # Census boundaries + Overture address points
+make load             # raw CSVs -> DuckDB
+make build            # dbt seeds + models + tests -> courtconnect.duckdb
+```
+`make demo` runs extract, load and build in one go. If you already have the raw CSVs in `data/raw` (or a folder named by `COURTCONNECT_DATA_DIR`), `make fresh-db` rebuilds the database in about a minute. To try changes without a long extract, `python ingestion/load_raw.py --data-dir ci/fixtures` then `make build` uses the small sample set CI builds from. The `.duckdb` file is a build output and is never committed.
+
 ## Editing the data
 Data lives in seeds under `transform/seeds/`; edit them, then `make build` and `make app-data`.
 
