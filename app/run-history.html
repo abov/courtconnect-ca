@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CourtConnect run history</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10151c" media="(prefers-color-scheme: dark)">
+<meta name="description" content="The data-quality scorecard after each refresh, and what the refresh agent has done so far: dated numbers read from the project's own logs.">
+<link rel="canonical" href="https://abov.github.io/courtconnect-ca/run-history.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CourtConnect CalNeva">
+<meta property="og:title" content="CourtConnect run history">
+<meta property="og:description" content="Scorecard history and refresh-agent runs, from the repository's own logs.">
+<meta property="og:url" content="https://abov.github.io/courtconnect-ca/run-history.html">
+<meta property="og:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
+<style>
+  /* Same tokens and fonts as index.html so the two pages read as one site. No cookies, no third-party requests. */
+  @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500 800; font-display: swap; src: url(fonts/plus-jakarta-sans-latin.woff2) format("woff2"); }
+  :root {
+    --font-body: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-head: "Plus Jakarta Sans", var(--font-body);
+    --bg: #fbfaf7; --panel: #ffffff; --text: #1f2328; --muted: #59636e; --line: #d6d1c4; --accent: #1F5FA8; --on-accent: #ffffff;
+    --warn: #855700; --hi: #F2B134; --tint: #e6eefa;
+    --r-sm: 8px; --r-md: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #10151c; --panel: #171e27; --text: #e6edf3; --muted: #9aa3ad; --line: #3a424d; --accent: #6aa5ee; --on-accent: #0d1117;
+            --warn: #d29922; --tint: #1b3556; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.6 var(--font-body); color: var(--text); background: var(--bg); }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  header { border-bottom: 3px solid var(--hi); background: linear-gradient(180deg, color-mix(in srgb, var(--hi) 16%, var(--panel)), var(--panel)); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  header .wrap { padding-top: 14px; padding-bottom: 18px; }
+  .back { font-size: 14px; }
+  h1, h2, h3 { font-family: var(--font-head); letter-spacing: -.015em; line-height: 1.25; }
+  h1 { font-size: clamp(26px, 6vw, 34px); font-weight: 800; margin: 10px 0 6px; color: var(--accent); }
+  h2 { font-size: 21px; font-weight: 700; margin: 36px 0 10px; }
+  h3 { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .lede { font-size: 17px; color: var(--muted); margin: 0; max-width: 60ch; }
+  main { padding-bottom: 48px; }
+  p { margin: 8px 0; max-width: 68ch; }
+  .meta { color: var(--muted); font-size: 13.5px; }
+
+  /* Numbers: plain tiles, each states what it measures and when. */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 14px 0 0; padding: 0; }
+  .stats div { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 14px; }
+  .stats dt { font-size: 13px; color: var(--muted); }
+  .stats dd { margin: 2px 0 0; font: 700 22px/1.2 var(--font-head); }
+  .stats small { display: block; font: 400 13px/1.4 var(--font-body); color: var(--muted); margin-top: 2px; }
+
+  /* Pipeline: a numbered list that stacks on phones, so text never shrinks to fit a diagram. */
+  .flow { list-style: none; counter-reset: step; margin: 14px 0 0; padding: 0; display: grid; gap: 0; }
+  .flow li { counter-increment: step; position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md);
+             padding: 12px 14px 12px 52px; margin-bottom: 22px; }
+  .flow li::before { content: counter(step); position: absolute; left: 14px; top: 12px; width: 26px; height: 26px; border-radius: 50%;
+                     background: var(--accent); color: var(--on-accent); font: 700 14px/26px var(--font-head); text-align: center; }
+  .flow li:not(:last-child)::after { content: "\2193"; position: absolute; left: 20px; bottom: -22px; width: 14px; text-align: center; color: var(--muted); font-size: 16px; line-height: 22px; }
+  .flow li:last-child { margin-bottom: 0; }
+  .flow p { margin: 2px 0; }
+  .gate { font-size: 14px; color: var(--muted); }
+  .gate b { color: var(--text); font-weight: 600; }
+
+  ul.plain { padding-left: 20px; margin: 8px 0; }
+  ul.plain li { margin: 5px 0; max-width: 68ch; }
+  .note { background: color-mix(in srgb, var(--warn) 10%, var(--panel)); border: 1px solid var(--warn); border-radius: var(--r-md); padding: 4px 14px 8px; margin-top: 12px; }
+  .note h3 { color: var(--warn); }
+  code { font: 13.5px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--tint); padding: 1px 5px; border-radius: 4px; }
+  footer { border-top: 1px solid var(--line); padding: 16px 0 28px; font-size: 13.5px; color: var(--muted); }
+  .spark { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 14px 0 0; }
+  .spark figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 14px; }
+  .spark figcaption { font-size: 13px; color: var(--muted); }
+  .spark b { display: block; font: 700 22px/1.2 var(--font-head); color: var(--text); }
+  .spark svg { display: block; width: 100%; height: 56px; margin-top: 6px; }
+  .spark .line { fill: none; stroke: var(--accent); stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .spark .dot { fill: var(--accent); }
+  .tablewrap { overflow-x: auto; margin: 10px 0; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--panel); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { padding: 7px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child, td.l, th.l { text-align: left; }
+  thead th { font-size: 13px; color: var(--muted); font-weight: 600; }
+  tbody tr:last-child td { border-bottom: 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="back" href="how-its-built.html">&larr; How it&rsquo;s built</a>
+    <h1>Run history</h1>
+    <p class="lede">The data-quality scorecard after each refresh, and what the refresh agent has done so far. Read straight from the project&rsquo;s own logs, not typed in.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="meta" id="status">Loading the logs&hellip;</p>
+
+  <h2 id="scorecard">Scorecard, refresh by refresh</h2>
+  <p class="meta">Source: <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_quality_trend.csv"><code>docs/data_quality_trend.csv</code></a>, one row each time <code>make quality</code> runs at a refresh. The runs are unevenly spaced, so each chart places points by date.</p>
+  <div class="spark" id="spark"></div>
+  <div class="tablewrap"><table id="trend">
+    <thead><tr><th>Date</th><th>Venues</th><th>Real names</th><th>Sports with venues</th><th>Service levels met</th><th>dbt tests passing</th><th>Failing</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+
+  <h2 id="agent">Refresh-agent runs</h2>
+  <p class="meta">Source: <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/agent_log.csv"><code>docs/agent_log.csv</code></a>. The agent opens a pull request; a deterministic gate script decides whether a routine one may merge itself (<a href="https://github.com/abov/courtconnect-ca/blob/main/docs/merge_gate_threat_model.md">threat model</a>).</p>
+  <div class="tablewrap"><table id="runs">
+    <thead><tr><th>Date</th><th>Pull request</th><th class="l">Class</th><th class="l">Gates</th><th class="l">Outcome</th><th>Est. cost</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p id="runs-sum"></p>
+
+  <div class="note">
+    <h3>Read these with care</h3>
+    <ul class="plain">
+      <li>The cost column is the agent&rsquo;s own estimate (ADR 0019 caps spend), not a bill.</li>
+      <li>Outcomes are copied from the log, which is updated by hand or by the next run, so it can lag what GitHub shows.</li>
+      <li>The history is short: the first scorecard row is from 2026-10-13. A steady line means the checks held, not that every fact on the map is right.</li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">This page sets no cookies and requests nothing from other sites; one small script reads <code>data/build_stats.json</code> from this site.</div>
+</footer>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var n = function (v) { return Number(v).toLocaleString("en-US"); };
+  var NS = "http://www.w3.org/2000/svg";
+  var day = function (s) { return Date.parse(s + "T00:00:00Z") / 86400000; };
+  function row(tb, cells, cls) {
+    var tr = document.createElement("tr");
+    cells.forEach(function (c, i) { var td = document.createElement("td"); td.textContent = c; if (cls && cls[i]) td.className = cls[i]; tr.appendChild(td); });
+    tb.appendChild(tr);
+  }
+  function spark(label, rows, key, fmt) {
+    var pts = rows.filter(function (r) { return r[key] !== null; });
+    if (pts.length < 2) return;
+    var fig = document.createElement("figure"), cap = document.createElement("figcaption"), big = document.createElement("b");
+    var first = pts[0], last = pts[pts.length - 1];
+    big.textContent = fmt(last[key]);
+    cap.textContent = label + " (" + fmt(first[key]) + " on " + first.date + ")";
+    var vals = pts.map(function (r) { return r[key]; }), lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    var t0 = day(first.date), t1 = day(last.date), W = 200, H = 56, pad = 4;
+    var X = function (r) { return pad + (W - 2 * pad) * (day(r.date) - t0) / ((t1 - t0) || 1); };
+    var Y = function (r) { return hi === lo ? H / 2 : H - pad - (H - 2 * pad) * (r[key] - lo) / (hi - lo); };
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.setAttribute("preserveAspectRatio", "none"); svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", label + " from " + fmt(first[key]) + " to " + fmt(last[key]) + " over " + pts.length + " refreshes");
+    var pl = document.createElementNS(NS, "polyline"); pl.setAttribute("class", "line");
+    pl.setAttribute("points", pts.map(function (r) { return X(r).toFixed(1) + "," + Y(r).toFixed(1); }).join(" ")); svg.appendChild(pl);
+    var c = document.createElementNS(NS, "circle"); c.setAttribute("class", "dot"); c.setAttribute("r", "3");
+    c.setAttribute("cx", X(last).toFixed(1)); c.setAttribute("cy", Y(last).toFixed(1)); svg.appendChild(c);
+    fig.appendChild(cap); fig.appendChild(big); fig.appendChild(svg); $("spark").appendChild(fig);
+  }
+  fetch("data/build_stats.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+    var h = d.history, tb = $("trend").tBodies[0];
+    spark("Venues on the map", h, "venues", n);
+    spark("Venues with a real name", h, "named_pct", function (v) { return v + "%"; });
+    spark("dbt tests passing", h, "tests_pass", n);
+    h.slice().reverse().forEach(function (r) {
+      row(tb, [r.date, n(r.venues), r.named_pct + "%", r.sports_with_venues, r.sla_met + " of " + r.sla_total, n(r.tests_pass), r.tests_fail + (r.tests_warn ? " (+" + r.tests_warn + " warn)" : "")]);
+    });
+    var rb = $("runs").tBodies[0], total = 0;
+    d.agent_runs.slice().reverse().forEach(function (r) {
+      total += r.est_cost_usd;
+      row(rb, [r.date, r.pr ? "#" + r.pr : "none", r["class"], r.gates, r.outcome, "$" + r.est_cost_usd.toFixed(2)], ["", "", "l", "l", "l", ""]);
+    });
+    $("runs-sum").textContent = d.agent_runs.length + " logged run" + (d.agent_runs.length === 1 ? "" : "s") + ", about $" + total.toFixed(2) +
+      " estimated in total. The merge gate’s own decisions are on each pull request.";
+    $("status").textContent = "Scorecard rows: " + h.length + ", from " + h[0].date + " to " + h[h.length - 1].date + ". Numbers as of " + d.as_of + ".";
+  }).catch(function () { $("status").textContent = "The logs could not be loaded. The same data is in the two CSV files linked below."; });
+})();
+</script>
+</body>
+</html>

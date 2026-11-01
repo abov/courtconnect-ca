@@ -1,0 +1,3 @@
+site_id,lat,lon,n_boxes,max_score,extent_long_m,extent_short_m,osm_context,nearest_osm_court_m,review_note,status,sport,access
+elk_grove-001,38.397694,-121.396589,1,0.653,24.7,23.1,school,99,in a mapped park/school/sports area: check the operator's public page,inferred,unknown,unknown
+elk_grove-002,38.399426,-121.367732,1,0.525,20.1,18.2,school,615,in a mapped park/school/sports area: check the operator's public page,inferred,unknown,unknown

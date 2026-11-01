@@ -1,0 +1,49 @@
+name: Report a tournament or event
+description: Tell us about a racket-sport tournament or event we are missing (California or Nevada).
+title: "Event: "
+labels: ["event-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks. We list the event's name, dates, venue and a link to the organizer's page. We take no registrations or payments.
+        Please do not include personal information (names or phone numbers of individuals).
+  - type: input
+    id: name
+    attributes:
+      label: Event name
+    validations:
+      required: true
+  - type: input
+    id: sport
+    attributes:
+      label: Sport
+      placeholder: Racquetball, table tennis, pickleball...
+    validations:
+      required: true
+  - type: input
+    id: dates
+    attributes:
+      label: Start date
+      description: YYYY-MM-DD. Add the end date in the notes if it runs more than one day.
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Venue and city
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Link to the event page
+      description: The organizer's or governing body's page (for example an R2 Sports, USA Pickleball or USTA event link).
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes (optional)
+      description: End date, whether spectators can attend, anything that looks tentative.

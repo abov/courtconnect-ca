@@ -7,15 +7,25 @@ Websites are exported only when `website_usable` is set, so dead links never rea
 
 File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
-  sports  : [{n: name, v: venues, s: status, r: recommended next source}], ordered by venues found
+  sports  : [{n: name, v: venues, s: status, r: recommended next source, d blurb, f facts {p players, c court, g gear, o governing body, y year, ou official site},
+              u links {l learn more, r rules, c court size, g gear} (https only),
+              cd standard court [length, width] ft, nh net height(s) in inches, su surfaces c concrete/g grass/s sand (all from the sheet's standard court, never measured at a venue; the "Find by court" dialog matches on them),
+              t INFERRED competitive tier 1 established (world-federation sport) / 2 organized (competing, named governing body) / 3 casual; from the sheet only, never a venue claim}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, r, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
      a street address; ai 1 + ad metres = nearest address point (inferred); ap 1 = address of the enclosing park/school/club (inferred); ns = nearest road name when no address (shown "Near <street>", inferred)
      r region CA/NV (ADR 0014); ac link-outs [type,title,url,provider,start,end,price]; ru notes (hand-curated); xu 1 = public access not confirmed; cf v/o/r confirmation; cd date; cn number of different people who confirmed it; up 'Opening soon' = confirmed but not open yet, or 'Reported: opening soon' with ul 1 = only a directory said so (ud = date checked)
+     wl hitting walls on site (int_wall_venue_link): [[wall types joined by ';', walls at this venue, confirmation tagged/inferred/reported/official], ...], only on venues with a
+        wall pin at them; a pointer to the walls layer, never counted as courts or in sport totals (tagged = from OpenStreetMap tags, not checked)
   events  : [{n name, sp sport, l level, f watch format, v venue, c city, y, x, pr location precision, s start, e end, d date status,
               t ticket info, u info link, k tickets link, vo verified on}]   (events to WATCH; every one links out to the organizer)
+  social  : [{n series name, sp sport, k kind, o organizer, v venue, c city, y, x, pr location precision, sc schedule (organizer's wording), ll last listed date, sl skill level,
+              au audience women/men/mixed, ag age focus, ct courts at the venue, pi price info, sk how it was found, u info link, g signup link, vo verified on}]   (recurring social get-togethers;
+              every one links out to the organizer; au/ag are only what the organizer states, absent = not stated)
   walls   : [{n name, c city, r region, y, x, pr location precision, t [wall types], sp [sports suited], nv near venue, su surface, l lit 1/0 (absent = unknown),
               f free 1/0 (absent = unknown), ac access, cf confirmation, d reported on, ev evidence, wn walls at this pin (absent = 1)}]   (hitting walls for solo practice)
+  platforms : [{n name, sp [sport indexes], d what it does, p price note, u https link, vo verified on}]   (player-matching apps, link-outs only)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
+                (q i names shared in a city carry a computed "(north courts, 6 courts)" suffix: position + court count, not a source)
      s source: o OpenStreetMap, p places, b both, m hand-curated
      f venue bits: 1 lit, 2 public, 4 free, 8 members-only (marked private/members, not marked public)      p[i][2] sport bits: 1 indoor, 2 outdoor, 4 sand, 8 clay, 16 grass, 32 hard, 64 turf
 """
@@ -39,6 +49,37 @@ ACTION_OFFER = {"open_play": "O", "clinic": "C", "private_lesson": "L", "group_c
                 "league": "E", "social_event": "S"}
 
 
+def https_only(url: str) -> str:
+    url = (url or "").strip()
+    if url and not url.startswith("https://"):
+        raise SystemExit(f"Sport link must be https: {url!r} (fix it in the Google Sheet, then make sync-sports)")
+    return url
+
+
+def add_sport_details(con, sports: list, sport_index: dict) -> None:
+    """Mini description for the sport card: blurb + facts + rules/court/gear links, all from the Google Sheet via the all_racquet seed.
+    The link/blurb columns may not exist yet (sheet not extended): then only the facts are exported."""
+    have = {r[0] for r in con.execute("select column_name from information_schema.columns where table_schema = 'raw' and table_name = 'all_racquet'").fetchall()}
+    col = lambda c: f"trim(cast({c} as varchar))" if c in have else "''"   # cast: an all-blank sheet column loads as INTEGER
+    for row in con.execute(f"""select trim(sport), {col('players')}, {col('court_dim')}, {col('base_gear')}, {col('org')}, {col('year_origin')},
+                               {col('url')}, {col('blurb')}, {col('learn_url')}, {col('rules_url')}, {col('court_url')}, {col('gear_url')}
+                        from raw.all_racquet""").fetchall():
+        name, players, court, gear, org, year, official, blurb, learn, rules, court_url, gear_url = (v or "" for v in row)
+        if name not in sport_index:
+            continue
+        if len(blurb) > 200:
+            raise SystemExit(f"Blurb for {name} is {len(blurb)} characters (max 200): shorten it in the Google Sheet")
+        facts = {k: v for k, v in (("p", players), ("c", court), ("g", gear), ("o", org), ("y", year), ("ou", https_only(official))) if v}
+        links = {k: https_only(v) for k, v in (("l", learn), ("r", rules), ("c", court_url), ("g", gear_url)) if v}
+        entry = sports[sport_index[name]]
+        if blurb:
+            entry["d"] = blurb
+        if facts:
+            entry["f"] = facts
+        if links:
+            entry["u"] = links
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     con = duckdb.connect("courtconnect.duckdb", read_only=True)
@@ -48,15 +89,32 @@ def main() -> None:
         from marts.mart_sport_gaps g order by g.venues_found desc, g.sport_name""").fetchall()
     sport_index = {r[0]: i for i, r in enumerate(gaps)}
     sports = [{"n": r[0], "v": int(r[2]), "s": r[1], "r": r[3]} for r in gaps]
+    add_sport_details(con, sports, sport_index)
+    tier_no = {"established": 1, "organized": 2, "casual": 3}
+    for name, tier, length, width, net, net2, conc, grass, sand in con.execute(
+            "select sport_name, competitive_tier, court_length_ft, court_width_ft, net_height_in, net_height_alt_in, plays_on_concrete, plays_on_grass, plays_on_sand from core.dim_sport").fetchall():
+        if name in sport_index:
+            e = sports[sport_index[name]]
+            e["t"] = tier_no[tier]
+            if length and width:   # standard court from the sheet (feet), never measured at a venue
+                e["cd"] = [length, width]
+            if net:
+                e["nh"] = [round(h, 1) for h in (net, net2) if h]
+            su = "".join(c for c, on in (("c", conc), ("g", grass), ("s", sand)) if on)
+            if su:
+                e["su"] = su
     # sports that need no fixed court (any beach): w = where, wn = note; the map lists them without pinpointing a place
     for name, where, note in con.execute("select trim(sport), trim(where_played), trim(note) from raw.sport_play_anywhere").fetchall():
         if name in sport_index:
             sports[sport_index[name]].update({"w": where, "wn": note})
 
     # sports played on another sport's courts: b = indexes of the court sports they share (the panel groups them, not counts them again)
-    for name, base in con.execute("select trim(also_sport), trim(sport) from raw.sport_also_played").fetchall():
+    # st = same equipment, equally valid (Teqis on a Teqpong table): the popup lists it next to the base sport, not as an optional note
+    for name, base, same in con.execute("select trim(also_sport), trim(sport), lower(trim(coalesce(same_table, ''))) from raw.sport_also_played").fetchall():
         if name in sport_index and base in sport_index:
             sports[sport_index[name]].setdefault("b", []).append(sport_index[base])
+            if same == "yes":
+                sports[sport_index[name]]["st"] = 1
 
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, region, address_line,
@@ -139,6 +197,16 @@ def main() -> None:
         entries[vid].append([sport_index[sport], int(courts or 0), mask])
         venues[vid]["_o"] = venues[vid].get("_o", set()) | {c for c in (venues[vid]["o"] or "")}
 
+    # Walls standing at a listed venue (int_wall_venue_link): shown in that venue's popup as "Hitting walls on site", grouped by wall type and confirmation.
+    # A pointer only: walls are not courts, so nothing here touches `p` or the sport and venue counts.
+    wall_links: dict[str, dict] = defaultdict(dict)
+    for vid, wtype, conf, count in con.execute("""
+            select l.venue_id, w.wall_type, w.confirmation, w.wall_count
+            from intermediate.int_wall_venue_link l join marts.mart_wall_pins w on w.wall_key = l.wall_key
+            order by l.venue_id, w.wall_type, w.confirmation""").fetchall():
+        key = (wtype, conf)
+        wall_links[vid][key] = wall_links[vid].get(key, 0) + int(count)
+
     out_venues = []
     for vid, v in venues.items():
         v["p"] = sorted(entries[vid])
@@ -158,6 +226,8 @@ def main() -> None:
                 v["rn"] = reporters[vid]        # number of different people who reported it (word of mouth, not confirmed)
             if manual[vid]["u"]:
                 v["xu"] = 1                      # public access not confirmed on the source map
+        if vid in wall_links:
+            v["wl"] = [[t, n, c] for (t, c), n in wall_links[vid].items()]   # hitting walls on site: [wall types, walls, confirmation]
         if vid in opening:
             v["up"] = opening[vid][0]            # not open yet: the badge text; the popup adds the caveat
             v["ud"] = opening[vid][2]            # date the page was read
@@ -176,6 +246,18 @@ def main() -> None:
                        "pr": prec or "", "s": str(start) if start else "", "e": str(end) if end else "", "d": dstat,
                        "t": tix or "", "u": info or "", "k": tickets or "", "vo": str(verified)})
 
+    # Social get-togethers: recurring series (not dates), link-out only. Audience and age focus are organizer-stated; absent keys mean "not stated", never a guess (ADR 0021).
+    social = []
+    for (name, sport, kind, org, venue, city, lat, lon, prec, sched, last, skill, aud, age, courts, price, skind, info, signup, verified) in con.execute("""
+            select series_name, sport_name, kind, organizer, venue_name, city, lat, lon, location_precision, schedule, last_listed_date, skill_level,
+                   audience, age_focus, courts, price_info, source_kind, info_url, signup_url, verified_on
+            from marts.mart_social_events order by sport_name, city, series_name""").fetchall():
+        e = {"n": name, "sp": sport, "k": kind, "o": org, "v": venue, "c": city, "y": round(float(lat), 5), "x": round(float(lon), 5), "pr": prec or "",
+             "sc": sched, "sk": skind, "vo": str(verified)}
+        for key, val in (("ll", str(last) if last else ""), ("sl", skill), ("au", aud), ("ag", age), ("ct", courts), ("pi", price), ("u", info), ("g", signup)):
+            if val: e[key] = val
+        social.append(e)
+
     # Hitting walls: solo practice, one row per map pin (walls side by side share a pin, wn = how many). Unknown lit / free flags are left out of the row, never exported as 0.
     walls = []
     for (name, city, region, lat, lon, prec, wtype, suited, near, surf, lit, free, access, conf, rep, evid, count) in con.execute("""
@@ -192,6 +274,13 @@ def main() -> None:
         if count > 1: w["wn"] = int(count)
         walls.append(w)
 
+    # Player-matching apps (social phase A): link-outs shown under "Find people to play with". Sports are indexes into `sports`.
+    platforms = []
+    for name, sps, what, price, url, verified in con.execute(
+            "select trim(platform), trim(sports), trim(what), trim(price_note), trim(url), trim(verified_on) from raw.player_platforms order by platform").fetchall():
+        platforms.append({"n": name, "sp": [sport_index[s.strip()] for s in sps.split(";") if s.strip() in sport_index], "d": what, "p": price,
+                          "u": https_only(url), "vo": verified})
+
     named = sum(1 for v in out_venues if v["q"] != "u")
     meta = {
         "generated": date.today().isoformat(),
@@ -201,12 +290,13 @@ def main() -> None:
         "sports_total": len(sports),
         "sports_with_venues": sum(1 for s in sports if s["v"] > 0),
         "events": len(events),
+        "social": len(social),
         "walls": sum(w.get("wn", 1) for w in walls),
         "link_outs": sum(len(v.get("ac", [])) for v in out_venues),
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "walls": walls}, ensure_ascii=False, separators=(",", ":")),
+    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "walls": walls, "platforms": platforms}, ensure_ascii=False, separators=(",", ":")),
                    encoding="utf-8")
     size = OUT.stat().st_size / 1e6
     print(f"Wrote {OUT}: {len(out_venues):,} venues, {len(sports)} sports, {size:.2f} MB  (named {named:,}; confirmed {meta['confirmed']:,})")

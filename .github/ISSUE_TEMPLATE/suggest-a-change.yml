@@ -41,7 +41,7 @@ body:
     id: sport
     attributes:
       label: Sport played here
-      description: Needed when reporting or confirming a sport, e.g. Pickleball, Tennis, Padel, Racquetball.
+      description: Needed when reporting or confirming a sport, e.g. Pickleball, Tennis, Padel, Racquetball. Padel = walled glass court; pop tennis (paddle tennis) = open court with a low net.
   - type: dropdown
     id: link_type
     attributes:

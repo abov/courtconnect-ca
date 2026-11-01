@@ -21,6 +21,8 @@ We need real usage numbers (for deciding what to build, for the feedback round, 
 - When on, the page footer says so.
 - A failing or blocked analytics script must never break the map (all calls are wrapped).
 
+Added 2026-10-23 (pre-beta): further events, all with the detail in the path (`event/<name>/<detail>`): `linkout-domain`, `linkout-kind`, `linkout-sport`, `sport-pick`, `empty-play`/`empty-watch`, `search-miss`, `mode`, `filter`. Same rules: fixed vocabularies only, no typed text. `make usage` exports the counts and prints the metrics below; list and questions in `docs/goat_analysis.md`.
+
 ## Metrics (defined here so the numbers mean the same thing every time)
 - **North star:** outbound link-outs per week (`event/linkout`). A link-out is the moment the map did its job (the player went to the provider).
 - **Engagement:** venue opens per visit = `venue-open` / page views.
@@ -30,7 +32,7 @@ We need real usage numbers (for deciding what to build, for the feedback round, 
 
 ## Owner setup (once)
 1. Create a free account at goatcounter.com and a site; pick a code (the part before `.goatcounter.com`).
-2. Set `GOATCOUNTER_CODE` in `app/index.html`, merge, and re-run `pages.yml`.
+2. Set `GOATCOUNTER_CODE` in `app/index.html`, and merge (`pages.yml` deploys it).
 3. Events are sent from the page, so no extra GoatCounter setting is needed. Keep the dashboard private, or make it public if you want to link it from the case study.
 
 ## Consequences

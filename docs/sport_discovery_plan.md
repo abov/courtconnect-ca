@@ -1,6 +1,6 @@
 # Plan: every sport in the dropdown + "what is this sport?" details
 
-Status: PLAN ONLY (2026-10-16), nothing built. Starts after the beta findings (10-29..11-01); ranks with roadmap items 7b/7c and ADR 0015 (mission: discover sports beyond pickleball).
+Status: PLAN ONLY (2026-10-16), nothing built. Starts after the beta findings (10-29..11-01); ranks with roadmap item 7c and ADR 0015 (7b, tennis visibility + "Try something new", dropped 2026-10-21) (mission: discover sports beyond pickleball).
 Source of truth for sports: the Google Sheet (synced into `transform/seeds/all_racquet.csv` by `make sync-sports`; never hand-edit the seed).
 
 ## Problem (measured 2026-10-16 from `app/data/venues.json`)
@@ -39,10 +39,20 @@ UX notes: mobile 375/320px first (card collapsed by default on phones, expanded 
 3. Dropdown shows all 76 (two groups) + empty-state card + suggest-a-place prefill.
 4. Blurbs for the remaining 55 sports.
 5. Venue searches for not-mapped sports, one family per session (Part 1 step 5).
-6. Re-run `pages.yml` after merge; confirm PR MERGED before calling it shipped.
+6. `pages.yml` deploys by itself after merge (check the run); confirm PR MERGED before calling it shipped.
 
 ## Decisions (owner, 2026-10-16)
 
 - Blurb and wiki columns live in the Google Sheet (synced by `make sync-sports`), not a repo seed. The `sport_details.csv` seed in Part 2 is dropped.
 - Unmapped sports stay in the main list, greyed out and marked "no places yet" (no separate group; supersedes the `<optgroup>` idea in Part 1).
 - No popularity-class labels on the card.
+
+## Update (2026-10-18)
+
+- Part 2 built early for the card (not the all-76 dropdown): sheet columns `Blurb`, `Learn URL`, `Rules URL`, `Court URL`, `Gear URL` (owner chose sheet columns and all 76 sports). Draft values for the 27 verifiable sports are in `docs/sport_details_draft.csv`; 49 remain blank. Details: `docs/sessions/2026-10-18-sport-info-card.md`.
+
+## Status (2026-10-21)
+
+- Built: all sheet sports (81) in the dropdown, unmapped ones greyed "(none yet)" with an empty-state line and a pre-filled report-a-venue link (2026-10-19); the "About <sport>" card (2026-10-18).
+- Waiting on the owner: the sheet's Blurb / URL columns are still empty, so the card shows facts only. `docs/sport_details_draft.csv` has 63 drafted blurbs to paste in.
+- Not started: blurbs for the remaining sports, the CI check (Part 1 step 6), the closest-mapped-sport hint (Part 1 step 2), venue searches (Part 1 step 5).

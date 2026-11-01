@@ -1,0 +1,4 @@
+# 2026-10-22 Club-named venues, pass 2 (slice 2)
+Read 14 clubs' own sites (public pages, project User-Agent) and added 11 venues / 15 rows to `manual_venues.csv`, all merged into existing pins: Bay Club Courtside, Gateway and Broadway Tennis, Chamisal, Tennis Club of Vista, Santa Barbara Polo & Racquet, Anthem CC, College Greens (members, inferred), Sea Point (private, HOA), Zephyr Cove (public, NV), Burbank Squash (club, day pass). Added 3 `venue_leads.csv` rows (Fallbrook TC, dNA Redding, Cambria TC) where the page did not say.
+Skipped with no usable page: Eureka Indoor, Desert Palm (no text), Ridgemark (too short), Bay Club SF Tennis (404), Woodhaven CC (golf page only), Palm Springs TC (a hotel), Mill Valley/Eastlake (booking or bridge-club pages).
+Next: ~85 club-named pins with a website remain (mostly table tennis, badminton and pickleball clubs, which are not member-gated courts); the `*-access` leads still need a community report.

@@ -60,12 +60,12 @@ demo: extract load build   ## the one-command demo
 docs:
 	$(DBT) docs generate && $(DBT) docs serve
 
-snowflake-build:  ## run the same project on Snowflake
-	$(PY) ingestion/load_raw.py --target snowflake
-	$(DBT) build --target snowflake
 
 app-data:        ## export the venue finder to app/data/venues.json for the map
 	$(PY) ingestion/export_app_data.py
+
+changes:         ## diff venues.json with origin/main into app/data/changes.json (public change feed, ADR 0025)
+	$(PY) ingestion/build_changes.py
 
 app:             ## serve the map at http://localhost:8765
 	$(PY) -m http.server 8765 --directory app
@@ -84,6 +84,21 @@ eval-match:      ## score the Overture place -> OSM match against ci/gold/place_
 
 quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 	$(PY) ingestion/export_quality_scorecard.py
+
+dashboard-data:   ## aggregate CSVs for the Evidence.dev dashboard (dashboard/README.md); run after make quality, stats, app-data
+	$(PY) ingestion/export_dashboard_data.py
+
+stats:            ## regenerate app/data/build_stats.json (numbers on app/how-its-built.html); run after make quality
+	$(PY) ingestion/build_stats.py
+
+usage:            ## export GoatCounter daily counts and print the usage metrics (needs GOATCOUNTER_API_TOKEN in .env; docs/goat_analysis.md)
+	$(PY) ingestion/extract_goatcounter.py
+	$(PY) ingestion/goat_report.py $(ARGS)
+interest:         ## print Google Trends search interest vs venues per metro (docs/search_interest_plan.md; re-export the seed about quarterly)
+	$(PY) ingestion/search_interest_report.py
+
+market-snapshot:  ## append today's venue counts (city x sport) to docs/market_snapshots.csv; run once per refresh after dbt build
+	$(PY) ingestion/snapshot_market.py
 
 sync-reports:     ## import approved community-form reports (Google Form) as seed edits; needs REPORTS_CSV_URL in .env
 	$(PY) ci/sync_reports.py $(ARGS)

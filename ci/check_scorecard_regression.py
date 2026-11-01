@@ -45,8 +45,12 @@ def main():
         if not base_rows:
             sys.exit("base trend file has no rows")
         old = base_rows[-1]
-        if new["date"] == old["date"] and new == old:
+        if new == old:
             print(f"No new scorecard line vs {args.base_ref} ({new['date']}): nothing to compare.")
+            return
+        if old not in rows:
+            print(f"The base's last line ({old['date']}) is not in this branch (branch behind {args.base_ref}): "
+                  f"skipping; sync with main and re-run.")
             return
     elif len(rows) < 2:
         print("Only one scorecard line: nothing to compare.")

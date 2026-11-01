@@ -1,0 +1,52 @@
+{
+  "release": "2026-10-21.0",
+  "run_on": "2026-10-28",
+  "duckdb": "1.5.6",
+  "machine": "Windows AMD64, 8 threads",
+  "themes": {
+    "places": {
+      "files": 16,
+      "release_bytes": 11895717186,
+      "planet_rows": 88418121,
+      "count_step": {
+        "seconds": 7.6,
+        "requests": 33,
+        "bytes": 38013059
+      },
+      "extract_rows": 95752,
+      "extract_step": {
+        "seconds": 49.8,
+        "requests": 2670,
+        "bytes": 289102218
+      },
+      "pct_of_release_bytes": 2.43
+    },
+    "addresses": {
+      "files": 64,
+      "release_bytes": 27692636174,
+      "planet_rows": 475263892,
+      "count_step": {
+        "seconds": 14.1,
+        "requests": 129,
+        "bytes": 60070406
+      },
+      "extract_rows": 5291696,
+      "extract_step": {
+        "seconds": 50.3,
+        "requests": 3148,
+        "bytes": 453929275
+      },
+      "pct_of_release_bytes": 1.64
+    },
+    "buildings": {
+      "files": 512,
+      "release_bytes": 276943764116,
+      "planet_rows": 2533842612,
+      "count_step": {
+        "seconds": 252.7,
+        "requests": 1025,
+        "bytes": 542584917
+      }
+    }
+  }
+}

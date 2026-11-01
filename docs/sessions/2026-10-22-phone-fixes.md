@@ -1,0 +1,3 @@
+# 2026-10-22 Pre-beta phone check and two fixes
+Checked the front door and search at 375/320px and in dark mode (DOM only). Fixed in `app/index.html`: the 2:1 width rule on the "Places to play" chip (written for the old long label) made "Events & meetups" wrap onto 3 lines; and search/select fields were 15px, which makes iOS Safari zoom on focus (now 16px at <=800px). Dark contrast, overflow and search behaviour were fine.
+Next: re-run `pages.yml` after merge (live site was still on #326, without the front door). Not checked: the >=800px layout, real iOS. Open nit: player-app links are ~16px tall inline text.

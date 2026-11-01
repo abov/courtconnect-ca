@@ -1,0 +1,294 @@
+query,lat,lon,display
+"10060 Avenida Magnifica, 92131, San Diego, CA",32.9082502,-117.0835224,"10060, Avenida Magnifica, Crown Pointe, Scripps Ranch, San Diego, San Diego County, California, 92131, United States"
+"1008 Santa Clara Place, 92109, San Diego, CA",32.7830689,-117.2499189,"1008, Santa Clara Place, Mission Beach, San Diego, San Diego County, California, 92109, United States"
+"1049 Catalina Blvd., 92107, San Diego, CA",32.7239284,-117.2450364,"1049, Catalina Boulevard, Fleetridge, Point Loma, San Diego, San Diego County, California, 92107, United States"
+"11220 Clairemont Mesa Blvd., 92124, San Diego, CA",32.8268164,-117.0821419,"11220, Clairemont Mesa Boulevard, Summerton Hills, Tierrasanta, San Diego, San Diego County, California, 92124, United S"
+"11220 Clairemont Mesa Blvd., 92124, San Diego, CA",32.8280217,-117.0837956,"11220, Clairemont Mesa Boulevard, Summerton Hills, Tierrasanta, San Diego, San Diego County, California, 92124, United S"
+"12350 Black Mtn Road, 92129, San Diego, CA",32.9422979,-117.1306165,"Lois J. Mangarelli Recreation Center, 12350, Black Mountain Road, Ridgewood, Rancho Peñasquitos, San Diego, San Diego Co"
+"125 East Park Ave., 92173, San Diego, CA",32.5529789,-117.0443255,"San Ysidro Senior Center, 125, East Park Avenue, El Pueblito Viejo, San Ysidro, San Diego, San Diego County, California,"
+"125 East Park Ave., 92173, San Diego, CA",32.5531602,-117.0441851,"125, East Park Avenue, El Pueblito Viejo, San Ysidro, San Diego, San Diego County, California, 92173, United States"
+"1405 Diamond St., 92109, San Diego, CA",32.8015535,-117.2447934,"1405, Diamond Street, North Pacific Beach, Pacific Beach, San Diego, San Diego County, California, 92109, United States"
+"14440 Black Mountain Road, 92126, San Diego, CA",32.9790479,-117.131059,"14440, Black Mountain Road, Sunset Hills, Rancho Peñasquitos, San Diego, San Diego County, California, 92129, United Sta"
+"14440 Black Mountain Road, 92126, San Diego, CA",32.9792487,-117.1395091,"14440, Carmel Valley Road, Sunset Hills, Black Mountain Ranch, San Diego, San Diego County, California, 92127, United St"
+"1500 Washington Place, 92103, San Diego, CA",32.749954,-117.176958,"1500, Washington Place, Five Points, Mission Hills, San Diego, San Diego County, California, 92103, United States"
+"18402 W. Bernardo Drive, 92127, San Diego, CA",33.0431292,-117.0762003,"18402, West Bernardo Drive, Bernardo Vista Del Lago, San Diego, San Diego County, California, 92127, United States"
+"2221 Morley Field Drive, 92104, San Diego, CA",32.7406205,-117.1423648,"2221, Morley Field Drive, North Park, San Diego, San Diego County, California, 92101, United States"
+"2221 Morley Field Drive, 92104, San Diego, CA",32.7399949,-117.1424646,"2221, Morley Field Drive, North Park, San Diego, San Diego County, California, 92101, United States"
+"2525 Bacon St., 92107, San Diego, CA",32.7533409,-117.2452062,"2525, Bacon Street, Ocean Beach, San Diego, San Diego County, California, 92107, United States"
+"2525 Bacon St., 92107, San Diego, CA",32.7554826,-117.2405511,"2525, Bacon Street, Ocean Beach, San Diego, San Diego County, California, 92107, United States"
+"2639 Grand Ave., 92109, San Diego, CA",32.8017356,-117.2221776,"2639, Grand Avenue, Pacific Beach, San Diego, San Diego County, California, 92109, United States"
+"2639 Grand Ave., 92109, San Diego, CA",32.8020353,-117.2215305,"2639, Grand Avenue, Pacific Beach, San Diego, San Diego County, California, 92109, United States"
+"3051 Cañon St., 92106, San Diego, CA",32.7217198,-117.2324164,"3051, Cañon Street, Little Portugal, Roseville, Point Loma, San Diego, San Diego County, California, 92106, United State"
+"3508 Conrad Ave., 92117, San Diego, CA",32.835482,-117.2118405,"3508, Conrad Avenue, Westridge, North Clairemont, Bay Ho, San Diego, San Diego County, California, 92117, United States"
+"3585 Governor Drive, 92122, San Diego, CA",32.8510912,-117.2103114,"Standley Recreation Center, 3585, Governor Drive, University Square, University City, San Diego, San Diego County, Calif"
+"3605 Clairemont Drive, 92117, San Diego, CA",32.809317,-117.195344,"3605, Clairemont Drive, Eureka Lemon, Bay Ho, San Diego, San Diego County, California, 92117, United States"
+"3605 Clairemont Drive, 92117, San Diego, CA",32.805891,-117.2010128,"3605, Clairemont Drive, Eureka Lemon, Bay Ho, San Diego, San Diego County, California, 92117, United States"
+"3605 Clairemont Drive, 92117, San Diego, CA",32.8052478,-117.2004341,"3605, Clairemont Drive, Clairemont Village, Clairemont, San Diego, San Diego County, California, 92117, United States"
+"3777 Townsgate Drive, 92130, San Diego, CA",32.9485619,-117.2340804,"Carmel Valley Recreation Center, 3777, Townsgate Drive, Del Mar Highlands, Del Mar Heights, San Diego, San Diego County,"
+"3777 Townsgate Drive, 92130, San Diego, CA",32.949123,-117.2351388,"3777, Townsgate Drive, Del Mar Highlands, Del Mar Heights, San Diego, San Diego County, California, 92130, United States"
+"4044 Idaho St., 92104, San Diego, CA",32.751318,-117.134225,"4044, Idaho Street, North Park, San Diego, San Diego County, California, 92104, United States"
+"4380 Landis St., 92105, San Diego, CA",32.7459402,-117.100086,"4380, Landis Street, Teralta, City Heights, San Diego, San Diego County, California, 92105, United States"
+"4421 Bannock Ave., 92117, San Diego, CA",32.8324022,-117.1973999,"North Clairemont Recreation Center, 4421, Bannock Avenue, North Clairemont, Clairemont, San Diego, San Diego County, Cal"
+"4421 Bannock Ave., 92117, San Diego, CA",32.83168,-117.196927,"4421, Bannock Avenue, North Clairemont, Clairemont, San Diego, San Diego County, California, 92117, United States"
+"4680 Avati Drive, 92117, San Diego, CA",32.8175188,-117.2155686,"Avati Drive, Bay Ho, San Diego, San Diego County, California, 92140, United States"
+"5156 Santo Road, 92124, San Diego, CA",32.825445,-117.108153,"5156, Santo Road, Villa Portofino, Tierrasanta Town Center, Tierrasanta, San Diego, San Diego County, California, 92124,"
+"5319 Orange Ave., 92115, San Diego, CA",32.7531861,-117.0816934,"Orange Avenue, Somali Town, Colina Park, Mid-City, San Diego, San Diego County, California, 92115, United States"
+"5319 Orange Ave., 92115, San Diego, CA",32.7531431,-117.0776318,"Orange Avenue, El Cerrito Heights, Mid-City, San Diego, San Diego County, California, 92115, United States"
+"5319 Orange Ave., 92115, San Diego, CA",32.7531533,-117.0787994,"Orange Avenue, El Cerrito Heights, Mid-City, San Diego, San Diego County, California, 92115, United States"
+"5319 Orange Ave., 92115, San Diego, CA",32.7530607,-117.0857048,"Orange Avenue, Somali Town, Colina Park, Mid-City, San Diego, San Diego County, California, 92105, United States"
+"5319 Orange Ave., 92115, San Diego, CA",32.7530713,-117.0870087,"Orange Avenue, Somali Town, Colina Park, City Heights, San Diego, San Diego County, California, 92105, United States"
+"6401 Skyline Drive, 92114, San Diego, CA",32.70126,-117.060655,"6401, Skyline Drive, South Encanto, O'Farrell, Encanto, San Diego, San Diego County, California, 92114, United States"
+"6508 Wunderlin Ave., 92114, San Diego, CA",32.7146156,-117.0577489,"6508, Wunderlin Avenue, Black Arts & Culture District, Encanto, San Diego, San Diego County, California, 92114, United S"
+"7003 Murray Park Drive, 92119, San Diego, CA",32.7927386,-117.0458375,"7003, Murray Park Drive, Navajo, San Diego, San Diego County, California, 92119, United States"
+"7064 Levant St., 92111, San Diego, CA",32.7919349,-117.1692276,"7064, Levant Street, Wheatley, Chesterton, Linda Vista, San Diego, San Diego County, California, 92111, United States"
+"7632 Draper Ave., 92037, San Diego, CA",32.8417375,-117.2768555,"7632, Draper Avenue, Village of La Jolla, La Jolla, San Diego, San Diego County, California, 92037, United States"
+"8651 Celestine Ave., 92123, San Diego, CA",32.7906771,-117.1454388,"8651, Celestine Avenue, Birdland, Serra Mesa, San Diego, San Diego County, California, 92123, United States"
+"Alamo Square Park, San Francisco, California",37.7763599,-122.4347,"Alamo Square, Western Addition, San Francisco, California, 94117, United States"
+"Alamo Square Tennis Courts, San Francisco, California",,,
+"Alice Chalmers Park, San Francisco, California",37.709831,-122.4466822,"Alice Chalmers Playground, 670, Crocker-Amazon, San Francisco, California, 94112, United States"
+"Alice Chalmers Tennis Courts, San Francisco, California",,,
+"Alice Marble Tennis Courts, San Francisco, California",37.8015551,-122.420117,"Alice Marble Tennis Courts, Lombard Street, Russian Hill, Nob Hill, San Francisco, California, 90214, United States"
+"Alta Plaza Park, San Francisco, California",37.7911812,-122.4376737,"Alta Plaza Park, Washington Street, Pacific Heights, San Francisco, California, 94115, United States"
+"Alta Plaza Tennis Courts, San Francisco, California",,,
+"Aptos Park, San Francisco, California",37.7284444,-122.4666646,"Aptos Playground, Ingleside, San Francisco, California, United States"
+"Aptos Tennis Courts, San Francisco, California",,,
+"Argonne Park, San Francisco, California",37.7794183,-122.4777096,"Argonne Playground, Richmond District, San Francisco, California, United States"
+"Argonne Park, San Francisco, California",37.7739706,-122.4737012,"Argonne Community Garden, Inner Richmond, Richmond District, San Francisco, California, 94118, United States"
+"Argonne Tennis Courts, San Francisco, California",,,
+"Balboa Park, San Francisco, California",37.7214274,-122.4475473,"Balboa Park, Geneva Avenue, Ingleside, San Francisco, California, 94112, United States"
+"Balboa Park, San Francisco, California",37.7249487,-122.4448177,"Balboa Park, Excelsior, San Francisco, California, United States"
+"Balboa Tennis Courts, San Francisco, California",,,
+"Bethune Court and Kelton Road, 92114, San Diego, CA",,,
+"Buena Vista Park, San Francisco, California",37.7683632,-122.4412774,"Buena Vista Park, Mission, San Francisco, California, United States"
+"Buena Vista Playground, San Francisco, California",37.7698931,-122.4422102,"Buena Vista Playground, Buena Vista Avenue West, Haight-Ashbury, San Francisco, California, 94177, United States"
+"Buena Vista Recreation Center, San Francisco, California",,,
+"Buena Vista Tennis Courts, San Francisco, California",,,
+"Buena Vista, San Francisco, California",37.8065169,-122.4207744,"Buena Vista, Beach Street, Fisherman's Wharf, San Francisco, California, 90214, United States"
+"Cabrillo Park, San Francisco, California",37.7728513,-122.4987386,"Cabrillo Playground, Outer Richmond, San Francisco, California, United States"
+"Cabrillo Tennis Courts, San Francisco, California",,,
+"Cadman Recreation Center Park, San Diego, California",32.8206791,-117.2153356,"Cadman Community Park & Recreation Center, 4280, Bay Ho, San Diego, San Diego County, California, 92117, United States"
+"Cadman Recreation Center Tennis Courts, San Diego, California",,,
+"Canyon Hills High School Park, San Diego, California",,,
+"Canyon Hills High School Playground, San Diego, California",,,
+"Canyon Hills High School Recreation Center, San Diego, California",,,
+"Canyon Hills High School Tennis Courts, San Diego, California",,,
+"Canyon Hills High School, San Diego, California",32.8259873,-117.1068471,"Canyon Hills High School, Porto Court, Villa Portofino, Tierrasanta Town Center, Tierrasanta, San Diego, San Diego Count"
+"Cayuga Park, San Francisco, California",37.7140184,-122.4502484,"Cayuga Park, Ingleside, San Francisco, California, United States"
+"Cayuga Tennis Courts, San Francisco, California",,,
+"Coronado Park, San Francisco, California",,,
+"Coronado Playground, San Francisco, California",37.7577589,-122.4148828,"Jose Coronado Playground, Folsom Street, Mission, San Francisco, California, 94110, United States"
+"Coronado Tennis Courts, San Francisco, California",,,
+"Crocker Amazon Park, San Francisco, California",37.7142312,-122.4302272,"Crocker Amazon Playground, San Francisco, California, United States"
+"Crocker Amazon Playground, San Francisco, California",37.7142312,-122.4302272,"Crocker Amazon Playground, San Francisco, California, United States"
+"Crocker Amazon Recreation Center, San Francisco, California",,,
+"Crocker Amazon Tennis Courts, San Francisco, California",,,
+"Crocker Amazon, San Francisco, California",37.7093777,-122.4385868,"Crocker-Amazon, San Francisco, California, 94112, United States"
+"Dolores Park, San Francisco, California",37.7597203,-122.4271323,"Mission Dolores Park, Castro District, Mission, San Francisco, California, 94114, United States"
+"Dolores Playground, San Francisco, California",37.7587413,-122.4268572,"Helen Diller Playground, 20th Street, Castro District, Mission, San Francisco, California, 94110, United States"
+"Dolores Recreation Center, San Francisco, California",,,
+"Dolores Tennis Courts, San Francisco, California",,,
+"Dolores, San Francisco, California",37.7689089,-122.4271335,"Market Street & Dolores Street, Market Street, Duboce Triangle, Castro District, Mission, San Francisco, California, 941"
+"Dolores, San Francisco, California",37.76878,-122.4272991,"Market Street & Dolores Street, Market Street, Duboce Triangle, Castro District, Mission, San Francisco, California, 941"
+"Dolores, San Francisco, California",37.764353,-122.4269535,"Mission Dolores Basilica, 3321, 16th Street, Duboce Triangle, Castro District, Mission, San Francisco, California, 94143"
+"Dolores, San Francisco, California",37.7641857,-122.4268123,"Old Mission Dolores, 320, Dolores Street, Duboce Triangle, Castro District, Mission, San Francisco, California, 94143, U"
+"Dolores, San Francisco, California",37.7597203,-122.4271323,"Mission Dolores Park, Castro District, Mission, San Francisco, California, 94114, United States"
+"Douglass Park, San Francisco, California",37.747789,-122.438705,"Douglass Playground, Noe Valley, Mission, San Francisco, California, United States"
+"Douglass Tennis Courts, San Francisco, California",,,
+"DuPont Tennis Courts, San Francisco, California",37.7826865,-122.4908608,"DuPont Tennis Courts, 336, 31st Avenue, Seacliff, Outer Richmond, Richmond District, San Francisco, California, 94121, U"
+"Emerald Hills Park, San Diego, California",32.7213976,-117.0738193,"Emerald Hills Park, Emerald Hills, Encanto, San Diego, San Diego County, California, United States"
+"Emerald Hills Tennis Courts, San Diego, California",,,
+"Encanto Park Park, San Diego, California",32.715892,-117.0563871,"Encanto Community Park, Black Arts & Culture District, Encanto, San Diego, San Diego County, California, United States"
+"Encanto Park Tennis Courts, San Diego, California",,,
+"Eureka Valley Park, San Francisco, California",37.7599496,-122.4363716,"Eureka Valley Recreation Center, Castro District, Mission, San Francisco, California, United States"
+"Eureka Valley Tennis Courts, San Francisco, California",,,
+"Excelsior Park, San Francisco, California",37.7202773,-122.4332826,"Excelsior Playground, Excelsior, San Francisco, California, United States"
+"Excelsior Tennis Courts, San Francisco, California",,,
+"Fulton Park, San Francisco, California",37.7733867,-122.4869389,"Fulton Playground, Outer Richmond, Richmond District, San Francisco, California, United States"
+"Fulton Park, San Francisco, California",37.7734715,-122.4716467,"Park Presidio Boulevard & Fulton Street, Park Presidio Boulevard, Inner Richmond, Richmond District, San Francisco, Cali"
+"Fulton Park, San Francisco, California",37.7732367,-122.4721554,"Fulton Street & Park Presidio Boulevard, Fulton Street, Inner Richmond, Richmond District, San Francisco, California, 94"
+"Fulton Tennis Courts, San Francisco, California",,,
+"George Christopher Park, San Francisco, California",37.7436934,-122.4405859,"George Christopher Playground, Mission, San Francisco, California, United States"
+"George Christopher Tennis Courts, San Francisco, California",,,
+"Glen Canyon Park, San Francisco, California",37.7403901,-122.4420142,"Glen Canyon Park, Mission, San Francisco, California, United States"
+"Glen Canyon Playground, San Francisco, California",37.7366825,-122.4405482,"Glen Canyon Park Playground, Coyote Crags Trail, Diamond Heights, San Francisco, California, 94131, United States"
+"Glen Canyon Tennis Courts, San Francisco, California",,,
+"Golden Gate Heights Park, San Francisco, California",37.7499913,-122.4695685,"Golden Gate Heights Park, Parkside, San Francisco, California, United States"
+"Golden Gate Heights Tennis Courts, San Francisco, California",,,
+"Goldman Tennis Center Park, San Francisco, California",,,
+"Goldman Tennis Center Playground, San Francisco, California",,,
+"Goldman Tennis Center Recreation Center, San Francisco, California",,,
+"Goldman Tennis Center Tennis Courts, San Francisco, California",,,
+"Goldman Tennis Center, San Francisco, California",37.7700992,-122.4590999,"Lisa and Douglas Goldman Tennis Center, 50, Bowling Green Drive, Inner Richmond, Richmond District, San Francisco, Calif"
+"Grattan Park, San Francisco, California",37.7626921,-122.4515162,"Grattan Playground, Haight-Ashbury, Richmond District, San Francisco, California, United States"
+"Grattan Tennis Courts, San Francisco, California",,,
+"Hamilton Park, San Francisco, California",,,
+"Hamilton Playground, San Francisco, California",37.7842871,-122.4355463,"Hamilton Receation Center Playground, Geary Boulevard, Fillmore District, Western Addition, San Francisco, California, 9"
+"Hamilton Tennis Courts, San Francisco, California",,,
+"Hayes Valley Park, San Francisco, California",37.7760467,-122.4273836,"Hayes Valley Playground, Western Addition, San Francisco, California, United States"
+"Hayes Valley Tennis Courts, San Francisco, California",,,
+"Helen Wills Park, San Francisco, California",37.7957887,-122.4206651,"Helen Wills Park, Nob Hill, San Francisco, California, 94109, United States"
+"Helen Wills Tennis Courts, San Francisco, California",,,
+"Holly Park Park, San Francisco, California",37.7372171,-122.4199467,"Holly Park, San Francisco, California, United States"
+"Holly Park Tennis Courts, San Francisco, California",,,
+"Hourglass Park Park, San Diego, California",32.9071285,-117.1221586,"Hourglass Field Community Park, Mira Mesa Gateway, Scripps Ranch, San Diego, San Diego County, California, United States"
+"Hourglass Park Playground, San Diego, California",,,
+"Hourglass Park Recreation Center, San Diego, California",,,
+"Hourglass Park Tennis Courts, San Diego, California",,,
+"Hourglass Park, San Diego, California",32.9071285,-117.1221586,"Hourglass Field Community Park, Mira Mesa Gateway, Scripps Ranch, San Diego, San Diego County, California, United States"
+"J. P. Murphy Park, San Francisco, California",37.7516587,-122.4650532,"J.P. Murphy Playground, San Francisco, California, United States"
+"J. P. Murphy Tennis Courts, San Francisco, California",,,
+"Jackson Park, San Francisco, California",37.764421,-122.3996359,"Jackson Park, Potrero Hill, Mission, San Francisco, California, United States"
+"Jackson Tennis Courts, San Francisco, California",,,
+"James Rolph Jr. Park, San Francisco, California",,,
+"James Rolph Jr. Playground, San Francisco, California",37.7505309,-122.4062648,"James Rolph Jr. Playground, Potrero Avenue, Potrero Hill, Mission, San Francisco, California, 94110, United States"
+"James Rolph Jr. Tennis Courts, San Francisco, California",,,
+"Jerabek Park Park, San Diego, California",32.9109247,-117.0821977,"Jerabek Park, Scripps Ranch, San Diego, San Diego County, California, United States"
+"Jerabek Park Tennis Courts, San Diego, California",,,
+"Joe DiMaggio Park, San Francisco, California",37.8026091,-122.412186,"Joe DiMaggio Playground, 651, North Beach, San Francisco, California, 94133, United States"
+"Joe DiMaggio Tennis Courts, San Francisco, California",,,
+"Junipero Serra Park, San Francisco, California",37.7247,-122.4738161,"Junipero Serra Playground, San Francisco, California, United States"
+"Junipero Serra Tennis Courts, San Francisco, California",,,
+"Lafayette Park, San Francisco, California",37.7914551,-122.4278614,"Lafayette Park, Pacific Heights, San Francisco, California, United States"
+"Lafayette Tennis Courts, San Francisco, California",,,
+"Lake Murray Park Park, San Diego, California",,,
+"Lake Murray Park Playground, San Diego, California",,,
+"Lake Murray Park Recreation Center, San Diego, California",,,
+"Lake Murray Park Tennis Courts, San Diego, California",,,
+"Lake Murray Park, San Diego, California",32.7922347,-117.044586,"Lake Murray Playground Project, San Carlos, San Diego, San Diego County, California, United States"
+"Laurel Hill Park, San Francisco, California",37.7839939,-122.4510589,"Laurel Hill Playground, Richmond District, San Francisco, California, United States"
+"Laurel Hill Tennis Courts, San Francisco, California",,,
+"Margaret S. Hayward Park, San Francisco, California",37.7809257,-122.4249138,"Margaret S. Hayward Playground, Western Addition, San Francisco, California, United States"
+"Margaret S. Hayward Playground, San Francisco, California",37.7809257,-122.4249138,"Margaret S. Hayward Playground, Western Addition, San Francisco, California, United States"
+"Margaret S. Hayward Recreation Center, San Francisco, California",,,
+"Margaret S. Hayward Tennis Courts, San Francisco, California",,,
+"Margaret S. Hayward, San Francisco, California",37.7809257,-122.4249138,"Margaret S. Hayward Playground, Western Addition, San Francisco, California, United States"
+"Martin Luther King Jr. Recreation Center Park, San Diego, California",,,
+"Martin Luther King Jr. Recreation Center Playground, San Diego, California",,,
+"Martin Luther King Jr. Recreation Center Recreation Center, San Diego, California",,,
+"Martin Luther King Jr. Recreation Center Tennis Courts, San Diego, California",,,
+"Martin Luther King Jr. Recreation Center, San Diego, California",,,
+"McCoppin Square Park, San Francisco, California",37.7435679,-122.4800548,"McCoppin Square, Parkside, San Francisco, California, United States"
+"McCoppin Square Tennis Courts, San Francisco, California",,,
+"McLaren Park, San Francisco, California",37.7174542,-122.4175419,"John McLaren Park, Bayview District, San Francisco, California, United States"
+"McLaren Park, San Francisco, California",37.7146247,-122.4157472,"McLaren Park Community Garden, Visitacion Valley, San Francisco, California, United States"
+"McLaren Playground, San Francisco, California",37.7235872,-122.4231222,"John McLaren Park Playground, Philosopher's Way, San Francisco, California, 94134, United States"
+"McLaren Playground, San Francisco, California",37.7216382,-122.4205564,"McLaren Park Redwood Grove Playground, Philosopher's Way, Portola, San Francisco, California, 94134, United States"
+"McLaren Recreation Center, San Francisco, California",,,
+"McLaren Tennis Courts, San Francisco, California",,,
+"McLaren, San Francisco, California",37.7174542,-122.4175419,"John McLaren Park, Bayview District, San Francisco, California, United States"
+"McLaren, San Francisco, California",37.7146247,-122.4157472,"McLaren Park Community Garden, Visitacion Valley, San Francisco, California, United States"
+"McLaren, San Francisco, California",37.7721673,-122.464709,"John McLaren Memorial Rhododendron Dell, Inner Richmond, Richmond District, San Francisco, California, 94118, United Sta"
+"McLaren, San Francisco, California",37.7862678,-122.4892759,"McLaren Avenue, Seacliff, Richmond District, San Francisco, California, 94121, United States"
+"Merced Heights Park, San Francisco, California",37.7175067,-122.4702814,"Merced Heights Playground, San Francisco, California, United States"
+"Merced Heights Tennis Courts, San Francisco, California",,,
+"Minnie & Lovie Ward Park, San Francisco, California",,,
+"Minnie & Lovie Ward Playground, San Francisco, California",37.7163991,-122.4585008,"Minnie & Lovie Ward Children’s Play Area, Montana Street, Ocean View, Ingleside, San Francisco, California, 94112, Unite"
+"Minnie & Lovie Ward Recreation Center, San Francisco, California",,,
+"Minnie & Lovie Ward Tennis Courts, San Francisco, California",,,
+"Minnie & Lovie Ward, San Francisco, California",37.7162599,-122.4572141,"Minnie and Lovie Ward Recreation Center, Montana Street, Ocean View, Ingleside, San Francisco, California, 94112, United"
+"Minnie & Lovie Ward, San Francisco, California",37.7163991,-122.4585008,"Minnie & Lovie Ward Children’s Play Area, Montana Street, Ocean View, Ingleside, San Francisco, California, 94112, Unite"
+"Miraloma Park, San Francisco, California",37.7386429,-122.4493344,"Miraloma Playground, San Francisco, California, United States"
+"Miraloma Park, San Francisco, California",37.7414162,-122.446717,"Miraloma Park Improvement Club, 350, O'Shaughnessy Boulevard, San Francisco, California, 94131, United States"
+"Miraloma Tennis Courts, San Francisco, California",,,
+"Mission Creek Park Park, San Francisco, California",37.7723178,-122.3948496,"Mission Creek Park, Mission Bay, San Francisco, California, United States"
+"Mission Creek Park Playground, San Francisco, California",,,
+"Mission Creek Park Recreation Center, San Francisco, California",,,
+"Mission Creek Park Tennis Courts, San Francisco, California",,,
+"Mission Creek Park, San Francisco, California",37.7723178,-122.3948496,"Mission Creek Park, Mission Bay, San Francisco, California, United States"
+"Mission Creek Park, San Francisco, California",37.7727776,-122.3960063,"Mission Creek Park, Long Bridge Street, Mission Bay, San Francisco, California, 94158, United States"
+"Mission Park, San Francisco, California",37.7597203,-122.4271323,"Mission Dolores Park, 19th Street, Castro District, Mission, San Francisco, California, 94114, United States"
+"Mission Park, San Francisco, California",37.7723178,-122.3948496,"Mission Creek Park, Mission Bay, San Francisco, California, United States"
+"Mission Park, San Francisco, California",37.7721438,-122.3925716,"Mission Bay Kids Park, Mission Bay, San Francisco, California, United States"
+"Mission Park, San Francisco, California",37.768973,-122.3918907,"UCSF Mission Bay Park, Mission Bay, San Francisco, California, 94158, United States"
+"Mission Playground, San Francisco, California",37.7594961,-122.42248,"Mission Playground, Mission, San Francisco, California, United States"
+"Mission Playground, San Francisco, California",37.7590257,-122.4222842,"Mission Playground, Linda Street, Mission, San Francisco, California, 94143, United States"
+"Mission Tennis Courts, San Francisco, California",,,
+"Morley Field Sports Complex Park, San Diego, California",32.7380974,-117.137637,"Morley Field Sports Complex, Morley Field, Burlingame, North Park, San Diego, San Diego County, California, 92104, Unite"
+"Morley Field Sports Complex Playground, San Diego, California",,,
+"Morley Field Sports Complex Recreation Center, San Diego, California",,,
+"Morley Field Sports Complex Tennis Courts, San Diego, California",,,
+"Morley Field Sports Complex, San Diego, California",32.7380974,-117.137637,"Morley Field Sports Complex, Morley Field Drive, North Park, San Diego, San Diego County, California, 92163, United Stat"
+"Moscone Park, San Francisco, California",37.8023864,-122.4332014,"Moscone Recreation Center, Marina District, San Francisco, California, United States"
+"Moscone Park, San Francisco, California",37.8018361,-122.4345735,"moscone dog play area, 1895, Marina District, San Francisco, California, 94123, United States"
+"Moscone Playground, San Francisco, California",37.8014434,-122.4335883,"Moscone Playground, Chestnut Street, Cow Hollow, Marina District, San Francisco, California, 94123, United States"
+"Moscone Recreation Center, San Francisco, California",37.8023864,-122.4332014,"Moscone Recreation Center, Marina District, San Francisco, California, United States"
+"Moscone Tennis Courts, San Francisco, California",,,
+"Moscone, San Francisco, California",37.7843988,-122.4005843,"George R Moscone Convention Center, 3rd Street, South of Market, Financial District, San Francisco, California, 94105, U"
+"Moscone, San Francisco, California",37.7822253,-122.401731,"Yerba Buena/Moscone, Clementina Street, South of Market, Tenderloin, San Francisco, California, 94105, United States"
+"Moscone, San Francisco, California",37.8023864,-122.4332014,"Moscone Recreation Center, Marina District, San Francisco, California, United States"
+"Moscone, San Francisco, California",37.7840588,-122.4009557,"Moscone North + South, San Francisco, California, United States"
+"Moscone, San Francisco, California",37.8018361,-122.4345735,"moscone dog play area, 1895, Marina District, San Francisco, California, 94123, United States"
+"Mountain Lake Park, San Francisco, California",37.7872442,-122.4693517,"Mountain Lake Park, Inner Richmond, Richmond District, San Francisco, California, United States"
+"Mountain Lake Tennis Courts, San Francisco, California",,,
+"Noe Valley Park, San Francisco, California",37.7513831,-122.4289801,"Noe Valley Town Square, Noe Valley, Mission, San Francisco, California, United States"
+"Noe Valley Park, San Francisco, California",37.7514069,-122.4389213,"Noe Valley Courts, Noe Valley, Mission, San Francisco, California, United States"
+"Noe Valley Tennis Courts, San Francisco, California",,,
+"Pacific Beach Tennis Club (Bob McEvoy Fields) Park, San Diego, California",,,
+"Pacific Beach Tennis Club (Bob McEvoy Fields) Playground, San Diego, California",,,
+"Pacific Beach Tennis Club (Bob McEvoy Fields) Recreation Center, San Diego, California",,,
+"Pacific Beach Tennis Club (Bob McEvoy Fields) Tennis Courts, San Diego, California",,,
+"Pacific Beach Tennis Club (Bob McEvoy Fields), San Diego, California",,,
+"Palega Park, San Francisco, California",37.7293497,-122.409804,"Palega Recreation Center, Portola, Bayview District, San Francisco, California, United States"
+"Palega Tennis Courts, San Francisco, California",,,
+"Parkside Square Park, San Francisco, California",37.7383636,-122.483982,"Parkside Square, Parkside, San Francisco, California, United States"
+"Parkside Square Tennis Courts, San Francisco, California",,,
+"Peixotto (15th St) Park, San Francisco, California",,,
+"Peixotto (15th St) Playground, San Francisco, California",,,
+"Peixotto (15th St) Recreation Center, San Francisco, California",,,
+"Peixotto (15th St) Tennis Courts, San Francisco, California",,,
+"Peixotto (15th St), San Francisco, California",37.7655317,-122.4374476,"Peixotto Playground, 15th Street, Duboce Triangle, Castro District, Mission, San Francisco, California, 94114, United St"
+"Peixotto (15th St), San Francisco, California",37.7656349,-122.4376588,"Peixotto Clubhouse, 15th Street, Duboce Triangle, Castro District, Mission, San Francisco, California, 94114, United Sta"
+"Point Loma Park Park, San Diego, California",32.7248118,-117.2434762,"Point Loma Community Park, Fleetridge, Point Loma, San Diego, San Diego County, California, United States"
+"Point Loma Park Tennis Courts, San Diego, California",,,
+"Potrero Hill Park, San Francisco, California",37.75633,-122.3969371,"Potrero Hill Recreation Center, 801, Potrero Hill, Mission, San Francisco, California, 94107, United States"
+"Potrero Hill Tennis Courts, San Francisco, California",,,
+"Presidio Wall Park, San Francisco, California",,,
+"Presidio Wall Playground, San Francisco, California",37.791124,-122.4540269,"Presidio Wall Playground, Mountain Lake Trail, Presidio Heights, Richmond District, San Francisco, California, 94118, Un"
+"Presidio Wall Tennis Courts, San Francisco, California",,,
+"Rancho Bernardo Community Park Park, San Diego, California",33.0476706,-117.0757515,"Rancho Bernardo Community Park, San Diego, San Diego County, California, United States"
+"Rancho Bernardo Community Park Tennis Courts, San Diego, California",,,
+"Richmond Park, San Francisco, California",37.7851031,-122.4781236,"Richmond Playground, Richmond District, San Francisco, California, United States"
+"Richmond Park, San Francisco, California",37.7833619,-122.4779933,"Richmond Recreation Center, 251, Richmond District, San Francisco, California, 94121, United States"
+"Richmond Tennis Courts, San Francisco, California",,,
+"Robb Athletic Field Park, San Diego, California",32.7538853,-117.2417525,"Robb Field Ocean Beach Athletic Area, Ocean Beach, San Diego, San Diego County, California, United States"
+"Robb Athletic Field Playground, San Diego, California",,,
+"Robb Athletic Field Recreation Center, San Diego, California",,,
+"Robb Athletic Field Tennis Courts, San Diego, California",,,
+"Robb Athletic Field, San Diego, California",32.7538853,-117.2417525,"Robb Field Ocean Beach Athletic Area, Ocean Beach, San Diego, San Diego County, California, United States"
+"Rochambeau Park, San Francisco, California",37.7847802,-122.4845559,"Rochambeau Playground, Richmond District, San Francisco, California, United States"
+"Rochambeau Tennis Courts, San Francisco, California",,,
+"Rossi Park, San Francisco, California",37.7787726,-122.4574707,"Angelo Rossi Park, Inner Richmond, Richmond District, San Francisco, California, 94118, United States"
+"Rossi Park, San Francisco, California",37.77792,-122.4578322,"Rossi Playground Edward St Annex, Inner Richmond, Richmond District, San Francisco, California, United States"
+"Rossi Tennis Courts, San Francisco, California",,,
+"Silver Terrace Park, San Francisco, California",37.7327483,-122.4031276,"Silver Terrace Playground, Portola, Bayview District, San Francisco, California, United States"
+"Silver Terrace Tennis Courts, San Francisco, California",,,
+"South Sunset Park, San Francisco, California",,,
+"South Sunset Playground, San Francisco, California",37.737111,-122.4984198,"South Sunset Playground, 40th Avenue, Parkside, San Francisco, California, 94166, United States"
+"South Sunset Tennis Courts, San Francisco, California",,,
+"St. Mary's Park, San Francisco, California",37.7330885,-122.4243889,"St. Mary's Park, San Francisco, California, 94110, United States"
+"St. Mary's Park, San Francisco, California",37.7337051,-122.4208402,"Saint Mary's Park, Portola, San Francisco, California, United States"
+"St. Mary's Tennis Courts, San Francisco, California",,,
+"States Street (Flint St) Park, San Francisco, California",,,
+"States Street (Flint St) Playground, San Francisco, California",,,
+"States Street (Flint St) Recreation Center, San Francisco, California",,,
+"States Street (Flint St) Tennis Courts, San Francisco, California",,,
+"States Street (Flint St), San Francisco, California",,,
+"Stern Grove Park, San Francisco, California",37.7360855,-122.4786044,"Sigmund Stern Recreation Grove, Parkside, San Francisco, California, United States"
+"Stern Grove Tennis Courts, San Francisco, California",,,
+"Sunnyside Park, San Francisco, California",37.7336767,-122.4474911,"Sunnyside Playground, San Francisco, California, United States"
+"Sunnyside Park, San Francisco, California",37.7321598,-122.4405915,"Sunnyside Conservatory, 236, San Francisco, California, United States"
+"Sunnyside Tennis Courts, San Francisco, California",,,
+"Sunset Tennis Courts, San Francisco, California",37.7502332,-122.498044,"West Sunset Tennis Courts, Ortega Street, Outer Sunset, Sunset District, San Francisco, California, 94166, United States"
+"Tierrasanta Recreation Center Park, San Diego, California",,,
+"Tierrasanta Recreation Center Playground, San Diego, California",,,
+"Tierrasanta Recreation Center Recreation Center, San Diego, California",,,
+"Tierrasanta Recreation Center Tennis Courts, San Diego, California",,,
+"Tierrasanta Recreation Center, San Diego, California",,,
+"Upper Noe Park, San Francisco, California",,,
+"Upper Noe Playground, San Francisco, California",37.7425787,-122.4282129,"Upper Noe Children's Play Area, Day Street, Noe Valley, Mission, San Francisco, California, 94110, United States"
+"Upper Noe Tennis Courts, San Francisco, California",,,
+"West Portal Park, San Francisco, California",37.7418471,-122.4650559,"West Portal Playground, San Francisco, California, 94127, United States"
+"West Portal Tennis Courts, San Francisco, California",,,
+"West Sunset Tennis Courts, San Francisco, California",37.7502332,-122.498044,"West Sunset Tennis Courts, Ortega Street, Outer Sunset, Sunset District, San Francisco, California, 94166, United States"
+"Youngblood Coleman Park, San Francisco, California",37.7389063,-122.3846113,"Youngblood-Coleman Playground, 1398, Bayview District, San Francisco, California, 94124, United States"
+"Youngblood Coleman Tennis Courts, San Francisco, California",,,

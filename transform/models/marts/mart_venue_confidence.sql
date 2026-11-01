@@ -8,7 +8,7 @@
 --   sport penalty 0 to -15 (added in rules_v2): 15 x the weighted share of the venue's directly evidenced sports that rest only on a loose OSM tag (weight 1) or a
 --                 business-name word (weight 0.5; a distinctive word like "padel" is usually right) (mart_sport_evidence.needs_review). Derived sports (sport_also_played) are rule outputs and not counted.
 -- last_seen_on: newest date any source saw the venue (OSM extract, Overture release, hand-added confirmation, link-out check); the 35-day
---   freshness SLA in `make quality` reads it. Nulls are coalesced to 1900-01-01 first because Snowflake's greatest() returns null if any input is null.
+--   freshness SLA in `make quality` reads it. Nulls are coalesced to 1900-01-01 first so one missing date never nulls the greatest().
 -- confidence_score_v1 keeps the old score so the effect of the penalty stays visible.
 -- Bands: high >= 60, medium 30-59, low < 30.
 {% set d0 = "cast('1900-01-01' as date)" %}

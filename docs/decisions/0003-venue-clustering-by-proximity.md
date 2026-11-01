@@ -1,6 +1,6 @@
 # ADR 0003: Cluster courts into venues by proximity, in portable SQL
 
-**Status:** accepted (naming is still a known gap)
+**Status:** accepted (naming addressed in ADR 0004; names are still approximate)
 
 ## Context
 ADR 0002 found that OpenStreetMap maps individual courts, so a 12-court club looks like 12 unrelated points.

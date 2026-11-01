@@ -1,0 +1,2 @@
+Eclipseball is now a play-anywhere row (`sport_play_anywhere.csv`: any indoor volleyball court; owner 2026-10-30). Synced the sheet: Pop Tennis popularity Growing -> World Official, net heights filled for Real Tennis (3ft) and Eclipseball (7ft 4in / 7ft 11in); build green, `venues.json` re-exported.
+Next: Eclipseball still has no venue pins by design; pin volleyball gyms only if the owner wants them.

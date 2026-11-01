@@ -1,0 +1,4 @@
+# 2026-10-21 Access leads, third batch
+
+Resolved 8 `*-access` leads with 9 `manual_venues.csv` rows merged into their pins (all within 20 m except Hillcrest, 105 m): Coto de Caza G&RC (members, stated), Riviera Tennis Club, La Valle Coastal Club (10-court pin), Berkeley CC, Menlo CC (own site is menlocc.com), Hillcrest CC (hcc-la.com), Rio del Oro (2 pins) = members, inferred; Sonoma Racquet Club courts = private (residents and guests). Bernardo Heights closed as rejected (now The Heights Golf Club, no courts).
+Left open with dated notes: Fairbanks Ranch, Wilshire, LACC, Calabasas (several same-name pins, need imagery to pick the club's), Burlingame (4 pins on house addresses, no own site), Bel-Air (TLS), Aztec Berkeley (expired cert). Plain WebFetch read most sites; the browser pane refused invitedclubs.com.

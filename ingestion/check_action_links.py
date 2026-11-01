@@ -14,7 +14,7 @@ import sys
 import requests
 
 SEED = "transform/seeds/venue_actions.csv"
-UA = {"User-Agent": "courtconnect-ca/0.1 (link check; portfolio project)"}
+from useragent import HEADERS as UA
 
 
 def main() -> None:

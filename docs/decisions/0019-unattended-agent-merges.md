@@ -1,6 +1,6 @@
 # 0019. When agents may merge without a person reviewing
 
-Date: 2026-10-18. Status: **accepted** (owner, 2026-10-18), with the Numbers table as written. **Stage 0 only: agents may open PRs, humans still merge.** No class may auto-merge until it earns it under section 4 and the owner switches it on; no scheduled task starts without the owner's go-ahead (CLAUDE.md).
+Date: 2026-10-18. Status: **accepted** (owner, 2026-10-18), with the Numbers table as written. **Stage 0 only: agents may open PRs, humans still merge.** **Update 2026-10-25 (owner asked to start auto-merge):** the merge gate for class R0 is built as `.github/workflows/agent-merge-gate.yml` and starts in shadow (it comments its verdict on every `claude/refresh-*` PR). It merges only when the owner sets the repo variable `AGENT_AUTOMERGE_R0=true` and `AGENTS_ENABLED` is `true`; the owner may switch it on before the N-PR track record in the Numbers table, accepting that risk. R1/R2 (including tournament PRs, which are R2 until a code-checked quote exists) stay human-merged. No class may auto-merge until it earns it under section 4 and the owner switches it on; no scheduled task starts without the owner's go-ahead (CLAUDE.md).
 
 ## Context
 ADR 0015 sets a long-term goal: the project runs itself with the owner's review time driven toward zero. `docs/self_service_plan.md` classifies each refresh step: most are mechanical with a pass/fail result, some need a page read and a quote, a few need judgment. ADR 0008 says a reviewer checks the evidence and merges; ADR 0017 says nothing from the page reader is used without a person approving it. Both were right for a project with no automated gates and no measured accuracy. This ADR says how that changes, and what does not.
@@ -40,7 +40,7 @@ An agent opens a PR. A separate deterministic **merge gate** (a script run in CI
 
 ### 5. Safety net instead of pre-approval
 - **Audit trail:** one bot identity with a fine-grained token (contents + pull requests only, no admin, no workflow edits); every change is a PR with class, evidence and gate results in the body.
-- **Revert:** a one-line command and a documented drill (`docs/self_service_plan.md` to be extended): revert the merge commit, rebuild, re-run `pages.yml`.
+- **Revert:** a one-line command and a documented drill (`docs/self_service_plan.md` to be extended): revert the merge commit, rebuild; the revert merge redeploys through `pages.yml` (it runs on pushes that touch `app/**`).
 - **Weekly audit digest:** a random sample (at least 10%, minimum 5) of that week's auto-merged PRs is re-checked by an independent AI pass and by the page itself; the owner gets a short digest of disagreements. This is how review time stays near zero and still catches drift.
 - **Budget and kill switch:** hard weekly spend cap and PR cap (owner); a failed gate, a revert, or `AGENTS_ENABLED=false` stops all agents.
 - **Unchanged rules:** no owner logins (ADR 0007), no Google Places data (ADR 0005), project User-Agent only, no personal data stored, no `.env` read, links out and no bookings or payments. Secrets reach agents only as runner secrets, never in prompts or PRs.

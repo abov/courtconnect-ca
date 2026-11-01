@@ -29,7 +29,7 @@ Goal (ADR 0015, long-term): the project runs itself with as little human review 
 | 7 | `make quality`, `make report` | M | run, diff the scorecard against the last line | needs a written no-regression rule (venue count, SLAs, stale share) |
 | 7 | Undated hand-added rows: re-date, or turn into a lead | E | re-read source, re-date with quote, else propose a lead | "leave stale" vs "make a lead" is a small judgment: default to leave stale |
 | 8 | Export (`make app-data`), commit `venues.json` | M | run; `ci/check_export_fresh.py` already checks it | `venues.json` collides between PRs: one refresh PR at a time, agents rebase on main and rebuild, never hand-resolve |
-| 9 | Commit, PR, re-run `pages.yml`, confirm merged | M | open PR, merge when gates pass, re-run Pages, confirm the run | needs auto-merge on required checks instead of `--admin` |
+| 9 | Commit, PR, confirm merged and the `pages.yml` run | M | open PR, merge when gates pass, confirm the Pages run (it starts by itself) | needs auto-merge on required checks instead of `--admin` |
 | 9 | Add 2 lines to CLAUDE.md "Current status" | M | write the numbers | shared file, conflict-prone: move the log to a generated file (e.g. a new line in `docs/data_quality_trend.csv`) and drop the CLAUDE.md edit |
 
 Outside the runbook but on the "Open, in order" list:
@@ -40,14 +40,14 @@ Outside the runbook but on the "Open, in order" list:
 | Padel / coming-soon lead rechecks (4) | E | official page + quote promotes a lead; opening a venue also updates courts/address |
 | Review queue (116 rows) | E | same: reader + quote check |
 | Tournament events (`docs/tournament_refresh.md`) | E | separate bi-weekly runbook; classify it next |
-| Cost tier, tennis visibility, sport cards, UX polish | J | product choices |
+| Cost tier, sport cards, UX polish | J | product choices |
 | ADRs, mission, privacy, new data sources | J | never autonomous |
 
 ## What this tells us
 - **About two thirds of the steps are M.** They already have a pass/fail result (dbt, CI, the shrink guard, the freshness check), so the gate exists; what is missing is a runner, a budget and auto-merge.
 - **The E steps all wait on one piece: the page reader (ADR 0017)** and a stored quote per fact. Build it once and most of the E rows open up.
 - **The only J steps left in a refresh** are adding a sport to the sheet, closing a venue on thin evidence, and anything that changes the rules. Those are the escalations.
-- **Gaps to fix first (cheap):** a scorecard no-regression check as a script, a check that every sport name matches the sheet, the CLAUDE.md status lines moved out of the shared file, and the runbook's remaining Snowflake lines removed (retired 2026-10-14).
+- **Gaps to fix first (cheap):** a scorecard no-regression check as a script, a check that every sport name matches the sheet, the CLAUDE.md status lines moved out of the shared file, and the runbook's Snowflake lines removed (done 2026-10-21, ADR 0018).
 
 ## Order
 1. Fix the cheap gaps above (small PRs, each human-merged as today).

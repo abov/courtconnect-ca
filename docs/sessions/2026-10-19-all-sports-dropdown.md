@@ -1,0 +1,10 @@
+# 2026-10-19 All sports in the dropdown, Crossminton play-anywhere, sheet sync
+
+- Dropdown lists all 76 sheet sports; the 49 with no places are greyed (hidden again only while a filter is on). Picking one shows "No place for X is listed in CA or NV yet" + a link to the report-a-venue form pre-filled with the sport.
+- Crossminton added to `sport_play_anywhere.csv` (streets, beaches, sand, grass, parking lots); Frescoball and Smashball notes now say "No official courts are set up ... can be set up anywhere on the beach".
+- `make sync-sports` run: sheet renamed Kadima -> Smashball, so aliases, search terms and coverage notes follow (Kadima/Matkot/Raketa are now aliases). `export_app_data.py` casts sheet detail columns to text (blank columns load as INTEGER).
+- Next: owner fills the sheet's Blurb/URL columns (draft: `docs/sport_details_draft.csv`); `docs/sport_discovery_plan.md` steps 4-5 (blurbs, venue searches).
+- `sport_also_played.csv`: Touchtennis on pickleball courts (989 venues, public/mapped only like Typti), Wacquetball on racquetball courts (127). "Whisperball" is not on the sheet: add it there first, then a row here.
+- Racquetball now also shows the 1-wall and 3-wall pins as an option (outdoor racquetball, app `WALL_SPORT`). Watch list: 3WallBall Outdoor Nationals, Huntington Beach, July 9-11 2027 (3wallball.com). Vegas World Championships NOT added: the site lists no 2027 dates and its last results page is 2024 (the "World Championships" title moved to Huntington in 2025-26); add it when dates are posted.
+- Australian Racquetball on squash courts (`sport_also_played.csv`); Outdoor Racquetball (a sheet sport) also maps to the 1-/3-wall pins.
+- Goodminton, Jazzminton: play-anywhere. Teqis, Teqpong: anywhere with a teqboard (Teqball/Teqvolley spots). Owner supplied Teqball hub list (Santa Monica Beach, Chula Vista, Long Beach, Culver City, Porterville, Las Vegas, UNLV) and offered the exact Santa Monica spot: NOT seeded yet, each needs a public-page check + evidence first.

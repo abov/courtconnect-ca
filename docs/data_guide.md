@@ -24,7 +24,7 @@ The Google Sheet tab **All Raquet** is the source of truth for the supported spo
 Seed files must keep CRLF line endings. Seed column changes need `dbt build --full-refresh`.
 
 ## Pop Tennis (paddle tennis) map import
-`ingestion/import_paddle_tennis_map.py` imports a hand-compiled West LA map (ID in `.env` as `PADDLE_TENNIS_MAP_ID`). Public and "in question" courts, plus private clubs and apartments (access `members`/`private`), are included; private homes never. Courts within 150 m of a known venue merge into it. Entries marked "?" show **Public access not confirmed**. Review the output before committing.
+`ingestion/oneoff/import_paddle_tennis_map.py` imports a hand-compiled West LA map (ID in `.env` as `PADDLE_TENNIS_MAP_ID`). Public and "in question" courts, plus private clubs and apartments (access `members`/`private`), are included; private homes never. Courts within 150 m of a known venue merge into it. Entries marked "?" show **Public access not confirmed**. Review the output before committing.
 
 ## Dead websites
 About 10% of websites in the open places data point at domains that no longer exist. `make check-websites` runs a DNS-only check (no pages fetched) and sets `website_status` (`ok`, `dead`, `unknown`); the app-facing `website_usable` hides dead links. A site counts as dead only on a definitive "domain does not exist". See `marts.mart_website_quality`.

@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CourtConnect: ask the data</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10151c" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Run SQL on the map's public venue data in your own browser (DuckDB-WebAssembly). Nothing you type leaves the page.">
+<link rel="canonical" href="https://abov.github.io/courtconnect-ca/ask-the-data.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CourtConnect CalNeva">
+<meta property="og:title" content="CourtConnect: ask the data">
+<meta property="og:description" content="Query the public venue export with SQL in your browser.">
+<meta property="og:url" content="https://abov.github.io/courtconnect-ca/ask-the-data.html">
+<meta property="og:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
+<style>
+  /* Same tokens and fonts as index.html so the two pages read as one site. No cookies, no third-party requests. */
+  @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500 800; font-display: swap; src: url(fonts/plus-jakarta-sans-latin.woff2) format("woff2"); }
+  :root {
+    --font-body: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-head: "Plus Jakarta Sans", var(--font-body);
+    --bg: #fbfaf7; --panel: #ffffff; --text: #1f2328; --muted: #59636e; --line: #d6d1c4; --accent: #1F5FA8; --on-accent: #ffffff;
+    --warn: #855700; --hi: #F2B134; --tint: #e6eefa;
+    --r-sm: 8px; --r-md: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #10151c; --panel: #171e27; --text: #e6edf3; --muted: #9aa3ad; --line: #3a424d; --accent: #6aa5ee; --on-accent: #0d1117;
+            --warn: #d29922; --tint: #1b3556; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.6 var(--font-body); color: var(--text); background: var(--bg); }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  header { border-bottom: 3px solid var(--hi); background: linear-gradient(180deg, color-mix(in srgb, var(--hi) 16%, var(--panel)), var(--panel)); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  header .wrap { padding-top: 14px; padding-bottom: 18px; }
+  .back { font-size: 14px; }
+  h1, h2, h3 { font-family: var(--font-head); letter-spacing: -.015em; line-height: 1.25; }
+  h1 { font-size: clamp(26px, 6vw, 34px); font-weight: 800; margin: 10px 0 6px; color: var(--accent); }
+  h2 { font-size: 21px; font-weight: 700; margin: 36px 0 10px; }
+  h3 { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .lede { font-size: 17px; color: var(--muted); margin: 0; max-width: 60ch; }
+  main { padding-bottom: 48px; }
+  p { margin: 8px 0; max-width: 68ch; }
+  .meta { color: var(--muted); font-size: 13.5px; }
+
+  /* Numbers: plain tiles, each states what it measures and when. */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 14px 0 0; padding: 0; }
+  .stats div { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 14px; }
+  .stats dt { font-size: 13px; color: var(--muted); }
+  .stats dd { margin: 2px 0 0; font: 700 22px/1.2 var(--font-head); }
+  .stats small { display: block; font: 400 13px/1.4 var(--font-body); color: var(--muted); margin-top: 2px; }
+
+  /* Pipeline: a numbered list that stacks on phones, so text never shrinks to fit a diagram. */
+  .flow { list-style: none; counter-reset: step; margin: 14px 0 0; padding: 0; display: grid; gap: 0; }
+  .flow li { counter-increment: step; position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md);
+             padding: 12px 14px 12px 52px; margin-bottom: 22px; }
+  .flow li::before { content: counter(step); position: absolute; left: 14px; top: 12px; width: 26px; height: 26px; border-radius: 50%;
+                     background: var(--accent); color: var(--on-accent); font: 700 14px/26px var(--font-head); text-align: center; }
+  .flow li:not(:last-child)::after { content: "\2193"; position: absolute; left: 20px; bottom: -22px; width: 14px; text-align: center; color: var(--muted); font-size: 16px; line-height: 22px; }
+  .flow li:last-child { margin-bottom: 0; }
+  .flow p { margin: 2px 0; }
+  .gate { font-size: 14px; color: var(--muted); }
+  .gate b { color: var(--text); font-weight: 600; }
+
+  ul.plain { padding-left: 20px; margin: 8px 0; }
+  ul.plain li { margin: 5px 0; max-width: 68ch; }
+  .note { background: color-mix(in srgb, var(--warn) 10%, var(--panel)); border: 1px solid var(--warn); border-radius: var(--r-md); padding: 4px 14px 8px; margin-top: 12px; }
+  .note h3 { color: var(--warn); }
+  code { font: 13.5px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--tint); padding: 1px 5px; border-radius: 4px; }
+  footer { border-top: 1px solid var(--line); padding: 16px 0 28px; font-size: 13.5px; color: var(--muted); }
+  .spark { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 14px 0 0; }
+  .spark figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 14px; }
+  .spark figcaption { font-size: 13px; color: var(--muted); }
+  .spark b { display: block; font: 700 22px/1.2 var(--font-head); color: var(--text); }
+  .spark svg { display: block; width: 100%; height: 56px; margin-top: 6px; }
+  .spark .line { fill: none; stroke: var(--accent); stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .spark .dot { fill: var(--accent); }
+  .tablewrap { overflow-x: auto; margin: 10px 0; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--panel); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { padding: 7px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child, td.l, th.l { text-align: left; }
+  thead th { font-size: 13px; color: var(--muted); font-weight: 600; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .qs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin: 12px 0; padding: 0; list-style: none; }
+  .qs button, .btn { font: 600 15px/1.3 var(--font-body); min-height: 44px; padding: 8px 12px; text-align: left; color: var(--text); background: var(--panel);
+                     border: 1px solid var(--line); border-radius: var(--r-md); cursor: pointer; }
+  .qs button { width: 100%; }
+  .qs button[aria-pressed="true"] { border-color: var(--accent); background: var(--tint); }
+  .btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .btn:disabled { opacity: .6; cursor: default; }
+  .qs button:focus-visible, .btn:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  textarea { width: 100%; min-height: 150px; font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--text); background: var(--panel);
+             border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 12px; resize: vertical; }
+  label.lbl { display: block; font-size: 14px; color: var(--muted); margin: 14px 0 4px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 10px 0; }
+  .null { color: var(--muted); }
+  .err { color: #b3261e; white-space: pre-wrap; }
+  @media (prefers-color-scheme: dark) { .err { color: #f2b8b5; } }
+  details { margin: 10px 0; }
+  details summary { cursor: pointer; font-weight: 600; }
+  dl.tbl dt { font-family: ui-monospace, Consolas, monospace; font-weight: 700; margin-top: 8px; }
+  dl.tbl dd { margin: 0; color: var(--muted); font-size: 14px; max-width: 68ch; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="back" href="how-its-built.html">&larr; How it&rsquo;s built</a>
+    <h1>Ask the data</h1>
+    <p class="lede">Run SQL on the map&rsquo;s public data file, inside your own browser. Nothing you type leaves this page.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2 id="start">What this is</h2>
+  <p>A small database engine (<a href="https://duckdb.org/docs/api/wasm/overview.html">DuckDB</a>, compiled to WebAssembly) that loads <code>data/venues.json</code>, the same file the map reads. It is the published export, not the full warehouse: no lineage, no raw sources, and no phone numbers or other private fields, because those are not in the file. The tables are described in the <a href="https://github.com/abov/courtconnect-ca/blob/main/app/data-dictionary.md">data dictionary</a>.</p>
+  <p class="meta">The engine is about 36 MB (35.7 MB for the WebAssembly file, uncompressed), so it loads only when you press the button. It is served from this site, not a CDN. Version 1.29.0; files and checksums are in <a href="https://github.com/abov/courtconnect-ca/tree/main/app/vendor/duckdb"><code>app/vendor/duckdb</code></a>.</p>
+  <div class="row">
+    <button class="btn primary" id="load" type="button">Load the engine and the data</button>
+    <span class="meta" id="status" role="status" aria-live="polite">Not loaded yet.</span>
+  </div>
+
+  <div id="app" hidden>
+    <h2 id="questions">Start with a question</h2>
+    <ul class="qs" id="qs"></ul>
+
+    <label class="lbl" for="sql">SQL (edit it and press Run, or Ctrl+Enter)</label>
+    <textarea id="sql" spellcheck="false"></textarea>
+    <div class="row">
+      <button class="btn" id="run" type="button">Run</button>
+      <span class="meta" id="qstatus" role="status" aria-live="polite"></span>
+    </div>
+    <p class="meta" id="qnote"></p>
+    <div class="tablewrap" id="resultwrap" hidden><table id="result"><thead></thead><tbody></tbody></table></div>
+    <p class="err" id="error"></p>
+
+    <details>
+      <summary>Tables you can query</summary>
+      <dl class="tbl" id="tables"></dl>
+    </details>
+  </div>
+
+  <div class="note">
+    <h3>Read these with care</h3>
+    <ul class="plain">
+      <li>These are counts of what the export lists, not of every court in the two states. Many pins come from OpenStreetMap, where court counts and names are often missing; the &ldquo;how sure are the names&rdquo; question shows how many.</li>
+      <li>A court count of 0 means unknown, not none. A venue that lists a sport is not proof that the sport can be booked or played there today.</li>
+      <li>The export is rebuilt after each refresh; its date is shown once the data loads.</li>
+      <li>Needs a current Chrome, Edge, Firefox or Safari. Not tested on phones; the engine file is large for a mobile connection.</li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">This page sets no cookies and requests nothing from other sites. Pressing the button downloads the engine and <code>data/venues.json</code> from this site; your queries run on your device and are not sent anywhere.</div>
+</footer>
+<script type="importmap">{"imports": {"apache-arrow": "./vendor/duckdb/apache-arrow.mjs"}}</script>
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const FILE = "venues.json";
+let conn = null, spec = null;
+
+function cell(td, v) {
+  if (v === null || v === undefined) { td.textContent = "NULL"; td.className = "null"; return; }
+  if (typeof v === "bigint") v = Number(v);
+  if (typeof v === "number") td.textContent = Number.isInteger(v) ? v.toLocaleString("en-US") : String(Math.round(v * 1e5) / 1e5);
+  else td.textContent = String(v);
+}
+
+async function runSql(sql, note) {
+  $("error").textContent = ""; $("qnote").textContent = note || "";
+  const t0 = performance.now();
+  try {
+    const res = await conn.query(sql);
+    const cols = res.schema.fields.map((f) => f.name), rows = res.toArray(), shown = rows.slice(0, 200);
+    const head = $("result").tHead, body = $("result").tBodies[0];
+    head.replaceChildren(); body.replaceChildren();
+    const hr = head.insertRow();
+    cols.forEach((c, i) => { const th = document.createElement("th"); th.textContent = c; if (i === 0) th.className = "l"; hr.appendChild(th); });
+    shown.forEach((r) => { const tr = body.insertRow(); cols.forEach((c) => cell(tr.insertCell(), r[c])); });
+    $("resultwrap").hidden = false;
+    $("qstatus").textContent = rows.length.toLocaleString("en-US") + " row" + (rows.length === 1 ? "" : "s") + (rows.length > shown.length ? " (first 200 shown)" : "") + " in " + Math.round(performance.now() - t0) + " ms.";
+  } catch (e) {
+    $("resultwrap").hidden = true; $("qstatus").textContent = "";
+    $("error").textContent = String(e.message || e);
+  }
+}
+
+function pick(i) {
+  document.querySelectorAll("#qs button").forEach((b, j) => b.setAttribute("aria-pressed", String(i === j)));
+  const q = spec.questions[i];
+  $("sql").value = q.sql;
+  runSql(q.sql, q.note);
+}
+
+$("load").addEventListener("click", async () => {
+  const btn = $("load"), st = $("status");
+  btn.disabled = true;
+  try {
+    if (typeof WebAssembly !== "object") throw new Error("This browser has no WebAssembly support.");
+    const t0 = performance.now();
+    st.textContent = "Loading the engine (about 36 MB)…";
+    const duckdb = await import("./vendor/duckdb/duckdb-browser.mjs");
+    const worker = new Worker(new URL("./vendor/duckdb/duckdb-browser-eh.worker.js", location.href));
+    const db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker);
+    await db.instantiate(new URL("./vendor/duckdb/duckdb-eh.wasm", location.href).href);
+    conn = await db.connect();
+    st.textContent = "Loading data/venues.json…";
+    const [venues, q] = await Promise.all([fetch("data/venues.json").then((r) => r.text()), fetch("ask-the-data-queries.json").then((r) => r.json())]);
+    spec = q;
+    await db.registerFileText(FILE, venues);
+    for (const sql of spec.setup) await conn.query(sql.replace("{{FILE}}", FILE));
+    const meta = JSON.parse(venues).meta;
+    st.textContent = "Ready: " + Number(meta.venues).toLocaleString("en-US") + " venues, export of " + meta.generated + " (loaded in " + ((performance.now() - t0) / 1000).toFixed(1) + " s).";
+    spec.questions.forEach((qq, i) => {
+      const li = document.createElement("li"), b = document.createElement("button");
+      b.type = "button"; b.textContent = qq.title; b.setAttribute("aria-pressed", "false"); b.addEventListener("click", () => pick(i));
+      li.appendChild(b); $("qs").appendChild(li);
+    });
+    for (const [name, desc] of Object.entries(spec.tables)) {
+      const dt = document.createElement("dt"), dd = document.createElement("dd");
+      dt.textContent = name; dd.textContent = desc; $("tables").append(dt, dd);
+    }
+    $("app").hidden = false;
+    pick(0);
+  } catch (e) {
+    st.textContent = "Could not load: " + String(e.message || e) + " The same file can be queried with DuckDB on your own machine (see the data dictionary).";
+    btn.disabled = false;
+  }
+});
+$("run").addEventListener("click", () => runSql($("sql").value, ""));
+$("sql").addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); runSql($("sql").value, ""); } });
+</script>
+</body>
+</html>

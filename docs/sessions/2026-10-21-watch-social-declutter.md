@@ -1,0 +1,2 @@
+Watch & Social declutter: removed the two intro notes above the list, shortened list headers ("To watch" / "To join"), button labels ("Tickets", "Sign up", "Details"), and popup footers (one "Checked <date>" line; the source is in a hover tooltip; the per-popup "CourtConnect sells nothing" lines dropped because the header already says we link out, no bookings or payments).
+Next: a wider plain-language pass over the Play popup and filters (`docs/ux_polish.md` PR 5) once the beta shows what people miss.

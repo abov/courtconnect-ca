@@ -16,6 +16,22 @@ Read from each app's public page on 2026-10-16 (Playo from general knowledge: it
 **Data:** Places2Play is behind a sign-in, and Pickleheads' terms forbid bot access and compiling a directory from the site. Neither
 is a data source. No partnership emails until we are ready to socialize or monetize.
 
+## Player-matching apps scan (2026-10-21, social phase A)
+Read from public App Store pages and the connectplayers.ca home page (text only, no logins). Terms of service NOT read for any of them; we only link out, nothing is scraped or stored.
+| App | Sports | Price | Region evidence |
+|---|---|---|---|
+| Hitch | Tennis, padel, pickleball | Free + paid plans | Lists Los Angeles among its cities |
+| Courtmate | Tennis, padel, pickleball | Free + paid plans | None stated |
+| Matched Point | Tennis, pickleball | Free + paid plans | "Live in your city", none named |
+| Padel Mates | Padel, pickleball, tennis, badminton, squash | Free + paid Pro | None stated |
+| ConnectPlayers | Badminton, tennis, pickleball, table tennis (20+) | Not stated | None stated (.ca domain) |
+| Playtomic | Padel, tennis, pickleball | Player prices not stated | None in CA/NV (Miami is the only US club shown) |
+| UTR Sports | Tennis, pickleball | Free signup + paid subscription (search summaries; page body did not load) | None checked |
+| PairUp | Tennis, padel, pickleball | Free; league fees via Stripe | None stated; 5 ratings |
+| RacketPal | Tennis, badminton, squash, table tennis, padel | Free + premium | London origin (2019); no US region stated |
+
+Added later the same day (2026-10-21): Playtomic, UTR Sports, PairUp and RacketPal, from public store and homepage text. Not added: the names "Link Up" and "RacketX", which could not be found at all. Re-check if the owner has a link. None of the five has a verified California/Nevada player pool, so the app says so. Shown as the "Find people to play with" list (seed `player_platforms.csv`, needs `evidence` + `verified_on`). Next: filter the existing Meetup/WhatsApp/Partiful link-outs into the same view; deep links or embeds need the platform's say-so, so no.
+
 ## What makes CourtConnect different (keep these)
 1. **Every place, not only bookable ones:** public parks, hitting walls, YMCAs, rec centers, places to watch.
 2. **Every racket sport**, with room to discover lesser-known ones; tennis stays visible next to pickleball (ADR 0015).
@@ -26,8 +42,8 @@ is a data source. No partnership emails until we are ready to socialize or monet
 Not that model: hosted games, payments and dense players per city need staff, safety and moderation work, and start empty (Gameli's
 own guide says you may have to host the first game). Instead:
 - **Now:** community around the data: word-of-mouth reports shown as `reported` (`docs/community_reports_plan.md`).
-- **After beta (social phase A, `CLAUDE.md` "After beta" list; was item 7c):** a "community of communities": on each pin, link out to open play, clubs,
-  Meetup/WhatsApp groups and OpenSports/GoodRec sessions that already exist. Check each source's terms first (not read yet).
+- **Social phase A (closed 2026-10-21):** a "community of communities": link-outs to player apps and recurring open-play series that already exist
+  (Watch & Social view). Each app's terms are still unread; we only link out.
 - **Only if the beta shows demand:** phase B (own profiles and matching), with its own ADR. Signals: GoatCounter clicks on social
   link-outs, and a beta question such as "Would you use CourtConnect to find people to play with?"
 

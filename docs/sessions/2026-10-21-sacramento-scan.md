@@ -1,0 +1,3 @@
+# 2026-10-21 Sacramento-area public facility scan
+City of Sacramento ('Parks with Pickle Ball' page, 18 community centers, Hart Senior Center) and Sunrise Rec & Park (pickleball + tennis park lists, Pickleball page) read by curl: 20 `sac-*` / `sunrise-*` rows in `manual_venues.csv` (pickleball added to 9 existing pins, 9 new pins incl. Hart table tennis), Cabrillo Park named via `venue_name_official.csv`, lead `pb-sacramento-burnett-miller-park`. Details in `docs/public_facility_scan.md` pass log.
+Next: Cordova RPD and Cosumnes CSD need the browser pane (JS lists), Folsom 403, Roseville pages not found; then Orange County, Inland Empire (separate sessions).

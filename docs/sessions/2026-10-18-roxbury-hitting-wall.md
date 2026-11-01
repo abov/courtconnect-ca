@@ -1,0 +1,3 @@
+# 2026-10-18 Backboards: Roxbury Park (Beverly Hills) + Westside check
+The owner pasted a Google AI Overview listing Westside walls; only Roxbury Park held up. Added 1 wall: Roxbury Park hitting wall, Beverly Hills (city page, "Hitting Wall: Drop-in only", `official`, `public`; lights/fees not stated). Not added (city pages name no wall): Westwood Tennis Courts and Cheviot Hills (LA Parks pages list only "Tennis Courts (Lighted), Pickleball"), UCLA Los Angeles Tennis Center / Sunset Canyon (no wall found, campus access unclear); Stoner, Poinsettia, Venice (Venice already in). AI Overview/Yelp wall claims need an official page before going in.
+Next: more metros one at a time; the statewide OSM extract is in its own session.

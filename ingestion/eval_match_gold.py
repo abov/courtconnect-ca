@@ -52,7 +52,8 @@ def load_gold() -> list[dict]:
     return rows
 
 
-def score(rows: list[dict]) -> None:
+def evaluate(rows: list[dict]) -> tuple[dict, list, list]:
+    """Compare the gold pairs with the warehouse: (tally per stratum plus 'all', wrong rows, stale rows)."""
     import duckdb
 
     con = duckdb.connect(str(DB), read_only=True)
@@ -74,7 +75,11 @@ def score(rows: list[dict]) -> None:
             tally[key][outcome] += 1
         if outcome in ("fp", "fn"):
             wrong.append((outcome, r, place_venue.get(r["place_id"])))
+    return tally, wrong, stale
 
+
+def score(rows: list[dict]) -> None:
+    tally, wrong, stale = evaluate(rows)
     print(f"gold pairs: {len(rows)} ({len(stale)} stale: place or court no longer in the warehouse)")
     print(f"{'stratum':<22}{'pairs':>6}{'tp':>5}{'fn':>5}{'fp':>5}{'tn':>5}  precision  recall")
     for key in sorted(tally, key=lambda k: (k == "all", k)):

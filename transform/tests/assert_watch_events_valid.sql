@@ -15,3 +15,6 @@ where (info_url is not null and info_url not like 'https://%') or (tickets_url i
 union all
 select event_key, 'no official link' from {{ ref('stg_watch_events') }}
 where info_url is null and tickets_url is null
+union all
+select event_key, 'screening row missing ticket_info or source_note' from {{ ref('stg_watch_events') }}
+where watch_format in ('watch_party', 'dome_screening', 'broadcast_only') and (ticket_info is null or source_note is null)

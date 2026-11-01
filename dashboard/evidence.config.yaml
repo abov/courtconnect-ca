@@ -1,0 +1,20 @@
+appearance:
+  default: system
+  switcher: true
+
+# Colours follow the map (logo blue and gold) so the dashboard reads as part of the same site.
+theme:
+  colorPalettes:
+    default:
+      light: ["#1F5FA8", "#F2B134", "#0a7d6e", "#8250df", "#855700", "#59636e"]
+      dark: ["#6aa5ee", "#F2B134", "#39c5b0", "#a371f7", "#d29922", "#9aa3ad"]
+  colors:
+    primary:
+      light: "#1F5FA8"
+      dark: "#6aa5ee"
+
+plugins:
+  components:
+    "@evidence-dev/core-components": {}
+  datasources:
+    "@evidence-dev/csv": {}

@@ -48,7 +48,7 @@ def kind_of(tags: dict) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--area", choices=[*overpass.BBOXES, "california", "nevada"], default="la")
+    ap.add_argument("--area", choices=[*overpass.BBOXES, *overpass.STATE_AREAS], default="la")
     ap.add_argument("--out", default=raw_path("osm_parents.csv"))
     args = ap.parse_args()
 

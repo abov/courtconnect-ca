@@ -65,7 +65,7 @@ def to_row(el: dict, ts: str) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--area", choices=[*overpass.BBOXES, "california", "nevada"], default="la")
+    ap.add_argument("--area", choices=[*overpass.BBOXES, *overpass.STATE_AREAS], default="la")
     ap.add_argument("--out", default=raw_path("osm_courts.csv"))
     args = ap.parse_args()
 

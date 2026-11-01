@@ -1,0 +1,2 @@
+Social phase A, first slice: scanned 5 player-matching apps (`docs/competitor_scan.md`), added seed `player_platforms.csv` (checked by `check_seed_evidence.py`, `check_sport_names.py`, dbt tests), exported as `platforms` in `venues.json`, and a "Find people to play with" panel in the Play sidebar that filters by sport. RacketPals/Link Up/RacketX named in the plan could not be verified, so they are not listed.
+Next: filter existing Meetup/WhatsApp/Partiful link-outs into the same view; read each app's terms before the beta; re-run `pages.yml` after merging.

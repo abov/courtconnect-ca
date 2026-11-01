@@ -1,0 +1,4 @@
+# 2026-10-19 Basque Pelota split into 8 variants (sheet sync)
+
+Synced the sheet (82 rows, 81 unique): `Basque Pelota`, `Jai alai`, `Xare` became `Basque Pelota: <Pala Corta | Paleta Cuero | Paleta Goma | Grand Chistera | Frontenis | Jai Alai | Joko Garbi | Xare>`; new `Wackitball`; many court sizes filled. The 5 Basque venues in `manual_venues.csv` and the generic OSM tags (`pelota`, `fronton`, `basque_pelota`) now list every variant, labelled INFERRED (rows set to `reported`, note in `rules`/`evidence`), because court sizes at the CA/NV centres are unknown (owner 2026-10-19). Also: `x` or `×` court dims parse (`stg_sports`, app), `expected_racket_sports` = 81.
+Duplicate Frontenis row was fixed in the sheet and re-synced (81 sports). Next: narrow the variants per venue when court sizes are known; sheet has no Blurb/Learn URL for the new variants yet.

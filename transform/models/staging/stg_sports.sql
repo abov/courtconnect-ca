@@ -20,14 +20,16 @@ cleaned as (
             else try_cast(coalesce({{ regex_extract('players', '-([0-9]+)$') }}, {{ regex_extract('players', '^([0-9]+)$') }}) as integer)
         end                                                   as players_max,
 
-        -- court: '44x20' -> 44 x 20 ft. Anything else (blocks, circumference, 'user descretion') stays null.
-        try_cast({{ regex_extract('court_dim', '^([0-9.]+)x[0-9.]+$') }} as double) as court_length_ft,
-        try_cast({{ regex_extract('court_dim', '^[0-9.]+x([0-9.]+)$') }} as double) as court_width_ft,
+        -- court: '44x20' (or '118.1×32.8') -> 44 x 20 ft. Anything else (blocks, circumference, 'user descretion') stays null.
+        try_cast({{ regex_extract('court_dim', '^([0-9.]+)[x×][0-9.]+$') }} as double) as court_length_ft,
+        try_cast({{ regex_extract('court_dim', '^[0-9.]+[x×]([0-9.]+)$') }} as double) as court_width_ft,
 
         lower(coalesce(court_surface, ''))                    as surface_lc,
         nullif(trim(base_gear), '')                           as base_gear,
         nullif(trim(net_type), '')                            as net_type,
         {{ to_inches('net_ht') }}                             as net_height_in,
+        -- '5ft 7in / 5ft 11in' lists two heights (e.g. women / men): the first stays in net_height_in, the second goes here
+        {{ to_inches("nullif(trim(split_part(net_ht, '/', 2)), '')") }} as net_height_alt_in,
         upper(trim(gear_avail_ao)) = 'Y'                      as gear_on_amazon_or_online,
 
         -- typo-proof: 'Competitve' / 'Non-Competitve' / blank

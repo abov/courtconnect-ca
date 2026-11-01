@@ -21,7 +21,7 @@ SEEDS = ROOT / "transform" / "seeds"
 VENUES = ROOT / "app" / "data" / "venues.json"
 STALE_DAYS = 14
 FIELDS = "number,title,author,labels,createdAt,body,comments,url"
-KINDS = {"venue-change": "change", "venue-confirmation": "confirm", "venue-report": "report"}
+KINDS = {"venue-change": "change", "venue-confirmation": "confirm", "venue-report": "report", "event-report": "event"}
 # Sources we may not store or that are not public pages (ADR 0005: no Google Places data; ADR 0007: no logged-in pages).
 NOT_A_SOURCE = ("google.com/maps", "goo.gl/maps", "maps.app.goo.gl", "google.com/maps/d/")
 
@@ -68,6 +68,33 @@ def repo_owner():
     return m.group(1).lower() if m else ""
 
 
+def check_event(issue, form, notes, age):
+    """A tournament report (report-an-event.yml): needs an https organizer link and a real date; flags events already in the seeds."""
+    name, link, start = field(form, "Event name"), field(form, "Link to the event page"), field(form, "Start date")
+    need = [f"{label} missing" for label, val in (("event name", name), ("venue and city", field(form, "Venue and city"))) if not val]
+    if (bad := check_link(link)) or not link:
+        need.append(bad or "event page link missing")
+    try:
+        if date.fromisoformat(start) < date.today():
+            need.append("event date is in the past")
+    except (TypeError, ValueError):
+        need.append("start date is not a real YYYY-MM-DD date")
+    tid = re.search(r"TID=(\d+)", link or "")
+    seeds = (SEEDS / "watch_events.csv").read_text(encoding="utf-8", errors="replace").lower()
+    if tid and (f"tid={tid.group(1)}" in seeds):
+        notes.append(f"R2 TID {tid.group(1)} is already in watch_events.csv: close the issue")
+    elif name and name.strip().lower() in seeds:
+        notes.append("an event with this name is already in watch_events.csv: close the issue if it is the same date")
+    if tid:
+        notes.append(f"R2 TID {tid.group(1)}: add a docs/r2_seen.csv row with your decision")
+    if age > STALE_DAYS and not issue.get("comments"):
+        notes.append(f"waiting {age} days with no reply")
+    author = (issue.get("author") or {}).get("login", "?")
+    nxt = ("ask the reporter: " + "; ".join(need)) if need else "by hand: add a watch_events.csv row (docs/tournament_refresh.md), then close the issue"
+    return {"number": issue["number"], "title": issue["title"], "author": author, "kind": "event", "age": age, "map_id": "",
+            "venue": "", "city": "", "need": need, "notes": notes, "next": nxt, "url": issue.get("url", "")}
+
+
 def check(issue, venues, keys, mentions, today, owner=""):
     labels = {l["name"] for l in issue.get("labels", [])}
     kind = next((KINDS[l] for l in labels if l in KINDS), "other")
@@ -82,6 +109,8 @@ def check(issue, venues, keys, mentions, today, owner=""):
     seen = field(form, "Date you saw") or field(form, "When did you last see")
     change, ltype, map_id = field(form, "What are you suggesting"), field(form, "If adding a way"), field(form, "Map ID")
 
+    if kind == "event":
+        return check_event(issue, form, notes, age)
     if kind == "other":
         notes.append("not from an issue form: read it by hand")
     else:

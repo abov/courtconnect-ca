@@ -1,0 +1,3 @@
+# 2026-10-22 pages.yml deploys on merge
+`pages.yml` was `workflow_dispatch` only, so merged app changes stayed unpublished until someone ran it (the live site lagged by several PRs). It now also runs on push to main when `app/**` or the workflow file changes; the manual trigger stays. Docs that said "re-run pages.yml" (CLAUDE.md, architecture, monthly refresh, ADR 0013/0019, scans, self-service plan) now say it deploys by itself.
+Not covered: a change only under `transform/` (dbt docs) still needs a manual run. Next: after merging, confirm the run on main succeeded and the live page shows the newest build.

@@ -23,6 +23,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "ingestion"))
+from useragent import HEADERS  # noqa: E402
 import issue_to_pr as ip  # noqa: E402
 
 CHOICES = {   # the form's "What are you reporting?" options -> the issue form's "What are you suggesting" wording
@@ -49,7 +51,7 @@ def fetch(url):
     if u.scheme != "https" or u.hostname != "docs.google.com":
         sys.exit("REPORTS_CSV_URL must be an https://docs.google.com/ published-CSV link.")
     import requests
-    r = requests.get(url, timeout=30, headers={"User-Agent": "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"})
+    r = requests.get(url, timeout=30, headers=HEADERS)
     r.raise_for_status()
     if "csv" not in r.headers.get("content-type", "") and not r.text.startswith("Timestamp"):
         sys.exit("That URL did not return CSV (is the tab published to the web as CSV?).")

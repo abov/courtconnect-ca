@@ -1,4 +1,4 @@
-{# Small adapter shims so the same model runs on DuckDB (local) and Snowflake (cloud). #}
+{# Small adapter shims from the DuckDB + Snowflake days (ADR 0001). DuckDB is the only engine now (ADR 0018); kept as written. #}
 
 {% macro regex_extract(col, pattern) %}
   {{ return(adapter.dispatch('regex_extract', 'courtconnect')(col, pattern)) }}

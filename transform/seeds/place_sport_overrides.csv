@@ -1,5 +1,12 @@
 place_id,sport,verdict,evidence,verified_on
-c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota,reject,,
+c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota: Pala Corta,reject,,
+c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota: Paleta Cuero,reject,,
+c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota: Paleta Goma,reject,,
+c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota: Grand Chistera,reject,,
+c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota: Frontenis,reject,,
+c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota: Jai Alai,reject,,
+c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota: Joko Garbi,reject,,
+c5786a81-01f2-4f42-8585-bc08b3764554,Basque Pelota: Xare,reject,,
 edcaf3e0-86ac-4a4c-87e4-78aac2d166b0,Beach Tennis,confirm,,
 53438b29-8bf8-4a48-aee8-c7ff1bd896e6,Beach Tennis,reject,,
 f2dc84bf-ff16-48eb-86e8-c90f66ad220f,Beach Tennis,reject,,
@@ -40,7 +47,6 @@ b3f8251a-eb52-45a6-b2b5-0cc05166a61f,Table Tennis,confirm,"bappatabletennis.com:
 b1a01f44-5ea5-4fd6-8a02-b632eeee27d1,Table Tennis,confirm,"fremonttabletennis.com: academy at 47998 Warm Springs Blvd, Fremont",2026-10-14
 0c39d93f-9102-40a8-b7c6-b8cef85dfebe,Table Tennis,confirm,gracelinttc.com: table tennis club in South El Monte with 10 Joola tables,2026-10-14
 ac569719-193c-4b8a-bda4-ffc99b6900d5,Table Tennis,confirm,northbaytta.com: North Bay Table Tennis Academy (site gives no address),2026-10-14
-191d6e2f-7177-4fbe-8ec6-20ed816e374b,Racquetball,reject,gearboxsports.com: racquetball/pickleball equipment maker; no courts listed,2026-10-14
 83111233-8648-491b-b778-b6082c1d37a7,Racquetball,reject,racquetballwarehouse.com redirects to an online equipment store; no courts,2026-10-14
 89f999d5-23e4-4a18-a04e-10146709f8bd,Badminton,reject,badmintondirect.com: online equipment store; courts belong to a separate academy,2026-10-14
 88281750-36d8-4ed1-9b13-e50511bb9202,Pickleball,confirm,"pickleballrepublic.com: Carlsbad South (12 courts) and North Mall (indoor)",2026-10-14
@@ -165,3 +171,7 @@ ed52f1ae-12f9-4947-b29d-948e7a68d9fb,Pickleball,reject,"winwinpickleballoc.com: 
 19e5c093-4e42-4547-beae-7d4b3c92dfbf,Tennis,reject,"rstennis.com: RS Tennis Academy describes itself only as ""a year-round tennis academy""; no courts, address or facility named on the page (ADR 0016)",2026-10-17
 3767c5c5-8dcb-4f66-9d06-2ffb5cf28c1f,Tennis,reject,"calitennisacademy.com: training programs only; the page gives ""San Diego, CA"" and a phone number, no courts, address or facility (ADR 0016)",2026-10-17
 54ab0049-9679-44d2-ba5c-8602ce641179,Padel,confirm,"flytemarin.com own site, read 2026-10-16: 'Pickleball, Tennis & Padel Club in Marin County' with 4 lighted padel courts at 440 Smith Ranch Rd, San Rafael.",2026-10-17
+92b96e51-94dc-49e5-a80a-dbdbc89de92b,Tennis,reject,"Walnut Creek Racquet Club (wcrc.net) FAQ, read 2026-10-16: the club is a USTA league and membership association that does not operate courts or lessons; its teams play at the Walnut Creek Tennis Center (Heather Farm, already on the map). The Overture place sits on the club's office address (301 N San Carlos Dr), not on courts. Removed on the owner's decision 2026-10-21.",2026-10-21
+2fce4299-5c28-4c38-b6f0-255e42fa7d48,Pickleball,confirm,"chiratennisacademy.com: home page says ""We also play pickleball!"" and has a Pickleball program page",2026-10-23
+4ac45383-5ad2-4b15-92f2-e1fca7bdd583,Pickleball,confirm,"meridiantennis.com: ""4 lighted championship tennis courts, a pickleball court""",2026-10-23
+873e10fb-87d3-4170-a235-178b2e470676,Pickleball,confirm,"sandieguitotennis.com: ""a dedicated pickleball court, a hitting wall/pickleball court"" (member-owned club)",2026-10-23

@@ -1,6 +1,6 @@
 {# Reduce a website to its bare domain: 'HTTPS://www.Example.com:8080/a?b#c' -> 'example.com'.
    MUST stay in step with domain_of() in ingestion/check_websites.py, or checked domains will not join back.
-   Plain string functions only (no regex), so it behaves the same on DuckDB and Snowflake. #}
+   Plain string functions only (no regex). #}
 {% macro website_domain(col) -%}
   case
     when {{ col }} is null or trim({{ col }}) = '' then null
