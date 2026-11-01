@@ -171,6 +171,7 @@ Last run: 2026-11-01. Added 0 events; changed 0. **Sources NOT read: the cloud s
 - **Standard web search (1):** Padel N9NE San Marcos: aggregator (padelbrowser.com) says it targets a November 2026 opening at 222 North City Drive Suite 107, four courts, founding memberships on pre-sale; no official opening announcement seen. Press/directory claim only, so `venue_opening_status.csv` is not changed (rule: official page only).
 
 ### Part 4 (Instagram sweep, new-venue handles, player groups)
-Last run: 2026-11-01. Added 0; changed 0. **Sources NOT read: the cloud sandbox blocks every site except search (www.instagram.com, thepadelcourts.com and curl to meetup.com/calipadel.com all fail to resolve/connect).**
-- **Unread:** all 62 provider=instagram link-outs in `venue_actions.csv` (sweep not run); new-venue social handles; recheck of the 3 `player_groups.csv` rows (thepadelcourts.com, calipadel.com and the third club page). No row changed or removed.
-- Needs the owner to allow the hosts or to run Part 4 by hand in the browser pane.
+Last run: 2026-11-01 (re-run later the same day; the first run had no network). Added 2 Instagram link-outs; changed 0 events.
+- **Instagram sweep: needs browser, not read.** www.instagram.com answered HTTP 429 to curl and WebFetch (tried once each; no workaround). All 49 distinct handles behind the 62 provider=instagram link-outs are unread; no row changed.
+- **New-venue handles** (venues added since 2026-10-24): WynPadel at The Westin Rancho Mirage, site wynpadel.net links @wyntennisacademy -> link-out added; CSULB SRWC, asirecreation.org/about links @csulbsrwc -> link-out added (profiles not opened). CSU Fresno and East Bay pages did not load; CSUB links only the university-wide @csubakersfield, not added.
+- **Player groups:** calipadel.com still carries the WhatsApp channel link (kept, verified_on refreshed); padelup.club still carries both WhatsApp invites incl. the stored one (kept, refreshed). thepadelcourts.com does not connect from the cloud sandbox: **not read**, row left as is (verified_on not refreshed). No new Meetup/Partiful/Facebook group links found on the pages read; no removals.
