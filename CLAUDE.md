@@ -14,6 +14,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0027, all accepted except 0001, su
 - `make usage`      export GoatCounter counts and print the usage metrics + sport demand vs coverage (needs `GOATCOUNTER_API_TOKEN` in `.env`; `docs/goat_analysis.md`)
 - `make interest`   Google Trends search interest vs venues per metro (planning signal, `docs/search_interest_plan.md`)
 - `make report`     regenerate `docs/coverage_snapshot.md`
+- `make observability`   Elementary data-observability report from the local warehouse (`docs/data_observability.md`; `make build` records the history and installs the package)
 
 ## Rules
 - NEVER read, print or commit `.env` (credentials). `.env.example` shows the keys.
@@ -56,7 +57,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0027, all accepted except 0001, su
 Hand-off is the PR description and `git log`; `docs/sessions/` holds only the routines' notes. Older history and past decisions: `docs/archive/session_digest.md`. Plan: `~/.claude/plans/create-a-revised-plan-temporal-yao.md`.
 
 **Working practices**
-- Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash). A new worktree has no `courtconnect.duckdb`: run `python ingestion/fresh_db.py` (`make fresh-db`; ~1 min, loads the shared raw CSVs and runs the full dbt build) instead of copying one. Raw CSVs live in ONE shared folder, the main checkout's `data/raw` (`ingestion/rawdir.py`; override with `COURTCONNECT_DATA_DIR`): extract/load scripts from any worktree read and write it, and `load_raw.py` refuses to shrink a table by more than 10% unless `--force`.
+- Build: `.venv/Scripts/dbt build --project-dir transform --profiles-dir transform` (no `make` in Git Bash; run `dbt deps` with the same flags once per checkout first, it installs Elementary, `docs/data_observability.md`). A new worktree has no `courtconnect.duckdb`: run `python ingestion/fresh_db.py` (`make fresh-db`; ~1 min, loads the shared raw CSVs and runs the full dbt build) instead of copying one. Raw CSVs live in ONE shared folder, the main checkout's `data/raw` (`ingestion/rawdir.py`; override with `COURTCONNECT_DATA_DIR`): extract/load scripts from any worktree read and write it, and `load_raw.py` refuses to shrink a table by more than 10% unless `--force`.
 - Seed column changes need `--full-refresh`. Snowflake was retired 2026-10-14 and its code removed 2026-10-21 (ADR 0018): DuckDB only.
 - Commit `app/data/venues.json` after `make app-data`. `pages.yml` deploys by itself when a merge to main touches `app/**` (or the workflow); check the latest run after merging (a newer run cancels an older one). `gh workflow run pages.yml` still runs it by hand. Confirm a PR is MERGED before calling it shipped.
 - Before starting a task: `git fetch`, check `git log origin/main --since=1.day --oneline` and `gh pr list`, so you don't redo work another session already landed (2026-10-17: city fill and the Padel guard-rail test were each built twice).

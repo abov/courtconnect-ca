@@ -15,3 +15,5 @@ transform/.user.yml
 data/aerial/
 data/reader_cache/
 dist/
+.venv-edr/
+observability/
