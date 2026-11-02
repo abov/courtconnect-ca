@@ -1,13 +1,13 @@
 # 0028. Five-state scope: California, Nevada, Washington, Oregon, Hawaii
 
-Date: 2026-11-02. Status: proposed (owner 2026-11-02 asked for the expansion). Step 0 (generalize, below) was approved the same day and is built in the same PR (#477); no new state is added and no extract has been run. Extends ADR 0014 (CalNeva); it does not replace it, and 0014's rules carry over unchanged.
+Date: 2026-11-02. Status: proposed (owner 2026-11-02 asked for the expansion). Step 0 (generalize, below) was approved the same day and merged in #477. Oregon (the data layer: OSM courts and parents, Overture places and addresses, ZIPs, places, outline, bounds) started 2026-11-02 on branch `claude/oregon-step`; OSM relation 165476 and the `OR` box were checked against Overpass (border bounds match). Oregon seed research (city rec centers, chains, campuses, leads, events) is not done yet. The product name was settled separately (ADR 0029, RacketConnect). Extends ADR 0014 (CalNeva); it does not replace it, and 0014's rules carry over unchanged.
 
 ## Context
 ADR 0014 made the covered area a list of regions. `ingestion/regions.json` already drives the extracts, the border clip, the Census place list and `ci/check_regions.py`, so most of the work for a new state is configuration plus the places still hardcoded to CA/NV (listed below). The name "CalNeva" no longer fits five states, and `courtconnect-ca` is wrong as a repo name (owner 2026-10-23 kept it for CA+NV; this decision reopens only the question, nothing is renamed here).
 
 ## Decision (proposed)
 - **Scope:** add `WA`, `OR`, `HI` to `regions.json`. Same rules as 0014: public pages only (ADR 0005/0007), inferred data labelled, link out only, no partnership emails. One state per step, each ending in a merged PR and a live check, so a bad state never blocks the others.
-- **Name:** recommend **CourtConnect West** (short, true for 5 states, still true if Arizona or Idaho join). Alternatives: "Pacific West" (Nevada is not Pacific), "West Coast + Hawaii" (Nevada again). The name appears in the app title, meta tags, About card, README, CLAUDE.md, Makefile help, coverage report, `exposures.yml`, `app/llms.txt`, the manifest, the share card and 3 app pages (23 files mention "CalNeva"); one labels-only PR, as in 0014 step 3. Historical text (ADRs, past status lines) stays.
+- **Name:** settled by ADR 0029 (accepted 2026-11-02, merged in #479): **RacketConnect**, with no region in the name, so no naming PR is needed. What is left is the region sentence ("California and Nevada", `REGION` in `app/index.html` plus the static repeats in the page meta/About text, `llms.txt`, the manifest, the issue form, the dbt exposure and overview, README line 3): each state's PR updates it (the Oregon PR made it "California, Nevada and Oregon"). The share card image is not regenerated until all states are in.
 - **Repo / Pages rename (owner decides):** keep `courtconnect-ca` until after the December beta, then rename once. GitHub redirects the old repo URL, but Pages does not redirect the old site URL, and GoatCounter, share links and the beta would break. Recommended: keep the URL through the beta, rename in the first quiet week after it, with the old Pages site left as a one-page redirect.
 - **Order (cheapest first):** step 0 generalize (no new data, CA/NV output must be byte-identical), then **OR**, then **WA**, then **HI**. OR first: one landmass, no new technical risk, and its border with CA exercises the clip. WA second: larger (Seattle), shares the Columbia River border with OR. HI last: smallest data but the most special cases (islands, map view, ZIPs).
 
@@ -46,7 +46,7 @@ Counts are by coordinates through the border polygon. Venues on the map: CA 9,74
 - **Cheap fixes made in this pass:** none yet; the proposal is to do the NV walls extract (`--area nevada`, minutes) and the `sport_directories.md` Nevada pass in step 0's PR, if the owner agrees.
 
 ## Open questions (owner)
-1. Name: "CourtConnect West", or another?
+1. ~~Name~~ answered: RacketConnect (ADR 0029).
 2. Repo / Pages rename: keep through the beta and rename after (recommended), rename now, or never?
 3. Order OR, WA, HI, one state per PR, each waiting for "ship it"?
 4. Hawaii resorts and hotels with courts: same rule as Nevada (closed), or case by case?

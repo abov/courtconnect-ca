@@ -1,0 +1,4 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+way,401318802,42.3218508,-122.812781,Swim and Tennis Club Court,tennis,paved,,,,,,pitch,,,,,,,,,,2026-11-02T19:28:38+00:00,OR
+way,202178715,44.0530271,-123.0247423,Meadow Park Pickleball Courts,pickleball,,,yes,no,,8,sports_centre,,,,,,,,,,2026-11-02T19:28:38+00:00,OR
+node,6328069014,44.2931674,-120.8335594,High School Ping Pong Court 2,table_tennis,,,,,,,pitch,,,,,,,,,,2026-11-02T19:28:38+00:00,OR

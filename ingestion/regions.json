@@ -2,7 +2,8 @@
   "note": "The only place the covered area lives. bbox = south, west, north, east. The OSM border relation is the real filter, the bbox only bounds the tiles. name = the --area value for the whole region. fips = the Census state code (place and county boundaries). Metros are named --area values; states lists which regions a metro may keep rows from. docs/fork_guide.md explains how to change this for another area.",
   "regions": {
     "CA": {"name": "california", "bbox": [32.5, -124.5, 42.1, -114.0], "relation": 165475, "fips": "06", "cache": "ca_border.wkt"},
-    "NV": {"name": "nevada", "bbox": [35.0, -120.01, 42.0, -114.03], "relation": 165473, "fips": "32", "cache": "nv_border.wkt"}
+    "NV": {"name": "nevada", "bbox": [35.0, -120.01, 42.0, -114.03], "relation": 165473, "fips": "32", "cache": "nv_border.wkt"},
+    "OR": {"name": "oregon", "bbox": [41.99, -124.7, 46.3, -116.45], "relation": 165476, "fips": "41", "cache": "or_border.wkt"}
   },
   "metros": {
     "la": {"bbox": [33.70, -118.67, 34.34, -118.15], "states": ["CA"]},
@@ -11,6 +12,7 @@
     "lv": {"bbox": [35.95, -115.40, 36.35, -114.85], "states": ["NV"], "note": "Las Vegas / Henderson"},
     "reno": {"bbox": [39.40, -119.95, 39.70, -119.65], "states": ["NV"], "note": "Reno / Sparks"},
     "carson": {"bbox": [39.10, -119.85, 39.25, -119.70], "states": ["NV"], "note": "Carson City"},
+    "portland": {"bbox": [45.30, -123.10, 45.65, -122.45], "states": ["OR"], "note": "Portland; the Washington side (Vancouver) joins when Washington is added"},
     "tahoe": {"bbox": [38.85, -120.20, 39.35, -119.85], "states": ["CA", "NV"], "note": "Lake Tahoe, straddles the CA/NV line"}
   }
 }
