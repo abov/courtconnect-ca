@@ -27,7 +27,7 @@ Swap in their sport (step 1) and a place they know (step 2). Give each person th
 > 3. Open a place and tap a link (website, open play, a club's Instagram). Did it go where you expected?
 > 4. Tap "Events & meetups" (or "Find players") and look for an event or group. Anything useful?
 > 5. Optional: if something is wrong, tap "Suggest a change" on that place.
-> 6. Optional: tap "Find by court", type a court size you know (like 40x20) and see if the sports it lists make sense.
+> 6. Optional: tap "Find by court", pick a sport you want to play and see if the bigger courts it says it fits inside (and the close seconds) make sense.
 >
 > A text back is fine: did you find what you wanted, what was missing or wrong, would you use it again and for what, anything confusing (like "confirmed" vs "inferred")?
 >
