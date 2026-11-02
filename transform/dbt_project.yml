@@ -299,6 +299,8 @@ models:
     marts:
       +materialized: table
       +schema: marts
+  elementary:   # data observability package (transform/packages.yml): its tables get their own schema
+    +schema: elementary
 
 vars:
   regions:   # covered states, mirrors ingestion/regions.json (south, west, north, east); ci/check_regions.py fails if they differ (ADR 0028)

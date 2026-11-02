@@ -637,6 +637,15 @@ models:
 
   - name: dim_court
     description: One row per physical court / sports-centre record from OpenStreetMap.
+    tests:   # observability (docs/data_observability.md): warn only, they never block a build
+      - elementary.volume_anomalies:
+          tags: [observability]
+          config: {severity: warn}
+          arguments: {days_back: 90, min_training_set_size: 3}
+      - elementary.dimension_anomalies:
+          tags: [observability]
+          config: {severity: warn}
+          arguments: {dimensions: [region], days_back: 90, min_training_set_size: 3}
     columns:
       - name: court_id
         tests: [unique, not_null]
@@ -931,6 +940,18 @@ models:
       The table behind the map. One row per venue and sport (a venue with tennis and pickleball has two rows). Venues are clusters of nearby
       OpenStreetMap courts merged with Overture places and hand-curated entries (ADR 0002, 0003). Exported to app/data/venues.json by
       ingestion/export_app_data.py.
+    tests:   # observability (docs/data_observability.md): warn only, they never block a build
+      - elementary.volume_anomalies:
+          tags: [observability]
+          config: {severity: warn}
+          arguments: {days_back: 90, min_training_set_size: 3}
+      - elementary.dimension_anomalies:
+          tags: [observability]
+          config: {severity: warn}
+          arguments: {dimensions: [region], days_back: 90, min_training_set_size: 3}
+      - elementary.schema_changes:
+          tags: [observability]
+          config: {severity: warn}
     columns:
       - name: venue_id
         description: Stable id of the venue cluster (dim_venue).
