@@ -58,7 +58,8 @@ make app         # http://localhost:8765
 
 ## Known leftovers (still CA/NV specific)
 
-- `ingestion/ask.py` rejects regions other than CA/NV; `ingestion/export_coverage_report.py` has a Nevada-specific sentence.
+- The dbt `regions` var in `transform/dbt_project.yml` mirrors `regions.json` (`init_fork.py` rewrites both; `python ci/check_regions.py --config-only` fails if they differ). Each region may carry `fips` (the two-digit Census state code, US only; `init_fork.py` takes it as an optional last value after the OSM relation); the Census steps below skip regions without one.
+- `app/index.html` still starts on California + Nevada (`HOME_BOUNDS`) and its text names both states.
 - The Census boundary and place-name steps (`make extract-boundaries`, `make city-boundaries`, `ingestion/build_places_lookup.py`) are US-only. Outside the US, replace the city source.
 - Some docs and the About card text describe California and Nevada.
 - Scheduled tasks and the agent workflows (refresh, issue triage) are tied to the owner's accounts. Leave them out until you have your own.

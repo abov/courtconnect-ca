@@ -20,11 +20,13 @@ from pathlib import Path
 import duckdb
 import requests
 
+from overpass import REGIONS
 from rawdir import raw_path
 
 BASE = "https://www2.census.gov/geo/tiger/GENZ2023/shp/"
 from useragent import HEADERS as UA
-FILES = [("place", "cb_2023_06_place_500k"), ("place", "cb_2023_32_place_500k"), ("county", "cb_2023_us_county_500k")]
+FIPS = [c["fips"] for c in REGIONS.values() if c["fips"]]   # state codes from ingestion/regions.json
+FILES = [*(("place", f"cb_2023_{f}_place_500k") for f in FIPS), ("county", "cb_2023_us_county_500k")]
 SOURCE = "US Census cartographic boundary files 2023 (1:500k)"
 
 
@@ -47,7 +49,7 @@ def main() -> None:
             con.execute(
                 f"""insert into shapes
                     select '{kind}', STATEFP, GEOID, NAME, st_astext(geom) from st_read('/vsizip/{z.as_posix()}')
-                    where STATEFP in ('06', '32')"""
+                    where STATEFP in ({', '.join(repr(f) for f in FIPS)})"""
             )
     out = Path(raw_path("census_boundaries.csv"))
     out.parent.mkdir(parents=True, exist_ok=True)

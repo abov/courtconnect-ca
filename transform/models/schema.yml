@@ -669,12 +669,12 @@ models:
               arguments:
                 values: ['court_name', 'operator', 'places_directory', 'manual', 'enclosing_feature', 'unnamed']
       - name: region
-        description: CA or NV (ADR 0014), from the state border polygon at extract time, or the seed's region column for hand-added venues.
+        description: A state code from the regions var (CA, NV; ADR 0014, 0028), from the state border polygon at extract time, or the seed's region column for hand-added venues.
         tests:
           - not_null
           - accepted_values:
               arguments:
-                values: ['CA', 'NV']
+                values: "{{ var('regions').keys() | list }}"
 
   - name: stg_website_checks
     description: Website domain checks (DNS only). 'dead' means the domain definitively does not exist; 'unknown' is inconclusive.
@@ -848,7 +848,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['CA', 'NV']
+                values: "{{ var('regions').keys() | list }}"
 
   - name: mart_wall_pins
     description: >
@@ -867,7 +867,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['CA', 'NV']
+                values: "{{ var('regions').keys() | list }}"
 
   - name: int_wall_venue_link
     description: >

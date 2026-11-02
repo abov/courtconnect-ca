@@ -63,13 +63,13 @@ def fetch_places(release: str) -> list[tuple]:
                addresses[1].freeform, addresses[1].locality, addresses[1].postcode, addresses[1].region,
                sources[1].license, sources[1].dataset
         from read_parquet('{path}', hive_partitioning=1)
-        where bbox.xmin between -124.5 and -114.0 and bbox.ymin between 32.5 and 42.1
+        where {overpass.sql_bbox('bbox.xmin', 'bbox.ymin')}
           and names.primary is not null
           and (taxonomy.hierarchy[1] = 'sports_and_recreation'
                or regexp_matches(coalesce(taxonomy.primary, ''),
                     'tennis|pickle|padel|squash|badminton|racquet|racket|recreation|athletic|country_club|community_center|sports'))
     """).fetchall()
-    print(f"{len(rows):,} candidate places in sports/recreation categories (CA+NV bounding box)")
+    print(f"{len(rows):,} candidate places in sports/recreation categories (covered regions' bounding boxes)")
 
     keep, outside = [], 0
     for r in rows:
@@ -81,7 +81,7 @@ def fetch_places(release: str) -> list[tuple]:
             outside += 1
             continue
         keep.append((*r, release, region))   # address_region = Overture's address text; region = border polygon (ADR 0014)
-    print(f"kept {len(keep):,} (racket category or sport word in the name); {outside:,} dropped outside the CA/NV borders")
+    print(f"kept {len(keep):,} (racket category or sport word in the name); {outside:,} dropped outside the covered borders")
     return keep
 
 

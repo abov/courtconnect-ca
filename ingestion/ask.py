@@ -20,6 +20,8 @@ from pathlib import Path
 
 import duckdb
 
+from overpass import REGIONS
+
 DB = "courtconnect.duckdb"
 SNAPSHOTS = Path(__file__).resolve().parent.parent / "docs" / "market_snapshots.csv"
 OLLAMA_URL = "http://localhost:11434/api/generate"
@@ -91,7 +93,7 @@ def route_with_model(question: str, model: str) -> dict:
     prompt = (
         "You route questions about racket-sport venues to ONE query template. Reply with JSON only: "
         '{"template": "<name>", "params": {"<param>": <value>}}. Use only the templates and parameters listed; '
-        "omit optional parameters you do not need (region is only CA or NV: omit it unless the question names a state); sport names are plain English like Padel, Pickleball, Tennis, Squash. "
+        "omit optional parameters you do not need (region is a state code, one of " + ", ".join(REGIONS) + ": omit it unless the question names a state); sport names are plain English like Padel, Pickleball, Tennis, Squash. "
         'If no template fits, reply {"template": "none", "params": {}}.\n\nTemplates:\n' + describe() + f"\n\nQuestion: {question}\nJSON:"
     )
     body = json.dumps({"model": model, "prompt": prompt, "format": "json", "stream": False, "options": {"temperature": 0}}).encode()
@@ -126,8 +128,8 @@ def validate(template: str, raw: dict, sports: list[str]) -> dict:
             close = [s for s in sports if out["sport"].lower() in s.lower()][:5]
             raise ValueError(f"Unknown sport '{out['sport']}'." + (f" Did you mean: {', '.join(close)}?" if close else ""))
         out["sport"] = match[0]
-    if out.get("region") and out["region"].upper() not in ("CA", "NV"):
-        raise ValueError("region must be CA or NV.")
+    if out.get("region") and out["region"].upper() not in REGIONS:
+        raise ValueError("region must be one of " + ", ".join(REGIONS) + ".")
     return out
 
 

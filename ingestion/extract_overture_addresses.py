@@ -18,6 +18,7 @@ from pathlib import Path
 
 import duckdb
 
+import overpass
 from extract_overture_places import BUCKET, latest_release
 from rawdir import raw_path
 
@@ -39,7 +40,7 @@ def main() -> None:
         select lat, lon from read_csv_auto('{raw_path("osm_courts.csv")}') where lat is not null and lon is not null
         union all select lat, lon from read_csv_auto('{raw_path("overture_places.csv")}') where lat is not null and lon is not null
         union all select lat, lon from read_csv_auto('transform/seeds/manual_venues.csv') where lat is not null and lon is not null""")
-    for extra in (raw_path("osm_courts_nv.csv"),):
+    for extra in sorted(Path(raw_path("")).glob("osm_courts_??.csv")):   # one file per extra state (overpass.out_name)
         if Path(extra).exists():
             con.execute(f"insert into pins select lat, lon from read_csv_auto('{extra}') where lat is not null and lon is not null")
     con.execute(f"""create table cells as
@@ -58,7 +59,7 @@ def main() -> None:
             from read_parquet('{path}', hive_partitioning=1) a
             join cells c on c.cx = cast(floor(a.bbox.xmin * {CELLS_PER_DEGREE}) as integer)
                         and c.cy = cast(floor(a.bbox.ymin * {CELLS_PER_DEGREE}) as integer)
-            where a.bbox.xmin between -124.5 and -114.0 and a.bbox.ymin between 32.5 and 42.1
+            where {overpass.sql_bbox('a.bbox.xmin', 'a.bbox.ymin')}
               and a.country = 'US' and a.number is not null and a.street is not null
         ) to '{args.out}' (header, delimiter ',')""")
     n = con.execute(f"select count(*) from read_csv_auto('{args.out}')").fetchone()[0]
