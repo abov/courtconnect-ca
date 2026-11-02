@@ -425,12 +425,12 @@
 <dialog id="court" aria-labelledby="courtTitle">
   <div class="dlg-h"><h2 id="courtTitle">Find by court</h2><button class="link" id="closeCourt" type="button">Close</button></div>
   <div class="dlg-b">
-    <p class="meta">Pick the sport you want to play and see which sports have a court the same size or bigger, with a similar net (or no net, if yours needs none), so you know where it can fit. If nothing matches closely, you get the nearest seconds and what you would change. Sizes and nets are each sport's standard from our sport sheet (inferred); no venue's court has been measured.</p>
-    <label class="l" for="courtLike">Sport you want to play (court size, net height in brackets)</label>
+    <p class="meta">Pick a court size and see which sports have a court the same size or bigger, with a similar net (or no net, if yours needs none), so you know where it can fit. If nothing matches closely, you get the nearest seconds and what you would change. Sizes and nets are each sport's standard from our sport sheet (inferred); no venue's court has been measured.</p>
+    <label class="l" for="courtLike">Court size (net height; sports with that court)</label>
     <select id="courtLike"></select>
     <div class="seg quick" style="margin-top:10px"><button class="chip" id="courtWall" type="button">Just hitting alone? Show all hitting walls</button></div>
     <div id="courtOut" role="status" aria-live="polite"></div>
-    <p class="meta" style="margin-top:12px">"Fits inside" means your sport's standard court is no bigger than that sport's standard court; it does not mean a venue has your lines or net, or allows it. Playing your own game? Any court of that size works; bring your own net and lines.</p>
+    <p class="meta" style="margin-top:12px">"Fits inside" means the court size you picked is no bigger than that sport's standard court; it does not mean a venue has your lines or net, or allows it. Playing your own game? Any court of that size works; bring your own net and lines.</p>
   </div>
 </dialog>
 
@@ -1551,37 +1551,40 @@ function renderPlayers() {
       el("span", {class: "facts", text: sp + " · " + p.p + " · read " + p.vo})));
   }
 }
-// ---------- Find by court: the sport you want -> sports whose court it fits inside (INFERRED from each sport's standard court in the sheet, never measured at a venue) ----------
-const fmtNet =h => h >= 24 ? Math.floor(h / 12) + "ft" + (Math.round(h % 12) ? " " + Math.round(h % 12) + "in" : "") : Math.round(h) + "in";
+// ---------- Find by court: the court size you pick -> sports whose court it fits inside (INFERRED from each sport's standard court in the sheet, never measured at a venue) ----------
+const fmtNet =h => h >= 24 ? Math.floor(h / 12) + "ft" + (Math.round(h % 12) ? " " + Math.round(h % 12) + "in" : "") : Math.round(h * 10) / 10 + "in";
 const COURT_TOL = 1.5, NET_SAME = 4, NEAR_SHORT = 0.15, MAX_ROOM = 5, NO_NET_ROOM = 1.6;   // ft rounding slack; in a "similar" net; share of a side a close second may fall short; biggest host court, as a multiple of yours; same, for a host with no net
 const COURT_SURF = {c: "hard court", g: "grass", s: "sand"};
 const ft1 = v => String(Math.round(v * 10) / 10);
-// guest = the sport wanted, host = a sport whose court it might fit inside. null = not usable; else {cost, notes} (cost 0 = nothing to change).
+// guest = the court size picked (a group of sports sharing one size + net, see courtGroups), host = a sport whose court it might fit inside. null = not usable; else {cost, notes} (cost 0 = nothing to change).
+const gWho = g => g.sz ? "this court size" : g.n;   // how messages name the guest
+const gStd = g => g.sz ? "the size you picked" : g.n + "'s standard";
 const wallBound = s => s.nn && !s.nh && !s.w;   // no net and not an open-court game (Naked Tennis is): it needs walls to play against
 function courtFit(g, h) {
   const gh = Math.max(...g.cd), gl = Math.min(...g.cd), hh = Math.max(...h.cd), hl = Math.min(...h.cd), notes = [], info = [];   // sides sorted, so a court may be turned
   const sh = gh - hh > COURT_TOL ? gh - hh : 0, sl = gl - hl > COURT_TOL ? gl - hl : 0;
   if (sh / gh > NEAR_SHORT || sl / gl > NEAR_SHORT) return null;
-  if (sh || sl) notes.push("the court is " + [sh && ft1(sh) + " ft shorter", sl && ft1(sl) + " ft narrower"].filter(Boolean).join(" and ") + " than " + g.n + "'s standard");
+  if (sh || sl) notes.push("the court is " + [sh && ft1(sh) + " ft shorter", sl && ft1(sl) + " ft narrower"].filter(Boolean).join(" and ") + " than " + gStd(g));
   const hNone = h.nn && !h.nh;
   if (wallBound(g) && !hNone) return null;   // wall sports need their walls: a netted court has none to play against
   if (g.nh && hNone) notes.push("no net is listed there, bring a portable one");
-  else if (g.nn && !g.nh && h.nh) info.push("take the net down, " + g.n + " is played without one");
+  else if (g.nn && !g.nh && h.nh) info.push("take the net down, " + (g.sz ? "the sports on this court are" : g.n + " is") + " played without one");
   else if (g.nh && h.nh) {
     const d = Math.min(...g.nh.flatMap(a => h.nh.map(b => Math.abs(a - b))));
-    if (d > NET_SAME) notes.push("net is " + h.nh.map(fmtNet).join(" / ") + " there, " + g.n + " uses " + g.nh.map(fmtNet).join(" / ") + " (change the net height)");
+    if (d > NET_SAME) notes.push("net is " + h.nh.map(fmtNet).join(" / ") + " there, " + gWho(g) + " uses " + g.nh.map(fmtNet).join(" / ") + " (change the net height)");
   }
-  if (g.su && h.su && ![...g.su].some(c => h.su.includes(c))) notes.push(g.n + " is played on " + [...g.su].map(c => COURT_SURF[c]).join(" / ") + ", this court is " + [...h.su].map(c => COURT_SURF[c]).join(" / "));
+  if (g.su && h.su && ![...g.su].some(c => h.su.includes(c))) notes.push((g.sz ? "the sports on this court are" : g.n + " is") + " played on " + [...g.su].map(c => COURT_SURF[c]).join(" / ") + ", this court is " + [...h.su].map(c => COURT_SURF[c]).join(" / "));
   return {cost: notes.length, notes, info};
 }
 // Bigger courts first: same size and net, then roomier courts with a similar net, then close seconds that need one change. Sports sharing one court size and net are one row (their surfaces pooled).
-function courtMatches(gi, maxRoom = MAX_ROOM) {
-  const g = sports[gi], ga = g.cd[0] * g.cd[1], groups = new Map(), out = [];
+function courtMatches(g, maxRoom = MAX_ROOM) {
+  const ga = g.cd[0] * g.cd[1], groups = new Map(), out = [];
   let unmapped = 0;
   sports.forEach((h, i) => {
-    if (i === gi || !h.cd || h.w) return;   // a sport with no court of its own (play anywhere) is no host
-    if (wallBound(g) && !WALL_SPORT[g.n] && WALL_SPORT[h.n]) return;   // a closed-court sport (squash, racquetball) can't use a 1- or 3-wall court
-    const k = [h.cd.join("x"), (h.nh || []).join("/"), h.nn || 0].join("|");
+    if (!h.cd || h.w) return;   // a sport with no court of its own (play anywhere) is no host
+    if (wallBound(g) && !g.ws && WALL_SPORT[h.n]) return;   // a closed-court sport (squash, racquetball) can't use a 1- or 3-wall court
+    const k = courtKey(h);
+    if (k === g.k && !g.w) return;   // the court picked is not its own host
     if (!groups.has(k)) groups.set(k, {cd: h.cd, nh: h.nh, nn: h.nn, su: "", members: []});
     const o = groups.get(k); o.members.push({i, s: h}); o.su = [...new Set(o.su + (h.su || ""))].join("");
   });
@@ -1605,7 +1608,7 @@ function courtRow(g, o, label) {
   const [head, ...rest] = o.members, s = head.s, nw = WALL_SPORT[s.n] ? wallsFor(s.n).length : 0;
   const net = s.nh ? " · net " + s.nh.map(fmtNet).join(" / ") : s.nn ? " · no net listed" : " · net height not listed";
   const where = s.v > 0 ? fmt(s.v) + (s.v === 1 ? " venue" : " venues") + " mapped" : nw ? fmt(nw) + (nw === 1 ? " hitting wall" : " hitting walls") + " mapped" : "None mapped yet";
-  const use = o.room > 1.15 ? " · " + g.n + " uses about " + Math.round(100 / o.room) + "% of it" : "";
+  const use = o.room > 1.15 ? " · " + (g.sz ? "your court size" : g.n) + " uses about " + Math.round(100 / o.room) + "% of it" : "";
   const row = el("div", {class: "crow"},
     el("div", {}, el("b", {text: s.n + " "}), el("span", {class: o.tier === 3 ? "badge warn" : "badge", text: label}),
       ...(o.members.some(m => (g.b || []).includes(m.i)) ? [el("span", {class: "badge c", text: "Our sheet: played on these courts"})] : [])),
@@ -1621,48 +1624,59 @@ function courtRow(g, o, label) {
 function renderCourt() {
   const box = $("courtOut"), pick = $("courtLike").value;
   box.replaceChildren();
-  if (pick === "") { box.append(el("p", {class: "meta", text: "Pick the sport you want to play to see where it fits."})); return; }
-  const gi = +pick, g = sports[gi];
-  let {out, unmapped} = courtMatches(gi), roomy = false;
-  if (!out.length) { ({out} = courtMatches(gi, Infinity)); out = out.sort((a, b) => a.room - b.room).slice(0, 3); roomy = out.length > 0; }   // nothing near its size: the smallest roomier courts, said so
+  if (pick === "") { box.append(el("p", {class: "meta", text: "Pick a court size to see where it fits."})); return; }
+  const g = courtGroups.get(pick);
+  let {out, unmapped} = courtMatches(g), roomy = false;
+  if (!out.length) { ({out} = courtMatches(g, Infinity)); out = out.sort((a, b) => a.room - b.room).slice(0, 3); roomy = out.length > 0; }   // nothing near its size: the smallest roomier courts, said so
   const good = out.filter(o => o.tier < 3), second = out.filter(o => o.tier === 3), shownGood = good.slice(0, 8), shownSecond = second.slice(0, 5);
   const gnet = g.nh ? "net " + g.nh.map(fmtNet).join(" / ") : g.nn ? "no net" : "net height not listed";
-  box.append(el("h3", {text: g.n + ": " + g.cd[0] + " x " + g.cd[1] + " ft, " + gnet}));
+  box.append(el("h3", {text: g.cd[0] + " x " + g.cd[1] + " ft, " + gnet}),
+    el("p", {class: "meta", text: "Standard court for: " + g.members.map(m => m.s.n).join(", ") + "."}));
   if (good.length) {
-    box.append(el("p", {class: "meta", text: (good.length === 1 ? "1 kind of court is" : good.length + " kinds of court are") + " the same size or bigger, with " + (wallBound(g) ? "no net either" : g.nn && !g.nh ? "any net (it is played without one)" : "a similar net") + ", so " + g.n + " fits inside. Most venues first."}));
+    box.append(el("p", {class: "meta", text: (good.length === 1 ? "1 kind of court is" : good.length + " kinds of court are") + " the same size or bigger, with " + (wallBound(g) ? "no net either" : g.nn && !g.nh ? "any net (it is played without one)" : "a similar net") + ", so " + gWho(g) + " fits inside. Most venues first."}));
     for (const o of shownGood) box.append(courtRow(g, o, o.tier === 1 ? "Same size" : "Fits inside"));
     if (good.length > shownGood.length) box.append(el("p", {class: "meta", text: (good.length - shownGood.length) + " more kinds of court fit it."}));
   } else if (out.length) {
-    box.append(el("p", {class: "meta", text: roomy ? "No mapped sport has a court close to " + g.n + "'s size. These are the smallest roomier courts, far bigger than it needs." : "No mapped sport has a bigger court with a similar net that " + g.n + " fits inside. These are the closest seconds."}));
+    box.append(el("p", {class: "meta", text: roomy ? "No mapped sport has a court close to " + (g.sz ? "this size" : g.n + "'s size") + ". These are the smallest roomier courts, far bigger than it needs." : "No mapped sport has a bigger court with a similar net that " + gWho(g) + " fits inside. These are the closest seconds."}));
   } else {
-    box.append(el("p", {class: "meta", text: "No mapped sport on our sheet has a court " + g.n + " fits inside or comes close to."}));
+    box.append(el("p", {class: "meta", text: "No mapped sport on our sheet has a court " + gWho(g) + " fits inside or comes close to."}));
   }
   if (second.length && good.length) box.append(el("h3", {text: "Close seconds"}), el("p", {class: "meta", text: "Nearly there: one thing would have to change (net, a few feet of size, or surface)."}));
   for (const o of shownSecond) box.append(courtRow(g, o, roomy ? "Much bigger" : "Close second"));
   if (second.length > shownSecond.length) box.append(el("p", {class: "meta", text: (second.length - shownSecond.length) + " more close seconds."}));
   if (unmapped) box.append(el("p", {class: "meta", text: unmapped + (unmapped === 1 ? " more sport has" : " more sports have") + " a court that would work but no venue is mapped for " + (unmapped === 1 ? "it" : "them") + " yet."}));
-  if (WALL_SPORT[g.n] || [...shownGood, ...shownSecond].some(o => o.members.some(m => WALL_SPORT[m.s.n]))) {   // wall sports play against a wall, so one person can use them alone
+  if (g.ws || [...shownGood, ...shownSecond].some(o => o.members.some(m => WALL_SPORT[m.s.n]))) {   // wall sports play against a wall, so one person can use them alone
     const all = soloWalls("all", false).length, pub = soloWalls("all", true).length, b = el("button", {class: "chip", type: "button", text: "Show all hitting walls (" + fmt(all) + ")"});
     b.addEventListener("click", () => enterSolo("court-group"));
     box.append(el("h3", {text: "Hitting walls you can use alone"}),
       el("p", {class: "meta", text: "The wall sports play against a wall or backboard. Wall sizes are the sport's standard, not measured at each wall, and access is mostly not known (" + fmt(pub) + " are mapped public)."}), b);
   }
 }
+// One entry per court size + net (+ "no fixed court"), holding the sports whose standard court it is; the key doubles as the picker value.
+const courtGroups = new Map();
+const courtKey = s => [s.cd.join("x"), (s.nh || []).join("/"), s.nn || 0].join("|");
 function openCourt(src) {
   const like = $("courtLike");
+  if (!courtGroups.size) {
+    sports.forEach((s, i) => {
+      if (!s.cd) return;
+      const key = courtKey(s) + "|" + (s.w ? 1 : 0);
+      if (!courtGroups.has(key)) courtGroups.set(key, {sz: true, k: courtKey(s), w: s.w, cd: s.cd, nh: s.nh, nn: s.nn, su: "", b: [], members: []});
+      const o = courtGroups.get(key); o.members.push({i, s}); o.su = [...new Set(o.su + (s.su || ""))].join(""); o.b = [...new Set([...o.b, ...(s.b || [])])];
+    });
+    for (const o of courtGroups.values()) { o.members.sort((x, y) => x.s.n.localeCompare(y.s.n, undefined, {sensitivity: "base"})); o.ws = o.members.some(m => WALL_SPORT[m.s.n]); }
+  }
   if (!like.options.length) {
-    like.append(el("option", {value: "", text: "Pick a sport…"}));
-    // One group per court size, smallest area first, the sports that share it listed A-Z underneath.
-    const groups = new Map(), r1 = v => Math.round(v * 10) / 10;
-    sports.map((s, i) => [s, i]).filter(([s]) => s.cd).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"}))
-      .forEach(([s, i]) => { const k = s.cd[0] + "x" + s.cd[1]; if (!groups.has(k)) groups.set(k, []); groups.get(k).push([s, i]); });
-    [...groups.values()].sort((a, b) => a[0][0].cd[0] * a[0][0].cd[1] - b[0][0].cd[0] * b[0][0].cd[1]).forEach(g => {
-      const og = el("optgroup", {label: r1(g[0][0].cd[0]) + " x " + r1(g[0][0].cd[1]) + " ft"});
-      g.forEach(([s, i]) => og.append(el("option", {value: String(i), text: s.n + (s.nh ? " (net " + s.nh.map(fmtNet).join(" / ") + ")" : "")})));
-      like.append(og);
+    like.append(el("option", {value: "", text: "Pick a court size…"}));
+    // Smallest area first; each size shows its net and the first few sports that share it.
+    const r1 = v => Math.round(v * 10) / 10;
+    [...courtGroups].sort((x, y) => x[1].cd[0] * x[1].cd[1] - y[1].cd[0] * y[1].cd[1] || x[1].cd[0] - y[1].cd[0]).forEach(([key, o]) => {
+      const names = o.members.map(m => m.s.n), more = names.length > 3 ? " +" + (names.length - 3) + " more" : "";
+      like.append(el("option", {value: key, text: r1(o.cd[0]) + " x " + r1(o.cd[1]) + " ft" + (o.nh ? " (net " + o.nh.map(fmtNet).join(" / ") + ")" : o.nn ? " (no net)" : "") + " · " + names.slice(0, 3).join(", ") + more}));
     });
   }
-  if (state.sport >= 0 && sports[state.sport].cd) like.value = String(state.sport);   // the sport already on the map is the one being looked for
+  const cur = state.sport >= 0 ? [...courtGroups].find(([, o]) => o.members.some(m => m.i === state.sport)) : null;
+  if (cur) like.value = cur[0];   // the sport already on the map: start from its court size
   renderCourt(); $("court").showModal(); trackD("court-open", src);
 }
 function openPlayers(idx, src) {
