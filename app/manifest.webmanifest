@@ -1,7 +1,7 @@
 {
   "name": "RacketConnect",
   "short_name": "RacketConnect",
-  "description": "Find where to play racket sports in California, Nevada and Oregon. Links out; no bookings or payments.",
+  "description": "Find where to play racket sports in California, Nevada, Oregon and Washington. Links out; no bookings or payments.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

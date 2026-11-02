@@ -305,6 +305,7 @@ vars:
     CA: {south: 32.5, west: -124.5, north: 42.1, east: -114.0}
     NV: {south: 35.0, west: -120.01, north: 42.0, east: -114.03}
     OR: {south: 41.99, west: -124.7, north: 46.3, east: -116.45}
+    WA: {south: 45.5, west: -124.9, north: 49.05, east: -116.9}
   expected_racket_sports: 82   # the sheet should list 82 racket sports (Sandball is excluded by the sync script); a warn-level test flags any gap
   manual_match_radius_m: 150   # a hand-added venue within this distance of a known court/place is merged into it
   place_match_radius_m: 100    # an Overture place within this distance of an OSM court is part of that venue
