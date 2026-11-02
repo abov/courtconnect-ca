@@ -66,7 +66,7 @@ left join osm_facts f on f.venue_id = bvs.venue_id and f.sport_id = bvs.sport_id
 -- own court is unmarked; a seed row that lists the sport itself is kept.
 -- Hitting walls (bridge in_wall, ADR 0032) are not exported yet: rows that only a wall supports stay out until the export and app read them
 -- (steps 2 and 3 of the plan), so the map shows what it showed before.
-where (bvs.in_osm or bvs.in_places or bvs.in_manual)
+where bvs.in_courts
   and not (
     v.is_members_only
     and not bvs.in_manual

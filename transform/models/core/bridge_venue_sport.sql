@@ -1,6 +1,7 @@
 -- Which sports are played at which venue, and which source says so: the court sources (OSM, places, manual; int_venue_sport_courts)
 -- plus hitting walls (in_wall, ADR 0032). A wall adds a sport to the venue it stands at; where a court source already lists the sport
--- the larger count wins (not the sum), like manual vs OSM.
+-- the larger count wins (not the sum), like manual vs OSM. in_courts = a court source (or a rule derived from one) lists the pair; a pair
+-- that only a wall supports has in_courts false, and the marts that feed the export keep reading in_courts until the export reads walls.
 select
     venue_id,
     sport_id,
@@ -8,10 +9,11 @@ select
     bool_or(in_osm)    as in_osm,
     bool_or(in_places) as in_places,
     bool_or(in_manual) as in_manual,
-    bool_or(in_wall)   as in_wall
+    bool_or(in_wall)   as in_wall,
+    bool_or(in_courts) as in_courts
 from (
-    select venue_id, sport_id, courts, in_osm, in_places, in_manual, in_wall from {{ ref('int_venue_sport_courts') }}
+    select venue_id, sport_id, courts, in_osm, in_places, in_manual, in_wall, true as in_courts from {{ ref('int_venue_sport_courts') }}
     union all
-    select venue_id, sport_id, courts, false, false, false, true from {{ ref('int_venue_sport_walls') }}
+    select venue_id, sport_id, courts, false, false, false, true, false from {{ ref('int_venue_sport_walls') }}
 ) u
 group by 1, 2
