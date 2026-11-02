@@ -466,6 +466,16 @@ function track(name, title) {
 // The detail goes in the event PATH (event/<name>/<detail>), not only the title, so every value counts as its own row in GoatCounter and in the export.
 // Details are fixed vocabularies (sport names, filter keys, domains, link kinds), never anything typed.
 function trackD(name, detail) { track(name + "/" + String(detail).toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40), detail); }
+// Demand signal for docs/court_usage_plan.md: WHEN (weekday + part of day on the visitor's own clock), WHERE (the opened venue's city, never the venue
+// or the visitor) and which sport filter was on. These count looks at a place, not play: they say when and where interest peaks, nothing about who.
+function trackDemand(v) {
+  try {
+    const d = new Date(), h = d.getHours();
+    trackD("demand-when", ["sun", "mon", "tue", "wed", "thu", "fri", "sat"][d.getDay()] + "-" + (h < 12 ? "am" : h < 17 ? "pm" : "eve"));
+    if (v.c) trackD("demand-where", v.c + " " + (v.r || ""));
+    if (v.c && state.sport >= 0 && sports[state.sport]) trackD("demand-sport-where", sports[state.sport].n + " " + v.c);
+  } catch (e) { /* ignore */ }
+}
 // A pick (sport or filter) that leaves nothing on the map: where people look vs what we have.
 function trackEmpty() {
   try {
@@ -1088,7 +1098,7 @@ function showVenue(v, fly) {
   if (!v) return;
   hideToast();
   if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: popupRoom()});
-  track("venue-open");
+  track("venue-open"); trackDemand(v);
   popup.setLngLat([v.x, v.y]).setDOMContent(venueNode(v)).addTo(map);
 }
 

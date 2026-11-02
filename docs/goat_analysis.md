@@ -19,6 +19,7 @@ How to turn the anonymous counts (ADR 0013) into decisions. Counts are direction
 | `event/search-miss/<reason>` | a search found nothing: `no-match`, `zip-outside`, `place-no-venues`, `place-no-events` |
 | `event/mode/<play or watch>`, `event/filter/<key>` | mode switches and filters turned on (surface, access, `offer-<code>`) |
 | `event/ref/<source>` | the shared link that brought the visit (`?ref=`) |
+| `event/demand-when/<weekday>-<am\|pm\|eve>`, `event/demand-where/<city> <state>`, `event/demand-sport-where/<sport> <city>` | looks at a venue by visitor weekday and part of day, venue city, and active sport filter (interest, not play; `docs/court_usage_plan.md`) |
 | `share`, `shortlist-add/open/copy`, `focus-on`, `welcome-back`, `this-week-open`, `map-key` | habit events: is the feature used at all |
 
 Never sent: search text, venue names, places, coordinates. Details are fixed vocabularies.
