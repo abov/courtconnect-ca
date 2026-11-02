@@ -58,7 +58,7 @@ make app         # http://localhost:8765
 
 ## Known leftovers (still CA/NV specific)
 
-- The dbt `regions` var in `transform/dbt_project.yml` mirrors `regions.json` (`init_fork.py` rewrites both; `python ci/check_regions.py --config-only` fails if they differ). Each region may carry `fips` (the two-digit Census state code, US only; `init_fork.py` takes it as an optional last value after the OSM relation); the Census steps below skip regions without one. Each region also needs its state line on the map: run `python ingestion/add_state_outline.py` after adding it (CI fails until `app/data/calneva_outline.json` has it).
+- The dbt `regions` var in `transform/dbt_project.yml` mirrors `regions.json` (`init_fork.py` rewrites both; `python ci/check_regions.py --config-only` fails if they differ). Each region may carry `fips` (the two-digit Census state code, US only; `init_fork.py` takes it as an optional last value after the OSM relation); the Census steps below skip regions without one. Each region also needs its state line on the map: run `python ingestion/add_state_outline.py` after adding it (CI fails until `app/data/state_outline.json` has it).
 - `app/index.html` still starts on California + Nevada (`HOME_BOUNDS`) and its text names both states.
 - The Census boundary and place-name steps (`make extract-boundaries`, `make city-boundaries`, `ingestion/build_places_lookup.py`) are US-only. Outside the US, replace the city source.
 - Some docs and the About card text describe California and Nevada.

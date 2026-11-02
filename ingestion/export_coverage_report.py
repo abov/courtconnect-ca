@@ -52,7 +52,7 @@ def main() -> None:
         status[r[1]] = status.get(r[1], 0) + 1
 
     by_region = con.sql("select region, count(*) from core.dim_venue group by 1 order by 1").fetchall()
-    L = [f"# CalNeva coverage snapshot ({today})\n",
+    L = [f"# Coverage snapshot ({today})\n",
          "Covered regions: " + ", ".join(f"{c['name'].title()} ({code})" for code, c in overpass.REGIONS.items()) + " (ADR 0014, 0028). Venues by region: "
          + ", ".join(f"{r} {n:,}" for r, n in by_region)
          + "".join(f"; {c['name'].title()} has no data until its first extract" for code, c in overpass.REGIONS.items()

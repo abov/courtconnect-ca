@@ -55,15 +55,15 @@ def check_dbt_var() -> int:
 
 
 def check_outlines() -> int:
-    """Every state in regions.json needs its state line in app/data/calneva_outline.json (drawn under the pins). A new state fails CI
+    """Every state in regions.json needs its state line in app/data/state_outline.json (drawn under the pins). A new state fails CI
     until `python ingestion/add_state_outline.py` has added it."""
-    fc = json.loads((Path(__file__).resolve().parent.parent / "app" / "data" / "calneva_outline.json").read_text(encoding="utf-8"))
+    fc = json.loads((Path(__file__).resolve().parent.parent / "app" / "data" / "state_outline.json").read_text(encoding="utf-8"))
     have = {f["properties"]["name"] for f in fc["features"]}
     code_to_name = {c: n.title() for n, c in overpass.STATE_AREAS.items()}
     missing = [code_to_name[c] for c in overpass.REGIONS if code_to_name[c] not in have]
-    print(f"{'ok  ' if not missing else 'FAIL'} calneva_outline.json has a state line for every region in regions.json")
+    print(f"{'ok  ' if not missing else 'FAIL'} state_outline.json has a state line for every region in regions.json")
     if missing:
-        print(f"  missing: {missing}; run python ingestion/add_state_outline.py (needs the cached data/raw/*_border.wkt) and commit app/data/calneva_outline.json")
+        print(f"  missing: {missing}; run python ingestion/add_state_outline.py (needs the cached data/raw/*_border.wkt) and commit app/data/state_outline.json")
     return bool(missing)
 
 

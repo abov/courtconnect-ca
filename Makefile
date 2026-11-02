@@ -7,7 +7,7 @@ RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main che
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
 
-extract:          ## pull ALL CalNeva courts + named parent features from OpenStreetMap, then places from Overture (~20 min)
+extract:          ## pull ALL courts for every state in regions.json + named parent features from OpenStreetMap, then places from Overture (~20 min)
 	for a in $(STATES); do $(PY) ingestion/extract_osm_courts.py --area $$a && $(PY) ingestion/extract_osm_parents.py --area $$a || exit 1; done   # California -> osm_courts.csv, other states -> osm_courts_<code>.csv
 	$(PY) ingestion/extract_overture_places.py
 	$(PY) ingestion/extract_overture_addresses.py
@@ -30,7 +30,7 @@ extract-addresses: ## Overture address points near the pins, for the address fil
 reverse-geocode: ## tier 3 address fill: cached Nominatim lookups for non-home blanks (1 request a second; runs the uncached pins only, capped at 100 per run; ask the owner for more)
 	$(PY) ingestion/reverse_geocode_blanks.py --limit 100
 
-extract-places:   ## pull racket-related CalNeva places from Overture Maps (reads S3 directly, ~1 min)
+extract-places:   ## pull racket-related places from Overture Maps (reads S3 directly, ~1 min)
 	$(PY) ingestion/extract_overture_places.py
 
 search-terms:     ## rebuild the sport name-keyword list (used to find places by business name)

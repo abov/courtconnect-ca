@@ -1,4 +1,4 @@
-# CalNeva coverage snapshot (2026-11-02)
+# Coverage snapshot (2026-11-02)
 
 Covered regions: California and Nevada (ADR 0014). Venues by region: CA 9,754, NV 546.
 
