@@ -1,60 +1,148 @@
 venue_id,lat,lon,place_name,place_kind,source,checked_on
 0043940eab32f748ecea62d4b0688589,36.06587,-115.312921,Spring Valley,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+02862b502ca08a56db15e01f285208a6,44.799069,-122.797404,Stayton,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 034e5e68629d7fc26709bd1cf95422e8,36.028765,-115.332384,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0624525fa15d74fadefd1bf5e31a8151,45.592992,-120.695318,Wasco,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+085d23acd3e95bc79a34d1ab9e27f619,45.133877,-122.853418,Woodburn,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+0a11298f69fad3c1f2f1162518a8815c,44.944608,-123.13461,Polk County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+0a5020b785c6cbdf12953f1903f6bd5b,44.957898,-123.061142,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0a889434a71cd5f9baf2cfc052934513,37.24289,-115.818286,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 0c58294f684affbc1af67a0369e14b32,38.961017,-119.884354,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0d964076191c6a0339581510ee24d8a5,44.449206,-124.080575,Bayshore,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0dabee24e1558a56575fa5712912d7dc,40.198843,-122.209937,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0db7cfe07896b507c0152f8145a829e6,44.999607,-120.220575,Fossil,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0f920998c37caf7f01737fa0c933c91a,38.7285,-121.072642,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0fe7b2ac095b370791e304559b75f8f8,44.957907,-123.085747,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1070e76525f2d4de73daa0169f332ace,44.984608,-122.997458,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+117466845fbe230a262221179257772c,44.836836,-122.99868,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+120c5dbdc4e62b6571584d4a9e505b89,44.91909,-123.299649,Dallas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1325c55637e5e3b85d7d747f03cc05b1,44.910228,-123.063121,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+155dc2784247ee146718ec46cfbe90a8,44.897785,-123.028218,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+176366cf1b67833ecd5f56857fc4d462,44.994783,-123.055862,Keizer,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+18455ff88c779d59706cbc70edb45655,44.967129,-123.101382,Polk County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+19a197625fba54f409887923e7eeeb0a,44.753498,-124.062336,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1c0001ee831ea43aa684f18871725d8e,44.631439,-121.123748,Madras,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1f961459c079314f0d70c8176ec9b83c,45.140493,-122.859409,Woodburn,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1fae37897a3432df6c922b539ae98fd1,44.859539,-123.022738,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 24f1beab0602400a3e0b7b64306f54d3,38.850144,-120.858497,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+25ea7050685a87ecda4e447171d94f1d,44.98231,-123.029775,Keizer,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+27e603a880aa07f11e27e05206787c3d,44.593313,-124.06341,Newport,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+28169d95f5d1749694942197bd9f1d6a,44.945378,-122.994119,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+29e1b95e077a0748b3260a1fd8222e98,44.863374,-124.032769,Lincoln Beach,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2d473612d6ccc09694aa1b8db838ae7c,44.869896,-123.019475,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2ec7db62e86dda66d37d83358f70c49b,44.982323,-122.990058,Hayesville,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 3183945fa7ed31e6f3db6872a52238f5,33.001684,-118.552826,Los Angeles County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+31f7dd9e6c9df92feadebc97787be908,45.5087,-120.577731,Sherman County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 352bd5cd0ce15a1857aeacc5fbdb4631,34.752497,-120.537476,Vandenberg AFB,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+35b8c6d7702eeaa51f421171f610ac9e,44.885818,-123.077489,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+36ad2b03952e25ff3ad356a620251a74,45.152479,-122.849834,Woodburn,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+37cc05adf0d93b6cfe4ee1da80736f92,44.962631,-122.979398,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3a1e1dbabcc1c64b23e7e9d1b760684d,44.853106,-123.211202,Independence,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 43007abf5ebf0db370b955c2cdfb18ae,38.988489,-119.20795,Lyon County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 44cee3048419d2248635af0d55e3936d,38.965408,-119.897903,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 4823c8278ed994b59229e237178f83e8,36.574803,-115.677165,Indian Springs,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 485fdb4e388d8451fc480e0b3ae24003,37.88354,-116.765536,Nye County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+48fe3c5cfbd4b4d67f3bf1faaef7e5db,44.866818,-123.022259,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+493e6b2aad1164d8aa178e1f1279db93,44.909926,-123.039583,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 4b763b937705eee35545ab5d3f643687,39.082257,-119.220857,Lyon County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+4e5a7d436021fc218d4bbf9400e8a74e,44.905603,-123.072756,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+50bfd6014d4d2a82f1077130a4acbcf4,36.229206,-115.247931,Las Vegas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+5279fbd76b3547320f3bb6f05ae277c9,45.013713,-122.789539,Silverton,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 586fec355f152aa7b251e053f2941d5a,40.349604,-122.199957,Lake California,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+59148280707aa6c6043cea317d5f84fe,44.907259,-123.068297,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 59858458637951ef74539acd6e93470d,38.947786,-120.088789,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+59c5f5c5366b08650855d61e6559ca5a,44.986796,-124.012087,Lincoln City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5aeb5882c4c59bf2d1ea60f51603e49e,39.510521,-119.643718,Storey County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+5b9dffabc7b1919d10dbd80164dba800,44.961463,-122.991748,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+5c70667c47121d94bc3e49980d3658d3,44.938772,-122.934968,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+5d6ab5d738a6ff62cb07a22e748a3ac0,33.704968,-115.636431,Riverside County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5e0968232a24dbf0e5d73f5a5afa3266,38.730405,-120.895122,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+5f9e08cf274ac4c3d4c97018445ce935,44.888007,-123.039239,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 63ce57c09bbd9fea0d4107dfa010f020,38.737782,-121.07892,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 6b4c6e7796289d45e7b3033408829ee4,36.00993,-121.239845,Fort Hunter Liggett,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 6c8535550500dcee5b9e27f4fb6570c6,38.881435,-120.070764,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+6ffffe23518d038e4f5d098fd8d33d3a,44.929764,-123.036508,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+70d2328b70ae8029d5864749ac274fda,44.992556,-123.980749,Neotsu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+71e11829a5038dc96fa09279a47dd371,44.900281,-123.043167,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7b2c3aab7c50e6461f3cf689f6abbcfa,36.151983,-115.419111,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+7bb127c823a01923549f00d72a99fde3,44.891546,-123.069378,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7d5ec6ef1b5f143becebe71d1b08b42c,40.195446,-122.212176,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+7f737d123997132ae5801ae15a20202e,44.961789,-122.745234,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7f82adfdf24147bababcd5467ecff131,39.044849,-120.116557,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+8011e6d51c6c1ae3c222cdf01140d54c,44.830768,-123.001358,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+82098d5d4797a0581c57f7a2e15a54b6,44.958787,-123.029001,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 837c9aa940f1f92e86652e7d80c10071,34.749733,-120.532812,Vandenberg AFB,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+86cb8f160cdc7b2a2ff9e535db9f247e,44.838072,-122.997957,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8703133fa3e644477f0d30bc100e31f0,44.307867,-124.098855,Yachats,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8a5827b571b7e671d67d1af0fc77f2fa,44.854496,-123.030884,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8a5a34b1064ae854e66c583242bd80ce,40.653228,-119.355191,Gerlach,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 8c8fcb2993b0d09c80e3048162acc66d,37.119543,-121.732675,Santa Clara County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+8e669df64aa74ed16dc9577799423cc1,44.998281,-123.03356,Keizer,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8e6fd1d5b7fd306fc2a2f68ebbc595c2,44.877014,-123.060242,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8f390bcac3471df2ba5a113abc92bd10,44.738398,-120.171935,Wheeler County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+955507e27cb99efac27d21ace06facc8,45.23191,-120.184685,Condon,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+95590e5d49a50cbda6f3c0f7958c8593,44.974104,-124.005399,Lincoln City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+958001ddc149110dabb378dd66b59d84,44.916846,-123.300076,Dallas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+95f4c7c85577683e867c07d6943e7691,44.901389,-123.028269,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+972bd6f87a22476c7bf91992c084fdab,44.753414,-124.061202,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 97bf1bcd7a6077eef40a3daed63531f7,36.009749,-121.24186,Fort Hunter Liggett,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+98f1f6a90b42f85cc3446f92aaf096e8,44.969705,-123.033241,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 992bc0716ef4918870aa00246bbb71e1,40.712595,-120.724389,Stones Landing,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 999eb3918b0c13436eb12ea0f630d0fb,39.053861,-119.945069,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 9b589ad4d133d1ae656f140533c16cd3,40.300616,-120.522383,Janesville,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 9bc58471747389e3b409f42c642febe9,39.368792,-119.722712,Washoe County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 9ebf19d212749c578628b4b000f847b9,39.74957,-122.157641,Glenn County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 a05cb4ce38139bc02bfab3d093523960,35.95837,-115.184415,Enterprise,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+a128f0fee6c57ad801e9751e7259c430,44.886177,-124.016219,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 a97ba9a6cf4da05610e774a5da9c8856,38.996073,-120.108152,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+ad6f890e8b1c223a2d3cf960a6590893,44.966217,-123.107176,Polk County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b14edaaf4ca2cb55d7c05a0c3e99c38e,34.989206,-117.860235,Kern County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b1b9d0c68ebbfe644f5d85b9e1aecaac,44.878101,-123.044668,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b33f901721d5dd16353a1b47f4026c1b,38.977931,-119.935731,Round Hill Village,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b51b1a09176398a719c39abb0f748893,45.025602,-122.738412,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b66b218205f3a8d6a6b1ffdb7c3c1a54,39.074931,-119.945234,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 b6cd2917d7861f308c7332561ca23542,39.2472,-120.355386,Placer County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b7c5908371fdd11b61e6bfd16305b520,44.975525,-123.996373,Lincoln City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b84fea08623c417553a098f522481846,44.939055,-123.006553,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b8dfe584025d21eca5f8707ac9ea590f,39.079132,-119.944988,Glenbrook,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 bcd1baa5a0c08b68b3c0bd515fce9c96,36.056791,-115.446932,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+bd04e04fb3b9c970f274d31feee681b2,44.893725,-123.071402,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bd8c33c2bcd59003e56a5aa006d439a8,44.833824,-119.793381,Spray,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bebe5431b4550181c73649120f0a4421,44.926226,-123.319888,Dallas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c090c3edda664947a957ef8ad12c30ee,39.459281,-118.792306,Churchill County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 c5c88196a91da06bde0529273517e6ea,40.31846,-122.802696,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 c5fc1ba6878b3ed0a6af698e00c6f8bc,38.692887,-120.678408,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+c63996828ed108ea96ca6c7dc42362a8,44.840854,-120.470507,Wasco County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c6c45731d17323e2a17e001bea2bb38c,38.745383,-122.493311,Lake County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+c7f6dd352441ba3e800f727aafc6d141,44.853019,-124.043087,Lincoln Beach,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c8b37c37f49e8a974d43b42cbf422a79,45.22978,-122.832538,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c93b2659c83c14a5ff1d078afdea6788,44.920164,-123.300326,Dallas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 caac4c9cc69559f4044b1e6b5ec6bd4a,36.579483,-115.674835,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 cc84e9ec53317387d465f12a9f5e6c81,38.756922,-119.365872,Smith Valley,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+cdad88dda38d5b4eedbb528d20f3029c,44.846749,-123.190109,Independence,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 cf2df7e18cfdf04d01ad1013e5c71dd9,33.256631,-119.48371,Ventura County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+d47fd6b00f30c955e77ea80fc0c00cb3,44.941909,-122.822777,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 d5753d09ccdbb0225b30521366aa4587,33.704967,-115.636431,Riverside County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 d6c0eaf8ec5d401f5b8cb2899d574214,38.902055,-120.995792,Auburn Lake Trails,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+da34ed4d41dcc917cf1c3e957fab7a9c,44.796121,-124.068079,Depoe Bay,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+dc3370730f0d45b30d6b514ec01ddc38,45.21091,-122.798029,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 dd44b3639bd1d5308f604a9fab7f6b07,38.743733,-121.080182,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 dd6da8f26261007d2ede027f88351730,39.050735,-119.944984,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 dd818859555239c9be2da861f91bab10,38.996228,-119.952016,Zephyr Cove,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+ddd4a6225d2849ac3bf4340185076098,44.833891,-122.9974,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e15ca568d8664d580b80f35ea8ffa78c,39.051973,-120.114164,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+e335df0f526667c286067510329ab6ad,44.852083,-123.221399,Monmouth,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e6346b1329dc4ddbecca897e0e7303c5,39.076259,-119.945202,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+e6daa85f011e7a264b5baf882cb5778e,44.877665,-124.035311,Lincoln Beach,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e7588cc1799b510523c2d5b9e9322cd0,36.070899,-115.955197,Pahrump,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e770ca41a70f192906ecfaca4ab03277,44.98484,-124.008398,Lincoln City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e8fa73459a771eb6601d47b454a69b05,44.907095,-123.055161,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e9c92083cbff89a36f876a258e67079a,44.865182,-123.026653,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ea2a5e8287bd3284821f6fe8808ae547,44.830698,-122.795813,Sublimity,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+eab57ca25488501be8dbe1f01089c720,44.902412,-123.060443,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ee8a0c4ce7fd7d6658752c4ae2164843,44.946579,-123.022804,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 ef90afca5dfb35eecbddc73844ba1d48,36.904372,-119.122702,Fresno County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 f4480d06b457498831f9a2ecca6699e0,38.958683,-119.885206,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 fb1e01eee4179401394ab37d430cad5a,36.151895,-115.422999,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 fd7d948d090f4309bd32cc216333017e,36.694115,-118.874223,Tulare County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+ff95cea28a25bd21dad4ac13bdda1237,45.009848,-123.015529,Keizer,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02

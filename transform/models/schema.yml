@@ -419,7 +419,7 @@ seeds:
     description: >
       Player-matching apps and sites shown under "Find people to play with" (social phase A, ADR 0015). Link-outs only: nothing is
       scraped, no member data is stored. `evidence` quotes the public page read on `verified_on`; none of them is checked for a
-      California or Nevada player pool, and the app says so.
+      California, Nevada or Oregon player pool, and the app says so.
     columns:
       - name: platform
         tests: [unique, not_null]
