@@ -45,5 +45,6 @@ over---under.com,Over Under events,organizer,Padel,CA,browser pane (events list)
 pickleballtournaments.com,PickleballTournaments.com (registration pages for PPA and USA Pickleball events),platform,Pickleball,CA+NV,"browser pane, event page only (venue and dates)",active,2026-10-24,2026-10-24,Used for the venue of the Sacramento PPA Challenger; the PPA schedule is the primary source
 csasquash.com,College Squash Association schedule,governing_body,Squash,none,WebFetch,rejected,2026-11-01,,No CA/NV events on the 2026-27 championship schedule (2026-11-01)
 pushitreplays.com,PUSHIT racket sports events hub,aggregator,All,unknown,not read,candidate,2026-11-01,,Aggregator found by search; read the organizer page before adding any event [cloud 2026-11-01: host does not resolve in sandbox; not read]
-mypickleballconnect.com,My Pickleball Connect,aggregator,Pickleball,CA+NV,not read,candidate,,,"Aggregator in search results; read the organizer page before adding any event"
+mypickleballconnect.com,My Pickleball Connect,aggregator,Pickleball,CA+NV+OR,not read,candidate,,,"Aggregator in search results; read the organizer page before adding any event"
 active.com,Active Network (City of Reno PRCS listings),platform,Table Tennis;Tennis,NV,not read,candidate,,,"Reno rec table tennis sessions look like classes not tournaments; read before adding"
+foundrypadel.com,Foundry Padel,organizer,Padel,OR,WebFetch,active,2026-11-02,2026-11-02,"Portland indoor padel club; Foundry Open Dec 5-6 2026 and Foundry League on the home page"
