@@ -1,8 +1,8 @@
 -- Fails on a watch event that is internally inconsistent or unsafe to show:
---  * coordinates outside CA and NV (typo)           * end before start
+--  * coordinates outside every covered state (typo)           * end before start
 --  * a "confirmed" date with no dates              * links that are not https
 select event_key, 'bad coordinates' as problem from {{ ref('stg_watch_events') }}
-where {{ outside_region_bbox('lat', 'lon', "'CA'") }} and {{ outside_region_bbox('lat', 'lon', "'NV'") }}
+where {{ outside_all_region_bboxes('lat', 'lon') }}
 union all
 select event_key, 'end before start' from {{ ref('stg_watch_events') }}
 where start_date is not null and end_date is not null and end_date < start_date

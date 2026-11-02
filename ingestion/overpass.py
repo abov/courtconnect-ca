@@ -19,7 +19,7 @@ URLS = [  # ordered by observed reliability; the first healthy one wins
 # The covered area lives in regions.json (docs/fork_guide.md). REGIONS: code -> bbox (south, west, north, east),
 # OSM border relation (the real filter; the bbox only bounds the tiles) and border cache file.
 _CFG = json.loads((Path(__file__).parent / "regions.json").read_text(encoding="utf-8"))
-REGIONS = {code: {"bbox": tuple(c["bbox"]), "relation": c["relation"], "cache": raw_path(c["cache"])}
+REGIONS = {code: {"bbox": tuple(c["bbox"]), "relation": c["relation"], "fips": c.get("fips", ""), "cache": raw_path(c["cache"])}
            for code, c in _CFG["regions"].items()}
 STATE_AREAS = {c["name"]: code for code, c in _CFG["regions"].items()}  # --area value -> region code
 BBOXES = {k: tuple(m["bbox"]) for k, m in _CFG["metros"].items()}  # named metros, south, west, north, east
@@ -27,6 +27,22 @@ BBOXES = {k: tuple(m["bbox"]) for k, m in _CFG["metros"].items()}  # named metro
 # Which region(s) a named area may keep rows from (the polygon clip decides, per point).
 AREA_REGIONS = {**{name: (code,) for name, code in STATE_AREAS.items()},
                 **{k: tuple(m["states"]) for k, m in _CFG["metros"].items()}}
+
+
+def out_name(stem: str, area: str) -> str:
+    """Default raw file for an extract: the first region's rows (California) live in <stem>.csv, every other state's in
+    <stem>_<code>.csv (osm_courts_nv.csv), which load_raw appends. A metro follows its state when it has just one."""
+    codes = AREA_REGIONS[area]
+    return f"{stem}_{codes[0].lower()}.csv" if len(codes) == 1 and codes[0] != next(iter(REGIONS)) else f"{stem}.csv"
+
+
+def sql_bbox(xcol: str, ycol: str) -> str:
+    """A SQL condition for 'inside any region's bounding box' (Overture's bbox.xmin / bbox.ymin), skipping boxes
+    that lie inside another one. A cheap pre-filter for the parquet read; region_at() is the real filter."""
+    boxes = [cfg["bbox"] for cfg in REGIONS.values()]
+    boxes = [b for b in boxes if not any(o != b and o[0] <= b[0] and o[1] <= b[1] and o[2] >= b[2] and o[3] >= b[3] for o in boxes)]
+    return " or ".join(f"({xcol} between {w} and {e} and {ycol} between {s} and {n})" if len(boxes) > 1
+                       else f"{xcol} between {w} and {e} and {ycol} between {s} and {n}" for s, w, n, e in boxes)
 
 
 def tiles(region: str, lat_step: float = 1.6, lon_step: float = 2.1):

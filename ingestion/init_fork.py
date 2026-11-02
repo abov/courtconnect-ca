@@ -3,7 +3,7 @@
     python ingestion/init_fork.py --region TX texas 25.8 -106.7 36.6 -93.5 114690            # dry run: prints what would change
     python ingestion/init_fork.py --region TX texas 25.8 -106.7 36.6 -93.5 114690 --apply    # does it
 
---region CODE NAME SOUTH WEST NORTH EAST OSM_RELATION   (repeat for more regions; NAME is the --area value, the relation is the
+--region CODE NAME SOUTH WEST NORTH EAST OSM_RELATION [FIPS]   (repeat for more regions; NAME is the --area value, the relation is the
                                                         OSM border relation id, found on the region's openstreetmap.org page)
 --metro KEY SOUTH WEST NORTH EAST CODE[,CODE]           (optional named sub-area for quick trial runs, e.g. --metro austin 30.1 -97.95 30.5 -97.55 TX)
 
@@ -36,7 +36,7 @@ OWNER_SEEDS = [
 
 def parse_regions(specs: list[list[str]]) -> dict:
     regions = {}
-    for code, name, s, w, n, e, rel in specs:
+    for code, name, s, w, n, e, rel, *fips in specs:   # FIPS: the two-digit Census state code (US only; optional)
         s, w, n, e = map(float, (s, w, n, e))
         if not (-90 <= s < n <= 90 and -180 <= w < e <= 180):
             raise SystemExit(f"region {code}: bbox must be south < north within -90..90 and west < east within -180..180")
@@ -46,7 +46,9 @@ def parse_regions(specs: list[list[str]]) -> dict:
             raise SystemExit(f"region name {name!r} must be lowercase letters, digits or underscores (it is the --area value)")
         if not rel.isdigit():
             raise SystemExit(f"region {code}: the OSM relation must be a number, got {rel!r}")
-        regions[code] = {"name": name, "bbox": [s, w, n, e], "relation": int(rel), "cache": f"{code.lower()}_border.wkt"}
+        if fips and not re.fullmatch(r"\d\d", fips[0]):
+            raise SystemExit(f"region {code}: FIPS must be a two-digit Census state code, got {fips[0]!r}")
+        regions[code] = {"name": name, "bbox": [s, w, n, e], "relation": int(rel), "fips": fips[0] if fips else "", "cache": f"{code.lower()}_border.wkt"}
     return regions
 
 
@@ -76,6 +78,17 @@ def apply(root: Path, regions: dict, metros: dict, write: bool) -> list[str]:
     out.append(f"ingestion/regions.json: regions {', '.join(old['regions'])} -> {', '.join(regions)}; metros {len(old['metros'])} -> {len(metros)}")
     if write:
         cfg_path.write_text(json.dumps(new, indent=1) + "\n", encoding="utf-8")
+    dbt_path = root / "transform" / "dbt_project.yml"   # the dbt `regions` var mirrors regions.json (ADR 0028)
+    if dbt_path.exists():
+        text = dbt_path.read_text(encoding="utf-8")
+        head = "  regions:   # covered states, mirrors ingestion/regions.json (south, west, north, east); ci/check_regions.py fails if they differ (ADR 0028)"
+        entries = [f"    {code}: {{south: {c['bbox'][0]}, west: {c['bbox'][1]}, north: {c['bbox'][2]}, east: {c['bbox'][3]}}}" for code, c in regions.items()]
+        block = "\n".join([head, *entries]) + "\n"
+        new_text, n = re.subn(r"^  regions:.*\n(?:    .*\n)+", lambda m: block, text, count=1, flags=re.M)
+        if n:
+            out.append(f"transform/dbt_project.yml: vars.regions -> {', '.join(regions)}")
+            if write:
+                dbt_path.write_text(new_text, encoding="utf-8")
     for p in seed_files(root):
         lines = p.read_text(encoding="utf-8").splitlines()
         rows = max(0, len(lines) - 1)
@@ -104,12 +117,14 @@ NEXT = """Next (docs/fork_guide.md):
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--region", nargs=7, action="append", required=True, metavar=("CODE", "NAME", "S", "W", "N", "E", "RELATION"), help="see above (7 values)")
+    ap.add_argument("--region", nargs="+", action="append", required=True, metavar="CODE NAME S W N E RELATION [FIPS]", help="see above (7 values, plus an optional FIPS)")
     ap.add_argument("--metro", nargs=6, action="append", default=[], metavar=("KEY", "S", "W", "N", "E", "CODES"), help="see above (6 values)")
     ap.add_argument("--apply", action="store_true", help="write the changes (default: print them)")
     ap.add_argument("--root", type=Path, default=ROOT, help=argparse.SUPPRESS)
     args = ap.parse_args()
 
+    if any(len(r) not in (7, 8) for r in args.region):
+        sys.exit("--region takes CODE NAME SOUTH WEST NORTH EAST RELATION [FIPS]")
     regions = parse_regions(args.region)
     metros = parse_metros(args.metro, regions)
     if args.apply and not tree_is_clean(args.root):
