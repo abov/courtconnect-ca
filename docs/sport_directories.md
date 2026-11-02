@@ -45,6 +45,6 @@ Searched in grouped queries (3-6 sports per query), public web only. A grouped s
 | Table Squash | Origin is UK (2009); no California listing. No usable directory found. |
 | Tennis Baseball, Tennis Triples, Lite Tennis, Naked Tennis, Tenis criollo | No California club found. No usable directory found. |
 | 360Ball, Qianball, Taiji Bailong | No US club list. 360Ball (South Africa) and Qianball (Denmark) have no US clubs in the results. No usable directory found. |
-| Riftball, Skyball, Toccer, Sandball, Miniten Thug, Floor Pro Mini Tennis, Pro Sunball | Mostly retail products; no clubs or courts found. No usable directory found. |
+| Riftball, Skyball, Toccer, Miniten Thug, Floor Pro Mini Tennis, Pro Sunball | Mostly retail products; no clubs or courts found. No usable directory found. |
 | Wall Pong, Xare, Jokari, Smolball | No result naming a California venue. Xare is a Basque pelota discipline (see Basque Pelota above). Jokari is a home game, no venue needed. No usable directory found. |
 | Downside Ball Game, Eclipseball, Ketball, Loboton, Micro Pickleball, Pang Pong, Rapidball, Spec Tennis, Teqis, Teqpong | **Not searched** in this pass. Unchecked, not negative. |
