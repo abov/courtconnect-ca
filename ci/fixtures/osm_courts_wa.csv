@@ -1,0 +1,5 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+way,634363013,47.0172632,-122.8820515,OHS Tennis Courts,tennis,,,,,,,sports_centre,,,,,,,,,,2026-11-02T20:52:54+00:00,WA
+relation,13396257,47.0042351,-122.8116845,Rainier Vista Pickleball Courts,pickleball,,,,,,,sports_centre,,,,,,,,,,2026-11-02T20:52:54+00:00,WA
+node,3339242278,47.6983532,-122.1842036,Seattle Badminton Club,badminton,,,,,,,club,,,,,,14:30-20:00,10858,117th Place Northeast,Kirkland,2026-11-02T20:52:54+00:00,WA
+node,3889966937,47.6272088,-122.1614472,Seattle Pacific Table Tennis Club,table_tennis,,,,,,,sports_centre,,,,,,,,,,2026-11-02T20:52:54+00:00,WA
