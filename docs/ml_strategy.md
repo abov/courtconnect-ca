@@ -4,7 +4,7 @@ Written 2026-10-21. A plan, not a decision: nothing here starts a scheduled task
 `docs/ml_plan.md` (the ML phases and their results), `docs/self_service_plan.md` (which refresh steps a machine can own) and ADR 0017 / 0019 (the page reader, and when an agent may merge). Read those for detail; this page is the order, the architecture and the case for doing it.
 
 ## 1. The case for ML here (the short version)
-CourtConnect is a data-quality problem on messy open data, run by one person. Three facts make ML a good fit, and each one is already measured in this repo:
+RacketConnect is a data-quality problem on messy open data, run by one person. Three facts make ML a good fit, and each one is already measured in this repo:
 
 1. **The bottleneck is reading and judging text, not computing.** The 116-row review queue, the facility scans, the `*-access` leads, the 482 pins that still lack a street, and every court count that is "on a page somewhere" all come down to "read a public page, find the sports, courts and address". That is what a language model does, and it is slow and context-hungry done by hand in a chat session.
 2. **Every human decision is already a label.** About 170 rows in `place_sport_overrides.csv`, 129 hand-judged venue pairs in the match gold set, 34 hand-settled pages for the reader, and every closed GitHub issue are verdicts with evidence. Most projects have to pay for labels; this one produces them as a by-product of working. Each verdict makes the next model better, so review effort now buys automation later.
@@ -25,7 +25,7 @@ CourtConnect is a data-quality problem on messy open data, run by one person. Th
 ## 2. The honest answer to "should we build agents, or is there another way?"
 Yes, build agents, but not one free-roaming agent. There are three ways to automate this project, and the right answer is the middle one, built on top of the first.
 
-| Approach | What it is | Fits CourtConnect? |
+| Approach | What it is | Fits RacketConnect? |
 |---|---|---|
 | **A. Plain automation** | Scripts + `make` + CI + cron. No LLM. | Covers about two thirds of the runbook already (the "M" steps in `docs/self_service_plan.md`). Do this first and keep it as the spine. |
 | **B. Narrow agents under deterministic gates** (recommended) | Several small workers, each with one job, a fixed output format, no tools beyond what it needs, and a merge gate it cannot change. The model reads and proposes; code verifies and decides. | Fits the "E" steps (evidence, quote) and issue handling. This is ADR 0019's design. |

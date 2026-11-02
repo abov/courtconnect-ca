@@ -1,6 +1,6 @@
 # Search interest (Google Trends)
 
-Status: BUILT 2026-10-25 (first export 2026-10-25). Refresh runs from the cloud routine "CourtConnect search interest refresh (quarterly)" (`docs/cloud_routines.md`; quarterly, opens a PR; a person merges). The cloud run has no browser pane: it tries WebFetch once and stops if no real `comparedgeo` values load (never estimates); a full read needs a local run in the browser pane.
+Status: BUILT 2026-10-25 (first export 2026-10-25). Refresh runs from the cloud routine "RacketConnect search interest refresh (quarterly)" (`docs/cloud_routines.md`; quarterly, opens a PR; a person merges). The cloud run has no browser pane: it tries WebFetch once and stops if no real `comparedgeo` values load (never estimates); a full read needs a local run in the browser pane.
 
 **Goal:** an internal planning signal: where do people search for a sport but we have few pins? It picks the next facility scan or lead pass. It is NOT shown on the map and is not a ranking of venues. `make interest` prints it.
 

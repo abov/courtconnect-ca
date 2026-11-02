@@ -44,7 +44,7 @@ No ML. A small hand-curated table plus existing data:
 3. **Rent or buy gear:** what you need (sheet `base_gear`) and where. "Rent at the venue" only when a public venue page says so: needs a new `rental` action type (or a flag) in `venue_actions.csv` with `evidence` + `verified_on`, as for every link-out. "Buy": the sheet's `Gear URL`, a neutral buying guide or the official body, never a store we pick for pay. If unknown, say "Most clubs lend rackets; ask when you book" only if a source supports it, otherwise omit.
 4. **Shops and places to ask, near you:** see "Gear shops near the last search" below.
 5. **Learn more:** a beginner guide or the sport's official body (the sheet's `Learn URL`, `Rules URL`, `Court URL`, `Gear URL`). A guide or governing-body page is as good as a shop link, and is the fallback wherever we have no sourced rental or shop.
-CourtConnect still links out and takes no bookings or payments, and no affiliate links. Any row we cannot source is hidden, not guessed. The guide also opens from the sport's About card, so anyone can use it without being nudged.
+RacketConnect still links out and takes no bookings or payments, and no affiliate links. Any row we cannot source is hidden, not guessed. The guide also opens from the sport's About card, so anyone can use it without being nudged.
 
 ### Gear shops near the last search
 Show up to 3 places to ask about, rent or buy gear, closest to where the person last searched (the city, zip or map centre they used, kept only in their browser as `cc.lastArea`; nothing sent anywhere, no "use my location" needed).

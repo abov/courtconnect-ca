@@ -32,7 +32,7 @@ Read from public App Store pages and the connectplayers.ca home page (text only,
 
 Added later the same day (2026-10-21): Playtomic, UTR Sports, PairUp and RacketPal, from public store and homepage text. Not added: the names "Link Up" and "RacketX", which could not be found at all. Re-check if the owner has a link. None of the five has a verified California/Nevada player pool, so the app says so. Shown as the "Find people to play with" list (seed `player_platforms.csv`, needs `evidence` + `verified_on`). Next: filter the existing Meetup/WhatsApp/Partiful link-outs into the same view; deep links or embeds need the platform's say-so, so no.
 
-## What makes CourtConnect different (keep these)
+## What makes RacketConnect different (keep these)
 1. **Every place, not only bookable ones:** public parks, hitting walls, YMCAs, rec centers, places to watch.
 2. **Every racket sport**, with room to discover lesser-known ones; tennis stays visible next to pickleball (ADR 0015).
 3. **Honest labels:** reported / official / visited with dates. Stale data is the known weak spot of Places2Play.
@@ -45,7 +45,7 @@ own guide says you may have to host the first game). Instead:
 - **Social phase A (closed 2026-10-21):** a "community of communities": link-outs to player apps and recurring open-play series that already exist
   (Watch & Social view). Each app's terms are still unread; we only link out.
 - **Only if the beta shows demand:** phase B (own profiles and matching), with its own ADR. Signals: GoatCounter clicks on social
-  link-outs, and a beta question such as "Would you use CourtConnect to find people to play with?"
+  link-outs, and a beta question such as "Would you use RacketConnect to find people to play with?"
 
 Sources: [Gameli guide](https://www.gameli.app/guides/best-apps-to-find-people-to-play-with),
 [Plei 2.0](https://www.plei.com/blog/meet-plei-2-0-building-the-largest-soccer-community-in-the-world),

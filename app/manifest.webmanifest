@@ -1,6 +1,6 @@
 {
-  "name": "CourtConnect CalNeva",
-  "short_name": "CourtConnect",
+  "name": "RacketConnect",
+  "short_name": "RacketConnect",
   "description": "Find where to play racket sports in California and Nevada. Links out; no bookings or payments.",
   "start_url": "./",
   "scope": "./",

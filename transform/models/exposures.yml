@@ -2,7 +2,7 @@ version: 2
 
 exposures:
   - name: courtconnect_map
-    label: CourtConnect CalNeva map
+    label: RacketConnect map
     type: application
     maturity: medium
     url: https://abov.github.io/courtconnect-ca/
@@ -18,7 +18,7 @@ exposures:
       - ref('dim_wall')
       - ref('mart_wall_pins')
     owner:
-      name: CourtConnect maintainer
+      name: RacketConnect maintainer
   - name: data_quality_scorecard
     label: Data quality scorecard
     type: analysis
@@ -31,4 +31,4 @@ exposures:
       - ref('stg_venue_actions')
       - ref('stg_watch_events')
     owner:
-      name: CourtConnect maintainer
+      name: RacketConnect maintainer

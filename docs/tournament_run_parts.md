@@ -4,11 +4,11 @@ The single 1st/15th run (tournaments for every sport + data refresh) stopped aft
 
 | Part | Cloud routine (claude.ai/code/routines) | Cron (America/Los_Angeles) | Covers |
 |------|---------|--------|--------|
-| 1 | CourtConnect tournaments part 1 | 09:00 on the 1st and 15th | USTA SoCal/NorCal, USA Pickleball, PPA, ITF pro tour |
-| 2 | CourtConnect tournaments part 2 | 10:30, gated on Part 1 | USA Badminton, R2 Sports, table tennis, Silicon Valley Open / US Squash, skyball, Club Locker squash |
-| 3 | CourtConnect tournaments part 3 | 12:00, gated on Part 2 | USA Padel calendar, beach tennis organizers, padel rechecks and lead rechecks |
-| 4 | CourtConnect tournaments part 4 | 13:30, gated on Part 3 | Instagram sweep, new-venue social handles, player-group links, new-court discovery for every sport |
-| 5 | CourtConnect data refresh: part 5 | 15:00, gated on Part 4 | data refresh (`docs/refresh_agent.md`), stacked on the tournament PR |
+| 1 | RacketConnect tournaments part 1 | 09:00 on the 1st and 15th | USTA SoCal/NorCal, USA Pickleball, PPA, ITF pro tour |
+| 2 | RacketConnect tournaments part 2 | 10:30, gated on Part 1 | USA Badminton, R2 Sports, table tennis, Silicon Valley Open / US Squash, skyball, Club Locker squash |
+| 3 | RacketConnect tournaments part 3 | 12:00, gated on Part 2 | USA Padel calendar, beach tennis organizers, padel rechecks and lead rechecks |
+| 4 | RacketConnect tournaments part 4 | 13:30, gated on Part 3 | Instagram sweep, new-venue social handles, player-group links, new-court discovery for every sport |
+| 5 | RacketConnect data refresh: part 5 | 15:00, gated on Part 4 | data refresh (`docs/refresh_agent.md`), stacked on the tournament PR |
 
 **Schedule (owner 2026-10-27):** a scheduled run cannot start another scheduled run (the local tool refused: "Refusing to run a scheduled task from a scheduled-task run session"), so the parts are NOT chained. Each has its own cron on the 1st and 15th, spaced so they do not overlap, and each part is gated on the one before it.
 - **Gate (first step of parts 2-5, before any work):** `git fetch origin`, then check that the previous part finished for this cycle: `docs/sessions/<today>-tournament-part-<N-1>.md` (or, for Part 5, Part 4's) exists on `origin/claude/tournaments-<cycle date>` (or on origin/main if that PR already merged), or the Pass section in `docs/tournament_sources.md` has a "Part <N-1>" sub-heading with "Last run: <today>". If a part found nothing and wrote no note, its Pass section line still counts. If the previous part is missing, wait up to 20 minutes (check every 5 with a short sleep), then stop with "PART N SKIPPED: Part <N-1> not done for <today>" and open nothing. A skipped part is run by hand later (Run now).
