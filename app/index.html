@@ -1573,6 +1573,7 @@ function courtFit(g, h) {
     const d = Math.min(...g.nh.flatMap(a => h.nh.map(b => Math.abs(a - b))));
     if (d > NET_SAME) notes.push("net is " + h.nh.map(fmtNet).join(" / ") + " there, " + gWho(g) + " uses " + g.nh.map(fmtNet).join(" / ") + " (change the net height)");
   }
+  if (g.su === "s" && !(h.su || "").includes("s")) return null;   // a sand-only sport (Pro Sunball) only fits a court known to be sand: never offer hard, grass or unknown-surface courts
   if (g.su && h.su && ![...g.su].some(c => h.su.includes(c))) notes.push((g.sz ? "the sports on this court are" : g.n + " is") + " played on " + [...g.su].map(c => COURT_SURF[c]).join(" / ") + ", this court is " + [...h.su].map(c => COURT_SURF[c]).join(" / "));
   return {cost: notes.length, notes, info};
 }
