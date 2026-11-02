@@ -44,7 +44,7 @@ Same governing-body steps, filtered to Nevada, plus: https://www.bounce.game/cit
 ## Known gaps
 Events people send us: the Watch list links to the "Report a tournament or event" form (label `event-report`); `make issues` lists them (step 2b), including any R2 TID, which goes into `docs/r2_seen.csv`.
 
-Local club-run events that are not on a governing-body calendar (Meetup groups, city recreation departments, club ladders) are not covered. Lead rows belong in `venue_leads.csv` or `docs/tournament_sources.md`, not `watch_events.csv`.
+Local club-run events that are not on a governing-body calendar (city recreation departments, club ladders, Meetup groups) are covered only through `social_events.csv` (clubs' own pages, re-read in Part 4 of the scheduled run since 2026-11-02) and the player-group links; a Meetup group found only by search stays a lead. Lead rows belong in `venue_leads.csv` or `docs/tournament_sources.md`, not `watch_events.csv`.
 
 ## Social links (ADR 0009)
 Rows in venue_actions.csv with action_type=social: check each link still loads (make check-links) and that the club's own site still links to the account; remove dead ones. Add new handles only when the club's own site shows them.

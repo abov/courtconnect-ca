@@ -28,7 +28,14 @@ POINTS = [
     (42.22, -121.78, "OR"),       # Klamath Falls
     (44.03, -116.96, "OR"),       # Ontario, on the Idaho line
     (43.60, -116.20, None),       # Boise, Idaho
-    (45.64, -122.66, None),       # Vancouver, Washington (None until Washington is added)
+    (45.64, -122.66, "WA"),       # Vancouver, across the Columbia from Portland
+    (47.61, -122.33, "WA"),       # Seattle
+    (47.66, -117.43, "WA"),       # Spokane, near the Idaho line
+    (46.28, -119.28, "WA"),       # Richland (Tri-Cities)
+    (48.75, -122.48, "WA"),       # Bellingham, near the Canadian border
+    (48.43, -123.37, None),       # Victoria, British Columbia
+    (47.67, -116.78, None),       # Coeur d'Alene, Idaho
+    (46.40, -116.99, None),       # Lewiston, Idaho (Clarkston WA is across the Snake)
     (32.40, -117.00, None),       # Tijuana area, Mexico
 ]
 
