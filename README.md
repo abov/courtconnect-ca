@@ -1,6 +1,6 @@
 # RacketConnect
 
-**Find where to play, who to play with, and where to watch, for every racket sport in California and Nevada** ("CalNeva", [ADR 0014](docs/decisions/0014-calneva-scope.md)).
+**Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada and Oregon** (scope: [ADR 0014](docs/decisions/0014-calneva-scope.md), growing to five states in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
 
 **[Open the live map](https://abov.github.io/courtconnect-ca/)** · [Data model and lineage (dbt docs)](https://abov.github.io/courtconnect-ca/dbt-docs/)
 
