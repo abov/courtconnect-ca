@@ -7,7 +7,7 @@ The twice-monthly chain and the quarterly search-interest refresh run as cloud r
 | CourtConnect tournaments part 1: tennis, pickleball, ITF | `trig_01AqJ2ucA3oqAB5oN9icwLE7` | 09:00 on the 1st and 15th |
 | CourtConnect tournaments part 2: badminton, table tennis, squash | `trig_01KR5SqAcLwkoLWfpEd6jDYL` | 10:30 on the 1st and 15th |
 | CourtConnect tournaments part 3: padel, beach tennis, lead rechecks | `trig_018RipCVXWnJ9y55YnpUFJsU` | 12:00 on the 1st and 15th |
-| CourtConnect tournaments part 4: Instagram sweep and player groups (also new-court discovery, #474) | `trig_01Bzo6g8B6YffCqx1buxkwwV` | 13:30 on the 1st and 15th |
+| CourtConnect tournaments part 4: Instagram sweep, player groups, new courts | `trig_01Bzo6g8B6YffCqx1buxkwwV` | 13:30 on the 1st and 15th |
 | CourtConnect data refresh: part 5 | `trig_019asuxbJ84AxduTtuecxe45` | 15:00 on the 1st and 15th |
 | CourtConnect search interest refresh (quarterly) | `trig_017bYuYYqZ62ysVfTjs68FXN` | 10:00 on the 3rd of Jan/Apr/Jul/Oct |
 
