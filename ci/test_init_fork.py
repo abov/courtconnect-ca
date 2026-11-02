@@ -18,7 +18,9 @@ try:
     for name in ["manual_venues", "venue_name_official", "venue_city_official", "osm_sport_map", "all_racquet", "sport_aliases"]:
         (seeds / f"{name}.csv").write_text("a,b\n1,2\n3,4\n", encoding="utf-8")
 
-    regions = f.parse_regions([["TX", "texas", "25.8", "-106.7", "36.6", "-93.5", "114690"]])
+    (tmp / "transform" / "dbt_project.yml").write_text(
+        "vars:\n  regions:   # old\n    CA: {south: 1, west: 2, north: 3, east: 4}\n    NV: {south: 1, west: 2, north: 3, east: 4}\n  keep_me: 1\n", encoding="utf-8")
+    regions = f.parse_regions([["TX", "texas", "25.8", "-106.7", "36.6", "-93.5", "114690", "48"]])
     metros = f.parse_metros([["austin", "30.1", "-97.95", "30.5", "-97.55", "TX"]], regions)
 
     plan = f.apply(tmp, regions, metros, write=False)                      # dry run changes nothing
@@ -28,6 +30,9 @@ try:
     f.apply(tmp, regions, metros, write=True)
     cfg = json.loads((tmp / "ingestion" / "regions.json").read_text(encoding="utf-8"))
     assert cfg["note"] == "keep me" and list(cfg["regions"]) == ["TX"] and cfg["regions"]["TX"]["cache"] == "tx_border.wkt", cfg
+    dbt = (tmp / "transform" / "dbt_project.yml").read_text(encoding="utf-8")     # the dbt regions var follows regions.json
+    assert "    TX: {south: 25.8, west: -106.7, north: 36.6, east: -93.5}\n  keep_me: 1\n" in dbt and "CA:" not in dbt, dbt
+    assert cfg["regions"]["TX"]["fips"] == "48", cfg
     assert cfg["regions"]["TX"]["relation"] == 114690 and cfg["metros"]["austin"]["states"] == ["TX"], cfg
     for name in ["manual_venues", "venue_name_official", "venue_city_official"]:   # glob venue_*_official included
         assert (seeds / f"{name}.csv").read_text(encoding="utf-8") == "a,b\n", name

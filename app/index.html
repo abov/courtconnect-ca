@@ -519,6 +519,7 @@ const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
+const HOME_BOUNDS = [[-124.6, 32.4], [-114.0, 42.2]];   // the map's starting view and the "show everything" view: the mainland states we cover (ADR 0028; a far-off state such as Hawaii gets its own shortcut)
 let textOff = false, searchCentre = null, zips = null, places = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
@@ -561,7 +562,7 @@ function showResume() {
   const b = el("button", {class: "link", type: "button", text: "Start over"});
   b.addEventListener("click", () => {
     hideResume(); store.set("hash", ""); $("reset").click();
-    if (state.mode !== "play") setMode("play"); else if (mapReady) map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
+    if (state.mode !== "play") setMode("play"); else if (mapReady) map.fitBounds(HOME_BOUNDS, {padding: 20, duration: 600});
   });
   $("resume").replaceChildren(el("span", {text: "Picked up where you left off: " + bits.join(" · ") + "."}), b);
   $("resume").hidden = false;
@@ -857,14 +858,14 @@ function geojson(list) {
   return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0, g: pinFamily(v)}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
 function initMap() {
-  map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: [[-124.6, 32.4], [-114.0, 42.2]],
+  map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: HOME_BOUNDS,
                             fitBoundsOptions: {padding: 20}, attributionControl: false});
   map.addControl(new maplibregl.NavigationControl({showCompass: false}), "top-right");
   map.addControl(new maplibregl.AttributionControl({compact: true, customAttribution: "Venues: OpenStreetMap, Overture Maps"}));
   popup = new maplibregl.Popup({closeButton: true, maxWidth: "300px", offset: 12, anchor: "bottom"});
   map.once("style.load", () => {                                   // as soon as the style is ready, without waiting for every basemap tile
     map.resize();                                                  // the grid may not have settled when the map was created
-    map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, animate: false});
+    map.fitBounds(HOME_BOUNDS, {padding: 20, animate: false});
     map.addSource("calneva", {type: "geojson", data: "data/calneva_outline.json"});   // CA + NV state lines (US Census, simplified); drawn under the pins
     map.addLayer({id: "calneva-line", type: "line", source: "calneva",
                   paint: {"line-color": "#2f6f5e", "line-width": 1.25, "line-opacity": 0.75}});
@@ -1156,8 +1157,9 @@ function fitTo(pts, maxZoom) {
   popup.remove(); map.fitBounds(b, {padding: pad, maxZoom, duration: 600});
 }
 async function zipPoint(q) {
-  const n = +q; if (n < 88900 || n > 96199) return null;   // not California or Nevada
+  const n = +q;
   if (!zips) { const r = await fetch("data/zips.json"); if (!r.ok) throw new Error("HTTP " + r.status); zips = await r.json(); }
+  if (!Object.keys(zips).some(k => Math.abs(+k - n) <= 120)) return null;   // no ZIP of ours within 120 of it: not in a covered state (zips.json holds every covered state's ZIPs)
   if (zips[q]) return {at: zips[q], zip: q, exact: true};
   let best = null;
   const lcp = k => { let i = 0; while (i < 5 && k[i] === q[i]) i++; return i; };   // ZIPs sharing the longest prefix are in the same area: 89999 gets a Nevada ZIP, not 90001
@@ -1292,7 +1294,7 @@ function applyMode(fit) {
     if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(ev => b.extend([ev.x, ev.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
   } else if (state.mode === "play" && fit) {
     const list = wallsFiltered();
-    if (list.length) fitWalls(list); else map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
+    if (list.length) fitWalls(list); else map.fitBounds(HOME_BOUNDS, {padding: 20, duration: 600});
   }
   refresh(); showWallNote(); syncSolo();   // Watch and Social return early from refresh(), so the orange-pin note (play-only) is updated here
 }

@@ -66,8 +66,9 @@ def to_row(el: dict, ts: str) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--area", choices=[*overpass.BBOXES, *overpass.STATE_AREAS], default="la")
-    ap.add_argument("--out", default=raw_path("osm_courts.csv"))
+    ap.add_argument("--out", default=None, help="default: data/raw/osm_courts.csv for California, osm_courts_<code>.csv for another state")
     args = ap.parse_args()
+    args.out = args.out or raw_path(overpass.out_name("osm_courts", args.area))
 
     tiles = overpass.area_tiles(args.area)
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")

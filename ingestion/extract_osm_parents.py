@@ -49,8 +49,9 @@ def kind_of(tags: dict) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--area", choices=[*overpass.BBOXES, *overpass.STATE_AREAS], default="la")
-    ap.add_argument("--out", default=raw_path("osm_parents.csv"))
+    ap.add_argument("--out", default=None, help="default: data/raw/osm_parents.csv for California, osm_parents_<code>.csv for another state")
     args = ap.parse_args()
+    args.out = args.out or raw_path(overpass.out_name("osm_parents", args.area))
 
     tiles = overpass.area_tiles(args.area)
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")

@@ -301,6 +301,9 @@ models:
       +schema: marts
 
 vars:
+  regions:   # covered states, mirrors ingestion/regions.json (south, west, north, east); ci/check_regions.py fails if they differ (ADR 0028)
+    CA: {south: 32.5, west: -124.5, north: 42.1, east: -114.0}
+    NV: {south: 35.0, west: -120.01, north: 42.0, east: -114.03}
   expected_racket_sports: 82   # the sheet should list 82 racket sports (Sandball is excluded by the sync script); a warn-level test flags any gap
   manual_match_radius_m: 150   # a hand-added venue within this distance of a known court/place is merged into it
   place_match_radius_m: 100    # an Overture place within this distance of an OSM court is part of that venue
