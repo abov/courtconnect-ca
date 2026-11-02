@@ -2,7 +2,7 @@
  "as_of": "2026-10-29",
  "venues": 10288,
  "sports_with_venues": 41,
- "sports_total": 82,
+ "sports_total": 83,
  "named_pct": 16.2,
  "sla_met": 7,
  "sla_total": 8,
@@ -12,7 +12,7 @@
  "seeds": 34,
  "custom_tests": 32,
  "adrs": 26,
- "ci_checks": 12,
+ "ci_checks": 13,
  "gold": {
   "pairs": 129,
   "wrong_merges": 0,
