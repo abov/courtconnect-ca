@@ -1,0 +1,2 @@
+Scoped plan for CA+NV -> CA, NV, WA, OR, HI: ADR 0028 (proposed, `docs/decisions/0028-five-state-scope.md`) holds the code changes to generalize regions, the CA vs NV parity gap list, cost per state and the order (step 0 generalize, then OR, WA, HI). No extract, load or build was run.
+Next: owner answers the open questions in ADR 0028 (name, rename timing, order, Hawaii resorts, OK for a metro trial), then step 0 PR.
