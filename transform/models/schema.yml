@@ -123,6 +123,19 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: parent_merge_block
+    description: >
+      A named park, school or club (as in OSM, matched on the lower-cased name) whose courts belong to different facilities, so int_court_pairs does
+      NOT link its courts by the 'same parent within parent_merge_radius_m' rule (ADR 0030). Courts in it still join when closer than venue_radius_m
+      or through seeds/court_group_merge.csv. One row per parent; evidence says why the courts are separate facilities and how that was checked.
+    columns:
+      - name: parent_name
+        tests: [not_null, unique]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: venue_name_official
     description: >
       A name for an OSM court group that no dataset names, taken from a nearby high-confidence Overture club place (100-225 m away, so
