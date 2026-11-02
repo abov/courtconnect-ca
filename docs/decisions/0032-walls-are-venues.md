@@ -22,7 +22,7 @@ Hitting walls (1-wall, backboard, 3-wall) are a separate layer: `dim_wall` -> `i
 
 ## Consequences
 - Fewer special cases; new wall sports and states (OR, WA) need no extra code.
-- Venue counts and some sport totals rise (about 440 walls today). Anything that quotes them (README, coverage snapshot, scorecard, Elementary tests, `ci/check_export_fresh.py`) must be re-baselined in step 1.
+- Venue counts and some sport totals rise (about 440 walls today). Anything that quotes them (README, coverage snapshot, scorecard, Elementary tests, `ci/check_export_fresh.py`) must be re-baselined in step 2.
 - Venue ids for walls must stay stable (the changes feed depends on it); wall keys become the id seed, so check the one-drift tolerance before step 2.
 - Risk: wall-only pins crowd the zoomed-out map. Cluster or style by kind in step 3.
 
