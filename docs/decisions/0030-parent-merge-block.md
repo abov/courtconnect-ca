@@ -1,6 +1,6 @@
 # 0030. Block the same-park merge for parks that hold separate facilities
 
-Date: 2026-11-02. Status: proposed (owner approval needed; it changes a matching rule).
+Date: 2026-11-02. Status: accepted (owner, chat 2026-11-02; it changes a matching rule).
 
 ## Context
 `int_court_pairs` links two courts when they are closer than `venue_radius_m` (75 m), and also when they sit inside the same named OSM park, school or club and are closer than `parent_merge_radius_m` (400 m). The second rule joins a school's courts that are a few hundred metres apart.
