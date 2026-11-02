@@ -105,12 +105,12 @@ Goal: help someone who is easily pulled away finish the job (pick a place, get a
 
 | Helper | What it does | Why it helps |
 |---|---|---|
-| **Shortlist** (header button, "Save to shortlist" in every venue popup, "Saved" badge in the list) | Park up to 30 places; open or remove them from one list; "Copy list to send to a friend" gives names plus share links | Replaces "open another tab so I don't lose it", which is how people stray |
+| ~~Shortlist~~ | Removed 2026-11-01 (owner: not useful as built). To come back later as **Favorites**, rebuilt from scratch | n/a |
 | **Welcome-back card** | After a Website / Directions / Join link opens in a new tab and the visitor returns (4+ s away), a card says "Welcome back. You were looking at X" with Save / Keep looking | Brings them back to where they were with one tap; correction forms do not trigger it |
-| **Focus mode** (header toggle, remembered) | Lists the 5 nearest places with "Show 5 more"; hides the sport notes, filters, clear-filters row and the long counts line; active-filter chips stay | Choice overload: 40 rows and ~20 controls become 5 rows and the essentials. Off by default so the beta baseline is unchanged |
+| **5-row list** (default since 2026-11-01; was the opt-in Focus mode chip) | The list shows the 5 nearest places with "Show 5 more"; a new map view starts at 5 again. The sport notes and filters stay in their own collapsed sections | Choice overload: 5 rows instead of 40, with no toggle to find |
 | **Pick up where you left off** | A return visit with no link restores the last sport / search / filters with a one-line "Start over"; the note goes once they change anything | Removes the "start again from scratch" cost of coming back; a `#venue=` or `#sport=` link always wins |
 
-New anonymous events (short names only): `shortlist-add`, `shortlist-open`, `shortlist-copy`, `focus-on`, `welcome-back`. Possible next steps, not built: a "next best place" button in the popup, a "plan" view (shortlist plus directions), a quiet-map option (no cluster animation). Wall pins and Watch-mode events cannot be saved yet.
+New anonymous events (short names only): `welcome-back` (the shortlist and focus events are no longer sent). Possible next steps, not built: a "next best place" button in the popup, a "plan" view (shortlist plus directions), a quiet-map option (no cluster animation). Wall pins and Watch-mode events cannot be saved yet.
 
 ## 5. How to ship it (PM view)
 

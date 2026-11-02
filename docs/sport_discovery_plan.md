@@ -49,7 +49,7 @@ UX notes: mobile 375/320px first (card collapsed by default on phones, expanded 
 
 ## Update (2026-10-18)
 
-- Part 2 built early for the card (not the all-76 dropdown): sheet columns `Blurb`, `Learn URL`, `Rules URL`, `Court URL`, `Gear URL` (owner chose sheet columns and all 76 sports). Draft values for the 27 verifiable sports are in `docs/sport_details_draft.csv`; 49 remain blank. Details: `docs/sessions/2026-10-18-sport-info-card.md`.
+- Part 2 built early for the card (not the all-76 dropdown): sheet columns `Blurb`, `Learn URL`, `Rules URL`, `Court URL`, `Gear URL` (owner chose sheet columns and all 76 sports). Draft values for the 27 verifiable sports are in `docs/sport_details_draft.csv`; 49 remain blank. Details: `docs/archive/session_digest.md`.
 
 ## Status (2026-10-21)
 

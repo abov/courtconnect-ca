@@ -40,7 +40,7 @@ One-page inventory. Layout and layers: [`architecture.md`](architecture.md). Dec
 - Static MapLibre page (`app/index.html`) over one `venues.json`; Play / Watch / Social modes; filters in the URL; link-outs; suggest-a-change form; GoatCounter analytics (ADR 0013); GitHub Pages hosting.
 
 ## Workflow and agentic strategies
-- Twice-monthly runbook; git worktrees per session; one task per session with a note in `docs/sessions/`; `CLAUDE.md` and memory files as persistent guidance.
+- Twice-monthly runbook; git worktrees per session; one task per session with hand-off in the PR description (`docs/sessions/` is only for the automated routines); `CLAUDE.md` and memory files as persistent guidance.
 - Cost control: cheapest path first, narrowest check first, no scheduled tasks or extracts unasked.
 - Observe, propose, verify, merge loop; automated gates in place of pre-approval; staged autonomy (ADR 0019): agents open PRs, humans merge, a class auto-merges only after it earns it and the owner switches it on; kill switch and spend cap ($20/month) ([`self_service_plan.md`](self_service_plan.md)).
 - Honesty over polish: label inferred data, never present guesses as confirmed.

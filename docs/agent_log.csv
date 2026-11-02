@@ -1,4 +1,4 @@
 date,pr,class,gates,outcome,est_cost_usd
 2026-10-24,404,R0,pass,edited,1.50
-2026-10-25,410,R0,pass,open,1.50
-2026-11-01,PR,R3,fail (scorecard regression: SLAs failing 1->2),open,1.50
+2026-10-25,410,R0,pass,accepted_unchanged,1.50
+2026-11-01,463,R3,pass after 4 unreadable-source events moved to leads,open,1.50

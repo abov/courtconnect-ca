@@ -1,6 +1,6 @@
 # The ML pilot I killed on purpose
 
-*Draft, 2026-10-29. Facts come from [`docs/ml_plan.md`](../ml_plan.md) (phases 1 and 3), [the 2026-10-27 session note](../sessions/2026-10-27-naip-downey-norwalk-scan.md) and the candidate files it links.*
+*Draft, 2026-10-29. Facts come from [`docs/ml_plan.md`](../ml_plan.md) (phases 1 and 3), [the 2026-10-27 session note](../archive/session_digest.md) and the candidate files it links.*
 
 CourtConnect's map only knows courts that some dataset or web page knows. I wondered whether a model could find the rest by looking at aerial photos. I built the pilot, measured it in four places, and stopped. This is why that was the right result, and what a smaller model that I kept taught me about the same job.
 
