@@ -1,5 +1,10 @@
 name: ci
-on: [push, pull_request, workflow_dispatch]
+# Pushes to a branch with an open PR are covered by the pull_request run; pushing as well ran the whole build twice per commit.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
 jobs:
   dbt-build:
     runs-on: ubuntu-latest

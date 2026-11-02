@@ -73,7 +73,7 @@ These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is bui
 ## How to record (in `docs/feedback_findings.md`)
 1. **Log** one row per finding: date, who (sport + area, no names or initials), type (bug / missing place / wrong data / confusing label / feature idea / pricing), what happened, severity 1-3, source (call / message / analytics). Nothing people would not want public.
 2. **Fix wrong or missing data now** through the normal seed workflow (evidence + `make build`); mark the row "fixed" with the PR.
-3. **Score the rest with RICE** in one table: Reach (people of N who hit it), Impact (3 big, 2 medium, 1 small, 0.5 minimal), Confidence (100 / 80 / 50 %), Effort (person-days), score = R x I x C / E. Take the top three into "Open, in order" in `CLAUDE.md`.
+3. **Score the rest with RICE** in one table: Reach (people of N who hit it), Impact (3 big, 2 medium, 1 small, 0.5 minimal), Confidence (100 / 80 / 50 %), Effort (person-days), score = R x I x C / E. Take the top three into "Open, in order" in `docs/status.md`.
 4. **Close the loop:** short "you said, we did" message to the testers; fill the placeholders in `docs/case_study.md` and the scorecard trend.
 5. **Decision note** (new ADR if direction changes): stay personal, open source, or test a paid layer.
 
