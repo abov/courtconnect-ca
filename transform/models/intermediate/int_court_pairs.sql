@@ -56,6 +56,8 @@ where sqrt(
           power((a.lat - b.lat) * 110540, 2)
         + power((a.lon - b.lon) * cos(radians(a.lat)) * 111320, 2)
       ) <= {{ var('parent_merge_radius_m') }}
+  -- a park whose courts belong to different facilities is listed in seeds/parent_merge_block.csv: only the 75 m rule links its courts (ADR 0030)
+  and lower(pa.parent_name) not in (select lower(parent_name) from {{ ref('parent_merge_block') }})
 
 union
 
