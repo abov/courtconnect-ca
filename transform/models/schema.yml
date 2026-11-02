@@ -123,6 +123,35 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: place_venue_link
+    description: >
+      A hand-checked link from one Overture place to one OSM court group (any court id of the group) that is the same facility although no
+      place-match radius reaches it, e.g. a club whose Overture pin is its street address and whose courts are mapped 400 m away inside the same
+      park. int_place_venue_match applies it first (match_rule 'seed_link'), so the two stop showing as two pins (ADR 0031). Keyed by stable ids;
+      not FK-tested because the CI fixture holds only a sample. Evidence says how the link was checked.
+    columns:
+      - name: place_id
+        tests: [not_null, unique]
+      - name: court_id
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
+  - name: parent_merge_block
+    description: >
+      A named park, school or club (as in OSM, matched on the lower-cased name) whose courts belong to different facilities, so int_court_pairs does
+      NOT link its courts by the 'same parent within parent_merge_radius_m' rule (ADR 0030). Courts in it still join when closer than venue_radius_m
+      or through seeds/court_group_merge.csv. One row per parent; evidence says why the courts are separate facilities and how that was checked.
+    columns:
+      - name: parent_name
+        tests: [not_null, unique]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: venue_name_official
     description: >
       A name for an OSM court group that no dataset names, taken from a nearby high-confidence Overture club place (100-225 m away, so

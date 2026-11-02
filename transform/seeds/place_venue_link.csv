@@ -1,0 +1,2 @@
+place_id,court_id,evidence,verified_on
+351da667-3f65-44f9-9d2b-1e76ec0c7783,way/1423812014,"Peninsula Tennis Club is one club. Overture pins it at 2525 Bacon St, which the City of San Diego park layer gives as the address of Robb Field Athletic Area; the club's own site (peninsulatennis.org) says it 'is located in Robb Field'. Its 12 courts are mapped in OSM (ways 1423812014-19 and 1423812182-87) about 430 m east, beyond every place-match radius, so the club showed as two pins. Court id is any court of the target group.",2026-11-02
