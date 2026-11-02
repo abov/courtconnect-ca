@@ -1,6 +1,6 @@
 # RacketConnect
 
-**Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada, Oregon and Washington** (scope: [ADR 0014](docs/decisions/0014-calneva-scope.md), growing to five states in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
+**Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada, Oregon and Washington** (scope: [ADR 0014](docs/decisions/0014-ca-nv-scope.md), growing to five states in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
 
 **[Open the live map](https://abov.github.io/courtconnect-ca/)** · [Data model and lineage (dbt docs)](https://abov.github.io/courtconnect-ca/dbt-docs/)
 
@@ -134,7 +134,7 @@ Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routi
 ## Roadmap
 Done:
 - [x] Venue clustering, statewide extract, Overture second source, watch events, link-outs, suggest-a-change flow, duplicate guard
-- [x] California + Nevada ([ADR 0014](docs/decisions/0014-calneva-scope.md)): 545 Nevada venues live; resort and casino courts closed by the owner (2026-10-17)
+- [x] California + Nevada ([ADR 0014](docs/decisions/0014-ca-nv-scope.md)): 545 Nevada venues live; resort and casino courts closed by the owner (2026-10-17)
 - [x] Street addresses and a city on every pin (OSM tags, nearest Overture address, Nominatim, Census boundaries; inferred ones labelled; homes show city only)
 - [x] Every sheet sport in the dropdown (81), with About cards and blurbs; sports with no place yet are greyed "(none yet)" with a report-a-venue link, never fake pins ([`docs/sport_discovery_plan.md`](docs/sport_discovery_plan.md))
 - [x] Padel kept apart from pop tennis, every Padel pin audited, directories swept, "Opening soon" pins ([`docs/padel_scan.md`](docs/padel_scan.md))
