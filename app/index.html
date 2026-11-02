@@ -425,7 +425,7 @@
 <dialog id="court" aria-labelledby="courtTitle">
   <div class="dlg-h"><h2 id="courtTitle">Find by court</h2><button class="link" id="closeCourt" type="button">Close</button></div>
   <div class="dlg-b">
-    <p class="meta">Pick a court size and see which sports have a court the same size or bigger, with a similar net (or no net, if yours needs none), so you know where it can fit. If nothing matches closely, you get the nearest seconds and what you would change. Sizes and nets are each sport's standard from our sport sheet (inferred); no venue's court has been measured.</p>
+    <p class="meta">Pick a court size and the map shows the venues with that court. Reopen this to see which other sports have a court the same size or bigger, with a similar net (or no net, if yours needs none), so you know where it can fit. If nothing matches closely, you get the nearest seconds and what you would change. Sizes and nets are each sport's standard from our sport sheet (inferred); no venue's court has been measured.</p>
     <label class="l" for="courtLike">Court size (net height; sports with that court)</label>
     <select id="courtLike"></select>
     <div class="seg quick" style="margin-top:10px"><button class="chip" id="courtWall" type="button">Just hitting alone? Show all hitting walls</button></div>
@@ -1639,6 +1639,13 @@ function courtRow(g, o, label) {
   row.append(btn);
   return row;
 }
+// The sports whose own standard court is the size picked and that have venues mapped, most venues first.
+const courtOwn = g => g.members.filter(m => m.s.v > 0).sort((a, b) => b.s.v - a.s.v);
+// Picking a size goes straight to the map for the sport that plays on it; reopening "Find by court" shows the other sports it fits.
+function courtPicked() {
+  const pick = $("courtLike").value, own = pick === "" ? [] : courtOwn(courtGroups.get(pick));
+  if (own.length) pickSport(own[0].i); else renderCourt();
+}
 function renderCourt() {
   const box = $("courtOut"), pick = $("courtLike").value;
   box.replaceChildren();
@@ -1650,6 +1657,11 @@ function renderCourt() {
   const gnet = g.nh ? "net " + g.nh.map(fmtNet).join(" / ") : g.nn ? "no net" : "net height not listed";
   box.append(el("h3", {text: g.cd[0] + " x " + g.cd[1] + " ft, " + gnet}),
     el("p", {class: "meta", text: "Standard court for: " + g.members.map(m => m.s.n).join(", ") + "."}));
+  for (const m of courtOwn(g).slice(0, 4)) {   // courts of exactly this size, mapped
+    const b = el("button", {class: "chip", type: "button", text: "Show " + m.s.n + " on map (" + fmt(m.s.v) + (m.s.v === 1 ? " venue" : " venues") + ")"});
+    b.addEventListener("click", () => pickSport(m.i));
+    box.append(b);
+  }
   if (good.length) {
     box.append(el("p", {class: "meta", text: (good.length === 1 ? "1 kind of court is" : good.length + " kinds of court are") + " the same size or bigger, with " + (wallBound(g) ? "no net either" : g.nn && !g.nh ? "any net (it is played without one)" : "a similar net") + ", so " + gWho(g) + " fits inside. Most venues first."}));
     for (const o of shownGood) box.append(courtRow(g, o, o.tier === 1 ? "Same size" : "Fits inside"));
@@ -1657,7 +1669,7 @@ function renderCourt() {
   } else if (out.length) {
     box.append(el("p", {class: "meta", text: roomy ? "No mapped sport has a court close to " + (g.sz ? "this size" : g.n + "'s size") + ". These are the smallest roomier courts, far bigger than it needs." : "No mapped sport has a bigger court with a similar net that " + gWho(g) + " fits inside. These are the closest seconds."}));
   } else {
-    box.append(el("p", {class: "meta", text: "No mapped sport on our sheet has a court " + gWho(g) + " fits inside or comes close to."}));
+    box.append(el("p", {class: "meta", text: (courtOwn(g).length ? "No other mapped sport" : "No mapped sport on our sheet") + " has a court " + gWho(g) + " fits inside or comes close to."}));
   }
   if (second.length && good.length) box.append(el("h3", {text: "Close seconds"}), el("p", {class: "meta", text: "Nearly there: one thing would have to change (net, a few feet of size, or surface)."}));
   for (const o of shownSecond) box.append(courtRow(g, o, roomy ? "Much bigger" : "Close second"));
@@ -1781,7 +1793,7 @@ function initControls() {
   $("modePlayers").addEventListener("click", () => openPlayers(state.sport, "header"));
   $("modeCourt").addEventListener("click", () => openCourt("header"));
   $("closeCourt").addEventListener("click", () => $("court").close());
-  $("courtLike").addEventListener("change", renderCourt);
+  $("courtLike").addEventListener("change", courtPicked);
   $("courtWall").addEventListener("click", () => enterSolo("court"));
   $("peopleBtn").addEventListener("click", () => openPlayers(state.sport, "sport"));
   $("playersSport").addEventListener("change", renderPlayers);
