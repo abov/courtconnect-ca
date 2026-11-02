@@ -1,4 +1,4 @@
--- Things to do at each venue, with the provider's link. Link-outs only: the provider (not CourtConnect) takes any registration or payment.
+-- Things to do at each venue, with the provider's link. Link-outs only: the provider (not RacketConnect) takes any registration or payment.
 select
     a.action_key,
     a.venue_id,

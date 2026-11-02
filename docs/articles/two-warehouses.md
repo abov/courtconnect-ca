@@ -2,7 +2,7 @@
 
 *Draft, 2026-10-29. Facts come from [ADR 0001](../decisions/0001-duckdb-first-then-snowflake.md), [ADR 0018](../decisions/0018-duckdb-only.md) and the repository history.*
 
-When I started CourtConnect I made a decision that sounds careful: develop on DuckDB, deploy to Snowflake, and keep every model runnable on both. The rule was "portable SQL, identical results". [ADR 0001](../decisions/0001-duckdb-first-then-snowflake.md) wrote it down.
+When I started RacketConnect I made a decision that sounds careful: develop on DuckDB, deploy to Snowflake, and keep every model runnable on both. The rule was "portable SQL, identical results". [ADR 0001](../decisions/0001-duckdb-first-then-snowflake.md) wrote it down.
 
 On 2026-10-14 I retired Snowflake. This is what the next week taught me about portability rules.
 

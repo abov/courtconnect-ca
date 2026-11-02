@@ -1,6 +1,6 @@
-# Contributing to CourtConnect CalNeva
+# Contributing to RacketConnect
 
-Thank you for helping. CourtConnect is a map that links out to venues; it takes no bookings or payments. Honesty matters more than
+Thank you for helping. RacketConnect is a map that links out to venues; it takes no bookings or payments. Honesty matters more than
 polish: label what is guessed, and only mark something confirmed when you can show how you know.
 
 ## Ways to help

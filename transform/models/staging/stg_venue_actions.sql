@@ -1,5 +1,5 @@
 -- What you can DO at a venue, with the provider's own link: join a league, take a clinic, find open play, book a lesson.
--- Link-outs only (ADR 0006): CourtConnect books nothing. Each row says which platform runs it, where to go, and how we know.
+-- Link-outs only (ADR 0006): RacketConnect books nothing. Each row says which platform runs it, where to go, and how we know.
 -- A row points at a hand-added venue (venue_ref_type 'manual', venue_ref = venue_key) or an Overture place ('place', venue_ref = place_id).
 select
     trim(a.action_key)                                        as action_key,

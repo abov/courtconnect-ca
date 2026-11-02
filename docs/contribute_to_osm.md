@@ -1,11 +1,11 @@
 # Improving the map by fixing OpenStreetMap
 
-Most CourtConnect venues come from OpenStreetMap (OSM). If a court is missing or wrong here, fix it at the source and the next
+Most RacketConnect venues come from OpenStreetMap (OSM). If a court is missing or wrong here, fix it at the source and the next
 data refresh picks it up. Rules are in [ADR 0011](decisions/0011-openstreetmap-contribution.md).
 
 ## How
 1. Open a venue on the map and click "Fix or improve this on OpenStreetMap" (OSM-sourced venues only). The OSM editor opens at the venue.
-2. Sign in with your own free OSM account (CourtConnect never logs in for you).
+2. Sign in with your own free OSM account (RacketConnect never logs in for you).
 3. Add or fix tags, write a short changeset comment, save.
 
 ## Tags that matter to us

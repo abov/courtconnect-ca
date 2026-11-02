@@ -4,7 +4,7 @@ Status: steps 1-2 BUILT and merged (#149, #152); step 3 BUILT 2026-10-18: the fo
 
 ## Why
 The owner can't visit venues, and court-finder apps are off limits (Places2Play needs a sign-in; Pickleheads' terms forbid
-compiling a directory from its site). Growth therefore comes from public pages plus **word of mouth from CourtConnect users**.
+compiling a directory from its site). Growth therefore comes from public pages plus **word of mouth from RacketConnect users**.
 ADR 0008 already makes `reported` the lowest level and says two independent confirmations raise a venue. Three things block it today:
 
 | Gap | Today |
@@ -58,7 +58,7 @@ its confirmations read "N confirmations waiting for review" (not "confirmed by")
   time count as one.
 
 **Step 3 setup (owner, about 10 minutes; then one session builds `make sync-reports` and the popup link)**
-1. Google Forms -> new form "CourtConnect: report a place to play". Settings: **Collect email addresses: off**, **Restrict to users in
+1. Google Forms -> new form "RacketConnect: report a place to play". Settings: **Collect email addresses: off**, **Restrict to users in
    your organisation / require sign-in: off**, "Limit to 1 response": off.
 2. Questions, with these exact titles (the import matches on them):
    - `Venue name` (short answer, required) - `City` (short answer, required) - `Map ID` (short answer, optional; the popup fills it)

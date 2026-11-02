@@ -4,7 +4,7 @@ Status: ideas only, nothing decided or built. Revisit after the December beta, w
 
 ## Guardrails (from CLAUDE.md and the ADRs)
 - Sponsored or paid items never change confirmation levels, ranking or "inferred vs confirmed" labels. Always labelled "Sponsored" / "Affiliate".
-- CourtConnect links out; it takes no bookings or payments. Referral link-outs only.
+- RacketConnect links out; it takes no bookings or payments. Referral link-outs only.
 - No partnership or data-license outreach until the owner lifts the 2026-10-16 rule; Pickleheads / Places2Play data stays off limits.
 - OSM (ODbL, share-alike) and Overture data cannot simply be resold; only our own layers (seeds, confirmations, events, leads, walls, change feed) carry value.
 - Privacy-minimal: no tracking ads; keep GoatCounter-style analytics. Bare-minimum budget, open source (prefer free tools).

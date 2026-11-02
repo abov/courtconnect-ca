@@ -1,6 +1,6 @@
 # Refresh agent (draft mode, ADR 0019 stage 0)
 
-The prompt for the data-refresh cloud routine (Part 5, "CourtConnect data refresh: part 5", `docs/cloud_routines.md`). It runs `docs/monthly_refresh.md` (the M steps of `docs/self_service_plan.md`) and opens ONE PR for a person to merge. It never merges. The routine's own prompt is the "Wrapper" section at the end; everything else is the prompt, so a change here changes the agent without touching the schedule.
+The prompt for the data-refresh cloud routine (Part 5, "RacketConnect data refresh: part 5", `docs/cloud_routines.md`). It runs `docs/monthly_refresh.md` (the M steps of `docs/self_service_plan.md`) and opens ONE PR for a person to merge. It never merges. The routine's own prompt is the "Wrapper" section at the end; everything else is the prompt, so a change here changes the agent without touching the schedule.
 
 **Settings the owner flips here** (the agent reads them from this file; nothing else turns them on):
 
@@ -61,7 +61,7 @@ Twice a month, matching the runbook ("twice a month") as Part 5 of the five sche
 ```
 ---
 name: courtconnect-refresh
-description: Twice a month: run the CourtConnect sync runbook in draft mode (ADR 0019 stage 0) and open one PR for review. Never merges.
+description: Twice a month: run the RacketConnect sync runbook in draft mode (ADR 0019 stage 0) and open one PR for review. Never merges.
 ---
 Work in C:\dev\courtconnect-ca. Read CLAUDE.md, then docs/refresh_agent.md in origin/main (`git show origin/main:docs/refresh_agent.md`) and follow it exactly. Do not merge, do not read .env, stop at the first failed preflight check.
 ```

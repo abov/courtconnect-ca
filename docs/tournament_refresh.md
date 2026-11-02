@@ -2,7 +2,7 @@
 
 Monthly refresh of everything else (extracts, link checks, 35-day freshness SLA): see `docs/monthly_refresh.md`.
 
-Goal: keep `transform/seeds/watch_events.csv` current for California. Only add events whose dates and venue you read at the organizer or governing body. Label anything inferred (see the `location_precision`, `date_status` and `source_note` columns). CourtConnect links out; no bookings or payments. Never use the owner's logins.
+Goal: keep `transform/seeds/watch_events.csv` current for California. Only add events whose dates and venue you read at the organizer or governing body. Label anything inferred (see the `location_precision`, `date_status` and `source_note` columns). RacketConnect links out; no bookings or payments. Never use the owner's logins.
 
 Cost rules: no subagents, no screenshots, no extended web search. Read pages as text. One batched call beats many.
 

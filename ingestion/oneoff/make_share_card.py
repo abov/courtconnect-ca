@@ -33,8 +33,7 @@ d.ellipse([*p(32 - 3.2, 23.5 - 3.2), *p(32 + 3.2, 23.5 + 3.2)], fill=BLUE)
 
 x = 500 * S
 d.rectangle([x, 150 * S, x + 90 * S, 158 * S], fill=GOLD)
-d.text((x, 185 * S), "CourtConnect", font=font("segoeuib.ttf", 92), fill=TEXT)
-d.text((x, 285 * S), "CalNeva", font=font("segoeuib.ttf", 92), fill=BLUE)
+d.text((x, 185 * S), "RacketConnect", font=font("segoeuib.ttf", 92), fill=TEXT)
 d.text((x, 415 * S), "Where to play racket sports", font=font("segoeui.ttf", 40), fill=TEXT)
 d.text((x, 465 * S), "in California + Nevada", font=font("segoeui.ttf", 40), fill=TEXT)
 d.text((x, 535 * S), "Tennis · pickleball · padel · squash · badminton · more", font=font("segoeui.ttf", 26), fill=MUTED)
