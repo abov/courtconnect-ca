@@ -2,7 +2,7 @@
 
 *Draft, 2026-10-29. Every number below comes from [`docs/gold_set_plan.md`](../gold_set_plan.md) or from `make eval-match`; the file and script are in the repo.*
 
-CourtConnect joins two maps that disagree. OpenStreetMap (OSM) knows where the courts are but rarely names them. Overture Maps knows business names but not courts. The product is the join: "this Overture place is the club that runs those OSM courts".
+RacketConnect joins two maps that disagree. OpenStreetMap (OSM) knows where the courts are but rarely names them. Overture Maps knows business names but not courts. The product is the join: "this Overture place is the club that runs those OSM courts".
 
 For weeks the join had no score. It was distance plus one shortcut (a place within 100 m of a court, or within 300 m if the two share an exact name), and I tuned it by looking at the map. That fails quietly. Two mistakes are possible and neither shows up in a row count: gluing together two businesses that are only neighbours, or leaving one club as two pins because its courts sit across a park.
 

@@ -1,5 +1,5 @@
 -- Recurring social get-togethers (mixers, club nights, open play, social nights): curated in seeds/social_events.csv, one row per SERIES
--- (not per date, so rows do not go stale each week), each with a link to the organizer's own page. CourtConnect takes no signups or payments.
+-- (not per date, so rows do not go stale each week), each with a link to the organizer's own page. RacketConnect takes no signups or payments.
 select
     trim(series_key)                                          as series_key,
     md5('social/' || trim(series_key))                        as series_id,

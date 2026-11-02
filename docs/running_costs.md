@@ -1,4 +1,4 @@
-# What it costs to run CourtConnect
+# What it costs to run RacketConnect
 
 *Written 2026-10-29. Every number comes from a repo doc, a file in the repo or a GitHub query run that day; where I did not check something, it says so. Short version: the recurring bill I can point to is zero, and the only spend that is capped is the AI agents.*
 

@@ -1,6 +1,6 @@
-# CourtConnect CalNeva
+# RacketConnect
 
-Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB, the only warehouse) -> static MapLibre map in `app/`.
+Racket-sport venue finder for California + Nevada ("CalNeva", ADR 0014): Python ingestion -> dbt (DuckDB, the only warehouse) -> static MapLibre map in `app/`. Product name RacketConnect (ADR 0029); the repo, DB file, dbt project and env vars keep the `courtconnect` names.
 README.md has the full story; read it only if you need background. Mission (ADR 0015): one map for every racket sport in CA + NV: find a court, watch a match, try a new sport, and find people to play with. Long-term goal: run itself with as little human review as possible, AI agents doing the work behind automated gates (see "After beta").
 Decisions are in `docs/decisions/` (ADRs 0001-0027, all accepted except 0001, superseded by 0018, and 0023-0026, proposed; one file each, read only the one you need).
 
@@ -24,7 +24,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0027, all accepted except 0001, su
   - `manual_venues.csv` (venues no dataset knows), `venue_actions.csv` (link-outs; keep `verified_on` + `evidence`),
   - `watch_events.csv` (https links only), `place_sport_overrides.csv` (confirm/reject uncertain matches), `sport_aliases.csv`, `closed_places.csv` (Overture places that no longer exist but are still listed open; `place_id` + `evidence` + `verified_on`), `venue_court_counts.csv` (a person's court count for one sport at a venue where OSM's is wrong; `venue_id` + pin `lat`/`lon` + `evidence` + `verified_on`).
 - DuckDB only (ADR 0018): new SQL needs no Snowflake-safe form; keep the existing `adapter.dispatch` macros, don't add engine-specific SQL without need.
-- Honesty over polish: label inferred data as inferred, never present guesses as confirmed. CourtConnect links out; it takes no bookings or payments.
+- Honesty over polish: label inferred data as inferred, never present guesses as confirmed. RacketConnect links out; it takes no bookings or payments.
 - NEVER use the owner's logins (Playtomic, PlayByPoint, Padel Up, etc.) or read logged-in pages; use public pages and what the owner reports (ADR 0007).
 - Don't use Google Places data (terms forbid storing it); Overture + OSM only (ADR 0005). The Google place-ID layer (`stg_google_place_ids.sql`, `ingestion/google_place_ids.py`) stays dormant (owner 2026-10-22, "for now"): don't delete it, don't run it.
 - No partnership or data-license emails (Pickleheads, USA Pickleball/Places2Play, other court apps) until the owner is ready to socialize or monetize (2026-10-16); their data is off limits. Sources are public pages and community reports.
@@ -86,7 +86,7 @@ Hand-off is the PR description and `git log`; `docs/sessions/` holds only the ro
 - Cost tier "Free / $ / $$ / $$$" (was 7f; beta question 11): ADR first, labelled inferred unless confirmed on a public page, members-only gets no tier.
 - ML + agents strategy (added 2026-10-21, umbrella plan `docs/ml_strategy.md`: tracks, agent roster, scoreboard, phased roadmap; Phase 0 needs only the owner's OK, no spend).
 - ML phases 2-3 (was 5d, `docs/ml_plan.md`): LLM page reader (ADR 0017; `ingestion/page_reader.py` built, free `--engine rules` measured 2026-10-19, Claude-engine run waits on the owner's API key + spend cap + precision bar) and NAIP aerial pilot (Hawthorne and one LV zip run: LV recall 46%; rescans 2026-10-27 in Downey and Sacramento found 0 new venues, fine-tuning did not help, so DROPPED: not worth scaling, `docs/ml_plan.md`; new courts go to OSM).
-- Search interest (Google Trends, BUILT 2026-10-25, `docs/search_interest_plan.md`): refreshed quarterly by the cloud routine "CourtConnect search interest refresh (quarterly)" (`docs/cloud_routines.md`; opens a PR). Planning signal only; NOT shown in the app. After beta: per-capita comparison, an app-facing "trending" label (only if labelled inferred), cross-sport scale.
+- Search interest (Google Trends, BUILT 2026-10-25, `docs/search_interest_plan.md`): refreshed quarterly by the cloud routine "RacketConnect search interest refresh (quarterly)" (`docs/cloud_routines.md`; opens a PR). Planning signal only; NOT shown in the app. After beta: per-capita comparison, an app-facing "trending" label (only if labelled inferred), cross-sport scale.
 - Monetization (brainstorm 2026-10-29, ideas only, `docs/monetization_ideas.md`): affiliate link-outs in the "Get started" guide + tip jar first, claimed/sponsored listings next, insight reports / API later. Sponsored never changes confirmation labels; no bookings or payments; needs the owner to lift the no-partnership-outreach rule and an ADR before any build; add a willingness-to-pay beta question.
 - Reporting dashboard (added 2026-10-25): no BI tool today; reports are markdown/CSV from `make report` / `quality` / `usage` / `interest`. Revisit later, cheapest first: DuckDB UI (`duckdb -ui`), then a one-page Evidence.dev prototype of the quality/coverage scorecard (static, fits Pages, outside CI at first); Metabase/Superset only if more people need self-serve access.
 - ITF 2027 calendars (was 7e, ~Dec): facts only (name, dates, venue, link), no scraping; read ITF pages singly in the browser pane.

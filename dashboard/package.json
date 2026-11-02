@@ -2,7 +2,7 @@
   "name": "courtconnect-dashboard",
   "version": "0.0.1",
   "private": true,
-  "description": "Evidence.dev (community edition, MIT) scorecard prototype for CourtConnect. Reads aggregate CSVs only.",
+  "description": "Evidence.dev (community edition, MIT) scorecard prototype for RacketConnect. Reads aggregate CSVs only.",
   "scripts": {
     "sources": "evidence sources",
     "dev": "evidence dev",

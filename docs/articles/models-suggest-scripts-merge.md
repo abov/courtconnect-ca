@@ -2,7 +2,7 @@
 
 *Draft, 2026-10-29. Facts come from [ADR 0017](../decisions/0017-llm-page-reader.md), [ADR 0019](../decisions/0019-unattended-agent-merges.md), [the threat model](../merge_gate_threat_model.md), [the gate workflow](../../.github/workflows/agent-merge-gate.yml), [the classifier](../../ci/check_refresh_diff.py) and the GitHub history of PR #410.*
 
-CourtConnect's long-term goal is to run itself with as little human review as possible. The data is public and the map has no accounts, so a bad change is visible but reversible. The risk that worried me was specific: agents read untrusted text (web pages, issue bodies) and propose edits to data that every visitor sees. A hostile page that steers an agent is a bigger problem than a wrong court count.
+RacketConnect's long-term goal is to run itself with as little human review as possible. The data is public and the map has no accounts, so a bad change is visible but reversible. The risk that worried me was specific: agents read untrusted text (web pages, issue bodies) and propose edits to data that every visitor sees. A hostile page that steers an agent is a bigger problem than a wrong court count.
 
 My answer, written down in [ADR 0019](../decisions/0019-unattended-agent-merges.md), is one sentence: **the model proposes, deterministic code decides, and every merge can be undone.**
 

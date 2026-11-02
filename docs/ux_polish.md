@@ -34,7 +34,7 @@ Keep the current layout; restyle and add icons.
 
 ```
 +-------------------------------+
-| (C) CourtConnect CalNeva      |  logo-blue title, gold underline accent
+| (C) RacketConnect      |  logo-blue title, gold underline accent
 | Find racquet-sport courts     |
 | [ Play ][ Watch ][ Walls ]    |  pill buttons, icons, gold when active
 | Sport [ Tennis          v ]   |

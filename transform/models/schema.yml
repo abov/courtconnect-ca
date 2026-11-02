@@ -354,7 +354,7 @@ seeds:
   - name: venue_actions
     description: >
       What you can do at a venue (join a league, take a clinic, find open play, book a lesson), as link-outs to the provider's own page.
-      CourtConnect books nothing. venue_ref_type is 'manual' (venue_ref = venue_key) or 'place' (venue_ref = an Overture place_id).
+      RacketConnect books nothing. venue_ref_type is 'manual' (venue_ref = venue_key) or 'place' (venue_ref = an Overture place_id).
     columns:
       - name: action_key
         tests: [unique, not_null]
@@ -926,7 +926,7 @@ models:
 
   - name: mart_venue_actions
     description: >
-      Link-outs for a venue (open play, clinics, tournaments, social accounts). CourtConnect takes no bookings or payments; every row links
+      Link-outs for a venue (open play, clinics, tournaments, social accounts). RacketConnect takes no bookings or payments; every row links
       to the provider's own page and carries verified_on and evidence (ADR 0007, 0009).
     columns:
       - name: venue_id
@@ -1008,7 +1008,7 @@ models:
   - name: stg_social_events
     description: >
       Recurring social get-togethers (mixers, club nights, open play), one row per series and not per date, each linking to the organizer's
-      own page. CourtConnect takes no signups or payments.
+      own page. RacketConnect takes no signups or payments.
 
   - name: stg_venue_actions
     description: >

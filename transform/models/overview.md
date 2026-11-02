@@ -1,6 +1,6 @@
 {% docs __overview__ %}
 
-# CourtConnect CalNeva: data model
+# RacketConnect: data model
 
 One map of racket-sport venues in California and Nevada, built from open data. This site documents the dbt project: every model, seed and test, and the lineage between them. Use the lineage graph (bottom right) to follow a venue from raw data to the exported map.
 

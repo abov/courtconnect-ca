@@ -1,4 +1,4 @@
-# Product brief: what CourtConnect is, why each piece exists, and how to make the page clear (2026-10-22)
+# Product brief: what RacketConnect is, why each piece exists, and how to make the page clear (2026-10-22)
 
 Status: **PR 1 and PR 2 built 2026-10-22 (mode names, promise headline, stats to footer, wall note collapsed, About card collapsed, "Filters (n)", short confirmation chip); PR 3 (welcome card) skipped by owner, legends merged into one "Map key" button in the list bar and "Share this place" built 2026-10-22; "Coming up next" strip (the brief's "This week" strip) built 2026-10-22.** Source: `app/index.html` read as text, ADR 0015, `docs/ux_polish.md`, `docs/competitor_scan.md`, `app/data/venues.json` meta (generated 2026-10-22). Builds on, does not replace, the visual polish plan.
 
@@ -26,7 +26,7 @@ Numbers are from the live export: **10,257 venues** (4,521 with a known name, 1,
 | Venue map (OSM + Overture + hand-curated) | 10k pins across CA + NV | The core promise: "every place" (ADR 0015). Without it nothing else matters. | Player, curious | Yes, the map |
 | Confirmation levels + "inferred" labels | Confirmed / listed business / guessed name / unnamed | Honesty rule (ADR 0007): never present a guess as fact. This is the trust differentiator against directory sites. | Everyone, silently | Yes, and too loudly (see §3) |
 | Sport picker (82 sports) + About card | Pickleball is not the whole story | Sport discovery, tennis and lesser-known sports stay findable | Curious | Yes |
-| Link-outs (`venue_actions`) | Website, leagues, clinics, open play, lessons | CourtConnect links out and takes no bookings or payments, so the *action* lives on the venue's page | Player | Yes, in the popup ("Join & follow") |
+| Link-outs (`venue_actions`) | Website, leagues, clinics, open play, lessons | RacketConnect links out and takes no bookings or payments, so the *action* lives on the venue's page | Player | Yes, in the popup ("Join & follow") |
 | Watch & Social view | Dated events (80) plus recurring groups (21) | Answers "what is on" and "who can I play with" without building accounts (social phase A, closed 2026-10-21) | Spectator, gatherer | Yes (mode button) |
 | Player platforms + "Find people to play with" | 10 apps/groups linked per sport | Same, link-out only | Gatherer | Yes (note under the sport picker) |
 | Hitting walls | 927 solo-practice spots | Underserved need, very few sources | Tennis/racquet players | Yes (only when a wall sport is picked) |
@@ -57,7 +57,7 @@ Principle: **answer the visitor's question first; reveal how we know it second.*
 ### Level 1: always visible (the 10-second experience)
 ```
 +--------------------------------------------+
-| (C) CourtConnect CalNeva                   |
+| (C) RacketConnect                   |
 | Find where to play racket sports in        |
 | California & Nevada.                       |
 |                                            |

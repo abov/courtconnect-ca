@@ -129,7 +129,7 @@ def main() -> None:
                has_lit_courts, is_confirmed_public, has_free_courts, is_members_only, also_listed_as, near_street
         from marts.mart_venue_finder""").fetchall()
 
-    # Things to do at a venue: link-outs to the provider's own page (CourtConnect books nothing). Current ones only.
+    # Things to do at a venue: link-outs to the provider's own page (RacketConnect books nothing). Current ones only.
     actions: dict[str, list] = defaultdict(list)
     for vid, atype, title, provider, url, price, start, end in con.execute("""
             select venue_id, action_type, title, provider, url, price_info, start_date, end_date

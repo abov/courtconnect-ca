@@ -2,7 +2,7 @@
 
 *Draft, 2026-10-29. Facts come from [the Overture benchmark](../planet_scale_benchmark.md) (measured 2026-10-28, release `2026-10-21.0`), [ADR 0018](../decisions/0018-duckdb-only.md), and file sizes read from the working checkout on 2026-10-29.*
 
-CourtConnect needs venue names and addresses from Overture Maps, a public dataset with hundreds of gigabytes of places, addresses and buildings. My first instinct was that this called for a cloud warehouse. It didn't. A single DuckDB file on a laptop read the public files in place and downloaded a small slice of them. This note shows the numbers, and where the claim stops.
+RacketConnect needs venue names and addresses from Overture Maps, a public dataset with hundreds of gigabytes of places, addresses and buildings. My first instinct was that this called for a cloud warehouse. It didn't. A single DuckDB file on a laptop read the public files in place and downloaded a small slice of them. This note shows the numbers, and where the claim stops.
 
 ## What was measured
 

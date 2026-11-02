@@ -30,4 +30,4 @@ Seed files must keep CRLF line endings. Seed column changes need `dbt build --fu
 About 10% of websites in the open places data point at domains that no longer exist. `make check-websites` runs a DNS-only check (no pages fetched) and sets `website_status` (`ok`, `dead`, `unknown`); the app-facing `website_usable` hides dead links. A site counts as dead only on a definitive "domain does not exist". See `marts.mart_website_quality`.
 
 ## Link-outs and providers
-CourtConnect takes no registrations or payments; the provider does. `make check-links` confirms every link still loads. What was found about Playtomic, PlayByPoint, BracketSync and others: [ADR 0006](decisions/0006-watch-events-and-link-out-discovery.md).
+RacketConnect takes no registrations or payments; the provider does. `make check-links` confirms every link still loads. What was found about Playtomic, PlayByPoint, BracketSync and others: [ADR 0006](decisions/0006-watch-events-and-link-out-discovery.md).

@@ -1,5 +1,5 @@
 ---
-title: CourtConnect data-quality scorecard
+title: RacketConnect data-quality scorecard
 ---
 
 ```sql stats
@@ -26,7 +26,7 @@ group by 1
 order by 2 desc
 ```
 
-A snapshot of how complete and how fresh the CourtConnect data is, as of **{stats[0].as_of}**. Everything here is an aggregate count from the project's own checks; no venue rows are published. This is a prototype of a BI-as-code page, built with the open-source Evidence.dev from plain CSVs.
+A snapshot of how complete and how fresh the RacketConnect data is, as of **{stats[0].as_of}**. Everything here is an aggregate count from the project's own checks; no venue rows are published. This is a prototype of a BI-as-code page, built with the open-source Evidence.dev from plain CSVs.
 
 <BigValue data={stats} value=venues title="Venues on the map" fmt=num0 />
 <BigValue data={stats} value=sports_with_venues title="Sports with a venue" />

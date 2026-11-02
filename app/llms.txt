@@ -1,4 +1,4 @@
-# CourtConnect CalNeva
+# RacketConnect
 
 > A free map of racket-sport venues in California and Nevada: find a court, watch a match, try a new sport, find people to play with. It links out to venues and organizers; it takes no bookings or payments.
 
