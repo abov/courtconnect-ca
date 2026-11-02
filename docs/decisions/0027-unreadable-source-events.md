@@ -1,6 +1,6 @@
 # 0027. Events whose source cannot be read leave the map instead of waiting for a person
 
-Date: 2026-11-02. Status: **proposed** (owner decides). Follows the 2026-11-01 refresh (PR #463), where the "oldest upcoming-event check" SLA failed because four seeded events had sources no scheduled run could read (`padelusa.org/calendar` loads by script, a club page returned 404, an Instagram post needs a login) and a person was needed to re-read them.
+Date: 2026-11-02. Status: **accepted** (owner, 2026-11-02). Follows the 2026-11-01 refresh (PR #463), where the "oldest upcoming-event check" SLA failed because four seeded events had sources no scheduled run could read (`padelusa.org/calendar` loads by script, a club page returned 404, an Instagram post needs a login) and a person was needed to re-read them.
 
 ## Context
 - `watch_events.csv` rows carry `verified_on`; the scorecard SLA fails when any upcoming row is older than 14 days. Re-dating a row without reading its source would fake freshness (CLAUDE.md: honesty over polish; ADR 0019: no loosening a gate to get green).
