@@ -17,7 +17,7 @@ Reach = people hit (of N). Impact: 3 big, 2 medium, 1 small, 0.5 minimal. Confid
 | Theme | Reach | Impact | Conf. | Effort | Score | Decision |
 |---|---|---|---|---|---|---|
 
-Top three go into "Open, in order" in `CLAUDE.md`.
+Top three go into "Open, in order" in `docs/status.md`.
 
 ## Numbers (GoatCounter, directional only)
 | Measure | Result | Target |
