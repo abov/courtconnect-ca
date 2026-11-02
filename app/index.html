@@ -1559,6 +1559,7 @@ const ft1 = v => String(Math.round(v * 10) / 10);
 // guest = the court size picked (a group of sports sharing one size + net, see courtGroups), host = a sport whose court it might fit inside. null = not usable; else {cost, notes} (cost 0 = nothing to change).
 const gWho = g => g.sz ? "this court size" : g.n;   // how messages name the guest
 const gStd = g => g.sz ? "the size you picked" : g.n + "'s standard";
+const onlySx = x => x.members.every(m => m.s.sx) ? [...new Set(x.members.map(m => m.s.sx))].join("") : "";   // special surface codes of a court group, only when every sport in it needs one (see the sx key in export_app_data.py)
 const wallBound = s => s.nn && !s.nh && !s.w;   // no net and not an open-court game (Naked Tennis is): it needs walls to play against
 function courtFit(g, h) {
   const gh = Math.max(...g.cd), gl = Math.min(...g.cd), hh = Math.max(...h.cd), hl = Math.min(...h.cd), notes = [], info = [];   // sides sorted, so a court may be turned
@@ -1573,6 +1574,8 @@ function courtFit(g, h) {
     const d = Math.min(...g.nh.flatMap(a => h.nh.map(b => Math.abs(a - b))));
     if (d > NET_SAME) notes.push("net is " + h.nh.map(fmtNet).join(" / ") + " there, " + gWho(g) + " uses " + g.nh.map(fmtNet).join(" / ") + " (change the net height)");
   }
+  const need = onlySx(g), have = onlySx(h);   // a sport that needs one special surface (padel turf, a Teq board, an aluminum deck, an indoor floor) only fits a court of that kind
+  if (need && ![...need].some(c => c === "i" ? h.members.some(m => m.s.in) : have.includes(c))) return null;
   if (g.su === "s" && !(h.su || "").includes("s")) return null;   // a sand-only sport (Pro Sunball) only fits a court known to be sand: never offer hard, grass or unknown-surface courts
   if (g.su && h.su && ![...g.su].some(c => h.su.includes(c))) notes.push((g.sz ? "the sports on this court are" : g.n + " is") + " played on " + [...g.su].map(c => COURT_SURF[c]).join(" / ") + ", this court is " + [...h.su].map(c => COURT_SURF[c]).join(" / "));
   return {cost: notes.length, notes, info};

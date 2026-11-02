@@ -15,6 +15,16 @@ select
     surface_lc like '%sand%'                                  as plays_on_sand,
     surface_lc like '%grass%'                                 as plays_on_grass,
     surface_lc like '%indoor%'                                as plays_indoors,
+    -- the one surface a sport needs when the sheet lists no concrete, grass or sand for it (Padel = turf, Teq = curved table); null = no special surface.
+    -- "Indoor/Outdoor" is not indoor-only. The "Find by court" dialog only offers such a sport courts of the same kind.
+    case
+        when surface_lc like '%concrete%' or surface_lc like '%grass%' or surface_lc like '%sand%' then null
+        when surface_lc like '%curved table%' then 'curved_table'
+        when surface_lc like '%tabletop%'     then 'tabletop'
+        when surface_lc like '%turf%'         then 'turf'
+        when surface_lc like '%aluminum%'     then 'aluminum'
+        when surface_lc like '%indoor%' and surface_lc not like '%outdoor%' then 'indoor'
+    end                                                       as special_surface,
     base_gear,
     gear_on_amazon_or_online,
     competitive_status,
