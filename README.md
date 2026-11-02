@@ -144,7 +144,7 @@ Done:
 - [x] Phone and accessibility follow-ups: 44 px touch targets, a tick / "?" badge on zoomed pins so status does not rely on colour, Near me distances (nearest-first lists), better glyph and chip contrast, and a computed "(north courts, 6 courts)" suffix that tells apart venues sharing an inferred name
 - [x] Load time measured on throttled Slow 4G / Fast 3G: fine for the beta ([`docs/archive/session_digest.md`](docs/archive/session_digest.md))
 
-Next, in order (details in [`CLAUDE.md`](CLAUDE.md) "Open, in order"):
+Next, in order (details in [`docs/status.md`](docs/status.md) "Open, in order"):
 - [ ] Beta prep (owner): exclude your own visits in GoatCounter on each device, then send the invites
 - [ ] Beta feedback round with friends (December; [`docs/feedback_round.md`](docs/feedback_round.md)), then rank what to build with the findings
 - [ ] Facility scans (UC and CSU campuses, military MWR) and club-named venues, one family at a time

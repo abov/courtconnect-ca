@@ -32,7 +32,7 @@ Goal (ADR 0015, long-term): the project runs itself with as little human review 
 | 9 | Commit, PR, confirm merged and the `pages.yml` run | M | open PR, merge when gates pass, confirm the Pages run (it starts by itself) | needs auto-merge on required checks instead of `--admin` |
 | 9 | Add 2 lines to CLAUDE.md "Current status" | M | write the numbers | shared file, conflict-prone: move the log to a generated file (e.g. a new line in `docs/data_quality_trend.csv`) and drop the CLAUDE.md edit |
 
-Outside the runbook but on the "Open, in order" list:
+Outside the runbook but on the "Open, in order" list in `docs/status.md`:
 | Work | Class | Note |
 |---|---|---|
 | Gold-set rules, match tuning (item 5) | J | changes how venues merge; needs the eval (`make eval-match`) as a gate before it could be E |

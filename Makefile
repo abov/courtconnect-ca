@@ -52,8 +52,14 @@ check-websites: ## flag venue websites whose domain no longer exists (DNS only, 
 load:             ## load raw CSV into DuckDB
 	$(PY) ingestion/load_raw.py
 
-build:            ## seeds + models + tests
+deps:             ## install dbt packages (Elementary); needed once per checkout
+	$(DBT) deps
+
+build: deps       ## seeds + models + tests
 	$(DBT) build
+
+observability:    ## Elementary report from the local warehouse (docs/data_observability.md); run make build first
+	$(PY) ingestion/observability_report.py
 
 demo: extract load build   ## the one-command demo
 	@echo "Done. Try: duckdb courtconnect.duckdb 'select * from marts.mart_sport_coverage'"

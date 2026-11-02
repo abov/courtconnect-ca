@@ -1,5 +1,10 @@
 name: ci
-on: [push, pull_request, workflow_dispatch]
+# Pushes to a branch with an open PR are covered by the pull_request run; pushing as well ran the whole build twice per commit.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
 jobs:
   dbt-build:
     runs-on: ubuntu-latest
@@ -34,6 +39,7 @@ jobs:
       # CI never calls OpenStreetMap: it loads a small committed sample of real OSM data
       # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
       - run: python ingestion/load_raw.py --data-dir ci/fixtures
+      - run: dbt deps --project-dir transform --profiles-dir transform  # Elementary (transform/packages.yml)
       - run: dbt build --project-dir transform --profiles-dir transform
       # The published dbt docs must describe every model and seed (reads the manifest dbt build just wrote).
       - run: python ci/check_dbt_descriptions.py
