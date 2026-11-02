@@ -1,7 +1,7 @@
 name: Refresh watchdog
 
-# Dead-man's switch for the twice-monthly scheduled chain (local tasks or cloud
-# routines). The chain runs on the 1st and 15th; on the 2nd and 16th this checks
+# Dead-man's switch for the twice-monthly scheduled chain (the cloud
+# routines in docs/cloud_routines.md). The chain runs on the 1st and 15th; on the 2nd and 16th this checks
 # that a "Tournaments ..." PR was opened in the last 3 days. If not, the job
 # fails, and GitHub emails the failure to whoever last edited this schedule.
 on:
@@ -26,6 +26,6 @@ jobs:
             --jq "[.[] | select(.createdAt >= \"$since\" and (.title | startswith(\"Tournaments\")))] | length")
           echo "Tournament PRs since $since: $n"
           if [ "$n" -eq 0 ]; then
-            echo "::error::No 'Tournaments' PR in the last 3 days: the scheduled chain did not run or stopped early. Check docs/cloud_routines.md and the scheduled-tasks list."
+            echo "::error::No 'Tournaments' PR in the last 3 days: the scheduled chain did not run or stopped early. Check the routines at https://claude.ai/code/routines (enabled? last run?) and docs/cloud_routines.md."
             exit 1
           fi

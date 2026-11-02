@@ -1,6 +1,6 @@
 # Search interest (Google Trends)
 
-Status: BUILT 2026-10-25 (first export 2026-10-25). Refresh runs from the scheduled task `courtconnect-search-interest-refresh` (quarterly, opens a PR; a person merges).
+Status: BUILT 2026-10-25 (first export 2026-10-25). Refresh runs from the cloud routine "CourtConnect search interest refresh (quarterly)" (`docs/cloud_routines.md`; quarterly, opens a PR; a person merges). The cloud run has no browser pane: it tries WebFetch once and stops if no real `comparedgeo` values load (never estimates); a full read needs a local run in the browser pane.
 
 **Goal:** an internal planning signal: where do people search for a sport but we have few pins? It picks the next facility scan or lead pass. It is NOT shown on the map and is not a ranking of venues. `make interest` prints it.
 
@@ -17,7 +17,7 @@ Status: BUILT 2026-10-25 (first export 2026-10-25). Refresh runs from the schedu
 - "Yuma AZ-El Centro" includes Yuma searches (Arizona), so a gap there is weak. Out-of-region metros Trends returns (Medford OR, Salt Lake City UT) are dropped from the seed.
 - Padel in Las Vegas: NV resort/casino courts are closed (owner 2026-10-17); a Las Vegas gap means look at non-resort sources only.
 
-## Refresh procedure (about quarterly; the scheduled task follows this)
+## Refresh procedure (about quarterly; the routine follows this)
 Read-only use of the public Trends pages in the built-in browser pane: no sign-in, no download, no `pytrends`, no API. Take no screenshots.
 1. For each of the 4 URLs in `source_url` (geo `US-CA`/`US-NV` x query set A/B; only change the sport list if the sheet's sports change): open the URL in the browser pane, wait 5 s, scroll down once so every widget loads.
 2. `read_network_requests` with `urlPattern=comparedgeo`: the last 5 requests are the five terms in the order of the `q=` list. Read each one by `requestId`; each body is `{"default":{"geoMapData":[{"geoCode","geoName","value":[n],"hasData":[bool]}]}}`.

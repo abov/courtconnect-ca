@@ -1,25 +1,25 @@
-# Scheduled runs: five parts (owner 2026-10-24)
+# Scheduled runs: five parts (owner 2026-10-24; run as cloud routines since 2026-11-02, `docs/cloud_routines.md`)
 
-The single 1st/15th run (tournaments for every sport + data refresh) stopped after one source on 2026-10-24: too big for one session at the low-usage settings. It is now five tasks on staggered crons on the 1st and 15th, all appending to ONE tournament PR per cycle, then the data refresh stacked on it. Each task prompt only says "read `docs/tournament_run_parts.md` from origin/main and do PART N"; the steps live here so they are versioned and reviewed.
+The single 1st/15th run (tournaments for every sport + data refresh) stopped after one source on 2026-10-24: too big for one session at the low-usage settings. It is now five cloud routines on staggered crons on the 1st and 15th, all appending to ONE tournament PR per cycle, then the data refresh stacked on it. Each routine prompt (plus the cloud overrides in `docs/cloud_routines.md`) only says "read `docs/tournament_run_parts.md` from origin/main and do PART N"; the steps live here so they are versioned and reviewed.
 
-| Part | Task id | Cron (local) | Covers |
+| Part | Cloud routine (claude.ai/code/routines) | Cron (America/Los_Angeles) | Covers |
 |------|---------|--------|--------|
-| 1 | `courtconnect-tournament-refresh` | 09:00 on the 1st and 15th | USTA SoCal/NorCal, USA Pickleball, PPA, ITF pro tour |
-| 2 | `courtconnect-tournament-refresh-2` | 10:30, gated on Part 1 | USA Badminton, R2 Sports, table tennis, Silicon Valley Open / US Squash, skyball, Club Locker squash |
-| 3 | `courtconnect-tournament-refresh-3` | 12:00, gated on Part 2 | USA Padel calendar, beach tennis organizers, padel rechecks and lead rechecks |
-| 4 | `courtconnect-tournament-refresh-4` | 13:30, gated on Part 3 | Instagram sweep, new-venue social handles, player-group links, new-court discovery for every sport |
-| 5 | `courtconnect-data-refresh` | 15:00, gated on Part 4 | data refresh (`docs/refresh_agent.md`), stacked on the tournament PR |
+| 1 | CourtConnect tournaments part 1 | 09:00 on the 1st and 15th | USTA SoCal/NorCal, USA Pickleball, PPA, ITF pro tour |
+| 2 | CourtConnect tournaments part 2 | 10:30, gated on Part 1 | USA Badminton, R2 Sports, table tennis, Silicon Valley Open / US Squash, skyball, Club Locker squash |
+| 3 | CourtConnect tournaments part 3 | 12:00, gated on Part 2 | USA Padel calendar, beach tennis organizers, padel rechecks and lead rechecks |
+| 4 | CourtConnect tournaments part 4 | 13:30, gated on Part 3 | Instagram sweep, new-venue social handles, player-group links, new-court discovery for every sport |
+| 5 | CourtConnect data refresh: part 5 | 15:00, gated on Part 4 | data refresh (`docs/refresh_agent.md`), stacked on the tournament PR |
 
-**Schedule (owner 2026-10-27):** a scheduled run cannot start another scheduled task (the tool refuses: "Refusing to run a scheduled task from a scheduled-task run session"), so the parts are NOT chained. Each has its own cron on the 1st and 15th, spaced so they do not overlap, and each part is gated on the one before it.
+**Schedule (owner 2026-10-27):** a scheduled run cannot start another scheduled run (the local tool refused: "Refusing to run a scheduled task from a scheduled-task run session"), so the parts are NOT chained. Each has its own cron on the 1st and 15th, spaced so they do not overlap, and each part is gated on the one before it.
 - **Gate (first step of parts 2-5, before any work):** `git fetch origin`, then check that the previous part finished for this cycle: `docs/sessions/<today>-tournament-part-<N-1>.md` (or, for Part 5, Part 4's) exists on `origin/claude/tournaments-<cycle date>` (or on origin/main if that PR already merged), or the Pass section in `docs/tournament_sources.md` has a "Part <N-1>" sub-heading with "Last run: <today>". If a part found nothing and wrote no note, its Pass section line still counts. If the previous part is missing, wait up to 20 minutes (check every 5 with a short sleep), then stop with "PART N SKIPPED: Part <N-1> not done for <today>" and open nothing. A skipped part is run by hand later (Run now).
 - No part starts another. Ignore any older instruction to start the next part.
 - Part 1 is the only part that may create the cycle branch; later parts use the branch steps below.
 - Never start a part that is already running (a second Run now is refused; that is fine, report it).
 
-Spend: each part is estimated at $1-1.50; the $5 weekly / $10 monthly caps of `docs/refresh_agent.md` count Part 5 only, ADR 0019's $20 a month is the ceiling for all five. If the month's total runs past it, disable the Part 4 cron. The app must be open on the 1st and 15th (a missed run starts at the next launch; run any part that missed by hand).
+Spend: each part is estimated at $1-1.50; the $5 weekly / $10 monthly caps of `docs/refresh_agent.md` count Part 5 only, ADR 0019's $20 a month is the ceiling for all five. If the month's total runs past it, disable the Part 4 cron. Cloud routines need no machine on; a part that missed or was skipped is started by hand with Run now at claude.ai/code/routines (after the previous part finished).
 
 ## Rules for every part
-Work in `C:\dev\courtconnect-ca` (Git Bash for commands; dbt is `.venv/Scripts/dbt ... --project-dir transform --profiles-dir transform`, there is no make). Read CLAUDE.md first and follow it (never read .env, no Google Places data, public pages only, no owner logins, honesty over polish). Cost rules: no subagents, no screenshots, no extended web search, read pages as text, narrowest check first. **Do the whole part: read every source listed for it. Do not stop early to save usage; if you truly cannot finish, list exactly which sources were not read in the PR body and the session note.** Do NOT merge any PR, do NOT run make extract/load, do NOT re-run the Pages workflow, never use --force or --admin.
+Local manual runs work in `C:\dev\courtconnect-ca`; cloud runs use their clone and the overrides in their prompt (`docs/cloud_routines.md`). Commands run in Git Bash locally (dbt is `.venv/Scripts/dbt ... --project-dir transform --profiles-dir transform`, there is no make). Read CLAUDE.md first and follow it (never read .env, no Google Places data, public pages only, no owner logins, honesty over polish). Cost rules: no subagents, no screenshots, no extended web search, read pages as text, narrowest check first. **Do the whole part: read every source listed for it. Do not stop early to save usage; if you truly cannot finish, list exactly which sources were not read in the PR body and the session note.** Do NOT merge any PR, do NOT run make extract/load, do NOT re-run the Pages workflow, never use --force or --admin.
 
 ## Branch and PR (parts 1-4)
 The cycle date is the date Part 1 started (the 1st or 15th; if you are started by hand on another day, today). One branch `claude/tournaments-<cycle date>` and one PR per cycle.
