@@ -1591,9 +1591,16 @@ function renderCourt() {
 function openCourt(src) {
   const like = $("courtLike");
   if (!like.options.length) {
-    like.append(el("option", {value: "", text: "Pick a sport's court…"}));
+    like.append(el("option", {value: "", text: "Pick a court size…"}));
+    // One group per court size, smallest area first, the sports that share it listed A-Z underneath.
+    const groups = new Map(), r1 = v => Math.round(v * 10) / 10;
     sports.map((s, i) => [s, i]).filter(([s]) => s.cd).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"}))
-      .forEach(([s, i]) => like.append(el("option", {value: String(i), text: s.n + " (" + s.cd[0] + " x " + s.cd[1] + " ft)"})));
+      .forEach(([s, i]) => { const k = s.cd[0] + "x" + s.cd[1]; if (!groups.has(k)) groups.set(k, []); groups.get(k).push([s, i]); });
+    [...groups.values()].sort((a, b) => a[0][0].cd[0] * a[0][0].cd[1] - b[0][0].cd[0] * b[0][0].cd[1]).forEach(g => {
+      const og = el("optgroup", {label: r1(g[0][0].cd[0]) + " x " + r1(g[0][0].cd[1]) + " ft"});
+      g.forEach(([s, i]) => og.append(el("option", {value: String(i), text: s.n})));
+      like.append(og);
+    });
   }
   renderCourt(); $("court").showModal(); trackD("court-open", src);
 }
