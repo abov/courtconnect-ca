@@ -52,12 +52,13 @@ When they reply, ask what they did, not whether they liked it ("What did you sea
 12. Do the Established / Organized / Casual chips (in Filters, "How organized the sport is") help you pick a sport, or confuse you? They are inferred from the sport sheet (world federation, named governing body), not from pro play: would you want a real pro-tour label? (`docs/archive/session_digest.md`)
 13. Did you ever want to search by court size or net height, or ask "I have a tennis court, what else fits?" Did "Find by court" give results that made sense? (`docs/archive/session_digest.md`)
 
-### Ask-first ideas (questions 8 to 11: one line each, a quick yes / maybe / no is enough; skip if the person is short on time)
+### Ask-first ideas (questions 8 to 11 and 14: one line each, a quick yes / maybe / no is enough; skip if the person is short on time)
 These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is built for them; the answers decide whether they are.
 8. When you look for people to play with, what matters: their level, their age group, both, or neither? Where do you look today (an app, Facebook, WhatsApp, Reddit, Meetup, your club)? If nobody near you has a group, would a ready-to-post "start one" kit with a suggested court help? (`docs/player_finding_plan.md`)
 9. If you often look at one sport, would a single dismissible card suggesting a related sport nearby ("Like Pickleball? Try Padel, 2 miles away") be helpful, annoying, or ignored? Where would you expect it? (`docs/sport_recommendation_plan.md`, section 6)
 10. Would you want an email when something changes at a spot you saved, or when a new court opens near you? How often is too often? (ADR 0025; "no" is a useful answer)
 11. Would a rough cost label ("Free / $ / $$ / $$$") on each place help you choose? Would you trust it if it said "estimated"? (No tier is built; members-only places would get none.)
+14. Would you tap a quick "how busy is it right now?" (empty / some / full) when you are at a court, if it took one tap and no sign-in? Would you trust the same from strangers before you drive there? (`docs/court_usage_plan.md`; nothing is built)
 
 ## Numbers (GoatCounter, directional only with 6 to 10 people; say so in the case study)
 | Question | Measure | First target |
