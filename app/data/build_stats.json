@@ -1,12 +1,12 @@
 {
- "as_of": "2026-10-29",
+ "as_of": "2026-11-02",
  "venues": 10288,
  "sports_with_venues": 41,
  "sports_total": 83,
  "named_pct": 16.2,
  "sla_met": 7,
  "sla_total": 8,
- "tests_pass": 254,
+ "tests_pass": 256,
  "tests_fail": 0,
  "models": 53,
  "seeds": 34,
@@ -137,6 +137,38 @@
    "named_pct": 16.2,
    "sites_dead_pct": 0.0,
    "seen_35d_pct": 100.0
+  },
+  {
+   "date": "2026-11-01",
+   "venues": 10288,
+   "sports_with_venues": 41,
+   "events_upcoming": 73,
+   "actions_current": 283,
+   "extract_age_days": 9,
+   "sla_met": 6,
+   "sla_total": 8,
+   "tests_pass": 256,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 16.2,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 100.0
+  },
+  {
+   "date": "2026-11-02",
+   "venues": 10288,
+   "sports_with_venues": 41,
+   "events_upcoming": 62,
+   "actions_current": 282,
+   "extract_age_days": 10,
+   "sla_met": 7,
+   "sla_total": 8,
+   "tests_pass": 256,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 16.2,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 100.0
   }
  ],
  "agent_runs": [
@@ -153,6 +185,14 @@
    "pr": 410,
    "class": "R0",
    "gates": "pass",
+   "outcome": "accepted_unchanged",
+   "est_cost_usd": 1.5
+  },
+  {
+   "date": "2026-11-01",
+   "pr": 463,
+   "class": "R3",
+   "gates": "pass after 4 unreadable-source events moved to leads",
    "outcome": "open",
    "est_cost_usd": 1.5
   }
