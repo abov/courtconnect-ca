@@ -306,6 +306,7 @@
         <div id="sportinfo" hidden><h4 id="sportinfo-t"></h4><div id="sportinfo-b"></div></div>
         <div id="wallnote" hidden><h4>About the orange pins</h4><div id="wallnote-b"></div></div>
       </details>
+      <div id="soloBar" class="note" hidden><p id="soloText" style="margin:0 0 6px"></p><div class="chips" id="soloChips"></div></div>
     </div>
     <div class="searchrow">
       <div class="sugwrap">
@@ -425,15 +426,11 @@
   <div class="dlg-h"><h2 id="courtTitle">Find by court</h2><button class="link" id="closeCourt" type="button">Close</button></div>
   <div class="dlg-b">
     <p class="meta">Start from a court you have or want, and see which sports fit it. Sizes and nets are each sport's standard from our sport sheet (inferred); no venue's court has been measured.</p>
-    <label class="l" for="courtSize">Court size in feet, e.g. 40x20</label>
-    <input id="courtSize" type="search" inputmode="text" autocomplete="off" placeholder="40x20">
-    <label class="l" for="courtNet" style="margin-top:8px">Net height (optional), e.g. 5ft 11in or 36in</label>
-    <input id="courtNet" type="search" inputmode="text" autocomplete="off" placeholder="5ft 11in">
-    <label class="l" for="courtLike" style="margin-top:8px">Or start from a court you know</label>
+    <label class="l" for="courtLike">Court size (net height in brackets)</label>
     <select id="courtLike"></select>
-    <div class="seg quick" style="margin-top:10px"><button class="chip" id="courtWall" type="button">Just hitting alone? Show hitting walls</button></div>
+    <div class="seg quick" style="margin-top:10px"><button class="chip" id="courtWall" type="button">Just hitting alone? Show all hitting walls</button></div>
     <div id="courtOut" role="status" aria-live="polite"></div>
-    <p class="meta" style="margin-top:12px">"Fits" means the sport's standard court is no bigger than the size you entered; it does not mean a venue has the lines or nets, or allows it. Playing your own game? Any court of that size works; bring your own net and lines.</p>
+    <p class="meta" style="margin-top:12px">"Fits" means the sport's standard court is no bigger than the size you picked; it does not mean a venue has the lines or nets, or allows it. Playing your own game? Any court of that size works; bring your own net and lines.</p>
   </div>
 </dialog>
 
@@ -518,7 +515,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson", washoe_county: "Washoe County Regional Parks", clark_county: "Clark County Parks & Recreation", suncity_summerlin: "Sun City Summerlin", lifetime_site: "Life Time", nlv_gov: "City of North Las Vegas"};
 
 let DATA, sports, venues, events = [], socials = [], socialPins = [], walls = [], platforms = [];
-const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers: new Set()};   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
+const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers: new Set(), solo: "", soloPub: false};   // solo = "all" | "one" | "three": the hitting-alone view shows walls only   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
@@ -594,6 +591,7 @@ function matches(v, sm, tm, vf, sport = state.sport) {
   return true;
 }
 function filtered() {
+  if (state.solo) return [];   // hitting alone: walls only, no venues
   const sm = surfMask(), tm = setMask();
   const vf = (state.on.has("lit") ? 1 : 0);
   return venues.filter(v => matches(v, sm, tm, vf));
@@ -780,7 +778,14 @@ function wallLinkText(wl) {
   return wl.map(([types, n, cf]) => n + " " + types.split(";").map(t => WALL_LINK_TYPE[t] || t).join(" / ") + " (" + (WALL_LINK_CONF[cf] || cf) + ")").join("; ");
 }
 function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t)) && (!WALL_PUBLIC_ONLY.includes(name) || wallAccess(w) === "public")) : []; }
-function wallsFiltered() { return state.mode === "play" && state.sport >= 0 ? wallsFor(sports[state.sport].n) : []; }
+// Hitting alone: every wall of a known type that one person can use against (1-wall, backboard, 3-wall); "other" handball-type walls are left out as above.
+const SOLO_TYPES = {all: ["one_wall", "backboard", "three_wall"], one: ["one_wall", "backboard"], three: ["three_wall"]};
+function soloWalls(kind, pub) { const ts = SOLO_TYPES[kind]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t)) && (!pub || wallAccess(w) === "public")) : []; }
+function wallsFiltered() {
+  if (state.mode !== "play") return [];
+  if (state.solo) return soloWalls(state.solo, state.soloPub);
+  return state.sport >= 0 ? wallsFor(sports[state.sport].n) : [];
+}
 function wallGeojson(list) {
   return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n, f: w.cf, r: wallAccess(w) === "restricted" ? 1 : 0}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
 }
@@ -839,7 +844,7 @@ function wallItems(list) {
     const btn = el("button", {type: "button"},
       el("div", {class: "nm", translate: "no", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
       el("div", {class: "meta", text: [distLabel(w), w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
-      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : null));
+      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : el("span", {class: "badge", text: wallAccess(w) === "public" ? "Public" : "Access not known"})));
     btn.addEventListener("click", () => showWall(w, true));
     out.push(el("li", {}, btn));
   }
@@ -1289,7 +1294,7 @@ function applyMode(fit) {
     const list = wallsFiltered();
     if (list.length) fitWalls(list); else map.fitBounds([[-124.6, 32.4], [-114.0, 42.2]], {padding: 20, duration: 600});
   }
-  refresh(); showWallNote();   // Watch and Social return early from refresh(), so the orange-pin note (play-only) is updated here
+  refresh(); showWallNote(); syncSolo();   // Watch and Social return early from refresh(), so the orange-pin note (play-only) is updated here
 }
 function renderList() {
   if (state.mode !== "play") return;
@@ -1369,7 +1374,7 @@ function refresh() {
   if (map.getSource("v")) map.getSource("v").setData(geojson(current));
   if (map.getSource("w")) map.getSource("w").setData(wallGeojson(wallsFiltered()));
   if (mapReady) setLayersFor(state.mode);
-  showWallNote();
+  showWallNote(); syncSolo();
   showNoPrograms();
   populateSports(); renderList(); writeHash();
 }
@@ -1379,6 +1384,7 @@ function writeHash() {
   const p = new URLSearchParams();
   if (state.mode !== "play") p.set("mode", state.mode);
   if (state.sport >= 0) p.set("sport", sports[state.sport].n);
+  if (state.solo) { p.set("solo", state.solo); if (state.soloPub) p.set("pub", "1"); }
   if (state.on.size) p.set("on", [...state.on].join(","));
   if (state.offers.size) p.set("offer", [...state.offers].join(""));
   if (state.text) p.set("q", state.text);
@@ -1390,6 +1396,7 @@ function readHash() {
   if (["watch", "social"].includes(p.get("mode"))) state.mode = "watch";   // #mode=social links (before the two views were merged) land on Watch & Social
   // old #mode=walls links land on the wall sport
   const s = p.get("sport") || (p.get("mode") === "walls" ? "1-wall Paddleball" : ""); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
+  if (SOLO_TYPES[p.get("solo")]) { state.solo = p.get("solo"); state.soloPub = p.get("pub") === "1"; state.sport = -1; }
   for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
   state.text = (p.get("q") || "").toLowerCase();
@@ -1399,7 +1406,7 @@ function readHash() {
 // Surface chips only make sense for tennis and for "All racket sports" (owner 2026-10-21); regular tennis is never played on sand.
 // A chip that stops applying is also dropped from the filters, so nothing stays on invisibly.
 function syncSurface() {
-  const name = state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", show = state.sport < 0 || name === "Tennis";
+  const name = state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", show = (state.sport < 0 && !state.solo) || name === "Tennis";
   for (const k of ["sand", "clay", "grass", "hard"]) {
     const keep = show && !(k === "sand" && name === "Tennis"), b = document.querySelector('[data-k="' + k + '"]');
     if (b) b.hidden = !keep;
@@ -1410,7 +1417,7 @@ function syncSurface() {
 // What is picked already shows in place (the Sport menu, the search box, pressed chips, "Filters (N on)"), so there is no separate row of filter chips; one "Clear" link on the Filters line resets them.
 function renderActive() {
   syncSurface();
-  const any = state.mode === "play" && (state.sport >= 0 || state.tier || state.text || state.on.size || state.offers.size);
+  const any = state.mode === "play" && (state.sport >= 0 || state.solo || state.tier || state.text || state.on.size || state.offers.size);
   $("clearFilters").hidden = !any;
   const nOn = filtersOn();
   $("moreLabel").textContent = nOn ? "Filters (" + nOn + " on)" : "Filters";
@@ -1544,23 +1551,15 @@ function renderPlayers() {
       el("span", {class: "facts", text: sp + " · " + p.p + " · read " + p.vo})));
   }
 }
-// ---------- Find by court: size / net -> sports (INFERRED from each sport's standard court in the sheet, never measured at a venue) ----------
-const parseSize = t => { const m = t.toLowerCase().replace(/[’']/g, "").match(/(\d+(?:\.\d+)?)\s*(?:x|×|by)\s*(\d+(?:\.\d+)?)/); return m ? [+m[1], +m[2]] : null; };
-function parseNet(t) {
-  t = t.trim().toLowerCase(); if (!t) return null;
-  let m = t.match(/^(\d+(?:\.\d+)?)\s*(?:ft|feet|foot|')\s*(?:(\d+(?:\.\d+)?)\s*(?:in|inches|")?)?$/);
-  if (m) return +m[1] * 12 + (+m[2] || 0);
-  m = t.match(/^(\d+(?:\.\d+)?)\s*(?:in|inches|")?$/); return m ? +m[1] : null;
-}
-const fmtNet = h => h >= 24 ? Math.floor(h / 12) + "ft" + (Math.round(h % 12) ? " " + Math.round(h % 12) + "in" : "") : Math.round(h) + "in";
-function courtMatches(size, net) {
+// ---------- Find by court: size -> sports (INFERRED from each sport's standard court in the sheet, never measured at a venue) ----------
+const fmtNet =h => h >= 24 ? Math.floor(h / 12) + "ft" + (Math.round(h % 12) ? " " + Math.round(h % 12) + "in" : "") : Math.round(h) + "in";
+function courtMatches(size) {
   const hi = Math.max(...size), lo = Math.min(...size), out = [];
   sports.forEach((s, i) => {
     if (!s.cd) return;
     const sh = Math.max(...s.cd), sl = Math.min(...s.cd);
     const kind = Math.abs(sh - hi) <= 1.5 && Math.abs(sl - lo) <= 1.5 ? "same" : sh <= hi && sl <= lo && sh * sl >= 0.2 * hi * lo ? "fits" : ""   // much smaller sports (a table in a tennis court) are left out;
     if (!kind) return;
-    if (net !== null && s.nh && !s.nh.some(h => Math.abs(h - net) <= 1.5)) return;   // a known net that differs rules the sport out; an unlisted one stays, marked
     out.push({i, s, kind, area: sh * sl});
   });
   return out.sort((a, b) => (a.kind === "same" ? 0 : 1) - (b.kind === "same" ? 0 : 1) || b.s.v - a.s.v || b.area - a.area);
@@ -1571,34 +1570,40 @@ function pickSport(i) {
   trackD("court-pick", sports[i].n);
 }
 function renderCourt() {
-  const box = $("courtOut"), size = parseSize($("courtSize").value), netTxt = $("courtNet").value.trim(), net = parseNet(netTxt);
+  const box = $("courtOut"), pick = $("courtLike").value, size = pick === "" ? null : sports[+pick].cd;
   box.replaceChildren();
-  if (!size) { box.append(el("p", {class: "meta", text: "Enter a size such as 40x20, or pick a court you know."})); return; }
-  if (netTxt && net === null) box.append(el("p", {class: "meta", text: "Could not read the net height, so it is ignored. Try 5ft 11in or 36in."}));
-  const res = courtMatches(size, netTxt && net !== null ? net : null), show = res.filter((r, n) => r.kind === "same" || n < 14);
+  if (!size) { box.append(el("p", {class: "meta", text: "Pick based on court size above to see which sports fit."})); return; }
+  const res = courtMatches(size), show = res.filter((r, n) => r.kind === "same" || n < 14);
   box.append(el("h3", {text: res.length ? res.length + (res.length === 1 ? " sport fits" : " sports fit") + " a " + size[0] + " x " + size[1] + " ft court" : "No sport on our sheet fits " + size[0] + " x " + size[1] + " ft"}));
   for (const {s, i, kind} of show) {
     const net2 = s.nh ? " · net " + s.nh.map(fmtNet).join(" / ") : " · net not listed";
-    const where = s.v > 0 ? fmt(s.v) + (s.v === 1 ? " venue" : " venues") + " mapped" : s.w ? "No fixed court needed" : "None mapped yet";
+    const nw = WALL_SPORT[s.n] ? wallsFor(s.n).length : 0;
+    const where = s.v > 0 ? fmt(s.v) + (s.v === 1 ? " venue" : " venues") + " mapped" : s.w ? "No fixed court needed" : nw ? fmt(nw) + (nw === 1 ? " hitting wall" : " hitting walls") + " mapped" : "None mapped yet";
     box.append(el("div", {class: "crow"},
       el("div", {}, el("b", {text: s.n + " "}), el("span", {class: "badge", text: kind === "same" ? "Standard size" : "Fits inside"})),
       el("div", {class: "meta", text: s.cd[0] + " x " + s.cd[1] + " ft" + net2 + " · " + where + ((s.b || []).length ? " · played on another sport's courts" : "")}),
       el("button", {class: "chip", type: "button", text: "Show on map"})));
     box.lastChild.querySelector("button").addEventListener("click", () => pickSport(i));
   }
-  if (res.length > show.length) box.append(el("p", {class: "meta", text: (res.length - show.length) + " more fit; enter a closer size to narrow the list."}));
+  if (show.some(r => WALL_SPORT[r.s.n])) {   // wall sports play against a wall, so one person can use them alone
+    const all = soloWalls("all", false).length, pub = soloWalls("all", true).length, b = el("button", {class: "chip", type: "button", text: "Show all hitting walls (" + fmt(all) + ")"});
+    b.addEventListener("click", () => enterSolo("court-group"));
+    box.append(el("h3", {text: "Hitting walls you can use alone"}),
+      el("p", {class: "meta", text: "The wall sports above play against a wall or backboard. Wall sizes are the sport's standard, not measured at each wall, and access is mostly not known (" + fmt(pub) + " are mapped public)."}), b);
+  }
+  if (res.length > show.length) box.append(el("p", {class: "meta", text: (res.length - show.length) + " more smaller sports fit inside this court."}));
 }
 function openCourt(src) {
   const like = $("courtLike");
   if (!like.options.length) {
-    like.append(el("option", {value: "", text: "Pick a court size…"}));
+    like.append(el("option", {value: "", text: "Pick based on court size…"}));
     // One group per court size, smallest area first, the sports that share it listed A-Z underneath.
     const groups = new Map(), r1 = v => Math.round(v * 10) / 10;
     sports.map((s, i) => [s, i]).filter(([s]) => s.cd).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"}))
       .forEach(([s, i]) => { const k = s.cd[0] + "x" + s.cd[1]; if (!groups.has(k)) groups.set(k, []); groups.get(k).push([s, i]); });
     [...groups.values()].sort((a, b) => a[0][0].cd[0] * a[0][0].cd[1] - b[0][0].cd[0] * b[0][0].cd[1]).forEach(g => {
       const og = el("optgroup", {label: r1(g[0][0].cd[0]) + " x " + r1(g[0][0].cd[1]) + " ft"});
-      g.forEach(([s, i]) => og.append(el("option", {value: String(i), text: s.n})));
+      g.forEach(([s, i]) => og.append(el("option", {value: String(i), text: s.n + (s.nh ? " (net " + s.nh.map(fmtNet).join(" / ") + ")" : "")})));
       like.append(og);
     });
   }
@@ -1648,6 +1653,27 @@ function showWallNote() {
   }
   syncSportMore();
 }
+// The hitting-alone bar: what the orange pins are, and chips for the wall type and public-only (counts follow the other chip).
+function syncSolo() {
+  const bar = $("soloBar"), on = state.mode === "play" && !!state.solo;
+  bar.hidden = !on; if (!on) return;
+  $("soloText").textContent = "Hitting walls to use on your own: orange pins, shown only where the wall type is known. Access is mostly not known (only walls marked Public are confirmed open), so check before you go. Wall sizes are not measured. Walls come from OpenStreetMap, city pages and visit reports; ones nobody has mapped are missing.";
+  const kinds = [["all", "All solo walls"], ["one", "1-wall & backboards"], ["three", "3-wall"]];
+  $("soloChips").replaceChildren(...kinds.map(([k, t]) => {
+    const b = el("button", {class: "chip", type: "button", text: t + " (" + soloWalls(k, state.soloPub).length + ")", "aria-pressed": String(state.solo === k)});
+    b.addEventListener("click", () => { state.solo = k; trackD("solo-kind", k); applyMode(true); });
+    return b;
+  }), (() => {
+    const b = el("button", {class: "chip", type: "button", text: "Public only (" + soloWalls(state.solo, true).length + ")", "aria-pressed": String(state.soloPub)});
+    b.addEventListener("click", () => { state.soloPub = !state.soloPub; trackD("solo-public", String(state.soloPub)); applyMode(true); });
+    return b;
+  })());
+}
+function enterSolo(src) {
+  $("court").close(); $("reset").click(); state.solo = "all";
+  if (state.mode !== "play") setMode("play"); else applyMode(true);
+  trackD("solo-open", src);
+}
 function setMode(m) {
   if (state.mode === m) return;
   state.mode = m; trackD("mode", m); populateSports(); syncControls(); applyMode(true);
@@ -1667,17 +1693,13 @@ function initControls() {
   $("modePlayers").addEventListener("click", () => openPlayers(state.sport, "header"));
   $("modeCourt").addEventListener("click", () => openCourt("header"));
   $("closeCourt").addEventListener("click", () => $("court").close());
-  $("courtSize").addEventListener("input", renderCourt); $("courtNet").addEventListener("input", renderCourt);
-  $("courtLike").addEventListener("change", e => {
-    const s = e.target.value === "" ? null : sports[+e.target.value]; if (!s) return;
-    $("courtSize").value = s.cd[0] + "x" + s.cd[1]; $("courtNet").value = s.nh ? fmtNet(s.nh[0]) : ""; renderCourt();
-  });
-  $("courtWall").addEventListener("click", () => { const i = sports.findIndex(s => s.n === "1-wall Paddleball"); if (i >= 0) pickSport(i); });
+  $("courtLike").addEventListener("change", renderCourt);
+  $("courtWall").addEventListener("click", () => enterSolo("court"));
   $("peopleBtn").addEventListener("click", () => openPlayers(state.sport, "sport"));
   $("playersSport").addEventListener("change", renderPlayers);
   $("closePlayers").addEventListener("click", () => $("players").close());
   $("playersTell").href = REPORT_FORM;
-  sel.addEventListener("change", () => { state.sport = +sel.value; updateSportIcon(); syncQuickSports(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
+  sel.addEventListener("change", () => { state.solo = ""; state.soloPub = false; state.sport = +sel.value; updateSportIcon(); syncQuickSports(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
   $("q").addEventListener("input", debounce(renderSug, 120));
@@ -1705,7 +1727,7 @@ function initControls() {
   });
   $("keytoggle").addEventListener("click", () => { const open = $("mapkey").hidden; setKey(open); if (open) track("map-key"); });
   $("clearFilters").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); $("reset").click(); });
-  $("reset").addEventListener("click", () => { state.sport = -1; state.tier = 0; populateSports(); state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
+  $("reset").addEventListener("click", () => { state.solo = ""; state.soloPub = false; state.sport = -1; state.tier = 0; populateSports(); state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
   $("nearMe").addEventListener("click", () => {
