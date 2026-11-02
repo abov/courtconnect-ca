@@ -76,7 +76,7 @@ def main() -> None:
 - `likely_outdoor` means the court is an untagged outdoor pitch. It is an assumption, not data. Only `outdoor`, `indoor` and
   `covered` come from an explicit tag.
 - Indoor courts are mostly mapped as buildings or sports centres, not as individual courts, so indoor court counts are low.
-- Beach / sand courts are almost unmapped (a few courts statewide). Beach tennis and sandball need another source.
+- Beach / sand courts are almost unmapped (a few courts statewide). Beach tennis needs another source.
 
 Filling these gaps needs a second source (Google Places, club and league directories). See `docs/decisions/0004`.
 """]

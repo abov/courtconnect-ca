@@ -83,7 +83,6 @@ Sports by status: **covered** 35, **sparse** 6, **tagged_none_found** 3, **not_f
 | Ricochet | not_found | 0 | 0 | 0 | 0 | 0 | Governing-body or club directory, Meetup groups; Google place IDs for live lookup |
 | Riftball | not_found | 0 | 0 | 0 | 0 | 0 | Governing-body or club directory, Meetup groups; Google place IDs for live lookup |
 | Road Tennis | not_found | 0 | 0 | 0 | 0 | 0 | Governing-body or club directory, Meetup groups; Google place IDs for live lookup |
-| Sandball | not_found | 0 | 0 | 0 | 0 | 0 | Governing-body or club directory, Meetup groups; Google place IDs for live lookup |
 | Shuttleball | not_found | 0 | 0 | 0 | 0 | 0 | Governing-body or club directory, Meetup groups; Google place IDs for live lookup |
 | Smashball | not_found | 0 | 0 | 0 | 0 | 0 | Governing-body or club directory, Meetup groups; Google place IDs for live lookup |
 | Smolball | not_found | 0 | 0 | 0 | 0 | 0 | Governing-body or club directory, Meetup groups; Google place IDs for live lookup |
@@ -110,6 +109,6 @@ Court records by setting: likely_outdoor 26,594, outdoor 571, unknown 314, indoo
 - `likely_outdoor` means the court is an untagged outdoor pitch. It is an assumption, not data. Only `outdoor`, `indoor` and
   `covered` come from an explicit tag.
 - Indoor courts are mostly mapped as buildings or sports centres, not as individual courts, so indoor court counts are low.
-- Beach / sand courts are almost unmapped (a few courts statewide). Beach tennis and sandball need another source.
+- Beach / sand courts are almost unmapped (a few courts statewide). Beach tennis needs another source.
 
 Filling these gaps needs a second source (Google Places, club and league directories). See `docs/decisions/0004`.

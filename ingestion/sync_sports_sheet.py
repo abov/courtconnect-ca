@@ -27,7 +27,11 @@ load_dotenv()
 SHEET_ID = os.environ.get("SPORTS_SHEET_ID", "").strip()
 SHEET_GID = os.environ.get("SPORTS_SHEET_GID", "0").strip() or "0"
 EXPORT_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={SHEET_GID}"
-EXPECTED_SPORTS = 83  # keep in sync with var `expected_racket_sports` in transform/dbt_project.yml
+EXPECTED_SPORTS = 82  # keep in sync with var `expected_racket_sports` in transform/dbt_project.yml
+# Sports that stay on the sheet but are kept out of the project (name -> why). Added 2026-11-01.
+EXCLUDED_SPORTS = {
+    "Sandball": "no clubs, courts or pages found online anywhere; the sport never took off (owner 2026-11-01)",
+}
 
 COLUMNS = {
     "Type": "sport_type", "Sport": "sport", "Players": "players", "Class": "popularity_class",
@@ -59,7 +63,7 @@ def main() -> None:
     for row in reader:
         out = {COLUMNS[k]: (row.get(k) or "").strip() for k in COLUMNS}
         out.update({v: (row.get(k) or "").strip() for k, v in DETAIL_COLUMNS.items()})
-        if out["sport"]:  # the sheet has ~20 formatted-but-empty rows below the data
+        if out["sport"] and out["sport"] not in EXCLUDED_SPORTS:  # the sheet has ~20 formatted-but-empty rows below the data
             rows.append(out)
 
     for r in rows:

@@ -9,7 +9,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
   meta    : counts, generation date, attribution
   sports  : [{n: name, v: venues, s: status, r: recommended next source, d blurb, f facts {p players, c court, g gear, o governing body, y year, ou official site},
               u links {l learn more, r rules, c court size, g gear} (https only),
-              cd standard court [length, width] ft, nh net height(s) in inches, nn 1 = the sheet lists no net for the sport (wall and solo sports), su surfaces c concrete/g grass/s sand (all from the sheet's standard court, never measured at a venue; the "Find by court" dialog matches on them),
+              cd standard court [length, width] ft, nh net height(s) in inches, nn 1 = the sheet lists no net for the sport (wall and solo sports), su surfaces c concrete/g grass/s sand, sx the one special surface a sport needs when it lists none of those (t turf, a aluminum, k tabletop, q curved table, i indoor-only), in 1 = played indoors (all from the sheet's standard court, never measured at a venue; the "Find by court" dialog matches on them),
               t INFERRED competitive tier 1 established (world-federation sport) / 2 organized (competing, named governing body) / 3 casual; from the sheet only, never a venue claim}], ordered by venues found
   venues  : [{i, n, q, s, y, x, c, r, a, w, o, f, p:[[sportIndex, courts, flagMask], ...], ac, ru, xu}]
      a street address; ai 1 + ad metres = nearest address point (inferred); ap 1 = address of the enclosing park/school/club (inferred); ns = nearest road name when no address (shown "Near <street>", inferred)
@@ -91,8 +91,9 @@ def main() -> None:
     sports = [{"n": r[0], "v": int(r[2]), "s": r[1], "r": r[3]} for r in gaps]
     add_sport_details(con, sports, sport_index)
     tier_no = {"established": 1, "organized": 2, "casual": 3}
-    for name, tier, length, width, net_type, net, net2, conc, grass, sand in con.execute(
-            "select sport_name, competitive_tier, court_length_ft, court_width_ft, net_type, net_height_in, net_height_alt_in, plays_on_concrete, plays_on_grass, plays_on_sand from core.dim_sport").fetchall():
+    special = {"turf": "t", "aluminum": "a", "tabletop": "k", "curved_table": "q", "indoor": "i"}
+    for name, tier, length, width, net_type, net, net2, conc, grass, sand, indoors, spec in con.execute(
+            "select sport_name, competitive_tier, court_length_ft, court_width_ft, net_type, net_height_in, net_height_alt_in, plays_on_concrete, plays_on_grass, plays_on_sand, plays_indoors, special_surface from core.dim_sport").fetchall():
         if name in sport_index:
             e = sports[sport_index[name]]
             e["t"] = tier_no[tier]
@@ -105,6 +106,10 @@ def main() -> None:
             su = "".join(c for c, on in (("c", conc), ("g", grass), ("s", sand)) if on)
             if su:
                 e["su"] = su
+            if spec:
+                e["sx"] = special[spec]
+            if indoors:
+                e["in"] = 1
     # sports that need no fixed court (any beach): w = where, wn = note; the map lists them without pinpointing a place
     for name, where, note in con.execute("select trim(sport), trim(where_played), trim(note) from raw.sport_play_anywhere").fetchall():
         if name in sport_index:
