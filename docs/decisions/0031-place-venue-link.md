@@ -1,6 +1,6 @@
 # 0031. Hand-checked links from an Overture place to an OSM court group
 
-Date: 2026-11-02. Status: proposed (owner approval needed; it adds a matching rule).
+Date: 2026-11-02. Status: accepted (owner, chat 2026-11-02; it adds a matching rule).
 
 ## Context
 `int_place_venue_match` links an Overture place to an OSM court group by distance (100 m), same name (300 m), park or street-address match (300 m) or the inside-the-footprint rule (350 m). Peninsula Tennis Club is one club, but Overture pins it at 2525 Bacon St (the City of San Diego's address for Robb Field Athletic Area) while its 12 courts are mapped in OSM 430 m east, inside the same park. No rule reaches that far, so after ADR 0030 freed the courts from Barnes the club still showed as two pins: one at the courts with 12 courts and one at the address with none.
