@@ -11,6 +11,7 @@
 --                  feature's (small) bounding box, the nearest of that feature's courts is within `place_inside_match_radius_m`, the place is a
 --                  racquet-sport lesson/court record (not a club, resort, league or gym: those are often a different business next door,
 --                  e.g. Walnut Creek Racquet Club beside Heather Farm Park) and its name does not say another sport. Gold set, third slice.
+--   seed_link      a hand-checked place -> court group link (place_venue_link.csv) for a place no radius reaches; beats every rule above.
 -- Same grid-bucket trick as int_court_pairs, so it scales statewide.
 {% set radius = var('place_match_radius_m') %}
 {% set name_radius = var('place_name_match_radius_m') %}
@@ -91,7 +92,18 @@ in_footprint as (
       {% endfor %}
 ),
 
+-- A person checked that this Overture place is the same facility as one OSM court group although no radius reaches it (seeds/place_venue_link.csv, ADR 0031).
+seeded as (
+    select l.place_id, c.venue_id,
+           sqrt(power((p.lat - c.lat) * 110540, 2) + power((p.lon - c.lon) * cos(radians(p.lat)) * 111320, 2)) as distance_m
+    from {{ ref('place_venue_link') }} l
+    join places p on p.place_id = l.place_id
+    join courts c on c.court_id = l.court_id
+),
+
 all_ruled as (
+    select place_id, venue_id, distance_m, 'seed_link' as match_rule from seeded
+    union all
     select place_id, venue_id, distance_m, match_rule from ruled where match_rule is not null
     union all
     select place_id, venue_id, distance_m, 'inside_facility' from in_footprint where distance_m <= {{ inside_radius }}
@@ -101,7 +113,7 @@ select place_id, venue_id, distance_m, match_rule
 from (
     select *, row_number() over (
         partition by place_id
-        order by case match_rule when 'distance' then 1 when 'same_name' then 2 when 'facility_name' then 3 else 4 end, distance_m, venue_id
+        order by case match_rule when 'seed_link' then 0 when 'distance' then 1 when 'same_name' then 2 when 'facility_name' then 3 else 4 end, distance_m, venue_id
     ) as rn
     from all_ruled
 ) x
