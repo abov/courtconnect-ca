@@ -19,7 +19,15 @@ POINTS = [
     (34.05, -118.25, "CA"),       # Los Angeles
     (36.17, -115.14, "NV"),       # Las Vegas
     (39.53, -119.81, "NV"),       # Reno
-    (45.52, -122.68, None),       # Portland, Oregon
+    (45.52, -122.68, "OR"),       # Portland
+    (44.05, -123.09, "OR"),       # Eugene
+    (44.06, -121.31, "OR"),       # Bend
+    (42.19, -122.71, "OR"),       # Ashland, just north of the California line
+    (41.73, -122.63, "CA"),       # Yreka, just south of it
+    (42.22, -121.78, "OR"),       # Klamath Falls
+    (44.03, -116.96, "OR"),       # Ontario, on the Idaho line
+    (43.60, -116.20, None),       # Boise, Idaho
+    (45.64, -122.66, None),       # Vancouver, Washington (None until Washington is added)
     (32.40, -117.00, None),       # Tijuana area, Mexico
 ]
 

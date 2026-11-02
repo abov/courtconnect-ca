@@ -1,6 +1,6 @@
 # 0028. Five-state scope: California, Nevada, Washington, Oregon, Hawaii
 
-Date: 2026-11-02. Status: proposed (owner 2026-11-02 asked for the expansion). Step 0 (generalize, below) was approved the same day and is built in the same PR (#477); no new state is added and no extract has been run. Extends ADR 0014 (CalNeva); it does not replace it, and 0014's rules carry over unchanged.
+Date: 2026-11-02. Status: proposed (owner 2026-11-02 asked for the expansion). Step 0 (generalize, below) was approved the same day and merged in #477. Oregon (the data layer: OSM courts and parents, Overture places and addresses, ZIPs, places, outline, bounds) started 2026-11-02 on branch `claude/oregon-step`; OSM relation 165476 and the `OR` box were checked against Overpass (border bounds match). Oregon seed research (city rec centers, chains, campuses, leads, events) is not done yet. The app copy still says California and Nevada until the name and labels PR. Extends ADR 0014 (CalNeva); it does not replace it, and 0014's rules carry over unchanged.
 
 ## Context
 ADR 0014 made the covered area a list of regions. `ingestion/regions.json` already drives the extracts, the border clip, the Census place list and `ci/check_regions.py`, so most of the work for a new state is configuration plus the places still hardcoded to CA/NV (listed below). The name "CalNeva" no longer fits five states, and `courtconnect-ca` is wrong as a repo name (owner 2026-10-23 kept it for CA+NV; this decision reopens only the question, nothing is renamed here).
