@@ -1,4 +1,4 @@
-"""Extract racket-sport-related places in California and Nevada (CalNeva, ADR 0014) from the Overture Maps places dataset.
+"""Extract racket-sport-related places in every state in regions.json (ADR 0014, 0028) from the Overture Maps places dataset.
 
 Overture publishes a global places dataset (businesses, clubs, venues) as GeoParquet on S3. Its places data is licensed
 CDLA-Permissive-2.0 / Apache-2.0 / CC0, so unlike Google Places it may be stored and republished (with attribution; see NOTICE.md).
