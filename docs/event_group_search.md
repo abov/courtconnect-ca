@@ -31,6 +31,12 @@ Searched: pickleball tournaments (Seattle, Spokane, Tacoma), padel clubs, table 
 - **Empty:** Spokane and Tacoma pickleball clubs with Meetup pages (none found); table tennis Meetup groups (none found); Seattle Platform Tennis Club (lead `platform-tennis-seattle-club`, no public page found).
 - **Recheck next cycle:** seattlebadminton.com calendar and ladders, spttc.net league page, jampadelclub.com for league dates, sjcc.org pickleball series, usta.com PNW Northwest Washington page for 2027, the three Meetup groups for upcoming events, Cascadia Padel (opening).
 
+### Oregon, second look (2026-11-02, seed-research session)
+Searched: Oregon racquetball state tournaments, Portland/Hillsboro badminton clubs, Eugene/Springfield pickleball clubs and leagues, Southern Oregon Pickleball Association (Medford).
+- **Added:** nothing dated (no event or group with an organizer page found). The Courts by Lithia & Driveway (Medford) is now a map venue with a drop-in link-out.
+- **Empty:** racquetball (Oregon Racquetball Association has no 2026-27 tournament page found; the only Portland event was the 2020 national high-school championships), badminton (Portland Badminton Club, Oregon Badminton Academy and Look Badminton have no readable site or schedule; a Lake Oswego Parks open-play badminton listing (LORAC, Sep 12 - Dec 26 2026) appears only on active.com), Eugene and Springfield pickleball (community-edited open-play lists only, no club page), SOPA (KOBI articles say it runs events all year and the Medford Summer Classic; no SOPA site or Facebook link found).
+- **Recheck next cycle:** the Lloyd Athletic Club and Courthouse Club Fitness pages for league dates, medfordoregon.gov for SOPA tournaments at the new courts, active.com LORAC badminton (Lake Oswego Parks & Rec's own page).
+
 ## Hawaii (2026-11-02)
 Searched: pickleball tournaments (Oahu, Maui), padel (Honolulu and the islands), USTA Hawaii Pacific, table tennis, badminton, Meetup pickleball groups, Pickles at Forté, City and County of Honolulu parks. Organizer pages read: meetup.com/oahu-pickleball-association, picklesatforte.com, ustahawaii.com/league-championships, hawaiipacifichealth.org (ESPN Honolulu Open).
 - **Added:** Oahu Pickleball Association (Meetup group, 6,800 members) and its drop-in series at Diamond Head Tennis Center; open play and $10 specials at Pickles at Forté (downtown Honolulu).

@@ -75,6 +75,7 @@ all_pairs as (
     select b.venue_id, b.sport_id, coalesce(p.best_rung, 7) as best_rung, coalesce(p.rungs_agreeing, 0) as rungs_agreeing
     from {{ ref('bridge_venue_sport') }} b
     left join per_pair p on p.venue_id = b.venue_id and p.sport_id = b.sport_id
+    where b.in_courts   -- wall-only pairs get no rung yet (ADR 0032): a wall's type is not a court tag, so the ladder is not applied to it
 )
 
 select

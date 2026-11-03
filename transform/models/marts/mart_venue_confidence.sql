@@ -91,6 +91,7 @@ scored as (
     left join seen os on os.venue_id = v.venue_id
     left join place_seen ps on ps.venue_id = v.venue_id
     left join sport_roll sr on sr.venue_id = v.venue_id
+    where v.venue_kind = 'courts'   -- wall venues are scored with the export (ADR 0032 step 2)
 )
 
 select
