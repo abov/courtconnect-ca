@@ -47,10 +47,12 @@ Arizona touches the same files as Mexico Phase 1 (`regions.json`, the dbt `regio
 3. **Resorts (Cancun/Riviera Maya, Los Cabos):** case by case. Add resort courts that are publicly bookable by non-guests; flag the rest for the owner (a different rule from Nevada's closed list).
 4. **Timing:** Phase 1 starts after Arizona merges (same files); Phases 2-3 research waits for the owner's call after the December beta.
 
+5. **Metro order (owner left it to the agent):** Monterrey, Guadalajara, Cancun/Riviera Maya, Mexico City, Merida, Queretaro. The two mid-size metros come first to settle the Spanish-source routine before Mexico City's roughly 8 sessions; Cancun comes third so the resort rule (case by case) is applied once, early.
+6. **Repo and Pages naming:** rename after the beta, as already planned (ADR 0028); Mexico changes nothing, since RacketConnect has no region in it (ADR 0029).
+7. **Tijuana metro trial:** yes. The OSM and Overture trial for Tijuana (minutes, no commit) may run once Phase 1 is approved.
+
 ## Still open
-- Order of the core metros after the border pilot.
-- Repo and Pages naming: RacketConnect has no region in it (ADR 0029), so nothing changes beyond the existing "rename after the beta" question.
-- May I run the OSM and Overture metro trial for Tijuana (minutes, no commit) once Phase 1 is approved?
+Nothing. The ADR stays proposed until the owner says "ship it" on the PR.
 
 ## Consequences
 Roughly doubles the covered population again with a second language, and coverage will look thin at first, so the scorecard must report per metro and the app must say "automatic data only" where nothing was hand-checked. One `MX` region keeps the pipeline unchanged for the five US states; splitting Mexico into per-state regions later stays possible through the `subregion` column.
