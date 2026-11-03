@@ -54,7 +54,8 @@ def main() -> None:
                count(*) filter (where in_osm), count(*) filter (where in_places), count(*) filter (where in_manual)
         from (select venue_id, any_value(name_source) name_source, any_value(website_usable) website_usable,
                      bool_or(in_osm) in_osm, bool_or(in_places) in_places, bool_or(in_manual) in_manual
-              from marts.mart_venue_finder where lat is not null and lon is not null group by venue_id)""")[0]
+              from marts.mart_venue_finder where lat is not null and lon is not null and venue_kind = 'courts' and in_courts group by venue_id)""")[0]   # court venues: hitting-wall venues are not on the map yet (ADR 0032)
+    wall_venues = q("select count(*) from core.dim_venue where venue_kind = 'hitting_wall'")[0][0]
     sports_total, sports_covered, sports_empty = q("""
         select count(*), count(*) filter (where venues_found > 0), count(*) filter (where venues_found = 0) from marts.mart_sport_gaps""")[0]
     conf = dict(q("select confirmation_level, count(*) from staging.stg_manual_venues group by 1"))
@@ -123,6 +124,7 @@ def main() -> None:
     L += ["", f"**{len(slas) - len(breaches)} of {len(slas)} service levels met.**", "",
           "## Coverage", "",
           f"- Venues on the map: **{venues:,}** ({in_osm:,} in OpenStreetMap, {in_places:,} in Overture places, {in_manual:,} hand-curated; sources overlap).",
+          f"- Hitting-wall venues (ADR 0032; held back from the map until the export step, so not in the counts here): **{wall_venues:,}**.",
           f"- Venues with a real name: **{named:,}** ({named_pct}%). The rest carry a name guessed from the park or school, or none.",
           f"- Venues with a usable website: **{sited:,}** ({round(100.0 * sited / venues, 1) if venues else 0}%).",
           f"- Sports on the sheet: **{sports_total}**; with at least one venue: **{sports_covered}**; empty: **{sports_empty}**.", "",

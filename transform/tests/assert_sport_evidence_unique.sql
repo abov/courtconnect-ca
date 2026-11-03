@@ -7,4 +7,4 @@ union all
 select b.venue_id, b.sport_id, 0
 from {{ ref('bridge_venue_sport') }} b
 left join {{ ref('mart_sport_evidence') }} e on e.venue_id = b.venue_id and e.sport_id = b.sport_id
-where e.venue_id is null and b.in_courts
+where e.venue_id is null

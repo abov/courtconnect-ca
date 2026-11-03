@@ -16,14 +16,14 @@ Hitting walls (1-wall, backboard, 3-wall) are a separate layer: `dim_wall` -> `i
 
 ## Plan (separate PRs, each green on `dbt build` and `ci/check_export_fresh.py`)
 1. Data (built): `venue_kind`, wall venues in `dim_venue` (`int_wall_venue`), wall sports in `bridge_venue_sport` (`in_wall`, seed `wall_type_sports.csv`). The export, sport totals, evidence ladder and confidence score keep reading court sources only (`bridge_venue_sport.in_courts`), so the map file does not change; `walls` stays in the export for one release.
-2. Export + docs (counts move here, with the baselines: README, coverage snapshot, scorecard, wall venues in the confidence score and evidence ladder): `export_app_data.py`, `app/data-dictionary.md`, `app/llms.txt`, changes feed (a wall appearing is a `venue_new` row).
-3. App: one pin layer with a kind style, the hitting-alone filter, remove the wall layer, `WALL_SPORT` special cases and the "Hitting walls you can use alone" section; "Find by court" needs no wall branch.
+2. Marts + baselines (built): the finder, neighbours and market marts see wall venues; wall sport pairs sit on the evidence ladder as derived (rung 7); a wall venue's confidence counts the wall data as its one source; the scorecard and coverage report keep court-only counts and report wall venues on their own line. The export still lists court venues only (it filters on `venue_kind`), so the map file does not change.
+3. Export + app together (the two change atomically): `export_app_data.py` lists wall venues in `venues` with a kind key, sport and `meta` counts include them, `app/data-dictionary.md`, `app/llms.txt`, changes feed (a wall appearing is a `venue_new` row); the app draws one pin layer with a kind style, the hitting-alone filter, drops the wall layer, `WALL_SPORT` special cases and the "Hitting walls you can use alone" section; "Find by court" needs no wall branch.
 4. Drop the old `walls` export key and models.
 
 ## Consequences
 - Fewer special cases; new wall sports and states (OR, WA) need no extra code.
-- Venue counts and some sport totals rise (about 440 walls today). Anything that quotes them (README, coverage snapshot, scorecard, Elementary tests, `ci/check_export_fresh.py`) must be re-baselined in step 2.
-- Venue ids for walls must stay stable (the changes feed depends on it); wall keys become the id seed, so check the one-drift tolerance before step 2.
+- Venue counts and some sport totals rise (about 440 walls today). Anything that quotes them (README, coverage snapshot, scorecard, Elementary tests, `ci/check_export_fresh.py`) must be re-baselined in step 3, when the counts reach the export.
+- Venue ids for walls must stay stable (the changes feed depends on it); wall keys become the id seed, so check the one-drift tolerance before step 3.
 - Risk: wall-only pins crowd the zoomed-out map. Cluster or style by kind in step 3.
 
 ## Open
