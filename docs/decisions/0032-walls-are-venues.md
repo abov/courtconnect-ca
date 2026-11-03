@@ -1,6 +1,6 @@
 # 0032. A hitting wall is a venue
 
-Date: 2026-11-02. Status: proposed (owner asked for it in chat 2026-11-02: "a wall is considered a venue in my eyes").
+Date: 2026-11-02. Status: proposed; steps 1-3 built (owner asked for it in chat 2026-11-02: "a wall is considered a venue in my eyes").
 
 ## Context
 Hitting walls (1-wall, backboard, 3-wall) are a separate layer: `dim_wall` -> `int_wall_clusters` -> `mart_wall_pins`, exported as `walls` beside `venues`, drawn as orange pins, filtered by a "hitting alone" bar, and tied to sports through the `WALL_SPORT` table in `app/index.html`. `int_wall_venue_link` only points a wall at a venue; "walls never count as courts". Every feature has to special-case them: "Find by court" ignored 1-wall Paddleball because it has walls and no venues (fixed in #494), counts differ, and the popup, search, share link and changes feed each treat walls on their own. To a person a wall is a place to play, so the data should say so.
@@ -17,8 +17,8 @@ Hitting walls (1-wall, backboard, 3-wall) are a separate layer: `dim_wall` -> `i
 ## Plan (separate PRs, each green on `dbt build` and `ci/check_export_fresh.py`)
 1. Data (built): `venue_kind`, wall venues in `dim_venue` (`int_wall_venue`), wall sports in `bridge_venue_sport` (`in_wall`, seed `wall_type_sports.csv`). The export, sport totals, evidence ladder and confidence score keep reading court sources only (`bridge_venue_sport.in_courts`), so the map file does not change; `walls` stays in the export for one release.
 2. Marts + baselines (built): the finder, neighbours and market marts see wall venues; wall sport pairs sit on the evidence ladder as derived (rung 7); a wall venue's confidence counts the wall data as its one source; the scorecard and coverage report keep court-only counts and report wall venues on their own line. The export still lists court venues only (it filters on `venue_kind`), so the map file does not change.
-3. Export + app together (the two change atomically): `export_app_data.py` lists wall venues in `venues` with a kind key, sport and `meta` counts include them, `app/data-dictionary.md`, `app/llms.txt`, changes feed (a wall appearing is a `venue_new` row); the app draws one pin layer with a kind style, the hitting-alone filter, drops the wall layer, `WALL_SPORT` special cases and the "Hitting walls you can use alone" section; "Find by court" needs no wall branch.
-4. Drop the old `walls` export key and models.
+3. Export + app together (built): `export_app_data.py` lists wall venues in `venues` (`kd` "w", details in `hw`), wall-only sport pairs carry flag 128 in `p`, sports carry `ws`, `meta` reports `venues`, `hitting_walls`, `walls` and `walls_unchecked`; `mart_sport_coverage.venues_found` counts wall venues; the scorecard and coverage report count them; `app/data-dictionary.md`, `app/llms.txt`, the changes feed (a wall appearing is a `venue_new` row; the first run that lists them takes them as the baseline instead of dating ~400 rows new). The app draws one pin layer with a kind style, "hitting alone" is a filter on venues (every wall type together; the 1-wall / 3-wall chips are gone, "Public only" stays), and `WALL_SPORT`, the wall layer and the "Hitting walls you can use alone" section are gone. "Find by court" has one wall rule left: when every sport with the picked size is a wall sport (34 x 20 ft, 1-wall Paddleball), it opens hitting alone, so all wall types show. The old `walls` export key was dropped here too, since the app no longer reads it.
+4. Retire what only the old layer used (leftover `mart_wall_pins` columns and tests once nothing reads them).
 
 ## Consequences
 - Fewer special cases; new wall sports and states (OR, WA) need no extra code.

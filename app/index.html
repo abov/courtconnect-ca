@@ -38,7 +38,7 @@
     --ok: #1a7f37; --warn: #855700; --bad: #cf222e; --ev: #8250df; --soc: #0a7d6e; --chip: #ffffff; --chip-on: #e6eefa;
     --hi: #F2B134; --on-hi: #3a2a00; --hover: #e6eefa;
     --r-sm: 8px; --r-md: 12px; --r-pill: 999px; --shadow: 0 4px 16px rgba(20,30,50,.16); --ease: 150ms ease;
-    --pin-c: #1a7f37; --pin-p: #0969da; --pin-i: #d4a72c; --pin-u: #8c959f;
+    --pin-c: #1a7f37; --pin-p: #0969da; --pin-i: #d4a72c; --pin-u: #8c959f; --pin-w: #b45309; --pin-wr: #6e7781;
   }
   @media (prefers-color-scheme: dark) {
     :root { --bg: #10151c; --panel: #171e27; --text: #e6edf3; --muted: #9aa3ad; --line: #3a424d; --accent: #6aa5ee; --on-accent: #0d1117;
@@ -87,6 +87,7 @@
   #list button { all: unset; display: block; width: 100%; box-sizing: border-box; padding: 10px 16px 10px 13px; cursor: pointer; border-left: 3px solid transparent; transition: background-color var(--ease); }
   #list button.qc { border-left-color: var(--pin-c); } #list button.qp { border-left-color: var(--pin-p); }
   #list button.qi { border-left-color: var(--pin-i); } #list button.qu { border-left-color: var(--pin-u); }
+  #list button.qw { border-left-color: var(--pin-w); } #list button.qwr { border-left-color: var(--pin-wr); }
   #list button:hover, #list button:focus-visible { background: var(--hover); }
   .nm { font-weight: 600; }
   .meta { color: var(--muted); font-size: 13px; }
@@ -378,11 +379,8 @@
       <span>Zoomed in: &#10003; name confirmed, ? name guessed</span>
     </div>
     <div class="legend playlegend" id="wallLegend" aria-label="Hitting wall legend" hidden>
-      <span>Hitting walls:</span>
-      <span><span class="dot" style="background:var(--pin-c)"></span>Confirmed</span>
-      <span><span class="dot" style="background:var(--pin-p)"></span>Reported by a player</span>
-      <span><span class="dot" style="background:var(--pin-i)"></span>From OpenStreetMap tags, unchecked</span>
-      <span><span class="dot" style="background:var(--pin-u)"></span>Restricted access</span>
+      <span><span class="dot" style="background:var(--pin-w)"></span>Hitting wall (a wall to hit against; details in the popup)</span>
+      <span><span class="dot" style="background:var(--pin-wr)"></span>Hitting wall, restricted access</span>
     </div>
   </div>
   <ul id="list"></ul>
@@ -483,7 +481,7 @@ function trackDemand(v) {
 // A pick (sport or filter) that leaves nothing on the map: where people look vs what we have.
 function trackEmpty() {
   try {
-    const none = state.mode === "play" ? !current.length && !wallsFiltered().length : !viewEv.length && !viewSoc.length;
+    const none = state.mode === "play" ? !current.length : !viewEv.length && !viewSoc.length;
     if (none) trackD("empty-" + state.mode, state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "any sport");
   } catch (e) { /* ignore */ }
 }
@@ -528,8 +526,8 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   courtreserve: "CourtReserve", matchtime: "MatchTime", p1padel_site: "P1 Padel", vip_site: "Vegas Indoor Pickleball", darling_site: "Darling Tennis Center",
   ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson", washoe_county: "Washoe County Regional Parks", clark_county: "Clark County Parks & Recreation", suncity_summerlin: "Sun City Summerlin", lifetime_site: "Life Time", nlv_gov: "City of North Las Vegas"};
 
-let DATA, sports, venues, events = [], socials = [], socialPins = [], walls = [], platforms = [];
-const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers: new Set(), solo: "", soloPub: false};   // solo = "all" | "one" | "three": the hitting-alone view shows walls only   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
+let DATA, sports, venues, events = [], socials = [], socialPins = [], platforms = [];
+const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers: new Set(), solo: false, soloPub: false};   // solo = the hitting-alone filter: hitting-wall venues and court venues with walls on site, every wall type together   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
@@ -607,10 +605,9 @@ function matches(v, sm, tm, vf, sport = state.sport) {
   return true;
 }
 function filtered() {
-  if (state.solo) return [];   // hitting alone: walls only, no venues
   const sm = surfMask(), tm = setMask();
   const vf = (state.on.has("lit") ? 1 : 0);
-  return venues.filter(v => matches(v, sm, tm, vf));
+  return venues.filter(v => matches(v, sm, tm, vf) && (!state.solo || soloWallCount(v, state.soloPub) > 0));
 }
 
 // ---------- watch events (link-out discovery, never booking) ----------
@@ -776,35 +773,32 @@ function renderWatchList() {
   updateCount();
 }
 
-// ---------- hitting walls (solo practice) ----------
+// ---------- hitting walls (ADR 0032: a wall is a venue) ----------
+// A hitting wall that stands at no listed court venue is a venue of kind kd "w" (details in v.hw); walls at a court venue are v.wl on that venue. The wall type decides the sports
+// (export: seed wall_type_sports.csv, flag 128 in p = inferred from the wall type, never confirmed play), so there is no wall-specific sport table here.
 const WALL_TYPE = {one_wall: "One-wall", three_wall: "Three-wall", backboard: "Backboard", other: "Wall"};
 const WALL_CONF = {reported: "Reported by a player, not independently verified", official: "Confirmed from an official source", tagged: "From OpenStreetMap tags", inferred: "Inferred"};
 // Who may use a wall: the same access vocabulary as venues (public / customers / private / members), blank = not known.
 const WALL_ACCESS_LABEL = {public: "Public", customers: "Customers only", private: "Private, not open to walk-up use", members: "Members only"};
 function wallAccess(w) { return w.ac === "public" ? "public" : WALL_ACCESS_LABEL[w.ac] ? "restricted" : "unknown"; }
-// Walls double as solo courts for the wall sports. Only walls whose type is known qualify: OSM handball/wall courts of unchecked type ("other") never do.
-// Racquetball is the 4-wall court (owner 2026-10-19), so it never shows walls. Outdoor racquetball is its own sport, played on 1-wall and 3-wall courts (3WallBall), so only it gets those walls (no backboards).
-// Knuckle Racket (owner 2026-10-20) is played on 1-wall and 3-wall courts too, but only walls mapped public (WALL_PUBLIC_ONLY).
-const WALL_SPORT = {"1-wall Paddleball": ["one_wall", "backboard"], "3-wall Paddleball": ["three_wall"], "Outdoor Racquetball": ["one_wall", "three_wall"], "Knuckle Racket": ["one_wall", "three_wall"]};
-const WALL_PUBLIC_ONLY = ["Knuckle Racket"];
-// Venue popup line: walls standing at this venue (v.wl = [[types, walls, confirmation], ...], from int_wall_venue_link). A pointer to the wall layer; walls never count as courts.
+const isWall = v => v.kd === "w";
+// Hitting alone: only walls of a known type one person can hit against (1-wall, backboard, 3-wall) count; "other" handball-type walls never do. People hitting alone do not care which type, so the types are not split.
+const SOLO_TYPE = new Set(["one_wall", "backboard", "three_wall"]);
+const soloType = types => types.split(";").some(t => SOLO_TYPE.has(t));
+// Venue popup line: walls standing at this court venue (v.wl = [[types, walls, confirmation, access], ...], from int_wall_venue_link).
 const WALL_LINK_TYPE = {one_wall: "one-wall", three_wall: "three-wall", backboard: "backboard", other: "handball-type"};
 const WALL_LINK_CONF = {tagged: "from OpenStreetMap tags, not checked", inferred: "inferred", reported: "reported, not verified", official: "official source"};
 function wallLinkText(wl) {
   return wl.map(([types, n, cf]) => n + " " + types.split(";").map(t => WALL_LINK_TYPE[t] || t).join(" / ") + " (" + (WALL_LINK_CONF[cf] || cf) + ")").join("; ");
 }
-function wallsFor(name) { const ts = WALL_SPORT[name]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t)) && (!WALL_PUBLIC_ONLY.includes(name) || wallAccess(w) === "public")) : []; }
-// Hitting alone: every wall of a known type that one person can use against (1-wall, backboard, 3-wall); "other" handball-type walls are left out as above.
-const SOLO_TYPES = {all: ["one_wall", "backboard", "three_wall"], one: ["one_wall", "backboard"], three: ["three_wall"]};
-function soloWalls(kind, pub) { const ts = SOLO_TYPES[kind]; return ts ? walls.filter(w => w.t.some(t => ts.includes(t)) && (!pub || wallAccess(w) === "public")) : []; }
-function wallsFiltered() {
-  if (state.mode !== "play") return [];
-  if (state.solo) return soloWalls(state.solo, state.soloPub);
-  return state.sport >= 0 ? wallsFor(sports[state.sport].n) : [];
+// Walls at a venue that count for hitting alone (pub: only walls mapped public); 0 = the venue is not in the filter.
+function soloWallCount(v, pub) {
+  if (isWall(v)) return soloType(v.hw.t.join(";")) && (!pub || v.hw.ac === "public") ? (v.hw.wn || 1) : 0;
+  return (v.wl || []).filter(w => soloType(w[0]) && (!pub || w[3] === "public")).reduce((s, w) => s + w[1], 0);
 }
-function wallGeojson(list) {
-  return {type: "FeatureCollection", features: list.map(w => ({type: "Feature", properties: {k: walls.indexOf(w), name: w.n, f: w.cf, r: wallAccess(w) === "restricted" ? 1 : 0}, geometry: {type: "Point", coordinates: [w.x, w.y]}}))};
-}
+const wallSportNow = () => state.mode === "play" && state.sport >= 0 && !!sports[state.sport] && !!sports[state.sport].ws;   // a hitting-wall sport is picked
+// Walls to report for a venue in the count line: all that hitting alone counts, else the picked wall sport's walls, else a wall venue's own.
+const wallsIn = v => state.solo ? soloWallCount(v, state.soloPub) : wallSportNow() ? ((v.p.find(p => p[0] === state.sport) || [0, 0])[1]) : isWall(v) ? (v.hw.wn || 1) : 0;
 // Directions open the user's own maps app at the pin's coordinates (no address lookup, nothing stored; ADR 0005).
 function directionsNode(y, x, name, approx) {
   const ll = y + "," + x, a = (href, text) => el("a", {href, target: "_blank", rel: "noopener noreferrer", text});
@@ -832,45 +826,34 @@ function shareNode(v) {
 function triState(v) { return v === 1 ? "Yes" : v === 0 ? "No" : "Not known"; }
 // Wall counts read from OSM tags alone are an assumption (one-wall unless a source says otherwise), so say so.
 function wallTypeLabel(w, t) { return (WALL_TYPE[t] || t) + (w.cf === "tagged" && t === "one_wall" ? " (assumed)" : ""); }
-function wallNode(w) {
-  const box = el("div"), approx = /approx/.test(w.pr), acc = wallAccess(w);
-  box.append(el("h2", {text: w.n, translate: "no"}));
+function wallNode(v) {
+  const w = v.hw, box = el("div"), approx = /approx/.test(w.pr), acc = wallAccess(w), {place, tag} = placeOf(v);
+  box.append(el("h2", {text: v.n || "Handball / wall court", translate: "no"}));
   box.append(el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), ...w.sp.map(s => el("span", {class: "badge", text: s}))));
-  box.append(el("p", {class: "meta", text: [w.wn ? w.wn + " walls (one pin)" : "", w.nv ? "Near " + w.nv : "", [w.c, w.r].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}));
+  box.append(el("p", {class: "meta", text: [w.wn ? w.wn + " walls (one pin)" : "", w.nv ? "Near " + w.nv : "", place + (tag ? " · " + tag : "")].filter(Boolean).join(" · ")}));
+  box.append(el("p", {}, el("b", {text: "Suits (inferred from the wall type): "}), document.createTextNode(v.p.map(p => sports[p[0]].n).join(", "))));
   box.append(el("p", {class: "meta", text: ["Access: " + (WALL_ACCESS_LABEL[w.ac] || "Not known") + (w.cf === "tagged" && acc !== "unknown" ? " (OSM tag, not checked)" : ""),
     "Lights: " + triState(w.l), "Free: " + triState(w.f), w.su ? "Surface: " + w.su : ""].filter(Boolean).join(" · ")}));
   box.append(el("p", {class: "meta", text: (WALL_CONF[w.cf] || w.cf) + (w.cf === "tagged" ? ", not checked" : "") + " (" + w.d + ")"}));
-  box.append(directionsNode(w.y, w.x, w.n, approx));
+  box.append(directionsNode(v.y, v.x, v.n, approx));
+  box.append(shareNode(v));
   const src = el("details", {class: "srcs"}, el("summary", {text: "Details and corrections"}));   // long explanations, one tap away
   if (approx) src.append(el("p", {class: "meta", text: "Pin is approximate: " + w.pr.replace(/^approximate:\s*/, "")}));
   if (w.wn) src.append(el("p", {class: "meta", text: w.wn + " walls side by side here (one pin for all of them)."}));
+  for (const t of addressNotes(v)) src.append(el("p", {class: "meta", text: t}));
   src.append(el("p", {class: "meta", text: w.cf === "tagged" ? "Sport is as tagged in OpenStreetMap. OpenStreetMap does not say how many walls a handball court has, so we assume one wall until a source or visit report says otherwise; condition and public access were not checked." : "Sports listed are what the wall is thought to suit."}));
-  if (w.cf === "tagged") src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + w.y + "/" + w.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
+  if (w.ev) src.append(el("p", {class: "meta", text: w.ev}));
+  if (w.cf === "tagged") src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
+  const q = new URLSearchParams({template: "suggest-a-change.yml", title: "Change: " + (v.n || "Hitting wall") + (v.c ? " (" + v.c + ")" : ""), venue: v.n || "", city: v.c || "", map_id: v.i});
+  src.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change"}), document.createTextNode(" (GitHub form)")));
   box.append(src);
   return box;
-}
-function showWall(w, fly) {
-  if (!w) return;
-  if (fly) map.flyTo({center: [w.x, w.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: popupRoom()});
-  popup.setLngLat([w.x, w.y]).setDOMContent(wallNode(w)).addTo(map);
-}
-function wallItems(list) {
-  const out = [];
-  for (const w of list) {
-    const btn = el("button", {type: "button"},
-      el("div", {class: "nm", translate: "no", text: w.n + (w.wn ? " (" + w.wn + " walls)" : "")}),
-      el("div", {class: "meta", text: [distLabel(w), w.c, w.sp.join(", ")].filter(Boolean).join(" · ")}),
-      el("div", {}, ...w.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(w, t)})), wallAccess(w) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : el("span", {class: "badge", text: wallAccess(w) === "public" ? "Public" : "Access not known"})));
-    btn.addEventListener("click", () => showWall(w, true));
-    out.push(el("li", {}, btn));
-  }
-  return out;
 }
 
 // ---------- map ----------
 let map, popup, current = [], mapReady = false, viewEv = [], viewSoc = [];
 function geojson(list) {
-  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0, g: pinFamily(v)}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
+  return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0, g: pinFamily(v), h: isWall(v) ? (wallAccess(v.hw) === "restricted" ? 2 : 1) : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
 function initMap() {
   map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: HOME_BOUNDS,
@@ -895,15 +878,15 @@ function initMap() {
       paint: {"circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 4, 14, 8, 16, 12],
               "circle-stroke-color": ["case", ["==", ["get", "up"], 1], ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"], ["==", ["get", "up"], 2], "#57606a", "#fff"],
               "circle-stroke-width": ["case", ["==", ["get", "up"], 1], 3, ["==", ["get", "up"], 2], 3, 1.5],
-                            "circle-color": ["case", [">=", ["get", "up"], 1], "#fff", ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"]]}});   // up 1 = confirmed but not open yet: hollow ring; up 2 = only reported by a directory: lighter, grey ring
+                            "circle-color": ["case", ["==", ["get", "h"], 1], "#b45309", ["==", ["get", "h"], 2], "#6e7781", [">=", ["get", "up"], 1], "#fff", ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"]]}});   // h 1 / 2 = a hitting-wall venue (orange; grey when access is restricted), one pin layer for both kinds; up 1 = confirmed but not open yet: hollow ring; up 2 = only reported by a directory: lighter, grey ring
     // Sport glyph inside the pin from zoom ~15 (polish PR 6). Pin colour still carries the status; the glyph is a second, redundant cue.
     // Dark glyph (#1f2328) on gold, grey and hollow rings, white only on green and blue: every pin colour has the glyph at >= 4.5:1 (white on grey was 3.04, dark on grey is 5.2).
     map.addLayer({id: "pts-glyph", type: "symbol", source: "v", filter: ["!", ["has", "point_count"]],
-      layout: {"icon-image": ["concat", "g-", ["get", "g"], ["case", [">=", ["get", "up"], 1], "-d", ["match", ["get", "q"], ["c", "p"], "-w", "-d"]]],
+      layout: {"icon-image": ["concat", "g-", ["get", "g"], ["case", [">=", ["get", "up"], 1], "-d", [">", ["get", "h"], 0], "-w", ["match", ["get", "q"], ["c", "p"], "-w", "-d"]]],
                "icon-size": ["interpolate", ["linear"], ["zoom"], 15.5, 0.85, 16, 1, 17, 1.1], "icon-allow-overlap": true, "icon-ignore-placement": true},   // from 15.5, 13.6 px there and 16 px at zoom 16 (was 11 / 13.6), still inside the 22-24 px pin
       paint: {"icon-opacity": ["interpolate", ["linear"], ["zoom"], 15.5, 0, 16, 1]}});
     // The glyph shows the sport, not the status (most pins are tennis), so confirmed and guessed names also get a small tick / "?" badge: a shape cue for people who cannot tell green from blue or gold. Rings (not open yet) are already hollow.
-    map.addLayer({id: "pts-status", type: "symbol", source: "v", filter: ["all", ["!", ["has", "point_count"]], ["==", ["get", "up"], 0], ["in", ["get", "q"], ["literal", ["c", "i"]]]],
+    map.addLayer({id: "pts-status", type: "symbol", source: "v", filter: ["all", ["!", ["has", "point_count"]], ["==", ["get", "up"], 0], ["==", ["get", "h"], 0], ["in", ["get", "q"], ["literal", ["c", "i"]]]],
       layout: {"icon-image": ["concat", "st-", ["get", "q"]], "icon-offset": [9, -9], "icon-size": ["interpolate", ["linear"], ["zoom"], 15.5, 0.8, 17, 1], "icon-allow-overlap": true, "icon-ignore-placement": true},
       paint: {"icon-opacity": ["interpolate", ["linear"], ["zoom"], 15.5, 0, 16, 1]}});
     addPinGlyphs();
@@ -934,15 +917,6 @@ function initMap() {
     map.on("mouseleave", "soc-pts", () => map.getCanvas().style.cursor = "");
     map.on("mouseenter", "ev-pts", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "ev-pts", () => map.getCanvas().style.cursor = "");
-    map.addSource("w", {type: "geojson", data: wallGeojson([])});
-    map.addLayer({id: "wall-pts", type: "circle", source: "w", layout: {visibility: "none"},
-      paint: {"circle-radius": 9, "circle-color": ["case", ["==", ["get", "r"], 1], "#8c959f", ["match", ["get", "f"], "official", "#1a7f37", "reported", "#0969da", "#d4a72c"]], "circle-stroke-color": "#fff", "circle-stroke-width": 2}});   // same palette as venues: green confirmed, blue reported by a player, yellow unchecked (OSM tags / inferred), grey restricted access
-    map.addLayer({id: "wall-label", type: "symbol", source: "w", layout: {visibility: "none", "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"],
-      "text-size": 12, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 9},
-      paint: {"text-color": "#24292f", "text-halo-color": "#fff", "text-halo-width": 1.5}});
-    map.on("click", "wall-pts", e => showWall(walls[e.features[0].properties.k], false));
-    map.on("mouseenter", "wall-pts", () => map.getCanvas().style.cursor = "pointer");
-    map.on("mouseleave", "wall-pts", () => map.getCanvas().style.cursor = "");
     map.on("moveend", debounce(() => state.mode === "play" ? renderList() : renderWatchList(), 150));   // Watch: the lists, the count and "Coming up next" all follow the view
     mapReady = true;
     applyMode(false);
@@ -974,8 +948,8 @@ function iconSpan(fams) {
   sp.innerHTML = [...new Set(fams)].slice(0, 4).map(f => '<svg viewBox="0 0 16 16">' + ICON[f] + '</svg>').join("");   // static strings above, no data
   return sp;
 }
-const venueIcons = v => iconSpan(v.p.slice().sort((a, b) => (b[1] || 0) - (a[1] || 0)).map(p => familyOf(sports[p[0]].n)));
-const pinFamily = v => v.p.length ? familyOf(sports[v.p.slice().sort((a, b) => (b[1] || 0) - (a[1] || 0))[0][0]].n) : "other";   // same "main sport" rule as venueIcons
+const venueIcons = v => isWall(v) ? iconSpan(["wall"]) : iconSpan(v.p.slice().sort((a, b) => (b[1] || 0) - (a[1] || 0)).map(p => familyOf(sports[p[0]].n)));
+const pinFamily = v => isWall(v) ? "wall" : v.p.length ? familyOf(sports[v.p.slice().sort((a, b) => (b[1] || 0) - (a[1] || 0))[0][0]].n) : "other";   // same "main sport" rule as venueIcons
 function addPinGlyphs() {   // the popup icon set drawn to small images, one white and one dark variant per sport family
   for (const f of Object.keys(ICON)) for (const [suffix, c] of [["w", "#ffffff"], ["d", "#1f2328"]]) {
     const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" fill="none" stroke="' + c + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
@@ -1002,6 +976,7 @@ function sportParts(v, withOptional = true) {
     else if (sports[p[0]].st) bases.forEach(b => (twins[b] = twins[b] || []).push(sports[p[0]].n));   // same equipment, equally valid (Teqis on a Teqpong table): named next to the base sport
     else bases.forEach(b => (extras[b] = extras[b] || []).push(sports[p[0]].n));
   }
+  const cntP = p => p[2] & 128 ? " (inferred from " + p[1] + (p[1] === 1 ? " hitting wall)" : " hitting walls)") : cnt(p[1]);   // a sport only a hitting wall supports here: said so, not counted as courts
   const cnt = c => v.up ? (c ? " (" + c + " courts planned)" : " (planned)") : c ? " (" + c + (c === 1 ? " court)" : " courts)") : " (at least 1 court)";   // no count listed: the venue still has a court; not open yet: planned
   // variants of one game ("Basque Pelota: Xare", "Basque Pelota: Jai Alai"…) share the same court: show it once, variants as inferred options
   const fam = {}, solo = [];
@@ -1009,8 +984,8 @@ function sportParts(v, withOptional = true) {
   const extra = [];
   const parts = solo.map(p => {
     const x = extras[p[0]];   // same courts, also playable: shown in the Plays line, marked optional (it used to sit only in the details section)
-    return [sports[p[0]].n, ...(twins[p[0]] || [])].join(" / ") + cnt(p[1]) + (x && withOptional ? " (optional on these courts: " + x.join(", ") + ")" : "");
-  }), counts = solo.map(p => p[1] || 0);
+    return [sports[p[0]].n, ...(twins[p[0]] || [])].join(" / ") + cntP(p) + (x && withOptional ? " (optional on these courts: " + x.join(", ") + ")" : "");
+  }), counts = solo.map(p => p[2] & 128 ? 0 : p[1] || 0);
   for (const [k, ps] of Object.entries(fam)) {
     const c = Math.max(...ps.map(p => p[1] || 0)); counts.push(c);
     if (ps.length < 2) { parts.push(sports[ps[0][0]].n + cnt(c)); continue; }
@@ -1026,6 +1001,18 @@ function facts(v, entry) {
   const out = [], m = entry ? entry[2] : v.m;
   for (const [k, label] of [["indoor", "Indoor"], ["outdoor", "Outdoor"], ["sand", "Sand"], ["clay", "Clay"], ["grass", "Grass"], ["hard", "Hard court"]]) if (m & SURF[k]) out.push(label);
   if (v.f & 1) out.push("Lights"); if (v.f & 2) out.push("Public"); if (v.f & 8) out.push("Private / members");  return out;
+}
+function placeOf(v) {   // address line and its inferred-ness label, shared by the court and hitting-wall popups
+  const place = [v.a || (v.ns ? "Near " + v.ns : ""), v.c, v.r].filter(Boolean).join(", ");   // r = state (ADR 0014, 0028); ns = nearest road, no address known
+  const tag = v.ai ? "address inferred, " + (v.ad < 10 ? "at the pin" : "~" + v.ad + " m from pin") : v.ap ? "address of the surrounding site (inferred)" : !v.a && v.ns ? "nearest road (inferred)" : "";
+  return {place, tag};
+}
+function addressNotes(v) {
+  const out = [];
+  if (v.ai) out.push("Nearest address (inferred), " + (v.ad < 10 ? "at the pin" : "about " + v.ad + " m from the pin") + ": the street address above is the closest address point we know, not confirmed for " + (isWall(v) ? "this wall." : "these courts."));
+  if (v.ap) out.push("Address of the surrounding park, school or club (as mapped in OpenStreetMap, inferred): " + (isWall(v) ? "the wall is" : "these courts are") + " inside it, but the address is not confirmed for " + (isWall(v) ? "the wall itself." : "the courts themselves."));
+  if (!v.a && v.ns) out.push("No street address known (inferred): the road name is the nearest street to the pin, not an address.");
+  return out;
 }
 function venueNode(v) {
   const box = el("div"), more = [];                                       // more = the long explanations, kept one tap away in the details section
@@ -1048,12 +1035,9 @@ function venueNode(v) {
       ? "Not open yet, and not confirmed by the club's own page: a directory or press listing (checked " + (v.ud || "recently") + ") says it is coming. The location is approximate and the court count, address and date may change or never happen."
       : "Not open yet. The club's own page (checked " + (v.ud || "recently") + ") says it is coming; court counts, address and opening date can change, and the pin may be approximate. Check the club before you go.");
   }
-  const place = [v.a || (v.ns ? "Near " + v.ns : ""), v.c, v.r].filter(Boolean).join(", ");   // r = state (CA/NV, ADR 0014); ns = nearest road, no address known
-  const tag = v.ai ? "address inferred, " + (v.ad < 10 ? "at the pin" : "~" + v.ad + " m from pin") : v.ap ? "address of the surrounding site (inferred)" : !v.a && v.ns ? "nearest road (inferred)" : "";
+  const {place, tag} = placeOf(v);
   if (place) head.append(el("p", {class: "meta", text: place + (tag ? " · " + tag : "")}));
-  if (v.ai) more.push("Nearest address (inferred), " + (v.ad < 10 ? "at the pin" : "about " + v.ad + " m from the pin") + ": the street address above is the closest address point we know, not confirmed for these courts.");
-  if (v.ap) more.push("Address of the surrounding park, school or club (as mapped in OpenStreetMap, inferred): these courts are inside it, but the address is not confirmed for the courts themselves.");
-  if (!v.a && v.ns) more.push("No street address known (inferred): the road name is the nearest street to the pin, not an address.");
+  more.push(...addressNotes(v));
   if (v.al) more.push("Also listed as: " + v.al);
   const sp = sportParts(v);
   plays.append(el("p", {}, el("b", {text: "Plays: "}), venueIcons(v), document.createTextNode(sp.main)));
@@ -1062,7 +1046,7 @@ function venueNode(v) {
   if (f.length) plays.append(el("p", {text: f.join(" · ")}));
   if (v.wl) {
     plays.append(el("p", {}, el("b", {text: "Hitting walls on site: "}), document.createTextNode(wallLinkText(v.wl))));
-    more.push("Hitting walls: " + (v.wl.some(w => w[2] === "tagged" || w[2] === "inferred") ? "the tagged or inferred ones are not checked (condition, count and public access unknown). " : "") + "They are solo-practice walls, shown as orange pins when you pick a wall sport, and are not counted as courts here.");
+    more.push("Hitting walls: " + (v.wl.some(w => w[2] === "tagged" || w[2] === "inferred") ? "the tagged or inferred ones are not checked (condition, count and public access unknown). " : "") + "They are solo-practice walls, not courts: the wall sports they suit are listed under Plays as inferred from the wall type. Turn on hitting alone (Find by court) to see every hitting wall.");
   }
   if (v.o && !noPrograms()) plays.append(el("p", {}, el("b", {text: "Offers: "}), document.createTextNode([...v.o].sort((a, b) => "OCLGDTES".indexOf(a) - "OCLGDTES".indexOf(b)).map(c => OFFER[c]).join(", "))));
   if (v.ru) plays.append(el("p", {}, el("b", {text: "Notes: "}), document.createTextNode(v.ru)));
@@ -1105,7 +1089,7 @@ function showVenue(v, fly) {
   hideToast();
   if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: popupRoom()});
   track("venue-open"); trackDemand(v);
-  popup.setLngLat([v.x, v.y]).setDOMContent(venueNode(v)).addTo(map);
+  popup.setLngLat([v.x, v.y]).setDOMContent((isWall(v) ? wallNode : venueNode)(v)).addTo(map);
 }
 
 // ---------- list + counts ----------
@@ -1114,14 +1098,9 @@ function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
   show(["clusters", "cluster-count", "pts", "pts-glyph", "pts-status"], mode === "play");
   show(["ev-pts", "ev-label", "soc-pts", "soc-label"], mode === "watch");
-  const walls_on = mode === "play" && wallsFiltered().length > 0;
-  show(["wall-pts", "wall-label"], walls_on);
-  $("wallLegend").hidden = !walls_on;
-  if (walls_on && !wallKeySeen) { wallKeySeen = true; store.set("keySeen", true); setKey(true); }   // wall pins reuse the venue colours with other meanings: show the key once, on the first visit (it used to reopen on every load and pushed the list down ~145 px)
+  $("wallLegend").hidden = !(mode === "play" && current.some(isWall));   // the wall pins' colours, listed in the map key only while some are on the map
 }
-let wallKeySeen = store.get("keySeen", false) === true;
 function setKey(open) { $("mapkey").hidden = !open; $("keytoggle").setAttribute("aria-expanded", String(open)); }
-function fitWalls(list) { const b = new maplibregl.LngLatBounds(); list.forEach(w => b.extend([w.x, w.y])); map.fitBounds(b, {padding: 90, maxZoom: 12, duration: 600}); }
 // ---------- search: name, city or ZIP; the map zooms to what it finds ----------
 // A name or city fits the map to every match. A ZIP (Census ZCTA centre, data/zips.json) fits to the pins within 6 km, or to the 5 nearest when none are that close.
 // Nothing found: the closest city name (typos), else the pins stay as the other filters leave them, with a note saying so.
@@ -1308,36 +1287,38 @@ function applyMode(fit) {
     const list = [...eventsFiltered(), ...socialFiltered()];
     if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(ev => b.extend([ev.x, ev.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
   } else if (state.mode === "play" && fit) {
-    const list = wallsFiltered();
-    if (list.length) fitWalls(list); else map.fitBounds(HOME_BOUNDS, {padding: 20, duration: 600});
+    const list = state.solo || wallSportNow() ? filtered() : [];   // hitting alone and the wall sports are sparse: fit the map to their pins
+    if (list.length) fitTo(list, 12); else map.fitBounds(HOME_BOUNDS, {padding: 20, duration: 600});
   }
-  refresh(); showWallNote(); syncSolo();   // Watch and Social return early from refresh(), so the orange-pin note (play-only) is updated here
+  refresh(); showWallNote(); syncSolo();   // Watch and Social return early from refresh(), so the wall-pin note (play-only) is updated here
 }
 function renderList() {
   if (state.mode !== "play") return;
   const c = map.getCenter(), b = map.getBounds();
-  const nearest = pool => pool.filter(v => b.contains([v.x, v.y])).map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
-  const all = nearest(current), wallsInView = nearest(wallsFiltered());   // only what the map shows right now, nearest the centre first
-  const ul = $("list"), key = all.slice(0, LIST_STEP).map(v => v.n).join("|") + "#" + wallsInView.length;
+  const all = current.filter(v => b.contains([v.x, v.y])).map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);   // only what the map shows right now, nearest the centre first
+  const ul = $("list"), key = all.slice(0, LIST_STEP).map(v => v.i).join("|");
   if (key !== renderList.key) listShown = LIST_STEP;   // a new view starts with 5 again
-  const walls = wallsInView.slice(0, listShown);
-  const top = all.slice(0, Math.max(0, listShown - walls.length));
-  const total = all.length + wallsInView.length;
-  ul.replaceChildren(...wallItems(walls));
+  const top = all.slice(0, listShown);
+  ul.replaceChildren();
   for (const v of top) {
-    const btn = el("button", {type: "button", class: "q" + v.q},
-      el("div", {class: "nm", translate: v.n ? "no" : "yes"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
-      el("div", {class: "meta", text: [distLabel(v), v.c, sportLine(v)].filter(Boolean).join(" · ")}),
-      el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.up ? el("span", {class: "badge warn", text: v.up}) : null, noPrograms() ? null : v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
+    const wall = isWall(v);
+    const btn = wall ? el("button", {type: "button", class: wallAccess(v.hw) === "restricted" ? "qwr" : "qw"},
+        el("div", {class: "nm", translate: "no"}, venueIcons(v), document.createTextNode((v.n || "Handball / wall court") + (v.hw.wn ? " (" + v.hw.wn + " walls)" : ""))),
+        el("div", {class: "meta", text: [distLabel(v), v.c, v.hw.sp.join(", ")].filter(Boolean).join(" · ")}),
+        el("div", {}, ...v.hw.t.map(t => el("span", {class: "badge ev", text: wallTypeLabel(v.hw, t)})), wallAccess(v.hw) === "restricted" ? el("span", {class: "badge warn", text: "Restricted access"}) : el("span", {class: "badge", text: wallAccess(v.hw) === "public" ? "Public" : "Access not known"})))
+      : el("button", {type: "button", class: "q" + v.q},
+        el("div", {class: "nm", translate: v.n ? "no" : "yes"}, venueIcons(v), document.createTextNode(v.n || "Unnamed courts" + (v.c ? " in " + v.c : ""))),
+        el("div", {class: "meta", text: [distLabel(v), v.c, sportLine(v)].filter(Boolean).join(" · ")}),
+        el("div", {}, el("span", {class: "badge " + v.q, text: QSHORT[v.q], title: QTIP[v.q]}), v.up ? el("span", {class: "badge warn", text: v.up}) : null, noPrograms() ? null : v.ac && v.ac.some(a => a[0] !== "social") ? el("span", {class: "badge", text: "Join online"}) : (v.o ? el("span", {class: "badge", text: "Offers lessons/play"}) : null)));
     btn.addEventListener("click", () => showVenue(v, true));
     ul.append(el("li", {}, btn));
   }
-  if (total > listShown) {
+  if (all.length > listShown) {
     const more = el("button", {type: "button", text: "Show " + LIST_STEP + " more"});
     more.addEventListener("click", () => { listShown += LIST_STEP; renderList(); });
     ul.append(el("li", {class: "empty"}, more));   // reuses the centred pill-button row of the empty state
   }
-  if (!top.length && !wallsInView.length) ul.append(current.length || wallsFiltered().length
+  if (!top.length) ul.append(current.length
     ? el("li", {class: "empty"}, el("p", {text: "Nothing in this view. Zoom out or pan the map to see more."}))
     : emptyItem(state.text ? "No venues match “" + state.text + "” yet. Try a nearby city, or clear the filters." : "No venues match these filters yet. Try zooming out or clearing a filter.", "Clear filters"));
   if (key !== renderList.key) { renderList.key = key; ul.scrollTop = 0; }   // a new view starts at its top rows
@@ -1349,6 +1330,7 @@ function venueCourts(v) {
   const have = new Set(v.p.map(p => p[0]));
   const fam = {}; let solo = 0;   // variants of one game ("Basque Pelota: …") share a court: count the family once, by its largest count
   for (const p of v.p) {
+    if (p[2] & 128) continue;   // hitting walls are not courts
     if (tierNow() && (sports[p[0]].t !== tierNow() || (sports[p[0]].b || []).length)) continue;
     if ((sports[p[0]].b || []).some(b => have.has(b))) continue;
     const k = famOf(sports[p[0]].n);
@@ -1362,17 +1344,14 @@ function updateCount() {
   const b = map.getBounds(), box = $("count"), pin = x => b.contains([x.x, x.y]);
   const noun = (n, one, many) => n === 1 ? one : many;
   if (state.mode === "play") {
-    const inView = current.filter(pin);
+    const inView = current.filter(pin), cv = state.solo || wallSportNow() ? [] : inView.filter(v => !isWall(v));   // courts are counted at court venues; walls have their own count
     let courts = 0, known = 0;
-    for (const v of inView) { const c = venueCourts(v); courts += c || 1; if (c) known++; }   // a venue with no listed count has at least 1 court
+    for (const v of cv) { const c = venueCourts(v); courts += c || 1; if (c) known++; }   // a venue with no listed count has at least 1 court
     const kids = [el("b", {text: fmt(inView.length)}), document.createTextNode(noun(inView.length, " venue", " venues") + " in view" + (inView.length !== current.length ? " of " + fmt(current.length) : ""))];
-    if (inView.length) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === inView.length ? " (all venues list a count)" : " (" + fmt(known) + noun(known, " venue lists", " venues list") + " a count; the rest count as 1)")));
-    const ws = wallsFiltered();
-    if (ws.length) {
-      const wsum = list => list.reduce((s, w) => s + (w.wn || 1), 0), wn = wsum(ws.filter(pin)), wall = wsum(ws);
-      const wt = [el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + " in view" + (wn !== wall ? " of " + fmt(wall) : "") + " for solo practice")];
-      box.replaceChildren(...(current.length ? [...kids, document.createTextNode(" · "), ...wt] : wt));
-    } else box.replaceChildren(...kids);
+    if (cv.length) kids.push(document.createTextNode(" · at least "), el("b", {text: fmt(courts)}), document.createTextNode(noun(courts, " court", " courts") + (known === cv.length ? " (all venues list a count)" : " (" + fmt(known) + noun(known, " venue lists", " venues list") + " a count; the rest count as 1)")));
+    const wn = inView.reduce((s, v) => s + wallsIn(v), 0), wall = current.reduce((s, v) => s + wallsIn(v), 0);
+    if (wall) kids.push(document.createTextNode(" · "), el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + (wn !== wall ? " of " + fmt(wall) : "")));
+    box.replaceChildren(...kids);
     return;
   }
   const ne = viewEv.filter(pin).length, ns = viewSoc.filter(pin).length;
@@ -1389,7 +1368,6 @@ function refresh() {
   }
   current = filtered();
   if (map.getSource("v")) map.getSource("v").setData(geojson(current));
-  if (map.getSource("w")) map.getSource("w").setData(wallGeojson(wallsFiltered()));
   if (mapReady) setLayersFor(state.mode);
   showWallNote(); syncSolo();
   showNoPrograms();
@@ -1401,7 +1379,7 @@ function writeHash() {
   const p = new URLSearchParams();
   if (state.mode !== "play") p.set("mode", state.mode);
   if (state.sport >= 0) p.set("sport", sports[state.sport].n);
-  if (state.solo) { p.set("solo", state.solo); if (state.soloPub) p.set("pub", "1"); }
+  if (state.solo) { p.set("solo", "1"); if (state.soloPub) p.set("pub", "1"); }
   if (state.on.size) p.set("on", [...state.on].join(","));
   if (state.offers.size) p.set("offer", [...state.offers].join(""));
   if (state.text) p.set("q", state.text);
@@ -1413,7 +1391,7 @@ function readHash() {
   if (["watch", "social"].includes(p.get("mode"))) state.mode = "watch";   // #mode=social links (before the two views were merged) land on Watch & Social
   // old #mode=walls links land on the wall sport
   const s = p.get("sport") || (p.get("mode") === "walls" ? "1-wall Paddleball" : ""); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
-  if (SOLO_TYPES[p.get("solo")]) { state.solo = p.get("solo"); state.soloPub = p.get("pub") === "1"; state.sport = -1; }
+  if (["1", "all", "one", "three"].includes(p.get("solo"))) { state.solo = true; state.soloPub = p.get("pub") === "1"; state.sport = -1; }   // old links split the wall types (one / three): hitting alone shows them all now
   for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
   state.text = (p.get("q") || "").toLowerCase();
@@ -1490,7 +1468,7 @@ function populateSports() {
     const narrowed = !!(state.text || state.on.size || state.offers.size);
     sel.append(el("option", {value: "-1", text: "All racket sports"}));
     sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => {
-      const mapped = s.v > 0 || s.w || wallsFor(s.n).length > 0;
+      const mapped = s.v > 0 || s.w;
       if (!tierOk(s)) return;
       if (!mapped && narrowed) return;   // with a filter on, only sports that can match stay
       // sports with no place found yet stay listed, greyed, so people can discover them (they get an explainer card, never fake pins)
@@ -1618,7 +1596,7 @@ function courtMatches(g, maxRoom = MAX_ROOM) {
   let unmapped = 0;
   sports.forEach((h, i) => {
     if (!h.cd || h.w) return;   // a sport with no court of its own (play anywhere) is no host
-    if (wallBound(g) && !g.ws && WALL_SPORT[h.n]) return;   // a closed-court sport (squash, racquetball) can't use a 1- or 3-wall court
+    if (wallBound(g) && !g.ws && h.ws) return;   // a closed-court sport (squash, racquetball) can't use a 1- or 3-wall court
     const k = courtKey(h);
     if (k === g.k && !g.w) return;   // the court picked is not its own host
     if (!groups.has(k)) groups.set(k, {cd: h.cd, nh: h.nh, nn: h.nn, su: "", members: []});
@@ -1627,7 +1605,7 @@ function courtMatches(g, maxRoom = MAX_ROOM) {
   for (const o of groups.values()) {
     const room = o.cd[0] * o.cd[1] / ga, f = courtFit(g, o);
     if (!f || room > maxRoom || (!wallBound(g) && o.nn && !o.nh && room > NO_NET_ROOM)) continue;   // a netless walled court is a weak host for a net sport unless it is close in size
-    const mapped = o.members.filter(m => m.s.v > 0 || (WALL_SPORT[m.s.n] && wallsFor(m.s.n).length));   // a court no venue has is no help to someone going to play
+    const mapped = o.members.filter(m => m.s.v > 0);   // a court no venue has is no help to someone going to play
     if (!mapped.length) { unmapped += o.members.length; continue; }
     const same = Math.abs(Math.max(...g.cd) - Math.max(...o.cd)) <= COURT_TOL && Math.abs(Math.min(...g.cd) - Math.min(...o.cd)) <= COURT_TOL;
     mapped.sort((a, b) => ((g.b || []).includes(b.i) ? 1 : 0) - ((g.b || []).includes(a.i) ? 1 : 0) || b.s.v - a.s.v || a.s.n.localeCompare(b.s.n));
@@ -1641,9 +1619,9 @@ function pickSport(i) {
   trackD("court-pick", sports[i].n);
 }
 function courtRow(g, o, label) {
-  const [head, ...rest] = o.members, s = head.s, nw = WALL_SPORT[s.n] ? wallsFor(s.n).length : 0;
+  const [head, ...rest] = o.members, s = head.s;
   const net = s.nh ? " · net " + s.nh.map(fmtNet).join(" / ") : s.nn ? " · no net listed" : " · net height not listed";
-  const where = s.v > 0 ? fmt(s.v) + (s.v === 1 ? " venue" : " venues") + " mapped" : nw ? fmt(nw) + (nw === 1 ? " hitting wall" : " hitting walls") + " mapped" : "None mapped yet";
+  const where = s.v > 0 ? fmt(s.v) + (s.v === 1 ? " venue" : " venues") + " mapped" : "None mapped yet";
   const use = o.room > 1.15 ? " · " + (g.sz ? "your court size" : g.n) + " uses about " + Math.round(100 / o.room) + "% of it" : "";
   const row = el("div", {class: "crow"},
     el("div", {}, el("b", {text: s.n + " "}), el("span", {class: o.tier === 3 ? "badge warn" : "badge", text: label}),
@@ -1658,14 +1636,12 @@ function courtRow(g, o, label) {
   return row;
 }
 // The sports whose own standard court is the size picked and that have venues mapped, most venues first.
-// A wall sport (1-wall Paddleball) has hitting walls mapped instead of venues. People hitting alone don't care about 1-wall vs 3-wall, so it opens all hitting walls.
-const soloOnly = s => s.v === 0 && !!WALL_SPORT[s.n] && wallsFor(s.n).length > 0;
-const ownCount = s => s.v > 0 ? s.v : soloOnly(s) ? 1 : 0;
-const courtOwn = g => g.members.filter(m => ownCount(m.s) > 0).sort((a, b) => b.s.v - a.s.v);
+// A wall sport's venues are hitting walls, and people hitting alone do not care about 1-wall vs 3-wall: when every sport with this court size is a wall sport, picking it opens hitting alone (all wall types).
+const courtOwn = g => g.members.filter(m => m.s.v > 0).sort((a, b) => b.s.v - a.s.v);
 // Picking a size goes straight to the map for the sport that plays on it; reopening "Find by court" shows the other sports it fits.
 function courtPicked() {
-  const pick = $("courtLike").value, own = pick === "" ? [] : courtOwn(courtGroups.get(pick));
-  if (own.length) { if (soloOnly(own[0].s)) enterSolo("court-pick"); else pickSport(own[0].i); } else renderCourt();
+  const pick = $("courtLike").value, own = pick === "" ? [] : courtOwn(courtGroups.get(pick)), court = own.find(m => !m.s.ws);
+  if (court) pickSport(court.i); else if (own.length) enterSolo("court-pick"); else renderCourt();
 }
 function renderCourt() {
   const box = $("courtOut"), pick = $("courtLike").value;
@@ -1679,7 +1655,6 @@ function renderCourt() {
   box.append(el("h3", {text: g.cd[0] + " x " + g.cd[1] + " ft, " + gnet}),
     el("p", {class: "meta", text: "Standard court for: " + g.members.map(m => m.s.n).join(", ") + "."}));
   for (const m of courtOwn(g).slice(0, 4)) {   // courts of exactly this size, mapped
-    if (soloOnly(m.s)) continue;   // its all-hitting-walls button is the wall section below
     const b = el("button", {class: "chip", type: "button", text: "Show " + m.s.n + " on map (" + fmt(m.s.v) + (m.s.v === 1 ? " venue" : " venues") + ")"});
     b.addEventListener("click", () => pickSport(m.i));
     box.append(b);
@@ -1697,12 +1672,6 @@ function renderCourt() {
   for (const o of shownSecond) box.append(courtRow(g, o, roomy ? "Much bigger" : "Close second"));
   if (second.length > shownSecond.length) box.append(el("p", {class: "meta", text: (second.length - shownSecond.length) + " more close seconds."}));
   if (unmapped) box.append(el("p", {class: "meta", text: unmapped + (unmapped === 1 ? " more sport has" : " more sports have") + " a court that would work but no venue is mapped for " + (unmapped === 1 ? "it" : "them") + " yet."}));
-  if (g.ws || [...shownGood, ...shownSecond].some(o => o.members.some(m => WALL_SPORT[m.s.n]))) {   // wall sports play against a wall, so one person can use them alone
-    const all = soloWalls("all", false).length, pub = soloWalls("all", true).length, b = el("button", {class: "chip", type: "button", text: "Show all hitting walls (" + fmt(all) + ")"});
-    b.addEventListener("click", () => enterSolo("court-group"));
-    box.append(el("h3", {text: "Hitting walls you can use alone"}),
-      el("p", {class: "meta", text: "The wall sports play against a wall or backboard. Wall sizes are the sport's standard, not measured at each wall, and access is mostly not known (" + fmt(pub) + " are mapped public)."}), b);
-  }
 }
 // One entry per court size + net (+ "no fixed court"), holding the sports whose standard court it is; the key doubles as the picker value.
 const courtGroups = new Map();
@@ -1716,7 +1685,7 @@ function openCourt(src) {
       if (!courtGroups.has(key)) courtGroups.set(key, {sz: true, k: courtKey(s), w: s.w, cd: s.cd, nh: s.nh, nn: s.nn, su: "", b: [], members: []});
       const o = courtGroups.get(key); o.members.push({i, s}); o.su = [...new Set(o.su + (s.su || ""))].join(""); o.b = [...new Set([...o.b, ...(s.b || [])])];
     });
-    for (const o of courtGroups.values()) { o.members.sort((x, y) => x.s.n.localeCompare(y.s.n, undefined, {sensitivity: "base"})); o.ws = o.members.some(m => WALL_SPORT[m.s.n]); }
+    for (const o of courtGroups.values()) { o.members.sort((x, y) => x.s.n.localeCompare(y.s.n, undefined, {sensitivity: "base"})); o.ws = o.members.some(m => m.s.ws); }
   }
   if (!like.options.length) {
     like.append(el("option", {value: "", text: "Pick a court size…"}));
@@ -1750,7 +1719,7 @@ function showAnywhere() {
   showSportInfo();
   showPeople();
   const n = $("anywhere"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
-  const none = !!(s && !s.w && s.v === 0 && !wallsFor(s.n).length);
+  const none = !!(s && !s.w && s.v === 0);
   n.hidden = !(s && (s.w || none));
   n.replaceChildren();
   if (s && s.w) n.textContent = s.wn;
@@ -1768,31 +1737,24 @@ function showNoPrograms() {
 }
 function showWallNote() {
   const n = $("wallnote"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
-  n.hidden = !(s && WALL_SPORT[s.n]);
+  n.hidden = !(s && s.ws);
   if (!n.hidden) {
-    const shown = wallsFor(s.n).reduce((n, w) => n + (w.wn || 1), 0), unknown = walls.filter(w => w.t.every(t => t === "other")).reduce((n, w) => n + (w.wn || 1), 0);
-    $("wallnote-b").textContent = (s.n === "Outdoor Racquetball" ? "Orange pins are outdoor 1-wall and 3-wall courts where outdoor racquetball is played, " : s.n === "Knuckle Racket" ? "Orange pins are public 1-wall and 3-wall courts where Knuckle Racket can be played (walls not marked public are left out), " : "Orange pins are hitting walls you can also use alone, ") + "shown only where the wall type is known (" + shown + " so far). " + unknown + " more handball and wall courts are mapped, but their wall count was not checked, so they are left out. Walls come from OpenStreetMap, city pages and visit reports across California, Nevada, Oregon, Washington and Hawaii; ones nobody has mapped or reported are missing.";
+    $("wallnote-b").textContent = "Orange pins are hitting walls where " + s.n + " can be played" + (s.ws === 2 ? " (only walls marked public; the others are left out)" : "") + ": " + fmt(s.v) + (s.v === 1 ? " place" : " places") + " so far, inferred from the wall type, not confirmed play. Wall sizes are the sport's standard, not measured at each wall. "
+      + fmt(DATA.meta.walls_unchecked || 0) + " more handball and wall courts are mapped, but their wall type was not checked, so they are left out. Walls come from OpenStreetMap, city pages and visit reports across California, Nevada, Oregon, Washington and Hawaii; ones nobody has mapped or reported are missing.";
   }
   syncSportMore();
 }
-// The hitting-alone bar: what the orange pins are, and chips for the wall type and public-only (counts follow the other chip).
+// The hitting-alone bar: what the orange pins are, and a public-only chip. All wall types show together (people hitting alone do not care which).
 function syncSolo() {
   const bar = $("soloBar"), on = state.mode === "play" && !!state.solo;
   bar.hidden = !on; if (!on) return;
-  $("soloText").textContent = "Hitting walls to use on your own: orange pins, shown only where the wall type is known. Access is mostly not known (only walls marked Public are confirmed open), so check before you go. Wall sizes are not measured. Walls come from OpenStreetMap, city pages and visit reports; ones nobody has mapped are missing.";
-  const kinds = [["all", "All solo walls"], ["one", "1-wall & backboards"], ["three", "3-wall"]];
-  $("soloChips").replaceChildren(...kinds.map(([k, t]) => {
-    const b = el("button", {class: "chip", type: "button", text: t + " (" + soloWalls(k, state.soloPub).length + ")", "aria-pressed": String(state.solo === k)});
-    b.addEventListener("click", () => { state.solo = k; trackD("solo-kind", k); applyMode(true); });
-    return b;
-  }), (() => {
-    const b = el("button", {class: "chip", type: "button", text: "Public only (" + soloWalls(state.solo, true).length + ")", "aria-pressed": String(state.soloPub)});
-    b.addEventListener("click", () => { state.soloPub = !state.soloPub; trackD("solo-public", String(state.soloPub)); applyMode(true); });
-    return b;
-  })());
+  $("soloText").textContent = "Hitting walls to use on your own: orange pins, plus court venues that have walls on site. Every wall type is shown together (1-wall, backboard, 3-wall), only where the wall type is known. Access is mostly not known (only walls marked Public are confirmed open), so check before you go. Wall sizes are not measured. Walls come from OpenStreetMap, city pages and visit reports; ones nobody has mapped are missing.";
+  const b = el("button", {class: "chip", type: "button", text: "Public only (" + venues.filter(v => soloWallCount(v, true) > 0).length + ")", "aria-pressed": String(state.soloPub)});
+  b.addEventListener("click", () => { state.soloPub = !state.soloPub; trackD("solo-public", String(state.soloPub)); applyMode(true); });
+  $("soloChips").replaceChildren(b);
 }
 function enterSolo(src) {
-  $("court").close(); $("reset").click(); state.solo = "all";
+  $("court").close(); $("reset").click(); state.solo = true;
   if (state.mode !== "play") setMode("play"); else applyMode(true);
   trackD("solo-open", src);
 }
@@ -1822,7 +1784,7 @@ function initControls() {
   $("playersSport").addEventListener("change", renderPlayers);
   $("closePlayers").addEventListener("click", () => $("players").close());
   $("playersTell").href = REPORT_FORM;
-  sel.addEventListener("change", () => { state.solo = ""; state.soloPub = false; state.sport = +sel.value; updateSportIcon(); syncQuickSports(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallsFiltered().length) applyMode(true); } });
+  sel.addEventListener("change", () => { state.solo = false; state.soloPub = false; state.sport = +sel.value; updateSportIcon(); syncQuickSports(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
   $("q").addEventListener("input", debounce(renderSug, 120));
@@ -1850,7 +1812,7 @@ function initControls() {
   });
   $("keytoggle").addEventListener("click", () => { const open = $("mapkey").hidden; setKey(open); if (open) track("map-key"); });
   $("clearFilters").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); $("reset").click(); });
-  $("reset").addEventListener("click", () => { state.solo = ""; state.soloPub = false; state.sport = -1; state.tier = 0; populateSports(); state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
+  $("reset").addEventListener("click", () => { state.solo = false; state.soloPub = false; state.sport = -1; state.tier = 0; populateSports(); state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
   $("goHawaii").hidden = !venues.some(v => v.r === "HI");
@@ -1870,9 +1832,9 @@ function initControls() {
 function initCoverage() {
   const m = DATA.meta;
   // the numbers are proof, not the opener: they sit in the footer next to the coverage dialog (product brief, 2026-10-22)
-  $("stats").textContent = fmt(m.venues) + " places mapped · " + m.sports_with_venues + " of " + m.sports_total + " racket sports found"
+  $("stats").textContent = fmt(m.venues) + " places mapped" + (m.hitting_walls ? " (" + fmt(m.hitting_walls) + " of them hitting walls)" : "") + " · " + m.sports_with_venues + " of " + m.sports_total + " racket sports found"
     + (DATA.venues.some(v => v.r === "NV") ? "" : " · California only so far; Nevada coming next");   // honest until Nevada data loads (ADR 0014)
-  $("covIntro").textContent = "This map combines OpenStreetMap courts with the Overture Maps places dataset. " + fmt(m.named) + " of " + fmt(m.venues) +
+  $("covIntro").textContent = "This map combines OpenStreetMap courts and hitting walls with the Overture Maps places dataset. " + fmt(m.named) + " of " + fmt(m.venues) +
     " venues have a name, and only " + fmt(m.confirmed) + " of those names are confirmed; the rest are guessed from the park or school the courts sit in. " +
     "Only " + m.sports_with_venues + " of " + m.sports_total + " racket sports have any venue here. Data as of " + m.generated + ".";
   const body = $("covBody");
@@ -1896,7 +1858,7 @@ let byKey = {};
 const featuredP = fetch("data/featured_sport.json", {cache: "no-cache"}).then(r => r.ok ? r.json() : null).catch(() => null);   // optional: without it only the Tennis button shows
 fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(async d => {
   featured = await featuredP;
-  DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; socials = d.social || []; walls = d.walls || []; platforms = d.platforms || [];
+  DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; socials = d.social || []; platforms = d.platforms || [];
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
     v.m = v.p.reduce((a, p) => a | p[2], 0);

@@ -1,6 +1,6 @@
 # Sport name review (2026-11-02)
 
-The master list (`all_racquet`, synced from the Google Sheet) has 83 racket sports. OpenStreetMap (our first court source) has a tag for **26** of them. These are the **57 that are not on the sport map**, and why.
+The master list (`all_racquet`, synced from the Google Sheet) has 82 racket sports. OpenStreetMap (our first court source) has a tag for **26** of them. These are the **56 that are not on the sport map**, and why.
 
 **How to read it.** "No OpenStreetMap tag exists" means the sport is real but nobody has a way to map its courts there, so we need another source (Google Places keyword search, club directories, governing-body sites). It does **not** mean your spelling is wrong. Rows that say "please check" are names I could not verify.
 
@@ -23,7 +23,7 @@ If a sport goes by another name, add it to `transform/seeds/sport_aliases.csv`; 
 | 13 | 360Ball | 2-4 | No OpenStreetMap tag exists |
 | 14 | Battlebird | 2 | No OpenStreetMap tag exists and no website listed |
 | 15 | Biraq | 2-4 | I could not verify this spelling - please check |
-| 16 | Eclipseball | - | No OpenStreetMap tag exists |
+| 16 | Eclipseball | 4-12 | No OpenStreetMap tag exists |
 | 17 | Floor Pro Mini Tennis | - | No OpenStreetMap tag exists and no website listed |
 | 18 | Frescotennis | 2-6 | No OpenStreetMap tag exists |
 | 19 | Goodminton | 2-4 | No OpenStreetMap tag exists and no website listed |
@@ -44,24 +44,23 @@ If a sport goes by another name, add it to `transform/seeds/sport_aliases.csv`; 
 | 34 | Racket Hockey | 4 | No OpenStreetMap tag exists |
 | 35 | Rapidball | 2+ | No OpenStreetMap tag exists |
 | 36 | Ricochet | 2+ | No OpenStreetMap tag exists |
-| 37 | Sandball | 2-4 | No OpenStreetMap tag exists and no website listed |
-| 38 | Shuttleball | 2-4 | No OpenStreetMap tag exists and no website listed |
-| 39 | Skyball | 2-4 | No OpenStreetMap tag exists |
-| 40 | Smolball | 8 | No OpenStreetMap tag exists |
-| 41 | Speedball | 1 | No OpenStreetMap tag exists and no website listed |
-| 42 | Street Racket | 2+ | No OpenStreetMap tag exists |
-| 43 | Street Tennis | 2-4 | No OpenStreetMap tag exists and no website listed |
-| 44 | String Paddleball | 1 | No OpenStreetMap tag exists and no website listed |
-| 45 | Table Squash | 2-4 | No OpenStreetMap tag exists |
-| 46 | Taiji Bailong | 2 | No OpenStreetMap tag exists |
-| 47 | Tenis criollo | 2-4 | No OpenStreetMap tag exists |
-| 48 | Tennis Baseball | 18 | No OpenStreetMap tag exists and no website listed |
-| 49 | Tennis Triples | 6-8 | No OpenStreetMap tag exists and no website listed |
-| 50 | Toccer | 20 | No OpenStreetMap tag exists |
-| 51 | Wackitball | 2-4 | No OpenStreetMap tag exists |
-| 52 | Wacquetball | 2-4 | No OpenStreetMap tag exists and no website listed |
-| 53 | Wall Pong | 2+ | No OpenStreetMap tag exists and no website listed |
-| 54 | Crossminton | 2-4 | No OpenStreetMap tag exists |
-| 55 | Teqis | 2 | No OpenStreetMap tag exists |
-| 56 | Teqpong | 2 | No OpenStreetMap tag exists |
-| 57 | Typti | 2-4 | No OpenStreetMap tag exists |
+| 37 | Shuttleball | 2-4 | No OpenStreetMap tag exists and no website listed |
+| 38 | Skyball | 2-4 | No OpenStreetMap tag exists |
+| 39 | Smolball | 8 | No OpenStreetMap tag exists |
+| 40 | Speedball | 1 | No OpenStreetMap tag exists and no website listed |
+| 41 | Street Racket | 2+ | No OpenStreetMap tag exists |
+| 42 | Street Tennis | 2-4 | No OpenStreetMap tag exists and no website listed |
+| 43 | String Paddleball | 1 | No OpenStreetMap tag exists and no website listed |
+| 44 | Table Squash | 2-4 | No OpenStreetMap tag exists |
+| 45 | Taiji Bailong | 2 | No OpenStreetMap tag exists |
+| 46 | Tenis criollo | 2-4 | No OpenStreetMap tag exists |
+| 47 | Tennis Baseball | 18 | No OpenStreetMap tag exists and no website listed |
+| 48 | Tennis Triples | 6-8 | No OpenStreetMap tag exists and no website listed |
+| 49 | Toccer | 20 | No OpenStreetMap tag exists |
+| 50 | Wackitball | 2-4 | No OpenStreetMap tag exists |
+| 51 | Wacquetball | 2-4 | No OpenStreetMap tag exists and no website listed |
+| 52 | Wall Pong | 2+ | No OpenStreetMap tag exists and no website listed |
+| 53 | Crossminton | 2-4 | No OpenStreetMap tag exists |
+| 54 | Teqis | 2 | No OpenStreetMap tag exists |
+| 55 | Teqpong | 2 | No OpenStreetMap tag exists |
+| 56 | Typti | 2-4 | No OpenStreetMap tag exists |
