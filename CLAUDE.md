@@ -65,7 +65,7 @@ Hand-off is the PR description and `git log`; `docs/sessions/` holds only the ro
 - Dirty main checkout: `git worktree add ../x -b branch origin/main`, use the main `.venv`.
 
 **Priorities** (dated detail for every item, the "After beta" list and the parked items: `docs/status.md`; edit it there when priorities change)
-1. Five states (ADR 0028/0029): Oregon and Washington data layers are built; their events, leagues and groups passes are done (`docs/event_group_search.md`); rec centers, chains and campuses are not; then Hawaii. New states get full CA parity (walls, handball, events, social, leads).
+1. Five states (ADR 0028/0029): Oregon, Washington and Hawaii data layers are built; their events, leagues and groups passes are done (`docs/event_group_search.md`); rec centers, chains and campuses are not (Hawaii resorts: ask the owner first). New states get full CA parity (walls, handball, events, social, leads).
 2. Street addresses: after every extract run `ingestion/reverse_geocode_blanks.py` (+ build, `make app-data`); run `extract_osm_parents.py` after each OSM refresh. Home-like pins never get an inferred street.
 3. Match gold set: re-run `make eval-match` after each OSM refresh.
 4. Padel lead rechecks run in Part 3 of the cloud routines (`docs/cloud_routines.md`); facility scans and coverage leads are in `docs/status.md`.

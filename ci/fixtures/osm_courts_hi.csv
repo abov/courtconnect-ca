@@ -1,0 +1,5 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+node,8287660196,19.6407118,-156.002364,Kona Table Tennis Club,table_tennis,,,,,,,club,,,,,,,,,,2026-11-03T01:44:58+00:00,HI
+node,14134258759,21.3095214,-157.8618518,Pickles at Forté,pickleball,,,,,,,fitness_centre,,,,https://www.picklesatforte.com/,+1 808-758-4683,Mo-Fr 06:30-24:00; Sa-Su 06:30-22:00,1032,Fort Street Mall,Honolulu,2026-11-03T01:44:58+00:00,HI
+way,508134083,21.2630302,-157.8178599,Diamond Head Tennis Center,tennis,,,,,,,sports_centre,,,,,,,3908,Paki Avenue,Honolulu,2026-11-03T01:44:58+00:00,HI
+way,308326465,20.8394606,-156.9202407,Tennis Courts,tennis,,,,,,,pitch,,,,,,,,,,2026-11-03T01:44:58+00:00,HI
