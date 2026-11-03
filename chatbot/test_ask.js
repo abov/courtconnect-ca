@@ -47,6 +47,15 @@ const Q = [
   ["Who can I play tennis with near Seattle?", "social"],
   ["Any pickleball leagues in Portland?", "social"],
   ["Where is a hitting wall in Oregon?", "walls", " OR"],
+  // kind replies: greetings, thanks, frustration, other sports, off-topic (each must offer chips, never the old cold refusal)
+  ["Hi", "welcome", "Hi!"],
+  ["hello there", "welcome"],
+  ["What can you do?", "welcome"],
+  ["Thanks!", "welcome", "welcome"],
+  ["This is useless", "support", "Sorry"],
+  ["Where can I play golf?", "offtopic", "Golf"],
+  ["Basketball courts in Reno", "offtopic", "near Reno"],
+  ["What's the weather in Reno?", "refuse", "couldn't match"],
 ];
 
 let ask = Ask.create(data, store), fails = 0;
@@ -63,7 +72,9 @@ Q.forEach(([q, kind, must], i) => {
     r = ask.answer("What did I say I play?");
   } else { saved = {}; r = ask.answer(q); } // each question starts without a saved profile
   const text = [...r.lines, ...r.items.map(x => x.title + " | " + x.detail)].join("\n");
-  const ok = kind.split("|").includes(r.kind) && (!must || text.includes(must));
+  // no result list means a next step: chips; and the old cold refusal text is gone
+  const kindly = !text.includes("I only help with") && ((r.items || []).length > 0 || (r.chips || []).length > 0);
+  const ok = kind.split("|").includes(r.kind) && (!must || text.includes(must)) && kindly;
   if (!ok) fails++;
   console.log(`\n${ok ? "PASS" : "FAIL"} ${i + 1}. ${q}  [${r.kind}]`);
   console.log(text.split("\n").slice(0, 4).map(l => "   " + l.slice(0, 230)).join("\n"));

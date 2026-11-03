@@ -71,9 +71,9 @@ def keep(lat, lon, area: str) -> bool:
     return region_at(lat, lon) in AREA_REGIONS[area]
 
 
-def run(query: str, label: str = "", attempts: int = 4) -> list[dict]:
+def run(query: str, label: str = "", attempts: int = 4, urls: list[str] | None = None) -> list[dict]:
     last: Exception | None = None
-    for url in URLS:
+    for url in urls or URLS:
         for attempt in range(attempts):
             try:
                 r = requests.post(url, data={"data": query}, timeout=330,
@@ -140,10 +140,17 @@ def border(region: str):
     if path.exists():
         poly = wkt.loads(path.read_text(encoding="utf-8"))
     else:
-        rel = run(f"[out:json][timeout:120];rel({cfg['relation']});out geom;", f"{region} border")[0]
-        lines = [LineString([(p["lon"], p["lat"]) for p in m["geometry"]])
-                 for m in rel["members"] if m["type"] == "way" and m.get("role") == "outer" and m.get("geometry")]
-        poly = unary_union(list(polygonize(unary_union(lines))))
+        # A mirror can serve a stale copy of the relation (the .fr one returned 248 of Arizona's 255 border ways), so the ways
+        # leave a gap and polygonize gives nothing: never cache an empty border, ask the next mirror.
+        for url in URLS:
+            rel = run(f"[out:json][timeout:120];rel({cfg['relation']});out geom;", f"{region} border", attempts=1, urls=[url])[0]
+            lines = [LineString([(p["lon"], p["lat"]) for p in m["geometry"]])
+                     for m in rel["members"] if m["type"] == "way" and m.get("role") == "outer" and m.get("geometry")]
+            poly = unary_union(list(polygonize(unary_union(lines))))
+            if not poly.is_empty:
+                break
+        else:
+            raise RuntimeError(f"No Overpass mirror returned a closed {region} border (relation {cfg['relation']})")
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(poly.wkt, encoding="utf-8")
     _BORDERS[region] = prep(poly)

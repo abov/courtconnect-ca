@@ -45,6 +45,7 @@
     clear() { try { localStorage.removeItem("cc_ask_profile"); } catch (e) {} }
   };
   function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+  let go;
   function add(node) { log.appendChild(node); node.scrollIntoView({block: "end"}); }
   function render(r) {
     const m = el("div", "msg");
@@ -55,10 +56,16 @@
       m.appendChild(d);
     });
     add(m);
+    if (r.chips && r.chips.length) addChips(r.chips);
+  }
+  function addChips(list) {
+    const row = el("div", "chips row");
+    list.forEach(t => { const b = el("button", "", t); b.type = "button"; b.addEventListener("click", () => go(t)); row.appendChild(b); });
+    add(row);
   }
   fetch("data/venues.json").then(r => r.json()).then(data => {
     const ask = Ask.create(data, store);
-    function go(q) { if (!q.trim()) return; add(el("div", "msg me", q)); render(ask.answer(q)); }
+    go = q => { if (!q.trim()) return; log.querySelectorAll(".row").forEach(n => n.remove()); add(el("div", "msg me", q)); render(ask.answer(q)); };
     document.getElementById("f").addEventListener("submit", e => { e.preventDefault(); go(input.value); input.value = ""; });
     ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "Where can I buy a paddle?"].forEach(t => {
       const b = el("button", "", t); b.type = "button"; b.addEventListener("click", () => go(t)); document.getElementById("chips").appendChild(b);
