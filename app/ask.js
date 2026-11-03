@@ -22,7 +22,17 @@
   const SOCIAL2 = / play w+ with /;
   const BOOK = / (book|reserve|reservation|reservations) /;
   const RACKET = / (court|courts|racket|rackets|racquet|racquets|paddle|paddles|shuttlecock|tennis|net) /;
-  const REFUSE = "I only help with racket sports, courts, and where to buy or rent racket-sport gear. Ask me about places to play, events to watch, or how to try a sport.";
+  // Replies that are not an answer (hello, thanks, off-topic, ...) stay kind and always offer a next step as chips (todo: docs/chatbot_ux_todo.md).
+  const STARTERS = ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "Where can I buy a paddle?"];
+  const POPULAR = ["Los Angeles", "San Diego", "the Bay Area", "Las Vegas", "Seattle"];
+  const SPORT_CHIPS = ["Tennis", "Pickleball", "Padel", "Squash"];
+  const GREETING = /^ (hi|hello|hey|hiya|howdy|yo|hola|sup|good morning|good afternoon|good evening)( there| again| everyone| all| bot)? $/;
+  const HELP = /^ (help|help me|i need help|can you help|can you help me|menu|start) $| (what can you do|what do you do|who are you|how does this work|how do you work|what can i ask) /;
+  const THANKS = / (thanks|thank you|thx|cheers|appreciate it) /;
+  const FRUSTRATED = / (useless|not helpful|unhelpful|doesn t work|does not work|not working|stupid|dumb|bad bot|this sucks|terrible|that s wrong|that is wrong|not what i asked|not what i wanted|you re wrong) /;
+  const OTHER_SPORT = / (golf|cricket|soccer|football|basketball|baseball|softball|hockey|volleyball|swimming|swim|running|jogging|yoga|pilates|rugby|skiing|snowboarding|skateboarding|bowling|boxing|lacrosse|cycling|climbing|surfing|hiking|fishing|archery|darts|billiards|chess) /;
+  const sportChips = (loc, skip) => SPORT_CHIPS.filter(n => n !== skip).slice(0, 4).map(n => n + " in " + loc.label);
+  const cityChips = sp => POPULAR.map(c => sp.name + " in " + c);
 
   function km(a, b, c, d) {
     const p = Math.PI / 180, h = Math.sin((c - a) * p / 2) ** 2 + Math.cos(a * p) * Math.cos(c * p) * Math.sin((d - b) * p / 2) ** 2;
@@ -126,9 +136,9 @@
         rows = searchVenues(sp, loc, st, {});
       }
       if (!loc && !st && rows.length > 8) {
-        return {kind: "clarify", lines: [lead, "We hold " + rows.length + " places for " + sp.name + " across the states we cover. Which city or area? (for example Reno, Las Vegas, San Diego, the Bay Area)"], items: []};
+        return {kind: "clarify", lines: [lead, "We hold " + rows.length + " places for " + sp.name + " across the states we cover. Which city or area? (for example Reno, Las Vegas, San Diego, the Bay Area)"], items: [], chips: cityChips(sp)};
       }
-      if (!rows.length) return {kind: "venues", lines: [lead, "No " + sp.name + " places found " + where + " in our data. That does not prove there are none; it may just not be mapped yet."], items: []};
+      if (!rows.length) return {kind: "venues", lines: [lead, "No " + sp.name + " places found " + where + " in our data. That does not prove there are none; it may just not be mapped yet.", loc ? "You could try another sport " + (loc.area ? "in " : "near ") + loc.label + ", or the same sport in a bigger nearby city." : "You could try a city or another sport."], items: [], chips: loc ? sportChips(loc, sp.name) : cityChips(sp)};
       const applied = [want.free && "free", want.lit && "lit", want.pub && !want.free && "public"].filter(Boolean);
       if (applied.length && !notes.length) notes.push("Only places marked " + applied.join(" and ") + " in our data are shown.");
       const shown = rows.slice(0, 5), names = {};
@@ -147,7 +157,8 @@
       if (has(t, / big screen /)) lines.push("We list events you can attend in person. Screenings of matches on a big screen aren't covered yet.");
       if (!ev.length) lines.push("No upcoming" + (sp ? " " + sp.name : "") + " events listed" + (loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + st : "") + (soon ? " this week" : "") + " in our data (as of " + data.meta.generated + ").");
       else lines.push(ev.length + " upcoming event" + (ev.length > 1 ? "s" : "") + " in our data:");
-      return {kind: "events", lines, items: ev.slice(0, 5).map(e => ({title: e.n, detail: [e.s + (e.e && e.e !== e.s ? " to " + e.e : ""), e.v + ", " + e.c, e.sp, e.d === "confirmed" ? "dates confirmed" : "dates " + e.d, e.t].filter(Boolean).join(" · "), url: /^https:\/\//.test(e.u || "") ? e.u : ""}))};
+      if (!ev.length) lines.push("That doesn't mean nothing is happening, only that we haven't listed it." + (loc && sp ? " I can show places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " instead." : ""));
+      return {kind: "events", lines, chips: !ev.length ? (loc && sp ? [sp.name + " in " + loc.label] : loc ? sportChips(loc) : undefined) : undefined, items: ev.slice(0, 5).map(e => ({title: e.n, detail: [e.s + (e.e && e.e !== e.s ? " to " + e.e : ""), e.v + ", " + e.c, e.sp, e.d === "confirmed" ? "dates confirmed" : "dates " + e.d, e.t].filter(Boolean).join(" · "), url: /^https:\/\//.test(e.u || "") ? e.u : ""}))};
     }
 
     function wallsAnswer(sp, loc, st) {
@@ -158,7 +169,7 @@
       w.sort((a, b) => loc ? km(loc.y, loc.x, a.y, a.x) - km(loc.y, loc.x, b.y, b.x) : 0);
       const onSite = data.venues.filter(v => v.wl && v.kd !== "w" && (!st || v.r === st) && near(v)).length;
       const where = loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + st : "";
-      if (!w.length) return {kind: "walls", lines: ["No stand-alone hitting walls found" + where + " in our data. That does not prove there are none." + (onSite ? " " + onSite + " court venues there have walls on site." : "")], items: []};
+      if (!w.length) return {kind: "walls", lines: ["No stand-alone hitting walls found" + where + " in our data. That does not prove there are none." + (onSite ? " " + onSite + " court venues there have walls on site." : "")], items: [], chips: loc ? sportChips(loc) : undefined};
       return {kind: "walls", lines: ["Found " + w.length + " stand-alone hitting wall pin" + (w.length > 1 ? "s" : "") + where + " (showing " + Math.min(5, w.length) + "). Many are only tagged in OpenStreetMap, not verified." + (onSite ? " Another " + onSite + " court venues have walls on site." : "")],
         items: w.slice(0, 5).map(v => ({title: (v.n || "Hitting wall") + (v.c ? " (" + v.c + ")" : ""),
           detail: [(v.hw.t || []).join(", "), v.hw.wn > 1 ? v.hw.wn + " walls" : "", acc(v.hw.ac), v.hw.cf === "tagged" ? "from OpenStreetMap tags, not checked" : v.hw.cf, v.hw.l === 1 ? "lit" : "", v.hw.f === 1 ? "free" : "", v.y.toFixed(4) + ", " + v.x.toFixed(4)].filter(Boolean).join(" · "), url: ""}))};
@@ -173,7 +184,8 @@
       const https = u => /^https:\/\//.test(u || "") ? u : "";
       const items = groups.slice(0, 4).map(g => ({title: g.n, detail: [g.o, g.v + ", " + g.c, g.sc, g.sl && "level: " + g.sl, g.pi].filter(Boolean).join(" · "), url: https(g.g) || https(g.u)}));
       if (apps.length) { lines.push("Player-matching apps (we link out; we haven't tested them):"); apps.slice(0, 3).forEach(p => items.push({title: p.n, detail: p.d + " · listed " + p.vo, url: https(p.u)})); }
-      return {kind: "social", lines, items};
+      if (!groups.length) lines.push("That only means we haven't listed any yet" + (loc && sp ? "; I can show places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " where you might meet people." : "."));
+      return {kind: "social", lines, items, chips: !groups.length && loc && sp ? [sp.name + " in " + loc.label] : undefined};
     }
 
     const sportByName = n => sports.find(s => s.n === n);
@@ -194,12 +206,19 @@
       if (named.length === 1) {
         const s = named[0], eq = has(t, / equipment /);
         const lines = eq ? [(s.f && s.f.g ? "Gear listed for " + s.n + ": " + s.f.g + "." : "No gear is listed for " + s.n + " yet.") + " That is the type of equipment only; I have no store or price data yet."] : ["From our sport list: " + describe(s)];
-        return {kind: "learn", lines: [...lines, "Tell me a city and I'll look for places to play " + s.n + "."], items: linkItem(s)};
+        return {kind: "learn", lines: [...lines, "Tell me a city and I'll look for places to play " + s.n + "."], items: linkItem(s), chips: cityChips({name: s.n})};
       }
-      return {kind: "clarify", lines: ["Which sport do you mean? I can describe any sport on our list, for example tennis, pickleball, padel, pop tennis, squash, racquetball, badminton, table tennis or beach tennis."], items: []};
+      return {kind: "clarify", lines: ["Which sport do you mean? I can describe any sport on our list, for example tennis, pickleball, padel, pop tennis, squash, racquetball, badminton, table tennis or beach tennis."], items: [], chips: ["What is padel?", "What is pickleball?", "What is pop tennis?", "What is squash?", "What is badminton?"]};
     }
 
+    // every reply that is not a list of results gets next-step chips
     function answer(question) {
+      const r = route(question);
+      if (!r.chips && !(r.items || []).length) r.chips = STARTERS.slice();
+      return r;
+    }
+
+    function route(question) {
       const t = norm(question);
       const profile = store.get() || {};
       let found = detectSports(t), loc = detectPlace(t), st = stateOf(t);
@@ -207,6 +226,16 @@
       if (has(t, / (forget|clear) (me|my profile|what i said|everything) /)) { store.clear(); return {kind: "profile", lines: ["Cleared. Nothing is saved in this browser now."], items: []}; }
       if (has(t, / (what did i say|what do i play|my profile|what do you remember|what do you know about me) /)) {
         return {kind: "profile", lines: Object.keys(profile).length ? ["Saved in this browser only: " + Object.entries(profile).map(([k, v]) => k + " = " + v).join(", ") + ". Say \"forget me\" to clear it."] : ["I don't have anything saved yet. Tell me, for example, \"I play padel in Reno, beginner\"."], items: []};
+      }
+      if (!found.length && !loc) {
+        if (GREETING.test(t) || HELP.test(t)) return {kind: "welcome", lines: ["Hi! I can help you find places to play tennis, pickleball, padel, squash and other racket sports, events to watch, groups to play with, and how to try a sport.", "Tell me a sport and a city, or pick one below."], items: []};
+        if (THANKS.test(t)) return {kind: "welcome", lines: ["You're welcome! Want to look for anything else?"], items: []};
+        if (FRUSTRATED.test(t)) return {kind: "support", lines: ["Sorry, that wasn't what you were hoping for. I'm a simple tool that only knows what's in our venue data, so I can miss things or misread a question.", "Tell me the sport and city (for example \"padel in Reno\") and I'll try again, or pick one below."], items: []};
+      }
+      const other = !found.length && t.match(OTHER_SPORT);
+      if (other) {
+        const w = other[1][0].toUpperCase() + other[1].slice(1);
+        return {kind: "offtopic", lines: [w + " is a bit outside what I know: RacketConnect covers racket sports like tennis, pickleball, padel, squash, badminton and table tennis.", loc ? "If you'd like to try one of those " + (loc.area ? "in " : "near ") + loc.label + ", pick one below." : "If you'd like to try one of those, tell me a city or pick one below."], items: [], chips: loc ? sportChips(loc) : undefined};
       }
       if (/^ (i play|i m into|i am into|i like|i love|im a|i m a|i am a|my level is|i live in) /.test(t) && (found.length || loc)) {
         const lvl = (t.match(/ (beginner|intermediate|advanced) /) || [])[1];
@@ -225,24 +254,26 @@
       if (has(t, BOOK) || (has(t, / rent /) && has(t, / (court|courts) /))) {
         const r = {kind: "booking", lines: ["I can't book or take payments; RacketConnect only links out. Use the venue's own booking page" + (sp && loc ? " (links shown on each place below when we have them)." : ". Tell me a sport and city and I'll show places with their links.")], items: []};
         if (sp && loc) { const v = venuesAnswer(sp, loc, st, t, ""); r.items = v.items; }
+        else if (sp) r.chips = cityChips(sp).slice(0, 3);
+        else if (loc) r.chips = sportChips(loc);
         return done(r);
       }
       if (has(t, GEAR) && !has(t, / equipment /)) {
-        return done({kind: "gear", lines: ["I don't have racket-shop, restringing or rental data yet, so I won't name stores. " + (sp ? "I can show places to play " + sp.name + (loc ? (loc.area ? " in " : " near ") + loc.label : "") + " instead; some offer clinics or lessons where you can try gear. " : "") + "A ranked gear list (sport specialists first, then general sporting goods, then big-box) is planned once the data exists."], items: []});
+        return done({kind: "gear", lines: ["I don't have racket-shop, restringing or rental data yet, so I won't name stores. " + (sp ? "I can show places to play " + sp.name + (loc ? (loc.area ? " in " : " near ") + loc.label : "") + " instead; some offer clinics or lessons where you can try gear. " : "") + "A ranked gear list (sport specialists first, then general sporting goods, then big-box) is planned once the data exists."], items: [], chips: sp && loc ? [sp.name + " in " + loc.label, "What is " + sp.name.toLowerCase() + "?"] : sp ? cityChips(sp).slice(0, 3) : undefined});
       }
       if (has(t, EVENTS)) return done(eventsAnswer(sp, loc, st, t));
       if (has(t, WALLS)) return done(wallsAnswer(sp, loc, st));
       if (has(t, SOCIAL) || has(t, SOCIAL2)) return done(socialAnswer(sp, loc, st));
-      if (has(t, / paddle | paddles /) && !found.length && !has(t, / (padel|pop tennis|pickleball|beach tennis) /)) return done({kind: "clarify", lines: ["\"Paddle\" can mean a pickleball paddle, pop tennis (also called paddle tennis), or padel (a different sport on a walled court). Which one?"], items: []});
-      if (has(t, LEARN) || (found.length && has(t, / (how do i|beginner|get started) /))) return done(learnAnswer(found, t));
+      if (has(t, / paddle | paddles /) && !found.length && !has(t, / (padel|pop tennis|pickleball|beach tennis) /)) return done({kind: "clarify", lines: ["\"Paddle\" can mean a pickleball paddle, pop tennis (also called paddle tennis), or padel (a different sport on a walled court). Which one?"], items: [], chips: ["What is pickleball?", "What is pop tennis?", "What is padel?"]});
+      if ((has(t, LEARN) && (found.length || has(t, / (sport|sports|racket|rackets|racquet|racquets|recommend|should i try|get started|how do i start|how do i begin|equipment|rules) /))) || (found.length && has(t, / (how do i|beginner|get started) /))) return done(learnAnswer(found, t));
       if (sp) return done(venuesAnswer(sp, loc, st, t, ""));
-      if (loc && has(t, RACKET)) return done({kind: "clarify", lines: ["Which sport " + (loc.area ? "in " : "near ") + loc.label + "? For example tennis, pickleball, padel, squash or racquetball."], items: []});
+      if (loc && has(t, RACKET)) return done({kind: "clarify", lines: ["Which sport " + (loc.area ? "in " : "near ") + loc.label + "? For example tennis, pickleball, padel, squash or racquetball."], items: [], chips: sportChips(loc)});
       if (has(t, RACKET)) return done({kind: "clarify", lines: ["Tell me the sport and a city, for example \"pickleball in Reno\"."], items: []});
-      return {kind: "refuse", lines: [REFUSE], items: []};
+      return {kind: "refuse", lines: ["Sorry, I couldn't match that. I'm built for racket sports: where to play, events to watch, groups to play with, and how to try a sport.", "Try something like \"pickleball in Reno\", or pick one below."], items: []};
     }
     return {answer};
   }
 
-  const api = {create};
+  const api = {create, starters: STARTERS};
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Ask = api;
 })(typeof window !== "undefined" ? window : globalThis);
