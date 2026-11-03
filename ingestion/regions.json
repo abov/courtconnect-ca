@@ -4,7 +4,8 @@
     "CA": {"name": "california", "bbox": [32.5, -124.5, 42.1, -114.0], "relation": 165475, "fips": "06", "cache": "ca_border.wkt"},
     "NV": {"name": "nevada", "bbox": [35.0, -120.01, 42.0, -114.03], "relation": 165473, "fips": "32", "cache": "nv_border.wkt"},
     "OR": {"name": "oregon", "bbox": [41.99, -124.7, 46.3, -116.45], "relation": 165476, "fips": "41", "cache": "or_border.wkt"},
-    "WA": {"name": "washington", "bbox": [45.5, -124.9, 49.05, -116.9], "relation": 165479, "fips": "53", "cache": "wa_border.wkt"}
+    "WA": {"name": "washington", "bbox": [45.5, -124.9, 49.05, -116.9], "relation": 165479, "fips": "53", "cache": "wa_border.wkt"},
+    "HI": {"name": "hawaii", "bbox": [18.85, -160.3, 22.35, -154.75], "relation": 166563, "fips": "15", "cache": "hi_border.wkt"}
   },
   "metros": {
     "la": {"bbox": [33.70, -118.67, 34.34, -118.15], "states": ["CA"]},
