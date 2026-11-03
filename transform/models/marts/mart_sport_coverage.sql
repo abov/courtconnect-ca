@@ -21,7 +21,7 @@ select
     count(distinct case when v.name_source <> 'unnamed' then bvs.venue_id end)         as venues_named,
     coalesce(max(w.weak_places), 0)                                                    as weak_name_matches
 from {{ ref('dim_sport') }} s
-left join {{ ref('bridge_venue_sport') }} bvs on bvs.sport_id = s.sport_id
+left join {{ ref('bridge_venue_sport') }} bvs on bvs.sport_id = s.sport_id and bvs.in_courts   -- hitting walls join the totals with the export (ADR 0032 step 2)
 left join {{ ref('dim_venue') }} v on v.venue_id = bvs.venue_id
 left join weak w on w.sport_id = s.sport_id
 where s.sport_family like 'Racket%'

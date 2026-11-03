@@ -64,7 +64,10 @@ join {{ ref('dim_sport') }} s on s.sport_id = bvs.sport_id
 left join osm_facts f on f.venue_id = bvs.venue_id and f.sport_id = bvs.sport_id
 -- exclude_private_members = yes (Pitton on badminton courts): a members-only venue does not get the sport by inference, even when its
 -- own court is unmarked; a seed row that lists the sport itself is kept.
-where not (
+-- Hitting walls (bridge in_wall, ADR 0032) are not exported yet: rows that only a wall supports stay out until the export and app read them
+-- (steps 2 and 3 of the plan), so the map shows what it showed before.
+where bvs.in_courts
+  and not (
     v.is_members_only
     and not bvs.in_manual
     and s.sport_name in (select trim(also_sport) from {{ ref('sport_also_played') }} where lower(trim(coalesce(exclude_private_members, ''))) = 'yes')
