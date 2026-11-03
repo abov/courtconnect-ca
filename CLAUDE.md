@@ -73,4 +73,6 @@ Hand-off is the PR description and `git log`; `docs/sessions/` holds only the ro
 4. Padel lead rechecks run in Part 3 of the cloud routines (`docs/cloud_routines.md`); facility scans and coverage leads are in `docs/status.md`.
 5. After the December beta: polish, player finding, sport suggestions, favorites email, ML phases, monetization (`docs/status.md`).
 
-**Closed, don't redo:** NV resorts/casinos, City of Sparks, the Google place-ID layer (dormant), NAIP aerial pilot (dropped), partnership emails. Basque Pelota only from public online sources.
+**Resorts and hotels with courts (all states, owner 2026-11-02, ADR 0028):** case by case; add what non-guests can book with access stated, flag guests/members-only. NV reopened; its finished passes aren't redone.
+
+**Closed, don't redo:** City of Sparks, the Google place-ID layer (dormant), NAIP aerial pilot (dropped), partnership emails. Basque Pelota only from public online sources.
