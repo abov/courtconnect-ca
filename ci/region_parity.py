@@ -27,10 +27,13 @@ APP = ROOT / "app"
 
 # Sports every state's pass must at least have searched; a zero is a gap to name (or to log as "searched, empty" in docs/event_group_search.md).
 SPORTS = ["Pickleball", "Padel", "Pop Tennis", "Beach Tennis", "Squash", "Table Tennis", "Badminton", "Racquetball"]
+# Wall types in the export (`hw.t`): 1-wall and 3-wall handball/wallball courts and backboards, each searched for in every state.
+WALL_KINDS = ["one_wall", "three_wall", "backboard"]
 # Docs that need a section per state (case-insensitive substring of the state's `name` in regions.json).
 DOCS = ["docs/event_group_search.md", "docs/public_facility_scan.md", "docs/padel_scan.md", "docs/gym_chain_scan.md"]
 # Items that may not be zero before a state is called done (everything else is shown but only reported).
-REQUIRED = ["pins", "manual venues", "hitting walls (OSM)", "walls (hand-added)", "watch events", "social series", "link-outs (hand-added)",
+REQUIRED = ["pins", "manual venues", "hitting walls (export)", "one_wall wall pins", "three_wall wall pins", "backboard wall pins", "handball wall pins",
+            "hitting walls (OSM)", "walls (hand-added)", "watch events", "social series", "link-outs (hand-added)",
             "street addresses", "zip codes", "places", "outline", "home view fits", "doc sections"]
 
 
@@ -70,6 +73,9 @@ def audit():
     street = Counter(v["r"] for v in export["venues"] if v.get("ns"))
     confirmed = Counter(v["r"] for v in export["venues"] if v["q"] == "c")
     hw = Counter(v["r"] for v in export["venues"] if v.get("hw") is not None)
+    wall_pins = [v for v in export["venues"] if isinstance(v.get("hw"), dict)]
+    wall_kind = {k: Counter(v["r"] for v in wall_pins if k in v["hw"].get("t", [])) for k in WALL_KINDS}
+    handball = Counter(v["r"] for v in wall_pins if "Handball" in v["hw"].get("sp", []))
     per_sport = {sp: Counter(v["r"] for v in export["venues"] if any(p[0] == sport_idx.get(sp) for p in v["p"])) for sp in SPORTS}
 
     manual = seed("manual_venues.csv")
@@ -96,6 +102,9 @@ def audit():
         r["street addresses"] = street[code]
         r["manual venues"] = manual_n[code]
         r["hitting walls (export)"] = hw[code]
+        for k in WALL_KINDS:
+            r[f"{k} wall pins"] = wall_kind[k][code]
+        r["handball wall pins"] = handball[code]
         r["hitting walls (OSM)"] = walls_osm[code]
         r["walls (hand-added)"] = walls_manual[code]
         r["watch events"] = events[code]
