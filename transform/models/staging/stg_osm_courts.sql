@@ -1,3 +1,4 @@
+{{ config(materialized='table') }}   -- 12 models read this; as a view its dedupe self-join re-ran for each
 -- One row per OSM element (a single court, or a facility such as a sports centre), tags standardised.
 -- Only records whose sport tag maps to a racket sport on the master sheet are kept
 -- (e.g. a pitch tagged only 'tetherball' is dropped, see ADR 0004).
