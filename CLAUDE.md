@@ -6,6 +6,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0032, all accepted except 0001, su
 
 ## Commands (run from Git Bash on Windows)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
+- `make build-changed`   only what changed since the last good build, plus downstream (`ingestion/build_changed.py`; no `make` in Git Bash: run the script; `--full` or `--dry-run`). Use it for seed, model, macro and test edits. After loading raw data (new state, refresh) it cannot see the change: run `--full`. CI and the last check before a PR are the full build.
 - `make app-data`   export `app/data/venues.json` for the map (commit it after any seed change; CI runs `ci/check_export_fresh.py`); `make app` serves it at localhost:8765
 - `make extract` / `make load`   refresh raw data (extract takes ~15 min; don't run unless asked)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
@@ -37,7 +38,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0032, all accepted except 0001, su
 - Don't take browser screenshots unless I ask. Read pages as text (`get_page_text` / `read_page`) instead.
 - In auto mode (or whenever I haven't picked an approach), always choose the cheapest path that does the job, and say in one line what it is:
   - Do it directly with Grep/Read/Edit; don't spawn subagents, run deep-research, or use extended web search unless I ask.
-  - Run the narrowest check (`dbt build --select <changed models>`, one test) before the full build; run the full build once at the end.
+  - Run the narrowest check (`python ingestion/build_changed.py`, or `dbt build --select <changed models>`, one test) before the full build; run the full build once at the end.
   - Never start `make extract`/`make load`, or loops/scheduled tasks, without asking.
   - Prefer one batched tool call over many; stop once the task is done instead of extra "nice to have" work.
   - If a task looks expensive (many pages to research, big refactor), propose the cheaper scoped version first and wait for my OK.
