@@ -15,7 +15,7 @@ Status: BUILT 2026-10-25 (first export 2026-10-25). Refresh runs from the cloud 
 - Relative and sampled: an index is the share of a metro's searches, not a count of people. 100 is only the top metro of that sport and query, so compare metros within a sport, not sports with each other.
 - Venues are assigned to the NEAREST anchor city within 120 miles: our own approximation. Nielsen owns the DMA county boundaries and forbids redistributing them, so we do not store a county-to-DMA list. Border and rural pins can land in the wrong metro.
 - "Yuma AZ-El Centro" includes Yuma searches (Arizona), so a gap there is weak. Out-of-region metros Trends returns (Medford OR, Salt Lake City UT) are dropped from the seed.
-- Padel in Las Vegas: NV resort/casino courts are closed (owner 2026-10-17); a Las Vegas gap means look at non-resort sources only.
+- Padel in Las Vegas: NV resort/casino courts follow the all-states resort rule (ADR 0028, reopened 2026-11-02); the 2026-10-17 passes stand, so a Las Vegas gap is not a reason to redo them.
 
 ## Refresh procedure (about quarterly; the routine follows this)
 Read-only use of the public Trends pages in the built-in browser pane: no sign-in, no download, no `pytrends`, no API. Take no screenshots.

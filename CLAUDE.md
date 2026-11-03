@@ -2,7 +2,7 @@
 
 Racket-sport venue finder for California + Nevada (ADR 0014, 0028): Python ingestion -> dbt (DuckDB, the only warehouse) -> static MapLibre map in `app/`. Product name RacketConnect (ADR 0029); the repo, DB file, dbt project and env vars keep the `courtconnect` names.
 README.md has the full story; read it only if you need background. Mission (ADR 0015): one map for every racket sport in CA + NV: find a court, watch a match, try a new sport, and find people to play with. Long-term goal: run itself with as little human review as possible, AI agents doing the work behind automated gates (see `docs/status.md`).
-Decisions are in `docs/decisions/` (ADRs 0001-0032, all accepted except 0001, superseded by 0018, 0023 deferred, and 0024-0026 and 0032, proposed; one file each, read only the one you need).
+Decisions are in `docs/decisions/` (ADRs 0001-0033, all accepted except 0001, superseded by 0018, 0023 deferred, and 0024-0026 and 0032, proposed; one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
@@ -51,7 +51,8 @@ Decisions are in `docs/decisions/` (ADRs 0001-0032, all accepted except 0001, su
 ## Where things are
 - `ingestion/`   Python extract/load/export scripts (`ingestion/oneoff/`: one-time research scans, not in any make target; outside requests use `ingestion/useragent.py`)
 - `transform/`   dbt project (models, seeds, macros, tests)
-- `app/`         static map page
+- `app/`         static map page (`ask.html`/`ask.js`: free rule-based ask box prototype, unlinked; ADR 0033)
+- `chatbot/`     ask-box checks (`node chatbot/test_ask.js`) and the optional Claude chat prototype (`docs/chatbot_plan.md`)
 - `ci/fixtures`  small sample data for CI
 
 ## Current status
@@ -72,4 +73,6 @@ Hand-off is the PR description and `git log`; `docs/sessions/` holds only the ro
 4. Padel lead rechecks run in Part 3 of the cloud routines (`docs/cloud_routines.md`); facility scans and coverage leads are in `docs/status.md`.
 5. After the December beta: polish, player finding, sport suggestions, favorites email, ML phases, monetization (`docs/status.md`).
 
-**Closed, don't redo:** NV resorts/casinos, City of Sparks, the Google place-ID layer (dormant), NAIP aerial pilot (dropped), partnership emails. Basque Pelota only from public online sources.
+**Resorts and hotels with courts (all states, owner 2026-11-02, ADR 0028):** case by case; add what non-guests can book with access stated, flag guests/members-only. NV reopened; its finished passes aren't redone.
+
+**Closed, don't redo:** City of Sparks, the Google place-ID layer (dormant), NAIP aerial pilot (dropped), partnership emails. Basque Pelota only from public online sources.
