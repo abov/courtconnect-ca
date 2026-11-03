@@ -36,10 +36,11 @@ def out_name(stem: str, area: str) -> str:
     return f"{stem}_{codes[0].lower()}.csv" if len(codes) == 1 and codes[0] != next(iter(REGIONS)) else f"{stem}.csv"
 
 
-def sql_bbox(xcol: str, ycol: str) -> str:
+def sql_bbox(xcol: str, ycol: str, region: str | None = None) -> str:
     """A SQL condition for 'inside any region's bounding box' (Overture's bbox.xmin / bbox.ymin), skipping boxes
-    that lie inside another one. A cheap pre-filter for the parquet read; region_at() is the real filter."""
-    boxes = [cfg["bbox"] for cfg in REGIONS.values()]
+    that lie inside another one; with region, just that region's box. A cheap pre-filter for the parquet read;
+    region_at() is the real filter."""
+    boxes = [cfg["bbox"] for code, cfg in REGIONS.items() if region in (None, code)]
     boxes = [b for b in boxes if not any(o != b and o[0] <= b[0] and o[1] <= b[1] and o[2] >= b[2] and o[3] >= b[3] for o in boxes)]
     return " or ".join(f"({xcol} between {w} and {e} and {ycol} between {s} and {n})" if len(boxes) > 1
                        else f"{xcol} between {w} and {e} and {ycol} between {s} and {n}" for s, w, n, e in boxes)

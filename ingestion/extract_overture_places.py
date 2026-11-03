@@ -5,12 +5,14 @@ CDLA-Permissive-2.0 / Apache-2.0 / CC0, so unlike Google Places it may be stored
 
     python ingestion/extract_overture_places.py                    # newest release
     python ingestion/extract_overture_places.py --release 2026-09-23.1
+    python ingestion/extract_overture_places.py --region HI        # one state only: replaces its rows, keeps the others
 
 Reads only what it needs straight from S3 (DuckDB range requests); nothing is downloaded wholesale.
 Keeps a place if its Overture category is a racket sport OR its business name mentions a sport term (see
 build_search_terms.py). Whether a name match counts as evidence is decided later, in dbt.
 
-Output: data/raw/overture_places.csv
+Output: data/raw/overture_places.csv. With --region CODE only that region's box is read and only its rows (the `region`
+column) are replaced in an existing file; other states' rows stay as they are (their release may differ).
 """
 from __future__ import annotations
 
@@ -46,8 +48,9 @@ def norm(s: str) -> str:
     return " " + re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", (s or "").lower())).strip() + " "
 
 
-def fetch_places(release: str) -> list[tuple]:
-    """Kept places (rows in FIELDS order) for one release, read straight from S3."""
+def fetch_places(release: str, region: str | None = None) -> list[tuple]:
+    """Kept places (rows in FIELDS order) for one release, read straight from S3. region = one code from regions.json,
+    or None for every region."""
     cats = {r["overture_category"] for r in csv.DictReader((SEEDS / "overture_category_map.csv").open(encoding="utf-8"))}
     terms = [r["term"] for r in csv.DictReader((SEEDS / "sport_search_terms.csv").open(encoding="utf-8"))]
     needles = [" " + t + " " for t in terms]
@@ -63,7 +66,7 @@ def fetch_places(release: str) -> list[tuple]:
                addresses[1].freeform, addresses[1].locality, addresses[1].postcode, addresses[1].region,
                sources[1].license, sources[1].dataset
         from read_parquet('{path}', hive_partitioning=1)
-        where {overpass.sql_bbox('bbox.xmin', 'bbox.ymin')}
+        where {overpass.sql_bbox('bbox.xmin', 'bbox.ymin', region)}
           and names.primary is not null
           and (taxonomy.hierarchy[1] = 'sports_and_recreation'
                or regexp_matches(coalesce(taxonomy.primary, ''),
@@ -76,13 +79,27 @@ def fetch_places(release: str) -> list[tuple]:
         name_n = norm(r[1])
         if not (r[2] in cats or any(n in name_n for n in needles)):
             continue
-        region = overpass.region_at(r[5], r[6])
-        if region is None:
+        at = overpass.region_at(r[5], r[6])
+        if at is None or (region and at != region):
             outside += 1
             continue
-        keep.append((*r, release, region))   # address_region = Overture's address text; region = border polygon (ADR 0014)
+        keep.append((*r, release, at))   # address_region = Overture's address text; region = border polygon (ADR 0014)
     print(f"kept {len(keep):,} (racket category or sport word in the name); {outside:,} dropped outside the covered borders")
     return keep
+
+
+def merge_rows(path: Path, region: str, keep: list[tuple]) -> list[tuple]:
+    """Rows to write for a one-region run: the existing file's other regions untouched, then the new rows."""
+    if not path.exists():
+        return keep
+    with path.open(newline="", encoding="utf-8") as f:
+        rd = csv.reader(f)
+        head = next(rd)
+        if head != FIELDS:
+            raise SystemExit(f"{path} has unexpected columns; run without --region to rebuild it")
+        rest = [r for r in rd if r[-1] != region]
+    print(f"kept {len(rest):,} existing rows of other regions")
+    return rest + keep
 
 
 def main() -> None:
@@ -90,13 +107,17 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--release", default=None)
     ap.add_argument("--out", default=raw_path("overture_places.csv"))
+    ap.add_argument("--region", default=None, choices=sorted(overpass.REGIONS),
+                    help="fetch only this region's rows and replace them in the existing file (default: all regions, rewrite)")
     args = ap.parse_args()
     release = args.release or latest_release()
     print(f"Overture release {release}")
 
-    keep = fetch_places(release)
+    keep = fetch_places(release, args.region)
 
     out = Path(args.out)
+    if args.region:
+        keep = merge_rows(out, args.region, keep)
     out.parent.mkdir(parents=True, exist_ok=True)
     with out.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)

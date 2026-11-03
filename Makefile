@@ -24,14 +24,14 @@ extract-boundaries: ## Census place + county boundaries for CA/NV into data/raw 
 city-boundaries: ## city for pins that still have none, from the Census boundaries (writes seeds/venue_place_boundary.csv; then dbt build, make app-data)
 	$(PY) ingestion/place_from_boundaries.py
 
-extract-addresses: ## Overture address points near the pins, for the address fill (reads S3, ~1 min; run after the OSM/places extract, then make load)
-	$(PY) ingestion/extract_overture_addresses.py
+extract-addresses: ## Overture address points near the pins, for the address fill (reads S3, ~1 min; run after the OSM/places extract, then make load; ARGS="--region HI" for one new state only)
+	$(PY) ingestion/extract_overture_addresses.py $(ARGS)
 
 reverse-geocode: ## tier 3 address fill: cached Nominatim lookups for non-home blanks (1 request a second; runs the uncached pins only, capped at 100 per run; ask the owner for more)
 	$(PY) ingestion/reverse_geocode_blanks.py --limit 100
 
-extract-places:   ## pull racket-related places from Overture Maps (reads S3 directly, ~1 min)
-	$(PY) ingestion/extract_overture_places.py
+extract-places:   ## pull racket-related places from Overture Maps (reads S3 directly, ~1 min; ARGS="--region HI" for one new state only, other states' rows stay)
+	$(PY) ingestion/extract_overture_places.py $(ARGS)
 
 search-terms:     ## rebuild the sport name-keyword list (used to find places by business name)
 	$(PY) ingestion/build_search_terms.py
