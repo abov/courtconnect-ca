@@ -36,6 +36,12 @@ POINTS = [
     (48.43, -123.37, None),       # Victoria, British Columbia
     (47.67, -116.78, None),       # Coeur d'Alene, Idaho
     (46.40, -116.99, None),       # Lewiston, Idaho (Clarkston WA is across the Snake)
+    (21.31, -157.86, "HI"),       # Honolulu (Oahu)
+    (19.72, -155.09, "HI"),       # Hilo (Hawaii island)
+    (20.89, -156.47, "HI"),       # Kahului (Maui)
+    (21.98, -159.37, "HI"),       # Lihue (Kauai)
+    (19.64, -155.99, "HI"),       # Kailua-Kona (Hawaii island)
+    (21.0, -158.9, None),         # open ocean between Oahu and Kauai
     (32.40, -117.00, None),       # Tijuana area, Mexico
 ]
 
