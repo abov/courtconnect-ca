@@ -1178,7 +1178,8 @@ models:
   - name: mart_sport_coverage
     description: >
       "How complete is our data?" One row per racket sport, including sports with zero venues found. venues_found counts only evidence we trust:
-      OSM courts and places with a racket category or a distinctive sport word.
+      OSM courts, places with a racket category or a distinctive sport word, and hitting walls whose type suits the sport (ADR 0032: a wall is a venue).
+      wall_venues_found is the part of that count that rests on a wall.
 
   - name: mart_sport_surface_coverage
     description: Courts and venues per sport, split by playing surface and indoor or outdoor setting. Answers "any indoor clay in California?".

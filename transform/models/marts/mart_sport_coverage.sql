@@ -1,5 +1,5 @@
 -- "How complete is our data?" One row per racket sport, including sports with zero venues found.
--- venues_found counts only evidence we trust: OSM courts, and places with a racket category or a distinctive sport word.
+-- venues_found counts only evidence we trust: OSM courts, places with a racket category or a distinctive sport word, and hitting walls whose type suits the sport (ADR 0032).
 with weak as (
     select sport_id, count(distinct place_id) as weak_places
     from {{ ref('bridge_place_sport') }}
@@ -7,8 +7,8 @@ with weak as (
     group by 1
 )
 
--- Hitting walls (ADR 0032) are counted apart: wall_venues_found = venues, wall venues and court venues alike, where a wall's type makes the sport playable.
--- venues_found and the other counts stay court-sourced until the export turns the walls on.
+-- Hitting walls (ADR 0032) count as venues: wall venues and court venues alike, where a wall's type makes the sport playable. wall_venues_found is the part of
+-- venues_found that rests on a wall (a wall venue, or a court venue whose wall supports the sport). osm/places/manual counts stay source-specific.
 select
     s.sport_name,
     s.popularity_class,
@@ -24,7 +24,7 @@ select
     coalesce(max(w.weak_places), 0)                                                    as weak_name_matches,
     coalesce(max(wv.wall_venues_found), 0)                                             as wall_venues_found
 from {{ ref('dim_sport') }} s
-left join {{ ref('bridge_venue_sport') }} bvs on bvs.sport_id = s.sport_id and bvs.in_courts   -- hitting walls join the totals with the export (ADR 0032 step 2)
+left join {{ ref('bridge_venue_sport') }} bvs on bvs.sport_id = s.sport_id
 left join {{ ref('dim_venue') }} v on v.venue_id = bvs.venue_id
 left join weak w on w.sport_id = s.sport_id
 left join (
