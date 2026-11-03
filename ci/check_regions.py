@@ -42,6 +42,18 @@ POINTS = [
     (21.98, -159.37, "HI"),       # Lihue (Kauai)
     (19.64, -155.99, "HI"),       # Kailua-Kona (Hawaii island)
     (21.0, -158.9, None),         # open ocean between Oahu and Kauai
+    (33.45, -112.07, "AZ"),       # Phoenix
+    (32.22, -110.97, "AZ"),       # Tucson
+    (35.20, -111.65, "AZ"),       # Flagstaff
+    (36.91, -111.46, "AZ"),       # Page, near the Utah line
+    (34.48, -114.32, "AZ"),       # Lake Havasu City, on the Colorado River
+    (32.68, -114.40, "AZ"),       # Yuma area, across the river from California
+    (31.34, -110.94, "AZ"),       # Nogales, Arizona
+    (31.28, -110.94, None),       # Nogales, Sonora (Mexico)
+    (37.10, -113.58, None),       # St. George, Utah
+    (35.53, -108.74, None),       # Gallup, New Mexico
+    (36.80, -114.07, "NV"),       # Mesquite, Nevada, on the Arizona line
+    (34.85, -114.61, "CA"),       # Needles, California, across the river from Arizona
     (32.40, -117.00, None),       # Tijuana area, Mexico
 ]
 
