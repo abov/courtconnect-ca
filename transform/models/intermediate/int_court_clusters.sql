@@ -3,7 +3,7 @@
 -- on each pass, adopts the smallest label among its neighbours. Labels flood outward from
 -- the smallest id in each group, so after enough passes everyone in a facility shares one label.
 -- `changed_in_last_pass` lets a dbt test prove we ran enough passes (see assert_clusters_converged).
-{% set passes = 8 %}
+{% set passes = 24 %}
 
 with pairs as (
     select * from {{ ref('int_court_pairs') }}
