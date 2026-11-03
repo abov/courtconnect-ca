@@ -10,8 +10,9 @@ with tagged as (
         c.surface_type,
         s.sport_name
     from {{ ref('stg_osm_courts') }} c
+    cross join unnest(string_split(c.sport_tag_delimited, ';')) as t(tag)   -- equi-join on the tag; the old LIKE '%;key;%' join could not be hashed
     join {{ ref('osm_sport_map') }} m
-        on c.sport_tag_delimited like '%;' || m.osm_sport_key || ';%'
+        on m.osm_sport_key = t.tag
     join {{ ref('dim_sport') }} s
         on s.sport_name = m.sport
 
