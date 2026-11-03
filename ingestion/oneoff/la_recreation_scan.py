@@ -64,7 +64,7 @@ def main():
     app = json.load(open(ROOT / "app/data/venues.json", encoding="utf-8"))
     sport_names = [s["n"] for s in app["sports"]]
     venues = [(v["y"], v["x"], {sport_names[p[0]] for p in v["p"]}) for v in app["venues"]]
-    walls = [(w["y"], w["x"]) for w in app["walls"]]
+    walls = [(v["y"], v["x"]) for v in app["venues"] if v.get("kd") or v.get("wl")]   # hitting walls are venues now (ADR 0032): wall venues, and court venues with walls on site
     places = open_data_by_slug()
 
     scan = list(csv.DictReader(open(args.scan, encoding="utf-8")))

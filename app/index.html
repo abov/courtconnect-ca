@@ -1739,7 +1739,7 @@ function showWallNote() {
   const n = $("wallnote"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
   n.hidden = !(s && s.ws);
   if (!n.hidden) {
-    $("wallnote-b").textContent = "Orange pins are hitting walls where " + s.n + " can be played" + (s.ws === 2 ? " (only walls marked public; the others are left out)" : "") + ": " + fmt(s.v) + (s.v === 1 ? " place" : " places") + " so far, inferred from the wall type (1-wall, backboard or 3-wall), not confirmed play. Wall sizes are the sport's standard, not measured at each wall. "
+    $("wallnote-b").textContent = "Orange pins are hitting walls where " + s.n + " can be played" + (s.ws === 2 ? " (only walls marked public; the others are left out)" : "") + ": " + fmt(s.v) + (s.v === 1 ? " place" : " places") + " so far, inferred from the wall type, not confirmed play. Wall sizes are the sport's standard, not measured at each wall. "
       + fmt(DATA.meta.walls_unchecked || 0) + " more handball and wall courts are mapped, but their wall type was not checked, so they are left out. Walls come from OpenStreetMap, city pages and visit reports across California, Nevada, Oregon, Washington and Hawaii; ones nobody has mapped or reported are missing.";
   }
   syncSportMore();

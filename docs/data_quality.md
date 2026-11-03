@@ -13,23 +13,23 @@ Generated 2026-11-02 by `make quality` (`ingestion/export_quality_scorecard.py`)
 | Website link-check age | 4 days | <= 60 days | OK |
 | Dead venue websites (of checked) | 0.0 % | <= 10.0 % | OK |
 | Venues seen in the last 35 days | 100.0 % | >= 99.0 % | OK |
-| Venues with a real name | 15.2 % | >= 25.0 % | **BREACH** |
+| Venues with a real name | 15.7 % | >= 25.0 % | **BREACH** |
 
 **7 of 8 service levels met.**
 
 ## Coverage
 
-- Venues on the map: **14,159** (12,983 in OpenStreetMap, 1,302 in Overture places, 839 hand-curated; sources overlap).
-- Of those, hitting-wall venues (ADR 0032; a wall that stands at no listed court venue): **383**; court venues: **13,776**.
-- Venues with a real name: **2,152** (15.2%). The rest carry a name guessed from the park or school, or none.
-- Venues with a usable website: **1,529** (10.8%).
+- Venues on the map: **14,177** (12,983 in OpenStreetMap, 1,302 in Overture places, 934 hand-curated; sources overlap).
+- Of those, hitting-wall venues (ADR 0032; a wall that stands at no listed court venue): **383**; court venues: **13,794**.
+- Venues with a real name: **2,231** (15.7%). The rest carry a name guessed from the park or school, or none.
+- Venues with a usable website: **1,615** (11.4%).
 - Sports on the sheet: **82**; with at least one venue: **43**; empty: **39**.
 
 ## Trust labels (hand-curated venues)
 
 | Confirmation | Venues |
 |---|---|
-| official | 930 |
+| official | 1062 |
 | reported | 83 |
 | visited | 3 |
 
@@ -43,10 +43,10 @@ Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-
 
 | Band | All | CA | HI | NV | OR | WA |
 |---|---|---|---|---|---|---|
-| high | 812 | 605 | 0 | 98 | 108 | 1 |
-| medium | 886 | 659 | 49 | 39 | 42 | 97 |
-| low | 12,485 | 8,814 | 375 | 410 | 1,005 | 1,881 |
-| total | 14,183 | 10,078 | 424 | 547 | 1,155 | 1,979 |
+| high | 907 | 605 | 0 | 98 | 108 | 96 |
+| medium | 874 | 659 | 49 | 39 | 42 | 85 |
+| low | 12,420 | 8,814 | 375 | 410 | 1,005 | 1,816 |
+| total | 14,201 | 10,078 | 424 | 547 | 1,155 | 1,997 |
 
 ## Freshness
 
@@ -55,7 +55,7 @@ Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-
 - Upcoming events: 66; 0 not re-checked in 14+ days.
 - Current social series: 30; 0 not re-checked in 35+ days.
 - Website liveness check: 4 days old; 0 of 904 checked venue sites dead (0.0%).
-- Venues seen by any source in the last 35 days: 14,179 of 14,183 (100.0%); oldest date 2026-10-10; 4 undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check (monthly runbook: docs/monthly_refresh.md).
+- Venues seen by any source in the last 35 days: 14,197 of 14,201 (100.0%); oldest date 2026-10-10; 4 undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check (monthly runbook: docs/monthly_refresh.md).
 
 Stale or undated venues (first 4):
 
@@ -70,10 +70,10 @@ Stale or undated venues (first 4):
 
 | Status | Leads |
 |---|---|
-| new | 110 |
+| new | 113 |
 | resolved | 75 |
-| rejected | 10 |
 | needs_location | 10 |
+| rejected | 10 |
 | needs_visit | 1 |
 | confirmed | 1 |
 

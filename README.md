@@ -39,11 +39,11 @@ A solo, end-to-end data product: Python ingestion, a tested dbt warehouse on Duc
 Not offered, on purpose: bookings, payments, accounts, rankings or paid placement ([value proposition](docs/value_proposition.md), [product brief](docs/product_brief.md)).
 
 ## What it does
-Live numbers (2026-10-23): **10,277 venues** (CA 9,732, NV 545), 1,650 confirmed, **39 of 82 sports** with at least one venue, 80 watch events, 21 social series, 923 hitting walls, 276 link-outs. By sport: [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md).
+Live numbers (2026-11-02): **14,177 venues** (CA 10,057, WA 1,996, OR 1,153, NV 547, HI 424), 2,231 with a confirmed name, **43 of 82 sports** with at least one venue, 93 watch events, 30 social series, 291 link-outs. 383 of the venues are hitting walls (1,105 walls in all, counting those at court venues). By sport: [`docs/coverage_snapshot.md`](docs/coverage_snapshot.md).
 
 - **Venue map** from OpenStreetMap (OSM), Overture Maps and hand-curated entries, with courts grouped into venues. Filter by sport, surface, indoor/outdoor, access, or search by name, city or ZIP; filters live in the URL.
 - **Honest about confidence:** pins show how much to trust each name and sport (confirmed, business listing, inferred), and a **How complete is this data?** panel lists every sport, including those with no data.
-- **Play / Watch / Social** views, plus a **hitting-wall** layer for solo practice ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md)).
+- **Play / Watch / Social** views, and **hitting walls** as venues for solo practice, with a "hitting alone" filter ([ADR 0015](docs/decisions/0015-mission-and-social-phase.md), [ADR 0032](docs/decisions/0032-walls-are-venues.md)).
 - **Link-outs** to a venue's own pages, each with a `verified_on` date and evidence note; popups show rules and access as the venue wrote them.
 - **Phone-first:** bottom-sheet popup, **Near me** (location stays in the browser), dark mode, add to home screen; axe-core accessibility check passes in light and dark.
 - **Market insights (inferred):** which sports are missing near a city and how many rival venues are nearby ([`docs/market_insights.md`](docs/market_insights.md)).
