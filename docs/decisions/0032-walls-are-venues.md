@@ -15,14 +15,14 @@ Hitting walls (1-wall, backboard, 3-wall) are a separate layer: `dim_wall` -> `i
 - **Seeds keep their names** (`manual_walls.csv`, `osm_wall_overrides.csv`); only the models downstream change.
 
 ## Plan (separate PRs, each green on `dbt build` and `ci/check_export_fresh.py`)
-1. Data: `venue_kind`, wall pins into `dim_venue`/`bridge_venue_sport`, fold `int_wall_venue_link` into the venue model; keep `walls` in the export for one release.
-2. Export + docs: `export_app_data.py`, `app/data-dictionary.md`, `app/llms.txt`, changes feed (a wall appearing is a `venue_new` row).
+1. Data (built): `venue_kind`, wall venues in `dim_venue` (`int_wall_venue`), wall sports in `bridge_venue_sport` (`in_wall`, seed `wall_type_sports.csv`). The export, sport totals, evidence ladder and confidence score keep reading court sources only (`bridge_venue_sport.in_courts`), so the map file does not change; `walls` stays in the export for one release.
+2. Export + docs (counts move here, with the baselines: README, coverage snapshot, scorecard, wall venues in the confidence score and evidence ladder): `export_app_data.py`, `app/data-dictionary.md`, `app/llms.txt`, changes feed (a wall appearing is a `venue_new` row).
 3. App: one pin layer with a kind style, the hitting-alone filter, remove the wall layer, `WALL_SPORT` special cases and the "Hitting walls you can use alone" section; "Find by court" needs no wall branch.
 4. Drop the old `walls` export key and models.
 
 ## Consequences
 - Fewer special cases; new wall sports and states (OR, WA) need no extra code.
-- Venue counts and some sport totals rise (about 440 walls today). Anything that quotes them (README, coverage snapshot, scorecard, Elementary tests, `ci/check_export_fresh.py`) must be re-baselined in step 1.
+- Venue counts and some sport totals rise (about 440 walls today). Anything that quotes them (README, coverage snapshot, scorecard, Elementary tests, `ci/check_export_fresh.py`) must be re-baselined in step 2.
 - Venue ids for walls must stay stable (the changes feed depends on it); wall keys become the id seed, so check the one-drift tolerance before step 2.
 - Risk: wall-only pins crowd the zoomed-out map. Cluster or style by kind in step 3.
 
