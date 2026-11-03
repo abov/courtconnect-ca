@@ -18,3 +18,5 @@ dist/
 .venv-edr/
 observability/
 transform/.state/
+chatbot/profile.json
+chatbot/results/

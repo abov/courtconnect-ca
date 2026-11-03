@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ask RacketConnect (prototype)</title>
+<style>
+  :root { --bg: #fbfaf7; --fg: #1f2328; --muted: #59636e; --card: #fff; --line: #d6d1c4; --accent: #1F5FA8; --accent-fg: #fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #10151c; --fg: #e6edf3; --muted: #9aa3ad; --card: #171e27; --line: #3a424d; --accent: #6aa5ee; --accent-fg: #0d1117; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.25rem; margin: 8px 0 4px; }
+  .note { color: var(--muted); font-size: .875rem; margin: 0 0 12px; }
+  #log { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+  .msg { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .msg.me { align-self: flex-end; background: var(--accent); color: var(--accent-fg); border-color: var(--accent); max-width: 85%; }
+  .msg p { margin: 0 0 8px; } .msg p:last-child { margin: 0; }
+  .item { border-top: 1px solid var(--line); padding: 8px 0 0; margin-top: 8px; }
+  .item b { display: block; } .item span { color: var(--muted); font-size: .875rem; }
+  a { color: var(--accent); }
+  form { display: flex; gap: 8px; position: sticky; bottom: 0; background: var(--bg); padding: 8px 0; }
+  input { flex: 1; min-width: 0; font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg); }
+  button { font: inherit; padding: 10px 16px; border-radius: 10px; border: 0; background: var(--accent); color: var(--accent-fg); cursor: pointer; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips button { background: var(--card); color: var(--fg); border: 1px solid var(--line); font-size: .875rem; padding: 6px 10px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ask RacketConnect</h1>
+  <p class="note">Prototype. Answers come only from our own venue data, no AI model. Racket sports, courts and gear only. Nothing is booked or paid here. Your sport and city are remembered in this browser only.</p>
+  <div class="chips" id="chips"></div>
+  <div id="log" aria-live="polite"></div>
+  <form id="f"><input id="q" autocomplete="off" placeholder="e.g. pickleball in Reno" aria-label="Your question"><button>Ask</button></form>
+</main>
+<script src="ask.js"></script>
+<script>
+(function () {
+  const log = document.getElementById("log"), input = document.getElementById("q");
+  const store = {
+    get() { try { return JSON.parse(localStorage.getItem("cc_ask_profile") || "{}"); } catch (e) { return {}; } },
+    set(v) { try { localStorage.setItem("cc_ask_profile", JSON.stringify(v)); } catch (e) {} },
+    clear() { try { localStorage.removeItem("cc_ask_profile"); } catch (e) {} }
+  };
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+  function add(node) { log.appendChild(node); node.scrollIntoView({block: "end"}); }
+  function render(r) {
+    const m = el("div", "msg");
+    r.lines.filter(Boolean).forEach(l => m.appendChild(el("p", "", l)));
+    (r.items || []).forEach(it => {
+      const d = el("div", "item"); d.appendChild(el("b", "", it.title)); d.appendChild(el("span", "", it.detail));
+      if (it.url && /^https?:\/\//.test(it.url)) { const a = el("a", "", " Open link"); a.href = it.url; a.target = "_blank"; a.rel = "noopener noreferrer"; d.appendChild(a); }
+      m.appendChild(d);
+    });
+    add(m);
+  }
+  fetch("data/venues.json").then(r => r.json()).then(data => {
+    const ask = Ask.create(data, store);
+    function go(q) { if (!q.trim()) return; add(el("div", "msg me", q)); render(ask.answer(q)); }
+    document.getElementById("f").addEventListener("submit", e => { e.preventDefault(); go(input.value); input.value = ""; });
+    ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "Where can I buy a paddle?"].forEach(t => {
+      const b = el("button", "", t); b.type = "button"; b.addEventListener("click", () => go(t)); document.getElementById("chips").appendChild(b);
+    });
+  }).catch(() => add(el("div", "msg", "Could not load the venue data.")));
+})();
+</script>
+</body>
+</html>
