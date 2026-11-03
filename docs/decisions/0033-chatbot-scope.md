@@ -1,6 +1,6 @@
 # 0033. Chatbot: racket-only, tools over our own data
 
-Date: 2026-11-02. Status: proposed (owner to accept). Separate from ADR 0017 (LLM page reader): that reads venue pages to fill the data; this answers visitors' questions from it.
+Date: 2026-11-02. Status: accepted (2026-11-02). Separate from ADR 0017 (LLM page reader): that reads venue pages to fill the data; this answers visitors' questions from it.
 
 ## Context
 The owner wants to test whether a chatbot helps players find places to play, learn about racket sports and find gear. Plan: `docs/chatbot_plan.md`. We have curated venue, event, social-group and sport data (CA, NV, OR, WA, HI) but no gear-store data.
