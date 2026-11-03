@@ -11,6 +11,9 @@ the data's own label: confirmed (cf v/o), reported (cf r), inferred (everything 
 
 Row shape: {d date, k kind, i venue id (venues only), n name, c city, l label, t detail}
   kinds: venue_new, venue_gone, venue_changed, event_new, event_changed, event_removed (only events that had not ended), social_new, social_removed
+Hitting-wall venues (kd 'w', ADR 0032) are venues like any other: one appearing is a venue_new row. The first export that lists them has nothing to
+compare with (the base export has no wall venues at all), so that one run takes them as the baseline instead of dating ~400 rows "new" today; wall-only
+sports (flag 128 in p) are left out of the sports comparison the same way.
 Venue ids that vanish and reappear under another id at the same name within ID_DRIFT_M metres are counted as id drift
 (favorites would stop matching), not as a new+gone pair; --check fails when drift passes MAX_ID_DRIFT of venues.
 """
@@ -53,15 +56,15 @@ def metres(a: dict, b: dict) -> float:
     return math.hypot(dx, dy)
 
 
-def sport_courts(v: dict, sports: list) -> dict:
-    return {sports[p[0]]["n"]: p[1] for p in v.get("p", [])}
+def sport_courts(v: dict, sports: list, skip_wall_only: bool = False) -> dict:
+    return {sports[p[0]]["n"]: p[1] for p in v.get("p", []) if not (skip_wall_only and p[2] & 128)}
 
 
-def venue_detail(old: dict, new: dict, osp: list, nsp: list) -> list[str]:
+def venue_detail(old: dict, new: dict, osp: list, nsp: list, baseline: bool = False) -> list[str]:
     out = []
     if old.get("n") != new.get("n"):
         out.append(f"name: {name(old)} -> {name(new)}")
-    oc, nc = sport_courts(old, osp), sport_courts(new, nsp)
+    oc, nc = sport_courts(old, osp, baseline), sport_courts(new, nsp, baseline)
     if added := sorted(set(nc) - set(oc)):
         out.append("sports added: " + ", ".join(added))
     if dropped := sorted(set(oc) - set(nc)):
@@ -80,7 +83,8 @@ def venue_detail(old: dict, new: dict, osp: list, nsp: list) -> list[str]:
 
 def venue_changes(old: dict, new: dict, day: str) -> tuple[list[dict], dict]:
     ov, nv = {v["i"]: v for v in old["venues"]}, {v["i"]: v for v in new["venues"]}
-    added, gone = [i for i in nv if i not in ov], [i for i in ov if i not in nv]
+    baseline = not any(v.get("kd") for v in old["venues"])   # the base export predates hitting-wall venues
+    added, gone = [i for i in nv if i not in ov and not (baseline and nv[i].get("kd"))], [i for i in ov if i not in nv]
     by_name: dict[str, list[str]] = {}
     for i in gone:
         by_name.setdefault((ov[i].get("n") or "").lower(), []).append(i)
@@ -104,7 +108,7 @@ def venue_changes(old: dict, new: dict, day: str) -> tuple[list[dict], dict]:
             rows.append({"d": day, "k": "venue_gone", "i": i, "n": name(v), "c": v.get("c") or "", "l": label(v),
                          "t": "no longer listed (the source stopped listing it or it stopped matching; a lead, not proof it closed)"})
     for i in nv.keys() & ov.keys():
-        det = venue_detail(ov[i], nv[i], old["sports"], new["sports"])
+        det = venue_detail(ov[i], nv[i], old["sports"], new["sports"], baseline)
         if det:
             rows.append({"d": day, "k": "venue_changed", "i": i, "n": name(nv[i]), "c": nv[i].get("c") or "", "l": label(nv[i]),
                          "t": "; ".join(det)})
