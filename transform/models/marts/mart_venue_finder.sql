@@ -22,11 +22,14 @@ select
     coalesce(dn.display_name, v.venue_name, 'Unnamed courts')  as venue_name,   -- same-name inferred pins get a computed position + court-count suffix (int_venue_display_name); name_source stays inferred
     v.name_source,
     v.venue_source,
+    v.venue_kind,
     s.sport_name,
     bvs.courts                                                as courts_for_sport,
     bvs.in_osm,
     bvs.in_places,
     bvs.in_manual,
+    bvs.in_wall,
+    bvs.in_courts,
     v.offerings,
     v.lat,
     v.lon,
@@ -64,10 +67,9 @@ join {{ ref('dim_sport') }} s on s.sport_id = bvs.sport_id
 left join osm_facts f on f.venue_id = bvs.venue_id and f.sport_id = bvs.sport_id
 -- exclude_private_members = yes (Pitton on badminton courts): a members-only venue does not get the sport by inference, even when its
 -- own court is unmarked; a seed row that lists the sport itself is kept.
--- Hitting walls (bridge in_wall, ADR 0032) are not exported yet: rows that only a wall supports stay out until the export and app read them
--- (steps 2 and 3 of the plan), so the map shows what it showed before.
-where bvs.in_courts
-  and not (
+-- Hitting walls (ADR 0032) are rows here too: venue_kind 'hitting_wall' venues, and wall-supported sports at court venues (in_wall, not in_courts).
+-- The export still lists court venues only (step 3 of the plan turns the walls on), so it filters on venue_kind.
+where not (
     v.is_members_only
     and not bvs.in_manual
     and s.sport_name in (select trim(also_sport) from {{ ref('sport_also_played') }} where lower(trim(coalesce(exclude_private_members, ''))) = 'yes')

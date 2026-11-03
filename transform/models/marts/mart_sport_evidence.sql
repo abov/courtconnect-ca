@@ -7,7 +7,7 @@
 --   rung 4  osm_tag_loose : OSM tag mapped with MEDIUM confidence (tag is a family name, e.g. pelota, paddle_tennis)
 --   rung 5  overture_category : Overture classifies the place as a racket venue for that sport
 --   rung 6  name_keyword : a distinctive sport word in the business name (inferred from the name only)
---   rung 7  derived     : only reachable through sport_also_played (a pickleball court is also a Skyball court); an inference, not a sighting
+--   rung 7  derived     : only reachable through sport_also_played (a pickleball court is also a Skyball court) or a hitting wall's type (wall_type_sports, ADR 0032); an inference, not a sighting
 -- Weak (ambiguous) name matches are not venues and never appear here. Rungs 1-2 come from people, 3-6 from datasets, 7 from rules.
 with osm as (
     select distinct
@@ -75,7 +75,6 @@ all_pairs as (
     select b.venue_id, b.sport_id, coalesce(p.best_rung, 7) as best_rung, coalesce(p.rungs_agreeing, 0) as rungs_agreeing
     from {{ ref('bridge_venue_sport') }} b
     left join per_pair p on p.venue_id = b.venue_id and p.sport_id = b.sport_id
-    where b.in_courts   -- wall-only pairs get no rung yet (ADR 0032): a wall's type is not a court tag, so the ladder is not applied to it
 )
 
 select
