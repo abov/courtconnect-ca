@@ -1,180 +1,471 @@
 venue_id,lat,lon,place_name,place_kind,source,checked_on
 0043940eab32f748ecea62d4b0688589,36.06587,-115.312921,Spring Valley,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+007325f838d6b03d76840bc81ef7b555,21.266454,-157.812713,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 020bbb4bb323980b6d802e833ac57019,46.518732,-122.889774,Lewis County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 02862b502ca08a56db15e01f285208a6,44.799069,-122.797404,Stayton,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+031aff0485bb360572a5613edd0657af,20.707559,-156.443516,Wailea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 034e5e68629d7fc26709bd1cf95422e8,36.028765,-115.332384,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 0458b69634e65c8da09b011fe03d95a0,48.004226,-122.483632,Island County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+05e57b6e2bc2e7231562b46f98f5af8c,19.594191,-155.969927,Kahaluu-Keauhou,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0624525fa15d74fadefd1bf5e31a8151,45.592992,-120.695318,Wasco,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+067bebefa29de2654a4d452d2d41672e,20.839495,-156.920255,Lanai City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+075d7d6d05cb7bd0359f6e1259e0617d,20.023328,-155.671572,Waimea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+081b99a0a5a2ad7f8fa3acd5dff94c34,21.42566,-157.751293,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 085d23acd3e95bc79a34d1ab9e27f619,45.133877,-122.853418,Woodburn,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0a11298f69fad3c1f2f1162518a8815c,44.944608,-123.13461,Polk County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0a5020b785c6cbdf12953f1903f6bd5b,44.957898,-123.061142,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+0a674c39a056a338998eaf4617f42f2a,21.322173,-157.848049,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0a889434a71cd5f9baf2cfc052934513,37.24289,-115.818286,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 0b86f886e02ea648c65b62892b6b0635,46.752737,-118.30849,Washtucna,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0c58294f684affbc1af67a0369e14b32,38.961017,-119.884354,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+0c6da48e6b1978f581eed185598ed2ed,19.605983,-155.055352,Keaau,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+0cfb8b9422334074cd26b8e30ebd818d,19.707887,-155.091403,Hilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0d236de4a19acd361fcae6798f5d4a23,46.199222,-119.007797,Burbank,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0d964076191c6a0339581510ee24d8a5,44.449206,-124.080575,Bayshore,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0dabee24e1558a56575fa5712912d7dc,40.198843,-122.209937,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 0db7cfe07896b507c0152f8145a829e6,44.999607,-120.220575,Fossil,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+0dcd1ba1bd1a43c61ea9b6be5834e939,20.974234,-156.678481,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+0e517b38f13b35747cedbb893f91dde0,20.689023,-156.365725,Maui County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+0e8de6e065bda0341757c4706e984c09,19.568833,-155.960878,Kahaluu-Keauhou,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0f61b569f25f1d47ba93a9c744591416,46.818298,-119.16712,Othello,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 0f920998c37caf7f01737fa0c933c91a,38.7285,-121.072642,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 0fe7b2ac095b370791e304559b75f8f8,44.957907,-123.085747,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 1070e76525f2d4de73daa0169f332ace,44.984608,-122.997458,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+10c643ac1b7ed883a8836c3f9ae07f47,21.280476,-157.737967,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 117466845fbe230a262221179257772c,44.836836,-122.99868,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 120c5dbdc4e62b6571584d4a9e505b89,44.91909,-123.299649,Dallas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+12350fa990fb9405f7e88690ca52e832,19.717514,-155.066538,Hilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+127d18d281eb6f4969bda4c6246fe2c5,21.289078,-157.82122,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+128ab5ad799945887d18fff23d750fa8,22.090909,-159.309835,Kapaa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+12e552d5a3000f9c7e6411fd0f487a8e,21.289322,-157.706279,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 1325c55637e5e3b85d7d747f03cc05b1,44.910228,-123.063121,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+151053e9a02e91383c8efc029583663f,20.927538,-156.694253,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 155dc2784247ee146718ec46cfbe90a8,44.897785,-123.028218,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+15ab63e961410845b6c00c075f5d83d8,21.364763,-157.935909,Halawa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 16644714170e7f445c05e4ba9de98243,46.814118,-124.095537,Grayland,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1682aa7df031fd683a5500ab34f5be0e,19.635791,-155.989955,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 176366cf1b67833ecd5f56857fc4d462,44.994783,-123.055862,Keizer,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+182a88fc26f3275649dcb3035f060856,19.639151,-155.999788,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 18455ff88c779d59706cbc70edb45655,44.967129,-123.101382,Polk County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+18da12d36d586adf6bcf57f39bbd6293,22.056482,-159.367511,Wailua Homesteads,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1926c37e3089397b8e5b7114d7605cf6,20.969096,-156.679216,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 19a197625fba54f409887923e7eeeb0a,44.753498,-124.062336,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1a18fb34681d805bca28e4041a0d4840,21.325679,-157.986406,Honolulu County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1aa99a1521d1951e7948ff919420ee92,19.680441,-155.085363,Hilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1b5230be7fde61c25f682538141fb9ab,21.421602,-157.799701,Kaneohe,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 1b8167124e23b4d664c09c215c1df684,46.687689,-123.724834,Raymond,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1bdaff849d8ea12855c716c66f60c9dd,19.666005,-155.052249,Hilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 1c0001ee831ea43aa684f18871725d8e,44.631439,-121.123748,Madras,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1da1d6400dcf1664987fb1b17d7802ce,21.267707,-157.781089,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1ea3d78fbaa90ba53389c30d65884556,22.204741,-159.396773,Kilauea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+1f24a032bc03b78285aaf42197ea559f,20.938219,-156.690369,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 1f961459c079314f0d70c8176ec9b83c,45.140493,-122.859409,Woodburn,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 1fae37897a3432df6c922b539ae98fd1,44.859539,-123.022738,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2065a9522f7d83de1ebfc2fddf3e2d78,21.26848,-157.707347,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 20a775286da97efe38c76974604a8ddc,46.649333,-121.617007,Lewis County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+20cba67da6a4172dcd68d0f358033353,21.327799,-158.067144,Kapolei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+216049c4ae52931c9114a427458d17fe,22.162817,-159.31272,Kauai County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+22f89297b8e7cb339eba8a8fd17e568a,21.381038,-157.784955,Honolulu County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+23a30d1588127b9087c89302e54da18f,21.283873,-157.823122,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+24f040582701ca07513cfbdda6ddd7bc,21.362931,-157.890504,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 24f1beab0602400a3e0b7b64306f54d3,38.850144,-120.858497,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+24f21cca6266ac4b618e1683d7295b57,21.310702,-157.855005,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+25298b3a18fcd37fb0a64d56209cb93c,21.338859,-158.120604,Ko Olina,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2587d222bcfa5281a927715d496142fb,21.407422,-158.028248,Royal Kunia,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+25a9a71eef01b16c6944b9fd5c384927,21.29394,-157.851748,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 25ea7050685a87ecda4e447171d94f1d,44.98231,-123.029775,Keizer,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+27b2365de48487d655a138ba26f46d9d,21.385972,-157.722909,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+27b26a70de74824f8b2c200c64e45b32,21.278127,-157.748854,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 27e603a880aa07f11e27e05206787c3d,44.593313,-124.06341,Newport,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 28169d95f5d1749694942197bd9f1d6a,44.945378,-122.994119,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 289b57663f1f6402d3dce7a090c98663,48.987208,-119.425166,Okanogan County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+29a574817ac66addb26dbfa2988bc1cb,21.325577,-157.85416,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 29e1b95e077a0748b3260a1fd8222e98,44.863374,-124.032769,Lincoln Beach,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2a2faf064eb358df8fcd0bb9358b8ed0,21.928425,-159.522792,Kalaheo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2ab7384799603471af23f20501019798,21.906684,-159.465397,Koloa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 2bcdb98e6b45d9db66f368c36bb2e7d2,48.009635,-122.570066,Island County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2bf1940ae4977cbcd4bc9587cba472a8,20.990551,-156.668623,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2c79b4d5600f734e727272fe726a9a03,21.349944,-157.965408,Honolulu County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 2d44e4729a59a3cb08aec9c2991c4510,48.215647,-122.478334,Camano,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 2d473612d6ccc09694aa1b8db838ae7c,44.869896,-123.019475,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2e2019adfd885e2fdb238ec36e93bcb1,20.965843,-156.681661,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2e6840b62c708f3e4e8ac460bc4fbcd7,21.970802,-159.396881,Kauai County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 2ec7db62e86dda66d37d83358f70c49b,44.982323,-122.990058,Hayesville,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2f55631578062caaaeed1c3e0272ff72,19.939849,-155.869959,Waikoloa Beach Resort,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+2fd504d45b1a4284e38c916294140338,21.00307,-156.652432,Kapalua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+30925d8e117097b8c073af0ad0698c69,21.276258,-157.790964,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+30cf8393dc9eeb12b9bc8ec666af2517,20.933423,-156.685992,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 3183945fa7ed31e6f3db6872a52238f5,33.001684,-118.552826,Los Angeles County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 31f7dd9e6c9df92feadebc97787be908,45.5087,-120.577731,Sherman County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+32f078d808967c271546eb34e536707e,22.042985,-159.336896,Kauai County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+33cef4acbcc502a071a28bf0c1e87c03,21.699789,-157.994325,Kawela Bay,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+33da61419c703ce66f9ea201fc0fe358,21.391921,-157.738578,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3419d97ddb21410b6abb27beafac913b,21.436541,-158.015755,Mililani Town,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 352bd5cd0ce15a1857aeacc5fbdb4631,34.752497,-120.537476,Vandenberg AFB,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 35b8c6d7702eeaa51f421171f610ac9e,44.885818,-123.077489,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+35be1bda5f2d84fe4fbfed9c7e3c798f,20.954317,-156.684626,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 36ad2b03952e25ff3ad356a620251a74,45.152479,-122.849834,Woodburn,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 37cc05adf0d93b6cfe4ee1da80736f92,44.962631,-122.979398,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+37f5383f4c416e99c4b37304026e2c15,20.764081,-156.457648,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 38625a9250d39e11550dfa661cc61151,47.990023,-122.492419,Island County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+387591ca1bdcf3fe43105ce61ee69116,21.969259,-159.717172,Kekaha,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+38837a9be1395eaba04d44fb5f9dac5f,20.95015,-156.688278,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+38b08e2f98ec1c792efb9318e81504a6,21.357317,-158.083824,Makakilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 3a1e1dbabcc1c64b23e7e9d1b760684d,44.853106,-123.211202,Independence,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3aead694f9c5928e9e0759b855dab32a,19.925826,-155.794349,Waikoloa Village,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3bb08273f205cfdcd4547375e99f6f0b,20.860574,-156.668203,Lahaina,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 3be2588d91cb0f62c119a7a849090f45,46.643592,-122.943536,Chehalis,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3be63d8f39980c573199fc3e97bf671c,21.301182,-157.833144,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 3c02c7b3bf01c36f631803c5f453a130,47.986626,-122.507142,Island County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3c37664a3cb27e28c33738a6b6751165,20.723743,-156.444677,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3c5618d214b885184eaeacec4696a7ae,20.644172,-156.438909,Makena,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3cfefbabf8ed8f8675fe17dc1dc4208f,21.295904,-157.834551,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3d62452ab20331e6b0a594bcef5dad30,20.957471,-156.682955,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3df38de57bbe6a19dd950811dce60d9e,19.433322,-155.272781,Hawaii County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3e3d10158969300993346187899ff90b,21.268256,-157.779426,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3e6ed0a5793714a591c895ce86f75c5a,21.267656,-157.708606,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3efa6147732ff09522aacbf0d3bbabe6,21.334725,-157.87169,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+3fa744fe145499eb659a374c07f6fdb9,21.295652,-157.68708,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4039cad669d2754be8145f96945965db,21.452981,-158.018617,Mililani Town,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+419735c5f88286b07c83cfef224adf5b,21.870009,-159.445401,Poipu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 43007abf5ebf0db370b955c2cdfb18ae,38.988489,-119.20795,Lyon County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 440dd083d828edd40f55e1a2e488b70a,47.91658,-122.394021,Island County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+444aff68d55fa7a4880b51e216a09799,19.9239,-155.882593,Waikoloa Beach Resort,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 44cee3048419d2248635af0d55e3936d,38.965408,-119.897903,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+4809a28edadac1f7277406cbfacd4e7b,21.299223,-157.672341,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 4823c8278ed994b59229e237178f83e8,36.574803,-115.677165,Indian Springs,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 485fdb4e388d8451fc480e0b3ae24003,37.88354,-116.765536,Nye County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 48fe3c5cfbd4b4d67f3bf1faaef7e5db,44.866818,-123.022259,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 493e6b2aad1164d8aa178e1f1279db93,44.909926,-123.039583,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 4b763b937705eee35545ab5d3f643687,39.082257,-119.220857,Lyon County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+4bf923c55184ff5b40976eebaf6c9cc2,21.342857,-157.956807,Hickam Housing,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4c3a2b63598fffb588dc1b334beb1afd,20.860151,-156.668838,Lahaina,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4c95926f81fdc9c8eadfd0f05707c3b5,19.620185,-155.985046,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4d5237a70036c49d937fbe75995cddc7,21.270083,-157.777247,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4d66177866a56cda2d43c04d41b9375a,22.22343,-159.556324,Haena,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4d78bd5cca197fd2f7c587ef52e627ae,21.50167,-158.225418,Honolulu County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4d9c352480dce2181541cd63935f7fba,21.386558,-158.135611,Nanakuli,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4ddbccb5f261761bfd91eba566249e79,21.309009,-157.826341,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4e00d521c6639adb51f6269540b14d28,19.56548,-155.965935,Kahaluu-Keauhou,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4e534fe73e56ff97e52b2d668c2e26ed,19.557827,-155.964379,Kahaluu-Keauhou,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 4e5a7d436021fc218d4bbf9400e8a74e,44.905603,-123.072756,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4f3798c2550f1cf8ba95e95a8df11fc8,20.883143,-156.477557,Kahului,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+4fbdb3cd3206690e24e4f3a1ea33878c,19.680364,-155.986366,Kaiminani,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+502c6ccc70c57c6fd3c53dbd01cd6410,21.304843,-157.827372,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 50bfd6014d4d2a82f1077130a4acbcf4,36.229206,-115.247931,Las Vegas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+50e5abce133dd0a01eceeb793d7762ce,21.287777,-157.763326,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+50eba6d2425d22b4024b0d290298ce33,20.850883,-156.317481,Makawao,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+51619127eb072f9abdb41fdfea4412d4,21.95662,-159.668468,Waimea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5279fbd76b3547320f3bb6f05ae277c9,45.013713,-122.789539,Silverton,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+53575dcef0902c3748f483857e5977a7,21.313071,-157.859774,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+5371d8f313415c35554cda682e3ff098,20.918755,-156.69478,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+53fc1f899f6697e18065a93953d3e4e8,21.315025,-157.809633,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+5504614cc40c417a44213b3418e3fa4c,20.678254,-156.441502,Wailea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+5577b32cd8ca4c2eeab729e5366d196b,21.307889,-157.83656,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+562a6dec457a1fcfa6d0d19728e9a7fa,19.813579,-155.834279,Hawaii County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+56a520b23ac26e0572e589159b4fd729,20.713416,-156.444438,Wailea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+56f6d972d1f1b4947f2dc8d3a2d95292,20.877508,-156.333653,Maui County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 586fec355f152aa7b251e053f2941d5a,40.349604,-122.199957,Lake California,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+5870957a771e1bf9250243a8c884e14f,22.059186,-159.320989,Wailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+58ce49152de0d384b1c08cbb0aba0507,21.452009,-158.011971,Mililani Town,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 59148280707aa6c6043cea317d5f84fe,44.907259,-123.068297,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 59858458637951ef74539acd6e93470d,38.947786,-120.088789,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+59ba3ba7dc23004e5c1614fe7a71839e,20.887608,-156.66214,Lahaina,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 59c5f5c5366b08650855d61e6559ca5a,44.986796,-124.012087,Lincoln City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5aeb5882c4c59bf2d1ea60f51603e49e,39.510521,-119.643718,Storey County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+5b6c3b2929ddce30aec711c4e753b092,21.262124,-157.815217,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5b9dffabc7b1919d10dbd80164dba800,44.961463,-122.991748,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5c70667c47121d94bc3e49980d3658d3,44.938772,-122.934968,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5d6ab5d738a6ff62cb07a22e748a3ac0,33.704968,-115.636431,Riverside County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5e0968232a24dbf0e5d73f5a5afa3266,38.730405,-120.895122,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+5ea881718c19dc6c931beefe71315ee0,21.407444,-157.803427,Kaneohe,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+5eec061457627d264393041242d6c49e,19.718445,-155.066598,Hilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+5f4624f490d5c1f9d196ad7219d74805,21.347476,-157.888433,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 5f9e08cf274ac4c3d4c97018445ce935,44.888007,-123.039239,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+608e84fc83aa87a8b130503a1efbbd2b,21.268315,-157.780614,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+61954dd6b0f6e2abe1ff0f553aec90be,20.891427,-156.489085,Wailuku,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+621f5aa8a7a5b6bee72c82e7e507a738,21.489439,-158.033906,Wheeler AFB,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+621f8fb9679d9a4a20cccd165831e373,21.284919,-157.726271,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6308a3049a90b96f709ca0901111be0c,21.259119,-157.792318,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6342d0496ce2b6de7cce7b11c0bcb52e,21.461623,-158.211902,Makaha,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 63ce57c09bbd9fea0d4107dfa010f020,38.737782,-121.07892,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+643feb728c9adc8ecef77dcbb466eddb,21.325975,-157.861354,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+64da9133f59ab19eadfd6d6121bed6ee,21.319678,-157.860262,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+64e7d7982def54158fadc3f3ecb7204b,21.056211,-156.83865,Ualapue,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 662927abb493df6736b0c7172d6d1ab6,48.161743,-122.467484,Camano,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6686c900795eb57fec6f2467d2932fcb,21.388187,-157.970547,Pearl City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 66982173374f965fb07f46eadcd31acc,47.985699,-122.508133,Island County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+683ed9b9a3dc29718dd213a246a7adc2,19.775196,-155.843343,Hawaii County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+68aa7061208f7ff46011ea563ecc11ed,19.636732,-155.97835,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 6b4c6e7796289d45e7b3033408829ee4,36.00993,-121.239845,Fort Hunter Liggett,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 6c8535550500dcee5b9e27f4fb6570c6,38.881435,-120.070764,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+6cd7e65828059f172816a7d1c20acd84,21.276896,-157.707726,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6d2e30f5b72d2999f040aa8d3024605c,21.326468,-157.80027,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6dea7e9c2706fcde26144de8941da265,21.320345,-157.978779,Iroquois Point,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6e08934896df274ca718ed29d0e04f69,21.30768,-157.875582,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6e68e2ca7ae3b3c1ee7bc693ec5aee62,22.07336,-159.318656,Kapaa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6ed760f4195d4f76318342f8dbf7ee22,21.295934,-157.724748,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6f2dc8f3c5481a2d0868fcaa5697ee1d,21.39883,-158.022869,Royal Kunia,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+6f4a7ebb04ffa3f49379f802a5f2a6c0,22.209508,-159.34978,Kauai County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 6ffffe23518d038e4f5d098fd8d33d3a,44.929764,-123.036508,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 70d2328b70ae8029d5864749ac274fda,44.992556,-123.980749,Neotsu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+716a53ea6045a4c2a46b7804c6d48d68,21.352782,-157.91184,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 71e11829a5038dc96fa09279a47dd371,44.900281,-123.043167,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+74677219f7a13b9bb41b04db79d8dc3d,21.965672,-159.390295,Puhi,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+755d9edd6ddc497645fa68e60ba53f5a,20.933262,-156.691366,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+75a23c8aa9bf8517ebe9d65dfe7d21cf,19.697371,-155.073584,Hilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+75b1555aee743f09020e20d533614e66,21.340196,-158.106361,Honolulu County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+75db30e2c3d056a693564d0eb8afddd1,21.407708,-157.759356,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+779a7d872400d6acc5024b986d7e78db,21.286909,-157.828092,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+77ecc4b438fa46f4d046602b04bef1e9,20.762838,-156.456636,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+7888065f2f0c3e54079321d1943e63c9,20.986897,-156.661062,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+78b164caeb1f974fc950fa555c62f540,20.83839,-156.343232,Pukalani,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7b0b21fa826fead04370697b08871c79,47.197904,-124.190969,Grays Harbor County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7b2c3aab7c50e6461f3cf689f6abbcfa,36.151983,-115.419111,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 7bb127c823a01923549f00d72a99fde3,44.891546,-123.069378,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+7cc7b6a3995514e0ae221459829635e1,20.728263,-156.449591,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+7cd0fca3d109a1e46c9085ec341e4987,19.930124,-155.794391,Waikoloa Village,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+7d2176ee61152fa3d53aa432d71f0fca,21.664215,-158.050284,Pupukea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7d5ec6ef1b5f143becebe71d1b08b42c,40.195446,-122.212176,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 7df3d3eb90c2e73e5967b9c8527803cb,48.591911,-120.402553,Okanogan County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+7e9056b65a7d90db15da820cc3fe6978,21.262368,-157.785823,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+7f6e1cd7ff5f6fedd80e4db6be67e6b9,21.904426,-159.593083,Hanapepe,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7f737d123997132ae5801ae15a20202e,44.961789,-122.745234,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7f82adfdf24147bababcd5467ecff131,39.044849,-120.116557,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+7fd38fa96ccdcc28ee959f3e9ac2ad04,20.947175,-156.691012,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8011e6d51c6c1ae3c222cdf01140d54c,44.830768,-123.001358,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8103a8afc2432c3d939ec76b854b0c0a,21.289778,-157.838272,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 82098d5d4797a0581c57f7a2e15a54b6,44.958787,-123.029001,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 821c2b19f592c99a902c92da5a7706f5,47.206113,-124.199766,Pacific Beach,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+836d009fe44205a17c80e39007534a8b,21.090256,-157.01647,Kaunakakai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 837c9aa940f1f92e86652e7d80c10071,34.749733,-120.532812,Vandenberg AFB,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+83aef1c844833f18516899daa653e4b4,19.623296,-155.041485,Keaau,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+83e9c2d6cd3c63f4db3263d3db27f3a6,19.059763,-155.58512,Naalehu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+84aabd4941ef26f0250d43f76a0c6169,21.263627,-157.787198,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 86cb8f160cdc7b2a2ff9e535db9f247e,44.838072,-122.997957,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8703133fa3e644477f0d30bc100e31f0,44.307867,-124.098855,Yachats,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+87ba32e9dfb091700de71b684d4ea191,20.077098,-155.46442,Honokaa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+88003211b20ab0030ca53946fcd2774c,21.280603,-157.738767,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+88cb1eb98aeabfd52caf2aab5e7fc95c,22.034938,-159.337308,Kauai County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+89145a3f96c0066e7edbd9526cb2ae4b,21.424461,-157.953068,Pearl City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 89a68247c70c10f5ba07a8f95bd9c9d0,46.6479,-122.950437,Chehalis,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8a07f30c2bb7ad499fff97aebad8f025,21.347218,-157.91178,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8a2d65b7d44f4e5a0ab3a986346a3f55,21.337705,-157.949934,Hickam Housing,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8a5827b571b7e671d67d1af0fc77f2fa,44.854496,-123.030884,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8a5a34b1064ae854e66c583242bd80ce,40.653228,-119.355191,Gerlach,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+8bc5648ec24d22abe29fe2afee97855e,21.265563,-157.791745,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8c2877bae83352b9aebbd6a32b8cbae5,21.599145,-158.103304,Haleiwa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8c89acad776dc78369bcc64951c8ff15,19.680466,-155.983978,Kaiminani,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8c8fcb2993b0d09c80e3048162acc66d,37.119543,-121.732675,Santa Clara County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 8e1b51518a2328c523fba48d7448d5e9,46.449434,-122.846124,Lewis County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8e4e40b6ee1ba0a853741f0645c95100,46.625411,-122.779983,Lewis County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8e669df64aa74ed16dc9577799423cc1,44.998281,-123.03356,Keizer,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8e6fd1d5b7fd306fc2a2f68ebbc595c2,44.877014,-123.060242,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8ea6224385c94d1e90f77ec7c620a5aa,21.264991,-157.792586,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+8eeec24be59c79292e926a14c144a4d9,19.572945,-155.967117,Kahaluu-Keauhou,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 8f390bcac3471df2ba5a113abc92bd10,44.738398,-120.171935,Wheeler County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+90781fd6077373c66def1c917c0f2292,21.295819,-157.707168,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+909618b58e2f0295db3886cbef923d1f,20.876717,-156.473696,Kahului,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+918c6d98a8ebcfe0670b1e99b7374285,21.313694,-157.832547,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+9203c528a35f749a244c6fd91ce779c2,20.657409,-156.440185,Makena,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+924c6db3b95855bb9246486a036fa8e8,21.319094,-157.815439,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+925a257ef255a3e5e5ba898630606e46,22.057422,-159.321949,Wailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+926aebccb27f0b6fda5a3dca498cc00f,20.71673,-156.445369,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+942aeda522e1153af8a8a65d9e169f9c,21.334494,-157.875686,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 955507e27cb99efac27d21ace06facc8,45.23191,-120.184685,Condon,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 95590e5d49a50cbda6f3c0f7958c8593,44.974104,-124.005399,Lincoln City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 958001ddc149110dabb378dd66b59d84,44.916846,-123.300076,Dallas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 95f4c7c85577683e867c07d6943e7691,44.901389,-123.028269,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+963e766c863de187d08d440a00e344d5,21.269647,-157.706771,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 972bd6f87a22476c7bf91992c084fdab,44.753414,-124.061202,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 97bf1bcd7a6077eef40a3daed63531f7,36.009749,-121.24186,Fort Hunter Liggett,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+981412f67bd9557cdd42ecd419dd0c1c,20.725434,-156.446318,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+9847aef0996524673adddcd2fe976ba0,21.416598,-157.765343,Kaneohe,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+98d0349ccaf492b291a75bf795abdf9b,21.363582,-158.086001,Makakilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 98f1f6a90b42f85cc3446f92aaf096e8,44.969705,-123.033241,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 992bc0716ef4918870aa00246bbb71e1,40.712595,-120.724389,Stones Landing,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 999eb3918b0c13436eb12ea0f630d0fb,39.053861,-119.945069,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+9a19da02fcc5f5a123f8ec5c92ffafb3,21.333023,-158.067061,Kapolei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+9a1e6b70064b1e52a3514f56ce561a41,21.343261,-157.881569,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 9b589ad4d133d1ae656f140533c16cd3,40.300616,-120.522383,Janesville,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 9bc58471747389e3b409f42c642febe9,39.368792,-119.722712,Washoe County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+9d19025ed792d3b37e18c88de6718d52,21.294194,-157.753182,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+9dcf23ce3295f5ad325c74aa615922a8,21.311897,-157.840829,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+9e08f4cd5491e34b28ca8c051a6b8dca,20.725591,-156.447317,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+9e84a7141270372de3f82beb31960328,21.314972,-158.006835,Ewa Beach,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 9ebf19d212749c578628b4b000f847b9,39.74957,-122.157641,Glenn County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 a05cb4ce38139bc02bfab3d093523960,35.95837,-115.184415,Enterprise,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+a05d8a5d19c3bebe7f79eb3a352f253d,21.295515,-157.846507,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 a128f0fee6c57ad801e9751e7259c430,44.886177,-124.016219,Lincoln County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a141d43ad6772c9536ac14a5b0416310,21.333741,-158.028445,Ewa Gentry,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a1607f61ce4ecdd8f5939278b522d5e3,21.284399,-157.741493,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a161570698e774e7a3d4af35713e1925,21.303193,-157.709078,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a1b903d4537e85cc012b23cfc457d8c7,21.277365,-157.767609,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a1c6af964dc879b6a147b76bcbecbaa8,22.077301,-159.320985,Kapaa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a27fa4fad067afbac5e64a1fe5c754a8,20.971708,-156.67887,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a69d2f136823ce0a85d196b8a555f9ec,21.266059,-157.780824,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a7cb772f748a0cf1a758e41ade44ee29,20.068232,-155.444673,Hawaii County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a7ce6e4e5448a3212175624b59585ba8,21.186953,-157.244513,Maui County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a7ea7062b4e999ead4b451a634b8020a,20.869529,-156.67481,Lahaina,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a851e8dff60975e1ef8ecb36a3baa7ee,19.80735,-155.998981,Hawaii County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+a9467b06dc413efc570292d5d7388b28,22.12794,-159.342198,Kauai County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 a97ba9a6cf4da05610e774a5da9c8856,38.996073,-120.108152,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+a9b6b9560bc4286de26f7b5d5e270037,21.335672,-157.838506,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+aad68e0da152946e76af0e55e979a756,21.264518,-157.782641,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ab11c1c205484773e02db40ad48fe035,21.640172,-157.923951,Laie,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ab2268992ef2f4674cc361a42189905d,21.377547,-157.941439,Aiea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ab61182cbef99a4dab5778ad712123d1,21.361172,-157.936105,Honolulu County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ac3946dd9ec74e377b01b9421cf6b376,21.399987,-157.97767,Pearl City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 ad6f890e8b1c223a2d3cf960a6590893,44.966217,-123.107176,Polk County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+add3c22e3bc87e38bc9e951f4752f568,20.660438,-156.440581,Wailea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+afa161a2687d8b0a6be323f020777cfa,21.313677,-157.850998,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b01cb6f2928e7630887d85997957d818,21.263285,-157.791499,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b0c6235d5e916764b07771cb069d1a89,21.305462,-157.817191,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b14edaaf4ca2cb55d7c05a0c3e99c38e,34.989206,-117.860235,Kern County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b1a5c2cdb314aa2fa10492c3b77a9d8e,21.331807,-157.965176,Hickam Housing,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b1b9d0c68ebbfe644f5d85b9e1aecaac,44.878101,-123.044668,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b2f45094b0eee35b625fdeb762057d7e,19.75729,-155.537322,Hawaii County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b309be735c213cbf21bcf21f8db4f193,48.594451,-120.407407,Okanogan County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b33f901721d5dd16353a1b47f4026c1b,38.977931,-119.935731,Round Hill Village,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b43d9229ec5cabdd61eccfa05f48eaf3,21.873495,-159.444297,Poipu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b4dc76e802f56d1b3112f3f7ec0eebaa,20.709558,-156.440397,Wailea,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b51b1a09176398a719c39abb0f748893,45.025602,-122.738412,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b66b218205f3a8d6a6b1ffdb7c3c1a54,39.074931,-119.945234,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b69512f36752086ee996e1df48a9ee84,19.508603,-155.916585,Captain Cook,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b6b19eda53e81f85eec5e41719b7c000,21.30812,-157.85041,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b6cd2917d7861f308c7332561ca23542,39.2472,-120.355386,Placer County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b6f2c39f1f08a069f239eae4675b5fcb,21.31798,-157.982106,Iroquois Point,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b74d93062c5a5e421d4ba6fd63ecc7f6,21.877196,-159.437727,Poipu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b798698e7419e50eac0bede352166e37,21.277333,-157.760615,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b7c3ecddb049ed17c3296d231ceef652,21.386904,-157.938638,Waimalu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b7c5908371fdd11b61e6bfd16305b520,44.975525,-123.996373,Lincoln City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b84fea08623c417553a098f522481846,44.939055,-123.006553,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b8b6f257474529c65e21cd6c4582f786,19.623664,-155.037342,Keaau,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 b8dfe584025d21eca5f8707ac9ea590f,39.079132,-119.944988,Glenbrook,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+b911d986c9b39a06b044bb43a0bec23d,21.28485,-157.69889,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b96705b5d7fcc2f2b1008528f570c373,19.698949,-155.129566,Hilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+b98ae81bd111494f9fcec1c245bdb5fe,20.625433,-156.44054,Makena,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 ba0d9ce03182ae742f86e6950400af69,47.193295,-124.198034,Grays Harbor County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bc3fa2075be2e5676d7ea2c4338ec225,19.467077,-155.921256,Honaunau-Napoopoo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bc93c45ac947d3912b744da22e148757,21.003038,-156.657688,Kapalua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 bcd1baa5a0c08b68b3c0bd515fce9c96,36.056791,-115.446932,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 bd04e04fb3b9c970f274d31feee681b2,44.893725,-123.071402,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bd475246973f09e3a7a3d2b4779b6f2e,21.342374,-157.71639,Waimanalo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 bd70d49962b882cbf9e85fd5aecf0843,46.269903,-119.706069,Benton County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bd7be25529edf6d5dcf769c57bad1128,21.331716,-157.935793,Hickam Housing,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bd84e803efe92d3f1227789ef203b753,21.289854,-157.745041,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 bd8c33c2bcd59003e56a5aa006d439a8,44.833824,-119.793381,Spray,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 bda8451a75b9da43a317d2a024210dc9,46.9775,-118.617422,Lind,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 bdc570570f4765c6e3ca8511e7a4cc6c,45.996105,-121.518987,Trout Lake,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+be26386ee734cfb2c6c88ddc56dbd186,21.702413,-157.997606,Kawela Bay,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 bebe5431b4550181c73649120f0a4421,44.926226,-123.319888,Dallas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bee0f6d067d950e0d67695068fccd287,20.076954,-155.466259,Honokaa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+bf76359bc494d75852a99ef70917b600,21.329886,-157.848882,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c0256bb39e5012130c13692af489ca10,21.286962,-157.839123,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c090c3edda664947a957ef8ad12c30ee,39.459281,-118.792306,Churchill County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+c160988be6241a15fdb082137870e5bb,19.68132,-155.982504,Kaiminani,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c1a762d8819b8f34c0cb3808f1123524,22.010545,-159.340786,Kauai County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c1c2af044ad5feac50a2bdb93cca72b6,20.720029,-156.443925,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c279dceffa56e36ff74f9a7afb78b1ba,19.605391,-155.046564,Kurtistown,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c392bb72a3096f6177aed12b1a1df745,20.915378,-156.694692,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c3b26e448c22fcb3c831db6e19a515b6,20.931061,-156.687735,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c48a0187ef8ea590c9480c650e819faf,21.471244,-158.212891,Makaha,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c4aa43c24f66f97cdf8e025117dd9d36,21.333599,-157.896821,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c4cd2350a99c336bf73663405c76f340,20.861588,-156.669112,Lahaina,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c50aa5638dec718e82efa31aa2724f13,46.60517,-121.670197,Packwood,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c5c88196a91da06bde0529273517e6ea,40.31846,-122.802696,Tehama County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 c5fc1ba6878b3ed0a6af698e00c6f8bc,38.692887,-120.678408,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+c61e9e5a1420b002a0d6524afe8caae7,21.313232,-157.854659,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c63996828ed108ea96ca6c7dc42362a8,44.840854,-120.470507,Wasco County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c6c45731d17323e2a17e001bea2bb38c,38.745383,-122.493311,Lake County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 c7f6dd352441ba3e800f727aafc6d141,44.853019,-124.043087,Lincoln Beach,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c87bd39199e27aca259932a970db6d00,20.826008,-156.924621,Lanai City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c8b37c37f49e8a974d43b42cbf422a79,45.22978,-122.832538,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 c93b2659c83c14a5ff1d078afdea6788,44.920164,-123.300326,Dallas,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c9521d5f20d41b08eb126cf89c0692fb,22.21976,-159.495746,Princeville,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c9846a7e46dbd3dc8b2773b3555c76fe,21.275261,-157.707481,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+c9fe2f618644a9c7ed3e5c0cfb1f481d,19.917354,-155.884683,Waikoloa Beach Resort,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ca369af907a3299d07fb21d878f11493,21.463172,-158.01997,Waipio Acres,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 caac4c9cc69559f4044b1e6b5ec6bd4a,36.579483,-115.674835,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+cc36ef3b1eb071fb2e9789da46b61253,21.500458,-158.022947,Wahiawa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 cc84e9ec53317387d465f12a9f5e6c81,38.756922,-119.365872,Smith Valley,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 cdad88dda38d5b4eedbb528d20f3029c,44.846749,-123.190109,Independence,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 cf2df7e18cfdf04d01ad1013e5c71dd9,33.256631,-119.48371,Ventura County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+d005234715eeb85deeea62cfc0c9412c,21.343117,-157.869903,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+d0a361e4dbc83efe1627ef17fbace632,19.619081,-155.984394,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+d0e749cde9583177c766cf65e7637ba8,21.99705,-159.763621,Kauai County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+d2d837992893d0482f5af9bb83731727,21.871774,-159.44619,Poipu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+d2f26e7e547386f7c6302ec1f4e4b45f,21.303478,-157.826457,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 d47fd6b00f30c955e77ea80fc0c00cb3,44.941909,-122.822777,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 d5753d09ccdbb0225b30521366aa4587,33.704967,-115.636431,Riverside County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+d61b43e1cf21c38f6c6dd5dfc1da1379,21.410691,-157.810826,Kaneohe,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+d67a9162cf053b74fc2da27cdbee8f82,22.221933,-159.495461,Princeville,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 d6c0eaf8ec5d401f5b8cb2899d574214,38.902055,-120.995792,Auburn Lake Trails,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+d8922208860d0bdc56f2cf0d2ddab180,20.827099,-156.329383,Kula,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+d973febdb56aebc608e6c0183f6845fb,21.325002,-158.058965,Kalaeloa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+da2a3c2ae9d65b84bc9ee0107bd34762,20.725526,-156.445237,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 da34ed4d41dcc917cf1c3e957fab7a9c,44.796121,-124.068079,Depoe Bay,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+da8660701ed6c0cdba0ef7ec16612262,19.13468,-155.510652,Hawaii County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+dad3770deefe18bd58bf65a0f07df710,20.753218,-155.985567,Hana,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+dad5fc497fb68b6d6802b434a3a9c41e,21.395092,-157.970016,Pearl City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+dae1ecca60f9cd7c97ecf67cbe670273,21.283469,-157.72854,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+db52b5264328ac16e90ddbf579282bd9,21.288618,-157.763986,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 dc3370730f0d45b30d6b514ec01ddc38,45.21091,-122.798029,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 dd44b3639bd1d5308f604a9fab7f6b07,38.743733,-121.080182,El Dorado Hills,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 dd6da8f26261007d2ede027f88351730,39.050735,-119.944984,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 dd818859555239c9be2da861f91bab10,38.996228,-119.952016,Zephyr Cove,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 ddd4a6225d2849ac3bf4340185076098,44.833891,-122.9974,Marion County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+de1905542ad5d9827712899b1a4238fa,21.872841,-159.449133,Poipu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+df15617f469563d1af17384cc6d07a64,19.569523,-155.964611,Kahaluu-Keauhou,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e02ea098c5f2a76f10634e82de28f505,21.403647,-157.79633,Kaneohe,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e081f7b065e522be2a209ef38dd14fa4,21.60735,-157.908725,Hauula,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e0b575be2e9732203a4f6552e89ddb7c,19.924519,-155.875951,Waikoloa Beach Resort,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e15ca568d8664d580b80f35ea8ffa78c,39.051973,-120.114164,El Dorado County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 e335df0f526667c286067510329ab6ad,44.852083,-123.221399,Monmouth,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e3bf7f6a446c1f860409801800deb1d6,48.364312,-124.622555,Neah Bay,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e3db0dc2d1e6d918579c296ff653eb00,21.345491,-157.902328,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e6346b1329dc4ddbecca897e0e7303c5,39.076259,-119.945202,Douglas County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 e6daa85f011e7a264b5baf882cb5778e,44.877665,-124.035311,Lincoln Beach,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e7588cc1799b510523c2d5b9e9322cd0,36.070899,-115.955197,Pahrump,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e770ca41a70f192906ecfaca4ab03277,44.98484,-124.008398,Lincoln City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+e870f3a2a2d8135e41100ca7419911f1,21.298869,-157.796226,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e8fa73459a771eb6601d47b454a69b05,44.907095,-123.055161,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 e9c92083cbff89a36f876a258e67079a,44.865182,-123.026653,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 ea2a5e8287bd3284821f6fe8808ae547,44.830698,-122.795813,Sublimity,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 eab57ca25488501be8dbe1f01089c720,44.902412,-123.060443,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ebfa8458dad7a6391454593bdfd793bb,20.233503,-155.800314,Kapaau,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ebfb491d5245295522f1116a07930374,21.385108,-157.747326,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ecb33a0717b557902613b6dba99c314c,19.640456,-155.998545,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ede5cc04533fc150a85f71e4a80c030a,20.920985,-156.690432,Kaanapali,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 ee8a0c4ce7fd7d6658752c4ae2164843,44.946579,-123.022804,Salem,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+eebfafe48637b411dedad4041a22d42c,20.733893,-156.454425,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ef87954db222d8a435ab31d8ee9060e8,21.488269,-158.043349,Schofield Barracks,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 ef90afca5dfb35eecbddc73844ba1d48,36.904372,-119.122702,Fresno County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+efe60f9ec7ad3fcb2114018e87d7c6af,21.302419,-158.070783,Kalaeloa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f023c6dfe0bc5014423969aeb4e6c667,21.298403,-157.835745,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f0d7c5574de73d31d51a9fa2e80a63f5,21.278744,-157.747548,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f12b6340801f180f4bf06ccdb4cbe3dd,21.417274,-157.765215,Kaneohe,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f23d975d1c78da18a4ba3e80bbe3051c,21.256645,-157.80155,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f2593ffd71c9bf84d89d00612df47f79,21.300106,-157.861408,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f35256394794f972e7422e2607a5cd93,19.677069,-155.983824,Kaiminani,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f35bcb46306123623c24136c0a767bbc,21.281937,-157.831875,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f3807a12da81083b9ae278efc019bfad,19.924083,-155.889147,Waikoloa Beach Resort,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f42a58150d5b9388d982a409669ce2af,20.75705,-156.458969,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 f4480d06b457498831f9a2ecca6699e0,38.958683,-119.885206,Kingsbury,place,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+f5e499a3f34725c94721b845a8c27d5e,20.996091,-156.657628,Kapalua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f73653250ee841dcadcf6c7154080301,19.614807,-155.031947,Keaau,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f7a48f9faeb1ae174071e6cb857736e2,21.884367,-159.484032,Poipu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f8373a478c5e3265dfc7e736736613e6,19.667673,-155.998417,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f846886fa5762d7a7f24c838190855c2,21.398109,-157.979255,Pearl City,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f857397f0ed1f3e7173147c8df5e9904,21.281183,-157.778322,East Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 f87639950a439e3b4d13d080b472a99c,46.823415,-119.168183,Othello,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+f8ccd7c4e68e1718f86b9a9df8f8f758,21.440045,-157.823912,Ahuimanu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 fb1e01eee4179401394ab37d430cad5a,36.151895,-115.422999,Clark County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
 fd7d948d090f4309bd32cc216333017e,36.694115,-118.874223,Tulare County,county,US Census cartographic boundary files 2023 (1:500k),2026-10-17
+fde3c57bba78b7fdafe8c22bdbf0e1dc,19.928674,-155.883374,Waikoloa Beach Resort,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+fe122f93d6f15a66cd4d76769623c155,19.489537,-155.909766,Captain Cook,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+fe33b6d99c516f167d41101b00ebec18,19.505841,-155.947404,Kealakekua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+ff0ae4076a16feebc8aef7245d3f1d6a,21.494592,-158.037233,Wahiawa,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 ff5ecd0d10532a2db3beb2208aedb110,46.828701,-119.159901,Othello,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 ff95cea28a25bd21dad4ac13bdda1237,45.009848,-123.015529,Keizer,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+fff72b51c1afb16485187fc643634d20,20.784193,-156.46464,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
