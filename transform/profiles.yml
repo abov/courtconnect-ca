@@ -7,3 +7,13 @@ courtconnect:
       path: courtconnect.duckdb   # relative to where you run dbt (repo root)
       threads: 4
 
+
+# Read by the Elementary CLI (edr, .venv-edr) to find the observability tables dbt writes into the elementary schema; dbt itself uses `courtconnect` above.
+elementary:
+  target: default
+  outputs:
+    default:
+      type: duckdb
+      path: "{{ env_var('COURTCONNECT_DB', 'courtconnect.duckdb') }}"   # edr runs dbt from its own folder: ingestion/observability_report.py passes an absolute path
+      schema: elementary
+      threads: 1

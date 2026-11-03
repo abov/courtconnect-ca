@@ -1,6 +1,6 @@
 # RacketConnect
 
-**Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada, Oregon and Washington** (scope: [ADR 0014](docs/decisions/0014-calneva-scope.md), growing to five states in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
+**Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada, Oregon and Washington** (scope: [ADR 0014](docs/decisions/0014-ca-nv-scope.md), growing to five states in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
 
 **[Open the live map](https://abov.github.io/courtconnect-ca/)** · [Data model and lineage (dbt docs)](https://abov.github.io/courtconnect-ca/dbt-docs/)
 
@@ -134,7 +134,7 @@ Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routi
 ## Roadmap
 Done:
 - [x] Venue clustering, statewide extract, Overture second source, watch events, link-outs, suggest-a-change flow, duplicate guard
-- [x] California + Nevada ([ADR 0014](docs/decisions/0014-calneva-scope.md)): 545 Nevada venues live; resort and casino courts closed by the owner (2026-10-17)
+- [x] California + Nevada ([ADR 0014](docs/decisions/0014-ca-nv-scope.md)): 545 Nevada venues live; resort and casino courts closed by the owner (2026-10-17)
 - [x] Street addresses and a city on every pin (OSM tags, nearest Overture address, Nominatim, Census boundaries; inferred ones labelled; homes show city only)
 - [x] Every sheet sport in the dropdown (81), with About cards and blurbs; sports with no place yet are greyed "(none yet)" with a report-a-venue link, never fake pins ([`docs/sport_discovery_plan.md`](docs/sport_discovery_plan.md))
 - [x] Padel kept apart from pop tennis, every Padel pin audited, directories swept, "Opening soon" pins ([`docs/padel_scan.md`](docs/padel_scan.md))
@@ -144,7 +144,7 @@ Done:
 - [x] Phone and accessibility follow-ups: 44 px touch targets, a tick / "?" badge on zoomed pins so status does not rely on colour, Near me distances (nearest-first lists), better glyph and chip contrast, and a computed "(north courts, 6 courts)" suffix that tells apart venues sharing an inferred name
 - [x] Load time measured on throttled Slow 4G / Fast 3G: fine for the beta ([`docs/archive/session_digest.md`](docs/archive/session_digest.md))
 
-Next, in order (details in [`CLAUDE.md`](CLAUDE.md) "Open, in order"):
+Next, in order (details in [`docs/status.md`](docs/status.md) "Open, in order"):
 - [ ] Beta prep (owner): exclude your own visits in GoatCounter on each device, then send the invites
 - [ ] Beta feedback round with friends (December; [`docs/feedback_round.md`](docs/feedback_round.md)), then rank what to build with the findings
 - [ ] Facility scans (UC and CSU campuses, military MWR) and club-named venues, one family at a time

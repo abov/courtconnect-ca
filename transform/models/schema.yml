@@ -291,6 +291,20 @@ seeds:
               arguments:
                 values: ['dead']
 
+  - name: wall_type_sports
+    description: >
+      Which sports a hitting wall of each type supports (ADR 0032), replacing the app's WALL_SPORT table. Inferred from the wall's structure, never confirmed
+      play. `public_only` = yes means the sport counts only at walls marked public (Knuckle Racket). Wall types not listed (the unchecked handball-type walls)
+      support nothing.
+    columns:
+      - name: wall_type
+        tests: [not_null]
+      - name: sport
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('dim_sport')", field: sport_name}
+
   - name: sport_also_played
     description: >
       A court or place that counts for sport `sport` also counts for `also_sport` (racquetball courts host 4-wall paddle). Derived rows
@@ -637,6 +651,15 @@ models:
 
   - name: dim_court
     description: One row per physical court / sports-centre record from OpenStreetMap.
+    tests:   # observability (docs/data_observability.md): warn only, they never block a build
+      - elementary.volume_anomalies:
+          tags: [observability]
+          config: {severity: warn}
+          arguments: {days_back: 90, min_training_set_size: 3}
+      - elementary.dimension_anomalies:
+          tags: [observability]
+          config: {severity: warn}
+          arguments: {dimensions: [region], days_back: 90, min_training_set_size: 3}
     columns:
       - name: court_id
         tests: [unique, not_null]
@@ -676,15 +699,24 @@ models:
               arguments: {to: "ref('dim_sport')", field: sport_id}
 
   - name: dim_venue
-    description: One row per facility, from OSM courts grouped by proximity (ADR 0003) plus Overture places (ADR 0005).
+    description: >
+      One row per venue: court facilities (OSM courts grouped by proximity, ADR 0003, plus Overture places, ADR 0005, plus hand-added rows) and
+      the hitting walls that stand at no listed venue (ADR 0032). A wall at a listed venue adds its sports to that venue instead.
     columns:
       - name: venue_id
         tests: [unique, not_null]
+      - name: venue_kind
+        description: courts = a court facility; hitting_wall = a wall pin that stands at no listed venue (ADR 0032).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['courts', 'hitting_wall']
       - name: venue_source
         tests:
           - accepted_values:
               arguments:
-                values: ['osm', 'osm+places', 'places_only', 'manual']
+                values: ['osm', 'osm+places', 'places_only', 'manual', 'walls']
       - name: indoor_basis
         description: Where has_indoor comes from. has_indoor is true/false only with a basis; null (unknown) otherwise. page_quote and footprint are reserved for later evidence.
         tests:
@@ -789,7 +821,7 @@ models:
                 values: ['strong', 'weak']
 
   - name: bridge_venue_sport
-    description: Which sports are played at which venue, and which source (OSM, places, or both) says so.
+    description: Which sports are played at which venue, and which source (OSM, places, manual or a hitting wall) says so. in_wall = inferred from a wall's type (ADR 0032), never confirmed play.
     columns:
       - name: venue_id
         tests:
@@ -898,6 +930,35 @@ models:
               arguments:
                 values: "{{ var('regions').keys() | list }}"
 
+  - name: int_venue_court
+    description: >
+      One row per court facility (the former dim_venue body): OSM courts grouped by proximity, Overture places and hand-added rows, venue_kind 'courts'.
+      core.dim_venue unions it with int_wall_venue (ADR 0032). Split out so hitting walls can link to court venues without a dependency cycle.
+
+  - name: int_venue_sport_courts
+    description: >
+      Which sports are played at which court venue and which court source says so (the former bridge_venue_sport body). core.bridge_venue_sport
+      adds the hitting-wall rows (ADR 0032).
+
+  - name: int_venue_sport_walls
+    description: >
+      Sports a hitting wall supports, per venue (ADR 0032): the court venue the wall links to, else its own wall venue. Sports come from the wall's
+      type (seeds/wall_type_sports.csv), inferred from the structure and never confirmed play; courts = number of walls.
+    columns:
+      - name: venue_id
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: "ref('dim_venue')", field: venue_id}
+
+  - name: int_wall_venue
+    description: >
+      Hitting-wall pins that stand at no listed court venue, as venues of their own (ADR 0032; venue_kind 'hitting_wall', venue_source 'walls'), with the
+      same columns as int_venue_court. A pin linked by int_wall_venue_link is a feature of that venue instead, so no pin is listed twice.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+
   - name: int_wall_venue_link
     description: >
       Links a hitting-wall pin to the one listed venue it stands at (by `near_venue_name`, else nearest within `wall_venue_link_radius_m`),
@@ -931,6 +992,18 @@ models:
       The table behind the map. One row per venue and sport (a venue with tennis and pickleball has two rows). Venues are clusters of nearby
       OpenStreetMap courts merged with Overture places and hand-curated entries (ADR 0002, 0003). Exported to app/data/venues.json by
       ingestion/export_app_data.py.
+    tests:   # observability (docs/data_observability.md): warn only, they never block a build
+      - elementary.volume_anomalies:
+          tags: [observability]
+          config: {severity: warn}
+          arguments: {days_back: 90, min_training_set_size: 3}
+      - elementary.dimension_anomalies:
+          tags: [observability]
+          config: {severity: warn}
+          arguments: {dimensions: [region], days_back: 90, min_training_set_size: 3}
+      - elementary.schema_changes:
+          tags: [observability]
+          config: {severity: warn}
     columns:
       - name: venue_id
         description: Stable id of the venue cluster (dim_venue).

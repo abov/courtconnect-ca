@@ -48,3 +48,10 @@ pushitreplays.com,PUSHIT racket sports events hub,aggregator,All,unknown,not rea
 mypickleballconnect.com,My Pickleball Connect,aggregator,Pickleball,CA+NV+OR,not read,candidate,,,"Aggregator in search results; read the organizer page before adding any event"
 active.com,Active Network (City of Reno PRCS listings),platform,Table Tennis;Tennis,NV,not read,candidate,,,"Reno rec table tennis sessions look like classes not tournaments; read before adding"
 foundrypadel.com,Foundry Padel,organizer,Padel,OR,WebFetch,active,2026-11-02,2026-11-02,"Portland indoor padel club; Foundry Open Dec 5-6 2026 and Foundry League on the home page"
+seattlebadminton.com,Seattle Badminton Club,organizer,Badminton,WA,WebFetch,active,2026-11-02,2026-11-02,Kirkland club; calendar page lists SBC Open Nov 6-8 2026; drop-in hours are an image
+spttc.net,Seattle Pacific Table Tennis Club,organizer,Table Tennis,WA,WebFetch,active,2026-11-02,2026-11-02,Bellevue club; open-play hours and drop-in price; no tournament dates posted 2026-11-02
+jampadelclub.com,Jam Padel,organizer,Padel,WA,WebFetch,active,2026-11-02,2026-11-02,"Bellevue padel club (formerly Pacific Padel Project); open play, no league dates yet"
+sjcc.org,Stroum Jewish Community Center,organizer,Pickleball,WA,WebFetch,active,2026-11-02,2026-11-02,Mercer Island; open court play and four Dec 2026 tournaments on the series page
+meetup.com,Meetup,platform,Tennis;Pickleball,WA,WebFetch,active,2026-11-02,2026-11-02,Group pages are public; read members and upcoming events
+cob.org,City of Bellingham Parks and Recreation,organizer,Badminton,WA,WebFetch,active,2026-11-02,2026-11-02,Adult badminton league at Bloedel Donovan Park; no season dates on the page
+washingtonracquetball.org,Washington Racquetball Association,governing_body,Racquetball,WA,WebFetch,active,2026-11-02,,Home page's newest post is Feb 2025; the tournaments and events pages were not read

@@ -48,7 +48,7 @@ Between syncs, the suggest-a-change flow (ADR 0008) turns an approved issue into
 
 ## CI/CD (GitHub Actions)
 
-- **`ci.yml`** (every push and PR) never calls live sources. It loads a small real-data sample (`ci/fixtures`, Pasadena area), runs the gate scripts, then `dbt build`. Gates: seed evidence, sport names, export freshness, review-priority file, sync-reports test, gold-set match check, scorecard no-regression against main, and the offline LLM-reader guard rail.
+- **`ci.yml`** (every PR, every push to main, and by hand) never calls live sources. It loads a small real-data sample (`ci/fixtures`, Pasadena area), runs the gate scripts, then `dbt build`. Gates: seed evidence, sport names, export freshness, review-priority file, sync-reports test, gold-set match check, scorecard no-regression against main, and the offline LLM-reader guard rail.
 - **`issue-to-pr.yml`**: approved issue to a PR that edits one seed row.
 - **`pages.yml`**: builds dbt docs and deploys `app/` to GitHub Pages. Runs on every push to main that touches `app/**` or the workflow (so merging an app or export change publishes it), and by hand (`workflow_dispatch`), e.g. after a change under `transform/` that should reach the dbt docs.
 - Never hand-resolve `venues.json` conflicts: take main's copy, rebuild, re-export.

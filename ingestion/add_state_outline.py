@@ -1,4 +1,4 @@
-"""Add the state lines of every covered state that is missing from app/data/calneva_outline.json (drawn under the pins on the map).
+"""Add the state lines of every covered state that is missing from app/data/state_outline.json (drawn under the pins on the map).
 
     python ingestion/add_state_outline.py
 
@@ -16,7 +16,7 @@ from shapely.geometry import mapping
 
 from overpass import REGIONS, STATE_AREAS
 
-OUT = Path(__file__).resolve().parent.parent / "app" / "data" / "calneva_outline.json"
+OUT = Path(__file__).resolve().parent.parent / "app" / "data" / "state_outline.json"
 
 
 def ring(coords) -> list:

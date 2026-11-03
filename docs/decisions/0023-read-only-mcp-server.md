@@ -1,6 +1,6 @@
 # 0023. An optional read-only MCP server over `venues.json`
 
-Date: 2026-10-23. Status: **proposed**. Recommendation: **no-go on a hosted server; go on a small local one only after the beta shows demand**, and ship a cheaper static alternative first (see Alternatives, option 2). Nothing here is built or scheduled.
+Date: 2026-10-23. Status: **deferred** (2026-11-02 review: not rejected; revisit after the beta shows demand). Recommendation: **no-go on a hosted server; go on a small local one only after the beta shows demand**, and ship a cheaper static alternative first (see Alternatives, option 2). Nothing here is built or scheduled.
 
 ## Context
 CLAUDE.md lists "Optional read-only MCP server over `venues.json` (was 8; ADR first)" under After beta. The mission (ADR 0015) is one map for every racket sport in CA + NV. Today the only way to use the data is the web page. More people now ask an AI assistant "where can I play padel near Reno?"; those assistants can only answer from our data if it is reachable in a form they can query.
