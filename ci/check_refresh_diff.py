@@ -8,7 +8,7 @@ Prints `R0` (exit 0) or `R3 escalate` with the reasons (exit 1). The agent still
 (stage 0), but labels it R3 and lists the reasons under "needs owner decision".
 R0 = every changed file is on the allowlist, venues added + removed <= 2% of the base count, venues with a changed
 field <= 5%. Venue count drop <= 1% is also checked here (the scorecard check repeats it from the trend line).
-Every other top-level array of the export (events, social, walls, platforms, sports) is diffed too, and any URL
+Every other top-level array of the export (events, social, platforms, sports; hitting walls are venues now, so they count in the venue caps) is diffed too, and any URL
 that appears in the new export but not the old one is counted: a link swap is the cheapest way to misuse a refresh
 (docs/merge_gate_threat_model.md, gaps 2 and 3). The caps below were set from past refresh commits (the 2026-10
 monthly refresh changed 12 of 90 events and put a new URL on 38 of 10,266 surviving venues).
@@ -36,7 +36,7 @@ MAX_ADD_REMOVE_PCT = 2.0
 MAX_CHANGED_PCT = 5.0
 MAX_DROP_PCT = 1.0
 MAX_URL_VENUES_PCT = 0.5     # surviving venues that gain a URL they did not have (website or link-out)
-MAX_ROWS_PCT_OTHER = 20.0    # events / social / walls / platforms rows added, removed or changed (floor MIN_ROWS_OTHER)
+MAX_ROWS_PCT_OTHER = 20.0    # events / social / platforms rows added, removed or changed (floor MIN_ROWS_OTHER)
 MIN_ROWS_OTHER = 5
 MAX_NEW_URLS_OTHER = 5       # new URLs per non-venue array; sports is only URL-checked (counts and blurbs follow the sheet)
 ROWS_UNCHECKED = {"sports"}

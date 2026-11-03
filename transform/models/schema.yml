@@ -913,7 +913,7 @@ models:
 
   - name: mart_wall_pins
     description: >
-      One row per hitting-wall map pin (the app's walls). OSM walls of the same type within `wall_group_radius_m` of each other
+      One row per hitting-wall map pin; pins that stand at no listed court venue become hitting-wall venues (int_wall_venue, ADR 0032). OSM walls of the same type within `wall_group_radius_m` of each other
       (a row of handball courts at a school) share one pin at their centre; `wall_count` says how many walls stand there.
     columns:
       - name: wall_key

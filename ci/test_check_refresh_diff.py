@@ -15,7 +15,6 @@ def export():
                    for i in range(1000)],
         "events": [{"n": f"Event {i}", "s": "2026-11-01", "u": f"https://events.example.org/{i}", "k": ""} for i in range(40)],
         "social": [{"n": f"Group {i}", "u": f"https://social.example.org/{i}", "g": f"https://social.example.org/{i}/join"} for i in range(20)],
-        "walls": [{"n": f"Wall {i}", "wl": f"v{i}"} for i in range(100)],
         "platforms": [{"n": f"App {i}", "u": f"https://apps.example.org/{i}"} for i in range(10)],
     }
 
@@ -64,7 +63,6 @@ assert any("social" in r for r in reasons_for(swap_in_array("social", "g", 6)))
 assert any("platforms" in r for r in reasons_for(swap_in_array("platforms", "u", 6)))
 assert any("sports" in r and "new URLs" in r for r in reasons_for(lambda d: [s.__setitem__("u", {"l": "https://evil.example.net/" + s["n"]}) for s in d["sports"][:6]]))
 assert any("events" in r and "rows" in r for r in reasons_for(lambda d: [e.__setitem__("n", "Rewritten") for e in d["events"][:10]]))  # 10 > 20% of 40 = 8
-assert any("walls" in r for r in reasons_for(lambda d: [w.__setitem__("wl", "v999") for w in d["walls"][:25]]))
 
 # a nested link-out URL (venue `ac`) counts the same as a website
 def swap_link_out(d):
