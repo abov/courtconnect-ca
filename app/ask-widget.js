@@ -18,8 +18,8 @@
   #askpanel .ai { border-top: 1px solid var(--line); padding-top: 6px; margin-top: 6px; }
   #askpanel .ai b { display: block; } #askpanel .ai span { color: var(--muted); font-size: 13px; }
   #askpanel .ai a { color: var(--accent); }
-  #askchips { display: flex; flex-wrap: wrap; gap: 6px; }
-  #askchips button { font: inherit; font-size: 13px; padding: 5px 10px; border-radius: var(--r-pill, 999px); border: 1px solid var(--line); background: var(--chip); color: var(--text); cursor: pointer; }
+  .askchips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .askchips button { font: inherit; font-size: 13px; padding: 5px 10px; border-radius: var(--r-pill, 999px); border: 1px solid var(--line); background: var(--chip); color: var(--text); cursor: pointer; }
   #askform { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); }
   #askq { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 8px 10px; border-radius: var(--r-sm, 8px); border: 1px solid var(--line); background: var(--bg); color: var(--text); }
   #askform button { font: 700 14px var(--font-head, system-ui); padding: 8px 14px; border: 0; border-radius: var(--r-sm, 8px); background: var(--accent); color: var(--on-accent); cursor: pointer; }
@@ -27,7 +27,7 @@
     #askfab { right: auto; left: 12px; bottom: calc(58vh + 12px); bottom: calc(58dvh + 12px); top: auto; }   /* phones: the map is the top 42dvh, so sit at its bottom-left */
     #askpanel { left: 0; right: 0; bottom: 0; width: auto; height: 70dvh; border-radius: var(--r-md, 12px) var(--r-md, 12px) 0 0; padding-bottom: env(safe-area-inset-bottom); }
   }
-  @media (pointer: coarse) { #askfab, #askchips button, #askform button, #askclose { min-height: 44px; } }`;
+  @media (pointer: coarse) { #askfab, .askchips button, #askform button, #askclose { min-height: 44px; } }`;
 
   function el(tag, attrs, text) {
     const e = document.createElement(tag);
@@ -71,16 +71,23 @@
         m.appendChild(d);
       });
       add(m);
+      if (r.chips && r.chips.length) addChips(r.chips);
     }
-    function go(q) { if (!q.trim()) return; add(el("div", {class: "am me"}, q)); render(ask.answer(q)); }
+    // tappable next steps; only the newest row stays, so the log doesn't fill with stale buttons
+    function addChips(list) {
+      const chips = el("div", {class: "askchips"});
+      list.forEach(t => { const b = el("button", {type: "button"}, t); b.addEventListener("click", () => go(t)); chips.appendChild(b); });
+      add(chips);
+    }
+    function go(q) {
+      if (!q.trim()) return;
+      log.querySelectorAll(".askchips").forEach(n => n.remove());
+      add(el("div", {class: "am me"}, q)); render(ask.answer(q));
+    }
 
     function intro() {
       add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Racket sports, courts and gear only. Nothing is booked or paid here. Your sport and city are remembered in this browser only."));
-      const chips = el("div", {id: "askchips"});
-      ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "Where can I buy a paddle?"].forEach(t => {
-        const b = el("button", {type: "button"}, t); b.addEventListener("click", () => go(t)); chips.appendChild(b);
-      });
-      add(chips);
+      addChips(root.Ask.starters);
     }
 
     function open(on) {
