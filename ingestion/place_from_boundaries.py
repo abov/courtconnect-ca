@@ -24,6 +24,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SEED = ROOT / "transform" / "seeds" / "venue_place_boundary.csv"
 FIELDS = ["venue_id", "lat", "lon", "place_name", "place_kind", "source", "checked_on"]
 SOURCE = "US Census cartographic boundary files 2023 (1:500k)"
+SOURCE_NEAR = SOURCE + ", nearest shape (pin just offshore of the simplified coastline)"
+NEAR_PLACE_DEG = 0.005   # ~500 m: the 1:500k files cut the coast by tens of metres, so a shore pin can fall just outside every shape
+NEAR_COUNTY_DEG = 0.01
 
 
 def main() -> None:
@@ -55,6 +58,16 @@ def main() -> None:
         "select p.venue_id, s.name from pin_geom p join shape s on s.kind = 'county' and st_contains(s.geom, p.g)"
     ).fetchall():
         found.setdefault(vid, (f"{name} County", "county"))
+    near: set[str] = set()
+    for kind, limit, label in (("place", NEAR_PLACE_DEG, "{}"), ("county", NEAR_COUNTY_DEG, "{} County")):
+        for vid, name in con.execute(
+            f"""select venue_id, arg_min(name, d) from (
+                    select p.venue_id, s.name, st_distance(s.geom, p.g) as d
+                    from pin_geom p join shape s on s.kind = '{kind}' and st_dwithin(s.geom, p.g, {limit})) group by venue_id"""
+        ).fetchall():
+            if vid not in found:
+                found[vid] = (label.format(name), kind)
+                near.add(vid)
     old = {}
     if SEED.exists():
         with SEED.open(newline="", encoding="utf-8") as f:
@@ -64,13 +77,13 @@ def main() -> None:
         if vid in found:
             name, kind = found[vid]
             old[vid] = {"venue_id": vid, "lat": round(lat, 6), "lon": round(lon, 6), "place_name": name, "place_kind": kind,
-                        "source": SOURCE, "checked_on": today}
+                        "source": SOURCE_NEAR if vid in near else SOURCE, "checked_on": today}
     with SEED.open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS, lineterminator="\r\n")
         w.writeheader()
         w.writerows(sorted(old.values(), key=lambda r: r["venue_id"]))
     kinds = [k for _, k in found.values()]
-    print(f"place {kinds.count('place')}, county only {kinds.count('county')}, none {len(pins) - len(found)}")
+    print(f"place {kinds.count('place')}, county only {kinds.count('county')} (of these {len(near)} by nearest shape), none {len(pins) - len(found)}")
 
 
 if __name__ == "__main__":

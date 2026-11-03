@@ -61,6 +61,9 @@ deps:             ## install dbt packages (Elementary); needed once per checkout
 build: deps       ## seeds + models + tests
 	$(DBT) build
 
+build-changed:    ## only what changed since the last good build + downstream (falls back to a full build; ARGS=--full or --dry-run; not for raw-data loads)
+	$(PY) ingestion/build_changed.py $(ARGS)
+
 observability:    ## Elementary report from the local warehouse (docs/data_observability.md); run make build first
 	$(PY) ingestion/observability_report.py
 

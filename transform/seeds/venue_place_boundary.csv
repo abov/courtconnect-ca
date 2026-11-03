@@ -216,6 +216,7 @@ venue_id,lat,lon,place_name,place_kind,source,checked_on
 75a23c8aa9bf8517ebe9d65dfe7d21cf,19.697371,-155.073584,Hilo,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 75b1555aee743f09020e20d533614e66,21.340196,-158.106361,Honolulu County,county,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 75db30e2c3d056a693564d0eb8afddd1,21.407708,-157.759356,Kailua,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
+7651a820393ca97ce013bbf5220622da,21.478489,-158.225985,Makaha,place,"US Census cartographic boundary files 2023 (1:500k), nearest shape (pin just offshore of the simplified coastline)",2026-11-02
 779a7d872400d6acc5024b986d7e78db,21.286909,-157.828092,Urban Honolulu,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 77ecc4b438fa46f4d046602b04bef1e9,20.762838,-156.456636,Kihei,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
 7888065f2f0c3e54079321d1943e63c9,20.986897,-156.661062,Napili-Honokowai,place,US Census cartographic boundary files 2023 (1:500k),2026-11-02
