@@ -1,5 +1,5 @@
 name: Report a tournament or event
-description: Tell us about a racket-sport tournament or event we are missing (California, Nevada, Oregon, Washington or Hawaii).
+description: Tell us about a racket-sport tournament or event we are missing (California, Nevada, Oregon, Washington, Arizona or Hawaii).
 title: "Event: "
 labels: ["event-report"]
 body:
