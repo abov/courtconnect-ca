@@ -72,8 +72,8 @@ Stale or undated venues (first 4):
 |---|---|
 | new | 113 |
 | resolved | 75 |
-| needs_location | 10 |
 | rejected | 10 |
+| needs_location | 10 |
 | needs_visit | 1 |
 | confirmed | 1 |
 
