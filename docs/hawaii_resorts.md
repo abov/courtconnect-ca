@@ -1,7 +1,7 @@
 # Hawaii resort and hotel courts
 
 Read 2026-11-02. The owner closed Nevada resort and casino courts (2026-10-17). For Hawaii the owner decided on 2026-11-02 to add resort courts as members / private (ADR 0028). Each resort has a `confirmed` row in `transform/seeds/venue_leads.csv` (`hi-*` lead ids) and 16 `manual_venues` rows (`hi-resort-*`, one per sport). Access is what the page supports: `private` = resort guests or eligible patrons (Fairmont Orchid, Mauna Lani, Turtle Bay, Hale Koa; non-guest play is not stated); `members` = members and guests (Holua, Hanalei Bay, Royal Kona); `club` = pass or drop-in fee sold to visitors, so not shown as members only (Royal Lahaina, Kapalua, Wailea). Counts are only what the source page states; directory counts are noted as unverified. Fairmont Orchid (page text did not load) and Royal Kona (page 403) are `reported`; Kapalua rests on a news article.
-No link-outs and no events were added.
+Three link-outs (`venue_actions.csv`, `hi-resort-*`): Royal Lahaina passes, Wailea daily court fee, Kapalua drop-in rates. No events were added.
 
 | Resort | Island, city | Sports (as stated) | Who may play | Source (read 2026-11-02) |
 |---|---|---|---|---|
@@ -30,6 +30,6 @@ Not added to `watch_events.csv` (they are team league play at resorts now on the
 - Dates, courts and facilities "may change" per the page. These are league play for registered teams; spectator access is not stated. Mixed 40 and Over (Sept 26-27 2026, Royal Kona and Fairmont Orchid) has already passed.
 
 ## Left open
-- Royal Lahaina has a second Overture-only pin ("Royal Lahaina Tennis Ranch", 20.8598, -156.6618) that is not at the ranch; check it for removal (`closed_places`).
+- Fixed 2026-11-02: Royal Lahaina's second Overture record (wrong coordinates in Lahaina town) is linked to the ranch's court group in `place_venue_link.csv`, so the stray pin is gone.
 - Hale Koa's tennis courts are not located separately; Hanalei Bay's pins sit at the geocoded address, not the courts.
 - Grand Hyatt Kauai and Hickam are still unread; add them the same way if wanted.
