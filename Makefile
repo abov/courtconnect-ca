@@ -36,6 +36,9 @@ extract-places:   ## pull racket-related places from Overture Maps (reads S3 dir
 search-terms:     ## rebuild the sport name-keyword list (used to find places by business name)
 	$(PY) ingestion/build_search_terms.py
 
+extract-walls:    ## hitting walls (1-wall backboards, 3-wall handball) for every covered state (owner 2026-11-02; NOT part of make extract; ~10-20 min per big state)
+	for a in $(STATES); do $(PY) ingestion/extract_osm_walls.py --area $$a || exit 1; done
+
 extract-la:       ## quick version: Los Angeles only
 	$(PY) ingestion/extract_osm_courts.py --area la
 	$(PY) ingestion/extract_osm_parents.py --area la

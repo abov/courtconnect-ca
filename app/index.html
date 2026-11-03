@@ -57,7 +57,7 @@
   h2, h3, h4, .nm, .seg .chip, .callout b, #list li.lh, #list li.thisweek .lh2, label.l, .join h3 { font-family: var(--font-head); }
   .nm { letter-spacing: -.005em; }
   .sub { color: var(--muted); font-size: 13px; }
-  .controls { padding: 12px 16px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
+  .controls { padding: 12px 16px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }   /* minmax: a wide child (the sport chip row) scrolls inside the panel instead of stretching it */
   label.l { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 3px; }
   select, input[type=search] { width: 100%; padding: 7px 9px; font: inherit; color: var(--text); background: var(--bg);
          border: 1px solid var(--line); border-radius: var(--r-sm); }
@@ -119,6 +119,8 @@
   .pcard a.btn.primary { background: var(--accent); color: var(--on-accent); }
   .dlg-b .apps p { margin: 6px 0; } .dlg-b .facts { color: var(--muted); font-size: 12.5px; }
   .quick { margin-bottom: 8px; }
+  .quick .chip.pick { display: inline-flex; align-items: center; flex: 0 1 auto; } .quick .chip.pick[hidden] { display: none; } .quick .chip.pick .sico { margin-right: 5px; color: inherit; }   /* sport chips: icon + name, the name always shown */
+  @media (max-width: 800px) { .quick { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; } .quick .chip { flex: none; white-space: nowrap; } }   /* phones: one swipeable row instead of three wrapped lines */
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
   #list li.thisweek { position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--accent) 6%, var(--panel)); } #list li.thisweek .none { margin: 0; padding: 2px 16px 10px; } #list li.thisweek .lh2 { margin: 0; padding: 8px 16px 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
@@ -297,7 +299,6 @@
       <label class="l" for="sport">Sport</label>
       <div class="seg quick" id="quicksport" role="group" aria-label="Quick sport picks">
         <button class="chip" id="sportMonth" type="button" aria-pressed="false" hidden></button>
-        <button class="chip" id="sportTop" type="button" aria-pressed="false" hidden></button>
       </div>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
       <button class="chip callout" id="peopleBtn" type="button" aria-haspopup="dialog" hidden></button>
@@ -1450,15 +1451,30 @@ function syncControls() {
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
   for (const b of document.querySelectorAll("[data-o]")) b.setAttribute("aria-pressed", state.offers.has(b.dataset.o));
 }
-// Two quick picks above the full list: the monthly featured sport (data/featured_sport.json, set at each monthly run) and the most popular sport, always Tennis.
+// Quick picks above the full list: one chip per main racket sport (the dropdown stays the full list), plus the monthly featured sport
+// (data/featured_sport.json, set at each monthly run). A chip hides when its sport is not in the dropdown (the watch view lists only sports with events).
 let featured = null;
-const QUICK = [["sportMonth", () => featured && featured.sport, "Racket sport of the month: "], ["sportTop", () => "Tennis", "Most popular: "]];
+const PICKS = ["Tennis", "Pickleball", "Padel", "Badminton", "Squash", "Table Tennis", "Racquetball"];
+const QUICK = [["sportMonth", () => featured && featured.sport, "Racket sport of the month: "]];
+function buildSportPicks() {
+  const wrap = $("quicksport");
+  for (const n of PICKS) {
+    const b = el("button", {class: "chip pick", type: "button", "aria-pressed": "false", hidden: ""});
+    b.dataset.sport = n; b.append(iconSpan([familyOf(n)]), n);
+    wrap.append(b);
+  }
+}
 function syncQuickSports() {
-  const sel = $("sport");
+  const sel = $("sport"), has = i => i >= 0 && [...sel.options].some(o => o.value === String(i));
   for (const [id, name, prefix] of QUICK) {
     const b = $(id), n = name(), i = n ? sports.findIndex(s => s.n === n) : -1;
-    b.hidden = i < 0 || ![...sel.options].some(o => o.value === String(i));   // watch view lists only sports with events
+    b.hidden = !has(i);
     b.dataset.i = String(i); b.textContent = prefix + (n || "");
+    b.setAttribute("aria-pressed", state.sport === i);
+  }
+  for (const b of document.querySelectorAll("#quicksport .pick")) {
+    const i = sports.findIndex(s => s.n === b.dataset.sport);
+    b.hidden = !has(i); b.dataset.i = String(i);
     b.setAttribute("aria-pressed", state.sport === i);
   }
 }
@@ -1788,7 +1804,8 @@ function setMode(m) {
 function initControls() {
   const sel = $("sport");
   populateSports();
-  for (const [id] of QUICK) $(id).addEventListener("click", e => { const i = +e.currentTarget.dataset.i; sel.value = String(state.sport === i ? -1 : i); sel.dispatchEvent(new Event("change")); });
+  buildSportPicks();
+  for (const b of [...QUICK.map(q => $(q[0])), ...document.querySelectorAll("#quicksport .pick")]) b.addEventListener("click", e => { const i = +e.currentTarget.dataset.i; sel.value = String(state.sport === i ? -1 : i); sel.dispatchEvent(new Event("change")); });
   for (const b of document.querySelectorAll("#tiers [data-t]")) b.addEventListener("click", () => {
     state.tier = state.tier === +b.dataset.t ? 0 : +b.dataset.t; trackD("tier", String(state.tier));
     const before = state.sport; populateSports(); syncQuickSports();

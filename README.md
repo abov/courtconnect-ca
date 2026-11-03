@@ -10,14 +10,23 @@
 
 *RacketConnect is a discovery tool for all racket sports: it finds where to play or watch, then sends you to the venue's or organizer's own site. It sells no tickets and takes no bookings or payments.*
 
-Tennis, padel, pickleball and squash and dozens of lesser-known and up-and-coming racket sports are booming, but information about *where to play* is scattered and messy. Court finders each cover one sport, or only places you can book. This project is one free map of all of them, from free park courts and hitting walls to private clubs. It collects the data, cleans it, checks it, and says honestly how complete it is.
+Tennis, padel, pickleball and squash and dozens of lesser-known and up-and-coming racket sports are booming, but information about *where to play* is scattered and messy. Most court finders cover one sport, and the multi-sport apps mostly list clubs you can book. This project is one free map of all of them, from free park courts and hitting walls to private clubs. It collects the data, cleans it, checks it, and says honestly how complete it is.
+
+## How it is different
+
+Pickleheads lists pickleball courts, Playtomic and MATCHi book club courts, and Padel Mates and CourtsApp span several racket sports ([competitor scan](docs/competitor_scan.md)). RacketConnect differs in four ways:
+
+- **Every place, not only bookable ones:** parks, hitting walls, YMCAs, rec centers and places to watch, not just clubs.
+- **Every racket sport,** including lesser-known ones.
+- **Honest labels:** each fact is marked official, reported or inferred, with dates.
+- **Links out, never bookings or payments.**
 
 ## At a glance (for engineers and data people)
 A solo, end-to-end data product: Python ingestion, a tested dbt warehouse on DuckDB, a static map, and a gated, agent-assisted refresh. No server, $0 hosting.
 - **Entity resolution, measured:** a hand-labelled gold set scores the place-to-court matcher (129 pairs, 0 wrong merges, 4 missed).
 - **Big source, small footprint:** DuckDB queries 40 GB of Overture parquet on S3 in place and fetches about 2% of it ([benchmark](docs/planet_scale_benchmark.md)).
 - **Quality as a contract:** 32 custom dbt tests, 11 CI gate scripts and a scorecard with stated service levels; the one breach (venue names) is reported, not hidden ([scorecard](docs/data_quality.md)).
-- **Decisions on record:** 26 ADRs, including one that reverses an earlier choice ([ADR 0018](docs/decisions/0018-duckdb-only.md)) and one on when agents may merge ([ADR 0019](docs/decisions/0019-unattended-agent-merges.md)).
+- **Decisions on record:** 32 ADRs, including one that reverses an earlier choice ([ADR 0018](docs/decisions/0018-duckdb-only.md)) and one on when agents may merge ([ADR 0019](docs/decisions/0019-unattended-agent-merges.md)).
 - **Start here:** [case study](docs/case_study.md) · [architecture](docs/architecture.md) · [data dictionary](app/data-dictionary.md) · [dbt docs and lineage](https://abov.github.io/courtconnect-ca/dbt-docs/)
 
 ## Who it is for
@@ -121,7 +130,7 @@ Data lives in seeds under `transform/seeds/`; edit them, then `make build` and `
 | Mark an Overture place as closed | `closed_places.csv` (with evidence) |
 | Correct a court count for one sport at a venue | `venue_court_counts.csv` (with evidence; add the missing sport via `manual_venues.csv`) |
 
-Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routine: [`docs/monthly_refresh.md`](docs/monthly_refresh.md). Decisions: short records in [`docs/decisions/`](docs/decisions) (ADRs 0001 to 0027; 0001 is superseded by 0018; 0023 to 0026 are proposed).
+Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routine: [`docs/monthly_refresh.md`](docs/monthly_refresh.md). Decisions: short records in [`docs/decisions/`](docs/decisions) (ADRs 0001 to 0032; 0001 is superseded by 0018; 0023 is deferred; 0024 to 0026 and 0032 are proposed).
 
 ## Principles
 - **Honesty over polish:** inferred data is labelled as inferred.
