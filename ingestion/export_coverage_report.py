@@ -40,18 +40,19 @@ def main() -> None:
         order by case coverage_status when 'covered' then 1 when 'sparse' then 2 when 'possible_only' then 3
                                       when 'tagged_none_found' then 4 else 5 end,
                  venues_found desc, weak_name_matches desc, sport_name""").fetchall()
-    tot = con.sql("""select (select count(*) from core.dim_court), (select count(*) from core.dim_venue),
-                            (select count(*) from core.dim_venue where name_source <> 'unnamed'),
-                            (select count(*) from core.dim_venue where name_source in ('court_name', 'operator', 'places_directory')),
-                            (select count(*) from core.dim_venue where venue_source = 'osm+places'),
-                            (select count(*) from core.dim_venue where venue_source = 'places_only')""").fetchone()
+    tot = con.sql("""select (select count(*) from core.dim_court), (select count(*) from core.dim_venue where venue_kind = 'courts'),
+                            (select count(*) from core.dim_venue where venue_kind = 'courts' and name_source <> 'unnamed'),
+                            (select count(*) from core.dim_venue where venue_kind = 'courts' and name_source in ('court_name', 'operator', 'places_directory')),
+                            (select count(*) from core.dim_venue where venue_kind = 'courts' and venue_source = 'osm+places'),
+                            (select count(*) from core.dim_venue where venue_kind = 'courts' and venue_source = 'places_only'),
+                            (select count(*) from core.dim_venue where venue_kind = 'hitting_wall')""").fetchone()
     surf = con.sql("select surface_type, count(*) from core.dim_court where record_kind='court' group by 1 order by 2 desc").fetchall()
     sett = con.sql("select setting, count(*) from core.dim_court group by 1 order by 2 desc").fetchall()
     status: dict[str, int] = {}
     for r in rows:
         status[r[1]] = status.get(r[1], 0) + 1
 
-    by_region = con.sql("select region, count(*) from core.dim_venue group by 1 order by 1").fetchall()
+    by_region = con.sql("select region, count(*) from core.dim_venue where venue_kind = 'courts' group by 1 order by 1").fetchall()
     L = [f"# Coverage snapshot ({today})\n",
          "Covered regions: " + ", ".join(f"{c['name'].title()} ({code})" for code, c in overpass.REGIONS.items()) + " (ADR 0014, 0028). Venues by region: "
          + ", ".join(f"{r} {n:,}" for r, n in by_region)
@@ -62,7 +63,7 @@ def main() -> None:
          f"**{tot[0]:,} OSM court/facility records plus Overture places -> {tot[1]:,} venues. {tot[2]:,} venues have a name; "
          f"{tot[3]:,} of those are confirmed (tagged on the court, its operator, or an Overture place) and the rest are inferred from the "
          f"park, school or club the court sits inside. Overture places matched {tot[4]:,} OSM venues and added {tot[5]:,} venues "
-         "OpenStreetMap had no court for.**\n",
+         f"OpenStreetMap had no court for. A further {tot[6]:,} hitting-wall venues (ADR 0032) are not in these counts until the map shows them.**\n",
          "Sports by status: " + ", ".join(f"**{k}** {v}" for k, v in status.items()) + ".\n",
          "`possible_only` means no confirmed venue, but some business names mention the sport (weak matches, never counted as venues). "
          "Review them in `marts.mart_places_to_review` and confirm real ones in `transform/seeds/place_sport_overrides.csv`.\n",

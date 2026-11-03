@@ -127,7 +127,10 @@ def main() -> None:
         select venue_id, venue_name, name_source, venue_source, sport_name, courts_for_sport, lat, lon, city, region, address_line,
                website_usable, offerings, address_source, address_distance_m, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
                has_lit_courts, is_confirmed_public, has_free_courts, is_members_only, also_listed_as, near_street
-        from marts.mart_venue_finder""").fetchall()
+        from marts.mart_venue_finder
+        -- court venues and court-sourced sports only: hitting-wall venues and wall-only sports (ADR 0032) are in the finder but reach the map
+        -- as the separate walls list until the export step of that plan turns them on
+        where venue_kind = 'courts' and in_courts""").fetchall()
 
     # Things to do at a venue: link-outs to the provider's own page (RacketConnect books nothing). Current ones only.
     actions: dict[str, list] = defaultdict(list)
