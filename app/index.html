@@ -531,7 +531,7 @@ const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
-const HOME_BOUNDS = [[-125.2, 30.4], [-108.4, 49.3]];   // the map's starting view and the "show everything" view: the mainland states we cover (ADR 0028; Hawaii is 2,500 miles out, so it is reached by search or panning)
+const HOME_BOUNDS = [[-160.5, 18.5], [-108.4, 49.3]];   // the map's starting view and the "show everything" view: every state we cover, Hawaii included (ADR 0028; owner 2026-11-02, so Places to play and Events frame the same area)
 let textOff = false, searchCentre = null, zips = null, places = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
