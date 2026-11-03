@@ -66,7 +66,7 @@ scored as (
         v.venue_name,
         v.venue_source,
         v.city,
-        10 * (coalesce(s.has_osm, 0) + coalesce(s.has_places, 0) + coalesce(s.has_manual, 0))  as sources_pts,
+        10 * (coalesce(s.has_osm, 0) + coalesce(s.has_places, 0) + coalesce(s.has_manual, 0) + case when v.venue_kind = 'hitting_wall' then 1 else 0 end) as sources_pts,   -- a wall venue's one source is the wall data (OSM walls or a person's report)
         coalesce(me.evidence_pts, 0)                                                            as evidence_pts,
         case when v.name_source in ('manual', 'places_directory', 'court_name', 'operator') then 10 else 0 end as named_pts,
         (case when v.website is not null and coalesce(v.website_status, '') <> 'dead' then 8 else 0 end
@@ -79,7 +79,7 @@ scored as (
             else 0
         end                                                                                     as fresh_pts,
         nullif(greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }}),
-                        coalesce(os.osm_seen_on, {{ d0 }}), coalesce(ps.places_seen_on, {{ d0 }})), {{ d0 }}) as last_seen_on,
+                        coalesce(os.osm_seen_on, {{ d0 }}), coalesce(ps.places_seen_on, {{ d0 }}), coalesce(v.source_seen_on, {{ d0 }})), {{ d0 }}) as last_seen_on,
         coalesce(sr.direct_sports, 0)                                                           as direct_sports,
         coalesce(sr.review_sports, 0)                                                           as review_sports,
         case when coalesce(sr.direct_sports, 0) = 0 then 0
@@ -91,7 +91,6 @@ scored as (
     left join seen os on os.venue_id = v.venue_id
     left join place_seen ps on ps.venue_id = v.venue_id
     left join sport_roll sr on sr.venue_id = v.venue_id
-    where v.venue_kind = 'courts'   -- wall venues are scored with the export (ADR 0032 step 2)
 )
 
 select

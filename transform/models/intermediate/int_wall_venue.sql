@@ -33,6 +33,7 @@ select
     cast(null as varchar)                                       as also_listed_as,
     'hitting_wall'                                              as venue_kind,
     cast(null as varchar)                                       as website_status,
-    cast(null as varchar)                                       as google_place_id
+    cast(null as varchar)                                       as google_place_id,
+    w.reported_on                                               as source_seen_on   -- when the wall was extracted from OSM or reported by a person
 from {{ ref('mart_wall_pins') }} w
 where w.wall_key not in (select wall_key from {{ ref('int_wall_venue_link') }})
