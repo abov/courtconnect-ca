@@ -124,9 +124,8 @@
   @media (max-width: 800px) { .quick { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; } .quick .chip { flex: none; white-space: nowrap; } }   /* phones: one swipeable row instead of three wrapped lines */
   .seg .chip { flex: 1 1 auto; text-align: center; padding: 6px 6px; border-radius: var(--r-pill); font-weight: 600; font-size: 13px; line-height: 1.2; }
   body:not(.watch) .watchonly, body:not(.social) .socialonly { display: none; }
-  #list li.thisweek { position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--accent) 6%, var(--panel)); } #list li.thisweek .none { margin: 0; padding: 2px 16px 10px; } #list li.thisweek .lh2 { margin: 0; padding: 8px 16px 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
-  #list li.thisweek button { padding-top: 6px; padding-bottom: 6px; } #list li.thisweek .nm, #list li.thisweek .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #list li.thisweek button + button { border-top: 1px solid var(--line); }
+  #list li.thisweek { position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--line); background: var(--panel); padding-bottom: 4px; } #list li.thisweek .none { margin: 0; padding: 0 16px 6px; font-size: 11.5px; } #list li.thisweek .lh2 { margin: 0; padding: 6px 16px 2px; font-size: 11px; font-weight: 600; letter-spacing: .02em; color: var(--muted); }
+  #list li.thisweek button { display: flex; gap: 6px; width: 100%; padding: 2px 16px; font-size: 11.5px; line-height: 1.4; white-space: nowrap; text-align: left; } #list li.thisweek .nm { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 11.5px; font-weight: 600; } #list li.thisweek .meta { flex: none; font-size: 11.5px; } #list li.thisweek .meta.when { color: var(--accent); }   /* "Coming up next": small type, one line per event */
   #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
   body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
@@ -317,7 +316,6 @@
         <ul id="qsug" class="sug" role="listbox" aria-label="Suggestions" hidden></ul>
       </div>
       <button class="chip" id="nearMe" type="button">Near me</button>
-      <button class="chip" id="goHawaii" type="button" hidden>Hawaii</button>
     </div>
     <p id="searchnote" class="note" hidden aria-live="polite"></p>
     <details class="playonly" id="moreFilters">
@@ -533,8 +531,7 @@ const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
-const HAWAII_BOUNDS = [[-160.3, 18.85], [-154.75, 22.35]];   // the "Hawaii" shortcut: the islands are 2,500 miles from the mainland, so the home view leaves them out
-const HOME_BOUNDS = [[-124.9, 32.4], [-114.0, 49.1]];   // the map's starting view and the "show everything" view: the mainland states we cover (ADR 0028; a far-off state such as Hawaii gets its own shortcut)
+const HOME_BOUNDS = [[-124.9, 32.4], [-114.0, 49.1]];   // the map's starting view and the "show everything" view: the mainland states we cover (ADR 0028; Hawaii is 2,500 miles out, so it is reached by search or panning)
 let textOff = false, searchCentre = null, zips = null, places = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
@@ -754,11 +751,11 @@ function renderSocialList(ul) {
 function buildComingUp() {
   const view = map.getBounds(), name = state.sport >= 0 ? sports[state.sport].n : "";
   const next = eventsFiltered().filter(ev => ev.s && view.contains([ev.x, ev.y])).sort((a, b) => a.s.localeCompare(b.s) || a.n.localeCompare(b.n)).slice(0, 3);
-  const li = el("li", {class: "thisweek"}, el("p", {class: "lh2", text: "Coming up next" + (name ? " · " + name : "") + " · in this area"}));
-  if (!next.length) li.append(el("p", {class: "meta none", text: "No dated events in this area. Zoom out or move the map to see more."}));
+  const li = el("li", {class: "thisweek"}, el("p", {class: "lh2", text: "Coming up next" + (name ? " · " + name : "")}));
+  if (!next.length) li.append(el("p", {class: "meta none", text: "None in this map view. Zoom out to see more."}));
   for (const ev of next) {
     const live = ev.s <= todayIso(), when = ev.s.slice(0, 4) === todayIso().slice(0, 4) && (ev.e || ev.s).slice(0, 4) === ev.s.slice(0, 4) ? fmtRange(ev).replace(/, \d{4}/g, "") : fmtRange(ev);   // year only when it is not this year
-    const btn = el("button", {type: "button"}, el("div", {class: "nm", text: ev.n, translate: "no"}), el("div", {class: "meta", text: (live ? "On now · " : "") + when + " · " + ev.c}));
+    const btn = el("button", {type: "button"}, el("span", {class: "meta when", text: (live ? "On now · " : "") + when}), el("span", {class: "nm", text: ev.n, translate: "no"}), el("span", {class: "meta", text: ev.c}));   // date first: it is what you scan for, and the long name is what gets cut
     btn.addEventListener("click", () => { track("this-week-open"); showEvent(ev, true); });
     li.append(btn);
   }
@@ -1817,8 +1814,6 @@ function initControls() {
   $("reset").addEventListener("click", () => { state.solo = false; state.soloPub = false; state.sport = -1; state.tier = 0; populateSports(); state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
-  $("goHawaii").hidden = !venues.some(v => v.r === "HI");
-  $("goHawaii").addEventListener("click", () => { setSearchNote(""); map.fitBounds(HAWAII_BOUNDS, {padding: 20, duration: 600}); track("go-hawaii"); });
   $("nearMe").addEventListener("click", () => {
     if (!navigator.geolocation) return setSearchNote("Your browser does not support location. Search by city or ZIP instead.");
     setSearchNote("");
