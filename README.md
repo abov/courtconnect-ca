@@ -143,7 +143,7 @@ Details: [`docs/data_guide.md`](docs/data_guide.md). Twice-monthly refresh routi
 ## Roadmap
 Done:
 - [x] Venue clustering, statewide extract, Overture second source, watch events, link-outs, suggest-a-change flow, duplicate guard
-- [x] California + Nevada ([ADR 0014](docs/decisions/0014-ca-nv-scope.md)): 545 Nevada venues live; resort and casino courts closed by the owner (2026-10-17)
+- [x] California + Nevada ([ADR 0014](docs/decisions/0014-ca-nv-scope.md)): 545 Nevada venues live; resort and casino courts follow the all-states resort rule (ADR 0028; closed 2026-10-17, reopened 2026-11-02)
 - [x] Street addresses and a city on every pin (OSM tags, nearest Overture address, Nominatim, Census boundaries; inferred ones labelled; homes show city only)
 - [x] Every sheet sport in the dropdown (81), with About cards and blurbs; sports with no place yet are greyed "(none yet)" with a report-a-venue link, never fake pins ([`docs/sport_discovery_plan.md`](docs/sport_discovery_plan.md))
 - [x] Padel kept apart from pop tennis, every Padel pin audited, directories swept, "Opening soon" pins ([`docs/padel_scan.md`](docs/padel_scan.md))

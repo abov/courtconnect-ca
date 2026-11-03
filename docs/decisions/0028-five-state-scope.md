@@ -35,24 +35,31 @@ Region config + test points, OSM courts + parents (`--area <state>`), Overture p
 ## Cost and time (estimates, not measured)
 - Extract: CA+NV takes about 15 min. By tile count the OSM extract adds roughly OR 4 min, WA 4 min, HI 2 min, plus parents and the Overture/address reads (about 1 min each, S3). The Overture release diff and the address extract scale with the boxes. A metro trial (`--area portland`) comes first and costs minutes.
 - Venues: NV has 546 pins (about 170 per million people; CA about 250). Same ratio gives roughly OR 700-1,000, WA 1,300-1,900, HI 250-350. Raw size grows about 25%.
-- Review work (per state): city rec centers, chains, campuses and leads are one session each, as for Nevada; about 8-12 small sessions per big state, 3-4 for Hawaii. Hawaii's quirks (many resorts with courts, military bases) follow the rules already set for Nevada (resorts: owner decides first).
+- Review work (per state): city rec centers, chains, campuses and leads are one session each, as for Nevada; about 8-12 small sessions per big state, 3-4 for Hawaii. Hawaii's quirks (many resorts with courts, military bases) follow the rules already set for Nevada, except resorts, which are case by case (open question 4).
 - The 35-day freshness SLA and the twice-monthly runbook cover more area; the scheduled routines (tournaments, discovery, refresh agent, search interest) need their source lists extended per state, and the spend cap ($20/month, ADR 0019) is the limit to watch.
 
 ## CA vs NV parity (audit 2026-11-02)
 Counts are by coordinates through the border polygon. Venues on the map: CA 9,742, NV 546.
 - **Same everywhere (no gap):** OSM and Overture extracts, parents, address fill tiers 1-3 (Nominatim cache CA 422, NV 484), city fill (place boundary rows CA 32, NV 27), freshness SLA, the quality scorecard (per-region confidence table), link-outs (venue_actions on hand-added venues: CA 76, NV 81), social series (CA 13, NV 8), the Overture release diff, the changes feed.
 - **Thinner in NV:** hand-added venues 770 / 118; watch events 80 / 9; hitting walls (OSM walls raw 881 / 9, hand-added 33 / 4: Nevada was only sliced to Las Vegas, Clark County and Reno; `extract_osm_walls.py --area nevada` has not been run and `make extract` has no walls step); `venue_name_official` 21 / 0; `venue_court_counts` 2 / 0 (cheap: none needed unless a person reports a wrong OSM count); leads 24 NV of 190.
-- **Done differently, on purpose:** LA Fitness has no NV clubs; resort and casino gyms closed by the owner; Sparks parked.
+- **Done differently, on purpose:** LA Fitness has no NV clubs; NV resort and casino gyms were closed 2026-10-17 and reopened 2026-11-02 under the all-states resort rule below; Sparks parked.
 - **Docs with no or little Nevada text:** `sport_directories.md` (0 NV vs 17 CA lines), `beach_tennis_watch.md`, `data_guide.md`, `padel_scan.md` (2 NV mentions in 38 lines; the NV padel pass looks thin), the GitHub event form text (California or Nevada).
 - **Not named in the scan docs for NV (unchecked, not known to be missing):** Mesquite, Pahrump, Fallon, Elko, Douglas County (Minden/Gardnerville), Incline Village, Nevada State, CSN, Truckee Meadows CC; Nellis AFB (lead `mil-nellis-warrior-fitness`, site returned 403).
 - **Code/CI gaps found:** CI fixtures have no Nevada rows; the gold match set has no coordinates, so whether it holds Nevada pairs was not checked; `ask.py` and the coverage report special-case CA/NV (step 0).
 - **Cheap fixes made in this pass:** none yet; the proposal is to do the NV walls extract (`--area nevada`, minutes) and the `sport_directories.md` Nevada pass in step 0's PR, if the owner agrees.
 
+## Resorts and hotels with courts (all states, owner 2026-11-02)
+One rule for CA, NV, OR, WA, HI and Mexico (ADR 0034), case by case:
+- **Add** resort and hotel courts that non-guests can book or use, from the resort's own public page, with the access stated (`access`, `rules`, a link-out in `venue_actions.csv`).
+- **Flag, don't drop**, courts that are guests-only or members-only: they go on the map labelled as such when a public page verifies them (as The Parker Palm Springs and Rancho Valencia already are), and anything unclear is a lead in `venue_leads.csv` for the owner.
+- **Nevada reopened.** The 2026-10-17 closure ("do not re-check") is withdrawn. The completed passes (Strip, downtown, Lake Las Vegas, Tahoe, Reno, Mesquite, Laughlin; PRs #184, #186, #188) and the pins they produced stand and are not redone; the unresolved leads (Horseshoe, Nugget, Eldorado: no readable official source) are retried only if a first-hand or community report arrives. New NV resort work follows this rule like any other state.
+- Hawaii's held items (four USTA sectionals at resort tennis centers, `docs/event_group_search.md`) are decided under this rule.
+
 ## Open questions (owner)
 1. ~~Name~~ answered: RacketConnect (ADR 0029).
 2. Repo / Pages rename: keep through the beta and rename after (recommended), rename now, or never?
 3. Order OR, WA, HI, one state per PR, each waiting for "ship it"?
-4. Hawaii resorts and hotels with courts: same rule as Nevada (closed), or case by case?
+4. ~~Hawaii resorts and hotels with courts~~ answered (owner 2026-11-02): case by case, as for Mexico (ADR 0034). Add resort courts that non-guests can book publicly, with the access stated; flag the rest for the owner. The same rule now applies to every state, Nevada included (section above).
 5. May I run the OSM metro trial (`--area portland`, a few minutes) and, after the plan is accepted, the full OR extract (about 15 min including Overture)?
 
 ## Consequences
