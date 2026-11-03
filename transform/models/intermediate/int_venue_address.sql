@@ -158,17 +158,14 @@ city_points as (
     where city is not null and city <> ''
 ),
 
+-- min_by, not row_number(): the window sorted ~43M probe x address candidates (the slowest step of the whole build)
 nearby_city as (
-    select venue_id, city
-    from (
-        select p.venue_id, b.city,
-               row_number() over (partition by p.venue_id order by
-                   power((p.lat - b.lat) * 110540, 2) + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2)) as rn,
-               power((p.lat - b.lat) * 110540, 2) + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2) as d2
-        from city_probe p
-        join city_points b on b.cy = p.ny and b.cx = p.nx
-    ) x
-    where rn = 1 and d2 <= {{ city_radius }} * {{ city_radius }}
+    select p.venue_id,
+           min_by(b.city, {'d2': power((p.lat - b.lat) * 110540, 2) + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2), 'city': b.city}) as city
+    from city_probe p
+    join city_points b on b.cy = p.ny and b.cx = p.nx
+    group by p.venue_id
+    having min(power((p.lat - b.lat) * 110540, 2) + power((p.lon - b.lon) * cos(radians(p.lat)) * 111320, 2)) <= {{ city_radius }} * {{ city_radius }}
 ),
 
 -- a person-checked city from the venue's own or a listing page (seeds/venue_city_official.csv); counts only while the pin is where it was checked
