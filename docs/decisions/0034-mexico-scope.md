@@ -1,6 +1,6 @@
 # 0034. Mexico: scope, shape and effort
 
-Date: 2026-11-02. Status: proposed (owner asked on 2026-11-02 to put all of Mexico on the map and to size it; planning only, nothing built). Extends ADR 0014 and 0028 (US states); their rules carry over unchanged. Numbered 0034 because Arizona is expected to take 0033.
+Date: 2026-11-02. Status: proposed (owner asked on 2026-11-02 to put all of Mexico on the map and to size it; planning only, nothing built; the owner answered language, parity, resorts and timing the same day, see "Owner answers"). Extends ADR 0014 and 0028 (US states); their rules carry over unchanged. Numbered 0034 because Arizona is expected to take 0033.
 
 ## Context
 ADR 0028 added states one at a time with a "full CA parity" rule and 8-12 small research sessions per big state. Mexico is a country: 32 states, about 130 million people, Spanish-language sources, and thinner OSM/Overture racket-sport data. Run state by state at that cadence it would be roughly 250-380 sessions, so this ADR proposes a different shape. Everything below about pin counts and sessions is an estimate, not measured; a metro trial gives the real ratio before anything else is committed.
@@ -41,13 +41,16 @@ Total about 37-46 sessions to "metro parity" in about ten metros, versus about 2
 ## Order and conflicts
 Arizona touches the same files as Mexico Phase 1 (`regions.json`, the dbt `regions` var, app bounds, outline, ZIPs, copy), and two PRs on generated files collide (CLAUDE.md). Recommended order: Arizona data layer merged first, then Mexico Phase 1. Phase 1 is code only and can start before the December beta; Phases 2-3 research waits for the owner's call on beta timing.
 
-## Open questions (owner)
-1. Language: English UI with Spanish aliases for v1 (recommended), or Spanish UI from the start?
-2. Is "full parity" per chosen metro (recommended) or per Mexican state?
-3. Resorts (Cancun/Riviera Maya, Los Cabos): same rule as Nevada (closed), as asked for Hawaii (ask first), or case by case?
-4. Order of metros after the border pilot, and whether the pilot starts before or after the December beta.
-5. Repo and Pages naming: RacketConnect has no region in it (ADR 0029), so nothing changes beyond the existing "rename after the beta" question.
-6. May I run the OSM and Overture metro trial for Tijuana (minutes, no commit) once Phase 1 is approved?
+## Owner answers (2026-11-02, in chat)
+1. **Language:** English UI with Spanish aliases for v1; Spanish UI is a later ADR.
+2. **Parity:** per chosen metro, not per Mexican state.
+3. **Resorts (Cancun/Riviera Maya, Los Cabos):** case by case. Add resort courts that are publicly bookable by non-guests; flag the rest for the owner (a different rule from Nevada's closed list).
+4. **Timing:** Phase 1 starts after Arizona merges (same files); Phases 2-3 research waits for the owner's call after the December beta.
+
+## Still open
+- Order of the core metros after the border pilot.
+- Repo and Pages naming: RacketConnect has no region in it (ADR 0029), so nothing changes beyond the existing "rename after the beta" question.
+- May I run the OSM and Overture metro trial for Tijuana (minutes, no commit) once Phase 1 is approved?
 
 ## Consequences
 Roughly doubles the covered population again with a second language, and coverage will look thin at first, so the scorecard must report per metro and the app must say "automatic data only" where nothing was hand-checked. One `MX` region keeps the pipeline unchanged for the five US states; splitting Mexico into per-state regions later stays possible through the `subregion` column.
