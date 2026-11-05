@@ -19,9 +19,10 @@ URLS = [  # ordered by observed reliability; the first healthy one wins
 # The covered area lives in regions.json (docs/fork_guide.md). REGIONS: code -> bbox (south, west, north, east),
 # OSM border relation (the real filter; the bbox only bounds the tiles) and border cache file.
 _CFG = json.loads((Path(__file__).parent / "regions.json").read_text(encoding="utf-8"))
-REGIONS = {code: {"name": c["name"], "bbox": tuple(c["bbox"]), "relation": c["relation"], "fips": c.get("fips", ""), "cache": raw_path(c["cache"])}
+REGIONS = {code: {"name": c["name"], "bbox": tuple(c["bbox"]), "relation": c["relation"], "fips": c.get("fips", ""), "cache": raw_path(c["cache"]), "defer": c.get("defer", False)}
            for code, c in _CFG["regions"].items()}
 STATE_AREAS = {c["name"]: code for code, c in _CFG["regions"].items()}  # --area value -> region code
+DEFAULT_AREAS = [c["name"] for c in _CFG["regions"].values() if not c.get("defer")]  # the --area values `make extract` loops over
 BBOXES = {k: tuple(m["bbox"]) for k, m in _CFG["metros"].items()}  # named metros, south, west, north, east
 
 # Which region(s) a named area may keep rows from (the polygon clip decides, per point).
@@ -38,9 +39,9 @@ def out_name(stem: str, area: str) -> str:
 
 def sql_bbox(xcol: str, ycol: str, region: str | None = None) -> str:
     """A SQL condition for 'inside any region's bounding box' (Overture's bbox.xmin / bbox.ymin), skipping boxes
-    that lie inside another one; with region, just that region's box. A cheap pre-filter for the parquet read;
+    that lie inside another one; with region, just that region's box (a deferred region only when asked for by code). A cheap pre-filter for the parquet read;
     region_at() is the real filter."""
-    boxes = [cfg["bbox"] for code, cfg in REGIONS.items() if region in (None, code)]
+    boxes = [cfg["bbox"] for code, cfg in REGIONS.items() if region == code or (region is None and not cfg["defer"])]
     boxes = [b for b in boxes if not any(o != b and o[0] <= b[0] and o[1] <= b[1] and o[2] >= b[2] and o[3] >= b[3] for o in boxes)]
     return " or ".join(f"({xcol} between {w} and {e} and {ycol} between {s} and {n})" if len(boxes) > 1
                        else f"{xcol} between {w} and {e} and {ycol} between {s} and {n}" for s, w, n, e in boxes)
@@ -124,6 +125,18 @@ def header(bbox: tuple[float, float, float, float], timeout: int = 300) -> str:
 _BORDERS: dict = {}
 
 
+def _gap_closers(merged, max_gap: float = 0.005):
+    """Short segments that close open rings whose two ends lie within max_gap degrees (about 500 m): Mexico's OSM relation
+    leaves a 17 m gap near the Rio Grande mouth, so its mainland never polygonizes. Larger gaps stay open (a real error)."""
+    from shapely.geometry import LineString, Point
+    out = []
+    for part in getattr(merged, "geoms", [merged]):
+        a, b = part.coords[0], part.coords[-1]
+        if a != b and Point(a).distance(Point(b)) <= max_gap:
+            out.append(LineString([b, a]))
+    return out
+
+
 def border(region: str):
     """A region's border as a shapely (prepared) polygon, built from its OSM relation and cached on disk."""
     if region in _BORDERS:
@@ -132,7 +145,7 @@ def border(region: str):
 
     from shapely import wkt
     from shapely.geometry import LineString
-    from shapely.ops import polygonize, unary_union
+    from shapely.ops import linemerge, polygonize, unary_union
     from shapely.prepared import prep
 
     cfg = REGIONS[region]
@@ -146,6 +159,7 @@ def border(region: str):
             rel = run(f"[out:json][timeout:120];rel({cfg['relation']});out geom;", f"{region} border", attempts=1, urls=[url])[0]
             lines = [LineString([(p["lon"], p["lat"]) for p in m["geometry"]])
                      for m in rel["members"] if m["type"] == "way" and m.get("role") == "outer" and m.get("geometry")]
+            lines += _gap_closers(linemerge(unary_union(lines)))
             poly = unary_union(list(polygonize(unary_union(lines))))
             if not poly.is_empty:
                 break

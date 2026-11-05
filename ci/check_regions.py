@@ -49,12 +49,23 @@ POINTS = [
     (34.48, -114.32, "AZ"),       # Lake Havasu City, on the Colorado River
     (32.68, -114.40, "AZ"),       # Yuma area, across the river from California
     (31.34, -110.94, "AZ"),       # Nogales, Arizona
-    (31.28, -110.94, None),       # Nogales, Sonora (Mexico)
     (37.10, -113.58, None),       # St. George, Utah
     (35.53, -108.74, None),       # Gallup, New Mexico
     (36.80, -114.07, "NV"),       # Mesquite, Nevada, on the Arizona line
     (34.85, -114.61, "CA"),       # Needles, California, across the river from Arizona
-    (32.40, -117.00, None),       # Tijuana area, Mexico
+    (32.5150, -117.0382, "MX"),   # Tijuana
+    (32.5350, -117.0290, "MX"),   # Tijuana, just south of the San Ysidro crossing
+    (32.5560, -117.0460, "CA"),   # San Ysidro, San Diego
+    (32.6650, -115.4678, "MX"),   # Mexicali
+    (32.6790, -115.4990, "CA"),   # Calexico
+    (31.3040, -110.9440, "MX"),   # Nogales, Sonora (was None before MX)
+    (32.4800, -114.7770, "MX"),   # San Luis Rio Colorado, Sonora
+    (32.4870, -114.7820, "AZ"),   # San Luis, Arizona
+    (31.7600, -106.4850, None),   # El Paso, Texas (not covered)
+    (31.6900, -106.4250, "MX"),   # Ciudad Juarez
+    (21.1619, -86.8515, "MX"),    # Cancun
+    (20.9674, -89.5926, "MX"),    # Merida
+    (19.4326, -99.1332, "MX"),    # Mexico City
 ]
 
 

@@ -53,6 +53,9 @@ Arizona touches the same files as Mexico Phase 1 (`regions.json`, the dbt `regio
 
 8. **Scope cut (2026-11-04, in chat):** 37-46 sessions is too many. Build Phases 1, 2 and 4 (about 11-15 sessions: country generalization, border pilot, automatic layer for the rest). The six core metros become demand-gated and unscheduled.
 
+## Built so far
+Phase 1 started 2026-11-04: `MX` region (OSM relation 114686; `overpass.border` closes the relation's 17 m Rio Grande gap), six border-pilot metros, dbt var, outline and border test points. `"defer": true` keeps MX out of `make extract` and the Overture default until Phase 4. Tijuana OSM trial: 77 courts (62 tennis, 10 pickleball), 3 named. Open in Phase 1: Overture divisions boundaries, Spanish terms, address country switch, app shortcut and copy.
+
 ## Still open
 What counts as "demand" for starting a Phase 3 metro (a GoatCounter or Trends threshold) is not set; decide it when the first metro is proposed. The ADR stays proposed until the owner says "ship it" on the PR.
 
