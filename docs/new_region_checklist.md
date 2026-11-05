@@ -2,7 +2,7 @@
 
 Owner 2026-11-03: every new state (and country, ADR 0034) gets the same work the others got, with nothing left silent. This is the one list; ADR 0028 ("Per-state step") is the reasoning behind it. Arizona's first PR (#525) shipped the data layer only, and the home view hid its southern border: this list and `ci/region_parity.py` exist so that does not repeat.
 
-**Rule:** a region is not "done" until `python ci/region_parity.py --region XX --strict` exits 0 and every other zero in its column is either filled or logged below its section in `docs/event_group_search.md` / `docs/public_facility_scan.md` as "searched, empty". Put the printed column in the PR description.
+**Rule:** a region is not "done" until `python ci/region_parity.py --region XX --strict` exits 0 and every other zero in its column is either filled or logged below its section in `docs/event_group_search.md` / `docs/public_facility_scan.md` as "searched, empty". A required item that is truly empty (e.g. no three-wall court found) goes in `ci/parity_logged_empty.csv` (region, item, evidence, verified_on) so `--strict` passes. Put the printed column in the PR description.
 
 ## 1. Data layer (one PR, mostly configuration)
 - [ ] `ingestion/regions.json` entry (bbox, OSM relation checked against Overpass, `fips`, cache file) and the `regions` var in `transform/dbt_project.yml`; test points in `ci/check_regions.py` (cities inside, neighbours across each border, and a nearby foreign city as `None`).

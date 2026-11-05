@@ -6,6 +6,7 @@ placed through the border polygon (data/raw/*_border.wkt, fetched on first use);
 Run: python ci/region_parity.py                 (matrix for every region, zeros marked)
      python ci/region_parity.py --region AZ     (one region, with the "state is done" verdict)
      python ci/region_parity.py --region AZ --strict   (exit 1 if a required item is zero; use before calling a state done)
+A required zero that was searched and found empty goes in ci/parity_logged_empty.csv (region, item, evidence, verified_on) and no longer fails --strict.
 Checklist and recipe: docs/new_region_checklist.md
 """
 import argparse
@@ -35,6 +36,18 @@ DOCS = ["docs/event_group_search.md", "docs/public_facility_scan.md", "docs/pade
 REQUIRED = ["pins", "manual venues", "hitting walls (export)", "one_wall wall pins", "three_wall wall pins", "backboard wall pins", "handball wall pins",
             "hitting walls (OSM)", "walls (hand-added)", "watch events", "social series", "link-outs (hand-added)",
             "street addresses", "zip codes", "places", "outline", "home view fits", "doc sections"]
+
+
+def logged_empty():
+    """{region: {item}} from ci/parity_logged_empty.csv: required items that were searched and are empty, each with its evidence and date. A row without both does not count."""
+    path = ROOT / "ci" / "parity_logged_empty.csv"
+    out = {}
+    if path.exists():
+        with open(path, encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f):
+                if r["evidence"].strip() and r["verified_on"].strip():
+                    out.setdefault(r["region"].upper(), set()).add(r["item"])
+    return out
 
 
 def region_of(lat, lon):
@@ -130,9 +143,13 @@ def main():
     items = list(next(iter(m.values())))
     w = max(len(i) for i in items)
     print(f"{'':{w}}  " + "  ".join(f"{c:>7}" for c in codes))
+    empty_ok = logged_empty()
     for item in items:
-        print(f"{item:{w}}  " + "  ".join(f"{m[c][item]:>7}" for c in codes) + ("   <- required" if item in REQUIRED else ""))
-    bad = {c: [i for i in items if m[c][i] == 0 and i in REQUIRED] for c in codes}
+        note = "   <- required" if item in REQUIRED else ""
+        if any(m[c][item] == 0 and item in empty_ok.get(c, ()) for c in codes):
+            note += " (logged empty)"
+        print(f"{item:{w}}  " + "  ".join(f"{m[c][item]:>7}" for c in codes) + note)
+    bad = {c: [i for i in items if m[c][i] == 0 and i in REQUIRED and i not in empty_ok.get(c, ())] for c in codes}
     for c in codes:
         zero_sports = [s for s in SPORTS if m[c][f"{s} pins"] == 0]
         print(f"\n{c}: required items at zero: {bad[c] or 'none'}")
