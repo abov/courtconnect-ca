@@ -1,6 +1,6 @@
 # Racket sport vacations chip (draft)
 
-Drafted 2026-11-05 from the owner's idea in chat: a separate top-level chip for racket sport vacations. Nothing here is built; the Mexico rows are unverified leads from search results.
+Drafted 2026-11-05 from the owner's idea in chat: a separate top-level chip for racket sport vacations. Data layer and chip built 2026-11-05 (seed, models, tests, export; `#mode=trips` in `app/index.html`, chip hidden while no verified row exists). The Mexico rows are unverified leads from search results, kept in the seed as `status = lead` and not exported.
 
 ## Proposal
 
@@ -15,7 +15,7 @@ Drafted 2026-11-05 from the owner's idea in chat: a separate top-level chip for 
 2. **Resorts.** The case-by-case resort rule applies: list what non-guests can book, flag guests-only (`who_can_play`).
 3. **Chip label:** open. "Racket vacations" unless the owner prefers "Trips".
 
-## Unverified Mexico leads (search results 2026-11-05, not yet read at the source)
+## Mexico leads (checked 2026-11-05: Club Med Cancun, both Sandos resorts and Four Seasons Punta Mita are now `verified` in the seed; the rest stay leads, reasons in each row's `evidence`)
 
 | Lead | Where | Sports (as reported) | Source |
 |---|---|---|---|
@@ -37,6 +37,6 @@ Beach tennis camps (Italy's Adriatic coast, Brazil, Spain, Portugal), padel camp
 ## Build order (each a separate PR)
 
 1. ADR 0036 (drafted).
-2. Seed + staging/core model + tests + `make app-data` export (no UI).
-3. Chip, map layer and list, with `#mode=trips` share links.
+2. Seed + staging/mart model + tests + `make app-data` export (no UI). Done: `racket_vacations.csv`, `stg_racket_vacations`, `mart_racket_vacations`, `assert_racket_vacations_*`, `vacations` key in `venues.json`.
+3. Chip, map layer and list, with `#mode=trips` share links. Done: pins and list follow the sport menu, search and map view; popup links out to the provider's own page.
 4. First verified batch: Mexico resorts above, then Hawaii.

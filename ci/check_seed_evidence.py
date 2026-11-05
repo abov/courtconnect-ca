@@ -9,6 +9,7 @@ RULES = {  # file: (date column, columns that must be non-empty, columns that mu
     "venue_actions.csv": ("verified_on", ["evidence", "url"], ["url"]),
     "venue_confirmations.csv": ("confirmed_on", ["evidence", "confirmed_by", "method"], []),
     "watch_events.csv": ("verified_on", ["source_note"], ["info_url", "tickets_url"]),
+    "racket_vacations.csv": ("verified_on", ["evidence", "info_url"], ["info_url"]),
     "social_events.csv": ("verified_on", ["source_note", "schedule", "info_url"], ["info_url", "signup_url"]),
     "player_platforms.csv": ("verified_on", ["evidence", "url", "sports"], ["url"]),
     "player_groups.csv": ("verified_on", ["evidence", "url", "published_at", "sports"], ["url", "published_at"]),
