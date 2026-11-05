@@ -26,6 +26,22 @@ group by 1
 order by 2 desc
 ```
 
+```sql issues
+select cast(date as date) as date, opened, closed, open_now from courtconnect.issues order by 1
+```
+
+```sql issue_totals
+select sum(opened) as opened, sum(closed) as closed, max_by(open_now, date) as open_now from courtconnect.issues
+```
+
+```sql views
+select cast(day as date) as day, page_views, events from courtconnect.views order by 1
+```
+
+```sql view_totals
+select sum(page_views) as page_views, sum(events) as events, count(*) as days from courtconnect.views
+```
+
 A snapshot of how complete and how fresh the RacketConnect data is, as of **{stats[0].as_of}**. Everything here is an aggregate count from the project's own checks; no venue rows are published. This is a prototype of a BI-as-code page, built with the open-source Evidence.dev from plain CSVs.
 
 <BigValue data={stats} value=venues title="Venues on the map" fmt=num0 />
@@ -46,6 +62,24 @@ History starts when the scorecard trend file starts, so the lines are short and 
 </LineChart>
 
 Most OpenStreetMap courts are unnamed, so many pins carry a name inferred from the park or school. The map labels those as inferred; this chart is the share with a real name.
+
+## Feedback issues, open and closed
+
+GitHub issues from the map's report forms, synced by `make feedback` (`docs/feedback_log.csv`). Titles and reporters are not shown here.
+
+<BigValue data={issue_totals} value=open_now title="Open now" />
+<BigValue data={issue_totals} value=opened title="Opened, all time" />
+<BigValue data={issue_totals} value=closed title="Closed, all time" />
+
+<LineChart data={issues} x=date y=open_now title="Open issues over time" yAxisTitle="Open" />
+
+<BarChart data={issues} x=date y={["opened","closed"]} title="Opened and closed per day" type=grouped />
+
+## Site views over time
+
+Daily page views and interaction events (venue opens, link-outs, filters) from GoatCounter, anonymous counts only. Counts are directional: ad blockers hide some visits and early numbers include the owner's own testing. {view_totals[0].page_views} page views and {view_totals[0].events} events over {view_totals[0].days} days with data (`docs/usage_daily.csv`, refreshed by `make usage`).
+
+<LineChart data={views} x=day y={["page_views","events"]} title="Page views and events per day" />
 
 ## Where the data is thin
 

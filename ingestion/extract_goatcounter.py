@@ -1,6 +1,6 @@
 """Export daily GoatCounter counts (page views + the named events of ADR 0013) to a raw CSV for analysis.
 
-    python ingestion/extract_goatcounter.py                  # last 90 days -> goatcounter_daily.csv in the shared raw folder
+    python ingestion/extract_goatcounter.py                  # last 60 days -> goatcounter_daily.csv in the shared raw folder
     python ingestion/extract_goatcounter.py --days 30 --out some.csv
 
 Needs GOATCOUNTER_API_TOKEN in .env (GoatCounter -> Settings -> API; permission "Count" is not needed, only
@@ -61,7 +61,7 @@ def fetch(token: str, start: date, end: date) -> list[dict]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--days", type=int, default=90, help="how many days back to export (default 90)")
+    ap.add_argument("--days", type=int, default=60, help="how many days back to export (default 60; 90 returned a 404 in 2026-11)")
     ap.add_argument("--out", default=raw_path("goatcounter_daily.csv"))
     args = ap.parse_args()
     load_dotenv()

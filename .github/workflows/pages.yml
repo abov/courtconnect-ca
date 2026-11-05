@@ -4,7 +4,7 @@ name: pages
 on:
   push:
     branches: [main]
-    paths: ['app/**', 'dashboard/**', 'docs/data_quality_trend.csv', 'ingestion/export_dashboard_data.py', '.github/workflows/pages.yml']
+    paths: ['app/**', 'dashboard/**', 'docs/data_quality_trend.csv', 'docs/feedback_log.csv', 'docs/usage_daily.csv', 'ingestion/export_dashboard_data.py', '.github/workflows/pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
