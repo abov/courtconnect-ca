@@ -42,14 +42,21 @@ select cast(day as date) as day, page_views, events from courtconnect.views orde
 select sum(page_views) as page_views, sum(events) as events, count(*) as days from courtconnect.views
 ```
 
-How complete the RacketConnect data is, as of **{stats[0].as_of}**. Counts only; no venue details are shown.
+How complete the RacketConnect data is. Counts only; no venue details are shown.
 
-<BigValue data={stats} value=venues title="Venues on the map" fmt=num0 />
-<BigValue data={stats} value=sports_with_venues title="Sports with a venue" />
+### The map, as of {stats[0].map_as_of}
+
+<BigValue data={stats} value=map_venues title="Venues on the map" fmt=num0 />
+<BigValue data={stats} value=map_sports_with_venues title="Sports with a venue" />
+
+{stats[0].map_sports_with_venues} of {stats[0].map_sports_total} sports have a venue. These two numbers come straight from the map's data file.
+
+### Quality checks, as of {stats[0].as_of}
+
 <BigValue data={stats} value=sla_met title="Service levels met" />
 <BigValue data={stats} value=gold_wrong_merges title="Wrong merges in the gold set" />
 
-{stats[0].sports_with_venues} of {stats[0].sports_total} sports have a venue. {stats[0].sla_met} of {stats[0].sla_total} service levels are met; the miss is venue names (below).
+{stats[0].sla_met} of {stats[0].sla_total} service levels are met; the miss is venue names (below). These are re-measured at each refresh.
 
 ## Trend, one point per refresh
 
