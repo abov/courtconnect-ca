@@ -273,6 +273,9 @@
     function answer(question, ctx) {
       const r = route(question, ctx);
       if (!r.chips && !(r.items || []).length) r.chips = STARTERS.slice();
+      // What was asked about, as names from our own lists only (a sport, a city or area), for the anonymous usage counts; never the typed text.
+      const t = norm(question), sp = detectSports(t)[0], where = detectPlace(t);
+      r.meta = {sport: sp ? sp.name : "", where: where ? where.label : "", hit: (r.items || []).length > 0};
       return r;
     }
 

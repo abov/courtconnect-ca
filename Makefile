@@ -125,7 +125,7 @@ dashboard-data:   ## aggregate CSVs for the Evidence.dev dashboard (dashboard/RE
 stats:            ## regenerate app/data/build_stats.json (numbers on app/how-its-built.html); run after make quality
 	$(PY) ingestion/build_stats.py
 
-usage:            ## export GoatCounter daily counts (and roll up docs/usage_daily.csv for the dashboard; commit it) and print the usage metrics (needs GOATCOUNTER_API_TOKEN in .env; docs/goat_analysis.md)
+usage:            ## export GoatCounter daily counts (and roll up docs/usage_daily.csv and docs/usage_events.csv for the dashboard; commit them) and print the usage metrics (needs GOATCOUNTER_API_TOKEN in .env; docs/goat_analysis.md)
 	$(PY) ingestion/extract_goatcounter.py
 	$(PY) ingestion/usage_daily.py
 	$(PY) ingestion/goat_report.py $(ARGS)
