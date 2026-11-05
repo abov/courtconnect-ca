@@ -1,6 +1,7 @@
 # RacketConnect
 
-> A free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona and Hawaii: find a court, watch a match, try a new sport, find people to play with. It links out to venues and organizers; it takes no bookings or payments.
+> A free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, Hawaii and the Mexican border: find a court, watch a match, try a new sport, find people to play with. It links out to venues and organizers; it takes no bookings or payments.
+> Mexico is a pilot: the border cities (Tijuana, Mexicali, Ensenada, Hermosillo, Nogales and San Luis Río Colorado) have automatic OpenStreetMap and Overture data, plus a hand-checked set of Tijuana padel clubs. Nothing else in Mexico has been checked by hand, and ZIP search is US-only.
 
 Everything is public and static. The whole dataset is one JSON file, rebuilt about twice a month. Keys are single letters to keep it small, so read the data dictionary first.
 
