@@ -10,7 +10,9 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import shutil
+import subprocess
 from collections import Counter
 from datetime import date, timedelta
 from pathlib import Path
@@ -27,6 +29,20 @@ def write(name: str, header: list[str], rows: list[list]) -> None:
     print(f"wrote dashboard/sources/courtconnect/{name}: {len(rows)} rows")
 
 
+def live_issues() -> list[tuple[str, str]] | None:
+    """(opened, closed) dates for every GitHub issue, straight from GitHub, so the scheduled Pages build is current.
+    Only runs in CI (GITHUB_ACTIONS); locally, and on any failure, the dashboard falls back to docs/feedback_log.csv."""
+    if not os.environ.get("GITHUB_ACTIONS"):
+        return None
+    try:
+        out = subprocess.run(["gh", "issue", "list", "--state", "all", "--limit", "2000", "--json", "createdAt,closedAt"],
+                             capture_output=True, text=True, check=True, timeout=60).stdout
+        return [(i["createdAt"][:10], (i["closedAt"] or "")[:10]) for i in json.loads(out)]
+    except (subprocess.SubprocessError, OSError, ValueError, KeyError):
+        print("live issue fetch failed; using docs/feedback_log.csv")
+        return None
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(ROOT / "docs" / "data_quality_trend.csv", OUT / "trend.csv")
@@ -40,10 +56,12 @@ def main() -> None:
             s["models"], s["seeds"], s["adrs"], s["gold"]["pairs"], s["gold"]["wrong_merges"], s["gold"]["missed"]]])
 
     # Feedback issues: one row per day from the first report to today, so the chart shows open vs handled over time.
-    with (ROOT / "docs" / "feedback_log.csv").open(encoding="utf-8") as f:
-        log = [r for r in csv.DictReader(f) if r["channel"] == "github-issue"]
+    log = live_issues()
+    if log is None:
+        with (ROOT / "docs" / "feedback_log.csv").open(encoding="utf-8") as f:
+            log = [(r["received_on"], r["resolved_on"]) for r in csv.DictReader(f) if r["channel"] == "github-issue"]
     if log:
-        opened, closed = Counter(r["received_on"] for r in log), Counter(r["resolved_on"] for r in log if r["resolved_on"])
+        opened, closed = Counter(o for o, _ in log), Counter(c for _, c in log if c)
         day, end, rows, n_open = date.fromisoformat(min(opened)), date.today(), [], 0
         while day <= end:
             k = day.isoformat()
