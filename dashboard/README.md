@@ -1,6 +1,6 @@
 # Dashboard prototype (Evidence.dev)
 
-A one-page BI-as-code scorecard: service-level numbers, venue and name-quality trends, and sport coverage. Markdown plus SQL, built to a static site. **Local prototype only: it is not wired into `pages.yml` or CI.**
+A one-page BI-as-code scorecard: service-level numbers, venue and name-quality trends, and sport coverage. Markdown plus SQL, built to a static site. **Published at <https://abov.github.io/courtconnect-ca/dashboard/> by `pages.yml` (added 2026-11-04): the Pages deploy exports the CSVs from committed files, runs `npm ci --ignore-scripts`, `npm run sources` and `npm run build`, and copies `build/` to `app/dashboard/`. It is not part of the CI check workflow.**
 
 ## Run it
 ```bash
@@ -14,6 +14,8 @@ python -m http.server 8766 --directory build   # open http://localhost:8766
 ```
 `npm run dev` gives live reload. Keep the dev server on localhost only (see "Known risks").
 
+`deployment.basePath` in `evidence.config.yaml` is `/courtconnect-ca/dashboard`, so a local `npm run dev` / `preview` serves under that path too.
+
 ## What it reads
 Only aggregates: `docs/data_quality_trend.csv`, `app/data/build_stats.json` and per-sport venue counts from `app/data/venues.json`. No venue rows, addresses or contacts; the warehouse is never opened. `ingestion/export_dashboard_data.py` writes the CSVs.
 
@@ -23,7 +25,7 @@ Evidence's open-source packages (MIT) are pinned to the versions of the last com
 ## Known risks (checked 2026-10-29)
 - `npm audit` reports 34 findings (4 critical, 11 high), all in Evidence's own build and dev tooling (Vite dev server, Vitest, SvelteKit, regex DoS in `minimatch` and `trim`), none in the generated static site. They matter if the dev server is reachable from a network or fed untrusted input. This project only feeds it its own CSVs. Do not run `npm audit fix --force` (it changes major versions and can break the build); upgrade deliberately when Evidence publishes a release.
 - Four install scripts (`@sveltejs/kit`, `esbuild`, `svelte-preprocess`) were not auto-approved by npm 11; the build ran without them.
-- Before this goes into CI or Pages: review the dependency tree, decide who updates it, and add the build to the Pages workflow as a separate step.
+- In Pages the build runs only on GitHub's runner with `npm ci` and the lockfile; the dev server is never started there. Decide who upgrades the dependency tree when Evidence publishes a release.
 
 ## Limits of the page
 The trend has one point per refresh, so the lines are short. Sport counts include sports inferred as also played on tennis courts (the map labels those inferred); the page says so.

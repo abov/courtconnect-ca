@@ -4,7 +4,7 @@ name: pages
 on:
   push:
     branches: [main]
-    paths: ['app/**', '.github/workflows/pages.yml']
+    paths: ['app/**', 'dashboard/**', 'docs/data_quality_trend.csv', 'ingestion/export_dashboard_data.py', '.github/workflows/pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,6 +26,15 @@ jobs:
       - run: dbt build --project-dir transform --profiles-dir transform
       - run: dbt docs generate --project-dir transform --profiles-dir transform
       - run: mkdir -p app/dbt-docs && cp transform/target/index.html transform/target/manifest.json transform/target/catalog.json app/dbt-docs/
+      # Scorecard dashboard (Evidence.dev, dashboard/README.md): reads only aggregate counts and trends from committed files, no venue rows.
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: npm, cache-dependency-path: dashboard/package-lock.json}
+      - run: python ingestion/export_dashboard_data.py
+      - run: npm ci --ignore-scripts
+        working-directory: dashboard
+      - run: npm run sources && npm run build
+        working-directory: dashboard
+      - run: mkdir -p app/dashboard && cp -r dashboard/build/. app/dashboard/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: {path: app}
