@@ -1,6 +1,6 @@
 # Racket sport vacations chip (draft)
 
-Drafted 2026-11-05 from the owner's idea in chat: a separate top-level chip for racket sport vacations. Data layer built 2026-11-05 (seed, models, tests, export); the chip is not. The Mexico rows are unverified leads from search results, kept in the seed as `status = lead` and not exported.
+Drafted 2026-11-05 from the owner's idea in chat: a separate top-level chip for racket sport vacations. Data layer and chip built 2026-11-05 (seed, models, tests, export; `#mode=trips` in `app/index.html`, chip hidden while no verified row exists). The Mexico rows are unverified leads from search results, kept in the seed as `status = lead` and not exported.
 
 ## Proposal
 
@@ -38,5 +38,5 @@ Beach tennis camps (Italy's Adriatic coast, Brazil, Spain, Portugal), padel camp
 
 1. ADR 0036 (drafted).
 2. Seed + staging/mart model + tests + `make app-data` export (no UI). Done: `racket_vacations.csv`, `stg_racket_vacations`, `mart_racket_vacations`, `assert_racket_vacations_*`, `vacations` key in `venues.json`.
-3. Chip, map layer and list, with `#mode=trips` share links.
+3. Chip, map layer and list, with `#mode=trips` share links. Done: pins and list follow the sport menu, search and map view; popup links out to the provider's own page.
 4. First verified batch: Mexico resorts above, then Hawaii.

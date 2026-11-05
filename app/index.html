@@ -128,7 +128,7 @@
   #list li.thisweek { position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--line); background: var(--panel); padding-bottom: 4px; } #list li.thisweek .none { margin: 0; padding: 0 16px 6px; font-size: 11.5px; } #list li.thisweek .lh2 { margin: 0; padding: 6px 16px 2px; font-size: 11px; font-weight: 600; letter-spacing: .02em; color: var(--muted); }
   #list li.thisweek button { display: flex; gap: 6px; width: 100%; padding: 2px 16px; font-size: 11.5px; line-height: 1.4; white-space: nowrap; text-align: left; } #list li.thisweek .nm { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 11.5px; font-weight: 600; } #list li.thisweek .meta { flex: none; font-size: 11.5px; } #list li.thisweek .meta.when { color: var(--accent); }   /* "Coming up next": small type, one line per event */
   #list li.lh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
-  body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
+  body.trips .playonly, body.trips .legend.playlegend, body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   #sport option.nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
@@ -289,6 +289,7 @@
     <div class="seg" role="group" aria-label="What are you looking for?">
       <button class="chip" id="modePlay" type="button" aria-pressed="true">Places to play</button>
       <button class="chip" id="modeWatch" type="button" aria-pressed="false">Events &amp; meetups</button>
+      <button class="chip" id="modeTrips" type="button" aria-pressed="false" hidden>Racket vacations</button>
       <button class="chip find" id="modePlayers" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M17 14.2c2.4.2 4.2 2.2 4.2 4.8"/></svg>Find players</button>
       <button class="chip find" id="modeCourt" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="1"/><path d="M12 6v12M3 12h18"/></svg>Find by court</button>
     </div>
@@ -489,7 +490,7 @@ function trackDemand(v) {
 // A pick (sport or filter) that leaves nothing on the map: where people look vs what we have.
 function trackEmpty() {
   try {
-    const none = state.mode === "play" ? !current.length : !viewEv.length && !viewSoc.length;
+    const none = state.mode === "play" ? !current.length : state.mode === "trips" ? !viewTrips.length : !viewEv.length && !viewSoc.length;
     if (none) trackD("empty-" + state.mode, state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "any sport");
   } catch (e) { /* ignore */ }
 }
@@ -547,7 +548,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   courtreserve: "CourtReserve", matchtime: "MatchTime", p1padel_site: "P1 Padel", vip_site: "Vegas Indoor Pickleball", darling_site: "Darling Tennis Center",
   ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson", washoe_county: "Washoe County Regional Parks", clark_county: "Clark County Parks & Recreation", suncity_summerlin: "Sun City Summerlin", lifetime_site: "Life Time", nlv_gov: "City of North Las Vegas"};
 
-let DATA, sports, venues, events = [], socials = [], socialPins = [], platforms = [];
+let DATA, sports, venues, events = [], socials = [], socialPins = [], platforms = [], trips = [];
 const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers: new Set(), solo: false, soloPub: false};   // solo = the hitting-alone filter: hitting-wall venues and court venues with walls on site, every wall type together   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
@@ -595,7 +596,7 @@ document.addEventListener("visibilitychange", () => {
 function hideResume() { $("resume").hidden = true; }
 function showResume() {
   const n = state.on.size + state.offers.size;
-  const bits = [state.mode === "watch" ? "Events & meetups" : "", state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", state.text ? "“" + state.text + "”" : "", n ? n + (n === 1 ? " filter" : " filters") : ""].filter(Boolean);
+  const bits = [state.mode === "watch" ? "Events & meetups" : state.mode === "trips" ? "Racket vacations" : "", state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", state.text ? "“" + state.text + "”" : "", n ? n + (n === 1 ? " filter" : " filters") : ""].filter(Boolean);
   if (!bits.length) return;
   const b = el("button", {class: "link", type: "button", text: "Start over"});
   b.addEventListener("click", () => {
@@ -701,6 +702,54 @@ function renderEventList(ul) {                                          // rows 
     ul.append(el("li", {}, btn));
   }
   return list;
+}
+
+// ---------- racket vacations (ADR 0036: stay-and-play trips; verified rows only, link-out only, nothing is booked here) ----------
+const TRIP_KIND = {resort: "Resort", camp: "Camp", academy: "Academy", tour: "Tour"};
+const TRIP_WHO = {guests: "Hotel guests only", anyone: "Open to non-guests", booking: "Open by booking"};
+const TRIP_COUNTRY = {US: "United States", MX: "Mexico"};
+function tripsFiltered() {
+  const name = state.sport >= 0 ? sports[state.sport].n : null;
+  return trips.filter(t => (!name || t.sp.includes(name)) && textHit(evText(t))).sort((a, b) => nearCmp(a, b) || a.co.localeCompare(b.co) || a.d.localeCompare(b.d) || a.n.localeCompare(b.n));
+}
+function tripGeojson(list) {
+  return {type: "FeatureCollection", features: list.map(t => ({type: "Feature", properties: {k: trips.indexOf(t), name: t.n}, geometry: {type: "Point", coordinates: [t.x, t.y]}}))};
+}
+const tripBadges = t => el("div", {}, el("span", {class: "badge ev", text: TRIP_KIND[t.k] || t.k}), ...t.sp.map(s => el("span", {class: "badge", text: s})), el("span", {class: "badge" + (t.w === "guests" ? " warn" : ""), text: TRIP_WHO[t.w] || t.w}));
+function tripNode(t) {
+  const box = el("div");
+  box.append(el("h2", {text: t.n, translate: "no"}), tripBadges(t));
+  box.append(el("p", {class: "meta", text: t.d + ", " + (TRIP_COUNTRY[t.co] || t.co)}));
+  if (t.p) box.append(el("p", {text: t.p}));
+  const row = el("div", {class: "btnrow"}), info = t.u ? safeUrl(t.u) : "";
+  if (info) row.append(el("a", {class: "btn primary", href: info, "data-kind": "trip-page", target: "_blank", rel: "noopener noreferrer", text: "Official page"}));
+  box.append(row);
+  box.append(el("p", {class: "meta", text: "The pin shows the resort, not the courts. Checked " + fmtDate(t.vo, {month: "short", day: "numeric", year: "numeric"})}));
+  return box;
+}
+function showTrip(t, fly) {
+  if (!t) return;
+  if (fly) map.flyTo({center: [t.x, t.y], zoom: Math.max(map.getZoom(), 9), essential: true, offset: popupRoom()});
+  popup.setLngLat([t.x, t.y]).setDOMContent(tripNode(t)).addTo(map);
+}
+function renderTripList() {
+  const ul = $("list"); ul.replaceChildren();
+  viewTrips = tripsFiltered();
+  const shown = viewTrips.filter(inMapView);
+  if (shown.length) ul.append(el("li", {class: "lh", text: "Racket vacations"}));
+  for (const t of shown) {
+    const btn = el("button", {type: "button"},
+      el("div", {class: "nm", text: t.n, translate: "no"}),
+      el("div", {class: "meta", text: [distLabel(t), t.d + ", " + (TRIP_COUNTRY[t.co] || t.co)].filter(Boolean).join(" \u00b7 ")}),
+      tripBadges(t));
+    btn.addEventListener("click", () => showTrip(t, true));
+    ul.append(el("li", {}, btn));
+  }
+  if (!viewTrips.length) ul.append(emptyItem("No racket vacations match these filters yet. Try all sports.", "Show all sports"));
+  else if (!shown.length) ul.append(el("li", {class: "empty"}, el("p", {text: "Nothing in this view. Zoom out or pan the map to see more."})));
+  ul.append(el("li", {class: "meta"}, document.createTextNode("We list a trip only after reading its own page, and take no bookings. Know one we are missing? "),
+    el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new/choose", target: "_blank", rel: "noopener noreferrer", text: "Tell us about it"}), document.createTextNode(".")));
+  updateCount();
 }
 
 // ---------- social get-togethers (recurring series, link-out only; ages and audiences are only what the organizer states) ----------
@@ -877,7 +926,7 @@ function wallNode(v) {
 }
 
 // ---------- map ----------
-let map, popup, current = [], mapReady = false, viewEv = [], viewSoc = [], shownVenue = null;   // shownVenue: the pin whose popup is open (the ask box answers "this place" from it)
+let map, popup, current = [], mapReady = false, viewEv = [], viewSoc = [], viewTrips = [], shownVenue = null;   // shownVenue: the pin whose popup is open (the ask box answers "this place" from it)
 function geojson(list) {
   return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0, g: pinFamily(v), h: isWall(v) ? (wallAccess(v.hw) === "restricted" ? 2 : 1) : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
@@ -944,9 +993,18 @@ function initMap() {
     map.on("mouseleave", "soc-pts", () => map.getCanvas().style.cursor = "");
     map.on("mouseenter", "ev-pts", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "ev-pts", () => map.getCanvas().style.cursor = "");
-    map.on("moveend", debounce(() => state.mode === "play" ? renderList() : renderWatchList(), 150));   // Watch: the lists, the count and "Coming up next" all follow the view
+    map.addSource("t", {type: "geojson", data: tripGeojson([])});
+    map.addLayer({id: "trip-pts", type: "circle", source: "t", layout: {visibility: "none"},
+      paint: {"circle-radius": 10, "circle-color": "#c2255c", "circle-stroke-color": "#fff", "circle-stroke-width": 2}});
+    map.addLayer({id: "trip-label", type: "symbol", source: "t", layout: {visibility: "none", "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"],
+      "text-size": 12, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 9},
+      paint: {"text-color": "#6b1236", "text-halo-color": "#fff", "text-halo-width": 1.5}});
+    map.on("click", "trip-pts", e => showTrip(trips[e.features[0].properties.k], false));
+    map.on("mouseenter", "trip-pts", () => map.getCanvas().style.cursor = "pointer");
+    map.on("mouseleave", "trip-pts", () => map.getCanvas().style.cursor = "");
+    map.on("moveend", debounce(() => state.mode === "play" ? renderList() : state.mode === "trips" ? renderTripList() : renderWatchList(), 150));   // Watch: the lists, the count and "Coming up next" all follow the view
     mapReady = true;
-    applyMode(false);
+    applyMode(state.mode === "trips");   // a shared #mode=trips link frames its pins; the other modes open on the home view
     if (state.text) runSearch(true);   // a shared #q= link zooms to its result
     const shared = sharedVenue && state.mode === "play" ? venues.find(v => v.i === sharedVenue) : null;   // an unknown id (venue removed since) is ignored
     sharedVenue = "";
@@ -1134,6 +1192,7 @@ function setLayersFor(mode) {
   const show = (ids, on) => ids.forEach(id => map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
   show(["clusters", "cluster-count", "pts", "pts-glyph", "pts-status"], mode === "play");
   show(["ev-pts", "ev-label", "soc-pts", "soc-label"], mode === "watch");
+  show(["trip-pts", "trip-label"], mode === "trips");
   $("wallLegend").hidden = !(mode === "play" && current.some(isWall));   // the wall pins' colours, listed in the map key only while some are on the map
 }
 function setKey(open) { $("mapkey").hidden = !open; $("keytoggle").setAttribute("aria-expanded", String(open)); }
@@ -1228,14 +1287,15 @@ async function placePoint(q) {
 }
 function noVenueNote(q, pl, pool, c, play) {
   const near = pool.length ? Math.round(Math.min(...pool.map(p => distKm(p, c)))) : null;
-  return (pl.typo ? "No match for “" + q + "”. Showing " : "") + pl.p[0] + ", " + pl.p[1] + (play ? ": no venues are mapped there yet." : ": no events or get-togethers are listed there yet.") + (near !== null ? " The nearest one is about " + near + " km away." : "");
+  return (pl.typo ? "No match for “" + q + "”. Showing " : "") + pl.p[0] + ", " + pl.p[1] + (play ? ": no venues are mapped there yet." : state.mode === "trips" ? ": no racket vacations are listed there yet." : ": no events or get-togethers are listed there yet.") + (near !== null ? " The nearest one is about " + near + " km away." : "");
 }
 let searchRun = 0;
 async function runSearch(zoom, open) {
   const my = ++searchRun, q = state.text, play = state.mode === "play";
   textOff = false; searchCentre = null; setSearchNote("");
-  const pins = () => play ? filtered() : [...eventsFiltered(), ...socialFiltered()];
-  const all = play ? venues : [...upcomingEvents(), ...socials.filter(isCurrentSocial)], textOf = play ? (v => v.t) : evText;
+  const tr = state.mode === "trips";
+  const pins = () => play ? filtered() : tr ? tripsFiltered() : [...eventsFiltered(), ...socialFiltered()];
+  const all = play ? venues : tr ? trips : [...upcomingEvents(), ...socials.filter(isCurrentSocial)], textOf = play ? (v => v.t) : evText;
   let pts = null, maxZoom = 15, note = "";
   const zq = isZip(q) ? q : zipToken(q), rest = zq ? q.replace(zq, "").replace(/\s+/g, " ").trim() : "";   // "94105 padel": the ZIP sets the centre, "padel" still filters
   if (zq) {
@@ -1276,7 +1336,7 @@ async function runSearch(zoom, open) {
       else if (pl && !pl.typo || pl && !city) {
         const c = {lat: pl.p[2], lng: pl.p[3]}; searchCentre = c; maxZoom = play ? 11 : 8; pts = [{x: c.lng, y: c.lat}];
         note = noVenueNote(q, pl, pins(), c, play);
-        trackD("search-miss", "place-no-" + (play ? "venues" : "events"));   // a real place with nothing listed: the coverage gap
+        trackD("search-miss", "place-no-" + (play ? "venues" : tr ? "trips" : "events"));   // a real place with nothing listed: the coverage gap
       }
       else if (city) { pts = all.filter(x => x.c === city); note = "No match for “" + q + "”. Showing " + city + ", the closest name."; }
       else { note = "No match for “" + q + "”. Try a city, a venue name or a ZIP code."; trackD("search-miss", "no-match"); }
@@ -1340,6 +1400,9 @@ function applyMode(fit) {
   if (state.mode === "watch" && fit) {
     const list = [...eventsFiltered(), ...socialFiltered()];
     if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(ev => b.extend([ev.x, ev.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
+  } else if (state.mode === "trips" && fit) {
+    const list = tripsFiltered();
+    if (list.length) { const b = new maplibregl.LngLatBounds(); list.forEach(x => b.extend([x.x, x.y])); map.fitBounds(b, {padding: 90, maxZoom: 8, duration: 600}); }
   } else if (state.mode === "play" && fit) {
     const list = state.solo || wallSportNow() ? filtered() : [];   // hitting alone and the wall sports are sparse: fit the map to their pins
     if (list.length) fitTo(list, 12); else map.fitBounds(HOME_BOUNDS, {padding: 20, duration: 600});
@@ -1408,12 +1471,22 @@ function updateCount() {
     box.replaceChildren(...kids);
     return;
   }
+  if (state.mode === "trips") {
+    const nt = viewTrips.filter(pin).length;
+    box.replaceChildren(el("b", {text: fmt(nt)}), document.createTextNode(noun(nt, " racket vacation", " racket vacations") + " in view" + (nt !== viewTrips.length ? " of " + fmt(viewTrips.length) : "")));
+    return;
+  }
   const ne = viewEv.filter(pin).length, ns = viewSoc.filter(pin).length;
   box.replaceChildren(el("b", {text: fmt(ne)}), document.createTextNode(noun(ne, " event", " events") + " to watch (dated) and "), el("b", {text: fmt(ns)}),
     document.createTextNode(noun(ns, " get-together", " get-togethers") + " to join (recurring series) in view"));
 }
 function refresh() {
   renderActive();
+  if (state.mode === "trips") {
+    renderTripList();
+    if (map.getSource("t")) map.getSource("t").setData(tripGeojson(viewTrips));
+    writeHash(); return;
+  }
   if (state.mode === "watch") {
     renderWatchList();
     if (map.getSource("e")) map.getSource("e").setData(eventGeojson(viewEv));
@@ -1442,6 +1515,7 @@ function writeHash() {
 }
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
+  if (p.get("mode") === "trips" && trips.length) state.mode = "trips";
   if (["watch", "social"].includes(p.get("mode"))) state.mode = "watch";   // #mode=social links (before the two views were merged) land on Watch & Social
   // old #mode=walls links land on the wall sport
   const s = p.get("sport") || (p.get("mode") === "walls" ? "1-wall Paddleball" : ""); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
@@ -1479,7 +1553,8 @@ function syncControls() {
   document.body.classList.toggle("watch", state.mode === "watch"); document.body.classList.toggle("social", state.mode === "watch");   // Watch & Social is one combined view
   if (filtersOn() && !matchMedia("(max-width: 800px)").matches) $("moreFilters").open = true;
   syncQuickSports();
-  $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode !== "play");
+  document.body.classList.toggle("trips", state.mode === "trips");
+  $("modePlay").setAttribute("aria-pressed", state.mode === "play"); $("modeWatch").setAttribute("aria-pressed", state.mode === "watch"); $("modeTrips").setAttribute("aria-pressed", state.mode === "trips");
   for (const b of document.querySelectorAll("[data-k]")) b.setAttribute("aria-pressed", state.on.has(b.dataset.k));
   for (const b of document.querySelectorAll("[data-o]")) b.setAttribute("aria-pressed", state.offers.has(b.dataset.o));
 }
@@ -1512,7 +1587,13 @@ function syncQuickSports() {
 }
 function populateSports() {
   const sel = $("sport"); sel.replaceChildren();
-  if (state.mode === "watch") {
+  if (state.mode === "trips") {
+    const counts = {};
+    trips.forEach(t => t.sp.forEach(s => counts[s] = (counts[s] || 0) + 1));
+    sel.append(el("option", {value: "-1", text: "All sports"}));
+    sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[s.n] && tierOk(s)) sel.append(el("option", {value: String(i), text: s.n})); });
+    if (state.sport >= 0 && !(counts[sports[state.sport].n] && tierOk(sports[state.sport]))) state.sport = -1;
+  } else if (state.mode === "watch") {
     const up = [...upcomingEvents(), ...socials.filter(isCurrentSocial)], counts = {};
     up.forEach(ev => counts[ev.sp] = (counts[ev.sp] || 0) + 1);
     sel.append(el("option", {value: "-1", text: "All sports"}));
@@ -1828,6 +1909,7 @@ function initControls() {
     if (state.sport !== before) sel.dispatchEvent(new Event("change")); else { renderActive(); refresh(); if (state.mode !== "play") applyMode(true); }
   });
   $("modePlay").addEventListener("click", () => setMode("play"));
+  $("modeTrips").addEventListener("click", () => setMode("trips"));   // stay-and-play trips (ADR 0036)
   $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
   $("modePlayers").addEventListener("click", () => openPlayers(state.sport, "header"));
   $("modeCourt").addEventListener("click", () => openCourt("header"));
@@ -1914,6 +1996,8 @@ const featuredP = fetch("data/featured_sport.json", {cache: "no-cache"}).then(r 
 fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(async d => {
   featured = await featuredP;
   DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; socials = d.social || []; platforms = d.platforms || [];
+  trips = (d.vacations || []).map(x => Object.assign(x, {c: x.d}));   // c = destination, so search and "closest name" treat a trip like any pinned place
+  $("modeTrips").hidden = !trips.length;
   venues.forEach((v, i) => {
     v.k = i; byKey[i] = v;
     v.m = v.p.reduce((a, p) => a | p[2], 0);
