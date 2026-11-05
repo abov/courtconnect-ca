@@ -5,7 +5,7 @@ STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import o
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 # Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
-.PHONY: setup extract fetch-data fresh-db extract-boundaries city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback
+.PHONY: setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -23,6 +23,9 @@ fresh-db:         ## new worktree (or a stale/broken db): rebuild courtconnect.d
 
 extract-boundaries: ## Census place + county boundaries for CA/NV into data/raw (~13 MB download; yearly at most), then make load
 	$(PY) ingestion/extract_census_boundaries.py
+
+extract-boundaries-mx: ## Mexican municipio + locality boundaries from Overture divisions into data/raw (~10 MB, 15 s; ADR 0034; not part of make extract), then make load
+	$(PY) ingestion/extract_overture_boundaries.py
 
 city-boundaries: ## city for pins that still have none, from the Census boundaries (writes seeds/venue_place_boundary.csv; then dbt build, make app-data)
 	$(PY) ingestion/place_from_boundaries.py
