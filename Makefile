@@ -1,7 +1,7 @@
 # Windows users: run these from Git Bash, or copy the commands.
 PY ?= python
 DBT = dbt --project-dir transform --profiles-dir transform
-STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import overpass; print(*overpass.STATE_AREAS)")   # --area value of every covered state (ingestion/regions.json)
+STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import overpass; print(*overpass.DEFAULT_AREAS)")   # --area value of every covered state (ingestion/regions.json; regions marked defer, like Mexico, are left out)
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 # Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
