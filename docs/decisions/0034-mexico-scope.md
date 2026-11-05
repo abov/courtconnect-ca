@@ -1,6 +1,6 @@
 # 0034. Mexico: scope, shape and effort
 
-Date: 2026-11-02. Status: proposed (owner asked on 2026-11-02 to put all of Mexico on the map and to size it; planning only, nothing built; the owner answered language, parity, resorts and timing the same day, see "Owner answers"). Extends ADR 0014 and 0028 (US states); their rules carry over unchanged. Numbered 0034 because Arizona is expected to take 0033.
+Date: 2026-11-02. Status: proposed (owner asked on 2026-11-02 to put all of Mexico on the map and to size it; planning only, nothing built; the owner answered language, parity, resorts and timing the same day, see "Owner answers"). Rescoped 2026-11-04: the owner found the full plan (37-46 sessions) too large, so hand-built parity is limited to the border pilot and the six core metros become demand-gated (see "Decision"). Extends ADR 0014 and 0028 (US states); their rules carry over unchanged. Numbered 0034 because Arizona is expected to take 0033.
 
 ## Context
 ADR 0028 added states one at a time with a "full CA parity" rule and 8-12 small research sessions per big state. Mexico is a country: 32 states, about 130 million people, Spanish-language sources, and thinner OSM/Overture racket-sport data. Run state by state at that cadence it would be roughly 250-380 sessions, so this ADR proposes a different shape. Everything below about pin counts and sessions is an estimate, not measured; a metro trial gives the real ratio before anything else is committed.
@@ -18,18 +18,18 @@ ADR 0028 added states one at a time with a "full CA parity" rule and 8-12 small 
 ## Sources (ADR 0005, 0007 unchanged)
 Overture + OSM for the base; public pages only for the rest; no Google Places; no partnership or data-license emails; no owner logins (Playtomic and similar are public pages only). Spanish research targets for events, leagues and groups: the national federations (tennis, padel, racquetball, squash, badminton, table tennis, pelota/frontenis; names and URLs to verify in the first pass), state sports institutes and municipal "instituto del deporte" pages, club websites, and public Facebook/Instagram/Meetup group pages. Login-walled pages are leads, not sources (ADR 0027). Record searches and empty results in a Mexico section of `docs/event_group_search.md`.
 
-## Decision (proposed): metro-first, automatic elsewhere
-Parity (walls, frontenis/handball, events, social, leads) is built for a chosen list of metros; the rest of the country gets the automatic OSM + Overture layer only, labelled as such. The "full CA parity" rule is read per covered metro, not per Mexican state.
+## Decision (proposed): automatic everywhere, hand-built parity at the border only
+Parity (walls, frontenis/handball, events, social, leads) is built for the border pilot metros; the rest of the country gets the automatic OSM + Overture layer only, labelled as such. The "full CA parity" rule is read per covered metro, not per Mexican state. The six core metros (Phase 3) are not scheduled: each is added one at a time, only when GoatCounter or Trends show demand for it (owner 2026-11-04).
 
 | Phase | What | Sessions (est.) |
 |---|---|---|
 | 0 | This ADR and the owner's answers | 1 |
 | 1 | Generalize for a country: `MX` region, boundaries via Overture divisions, country filter in the address extractor, Spanish terms and aliases, app shortcut/outline/copy, CI fixture rows and border test points. No new data. | 3-4 |
 | 2 | Border pilot: Tijuana, Mexicali, Ensenada, then Sonora (Hermosillo, Nogales, San Luis Rio Colorado). Metro trial extract (minutes), data layer, reverse geocode, review, events/groups pass, padel and frontenis pass, chain list for Mexico. | 6-8 |
-| 3 | Six core metros: CDMX (largest, about 8 sessions), Guadalajara, Monterrey, Cancun/Riviera Maya, Merida, Queretaro (about 4-5 each). | 25-30 |
+| 3 | **Deferred, demand-gated.** Six core metros, one at a time when usage data asks for it: CDMX (largest, about 8 sessions), Guadalajara, Monterrey, Cancun/Riviera Maya, Merida, Queretaro (about 4-5 each). | 25-30 if all were done; not scheduled |
 | 4 | Rest of the country, automatic layer only: nationwide extract, quality scorecard per metro, a coverage note; hand research only where GoatCounter or Trends show demand. | 2-3 |
 
-Total about 37-46 sessions to "metro parity" in about ten metros, versus about 250-380 for 32-state parity. Extract time: OSM tiles for the whole country are mostly ocean and desert, so assume a full run at 30-45 minutes (CA+NV is about 15), after metro trials of a few minutes each.
+Scheduled total (Phases 1, 2 and 4): about 11-15 sessions, with Phase 0 already done. The original plan with all six core metros was 37-46 sessions, versus about 250-380 for 32-state parity. Extract time: OSM tiles for the whole country are mostly ocean and desert, so assume a full run at 30-45 minutes (CA+NV is about 15), after metro trials of a few minutes each.
 
 **Expected pins (ratio, unmeasured).** NV has about 170 pins per million people, CA about 250. Assume Mexico starts at 15-40 per million (10-25% of NV's ratio, because OSM and Overture tag fewer racket venues there): about 2,000-5,000 nationally, 550-1,500 in the six core metros (about 37 million people), 100-300 in the border pilot. The trial replaces this with a measured number.
 
@@ -39,20 +39,22 @@ Total about 37-46 sessions to "metro parity" in about ten metros, versus about 2
 - Search interest (`search_metros.csv`): Mexican metros need Google Trends geo codes and Spanish queries; lowest priority.
 
 ## Order and conflicts
-Arizona touches the same files as Mexico Phase 1 (`regions.json`, the dbt `regions` var, app bounds, outline, ZIPs, copy), and two PRs on generated files collide (CLAUDE.md). Recommended order: Arizona data layer merged first, then Mexico Phase 1. Phase 1 is code only and can start before the December beta; Phases 2-3 research waits for the owner's call on beta timing.
+Arizona touches the same files as Mexico Phase 1 (`regions.json`, the dbt `regions` var, app bounds, outline, ZIPs, copy), and two PRs on generated files collide (CLAUDE.md). Recommended order: Arizona data layer merged first, then Mexico Phase 1. Phase 1 is code only and can start before the December beta; Phase 2 research waits for the owner's call on beta timing. Phase 3 has no date: it follows demand.
 
 ## Owner answers (2026-11-02, in chat)
 1. **Language:** English UI with Spanish aliases for v1; Spanish UI is a later ADR.
 2. **Parity:** per chosen metro, not per Mexican state.
 3. **Resorts (Cancun/Riviera Maya, Los Cabos):** case by case. Add resort courts that are publicly bookable by non-guests; flag the rest for the owner (a different rule from Nevada's closed list).
-4. **Timing:** Phase 1 starts after Arizona merges (same files); Phases 2-3 research waits for the owner's call after the December beta.
+4. **Timing:** Phase 1 starts after Arizona merges (same files); Phase 2 research waits for the owner's call after the December beta.
 
-5. **Metro order (owner left it to the agent):** Monterrey, Guadalajara, Cancun/Riviera Maya, Mexico City, Merida, Queretaro. The two mid-size metros come first to settle the Spanish-source routine before Mexico City's roughly 8 sessions; Cancun comes third so the resort rule (case by case) is applied once, early.
+5. **Metro order, if Phase 3 is ever run (owner left it to the agent):** Monterrey, Guadalajara, Cancun/Riviera Maya, Mexico City, Merida, Queretaro. The two mid-size metros come first to settle the Spanish-source routine before Mexico City's roughly 8 sessions; Cancun comes third so the resort rule (case by case) is applied once, early.
 6. **Repo and Pages naming:** rename after the beta, as already planned (ADR 0028); Mexico changes nothing, since RacketConnect has no region in it (ADR 0029).
 7. **Tijuana metro trial:** yes. The OSM and Overture trial for Tijuana (minutes, no commit) may run once Phase 1 is approved.
 
+8. **Scope cut (2026-11-04, in chat):** 37-46 sessions is too many. Build Phases 1, 2 and 4 (about 11-15 sessions: country generalization, border pilot, automatic layer for the rest). The six core metros become demand-gated and unscheduled.
+
 ## Still open
-Nothing. The ADR stays proposed until the owner says "ship it" on the PR.
+What counts as "demand" for starting a Phase 3 metro (a GoatCounter or Trends threshold) is not set; decide it when the first metro is proposed. The ADR stays proposed until the owner says "ship it" on the PR.
 
 ## Consequences
-Roughly doubles the covered population again with a second language, and coverage will look thin at first, so the scorecard must report per metro and the app must say "automatic data only" where nothing was hand-checked. One `MX` region keeps the pipeline unchanged for the five US states; splitting Mexico into per-state regions later stays possible through the `subregion` column.
+Roughly doubles the covered population again with a second language, and coverage will look thin at first (hand-checked only at the border, automatic elsewhere, including Mexico City until demand says otherwise), so the scorecard must report per metro and the app must say "automatic data only" where nothing was hand-checked. One `MX` region keeps the pipeline unchanged for the five US states; splitting Mexico into per-state regions later stays possible through the `subregion` column.

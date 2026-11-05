@@ -1,6 +1,6 @@
 # 0035. Arizona joins the map
 
-Date: 2026-11-03. Status: accepted, in progress (owner 2026-11-03 asked for it "with the same work as the other states"). The data layer is built: 2,024 pins on the first build (above the ratio estimate below). Extends ADR 0028 (five-state scope); its per-state step, the "new states get full CA parity" rule and the events/groups pass apply unchanged.
+Date: 2026-11-03. Status: accepted, in progress (owner 2026-11-03 asked for it "with the same work as the other states"). The data layer is built: 2,024 pins on the first build (above the ratio estimate below). Research passes: events, groups and chains in slice 1 (#534); city and county parks, JCC, campuses, LA Fitness and sport passes in slice 2 (2026-11-04). Open: Glendale parks, Tucson YMCAs, NAU, community colleges, military and resorts. Extends ADR 0028 (five-state scope); its per-state step, the "new states get full CA parity" rule and the events/groups pass apply unchanged.
 
 ## Context
 ADR 0028 step 0 made a new state mostly configuration. Arizona is one landmass and borders CA and NV, so it needs no special handling. OSM relation 162018 was checked against Overpass on 2026-11-03 (Arizona, `ISO3166-2` US-AZ, bounds 31.33 / -114.82 / 37.00 / -109.05, matching the box). Census FIPS is 04; ZIPs run 85xxx-86xxx.

@@ -12,6 +12,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0035, all accepted except 0001, su
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
 - `make sync-reports`   import owner-approved community-form reports as seed edits (needs `REPORTS_CSV_URL` in `.env`; `ARGS=--dry-run` previews)
 - `make issues`     read-only check of open GitHub issues (missing info, already in seeds, duplicates, waiting); runbook step 2b
+- `make feedback`   sync every GitHub issue (open and closed) into `docs/feedback_log.csv`, list what is open/handled and any comment after close; log non-issue feedback with `ARGS="--add --channel message --reporter <tag> --summary ..."` (no emails/phones; commit the CSV)
 - `make usage`      export GoatCounter counts and print the usage metrics + sport demand vs coverage (needs `GOATCOUNTER_API_TOKEN` in `.env`; `docs/goat_analysis.md`)
 - `make interest`   Google Trends search interest vs venues per metro (planning signal, `docs/search_interest_plan.md`)
 - `make report`     regenerate `docs/coverage_snapshot.md`
