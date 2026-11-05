@@ -75,7 +75,8 @@ def main() -> None:
             join cells c on c.cx = cast(floor(a.bbox.xmin * {CELLS_PER_DEGREE}) as integer)
                         and c.cy = cast(floor(a.bbox.ymin * {CELLS_PER_DEGREE}) as integer)
             where {bbox_sql}
-              and a.country in ({countries}) and a.number is not null and a.street is not null"""
+              and a.country in ({countries}) and a.number is not null and a.street is not null
+              and (a.country = 'US' or coalesce(a.sources[1].license, '') not ilike '%proprietary%')   -- ADR 0034: Mexico's mx/countrywide is tagged LicenseRef-Proprietary, so its points are not kept"""
     out = Path(args.out)
     if args.region and out.exists():
         # keep every existing row outside this region's cells, add the freshly read ones (same cells, so no duplicates)
