@@ -1,0 +1,116 @@
+metro,sport,interest_index,interest_rank,venues,completeness_share,confidence,gap_candidate,exported_on
+San Francisco-Oakland-San Jose CA,Badminton,100.0,1,40,0.7333,ok,false,2026-10-25
+Los Angeles CA,Badminton,41.0,2,42,0.6032,ok,false,2026-10-25
+San Diego CA,Badminton,36.0,3,11,0.697,ok,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Badminton,30.0,4,3,1.0,ok,false,2026-10-25
+Fresno-Visalia CA,Badminton,27.0,5,2,1.0,ok,false,2026-10-25
+Las Vegas NV,Badminton,24.0,6,4,0.75,ok,false,2026-10-25
+Monterey-Salinas CA,Badminton,21.0,7,3,0.1111,ok,false,2026-10-25
+Santa Barbara-Santa Maria-San Luis Obispo CA,Badminton,21.0,7,0,,ok,false,2026-10-25
+Eureka CA,Badminton,20.0,9,0,,ok,false,2026-10-25
+Palm Springs CA,Badminton,20.0,9,3,0.4444,ok,false,2026-10-25
+Bakersfield CA,Badminton,17.0,11,1,0.6667,ok,false,2026-10-25
+Reno NV,Badminton,17.0,11,0,,ok,false,2026-10-25
+Yuma AZ-El Centro CA,Badminton,16.0,13,0,,ok,false,2026-10-25
+Chico-Redding CA,Badminton,13.0,14,1,0.0,ok,false,2026-10-25
+San Diego CA,Beach Tennis,100.0,1,1,0.6667,thin,false,2026-10-25
+Los Angeles CA,Beach Tennis,69.0,2,4,0.8333,thin,false,2026-10-25
+Palm Springs CA,Beach Tennis,55.0,3,0,,thin,false,2026-10-25
+Monterey-Salinas CA,Beach Tennis,51.0,4,0,,thin,false,2026-10-25
+Santa Barbara-Santa Maria-San Luis Obispo CA,Beach Tennis,50.0,5,0,,thin,false,2026-10-25
+San Francisco-Oakland-San Jose CA,Beach Tennis,46.0,6,4,1.0,thin,false,2026-10-25
+Las Vegas NV,Beach Tennis,33.0,7,0,,thin,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Beach Tennis,29.0,8,0,,thin,false,2026-10-25
+Reno NV,Beach Tennis,27.0,9,0,,thin,false,2026-10-25
+Chico-Redding CA,Beach Tennis,25.0,10,0,,thin,false,2026-10-25
+Bakersfield CA,Beach Tennis,22.0,11,0,,thin,false,2026-10-25
+Fresno-Visalia CA,Beach Tennis,21.0,12,0,,thin,false,2026-10-25
+Yuma AZ-El Centro CA,Padel,100.0,1,0,,ok,true,2026-10-25
+San Francisco-Oakland-San Jose CA,Padel,90.0,2,8,1.0,ok,false,2026-10-25
+San Diego CA,Padel,80.0,3,15,0.9556,ok,false,2026-10-25
+Los Angeles CA,Padel,67.0,4,12,0.9444,ok,false,2026-10-25
+Las Vegas NV,Padel,54.0,5,1,1.0,ok,true,2026-10-25
+Palm Springs CA,Padel,51.0,6,3,1.0,ok,true,2026-10-25
+Santa Barbara-Santa Maria-San Luis Obispo CA,Padel,44.0,7,0,,ok,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Padel,41.0,8,2,1.0,ok,false,2026-10-25
+Monterey-Salinas CA,Padel,32.0,9,0,,ok,false,2026-10-25
+Reno NV,Padel,30.0,10,1,1.0,ok,false,2026-10-25
+Fresno-Visalia CA,Padel,27.0,11,0,,ok,false,2026-10-25
+Bakersfield CA,Padel,19.0,12,0,,ok,false,2026-10-25
+Eureka CA,Padel,19.0,12,0,,ok,false,2026-10-25
+Chico-Redding CA,Padel,17.0,14,0,,ok,false,2026-10-25
+Palm Springs CA,Pickleball,100.0,1,137,0.2701,ok,false,2026-10-25
+San Diego CA,Pickleball,83.0,2,138,0.5773,ok,false,2026-10-25
+San Francisco-Oakland-San Jose CA,Pickleball,72.0,3,184,0.4384,ok,false,2026-10-25
+Las Vegas NV,Pickleball,70.0,4,82,0.5122,ok,false,2026-10-25
+Los Angeles CA,Pickleball,63.0,5,456,0.4218,ok,false,2026-10-25
+Santa Barbara-Santa Maria-San Luis Obispo CA,Pickleball,59.0,6,45,0.3481,ok,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Pickleball,55.0,7,125,0.448,ok,false,2026-10-25
+Monterey-Salinas CA,Pickleball,44.0,8,12,0.5,ok,false,2026-10-25
+Reno NV,Pickleball,44.0,8,33,0.4848,ok,false,2026-10-25
+Eureka CA,Pickleball,40.0,10,8,0.3333,ok,false,2026-10-25
+Chico-Redding CA,Pickleball,39.0,11,17,0.4118,ok,false,2026-10-25
+Bakersfield CA,Pickleball,34.0,12,16,0.4167,ok,false,2026-10-25
+Fresno-Visalia CA,Pickleball,32.0,13,19,0.386,ok,false,2026-10-25
+Yuma AZ-El Centro CA,Pickleball,32.0,13,6,0.0,ok,false,2026-10-25
+San Francisco-Oakland-San Jose CA,Platform Tennis,100.0,1,1,1.0,thin,false,2026-10-25
+San Diego CA,Platform Tennis,69.0,2,0,,thin,false,2026-10-25
+Los Angeles CA,Platform Tennis,66.0,3,0,,thin,false,2026-10-25
+Palm Springs CA,Platform Tennis,65.0,4,0,,thin,false,2026-10-25
+Santa Barbara-Santa Maria-San Luis Obispo CA,Platform Tennis,57.0,5,0,,thin,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Platform Tennis,54.0,6,0,,thin,false,2026-10-25
+Las Vegas NV,Platform Tennis,52.0,7,0,,thin,false,2026-10-25
+Fresno-Visalia CA,Platform Tennis,50.0,8,0,,thin,false,2026-10-25
+Bakersfield CA,Platform Tennis,33.0,9,0,,thin,false,2026-10-25
+Monterey-Salinas CA,Platform Tennis,27.0,10,0,,thin,false,2026-10-25
+Reno NV,Platform Tennis,25.0,11,0,,thin,false,2026-10-25
+Palm Springs CA,Pop Tennis,100.0,1,0,,thin,false,2026-10-25
+San Francisco-Oakland-San Jose CA,Pop Tennis,55.0,2,0,,thin,false,2026-10-25
+Los Angeles CA,Pop Tennis,42.0,3,23,0.7681,thin,false,2026-10-25
+Monterey-Salinas CA,Pop Tennis,40.0,4,0,,thin,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Pop Tennis,40.0,4,0,,thin,false,2026-10-25
+San Diego CA,Pop Tennis,40.0,4,0,,thin,false,2026-10-25
+Fresno-Visalia CA,Pop Tennis,27.0,7,0,,thin,false,2026-10-25
+San Diego CA,Racquetball,79.0,1,19,0.9123,thin,false,2026-10-25
+Las Vegas NV,Racquetball,64.0,2,17,0.9412,thin,false,2026-10-25
+Los Angeles CA,Racquetball,61.0,3,88,0.9659,thin,false,2026-10-25
+San Francisco-Oakland-San Jose CA,Racquetball,59.0,4,14,0.9524,thin,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Racquetball,50.0,5,5,1.0,thin,false,2026-10-25
+Palm Springs CA,Racquetball,44.0,6,5,1.0,thin,false,2026-10-25
+Bakersfield CA,Racquetball,42.0,7,1,0.0,thin,false,2026-10-25
+Santa Barbara-Santa Maria-San Luis Obispo CA,Racquetball,42.0,7,2,1.0,thin,false,2026-10-25
+Reno NV,Racquetball,38.0,9,2,0.6667,thin,false,2026-10-25
+Monterey-Salinas CA,Racquetball,37.0,10,0,,thin,false,2026-10-25
+Fresno-Visalia CA,Racquetball,33.0,11,1,1.0,thin,false,2026-10-25
+San Francisco-Oakland-San Jose CA,Squash,100.0,1,7,0.9048,thin,false,2026-10-25
+San Diego CA,Squash,66.0,2,1,1.0,thin,false,2026-10-25
+Los Angeles CA,Squash,50.0,3,9,0.9259,thin,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Squash,50.0,3,1,1.0,thin,false,2026-10-25
+San Francisco-Oakland-San Jose CA,Table Tennis,100.0,1,58,0.6552,ok,false,2026-10-25
+Los Angeles CA,Table Tennis,63.0,2,45,0.5926,ok,false,2026-10-25
+San Diego CA,Table Tennis,54.0,3,17,0.4902,ok,false,2026-10-25
+Palm Springs CA,Table Tennis,53.0,4,3,0.5556,ok,true,2026-10-25
+Las Vegas NV,Table Tennis,52.0,5,6,0.5556,ok,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Table Tennis,45.0,6,8,0.8333,ok,false,2026-10-25
+Monterey-Salinas CA,Table Tennis,41.0,7,2,0.6667,ok,false,2026-10-25
+Santa Barbara-Santa Maria-San Luis Obispo CA,Table Tennis,40.0,8,4,0.3333,ok,false,2026-10-25
+Fresno-Visalia CA,Table Tennis,35.0,9,2,0.6667,ok,false,2026-10-25
+Reno NV,Table Tennis,31.0,10,1,0.6667,ok,false,2026-10-25
+Bakersfield CA,Table Tennis,26.0,11,0,,ok,false,2026-10-25
+Chico-Redding CA,Table Tennis,25.0,12,5,0.2667,ok,false,2026-10-25
+Eureka CA,Table Tennis,24.0,13,2,0.5,ok,false,2026-10-25
+Yuma AZ-El Centro CA,Table Tennis,24.0,13,1,0.6667,ok,false,2026-10-25
+Palm Springs CA,Tennis,100.0,1,646,0.1682,ok,false,2026-10-25
+San Francisco-Oakland-San Jose CA,Tennis,63.0,2,2025,0.2186,ok,false,2026-10-25
+San Diego CA,Tennis,51.0,3,846,0.2293,ok,false,2026-10-25
+Los Angeles CA,Tennis,45.0,4,3204,0.1981,ok,false,2026-10-25
+Santa Barbara-Santa Maria-San Luis Obispo CA,Tennis,44.0,5,515,0.0971,ok,false,2026-10-25
+Las Vegas NV,Tennis,36.0,6,356,0.2659,ok,false,2026-10-25
+Monterey-Salinas CA,Tennis,34.0,7,294,0.195,ok,false,2026-10-25
+Sacramento-Stockton-Modesto CA,Tennis,32.0,8,800,0.2283,ok,false,2026-10-25
+Fresno-Visalia CA,Tennis,27.0,9,204,0.1961,ok,false,2026-10-25
+Reno NV,Tennis,27.0,9,218,0.2431,ok,false,2026-10-25
+Bakersfield CA,Tennis,25.0,11,129,0.2067,ok,false,2026-10-25
+Eureka CA,Tennis,23.0,12,51,0.2222,ok,false,2026-10-25
+Yuma AZ-El Centro CA,Tennis,20.0,13,39,0.2393,ok,false,2026-10-25
+Chico-Redding CA,Tennis,18.0,14,127,0.1837,ok,false,2026-10-25

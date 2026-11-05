@@ -860,6 +860,8 @@ models:
               arguments:
                 values: ['ok', 'thin']
       - name: interest_index
+      - name: completeness_share
+        description: Mean share of the venues near the anchor with a real name, an address and a usable website (0-1); null when there are none.
 
   - name: mart_venue_confidence
     description: >

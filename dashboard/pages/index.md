@@ -101,6 +101,22 @@ select city, region, venues, completeness, real_name_share, address_share, websi
 from courtconnect.city_scorecard where venues >= 100 order by completeness, venues desc limit 10
 ```
 
+```sql interest_gaps
+select metro, sport, interest_index, venues, completeness_share
+from courtconnect.search_interest
+where gap_candidate order by interest_index desc, venues
+```
+
+```sql interest_all
+select sport, metro, interest_index, interest_rank, venues, completeness_share
+from courtconnect.search_interest
+where confidence = 'ok' order by sport, interest_index desc
+```
+
+```sql interest_meta
+select strftime(max(cast(exported_on as date)), '%Y-%m-%d') as exported_on from courtconnect.search_interest
+```
+
 ```sql ml_latest
 select * from courtconnect.ml_metrics order by date desc limit 1
 ```
@@ -244,6 +260,31 @@ Cities where visitors opened a venue, then the biggest cities that are the least
   <Column id=real_name_share title="Real name" fmt=pct0 />
   <Column id=address_share title="Address" fmt=pct0 />
   <Column id=website_share title="Website" fmt=pct0 />
+</DataTable>
+
+## Search interest against coverage
+
+An outside signal for popularity: how much people in each metro search Google for a sport, next to what we list there (Google Trends, exported {interest_meta[0].exported_on}, refreshed about quarterly). The index is relative and sampled: 100 is the metro with the most searches for that sport, so compare metros within one sport, never one sport with another. It is not a count of players. Venues are assigned to the nearest metro anchor city within 120 miles, our own approximation, so border and rural pins can land in the wrong metro. Yuma-El Centro also includes Arizona searches, so a gap there is weak. A gap is a place to look for missing venues, not proof of one.
+
+High interest and 3 or fewer venues:
+
+<DataTable data={interest_gaps} rows=12>
+  <Column id=metro />
+  <Column id=sport />
+  <Column id=interest_index title="Interest" fmt=num0 contentType=colorscale colorScale=#e9a23b />
+  <Column id=venues fmt=num0 />
+  <Column id=completeness_share title="Completeness" fmt=pct0 />
+</DataTable>
+
+All metros, by sport (the five busiest sports; thin Trends data is left out):
+
+<DataTable data={interest_all} rows=15 search=true>
+  <Column id=sport />
+  <Column id=metro />
+  <Column id=interest_index title="Interest" fmt=num0 contentType=colorscale colorScale=#e9a23b />
+  <Column id=interest_rank title="Rank" />
+  <Column id=venues fmt=num0 contentType=colorscale colorScale=#6fb27c />
+  <Column id=completeness_share title="Completeness" fmt=pct0 contentType=colorscale colorScale=#6fb27c />
 </DataTable>
 
 ## What the machine learning is doing

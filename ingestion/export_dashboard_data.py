@@ -4,7 +4,7 @@
 
 Only counts and dates that are already public leave the warehouse: the scorecard history, the numbers on the How it's built page
 (app/data/build_stats.json), the feedback issue counts (docs/feedback_log.csv), daily site views (docs/usage_daily.csv), event counts by name (docs/usage_events.csv),
-the ML scores (docs/ml_metrics.csv, docs/review_priority.csv, docs/reader_pilot_results.csv) and, from the map export, per-sport and per-city venue counts with how complete they are.
+the ML scores (docs/ml_metrics.csv, docs/review_priority.csv, docs/reader_pilot_results.csv), Google Trends search interest per metro and sport next to venue counts (docs/search_interest_vs_coverage.csv) and, from the map export, per-sport and per-city venue counts with how complete they are.
 No venue rows, names, addresses or contacts. The CSVs are
 generated and git-ignored; run `make quality`, `make stats` and `make app-data` first so they are current.
 """
@@ -136,6 +136,10 @@ def main() -> None:
     rows.sort(key=lambda r: (-r[-1], -r[2]))
     write("city_scorecard.csv", ["city", "region", "venues", "real_name_share", "address_share", "website_share", "hand_checked_share",
                                   "completeness", "opens"], rows)
+
+    # Google Trends interest per metro and sport next to venues and completeness (written from the warehouse by `make interest`; relative, sampled).
+    shutil.copyfile(ROOT / "docs" / "search_interest_vs_coverage.csv", OUT / "search_interest.csv")
+    print("wrote dashboard/sources/courtconnect/search_interest.csv: copy of docs/search_interest_vs_coverage.csv")
 
     # ML: the review-queue ranker's score history and queue, and what the page reader found, all from committed files.
     shutil.copyfile(ROOT / "docs" / "ml_metrics.csv", OUT / "ml_metrics.csv")
