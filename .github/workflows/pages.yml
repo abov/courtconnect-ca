@@ -4,7 +4,7 @@ name: pages
 on:
   push:
     branches: [main]
-    paths: ['app/**', 'dashboard/**', 'docs/data_quality_trend.csv', 'docs/feedback_log.csv', 'docs/usage_daily.csv', 'docs/usage_events.csv', 'docs/ml_metrics.csv', 'docs/review_priority.csv', 'docs/reader_pilot_results.csv', 'ingestion/export_dashboard_data.py', '.github/workflows/pages.yml']
+    paths: ['app/**', 'dashboard/**', 'docs/data_quality_trend.csv', 'docs/feedback_log.csv', 'docs/usage_daily.csv', 'docs/usage_events.csv', 'docs/ml_metrics.csv', 'docs/review_priority.csv', 'docs/reader_pilot_results.csv', 'docs/search_interest_vs_coverage.csv', 'ingestion/export_dashboard_data.py', '.github/workflows/pages.yml']
   workflow_dispatch:
   schedule:
     - cron: '17 11 * * *'   # daily rebuild so the dashboard's live issue counts never go stale

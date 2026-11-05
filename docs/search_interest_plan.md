@@ -9,7 +9,7 @@ Status: BUILT 2026-10-25 (first export 2026-10-25). Refresh runs from the cloud 
 - `transform/seeds/search_metros.csv`: the 14 Google metro codes covering CA + NV, each with one anchor city.
 - `int_search_interest`: puts the CA and NV queries on one scale (Reno is in both, so Las Vegas is rescaled by Reno's ratio; no Reno data = no Las Vegas index).
 - `mart_search_vs_coverage`: per (metro, sport) interest next to the venues nearest that metro's anchor. `gap_candidate` = confidence ok, index >= 50 and 3 or fewer venues. A place to look for missing venues first, not proof of a gap.
-- `ingestion/search_interest_report.py` (`make interest`), test `assert_search_interest_valid`.
+- `ingestion/search_interest_report.py` (`make interest`): prints the report and writes `docs/search_interest_vs_coverage.csv` (metro, sport, index, venues, completeness share; no venue rows). Commit it after a refresh: the Evidence dashboard reads it ("Search interest against coverage", `dashboard/README.md`), and `pages.yml` rebuilds when it changes. Test `assert_search_interest_valid`.
 
 ## Limits (say them whenever the numbers are quoted)
 - Relative and sampled: an index is the share of a metro's searches, not a count of people. 100 is only the top metro of that sport and query, so compare metros within a sport, not sports with each other.
@@ -23,7 +23,7 @@ Read-only use of the public Trends pages in the built-in browser pane: no sign-i
 2. `read_network_requests` with `urlPattern=comparedgeo`: the last 5 requests are the five terms in the order of the `q=` list. Read each one by `requestId`; each body is `{"default":{"geoMapData":[{"geoCode","geoName","value":[n],"hasData":[bool]}]}}`.
 3. Check the order once: the third response of set A must equal a padel-only query (`q=padel`).
 4. Rewrite `search_interest.csv` (same columns; `hasData` false = blank `index_value`; keep only metros in `search_metros.csv`; new `period` and `exported_on`). Keep CRLF.
-5. `dbt build --select search_metros search_interest int_search_interest mart_search_vs_coverage assert_search_interest_valid`, then `python ingestion/search_interest_report.py`.
+5. `dbt build --select search_metros search_interest int_search_interest mart_search_vs_coverage assert_search_interest_valid`, then `python ingestion/search_interest_report.py` (also rewrites `docs/search_interest_vs_coverage.csv`; commit it).
 6. Open a PR with the report's gap list in the description (2-4 bullets) and a new `docs/sessions/` note. If Trends returns 429 or empty widgets, stop, write the note and do not retry in a loop.
 7. Act on the top 2-3 gaps only if the owner asks; otherwise they feed the next facility scan or padel lead pass choice.
 
