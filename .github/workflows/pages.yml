@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: {python-version: "3.12"}
+        with: {python-version: "3.12", cache: pip, cache-dependency-path: requirements.txt}
       # dbt docs (lineage + data dictionary) built from the small CI fixture data; structure only, no venue data is published here.
       - run: pip install dbt-core dbt-duckdb "duckdb<2" pandas python-dotenv
       - run: python ingestion/load_raw.py --data-dir ci/fixtures

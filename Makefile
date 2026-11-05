@@ -4,6 +4,9 @@ DBT = dbt --project-dir transform --profiles-dir transform
 STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import overpass; print(*overpass.STATE_AREAS)")   # --area value of every covered state (ingestion/regions.json)
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
+# Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
+.PHONY: setup extract fetch-data fresh-db extract-boundaries city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback
+
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
 
@@ -69,6 +72,21 @@ observability:    ## Elementary report from the local warehouse (docs/data_obser
 
 demo: extract load build   ## the one-command demo
 	@echo "Done. Try: duckdb courtconnect.duckdb 'select * from marts.mart_sport_coverage'"
+
+refresh:          ## after make extract (docs/monthly_refresh.md steps 4, 6-8a): load, build, address fill, rebuild, scorecard, stats, reports, export, change feed; stops at the first failure
+	$(MAKE) load
+	$(MAKE) build
+	$(MAKE) reverse-geocode
+	$(MAKE) build-changed
+	$(MAKE) quality
+	$(MAKE) stats
+	$(MAKE) report
+	$(MAKE) market-snapshot
+	git fetch --no-tags origin main
+	$(PY) ci/check_scorecard_regression.py --base-ref origin/main
+	$(MAKE) app-data
+	$(MAKE) changes
+	@echo "Refresh done. Still by hand: sync-sports, issues, check-links, social series, sport of the month (app/data/featured_sport.json), then commit and open the PR (docs/monthly_refresh.md)."
 
 docs:
 	$(DBT) docs generate && $(DBT) docs serve
