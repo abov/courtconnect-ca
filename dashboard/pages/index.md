@@ -3,13 +3,21 @@ title: RacketConnect data-quality scorecard
 ---
 
 ```sql stats
-select * exclude (as_of), strftime(cast(as_of as date), '%Y-%m-%d') as as_of
+select * exclude (as_of, map_as_of), strftime(cast(as_of as date), '%Y-%m-%d') as as_of, strftime(cast(map_as_of as date), '%Y-%m-%d') as map_as_of
 from courtconnect.stats
 ```
 
 ```sql trend
 select cast(date as date) as date, venues, named_pct, tests_pass, sla_met, sla_total
 from courtconnect.trend
+order by 1
+```
+
+```sql venue_trend
+select date, venues from ${trend}
+union all
+select cast(map_as_of as date), map_venues from courtconnect.stats
+where cast(map_as_of as date) > (select max(date) from ${trend})
 order by 1
 ```
 
@@ -62,7 +70,9 @@ How complete the RacketConnect data is. Counts only; no venue details are shown.
 
 One point per refresh, so the lines are short for now.
 
-<LineChart data={trend} x=date y=venues title="Venues on the map" yAxisTitle="Venues" />
+<LineChart data={venue_trend} x=date y=venues title="Venues on the map" yAxisTitle="Venues" />
+
+The scorecard and the map count venues the same way. The scorecard is re-run at each refresh, so its last point can be older than the map; the newest point here is the map's own count above.
 
 <LineChart data={trend} x=date y=named_pct title="Venues with a real name (%)" yMin=0 yMax=30>
   <ReferenceLine y=25 label="Goal 25%" />
@@ -94,7 +104,7 @@ Sports grouped by how well they are covered.
 
 <BarChart data={status_counts} x=status y=sports title="Sports by coverage status" />
 
-Some sports share one number because they are assumed to be playable on tennis courts. The map marks those as inferred.
+Some sports share one number because they are assumed to be playable on tennis courts. The map marks those as inferred. A venue that hosts several sports counts once for each, so the table does not add up to the venue total.
 
 <DataTable data={coverage} rows=15 search=true>
   <Column id=sport />
