@@ -1,0 +1,145 @@
+day,event,detail,count
+2026-10-13,linkout,,1
+2026-10-13,venue-open,,1
+2026-10-14,sport,,2
+2026-10-15,linkout,,1
+2026-10-15,sport,,3
+2026-10-15,venue-open,,2
+2026-10-16,venue-open,,1
+2026-10-17,sport,,2
+2026-10-17,venue-open,,1
+2026-10-18,sport,,3
+2026-10-18,venue-open,,1
+2026-10-19,sport,,1
+2026-10-19,venue-open,,1
+2026-10-20,linkout,,1
+2026-10-20,sport,,1
+2026-10-20,venue-open,,2
+2026-10-21,linkout,,1
+2026-10-21,sport,,4
+2026-10-21,suggest-change,,1
+2026-10-21,venue-open,,3
+2026-10-22,linkout,,1
+2026-10-22,shortlist-open,,1
+2026-10-22,sport,,2
+2026-10-22,venue-open,,1
+2026-10-23,linkout,,1
+2026-10-23,linkout-domain,bracketsync.com,1
+2026-10-23,linkout-kind,event-page,1
+2026-10-23,linkout-sport,Pop Tennis,1
+2026-10-23,mode,watch,1
+2026-10-23,sport,,1
+2026-10-23,sport-pick,Pop Tennis,1
+2026-10-24,focus-on,,2
+2026-10-24,linkout,,1
+2026-10-24,linkout-domain,r2sports.com,1
+2026-10-24,linkout-kind,event-page,1
+2026-10-24,linkout-sport,Racquetball,1
+2026-10-24,mode,play,6
+2026-10-24,mode,watch,7
+2026-10-24,search-miss,place-no-events,2
+2026-10-24,sport,,8
+2026-10-24,sport-pick,3-wall Paddleball,1
+2026-10-24,sport-pick,Beach Tennis,2
+2026-10-24,sport-pick,Outdoor Racquetball,2
+2026-10-24,sport-pick,Padel,1
+2026-10-24,sport-pick,Pickleball,2
+2026-10-24,sport-pick,Pitton,1
+2026-10-24,sport-pick,Pop Tennis,5
+2026-10-24,sport-pick,Racquetball,1
+2026-10-24,sport-pick,Table Tennis,1
+2026-10-24,sport-pick,Tennis,5
+2026-10-24,venue-open,,1
+2026-10-25,empty-play,Teqis,1
+2026-10-25,empty-play,any sport,1
+2026-10-25,filter,clay,1
+2026-10-25,filter,grass,1
+2026-10-25,filter,members,1
+2026-10-25,filter,named,1
+2026-10-25,filter,offer-C,1
+2026-10-25,filter,public,1
+2026-10-25,filter,sand,1
+2026-10-25,filter,web,1
+2026-10-25,focus-on,,1
+2026-10-25,map-key,,1
+2026-10-25,mode,play,2
+2026-10-25,mode,watch,2
+2026-10-25,sport,,3
+2026-10-25,sport-pick,Badminton,1
+2026-10-25,sport-pick,Basque Pelota: Pala Corta,2
+2026-10-25,sport-pick,Beach Tennis,1
+2026-10-25,sport-pick,Outdoor Racquetball,1
+2026-10-25,sport-pick,Padel,2
+2026-10-25,sport-pick,Pickleball,1
+2026-10-25,sport-pick,Pop Tennis,2
+2026-10-25,sport-pick,Racquetball,1
+2026-10-25,sport-pick,Table Tennis,1
+2026-10-25,sport-pick,Tennis,2
+2026-10-25,sport-pick,Teqis,1
+2026-10-25,venue-open,,2
+2026-10-26,mode,watch,1
+2026-10-26,sport,,1
+2026-10-26,sport-pick,Beach Tennis,1
+2026-10-28,empty-play,Badminton,1
+2026-10-28,empty-play,Crossminton,2
+2026-10-28,empty-play,Frescotennis,1
+2026-10-28,empty-play,Naked Tennis,1
+2026-10-28,focus-on,,1
+2026-10-28,linkout,,1
+2026-10-28,linkout-domain,bayclubs.com,1
+2026-10-28,linkout-kind,website,1
+2026-10-28,linkout-sport,Racquetball,1
+2026-10-28,mode,play,1
+2026-10-28,mode,watch,1
+2026-10-28,sport,,4
+2026-10-28,sport-pick,1-wall Paddleball,1
+2026-10-28,sport-pick,Badminton,1
+2026-10-28,sport-pick,Crossminton,2
+2026-10-28,sport-pick,Frescotennis,1
+2026-10-28,sport-pick,Loboton,1
+2026-10-28,sport-pick,Naked Tennis,1
+2026-10-28,sport-pick,Padel,1
+2026-10-28,sport-pick,Pop Tennis,1
+2026-10-28,sport-pick,Racquetball,2
+2026-10-28,sport-pick,Table Tennis,1
+2026-10-28,sport-pick,Tennis,1
+2026-10-28,sport-pick,Teqpong,1
+2026-10-28,venue-open,,2
+2026-10-28,welcome-back,,1
+2026-10-29,ref,ref friend-test,1
+2026-11-01,court-open,header,1
+2026-11-01,empty-play,Downside Ball Game,1
+2026-11-01,empty-play,Eclipseball,1
+2026-11-01,empty-watch,any sport,1
+2026-11-01,linkout,,1
+2026-11-01,linkout-domain,openfreemap.org,1
+2026-11-01,linkout-sport,Tennis,1
+2026-11-01,mode,play,3
+2026-11-01,mode,watch,3
+2026-11-01,players-open,header,1
+2026-11-01,players-open,sport,1
+2026-11-01,sport,,3
+2026-11-01,sport-pick,Basque Pelota: Pala Corta,1
+2026-11-01,sport-pick,Beach Tennis,1
+2026-11-01,sport-pick,Downside Ball Game,1
+2026-11-01,sport-pick,Eclipseball,1
+2026-11-01,sport-pick,Pop Tennis,2
+2026-11-01,sport-pick,Tennis,1
+2026-11-01,tier,0,2
+2026-11-01,tier,1,2
+2026-11-01,tier,2,1
+2026-11-01,tier,3,1
+2026-11-01,venue-open,,1
+2026-11-02,demand-when,mon-eve,1
+2026-11-02,demand-where,Newman Lake WA,1
+2026-11-02,linkout,,1
+2026-11-02,linkout-domain,github.com,1
+2026-11-02,mode,play,1
+2026-11-02,mode,watch,1
+2026-11-02,search-miss,no-match,1
+2026-11-02,sport,,1
+2026-11-02,sport-pick,Padel,1
+2026-11-02,suggest-change,,1
+2026-11-02,venue-open,,1
+2026-11-03,sport,,1
+2026-11-03,sport-pick,Padel,1

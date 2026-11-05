@@ -488,6 +488,19 @@ function trackEmpty() {
     if (none) trackD("empty-" + state.mode, state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "any sport");
   } catch (e) { /* ignore */ }
 }
+// Ask box (ADR 0033): how often it is opened, what kind of reply each question got, whether it found anything, and the sport and place it was about.
+// Sport and place are names from our own lists (ask.js meta); the typed question is never sent.
+let askOpenedOnce = false;
+function trackAskOpen() { if (!askOpenedOnce) { askOpenedOnce = true; track("ask-open"); } }
+function trackAsk(r) {
+  try {
+    const m = r.meta || {};
+    trackD("ask-kind", r.kind || "other");
+    if (!m.hit && ["venues", "events", "social", "walls"].includes(r.kind)) trackD("ask-empty", r.kind);
+    if (m.sport) trackD("ask-sport", m.sport);
+    if (m.where) trackD("ask-where", m.where);
+  } catch (e) { /* ignore */ }
+}
 // Which shared link brought the visitor: ?ref=reddit-pickleball logs the event "ref/reddit-pickleball". Only an allowlisted
 // source (plus an optional short community tag) is kept; anything else is ignored. GoatCounter also reads ?ref= as the referrer.
 const REF_RE = /^(reddit|fb|ig|wa|x|nd|hn|tt|nl|sms|friend)(-[a-z0-9-]{1,20})?$/;
@@ -1886,7 +1899,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   if (resumed) showResume();
   if (store.get("welcomed", false)) document.querySelector(".welcome").hidden = true; else store.set("welcomed", true);   // the intro line shows on the first visit only (About keeps it)
   initMap();
-  if (window.AskWidget) AskWidget.mount(d, askContext);   // ask pop-up (ADR 0033); the page works without it
+  if (window.AskWidget) AskWidget.mount(d, askContext, {opened: trackAskOpen, answered: trackAsk});   // ask pop-up (ADR 0033); the page works without it
   if (state.mode === "watch") renderWatchList();
   $("loading").remove();
 }).catch(err => { document.querySelector("#loading .spin")?.remove(); $("loadmsg").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });

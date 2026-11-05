@@ -20,6 +20,7 @@ How to turn the anonymous counts (ADR 0013) into decisions. Counts are direction
 | `event/mode/<play or watch>`, `event/filter/<key>` | mode switches and filters turned on (surface, access, `offer-<code>`) |
 | `event/ref/<source>` | the shared link that brought the visit (`?ref=`) |
 | `event/demand-when/<weekday>-<am\|pm\|eve>`, `event/demand-where/<city> <state>`, `event/demand-sport-where/<sport> <city>` | looks at a venue by visitor weekday and part of day, venue city, and active sport filter (interest, not play; `docs/court_usage_plan.md`) |
+| `event/ask-open`, `event/ask-kind/<reply kind>`, `event/ask-empty/<kind>`, `event/ask-sport/<sport>`, `event/ask-where/<city or area>` | the ask box (ADR 0033): opened, what kind of reply each question got (venues, events, clarify, refuse, ...), a search reply with no results, and the sport and place the question named. Sport and place are names from our own lists (`meta` in `app/ask.js`), never the typed text |
 | `share`, `shortlist-add/open/copy`, `focus-on`, `welcome-back`, `this-week-open`, `map-key` | habit events: is the feature used at all |
 
 Never sent: search text, venue names, places, coordinates. Details are fixed vocabularies.
@@ -33,6 +34,8 @@ Never sent: search text, venue names, places, coordinates. Details are fixed voc
 | Where do people look but find nothing? | `empty-*` plus `search-miss/place-no-venues` vs `mart_sport_gaps`: the report's last table. A sport with many picks and empty or sparse coverage is the next facility scan |
 | Is Watch / Social used? | `mode/watch` vs `mode/play`, `linkout-kind` event-page / tickets / signup |
 | Which communities send people who stay? | `ref/*` visits vs the link-out total (ask: do shared posts convert?) |
+| Do people get answers from the ask box? | `ask-kind` refuse/clarify/offtopic share and `ask-empty` on the dashboard; a high share is the next rules to write |
+| Are the popular sports and cities also the accurate ones? | dashboard "Accuracy against popularity": picks, link-outs, asks and venue opens next to how complete each sport's and city's venues are |
 | Which features can go? | habit events at zero after the beta are candidates to simplify |
 
 ## Check once

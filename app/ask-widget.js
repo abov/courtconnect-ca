@@ -36,7 +36,7 @@
     return e;
   }
 
-  function mount(data, ctx) {
+  function mount(data, ctx, hooks) {
     if (document.getElementById("askfab") || !root.Ask) return;
     const store = {
       get() { try { return JSON.parse(localStorage.getItem("cc_ask_profile") || "{}"); } catch (e) { return {}; } },
@@ -82,7 +82,9 @@
     function go(q) {
       if (!q.trim()) return;
       log.querySelectorAll(".askchips").forEach(n => n.remove());
-      add(el("div", {class: "am me"}, q)); render(ask.answer(q, ctx));
+      add(el("div", {class: "am me"}, q));
+      const r = ask.answer(q, ctx); render(r);
+      if (hooks && hooks.answered) hooks.answered(r);   // counts only: reply kind, sport and place names from our lists; never the question text
     }
 
     function intro() {
@@ -92,7 +94,7 @@
 
     function open(on) {
       panel.hidden = !on; fab.hidden = on; fab.setAttribute("aria-expanded", on ? "true" : "false");
-      if (on) { if (!log.firstChild) intro(); input.focus(); } else fab.focus();
+      if (on) { if (!log.firstChild) intro(); input.focus(); if (hooks && hooks.opened) hooks.opened(); } else fab.focus();
     }
     fab.addEventListener("click", () => open(true));
     close.addEventListener("click", () => open(false));
