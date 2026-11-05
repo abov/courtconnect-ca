@@ -65,7 +65,8 @@ def main() -> None:
             log = [(r["received_on"], r["resolved_on"]) for r in csv.DictReader(f) if r["channel"] == "github-issue"]
     if log:
         opened, closed = Counter(o for o, _ in log), Counter(c for _, c in log if c)
-        day, end, rows, n_open = date.fromisoformat(min(opened)), date.today(), [], 0
+        # GitHub dates are UTC, so a close can be dated after the local "today"; never cut it off.
+        day, end, rows, n_open = date.fromisoformat(min(opened)), max(date.today(), date.fromisoformat(max([*opened, *closed]))), [], 0
         while day <= end:
             k = day.isoformat()
             n_open += opened[k] - closed[k]
@@ -73,8 +74,14 @@ def main() -> None:
             day += timedelta(days=1)
         write("issues.csv", ["date", "opened", "closed", "open_now"], rows)
 
-    shutil.copyfile(ROOT / "docs" / "usage_daily.csv", OUT / "views.csv")
-    print("wrote dashboard/sources/courtconnect/views.csv: copy of docs/usage_daily.csv")
+    # GoatCounter omits days with no hits; fill them with 0 so the chart has no gaps and "days" is the real span.
+    with (ROOT / "docs" / "usage_daily.csv").open(encoding="utf-8") as f:
+        seen = {r["day"]: [int(r["page_views"]), int(r["events"])] for r in csv.DictReader(f)}
+    day, last, rows = date.fromisoformat(min(seen)), date.fromisoformat(max(seen)), []
+    while day <= last:
+        rows.append([day.isoformat(), *seen.get(day.isoformat(), [0, 0])])
+        day += timedelta(days=1)
+    write("views.csv", ["day", "page_views", "events"], rows)
 
     venues = json.loads((ROOT / "app" / "data" / "venues.json").read_text(encoding="utf-8"))
     write("sport_coverage.csv", ["sport", "venues", "status"], [[x["n"], x["v"], x["s"]] for x in venues["sports"]])

@@ -1,4 +1,4 @@
 id,received_on,channel,reporter,kind,summary,status,resolved_on,resolution,link
 gh-112,2026-10-15,github-issue,abov,wrong-data,Change: Marine Avenue Park,done,2026-10-15,PR #132,https://github.com/abov/courtconnect-ca/issues/112
 gh-99,2026-10-15,github-issue,abov,wrong-data,Change: Jim Gilliam Recreation Center,done,2026-10-15,PR #110,https://github.com/abov/courtconnect-ca/issues/99
-gh-533,2026-11-03,github-issue,abov,other,Chat not working,open,,,https://github.com/abov/courtconnect-ca/issues/533
+gh-533,2026-11-03,github-issue,abov,other,Chat not working,done,2026-11-05,PR #541,https://github.com/abov/courtconnect-ca/issues/533
