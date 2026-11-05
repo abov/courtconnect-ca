@@ -70,10 +70,10 @@ def by_coord(rows, lat="lat", lon="lon"):
 
 
 def home_view_fits(cfg, margin=0.25):
-    """1 if the region's box sits inside app/index.html HOME_BOUNDS with `margin` degrees to spare (a line on the screen edge is hidden by the UI; Arizona's was). Regions far outside it (Hawaii) have their own shortcut: counted as fine. A region with `home_shortcut` in regions.json (the id of its chip in index.html) fits if that chip exists."""
+    """1 if the region's box sits inside app/index.html HOME_BOUNDS with `margin` degrees to spare (a line on the screen edge is hidden by the UI; Arizona's was). Regions far outside it (Hawaii) have their own shortcut: counted as fine. A region with `home_shortcut` in regions.json (the id of its control in index.html, the Country dropdown for Mexico) fits if that control exists."""
     west, south, east, north = map(float, re.search(r"HOME_BOUNDS = \[\[(.+?), (.+?)\], \[(.+?), (.+?)\]\]", (APP / "index.html").read_text(encoding="utf-8")).groups())
     s, w, n, e = cfg["bbox"]
-    if cfg.get("home_shortcut"):   # a region the home view deliberately leaves out (Mexico, ADR 0034) must have its own shortcut chip in the page
+    if cfg.get("home_shortcut"):   # a region the home view frames only in part (Mexico, ADR 0034: the home view covers the pilot and the pins, the rest of the country is the Country dropdown) must have its own control in the page
         return int(f'id="{cfg["home_shortcut"]}"' in (APP / "index.html").read_text(encoding="utf-8"))
     if e < west - 5 or w > east + 5 or n < south - 5 or s > north + 5:
         return 1

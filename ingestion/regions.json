@@ -7,7 +7,7 @@
     "WA": {"name": "washington", "bbox": [45.5, -124.9, 49.05, -116.9], "relation": 165479, "fips": "53", "cache": "wa_border.wkt"},
     "HI": {"name": "hawaii", "bbox": [18.85, -160.3, 22.35, -154.75], "relation": 166563, "fips": "15", "cache": "hi_border.wkt"},
     "AZ": {"name": "arizona", "bbox": [31.33, -114.82, 37.01, -109.04], "relation": 162018, "fips": "04", "cache": "az_border.wkt"},
-    "MX": {"name": "mexico", "bbox": [14.3, -118.7, 32.8, -86.4], "relation": 114686, "fips": "", "country": "MX", "cache": "mx_border.wkt", "defer": true, "home_shortcut": "mexicoBtn", "note": "ADR 0034: one region for the whole country; fips stays blank (no Census). defer = left out of the default all-region extracts (make extract, Overture without --region) until Phase 4; metros and --area mexico / --region MX still work."}
+    "MX": {"name": "mexico", "bbox": [14.3, -118.7, 32.8, -86.4], "relation": 114686, "fips": "", "country": "MX", "cache": "mx_border.wkt", "defer": true, "home_shortcut": "country", "note": "ADR 0034: one region for the whole country; fips stays blank (no Census). defer = left out of the default all-region extracts (make extract, Overture without --region) until Phase 4; metros and --area mexico / --region MX still work."}
   },
   "metros": {
     "la": {"bbox": [33.70, -118.67, 34.34, -118.15], "states": ["CA"]},
