@@ -103,6 +103,7 @@
   .sug .meta { display: block; }
   @media (pointer: coarse) { .sug li { min-height: 44px; } }
   .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > div { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
+  .locrow { display: flex; gap: 8px; } .locrow > div { flex: 1; min-width: 0; }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
@@ -295,6 +296,10 @@
 
   <div class="controls">
     <p id="resume" class="note" role="status" hidden></p>
+    <div class="locrow" role="group" aria-label="Zoom the map to a place">
+      <div><label class="l" for="country">Country</label><select id="country"></select></div>
+      <div id="stateWrap" hidden><label class="l" for="usState">State</label><select id="usState"></select></div>
+    </div>
     <div>
       <label class="l" for="sport">Sport</label>
       <div class="seg quick" id="quicksport" role="group" aria-label="Quick sport picks">
@@ -548,6 +553,10 @@ const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
+// The Country and State dropdowns only zoom the map (they never filter pins); the page still opens on HOME_BOUNDS. Rough state boxes, [west, south], [east, north].
+const STATE_NAMES = {AZ: "Arizona", CA: "California", HI: "Hawaii", NV: "Nevada", OR: "Oregon", WA: "Washington"};
+const STATE_BOUNDS = {AZ: [[-114.9, 31.3], [-109.0, 37.0]], CA: [[-124.5, 32.5], [-114.1, 42.0]], HI: [[-160.3, 18.9], [-154.8, 22.3]],
+  NV: [[-120.0, 35.0], [-114.0, 42.0]], OR: [[-124.6, 42.0], [-116.4, 46.3]], WA: [[-124.8, 45.5], [-116.9, 49.0]]};
 const HOME_BOUNDS = [[-160.6, 18.5], [-108.4, 49.3]];   // the map's starting view and the "show everything" view: every state we cover, Hawaii included (ADR 0028; owner 2026-11-02, so Places to play and Events frame the same area)
 let textOff = false, searchCentre = null, zips = null, places = null, hasMx = false;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
@@ -592,6 +601,7 @@ function showResume() {
   b.addEventListener("click", () => {
     hideResume(); store.set("hash", ""); $("reset").click();
     if (state.mode !== "play") setMode("play"); else if (mapReady) map.fitBounds(HOME_BOUNDS, {padding: 20, duration: 600});
+    resetPlace();
   });
   $("resume").replaceChildren(el("span", {text: "Picked up where you left off: " + bits.join(" · ") + "."}), b);
   $("resume").hidden = false;
@@ -1175,6 +1185,22 @@ function fitTo(pts, maxZoom) {
   const b = new maplibregl.LngLatBounds(); pts.forEach(p => b.extend([p.x, p.y]));
   const c = map.getContainer(), pad = Math.min(90, Math.floor(Math.min(c.clientWidth, c.clientHeight) / 4));
   popup.remove(); map.fitBounds(b, {padding: pad, maxZoom, duration: 600});
+}
+// Country and State dropdowns: they only move the map (the pins are never filtered), and the page starts on "All countries" = HOME_BOUNDS.
+function zoomHome() { if (!mapReady) return; popup.remove(); map.fitBounds(HOME_BOUNDS, {padding: 20, duration: 600}); }
+function resetPlace() { $("country").value = ""; $("usState").value = ""; $("stateWrap").hidden = true; }
+function initPlace(mx) {
+  const country = $("country"), st = $("usState"), have = new Set(venues.map(v => v.r));
+  country.replaceChildren(new Option("All countries", ""), new Option("United States", "US"), ...(mx.length ? [new Option("Mexico", "MX")] : []));
+  st.replaceChildren(new Option("All states", ""), ...Object.entries(STATE_NAMES).filter(([k]) => have.has(k)).map(([k, n]) => new Option(n, k)));
+  country.addEventListener("change", () => {
+    st.value = ""; $("stateWrap").hidden = country.value !== "US";   // states exist only for the US (Mexico has no state list yet)
+    if (country.value) trackD("place-pick", country.value);
+    if (country.value === "MX") fitTo(mx.map(v => ({x: v.x, y: v.y})), 8); else zoomHome();   // "United States" frames every state we cover, the same as the home view
+  });
+  st.addEventListener("change", () => {
+    if (st.value) { trackD("place-pick", st.value); if (mapReady) { popup.remove(); map.fitBounds(STATE_BOUNDS[st.value], {padding: 20, duration: 600}); } } else zoomHome();
+  });
 }
 async function zipPoint(q) {
   const n = +q;
@@ -1870,7 +1896,8 @@ function initCoverage() {
   $("closeCoverage").addEventListener("click", () => $("coverage").close());
   const mx = DATA.venues.filter(v => v.r === "MX");   // the Mexico shortcut appears only once Mexican pins are loaded; the home view stops at the US border (ADR 0034)
   hasMx = mx.length > 0; $("mexicoBtn").hidden = !hasMx;
-  $("mexicoBtn").addEventListener("click", () => { if (state.mode !== "play") setMode("play"); fitTo(mx.map(v => ({x: v.x, y: v.y})), 8); });
+  initPlace(mx);
+  $("mexicoBtn").addEventListener("click", () => { if (state.mode !== "play") setMode("play"); $("country").value = "MX"; $("country").dispatchEvent(new Event("change")); });
   $("aboutClub").href = REPORT_FORM;
   $("aboutEvent").href = REPORT_FORM;
   $("openAbout").addEventListener("click", () => $("about").showModal());
