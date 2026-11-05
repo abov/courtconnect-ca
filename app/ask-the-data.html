@@ -106,11 +106,20 @@
   dl.tbl dt { font-family: ui-monospace, Consolas, monospace; font-weight: 700; margin-top: 8px; }
   dl.tbl dd { margin: 0; color: var(--muted); font-size: 14px; max-width: 68ch; }
 </style>
+<link rel="stylesheet" href="site-nav.css">
 </head>
 <body>
 <header>
   <div class="wrap">
-    <a class="back" href="how-its-built.html">&larr; How it&rsquo;s built</a>
+    <nav class="site-nav" aria-label="RacketConnect pages">
+      <a href="./">Map</a>
+      <a href="how-its-built.html">How it&rsquo;s built</a>
+      <a href="dashboard/">Data quality</a>
+      <a href="how-its-built.html#docs">Docs</a>
+      <a href="run-history.html">Run history</a>
+      <a href="ask-the-data.html" aria-current="page">Ask the data</a>
+      <a href="https://github.com/abov/courtconnect-ca">Source</a>
+    </nav>
     <h1>Ask the data</h1>
     <p class="lede">Run SQL on the map&rsquo;s public data file, inside your own browser. Nothing you type leaves this page.</p>
   </div>

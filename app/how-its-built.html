@@ -64,6 +64,7 @@
   .flow li:not(:last-child)::after { content: "\2193"; position: absolute; left: 20px; bottom: -22px; width: 14px; text-align: center; color: var(--muted); font-size: 16px; line-height: 22px; }
   .flow li:last-child { margin-bottom: 0; }
   .flow p { margin: 2px 0; }
+  #docs ~ h3 { margin-top: 18px; }
   .gate { font-size: 14px; color: var(--muted); }
   .gate b { color: var(--text); font-weight: 600; }
 
@@ -74,11 +75,20 @@
   code { font: 13.5px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--tint); padding: 1px 5px; border-radius: 4px; }
   footer { border-top: 1px solid var(--line); padding: 16px 0 28px; font-size: 13.5px; color: var(--muted); }
 </style>
+<link rel="stylesheet" href="site-nav.css">
 </head>
 <body>
 <header>
   <div class="wrap">
-    <a class="back" href="./">&larr; Back to the map</a>
+    <nav class="site-nav" aria-label="RacketConnect pages">
+      <a href="./">Map</a>
+      <a href="how-its-built.html" aria-current="page">How it&rsquo;s built</a>
+      <a href="dashboard/">Data quality</a>
+      <a href="how-its-built.html#docs">Docs</a>
+      <a href="run-history.html">Run history</a>
+      <a href="ask-the-data.html">Ask the data</a>
+      <a href="https://github.com/abov/courtconnect-ca">Source</a>
+    </nav>
     <h1>How RacketConnect is built</h1>
     <p class="lede">Open data in, a tested warehouse in the middle, one static file out, and gates that decide what ships. Everything here is measured or marked as not yet measured.</p>
   </div>
@@ -148,15 +158,36 @@
     </ul>
   </div>
 
-  <h2 id="more">Go deeper</h2>
+  <h2 id="docs">Documentation</h2>
+  <p>Everything about the project, in one list. The pages on this site are live; the rest are the project&rsquo;s own files on GitHub.</p>
+
+  <h3>Understand it</h3>
   <ul class="plain">
     <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/case_study.md">Case study</a>: the problem, trade-offs and incidents, in one read.</li>
-    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/architecture.md">Architecture</a>, the <a href="dbt-docs/">dbt docs and lineage</a> (built from small sample data, structure only) and the <a href="https://github.com/abov/courtconnect-ca/blob/main/app/data-dictionary.md">data dictionary</a>.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/architecture.md">Architecture</a>, <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/tools_and_strategies.md">tools and strategies</a> and the <a href="dbt-docs/">dbt docs and lineage</a> (built from small sample data, structure only).</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/decisions">Decision records (ADRs)</a>: one short file per decision, including the ones that were reversed.</li>
     <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/running_costs.md">What it costs to run</a>: hosting, data, CI and the capped AI agents, with what is not measured.</li>
-    <li><a href="run-history.html">Run history</a>: the scorecard after each refresh and the refresh agent's logged runs.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/value_proposition.md">Value proposition</a>, <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/product_brief.md">product brief</a> and <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/competitor_scan.md">competitor scan</a>: who it is for and how it differs.</li>
+  </ul>
+
+  <h3>Check the data quality</h3>
+  <ul class="plain">
+    <li><a href="dashboard/">Data-quality dashboard</a>: live counts and trends (open issues, site views, coverage by sport and city). Counts only, no venue rows.</li>
+    <li><a href="run-history.html">Run history</a>: the scorecard after each refresh and the refresh agent&rsquo;s logged runs.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_quality.md">Data-quality scorecard</a>, <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/coverage_snapshot.md">coverage snapshot</a>, <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_observability.md">data observability</a> and the <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/planet_scale_benchmark.md">planet-scale benchmark</a> with its caveats.</li>
+  </ul>
+
+  <h3>Use the data</h3>
+  <ul class="plain">
     <li><a href="ask-the-data.html">Ask the data</a>: run SQL on the public venue export in your browser (DuckDB-WebAssembly, about 36 MB, loads on request).</li>
-    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_quality.md">Data-quality scorecard</a> and the <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/planet_scale_benchmark.md">planet-scale benchmark</a> with its caveats.</li>
-    <li><a href="https://github.com/abov/courtconnect-ca">Source code</a>.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/app/data-dictionary.md">Data dictionary</a> and <a href="llms.txt">llms.txt</a>: how to read <code>data/venues.json</code>, for people and AI tools.</li>
+  </ul>
+
+  <h3>Run it, change it, reuse it</h3>
+  <ul class="plain">
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/README.md#quick-start">Quick start</a> and <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_guide.md">how to edit the data</a>; <a href="https://github.com/abov/courtconnect-ca/blob/main/CONTRIBUTING.md">contributing</a> and how to report a venue.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/monthly_refresh.md">The twice-monthly refresh runbook</a>, the <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/cloud_routines.md">scheduled agent routines</a> and <a href="https://github.com/abov/courtconnect-ca/blob/main/docs/status.md">current status and priorities</a>.</li>
+    <li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/fork_guide.md">Fork guide</a>: reuse it for another area or sport. <a href="https://github.com/abov/courtconnect-ca">Source code</a>.</li>
   </ul>
 </main>
 

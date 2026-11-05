@@ -87,11 +87,20 @@
   thead th { font-size: 13px; color: var(--muted); font-weight: 600; }
   tbody tr:last-child td { border-bottom: 0; }
 </style>
+<link rel="stylesheet" href="site-nav.css">
 </head>
 <body>
 <header>
   <div class="wrap">
-    <a class="back" href="how-its-built.html">&larr; How it&rsquo;s built</a>
+    <nav class="site-nav" aria-label="RacketConnect pages">
+      <a href="./">Map</a>
+      <a href="how-its-built.html">How it&rsquo;s built</a>
+      <a href="dashboard/">Data quality</a>
+      <a href="how-its-built.html#docs">Docs</a>
+      <a href="run-history.html" aria-current="page">Run history</a>
+      <a href="ask-the-data.html">Ask the data</a>
+      <a href="https://github.com/abov/courtconnect-ca">Source</a>
+    </nav>
     <h1>Run history</h1>
     <p class="lede">The data-quality scorecard after each refresh, and what the refresh agent has done so far. Read straight from the project&rsquo;s own logs, not typed in.</p>
   </div>
