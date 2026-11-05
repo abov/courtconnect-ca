@@ -2,6 +2,8 @@
 
 One-page inventory. Layout and layers: [`architecture.md`](architecture.md). Decisions: [`decisions/`](decisions).
 
+The long version is the owner's Google Sheet [RacketConnect tool dictionary](https://docs.google.com/spreadsheets/d/1RWONK-tLDJh5lRNyAISlNMEY4UH9ZHWGSW2ytlo5k1c/edit) (private; every tool with what it is, how it is used here and elsewhere, lifecycle stage and license, plus a lifecycle tab and a glossary). Whenever a tool, library, service or data source is added or removed, update the sheet (a row on the Dictionary tab, and the Lifecycle tab if a step changes) and this page in the same change.
+
 ## Languages and runtime
 - Python 3.12 (ingestion, export, checks, ML), SQL (dbt), JavaScript/HTML/CSS (map), Bash and `make` as the task runner.
 - `.venv`; `requirements-ml.txt` for the optional ML dependencies.
