@@ -123,7 +123,7 @@ def main() -> None:
     if args.dry_run:
         return
     done = 0
-    for vid, lat, lon, _region in todo[: args.limit]:
+    for vid, lat, lon, region in todo[: args.limit]:
         try:
             res = lookup(lat, lon)
         except requests.RequestException as e:
@@ -138,7 +138,7 @@ def main() -> None:
             d = distance_m(lat, lon, float(res["lat"]), float(res["lon"]))
             row.update(status="address" if d <= MAX_DISTANCE_M else "too_far", distance_m=round(d))
             if row["status"] == "address":
-                row["address_line"] = f"{number} {road}"
+                row["address_line"] = f"{road} {number}" if region == "MX" else f"{number} {road}"   # Mexico: street then number (ADR 0034)
         elif road:
             row["status"] = "street_only"
             row["address_line"] = road
