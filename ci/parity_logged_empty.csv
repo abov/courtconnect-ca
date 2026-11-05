@@ -1,0 +1,3 @@
+region,item,evidence,verified_on
+AZ,three_wall wall pins,"docs/public_facility_scan.md, Arizona 2026-11-04 (slice 1 and 2 Walls notes): OSM wall extract, web searches and every city page read found no three-wall court; Chaparral Park lead stays in venue_leads.csv",2026-11-04
+AZ,backboard wall pins,"docs/public_facility_scan.md, Arizona 2026-11-04 (slice 1 and 2 Walls notes): OSM wall extract, web searches and every city page read found no backboard; Phoenix/Tucson park pages searched",2026-11-04
