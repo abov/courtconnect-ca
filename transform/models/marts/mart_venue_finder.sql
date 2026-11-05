@@ -69,7 +69,13 @@ left join osm_facts f on f.venue_id = bvs.venue_id and f.sport_id = bvs.sport_id
 -- own court is unmarked; a seed row that lists the sport itself is kept.
 -- Hitting walls (ADR 0032) are rows here too: venue_kind 'hitting_wall' venues, and wall-supported sports at court venues (in_wall, not in_courts).
 -- The export still lists court venues only (step 3 of the plan turns the walls on), so it filters on venue_kind.
+-- Verified-only regions (var verified_only_regions, MX; ADR 0034, docs/mexico_metro_trial.md): an automatic OSM / Overture venue is not shown until a seed row
+-- with evidence backs it (int_venue_verified). The hidden ones stay in dim_venue and are listed in mart_unverified_region_leads.
 where not (
+    v.region in ({% for r in var('verified_only_regions') %}'{{ r }}'{% if not loop.last %}, {% endif %}{% endfor %})
+    and v.venue_id not in (select venue_id from {{ ref('int_venue_verified') }})
+)
+and not (
     v.is_members_only
     and not bvs.in_manual
     and s.sport_name in (select trim(also_sport) from {{ ref('sport_also_played') }} where lower(trim(coalesce(exclude_private_members, ''))) = 'yes')

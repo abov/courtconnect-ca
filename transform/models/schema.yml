@@ -1028,6 +1028,30 @@ models:
       - name: website_usable
         description: Website that passed the liveness check; dead links never reach the map.
 
+  - name: int_venue_verified
+    description: >
+      Venues a person verified through a seed row with evidence (manual_venues confirmed visited / official, or a venue_actions row with evidence +
+      verified_on). The only venues of a verified-only region (var verified_only_regions, MX) that reach mart_venue_finder (ADR 0034).
+    columns:
+      - name: venue_id
+        tests:
+          - not_null
+      - name: verified_via
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['manual_venues', 'venue_actions']
+
+  - name: mart_unverified_region_leads
+    description: >
+      Automatic OSM + Overture venues in a verified-only region (MX) that no seed row backs: kept in the warehouse as leads, never shown on the map.
+      Trial precision of the named ones was about 1 in 5 (docs/mexico_metro_trial.md).
+    columns:
+      - name: venue_id
+        tests:
+          - unique
+          - not_null
+
   - name: mart_venue_actions
     description: >
       Link-outs for a venue (open play, clinics, tournaments, social accounts). RacketConnect takes no bookings or payments; every row links
