@@ -107,6 +107,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 1360e4c2922f15e01de17b943da40482,39.482433,-119.780428,city_only,,Reno,,,2026-10-17
 136607e913711d7821e601e3c5f8900f,39.48883,-117.064754,street_only,Nevada Street,Austin,,way/1308913907,2026-10-16
 136ed1840b588c8a909c7532dae14e48,36.227073,-115.178086,street_only,Fuselier Drive,North Las Vegas,,way/1353995946,2026-10-17
+1371ee49ffb9fb304cee42f4804101ce,35.235105,-111.669181,address,3000 North Fremont Boulevard,Flagstaff,0,node/7373859907,2026-11-04
 1387f42027cbc729df14db4105a8a3c9,39.253392,-119.949946,address,914 Northwood Boulevard,Incline Village,0,node/12120338969,2026-10-17
 14540d076375dd3032b760b8fefea677,36.147334,-115.220249,city_only,,Spring Valley,,,2026-10-17
 14543fee79f40536993cb2fb4b1c2bee,36.062058,-115.101026,city_only,,Paradise,,,2026-10-17
@@ -241,6 +242,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 31fdde0d162ce5d5d5bc95951d1a714f,36.1458,-115.1371,street_only,South Maryland Parkway,Las Vegas,,way/1023288477,2026-10-16
 31fe43351315bff4d1a8d130d30bb948,33.461433,-118.523404,city_only,,,,,2026-10-17
 3257d44dd18720a642e26e4c05fc213e,36.300148,-109.224768,street_only,Navajo Route 64,Tsaile,,way/1567486248,2026-11-04
+32bd2cb2915a9dd24dea20c8909d8756,33.669277,-111.908231,street_only,East Thompson Peak Parkway,Scottsdale,,way/1081011724,2026-11-04
 32f078d808967c271546eb34e536707e,22.042985,-159.336896,street_only,Lehia Lane,Wailua,,way/657979655,2026-11-02
 336dc76a0fe83e8c79d0942f05311cae,32.976015,-117.214152,too_far,,Rancho Santa Fe,472,way/130538534,2026-10-16
 33b7d37153786fed18879d0d4fcb93af,36.14557,-115.21289,address,5200 West Sahara Avenue,Las Vegas,1,node/13943781601,2026-10-16
@@ -777,6 +779,7 @@ a75c1b8c4ecd4b1ffcd4f4d558236d1e,38.274649,-122.028586,address,205 East Atlantic
 a7e509e02102259c144c420d5d814346,36.02658,-115.169963,city_only,,Enterprise,,,2026-10-17
 a7ea7062b4e999ead4b451a634b8020a,20.869529,-156.67481,street_only,Front Street,Lahaina,,way/304761641,2026-11-02
 a7eecfd6a464de2302ede35f0b8f840e,36.006702,-115.077391,street_only,Mountain Dell Avenue,Henderson,,way/172890221,2026-10-16
+a813474eb148675202e9a72dbdb1758f,33.750679,-112.250352,street_only,New River Trail,Peoria,,way/863324854,2026-11-04
 a81e6541348b0bbea958a3ea3d2e6513,36.124076,-115.148916,city_only,,Winchester,,,2026-10-17
 a8208cf2b676bdb7e36eabe0fa447411,36.22373,-115.310648,street_only,Sweden Street,Las Vegas,,way/914880692,2026-10-16
 a859a46eb942ddd1cbb97f83bf87ddbe,45.112457,-123.446874,street_only,Southwest Moriah Lane,,,way/678519249,2026-11-02
@@ -867,6 +870,7 @@ bf76359bc494d75852a99ef70917b600,21.329886,-157.848882,street_only,Pikake Place,
 c031cee9e0dcac4e40be4061f72ce558,36.168982,-115.025276,city_only,,Sunrise Manor,,,2026-10-17
 c04664b6edd28b36cba3499b1a1acc89,32.801007,-117.161503,street_only,Ashford Street,San Diego,,way/158309786,2026-10-16
 c05697e4dbe90ff63ff36c780efb9aa9,36.147814,-115.058333,street_only,Winterwood Boulevard,Sunrise Manor,,way/1558540163,2026-10-16
+c0789f3796785db9b8f8d2adf8fb4c01,35.204633,-111.610431,address,1702 North 4th Street,Flagstaff,0,way/204856057,2026-11-04
 c090c3edda664947a957ef8ad12c30ee,39.459281,-118.792306,city_only,,,,,2026-10-17
 c0c67380b3cebc0acd6ad59ecb3a9516,21.40791,-157.97037,street_only,Kuahaka Street,Pearl City,,way/595894323,2026-11-04
 c0d580b5c1fdcb533e343b5ff726d535,36.169908,-115.23485,address,300 South Torrey Pines Drive,Las Vegas,99,way/1421965931,2026-10-16
@@ -881,6 +885,7 @@ c31d92a3b62f9a4d7988e23bb40c5f50,36.267375,-115.121855,city_only,,North Las Vega
 c38c8a574ea30ce73e39a7ba1331f0d4,19.86782,-155.11233,street_only,Old Māmalahoa Highway,Honomu,,way/289852431,2026-11-04
 c392bb72a3096f6177aed12b1a1df745,20.915378,-156.694692,street_only,Nohea Kai Drive,Kaanapali,,way/1423793406,2026-11-02
 c3dea3a0832149c5a8c1e98984ef43e9,39.18911,-120.199022,street_only,Alpine Meadows Road,Olympic Valley,,way/187210728,2026-10-16
+c42c39718d41f3af4f7a615df178f573,33.573695,-112.062595,address,802 East Vogel Avenue,Phoenix,0,way/33868696,2026-11-04
 c487f0de6a616e65a07d89323c9f2c78,36.204772,-115.128535,address,991 Putnam Avenue,North Las Vegas,107,way/14305186,2026-10-17
 c48a0187ef8ea590c9480c650e819faf,21.471244,-158.212891,street_only,Manuku Street,Makaha,,way/1339922921,2026-11-04
 c4aa43c24f66f97cdf8e025117dd9d36,21.333599,-157.896821,street_only,Nimitz Highway,Honolulu,,way/1504111716,2026-11-04
@@ -892,6 +897,7 @@ c61e9e5a1420b002a0d6524afe8caae7,21.313232,-157.854659,street_only,Lunalilo Free
 c68b72a39bcadece34243b892b61dd4d,36.116551,-115.197401,city_only,,Spring Valley,,,2026-10-17
 c69b41a7a2127ebf26f140405e04adf5,36.005092,-115.258768,address,10155 Mountains Edge Parkway,Las Vegas,73,way/1241745427,2026-10-16
 c6c45731d17323e2a17e001bea2bb38c,38.745383,-122.493311,city_only,,,,,2026-10-17
+c6e90eef831008253ad0cdefb6ab23e4,33.419165,-111.894479,address,2150 East Orange Street,Tempe,0,node/5233388028,2026-11-04
 c701153da54132878aa55d3cdd8ba449,36.098308,-115.284935,city_only,,Spring Valley,,,2026-10-17
 c723b217413bbf77b0619c5cdefec5e7,42.220908,-121.732361,street_only,Upland Way,Klamath Falls,,way/1528575982,2026-11-02
 c799e2be817e01c0433f628d48a297be,36.068744,-114.965346,city_only,,Henderson,,,2026-10-17
@@ -1030,6 +1036,7 @@ e3cbef69aacad74ec6fbe33d965c4ef0,36.18002,-115.050993,street_only,North Christy 
 e3e2ba5ebab05a203409bd15aef7b9f5,34.098402,-117.708781,street_only,Amherst Avenue,Claremont,,way/380190279,2026-10-16
 e417ecd6b91f566dc524d57758f8c012,36.266231,-115.092617,city_only,,North Las Vegas,,,2026-10-17
 e4499779e118a0ff0f6e3bbfcad3667d,36.063713,-119.027971,street_only,Howland Street,Porterville,,way/1566625301,2026-10-16
+e44e32a30add4988679aca559e1567d5,32.247016,-110.967452,street_only,East Waverly Street,Tucson,,way/152840709,2026-11-04
 e551e0db9a0fd1ef568fc885d02b5d6f,33.671024,-117.382947,street_only,Ryan Court,Lake Elsinore,,way/1247098726,2026-10-16
 e556c0f61118e6f7f7963483ca31c8ec,33.727219,-117.953384,street_only,Brookhurst Street,Fountain Valley,,way/963507842,2026-10-16
 e5752c2a5387144b09ee543b109af19b,46.574007,-120.402218,street_only,Mieras Road,,,way/1152277142,2026-11-02
@@ -1058,6 +1065,7 @@ e9909bd8bcfadc2d0d079603008fb14f,42.340686,-122.902747,address,1221 OR 238,Medfo
 e9bcdb62d300586336bade535a33f194,35.997131,-114.959304,street_only,Scholar Street,Henderson,,way/212669094,2026-10-16
 e9c6ef5c6d4b0a3428eb2979348a8436,40.695077,-124.196954,street_only,Tompkins Hill Road,Beatrice,,relation/6321155,2026-10-16
 ea43404c9b8628b8a3e2cbac8dc1b66c,33.619108,-114.607029,address,811 West Chanslor Way,Blythe,78,way/44486234,2026-10-16
+ea5d4d5655673516094e147b76885d56,33.777882,-111.920345,address,32220 North 74th Way,Scottsdale,0,way/1071789973,2026-11-04
 ea92f08b89cf7dbde7856cfaf6d8c5ad,21.28599,-157.68286,street_only,Koko Crater Tramway,East Honolulu,,node/14117993821,2026-11-02
 eaa839bd055a0d5b052dc20c8a606201,36.811985,-114.052768,street_only,Cindy Sue Lane,Mesquite,,way/856476808,2026-10-16
 eabdda6d0326cb6b4b98bc84e59c468c,36.08931,-115.139138,street_only,East Russell Road,Paradise,,way/1442809136,2026-10-16
@@ -1079,6 +1087,7 @@ edaaf168199beb1bffd3bbfa06391418,36.293818,-115.183219,street_only,Elkhorn Road,
 edc76a5564002308739b6bfc17f3a90d,45.506447,-122.829276,street_only,Del Hayes Way,,,node/13055776879,2026-11-02
 ee20b4afe9e154d94c59e2b7e1538f5b,36.012425,-115.060459,city_only,,Henderson,,,2026-10-17
 ee2d52ae4be32bf8d3b7100482254b2f,36.2097,-115.2054,street_only,North Decatur Boulevard,Las Vegas,,way/978675707,2026-10-16
+ee49a6b5f6189b492edbc55bfb6f46e5,33.576691,-112.110507,street_only,North 23rd Avenue,Phoenix,,way/121550069,2026-11-04
 ee5be174d044396972475135b2e54211,36.298555,-115.322636,street_only,Farm Road,Las Vegas,,way/1558232121,2026-10-16
 ee680483176d68a85eedda76fd2ed97c,39.486566,-119.741096,street_only,Fairwood Drive,Reno,,way/1069683587,2026-10-16
 eebfafe48637b411dedad4041a22d42c,20.733893,-156.454425,street_only,Waimahaihai Street,Kihei,,way/448023159,2026-11-04
@@ -1152,6 +1161,7 @@ fe33b6d99c516f167d41101b00ebec18,19.505841,-155.947404,street_only,Club Drive,,,
 ff09df943054d6f9b349cbb9da9e55c7,36.013051,-115.104803,street_only,Amargosa Trail,Henderson,,way/1560289217,2026-10-16
 ff0ae4076a16feebc8aef7245d3f1d6a,21.494592,-158.037233,street_only,Kilani Avenue,Wahiawa,,way/467652944,2026-11-04
 ff3987731b6c73e6ae0da6cba5e36970,33.905847,-118.006443,street_only,Adelfa Drive,La Mirada,,way/1425200206,2026-10-16
+ff5f4e8446bdc83176f8d054098b22eb,33.37395,-112.144109,street_only,South Cesar Chavez Park Road,Phoenix,,way/1466927824,2026-11-04
 ff9e489b5d6b03a3c246ab852021b1f1,39.645536,-119.840503,street_only,West Patrician Drive,Lemmon Valley,,way/515726340,2026-10-16
 ffb68e01da04ab6de373614563670e0a,36.141661,-115.264456,city_only,,Spring Valley,,,2026-10-17
 ffc9980055ff27edd4ac03c5c16e330c,39.547166,-119.809519,street_only,Manogue Road,Reno,,way/487893087,2026-10-16
