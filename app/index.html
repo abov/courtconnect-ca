@@ -1216,7 +1216,7 @@ async function runSearch(zoom, open) {
     try {
       const z = await zipPoint(zq);
       if (my !== searchRun) return;
-      if (!z) { textOff = true; note = "ZIP " + zq + " is outside " + REGION + "."; trackD("search-miss", "zip-outside"); }
+      if (!z) { textOff = true; note = "ZIP " + zq + " is outside " + REGION + "." + (hasMx ? " Only US ZIP codes are searchable; for Mexico, search the city." : ""); trackD("search-miss", "zip-outside"); }
       else {
         const c = {lat: z.at[0], lng: z.at[1]}; searchCentre = c; maxZoom = play ? 13 : 11;
         let pool = pins(), lead = "";
