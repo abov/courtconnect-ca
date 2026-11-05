@@ -110,6 +110,9 @@
   .badge.i { color: var(--warn); border-color: var(--warn); }
   .seg { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
   .seg .chip.find { display: inline-flex; align-items: center; justify-content: center; gap: 5px; border-color: var(--accent); color: var(--accent); }   /* opens the Find players dialog: an action, not a view, so it never shows as pressed */
+  .seg .chip.view { display: inline-flex; align-items: center; justify-content: center; gap: 5px; }   /* views you switch between: tinted, with an icon; the picked one turns yellow */
+  .seg .chip.view:not([aria-pressed=true]) { background: var(--chip-on); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+  .seg .chip.view svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
   .seg .chip.find:hover { background: var(--hover); } .seg .chip.find svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .callout { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; margin-top: 8px; text-align: left; border-radius: var(--r-md); border-color: var(--accent); padding: 8px 12px;
              background: color-mix(in srgb, var(--accent) 9%, var(--chip)); }
@@ -287,9 +290,9 @@
     <div class="sub" id="headline">Find where to play racket sports in California, Nevada, Oregon, Washington, Arizona, Hawaii and the Mexican border.</div>
     <p class="sub welcome">Every racket sport, every kind of court, from free parks to private clubs. Labelled by how sure we are. We link out and never take bookings or payments.</p>
     <div class="seg" role="group" aria-label="What are you looking for?">
-      <button class="chip" id="modePlay" type="button" aria-pressed="true">Places to play</button>
-      <button class="chip" id="modeWatch" type="button" aria-pressed="false">Events &amp; meetups</button>
-      <button class="chip" id="modeTrips" type="button" aria-pressed="false" hidden>Racket vacations</button>
+      <button class="chip view" id="modePlay" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/></svg>Places to play</button>
+      <button class="chip view" id="modeWatch" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>Events &amp; meetups</button>
+      <button class="chip view" id="modeTrips" type="button" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 21c0-5 .5-8 1-11M8 21h9M13.5 10C11.5 7 8 7 5.5 9.5M13.5 10c0-3.5-2.5-5.5-5.5-5.5M13.5 10c1.5-3.5 5-4.5 7.5-3M13.5 10c2.5-1 5.5.5 6.5 3"/></svg>Racket vacations</button>
       <button class="chip find" id="modePlayers" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M17 14.2c2.4.2 4.2 2.2 4.2 4.8"/></svg>Find players</button>
       <button class="chip find" id="modeCourt" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="1"/><path d="M12 6v12M3 12h18"/></svg>Find by court</button>
     </div>
@@ -557,7 +560,7 @@ let userPos = null;   // {lat, lng} after a successful "Near me"
 const STATE_NAMES = {AZ: "Arizona", CA: "California", HI: "Hawaii", NV: "Nevada", OR: "Oregon", WA: "Washington"};
 const STATE_BOUNDS = {AZ: [[-114.9, 31.3], [-109.0, 37.0]], CA: [[-124.5, 32.5], [-114.1, 42.0]], HI: [[-160.3, 18.9], [-154.8, 22.3]],
   NV: [[-120.0, 35.0], [-114.0, 42.0]], OR: [[-124.6, 42.0], [-116.4, 46.3]], WA: [[-124.8, 45.5], [-116.9, 49.0]]};
-const HOME_BOUNDS = [[-160.6, 18.5], [-98.5, 49.3]];   // the map's starting view and the "show everything" view: every venue we have, Hawaii and Mexico included (ADR 0028; owner 2026-11-02, so Places to play and Events frame the same area; owner 2026-11-05: open on all venues, not just the U.S.)
+const HOME_BOUNDS = [[-160.6, 18.0], [-85.0, 49.3]];   // the map's starting view and the "show everything" view: every venue we have, Hawaii and Mexico included (ADR 0028; owner 2026-11-02, so Places to play and Events frame the same area; owner 2026-11-05: open on all venues, not just the U.S.; east edge reaches Cancún, -86.8)
 const US_BOUNDS = [[-160.6, 18.5], [-108.4, 49.3]];   // the "United States" country pick: every state we cover
 let textOff = false, searchCentre = null, zips = null, places = null, hasMx = false;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
@@ -942,7 +945,7 @@ function initMap() {
     map.fitBounds(HOME_BOUNDS, {padding: 20, animate: false});
     map.addSource("state-outline", {type: "geojson", data: "data/state_outline.json"});   // covered-state lines (US Census, simplified); drawn under the pins
     map.addLayer({id: "state-outline-line", type: "line", source: "state-outline",
-                  paint: {"line-color": "#2f6f5e", "line-width": 1.25, "line-opacity": 0.75}});
+                  paint: {"line-color": "#2f6f5e", "line-width": 0.6, "line-opacity": 0.7}});
     map.addSource("v", {type: "geojson", data: geojson(current), cluster: true, clusterRadius: 38, clusterMaxZoom: 13});
     map.addLayer({id: "clusters", type: "circle", source: "v", filter: ["has", "point_count"],
       paint: {"circle-color": "#24292f", "circle-opacity": 0.85, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
