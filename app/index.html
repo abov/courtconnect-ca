@@ -321,7 +321,6 @@
         <ul id="qsug" class="sug" role="listbox" aria-label="Suggestions" hidden></ul>
       </div>
       <button class="chip" id="nearMe" type="button">Near me</button>
-      <button class="chip" id="mexicoBtn" type="button" hidden>Mexico</button>
     </div>
     <p id="searchnote" class="note" hidden aria-live="polite"></p>
     <details class="playonly" id="moreFilters">
@@ -557,7 +556,8 @@ let userPos = null;   // {lat, lng} after a successful "Near me"
 const STATE_NAMES = {AZ: "Arizona", CA: "California", HI: "Hawaii", NV: "Nevada", OR: "Oregon", WA: "Washington"};
 const STATE_BOUNDS = {AZ: [[-114.9, 31.3], [-109.0, 37.0]], CA: [[-124.5, 32.5], [-114.1, 42.0]], HI: [[-160.3, 18.9], [-154.8, 22.3]],
   NV: [[-120.0, 35.0], [-114.0, 42.0]], OR: [[-124.6, 42.0], [-116.4, 46.3]], WA: [[-124.8, 45.5], [-116.9, 49.0]]};
-const HOME_BOUNDS = [[-160.6, 18.5], [-108.4, 49.3]];   // the map's starting view and the "show everything" view: every state we cover, Hawaii included (ADR 0028; owner 2026-11-02, so Places to play and Events frame the same area)
+const HOME_BOUNDS = [[-160.6, 18.5], [-98.5, 49.3]];   // the map's starting view and the "show everything" view: every venue we have, Hawaii and Mexico included (ADR 0028; owner 2026-11-02, so Places to play and Events frame the same area; owner 2026-11-05: open on all venues, not just the U.S.)
+const US_BOUNDS = [[-160.6, 18.5], [-108.4, 49.3]];   // the "United States" country pick: every state we cover
 let textOff = false, searchCentre = null, zips = null, places = null, hasMx = false;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
@@ -1186,8 +1186,9 @@ function fitTo(pts, maxZoom) {
   const c = map.getContainer(), pad = Math.min(90, Math.floor(Math.min(c.clientWidth, c.clientHeight) / 4));
   popup.remove(); map.fitBounds(b, {padding: pad, maxZoom, duration: 600});
 }
-// Country and State dropdowns: they only move the map (the pins are never filtered), and the page starts on "All countries" = HOME_BOUNDS.
-function zoomHome() { if (!mapReady) return; popup.remove(); map.fitBounds(HOME_BOUNDS, {padding: 20, duration: 600}); }
+// Country and State dropdowns: they only move the map (the pins are never filtered), and the page starts on "All countries" = HOME_BOUNDS (every venue, Mexico included).
+function zoomTo(b) { if (!mapReady) return; popup.remove(); map.fitBounds(b, {padding: 20, duration: 600}); }
+function zoomHome() { zoomTo(HOME_BOUNDS); }
 function resetPlace() { $("country").value = ""; $("usState").value = ""; $("stateWrap").hidden = true; }
 function initPlace(mx) {
   const country = $("country"), st = $("usState"), have = new Set(venues.map(v => v.r));
@@ -1196,7 +1197,7 @@ function initPlace(mx) {
   country.addEventListener("change", () => {
     st.value = ""; $("stateWrap").hidden = country.value !== "US";   // states exist only for the US (Mexico has no state list yet)
     if (country.value) trackD("place-pick", country.value);
-    if (country.value === "MX") fitTo(mx.map(v => ({x: v.x, y: v.y})), 8); else zoomHome();   // "United States" frames every state we cover, the same as the home view
+    if (country.value === "MX") fitTo(mx.map(v => ({x: v.x, y: v.y})), 8); else zoomTo(country.value === "US" ? US_BOUNDS : HOME_BOUNDS);   // "United States" frames every state we cover; "All countries" is the home view
   });
   st.addEventListener("change", () => {
     if (st.value) { trackD("place-pick", st.value); if (mapReady) { popup.remove(); map.fitBounds(STATE_BOUNDS[st.value], {padding: 20, duration: 600}); } } else zoomHome();
@@ -1894,10 +1895,9 @@ function initCoverage() {
     body.append(el("tr", {}, el("td", {text: s.n}), el("td", {}, el("span", {class: "st " + s.s, text: s.s})), el("td", {class: "n", text: fmt(s.v)}))));
   $("openCoverage").addEventListener("click", () => $("coverage").showModal());
   $("closeCoverage").addEventListener("click", () => $("coverage").close());
-  const mx = DATA.venues.filter(v => v.r === "MX");   // the Mexico shortcut appears only once Mexican pins are loaded; the home view stops at the US border (ADR 0034)
-  hasMx = mx.length > 0; $("mexicoBtn").hidden = !hasMx;
+  const mx = DATA.venues.filter(v => v.r === "MX");   // Mexican pins add the Mexico country pick; the home view frames them too
+  hasMx = mx.length > 0;
   initPlace(mx);
-  $("mexicoBtn").addEventListener("click", () => { if (state.mode !== "play") setMode("play"); $("country").value = "MX"; $("country").dispatchEvent(new Event("change")); });
   $("aboutClub").href = REPORT_FORM;
   $("aboutEvent").href = REPORT_FORM;
   $("openAbout").addEventListener("click", () => $("about").showModal());
