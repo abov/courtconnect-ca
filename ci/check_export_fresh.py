@@ -32,6 +32,12 @@ exported_social = {e["n"] for e in data.get("social", [])}
 for name in sorted(expected_social - exported_social):
     problems.append(f"social series missing from venues.json: {name}")
 
+with open(seeds / "racket_vacations.csv", encoding="utf-8", newline="") as f:
+    expected_vac = {r["name"] for r in csv.DictReader(f) if r["status"].strip().lower() == "verified"}
+exported_vac = {v["n"] for v in data.get("vacations", [])}
+for name in sorted(expected_vac - exported_vac):
+    problems.append(f"verified racket vacation missing from venues.json: {name}")
+
 if problems:
     print("app/data/venues.json is stale (generated " + generated + "):\n  " + "\n  ".join(problems))
     sys.exit(1)

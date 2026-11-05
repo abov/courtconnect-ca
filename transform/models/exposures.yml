@@ -14,6 +14,7 @@ exposures:
       - ref('mart_venue_actions')
       - ref('mart_watch_events')
       - ref('mart_social_events')
+      - ref('mart_racket_vacations')
       - ref('mart_sport_gaps')
       - ref('dim_wall')
       - ref('mart_wall_pins')

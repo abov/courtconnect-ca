@@ -520,6 +520,38 @@ seeds:
               arguments:
                 values: ['confirmed', 'dates_not_confirmed']
 
+  - name: racket_vacations
+    description: >
+      Racket sport vacations (stay-and-play resorts, camps, academies, tours) in regions already on the map, curated by hand, one row per offer
+      (ADR 0036). A discovery list only: every row links out to the provider; nothing is booked or sold here. Only `status = verified` rows (own page or a
+      dated news item, with `evidence` + `verified_on`) reach the map; `lead` rows stay in the seed. `who_can_play` says whether non-guests can play.
+    columns:
+      - name: vacation_key
+        tests: [unique, not_null]
+      - name: kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['resort', 'camp', 'academy', 'tour']
+      - name: sports
+        tests: [not_null]
+      - name: who_can_play
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['guests', 'anyone', 'booking']
+      - name: info_url
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['verified', 'lead']
+
   - name: social_events
     description: >
       Recurring social get-togethers people can join (mixers, club nights, open play, social nights), curated by hand, one row per SERIES, not per date.
@@ -1043,6 +1075,9 @@ models:
   - name: mart_watch_events
     description: Events to watch (pro and amateur tournaments, dome screenings). Link-out only, with date_status and location_precision saying how certain the data is (ADR 0006).
 
+  - name: mart_racket_vacations
+    description: Racket sport vacations the map may show (verified rows only, ADR 0036). Link-out only; who_can_play says whether non-guests can play.
+
   - name: mart_social_events
     description: Recurring social get-togethers (mixers, club nights, open play). Link-out only; age_focus and audience are organizer-stated, never inferred.
 
@@ -1108,6 +1143,11 @@ models:
     description: >
       Matches and tournaments people can go and watch, curated in seeds/watch_events.csv, each with a link to the organizer's own page.
       Nothing is sold or reserved; info_url and tickets_url are link-outs.
+
+  - name: stg_racket_vacations
+    description: >
+      Racket sport vacations curated in seeds/racket_vacations.csv, each with a link to the provider's own page. Includes unverified leads;
+      mart_racket_vacations keeps the verified rows. Nothing is booked or sold.
 
   - name: stg_social_events
     description: >

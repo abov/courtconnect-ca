@@ -156,6 +156,22 @@ seeds:
         info_url: varchar
         tickets_url: varchar
         source_note: varchar
+    racket_vacations:        # all text; the staging model casts the date and coordinates
+      +column_types:
+        vacation_key: varchar
+        name: varchar
+        kind: varchar
+        destination: varchar
+        country: varchar
+        lat: varchar
+        lon: varchar
+        sports: varchar
+        who_can_play: varchar
+        price_note: varchar
+        info_url: varchar
+        evidence: varchar
+        verified_on: varchar
+        status: varchar
     social_events:           # all text; dates and numbers are cast in stg_social_events
       +column_types:
         lat: varchar

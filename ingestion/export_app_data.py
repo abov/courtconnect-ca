@@ -280,6 +280,16 @@ def main() -> None:
                        "pr": prec or "", "s": str(start) if start else "", "e": str(end) if end else "", "d": dstat,
                        "t": tix or "", "u": info or "", "k": tickets or "", "vo": str(verified)})
 
+    # Racket sport vacations (ADR 0036): verified rows only, link-out only. `sp` is the offer's sports as a list of names.
+    vacations = []
+    for (name, kind, dest, country, lat, lon, sps, who, price, info, verified) in con.execute("""
+            select vacation_name, kind, destination, country, lat, lon, sports, who_can_play, price_note, info_url, verified_on
+            from marts.mart_racket_vacations order by country, destination, vacation_name""").fetchall():
+        vac = {"n": name, "k": kind, "d": dest, "co": country, "y": round(float(lat), 5), "x": round(float(lon), 5),
+               "sp": [s.strip() for s in sps.split(";") if s.strip()], "w": who, "u": info, "vo": str(verified)}
+        if price: vac["p"] = price
+        vacations.append(vac)
+
     # Social get-togethers: recurring series (not dates), link-out only. Audience and age focus are organizer-stated; absent keys mean "not stated", never a guess (ADR 0021).
     social = []
     for (name, sport, kind, org, venue, city, lat, lon, prec, sched, last, skill, aud, age, courts, price, skind, info, signup, verified) in con.execute("""
@@ -312,6 +322,7 @@ def main() -> None:
         "sports_with_venues": sum(1 for s in sports if s["v"] > 0),
         "events": len(events),
         "social": len(social),
+        "vacations": len(vacations),
         "hitting_walls": sum(1 for v in out_venues if v.get("kd")),
         "walls": int(walls_total),
         "walls_unchecked": int(walls_unchecked),
@@ -319,7 +330,7 @@ def main() -> None:
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "platforms": platforms}, ensure_ascii=False, separators=(",", ":")),
+    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "vacations": vacations, "platforms": platforms}, ensure_ascii=False, separators=(",", ":")),
                    encoding="utf-8")
     size = OUT.stat().st_size / 1e6
     print(f"Wrote {OUT}: {len(out_venues):,} venues ({meta['hitting_walls']:,} hitting-wall venues), {len(sports)} sports, {size:.2f} MB  (named {named:,}; confirmed {meta['confirmed']:,})")
