@@ -850,7 +850,7 @@ function wallNode(v) {
 }
 
 // ---------- map ----------
-let map, popup, current = [], mapReady = false, viewEv = [], viewSoc = [];
+let map, popup, current = [], mapReady = false, viewEv = [], viewSoc = [], shownVenue = null;   // shownVenue: the pin whose popup is open (the ask box answers "this place" from it)
 function geojson(list) {
   return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0, g: pinFamily(v), h: isWall(v) ? (wallAccess(v.hw) === "restricted" ? 2 : 1) : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
@@ -860,6 +860,7 @@ function initMap() {
   map.addControl(new maplibregl.NavigationControl({showCompass: false}), "top-right");
   map.addControl(new maplibregl.AttributionControl({compact: true, customAttribution: "Venues: OpenStreetMap, Overture Maps"}));
   popup = new maplibregl.Popup({closeButton: true, maxWidth: "300px", offset: 12, anchor: "bottom"});
+  popup.on("close", () => { shownVenue = null; });
   map.once("style.load", () => {                                   // as soon as the style is ready, without waiting for every basemap tile
     map.resize();                                                  // the grid may not have settled when the map was created
     map.fitBounds(HOME_BOUNDS, {padding: 20, animate: false});
@@ -1089,6 +1090,15 @@ function showVenue(v, fly) {
   if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: popupRoom()});
   track("venue-open"); trackDemand(v);
   popup.setLngLat([v.x, v.y]).setDOMContent((isWall(v) ? wallNode : venueNode)(v)).addTo(map);
+  shownVenue = v;   // after addTo: swapping pins closes the old popup first, and that close clears it
+}
+
+// What the ask box may know about the page: the open pin and what the map shows now (play mode only), nearest the centre first. Read when a question is asked.
+function askContext() {
+  if (!map || state.mode !== "play") return {selected: null, inView: [], sport: ""};
+  const c = map.getCenter(), b = map.getBounds();
+  return {selected: shownVenue, sport: state.sport >= 0 ? sports[state.sport].n : "",
+    inView: current.filter(v => b.contains([v.x, v.y])).map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).map(x => x[1])};
 }
 
 // ---------- list + counts ----------
@@ -1870,7 +1880,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   if (resumed) showResume();
   if (store.get("welcomed", false)) document.querySelector(".welcome").hidden = true; else store.set("welcomed", true);   // the intro line shows on the first visit only (About keeps it)
   initMap();
-  if (window.AskWidget) AskWidget.mount(d);   // ask pop-up (ADR 0033); the page works without it
+  if (window.AskWidget) AskWidget.mount(d, askContext);   // ask pop-up (ADR 0033); the page works without it
   if (state.mode === "watch") renderWatchList();
   $("loading").remove();
 }).catch(err => { document.querySelector("#loading .spin")?.remove(); $("loadmsg").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });

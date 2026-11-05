@@ -36,7 +36,7 @@
     return e;
   }
 
-  function mount(data) {
+  function mount(data, ctx) {
     if (document.getElementById("askfab") || !root.Ask) return;
     const store = {
       get() { try { return JSON.parse(localStorage.getItem("cc_ask_profile") || "{}"); } catch (e) { return {}; } },
@@ -82,11 +82,11 @@
     function go(q) {
       if (!q.trim()) return;
       log.querySelectorAll(".askchips").forEach(n => n.remove());
-      add(el("div", {class: "am me"}, q)); render(ask.answer(q));
+      add(el("div", {class: "am me"}, q)); render(ask.answer(q, ctx));
     }
 
     function intro() {
-      add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Racket sports, courts and gear only. Nothing is booked or paid here. Your sport and city are remembered in this browser only."));
+      add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Ask about places to play, events, groups, how to try a sport, what is in the map view, or how RacketConnect works. Nothing is booked or paid here. Your sport and city are remembered in this browser only."));
       addChips(root.Ask.starters);
     }
 
