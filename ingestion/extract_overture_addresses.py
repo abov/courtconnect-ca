@@ -65,6 +65,8 @@ def main() -> None:
         bbox_sql = f"a.bbox.xmin between {w - m} and {e + m} and a.bbox.ymin between {s - m} and {n + m}"
     else:
         bbox_sql = overpass.sql_bbox('a.bbox.xmin', 'a.bbox.ymin')
+    # the region's country (regions.json, default US); with no --region the countries of every non-deferred region
+    countries = ", ".join(sorted({f"'{cfg['country']}'" for code, cfg in overpass.REGIONS.items() if args.region == code or (not args.region and not cfg['defer'])}))
     fetched = f"""
             select a.id as address_id, a.number as house_number, a.street, a.unit, a.postcode,
                    coalesce(a.postal_city, a.address_levels[2].value) as city, a.address_levels[1].value as state,
@@ -73,7 +75,7 @@ def main() -> None:
             join cells c on c.cx = cast(floor(a.bbox.xmin * {CELLS_PER_DEGREE}) as integer)
                         and c.cy = cast(floor(a.bbox.ymin * {CELLS_PER_DEGREE}) as integer)
             where {bbox_sql}
-              and a.country = 'US' and a.number is not null and a.street is not null"""
+              and a.country in ({countries}) and a.number is not null and a.street is not null"""
     out = Path(args.out)
     if args.region and out.exists():
         # keep every existing row outside this region's cells, add the freshly read ones (same cells, so no duplicates)

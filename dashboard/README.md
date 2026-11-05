@@ -16,6 +16,9 @@ python -m http.server 8766 --directory build   # open http://localhost:8766
 
 `deployment.basePath` in `evidence.config.yaml` is `/courtconnect-ca/dashboard`, so a local `npm run dev` / `preview` serves under that path too.
 
+## Freshness
+The page is static, so it is only as new as its last build. `pages.yml` rebuilds it on every relevant push to main and once a day (11:17 UTC); in CI the issue counts come live from the GitHub API (`gh issue list`), everything else from committed files. Site views are pulled live from GoatCounter in that build when the `GOATCOUNTER_API_TOKEN` repo secret is set; without it (or if GoatCounter fails) the committed `docs/usage_daily.csv` is used.
+
 ## What it reads
 Only aggregates: `docs/data_quality_trend.csv`, `docs/feedback_log.csv` (issue open/closed counts by day; no titles), `docs/usage_daily.csv` (GoatCounter page views and events per day; `make usage` refreshes it, commit it), `app/data/build_stats.json` and per-sport venue counts from `app/data/venues.json`. No venue rows, addresses or contacts; the warehouse is never opened. `ingestion/export_dashboard_data.py` writes the CSVs.
 

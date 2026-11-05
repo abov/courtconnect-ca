@@ -25,6 +25,8 @@ basque pelota xare,Basque Pelota: Xare,ambiguous
 battlebird,Battlebird,ambiguous
 beach tennis,Beach Tennis,ambiguous
 biraq,Biraq,ambiguous
+cancha de tenis,Tennis,distinctive
+club de tenis,Tennis,distinctive
 crossminton,Crossminton,distinctive
 downside ball game,Downside Ball Game,ambiguous
 eclipseball,Eclipseball,ambiguous
@@ -83,8 +85,11 @@ racket club,Tennis,distinctive
 racket hockey,Racket Hockey,ambiguous
 racquet club,Tennis,distinctive
 racquetball,Racquetball,distinctive
+racquetbol,Racquetball,distinctive
 raketa,Smashball,ambiguous
 rapidball,Rapidball,ambiguous
+raquetball,Racquetball,distinctive
+raquetbol,Racquetball,distinctive
 real tennis,Real Tennis,ambiguous
 ricochet,Ricochet,ambiguous
 riftball,Riftball,ambiguous
@@ -105,7 +110,9 @@ table squash,Table Squash,ambiguous
 table tennis,Table Tennis,distinctive
 taiji bailong,Taiji Bailong,ambiguous
 tamburello,Tamburello,distinctive
+tenis,Tennis,ambiguous
 tenis criollo,Tenis criollo,ambiguous
+tenis de mesa,Table Tennis,distinctive
 tennis,Tennis,distinctive
 tennis baseball,Tennis Baseball,ambiguous
 tennis triples,Tennis Triples,ambiguous

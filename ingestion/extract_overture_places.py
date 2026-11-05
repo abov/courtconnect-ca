@@ -20,6 +20,7 @@ import argparse
 import csv
 import re
 import sys
+import unicodedata
 import urllib.request
 from pathlib import Path
 
@@ -44,8 +45,9 @@ def latest_release() -> str:
 
 
 def norm(s: str) -> str:
-    """Same normalisation dbt uses for name matching: lowercase, non-alphanumerics -> single spaces."""
-    return " " + re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", (s or "").lower())).strip() + " "
+    """Same normalisation dbt uses for name matching: accents folded, lowercase, non-alphanumerics -> single spaces."""
+    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode()
+    return " " + re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", s.lower())).strip() + " "
 
 
 def fetch_places(release: str, region: str | None = None) -> list[tuple]:

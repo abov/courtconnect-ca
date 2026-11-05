@@ -31,8 +31,9 @@
   ' ' || trim(regexp_replace(lower({{ col }}), '[^a-z0-9]+', ' ')) || ' '
 {%- endmacro %}
 
+{# DuckDB also folds accents first ('Pádel' -> 'padel'), so Spanish names match the English search terms (ADR 0034). #}
 {% macro duckdb__normalize_name(col) -%}
-  ' ' || trim(regexp_replace(lower({{ col }}), '[^a-z0-9]+', ' ', 'g')) || ' '
+  ' ' || trim(regexp_replace(lower(strip_accents({{ col }})), '[^a-z0-9]+', ' ', 'g')) || ' '
 {%- endmacro %}
 
 {# Distinctive part of a normalized name (see normalize_name): generic sport/venue words and single letters removed,

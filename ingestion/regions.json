@@ -1,12 +1,13 @@
 {
-  "note": "The only place the covered area lives. bbox = south, west, north, east. The OSM border relation is the real filter, the bbox only bounds the tiles. name = the --area value for the whole region. fips = the Census state code (place and county boundaries). Metros are named --area values; states lists which regions a metro may keep rows from. docs/fork_guide.md explains how to change this for another area.",
+  "note": "The only place the covered area lives. bbox = south, west, north, east. The OSM border relation is the real filter, the bbox only bounds the tiles. name = the --area value for the whole region. fips = the Census state code (place and county boundaries). defer = true keeps a region out of the default all-region extracts. country = ISO code of Overture's address country filter (default US). Metros are named --area values; states lists which regions a metro may keep rows from. docs/fork_guide.md explains how to change this for another area.",
   "regions": {
     "CA": {"name": "california", "bbox": [32.5, -124.5, 42.1, -114.0], "relation": 165475, "fips": "06", "cache": "ca_border.wkt"},
     "NV": {"name": "nevada", "bbox": [35.0, -120.01, 42.0, -114.03], "relation": 165473, "fips": "32", "cache": "nv_border.wkt"},
     "OR": {"name": "oregon", "bbox": [41.99, -124.7, 46.3, -116.45], "relation": 165476, "fips": "41", "cache": "or_border.wkt"},
     "WA": {"name": "washington", "bbox": [45.5, -124.9, 49.05, -116.9], "relation": 165479, "fips": "53", "cache": "wa_border.wkt"},
     "HI": {"name": "hawaii", "bbox": [18.85, -160.3, 22.35, -154.75], "relation": 166563, "fips": "15", "cache": "hi_border.wkt"},
-    "AZ": {"name": "arizona", "bbox": [31.33, -114.82, 37.01, -109.04], "relation": 162018, "fips": "04", "cache": "az_border.wkt"}
+    "AZ": {"name": "arizona", "bbox": [31.33, -114.82, 37.01, -109.04], "relation": 162018, "fips": "04", "cache": "az_border.wkt"},
+    "MX": {"name": "mexico", "bbox": [14.3, -118.7, 32.8, -86.4], "relation": 114686, "fips": "", "country": "MX", "cache": "mx_border.wkt", "defer": true, "note": "ADR 0034: one region for the whole country; fips stays blank (no Census). defer = left out of the default all-region extracts (make extract, Overture without --region) until Phase 4; metros and --area mexico / --region MX still work."}
   },
   "metros": {
     "la": {"bbox": [33.70, -118.67, 34.34, -118.15], "states": ["CA"]},
@@ -17,6 +18,12 @@
     "carson": {"bbox": [39.10, -119.85, 39.25, -119.70], "states": ["NV"], "note": "Carson City"},
     "portland": {"bbox": [45.30, -123.10, 45.65, -122.45], "states": ["OR", "WA"], "note": "Portland and Vancouver WA, across the Columbia"},
     "seattle": {"bbox": [47.40, -122.45, 47.80, -122.15], "states": ["WA"], "note": "Seattle"},
-    "tahoe": {"bbox": [38.85, -120.20, 39.35, -119.85], "states": ["CA", "NV"], "note": "Lake Tahoe, straddles the CA/NV line"}
+    "tahoe": {"bbox": [38.85, -120.20, 39.35, -119.85], "states": ["CA", "NV"], "note": "Lake Tahoe, straddles the CA/NV line"},
+    "tijuana": {"bbox": [32.40, -117.15, 32.60, -116.55], "states": ["MX"], "note": "Tijuana and Tecate (border pilot, ADR 0034)"},
+    "mexicali": {"bbox": [32.55, -115.65, 32.75, -115.25], "states": ["MX"], "note": "Mexicali (border pilot)"},
+    "ensenada": {"bbox": [31.75, -116.75, 31.95, -116.50], "states": ["MX"], "note": "Ensenada (border pilot)"},
+    "hermosillo": {"bbox": [28.95, -111.15, 29.20, -110.85], "states": ["MX"], "note": "Hermosillo (border pilot)"},
+    "nogales_son": {"bbox": [31.20, -111.05, 31.40, -110.85], "states": ["MX"], "note": "Nogales, Sonora (border pilot)"},
+    "slrc": {"bbox": [32.40, -114.85, 32.55, -114.70], "states": ["MX"], "note": "San Luis Rio Colorado (border pilot)"}
   }
 }

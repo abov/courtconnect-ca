@@ -316,6 +316,7 @@
         <ul id="qsug" class="sug" role="listbox" aria-label="Suggestions" hidden></ul>
       </div>
       <button class="chip" id="nearMe" type="button">Near me</button>
+      <button class="chip" id="mexicoBtn" type="button" hidden>Mexico</button>
     </div>
     <p id="searchnote" class="note" hidden aria-live="polite"></p>
     <details class="playonly" id="moreFilters">
@@ -382,7 +383,7 @@
     </div>
   </div>
   <ul id="list"></ul>
-  <footer><div id="stats"></div><div><button class="link" id="openAbout" type="button">About RacketConnect</button> &middot; <button class="link" id="openCoverage" type="button">How complete is this data?</button> &middot; <a href="how-its-built.html">How it's built</a> &middot; <a href="dashboard/">Live dashboard</a></div><div id="attr"></div></footer>
+  <footer><div id="stats"></div><div><button class="link" id="openAbout" type="button">About RacketConnect</button> &middot; <button class="link" id="openCoverage" type="button">How complete is this data?</button> &middot; <a href="dashboard/">Data scorecard (live)</a> &middot; <a href="how-its-built.html">How it's built</a></div><div id="attr"></div></footer>
 </aside>
 
 <main id="map" aria-label="Map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona and Hawaii"></main>
@@ -399,6 +400,8 @@
     <p>Is your club missing or wrong? Tell us with a link to your public page; we review it and update the listing when the page backs it up. <a id="aboutClub" href="#" target="_blank" rel="noopener noreferrer">Fix or add your listing</a> (no sign-in)</p>
     <h3>For companies and organizers</h3>
     <p>Running a tournament, league or open play? Send us the dates and your public page; we review it and list it as an event when the page backs it up. <a id="aboutEvent" href="#" target="_blank" rel="noopener noreferrer">Add an event</a> (no sign-in)</p>
+    <h3>Can you trust it?</h3>
+    <p>See how complete and fresh the data is: <a href="dashboard/">the live data scorecard</a> (counts and trends after each refresh), <a href="run-history.html">run history</a>, or <a href="ask-the-data.html">ask the data</a> your own SQL question in the browser.</p>
     <h3>For builders</h3>
     <p>Open data in, a tested dbt warehouse, one static file out. <a href="how-its-built.html">How it's built</a>, with the numbers and the limits.</p>
     <h3>Other languages</h3>
@@ -532,7 +535,7 @@ const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
 const HOME_BOUNDS = [[-160.6, 18.5], [-108.4, 49.3]];   // the map's starting view and the "show everything" view: every state we cover, Hawaii included (ADR 0028; owner 2026-11-02, so Places to play and Events frame the same area)
-let textOff = false, searchCentre = null, zips = null, places = null;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
+let textOff = false, searchCentre = null, zips = null, places = null, hasMx = false;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
 
 function el(tag, props, ...kids) {
   const e = document.createElement(tag);
@@ -1211,7 +1214,7 @@ async function runSearch(zoom, open) {
           if (!near.length) maxZoom = play ? 11 : 9;
         }
         pts = [{x: c.lng, y: c.lat}, ...near];
-        note = lead + (z.exact ? "" : "ZIP " + zq + " is not in the list; centred on the nearest ZIP (" + z.zip + "). ")
+        note = lead + (z.exact ? "" : "ZIP " + zq + " is not in the list; centred on the nearest ZIP (" + z.zip + "). " + (hasMx ? "Only US ZIP codes are searchable; for Mexico, search the city. " : ""))
           + (within ? near.length + (near.length === 1 ? " spot" : " spots") + what + " within 6 km of " + z.zip + "." : far !== null ? "Nothing" + what + " within 6 km of " + z.zip + "; the nearest is about " + far + " km away." : "Nothing matches the current filters.");
       }
     } catch (err) { if (my !== searchRun) return; textOff = true; note = "ZIP lookup is not available right now. Try a city or venue name."; }
@@ -1850,6 +1853,9 @@ function initCoverage() {
     body.append(el("tr", {}, el("td", {text: s.n}), el("td", {}, el("span", {class: "st " + s.s, text: s.s})), el("td", {class: "n", text: fmt(s.v)}))));
   $("openCoverage").addEventListener("click", () => $("coverage").showModal());
   $("closeCoverage").addEventListener("click", () => $("coverage").close());
+  const mx = DATA.venues.filter(v => v.r === "MX");   // the Mexico shortcut appears only once Mexican pins are loaded; the home view stops at the US border (ADR 0034)
+  hasMx = mx.length > 0; $("mexicoBtn").hidden = !hasMx;
+  $("mexicoBtn").addEventListener("click", () => { if (state.mode !== "play") setMode("play"); fitTo(mx.map(v => ({x: v.x, y: v.y})), 8); });
   $("aboutClub").href = REPORT_FORM;
   $("aboutEvent").href = REPORT_FORM;
   $("openAbout").addEventListener("click", () => $("about").showModal());

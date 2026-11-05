@@ -42,18 +42,25 @@ select cast(day as date) as day, page_views, events from courtconnect.views orde
 select sum(page_views) as page_views, sum(events) as events, count(*) as days from courtconnect.views
 ```
 
-A snapshot of how complete and how fresh the RacketConnect data is, as of **{stats[0].as_of}**. Everything here is an aggregate count from the project's own checks; no venue rows are published. This is a prototype of a BI-as-code page, built with the open-source Evidence.dev from plain CSVs.
+How complete the RacketConnect data is. Counts only; no venue details are shown.
 
-<BigValue data={stats} value=venues title="Venues on the map" fmt=num0 />
-<BigValue data={stats} value=sports_with_venues title="Sports with a venue" />
+### The map, as of {stats[0].map_as_of}
+
+<BigValue data={stats} value=map_venues title="Venues on the map" fmt=num0 />
+<BigValue data={stats} value=map_sports_with_venues title="Sports with a venue" />
+
+{stats[0].map_sports_with_venues} of {stats[0].map_sports_total} sports have a venue. These two numbers come straight from the map's data file.
+
+### Quality checks, as of {stats[0].as_of}
+
 <BigValue data={stats} value=sla_met title="Service levels met" />
 <BigValue data={stats} value=gold_wrong_merges title="Wrong merges in the gold set" />
 
-Of {stats[0].sports_total} sports on the master sheet, {stats[0].sports_with_venues} have at least one venue. {stats[0].sla_met} of {stats[0].sla_total} service levels are met; the miss is real (venue names, below).
+{stats[0].sla_met} of {stats[0].sla_total} service levels are met; the miss is venue names (below). These are re-measured at each refresh.
 
 ## Trend, one point per refresh
 
-History starts when the scorecard trend file starts, so the lines are short and will grow with each twice-monthly refresh.
+One point per refresh, so the lines are short for now.
 
 <LineChart data={trend} x=date y=venues title="Venues on the map" yAxisTitle="Venues" />
 
@@ -61,11 +68,11 @@ History starts when the scorecard trend file starts, so the lines are short and 
   <ReferenceLine y=25 label="Goal 25%" />
 </LineChart>
 
-Most OpenStreetMap courts are unnamed, so many pins carry a name inferred from the park or school. The map labels those as inferred; this chart is the share with a real name.
+Many courts are unnamed, so some pins use a name inferred from the park or school. This chart counts only real names.
 
 ## Feedback issues, open and closed
 
-GitHub issues from the map's report forms, synced by `make feedback` (`docs/feedback_log.csv`). Titles and reporters are not shown here.
+Reports sent through the map's forms, as GitHub issues. Updated daily.
 
 <BigValue data={issue_totals} value=open_now title="Open now" />
 <BigValue data={issue_totals} value=opened title="Opened, all time" />
@@ -77,17 +84,17 @@ GitHub issues from the map's report forms, synced by `make feedback` (`docs/feed
 
 ## Site views over time
 
-Daily page views and interaction events (venue opens, link-outs, filters) from GoatCounter, anonymous counts only. Counts are directional: ad blockers hide some visits and early numbers include the owner's own testing. {view_totals[0].page_views} page views and {view_totals[0].events} events over {view_totals[0].days} days with data (`docs/usage_daily.csv`, refreshed by `make usage`).
+{view_totals[0].page_views} page views and {view_totals[0].events} clicks over {view_totals[0].days} days. Anonymous and approximate: ad blockers hide some visits.
 
 <LineChart data={views} x=day y={["page_views","events"]} title="Page views and events per day" />
 
 ## Where the data is thin
 
-Sports by coverage status. A status is the project's own label from `mart_sport_gaps`; the data dictionary and dbt docs describe the values.
+Sports grouped by how well they are covered.
 
 <BarChart data={status_counts} x=status y=sports title="Sports by coverage status" />
 
-Read the counts with care: several sports share one number (for example 8,090 for Frescotennis, Hand Tennis and Loboton) because they are inferred as also played on tennis courts. The map shows those as inferred, not as separate courts.
+Some sports share one number because they are assumed to be playable on tennis courts. The map marks those as inferred.
 
 <DataTable data={coverage} rows=15 search=true>
   <Column id=sport />
@@ -97,4 +104,4 @@ Read the counts with care: several sports share one number (for example 8,090 fo
 
 ## How it is made
 
-`make quality`, `make stats` and `make app-data` produce the numbers; `make dashboard-data` copies the aggregates into this project's CSV source. See [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html) and the [source code](https://github.com/abov/courtconnect-ca).
+Built with Evidence.dev from the project's own checks. See [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html) and the [source code](https://github.com/abov/courtconnect-ca).
