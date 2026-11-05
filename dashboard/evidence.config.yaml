@@ -1,3 +1,7 @@
+# Served from the project Pages site under /dashboard/ (.github/workflows/pages.yml).
+deployment:
+  basePath: /courtconnect-ca/dashboard
+
 appearance:
   default: system
   switcher: true
