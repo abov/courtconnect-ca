@@ -8,7 +8,7 @@ from courtconnect.stats
 ```
 
 ```sql trend
-select cast(date as date) as date, venues, named_pct / 100.0 as named_share, tests_pass, sla_met, sla_total
+select cast(date as date) as date, venues, tests_pass, sla_met, sla_total
 from courtconnect.trend
 order by 1
 ```
@@ -153,7 +153,7 @@ How complete the RacketConnect data is. Counts only; no venue details are shown.
 <BigValue data={stats} value=sla_met title="Service levels met" />
 <BigValue data={stats} value=gold_wrong_merges title="Wrong merges in the gold set" />
 
-{stats[0].sla_met} of {stats[0].sla_total} service levels are met; the miss is venue names (below). These are re-measured at each refresh.
+{stats[0].sla_met} of {stats[0].sla_total} service levels are met. These are re-measured at each refresh.
 
 ## Trend, one point per refresh
 
@@ -162,12 +162,6 @@ One point per refresh, so the lines are short for now.
 <LineChart data={venue_trend} x=date y=venues title="Venues on the map" yAxisTitle="Venues" />
 
 The scorecard and the map count venues the same way. The scorecard is re-run at each refresh, so its last point can be older than the map; the newest point here is the map's own count above.
-
-<LineChart data={trend} x=date y=named_share title="Venues with a real name" yFmt=pct0 yMin=0 yMax=0.3>
-  <ReferenceLine y=0.25 label="Goal 25%" />
-</LineChart>
-
-Many courts are unnamed, so some pins use a name inferred from the park or school. This chart counts only real names.
 
 ## Feedback issues, open and closed
 
