@@ -8,6 +8,7 @@ User-Agent, results stored, no grid sweeps. This sends pin coordinates only (no 
 
     python ingestion/reverse_geocode_blanks.py --limit 25     # query up to 25 uncached pins (sample); omit --limit for all
     python ingestion/reverse_geocode_blanks.py --dry-run      # count what would be queried
+    python ingestion/reverse_geocode_blanks.py --region MX    # only pins of one region (e.g. after adding Mexico pins)
     python ingestion/reverse_geocode_blanks.py --cities       # CITY ONLY for any pin (home-like too) still without a city after every other source
 
 A city names no street, so --cities also covers home-like pins. It asks Nominatim at town level (zoom 12) and stores the city on the pin's
@@ -114,11 +115,12 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--cities", action="store_true")
+    ap.add_argument("--region", default=None, help="only pins of this region code (e.g. MX)")
     args = ap.parse_args()
     cache = load_cache()
     if args.cities:
         return fill_cities(cache, args.limit, args.dry_run)
-    todo = [b for b in blanks() if b[0] not in cache or distance_m(b[1], b[2], float(cache[b[0]]["lat"]), float(cache[b[0]]["lon"])) > 30]
+    todo = [b for b in blanks() if (args.region is None or b[3] == args.region) and (b[0] not in cache or distance_m(b[1], b[2], float(cache[b[0]]["lat"]), float(cache[b[0]]["lon"])) > 30)]
     print(f"{len(todo)} non-home pins without an address are not cached yet ({len(cache)} cached)")
     if args.dry_run:
         return
