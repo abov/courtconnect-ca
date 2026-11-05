@@ -9,7 +9,7 @@ The long version is the owner's Google Sheet [RacketConnect tool dictionary](htt
 - `.venv`; `requirements-ml.txt` for the optional ML dependencies.
 
 ## Data sources (public and open only)
-- OpenStreetMap via Overpass (courts, walls, parent parks and schools), Overture Maps places and addresses (S3), US Census place and county boundaries, Nominatim reverse geocoding (cached), the Google Sheet sports list, public venue and city pages, community reports and GitHub issues.
+- OpenStreetMap via Overpass (courts, walls, parent parks and schools), Overture Maps places and addresses (S3), US Census place and county boundaries (Mexico: Overture divisions municipios and localities, ADR 0034), Nominatim reverse geocoding (cached), the Google Sheet sports list, public venue and city pages, community reports and GitHub issues.
 - Not used: Google Places (ADR 0005), owner logins (ADR 0007), directory sites whose terms forbid reuse.
 
 ## Back end
