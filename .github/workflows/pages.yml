@@ -32,6 +32,14 @@ jobs:
       # Scorecard dashboard (Evidence.dev, dashboard/README.md): reads only aggregate counts and trends from committed files, no venue rows.
       - uses: actions/setup-node@v4
         with: {node-version: "22", cache: npm, cache-dependency-path: dashboard/package-lock.json}
+      # Live site views: with the GOATCOUNTER_API_TOKEN repo secret set, pull fresh daily counts into the runner's docs/usage_daily.csv (not committed).
+      # No secret, or GoatCounter down: the committed file is used and the deploy goes on.
+      - name: Refresh site views from GoatCounter
+        env: {GOATCOUNTER_API_TOKEN: "${{ secrets.GOATCOUNTER_API_TOKEN }}", COURTCONNECT_DATA_DIR: "${{ runner.temp }}"}
+        run: |
+          if [ -z "$GOATCOUNTER_API_TOKEN" ]; then echo "no GOATCOUNTER_API_TOKEN secret; using committed docs/usage_daily.csv"; exit 0; fi
+          pip install requests
+          python ingestion/extract_goatcounter.py && python ingestion/usage_daily.py || echo "::warning::GoatCounter refresh failed; using committed docs/usage_daily.csv"
       - run: python ingestion/export_dashboard_data.py
         env: {GH_TOKEN: "${{ github.token }}"}
       - run: npm ci --ignore-scripts
