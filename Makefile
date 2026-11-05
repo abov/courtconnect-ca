@@ -118,3 +118,6 @@ sync-reports:     ## import approved community-form reports (Google Form) as see
 
 issues:           ## check open GitHub issues: what is missing, already done, duplicate or waiting (needs gh, read-only)
 	$(PY) ci/check_issues.py
+
+feedback:         ## sync all GitHub issues (open + closed) into docs/feedback_log.csv and list open/handled feedback (needs gh)
+	$(PY) ci/feedback_log.py $(ARGS)
