@@ -8,7 +8,7 @@ Owner 2026-11-03: every new state (and country, ADR 0034) gets the same work the
 - [ ] `ingestion/regions.json` entry (bbox, OSM relation checked against Overpass, `fips`, cache file) and the `regions` var in `transform/dbt_project.yml`; test points in `ci/check_regions.py` (cities inside, neighbours across each border, and a nearby foreign city as `None`).
 - [ ] Extract: OSM courts + parents (`--area <name>`), Overture places + addresses, `load`, `build`, `reverse_geocode_blanks.py`, `make city-boundaries`, `make extract-boundaries` (Census places), `make app-data`.
 - [ ] `app/data/state_outline.json` via `python ingestion/add_state_outline.py`, ZIPs (`zips.json`) and places (`places.json`): in the app and drawn.
-- [ ] **Home view**: `HOME_BOUNDS` in `app/index.html` contains the region with at least 0.25 degrees to spare on every side (the parity script checks it); far-away regions (Hawaii, Mexico) get a shortcut instead.
+- [ ] **Home view**: `HOME_BOUNDS` in `app/index.html` contains the region with at least 0.25 degrees to spare on every side (the parity script checks it); far-away regions (Hawaii, Mexico) get a shortcut instead; Hawaii is detected by distance, Mexico is a country the home view stops short of on purpose, so its `regions.json` entry has `"home_shortcut": "mexicoBtn"` (the chip id) and the parity check passes while that chip is in `app/index.html`.
 - [ ] **Region sentence** everywhere: `REGION` and the static repeats in `app/index.html` (title, meta, About, loading text), `app/llms.txt`, `manifest.webmanifest`, `app/data-dictionary.md`, README line 3, the issue form, dbt exposure and overview, `ingestion/ask.py`. `grep -rn "Oregon, Washington"` finds them.
 - [ ] CI fixtures: one row for the region in `ci/fixtures`.
 
