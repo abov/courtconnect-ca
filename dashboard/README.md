@@ -17,7 +17,7 @@ python -m http.server 8766 --directory build   # open http://localhost:8766
 `deployment.basePath` in `evidence.config.yaml` is `/courtconnect-ca/dashboard`, so a local `npm run dev` / `preview` serves under that path too.
 
 ## What it reads
-Only aggregates: `docs/data_quality_trend.csv`, `app/data/build_stats.json` and per-sport venue counts from `app/data/venues.json`. No venue rows, addresses or contacts; the warehouse is never opened. `ingestion/export_dashboard_data.py` writes the CSVs.
+Only aggregates: `docs/data_quality_trend.csv`, `docs/feedback_log.csv` (issue open/closed counts by day; no titles), `docs/usage_daily.csv` (GoatCounter page views and events per day; `make usage` refreshes it, commit it), `app/data/build_stats.json` and per-sport venue counts from `app/data/venues.json`. No venue rows, addresses or contacts; the warehouse is never opened. `ingestion/export_dashboard_data.py` writes the CSVs.
 
 ## Why the community edition, pinned
 Evidence's open-source packages (MIT) are pinned to the versions of the last community template (2026-02-06: `@evidence-dev/evidence` 40.1.8). Evidence's newer "Evidence Studio" CLI needs an Evidence account and a hosted data connection, so it is not used here. The community template has been deprecated in favour of that product (2026-08-20), so treat this as a snapshot: the repository is active and MIT-licensed, but the project's long-term support for the community packages is not something this prototype relies on.
