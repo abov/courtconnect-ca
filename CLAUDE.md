@@ -50,6 +50,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0035, all accepted except 0001, su
 - Keep summaries short everywhere (owner 2026-10-22): chat replies lead with the result and use at most ~5 bullets, wrap-up recaps are 1-2 sentences, PR descriptions 2-4 bullets, commit messages one line plus at most two. No tables or per-feature breakdowns unless asked; offer detail instead.
 
 ## Where things are
+- Tool dictionary: Google Sheet "RacketConnect tool dictionary" (link in `docs/tools_and_strategies.md`). When you add or remove a tool, library, service or data source, update its Dictionary row (and the Lifecycle tab if a step changes) and `docs/tools_and_strategies.md` in the same task.
 - `ingestion/`   Python extract/load/export scripts (`ingestion/oneoff/`: one-time research scans, not in any make target; outside requests use `ingestion/useragent.py`)
 - `transform/`   dbt project (models, seeds, macros, tests)
 - `app/`         static map page (`ask.html`/`ask.js`: free rule-based ask box prototype, unlinked; ADR 0033)
