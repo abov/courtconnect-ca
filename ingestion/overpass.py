@@ -19,7 +19,7 @@ URLS = [  # ordered by observed reliability; the first healthy one wins
 # The covered area lives in regions.json (docs/fork_guide.md). REGIONS: code -> bbox (south, west, north, east),
 # OSM border relation (the real filter; the bbox only bounds the tiles) and border cache file.
 _CFG = json.loads((Path(__file__).parent / "regions.json").read_text(encoding="utf-8"))
-REGIONS = {code: {"name": c["name"], "bbox": tuple(c["bbox"]), "relation": c["relation"], "fips": c.get("fips", ""), "cache": raw_path(c["cache"]), "defer": c.get("defer", False)}
+REGIONS = {code: {"name": c["name"], "bbox": tuple(c["bbox"]), "relation": c["relation"], "fips": c.get("fips", ""), "cache": raw_path(c["cache"]), "defer": c.get("defer", False), "country": c.get("country", "US")}
            for code, c in _CFG["regions"].items()}
 STATE_AREAS = {c["name"]: code for code, c in _CFG["regions"].items()}  # --area value -> region code
 DEFAULT_AREAS = [c["name"] for c in _CFG["regions"].values() if not c.get("defer")]  # the --area values `make extract` loops over
