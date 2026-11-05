@@ -28,6 +28,7 @@ A solo, end-to-end data product: Python ingestion, a tested dbt warehouse on Duc
 - **Quality as a contract:** 32 custom dbt tests, 11 CI gate scripts and a scorecard with stated service levels; the one breach (venue names) is reported, not hidden ([scorecard](docs/data_quality.md)).
 - **Decisions on record:** 32 ADRs, including one that reverses an earlier choice ([ADR 0018](docs/decisions/0018-duckdb-only.md)) and one on when agents may merge ([ADR 0019](docs/decisions/0019-unattended-agent-merges.md)).
 - **Start here:** [case study](docs/case_study.md) · [architecture](docs/architecture.md) · [data dictionary](app/data-dictionary.md) · [dbt docs and lineage](https://abov.github.io/courtconnect-ca/dbt-docs/)
+- **Dashboards (same aggregates, two tools):** [Evidence.dev scorecard](https://abov.github.io/courtconnect-ca/dashboard/) (BI as code, built in CI) and a [Looker Studio report](docs/looker_studio.md) over a Google Sheet. Counts and dates only, no venue rows.
 
 ## Who it is for
 - **Players:** find a court, filter by sport, surface and access, then follow link-outs to open play, leagues and lessons.
