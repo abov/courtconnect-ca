@@ -62,5 +62,8 @@ What counts as "demand" for starting a Phase 3 metro (a GoatCounter or Trends th
 ## Border pilot so far (#565, 2026-11-05)
 Five Tijuana padel clubs are on the map, confirmed on their own Playtomic or club pages (Baja, Lago, Gran Padel Rio, Spin, Tijuana Padel / The Club). Mexicali, Hermosillo, Ensenada, San Luis Rio Colorado and two more Tijuana clubs are `venue_leads.csv` rows until each club has its own page. MX pins never take a US address or city. The Overture `mx/countrywide` address source is tagged LicenseRef-Proprietary, so `extract_overture_addresses.py` drops it: MX street lines come only from OSM tags and Nominatim reverse geocoding.
 
+## Verified-only gate (2026-11-05)
+After the metro trial (`docs/mexico_metro_trial.md`: automatic precision about 1 in 5), `mart_venue_finder` hides every pin in a region listed in the dbt var `hide_unverified_regions` (MX) unless a seed row backs it (`manual_venues.csv`, `venue_name_official.csv`); `assert_hidden_regions_verified_only` enforces it. MX went from 98 to 33 pins. The automatic rows stay in the warehouse as leads. To re-open a region, remove it from the var.
+
 ## Consequences
 Roughly doubles the covered population again with a second language, and coverage will look thin at first (hand-checked only at the border, automatic elsewhere, including Mexico City until demand says otherwise), so the scorecard must report per metro and the app must say "automatic data only" where nothing was hand-checked. One `MX` region keeps the pipeline unchanged for the five US states; splitting Mexico into per-state regions later stays possible through the `subregion` column.
