@@ -31,7 +31,7 @@
 {% set wide_city_cell = 0.06 %}
 
 with v as (
-    select venue_id, venue_name, name_source, lat, lon, address_line, city
+    select venue_id, venue_name, name_source, lat, lon, address_line, city, region
     from {{ ref('dim_venue') }}
 ),
 
@@ -283,7 +283,8 @@ select
          when v.address_line is null and not fl.is_home_like and nm.address_line is not null
          then nm.distance_m end                               as address_distance_m,
     -- city for a pin with none (city is not sensitive: it never names a street); used by the map's location search
-    coalesce(v.city, oc.city, n.city, nm.city, nc.city, mc.city, pp.addr_city, ny.city, wc.city, bp.city) as city,
+    case when coalesce(v.region, '') = 'MX' then coalesce(v.city, oc.city, nm.city, nc.city, mc.city, pp.addr_city, bp.city)
+         else coalesce(v.city, oc.city, n.city, nm.city, nc.city, mc.city, pp.addr_city, ny.city, wc.city, bp.city) end as city,
     (v.address_line is null and o.address_line is null and fl.is_home_like and n.address_line is not null) as address_withheld,
     case when v.address_line is null and o.address_line is null and not fl.is_home_like
               and not (v.name_source = 'enclosing_feature' and pp.address_line is not null)
@@ -292,7 +293,7 @@ select
 from v
 join flags fl on fl.venue_id = v.venue_id
 left join court_flags cf on cf.venue_id = v.venue_id
-left join nearest n on n.venue_id = v.venue_id
+left join nearest n on n.venue_id = v.venue_id and coalesce(v.region, '') <> 'MX'   -- a Mexican pin never takes a US address or city from across the border (ADR 0034)
 left join nominatim nm on nm.venue_id = v.venue_id
 left join nominatim_city nc on nc.venue_id = v.venue_id
 left join parent_pick pp on pp.venue_id = v.venue_id
