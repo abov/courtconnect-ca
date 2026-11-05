@@ -5,13 +5,17 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+# A newer push to the same PR cancels the older run; main and manual runs always finish.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   dbt-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: {python-version: "3.12"}
+        with: {python-version: "3.12", cache: pip, cache-dependency-path: requirements.txt}
       - run: python ci/check_seed_evidence.py
       - run: python ci/check_sport_names.py
       - run: python ci/check_r2_events.py
