@@ -1,0 +1,4 @@
+date,labels,confirms,rejects,loo_accuracy,loo_auc,likely_calls,likely_right,queue_rows,likely_confirm,unclear,likely_reject
+2026-10-14,61,37,24,0.82,0.88,,0.85,233,104,116,13
+2026-10-15,90,62,28,0.86,0.93,,0.93,205,,,21
+2026-11-04,208,122,86,0.74,0.797,133,0.865,239,103,113,23

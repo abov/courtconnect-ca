@@ -9,11 +9,14 @@ distance to the nearest OSM court). It only ORDERS the queue; a person still che
 verdict in place_sport_overrides.csv. Its guess is never shown on the map.
 
 Writes docs/review_priority.csv (most clear-cut first) and prints a leave-one-out check of how often the guess was right.
+Each run also records that check in docs/ml_metrics.csv (one row per day) so the dashboard can show the ranker's score over time.
 Needs scikit-learn: pip install -r requirements-ml.txt
 """
 from __future__ import annotations
 
+import csv
 import re
+from datetime import date
 from pathlib import Path
 
 import duckdb
@@ -26,6 +29,9 @@ from sklearn.model_selection import LeaveOneOut, cross_val_predict
 
 DB = Path("courtconnect.duckdb")
 OUT = Path("docs/review_priority.csv")
+METRICS = Path("docs/ml_metrics.csv")
+METRIC_COLS = ["date", "labels", "confirms", "rejects", "loo_accuracy", "loo_auc", "likely_calls", "likely_right", "queue_rows",
+               "likely_confirm", "unclear", "likely_reject"]
 STORE_WORDS = {"warehouse", "direct", "gear", "gearbox", "store", "shop", "supply", "outlet", "pro shop", "apparel", "equipment"}
 LIKELY = 0.7   # p(confirm) at or above -> likely_confirm; at or below 1 - LIKELY -> likely_reject
 
@@ -125,6 +131,9 @@ def main() -> None:
     print(f"labels: {len(y)} ({y.sum()} confirm, {len(y) - y.sum()} reject)")
     print(f"leave-one-out: accuracy {((p_loo >= 0.5) == y).mean():.0%}, AUC {roc_auc_score(y, p_loo):.2f}; "
           f"'likely' calls {sure.sum()} of {len(y)}, right {((p_loo[sure] >= 0.5) == y[sure]).mean():.0%}")
+    metrics = {"date": date.today().isoformat(), "labels": len(y), "confirms": int(y.sum()), "rejects": int(len(y) - y.sum()),
+               "loo_accuracy": round(float(((p_loo >= 0.5) == y).mean()), 3), "loo_auc": round(float(roc_auc_score(y, p_loo)), 3),
+               "likely_calls": int(sure.sum()), "likely_right": round(float(((p_loo[sure] >= 0.5) == y[sure]).mean()), 3) if sure.any() else ""}
     wrong = labels.loc[(p_loo >= 0.5) != y, ["name", "sport_name", "verdict"]]
     if len(wrong):
         print("missed:", "; ".join(f"{r.name} / {r.sport_name} ({r.verdict})" for r in wrong.itertuples()))
@@ -152,6 +161,13 @@ def main() -> None:
     cols = ["review_priority", "model_guess", "p_confirm", "sport_name", "venue_name", "name", "city", "region",
             "category", "website_domain", "website_status", "best_rung_label", "reasons", "venue_id", "place_id"]
     queue[cols].rename(columns={"name": "place_name"}).to_csv(OUT, index=False, lineterminator="\r\n")
+    guesses = queue["model_guess"].value_counts()
+    metrics.update(queue_rows=len(queue), **{k: int(guesses.get(k, 0)) for k in ("likely_confirm", "unclear", "likely_reject")})
+    old = list(csv.DictReader(METRICS.open(encoding="utf-8"))) if METRICS.exists() else []
+    with METRICS.open("w", encoding="utf-8", newline="") as f:   # a re-run on the same day replaces that day's row
+        w = csv.DictWriter(f, fieldnames=METRIC_COLS)
+        w.writeheader()
+        w.writerows([r for r in old if r["date"] != metrics["date"]] + [metrics])
     print(f"queue: {len(queue)} rows -> {OUT}  " + ", ".join(f"{k} {v}" for k, v in queue["model_guess"].value_counts().items())
           + f"; {(queue['website_status'] == 'dead').sum()} with a dead site sorted last")
 

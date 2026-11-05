@@ -89,7 +89,7 @@ select
     nullif(trim(website), '')                                 as website,
     nullif(trim(phone), '')                                   as phone,
     nullif(trim(opening_hours), '')                           as opening_hours,
-    nullif(trim(concat_ws(' ', addr_housenumber, addr_street)), '') as address_line,
+    nullif(trim(case when region = 'MX' then concat_ws(' ', addr_street, addr_housenumber) else concat_ws(' ', addr_housenumber, addr_street) end), '') as address_line,   -- Mexico writes street then number (ADR 0034)
     nullif(trim(addr_city), '')                               as city,
     lower(nullif(trim(building), ''))                       as building,
     extracted_at,

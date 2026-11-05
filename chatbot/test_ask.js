@@ -69,7 +69,7 @@ const Q = [
   ["How do I add my club?", "about", "No sign-in"],
   ["The address for this court is wrong", "about", "missing or wrong", false],
   ["Which states do you cover?", "about", "Arizona"],
-  ["Do you have courts in Mexico?", "about", "aren't on the map"],
+  ["Do you have courts in Mexico?", "about", "border pilot"],
   ["Is there an iPhone app?", "about", "no app"],
   ["Do you speak Spanish?", "about", "no translation"],
   ["Who built this?", "about", "open-source"],

@@ -3,7 +3,9 @@
     python ingestion/export_dashboard_data.py        (or: make dashboard-data)
 
 Only counts and dates that are already public leave the warehouse: the scorecard history, the numbers on the How it's built page
-(app/data/build_stats.json), the feedback issue counts (docs/feedback_log.csv), daily site views (docs/usage_daily.csv) and the per-sport venue counts from the map export. No venue rows, addresses or contacts. The CSVs are
+(app/data/build_stats.json), the feedback issue counts (docs/feedback_log.csv), daily site views (docs/usage_daily.csv), event counts by name (docs/usage_events.csv),
+the ML scores (docs/ml_metrics.csv, docs/review_priority.csv, docs/reader_pilot_results.csv), Google Trends search interest per metro and sport next to venue counts (docs/search_interest_vs_coverage.csv) and, from the map export, per-sport and per-city venue counts with how complete they are.
+No venue rows, names, addresses or contacts. The CSVs are
 generated and git-ignored; run `make quality`, `make stats` and `make app-data` first so they are current.
 """
 from __future__ import annotations
@@ -13,7 +15,7 @@ import json
 import os
 import shutil
 import subprocess
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -27,6 +29,21 @@ def write(name: str, header: list[str], rows: list[list]) -> None:
         w.writerow(header)
         w.writerows(rows)
     print(f"wrote dashboard/sources/courtconnect/{name}: {len(rows)} rows")
+
+
+def slug(text: str) -> str:
+    return "".join(c if c.isalnum() else " " for c in text.lower()).strip()
+
+
+def completeness(vs: list[dict]) -> list[float]:
+    """Shares of venues with: a real name (court, operator or places-directory name, same as the scorecard), a street address, a website,
+    and a hand check (visited, or stated by the operator). Completeness is the mean of the first three."""
+    n = len(vs)
+    real = sum(v["q"] in ("c", "p") for v in vs) / n
+    addr = sum(bool(v["a"]) for v in vs) / n
+    web = sum(bool(v["w"]) for v in vs) / n
+    checked = sum(v.get("cf") in ("v", "o") for v in vs) / n
+    return [round(x, 4) for x in (real, addr, web, checked, (real + addr + web) / 3)]
 
 
 def live_issues() -> list[tuple[str, str]] | None:
@@ -85,6 +102,54 @@ def main() -> None:
 
     venues = json.loads((ROOT / "app" / "data" / "venues.json").read_text(encoding="utf-8"))
     write("sport_coverage.csv", ["sport", "venues", "status"], [[x["n"], x["v"], x["s"]] for x in venues["sports"]])
+
+    # Event counts by day, name and detail (the vocabulary in docs/goat_analysis.md): the ask box, sport picks, link-outs, demand by city.
+    with (ROOT / "docs" / "usage_events.csv").open(encoding="utf-8") as f:
+        ev = list(csv.DictReader(f))
+    write("events.csv", ["day", "event", "detail", "count"], [[r["day"], r["event"], r["detail"], int(r["count"])] for r in ev])
+    demand = defaultdict(lambda: defaultdict(int))   # event name -> slug(detail) -> count
+    for r in ev:
+        demand[r["event"]][slug(r["detail"])] += int(r["count"])
+
+    # How complete the data is per sport and per city, next to how much each is looked at. Demand is small while traffic is small: directional only.
+    by_sport = defaultdict(list)
+    by_city = defaultdict(list)
+    for v in venues["venues"]:
+        for p in v["p"]:
+            by_sport[p[0]].append(v)
+        if v["c"]:
+            by_city[(v["c"], v["r"])].append(v)
+    rows = []
+    for i, sp in enumerate(venues["sports"]):
+        vs = by_sport.get(i)
+        k = slug(sp["n"])
+        picks, links, asks = demand["sport-pick"][k], demand["linkout-sport"][k], demand["ask-sport"][k]
+        if vs and not sp.get("b"):   # sports assumed playable on another sport's courts just mirror that sport's venues; the map marks them inferred
+            rows.append([sp["n"], len(vs), *completeness(vs), picks, links, asks, picks + links + asks, sp["s"]])
+    write("sport_scorecard.csv", ["sport", "venues", "real_name_share", "address_share", "website_share", "hand_checked_share", "completeness",
+                                   "picks", "linkouts", "asks", "demand", "status"], rows)
+    rows = []
+    for (city, region), vs in by_city.items():
+        opens = demand["demand-where"][slug(f"{city} {region}")]
+        if len(vs) >= 15 or opens:   # small towns only appear once someone has looked at them
+            rows.append([city, region, len(vs), *completeness(vs), opens])
+    rows.sort(key=lambda r: (-r[-1], -r[2]))
+    write("city_scorecard.csv", ["city", "region", "venues", "real_name_share", "address_share", "website_share", "hand_checked_share",
+                                  "completeness", "opens"], rows)
+
+    # Google Trends interest per metro and sport next to venues and completeness (written from the warehouse by `make interest`; relative, sampled).
+    shutil.copyfile(ROOT / "docs" / "search_interest_vs_coverage.csv", OUT / "search_interest.csv")
+    print("wrote dashboard/sources/courtconnect/search_interest.csv: copy of docs/search_interest_vs_coverage.csv")
+
+    # ML: the review-queue ranker's score history and queue, and what the page reader found, all from committed files.
+    shutil.copyfile(ROOT / "docs" / "ml_metrics.csv", OUT / "ml_metrics.csv")
+    print("wrote dashboard/sources/courtconnect/ml_metrics.csv: copy of docs/ml_metrics.csv")
+    with (ROOT / "docs" / "review_priority.csv").open(encoding="utf-8") as f:
+        queue = Counter((r["model_guess"], r["sport_name"]) for r in csv.DictReader(f))
+    write("review_queue.csv", ["model_guess", "sport", "rows"], [[g, sp, n] for (g, sp), n in sorted(queue.items())])
+    with (ROOT / "docs" / "reader_pilot_results.csv").open(encoding="utf-8") as f:
+        reader = Counter((r["field"], r["outcome"]) for r in csv.DictReader(f))
+    write("reader_outcomes.csv", ["field", "outcome", "facts"], [[fl, o, n] for (fl, o), n in sorted(reader.items())])
 
 
 if __name__ == "__main__":
