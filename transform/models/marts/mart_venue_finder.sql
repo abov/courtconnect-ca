@@ -74,10 +74,3 @@ where not (
     and not bvs.in_manual
     and s.sport_name in (select trim(also_sport) from {{ ref('sport_also_played') }} where lower(trim(coalesce(exclude_private_members, ''))) = 'yes')
 )
--- Verified-only regions (var hide_unverified_regions, Mexico): an automatic OSM/Overture pin shows only when a hand-checked seed row backs it
--- (manual_venues.csv or venue_name_official.csv). Measured precision of the automatic layer was 1 in 5 (docs/mexico_metro_trial.md).
-and (
-    coalesce(v.region, '') not in ('{{ var("hide_unverified_regions") | join("', '") }}')
-    or v.name_source = 'manual'
-    or bvs.in_manual
-)
