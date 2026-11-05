@@ -15,7 +15,7 @@ Drafted 2026-11-05 from the owner's idea in chat: a separate top-level chip for 
 2. **Resorts.** The case-by-case resort rule applies: list what non-guests can book, flag guests-only (`who_can_play`).
 3. **Chip label:** open. "Racket vacations" unless the owner prefers "Trips".
 
-## Unverified Mexico leads (search results 2026-11-05, not yet read at the source)
+## Mexico leads (checked 2026-11-05: Club Med Cancun, both Sandos resorts and Four Seasons Punta Mita are now `verified` in the seed; the rest stay leads, reasons in each row's `evidence`)
 
 | Lead | Where | Sports (as reported) | Source |
 |---|---|---|---|
