@@ -23,7 +23,52 @@
   const BOOK = / (book|reserve|reservation|reservations) /;
   const RACKET = / (court|courts|racket|rackets|racquet|racquets|paddle|paddles|shuttlecock|tennis|net) /;
   // Replies that are not an answer (hello, thanks, off-topic, ...) stay kind and always offer a next step as chips (todo: docs/chatbot_ux_todo.md).
-  const STARTERS = ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "Where can I buy a paddle?"];
+  const STARTERS = ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "What is RacketConnect?"];
+  // Questions about the page the visitor is looking at (needs the map's context from the widget; without it they fall through to the normal routing).
+  const VIEW = / (this view|in view|on screen|on the screen|on the map|am i looking at|i m looking at|you re looking at|this pin|this court|this place|this venue|this spot|this one|selected|around here|nearby|near me|close to me|closest to me|visible) /;
+  const VIEW_THIS = / (am i looking at|i m looking at|this pin|this court|this place|this venue|this spot|this one|selected|open) /;
+  const PRODUCT_URL = {change: "https://github.com/abov/courtconnect-ca/issues/new?template=suggest-a-change.yml", event: "https://github.com/abov/courtconnect-ca/issues/new?template=report-an-event.yml", code: "https://github.com/abov/courtconnect-ca"};
+  const PRODUCT_CHIPS = ["What does confirmed mean?", "How do I add my club?", "Where does your data come from?", "Which states do you cover?"];
+  // About RacketConnect itself. Every line repeats what the About card, README and llms.txt already say; nothing here is new policy.
+  // [pattern, lines, link items, chips]
+  const PRODUCT = [
+    [/ (add|submit|claim) (my|our|this) (club|clubs|venue|court|courts|listing|facility|gym|place|business|event|tournament|league) | (add|submit) (a|an) (club|venue|listing|facility|event|tournament|league) | (is|are) (missing|wrong|incorrect|outdated) | (missing|wrong|incorrect|outdated) (club|venue|court|listing|place|address|info|hours) | report (a|an) (mistake|error|problem|closure) | suggest a change | (fix|update|correct) (my|our|this|the) (listing|address|info|hours) /,
+      ["Is a place missing or wrong? Send us a link to its public page; a reviewer checks it and updates the listing when the page backs it up. No sign-in is needed. A listing changes only with public evidence; it can't be bought."],
+      [{title: "Suggest a change or add a place", detail: "GitHub form", url: PRODUCT_URL.change}, {title: "Add an event, league or open play", detail: "GitHub form", url: PRODUCT_URL.event}], ["What does confirmed mean?", "Which states do you cover?"]],
+    [/ (what does|what do|what s|whats|meaning of|mean by|explain) (.* )?(confirmed|reported|official|inferred|labels?|badges?|checked) | how (sure|certain) (.* )?(are you|is this)| (confirmed|inferred) (mean|means) /,
+      ["Each place says how sure we are. Confirmed: someone checked it in person. Official: the operator's own public page says so. Reported: a person told us and we haven't independently confirmed it. No label means the pin comes from map data only (OpenStreetMap or Overture), so treat access, hours and prices as unknown until you check the venue's own page. Street addresses marked inferred are the nearest address or road, not confirmed."],
+      [], ["Where does your data come from?", "How up to date is this?"]],
+    [/ (where|how) (.* )?(data|info|information|listings?|venues?) (.* )?(come from|comes from|sourced|collected) | where (do|does) (you|racketconnect|this) get | data sources? | your sources? | (openstreetmap|osm|overture) | how (do|did) you (know|collect|build) /,
+      ["The venues come from OpenStreetMap contributors and the Overture Maps Foundation, plus places we add by hand from public pages and community reports. Events, groups and links come from the organizers' own public pages. We don't use logged-in pages, booking apps' private data or Google Places. The pipeline is open source."],
+      [{title: "How it's built", detail: "numbers and limits", url: "how-its-built.html"}], ["What does confirmed mean?", "How up to date is this?"]],
+    [/ (how|is it|is this|are you|are the) (.* )?(accurate|up to date|current|fresh|reliable|trust|trustworthy) | how (often|frequently) (.* )?(updated|refreshed|update|refresh) | (last|latest) (updated|refresh|refreshed) | out of date | outdated /,
+      ["The data is rebuilt about twice a month. Public access, hours and prices are often unknown, so I only say them when our data has them, and each place shows when it was last checked. If something is wrong, tell us and a reviewer will check it."],
+      [{title: "Suggest a change", detail: "GitHub form", url: PRODUCT_URL.change}], ["What does confirmed mean?", "How do I add my club?"]],
+    [/ (which|what) (states|regions|countries) | (do you|does it|does racketconnect|will you|are you going to) (cover|support|expand|add) | (mexico|canada|europe|texas|florida|new york|colorado|utah|idaho|montana|new mexico) | outside (of )?(california|the us|the u s|these states) /,
+      ["We cover California, Nevada, Oregon, Washington, Arizona and Hawaii. Other places, including Mexico, aren't on the map yet."],
+      [], ["Pickleball in Reno", "Padel in Las Vegas", "Tennis in Seattle"]],
+    [/ (is|are) (this|it|racketconnect|the (app|site|map|website)) (really |completely |a )?free | free to use | (do|will) i (need|have to) (.* )?(account|sign up|sign in|log in|login|pay|register) | (an |any )?account | sign up | sign in | log in | login | subscription | cost to use | how much (does|is) (racketconnect|the (app|site|map)|this (app|site|map)) /,
+      ["RacketConnect is free to use. There are no accounts, no sign-in and no paid or featured placement. We link out to each venue's own page; we never take bookings or payments."],
+      [], ["Pickleball in Reno", "What is pop tennis?"]],
+    [/ (privacy|tracking|tracked|cookies|cookie|personal (data|information)|my data|do you (store|save|collect|sell)) /,
+      ["There are no accounts. We count anonymous page visits and which kinds of places get opened (a count of looks, nothing about who you are). If you tell this box your sport and city, they are remembered in your browser only; say \"forget me\" to clear them."],
+      [], ["Forget me", "What did I say I play?"]],
+    [/ (who|what company|which company) (made|built|created|runs|owns|is behind|developed) | (contact|email|e mail|reach) (you|the team|someone|support|the owner)| support team | is (this|it) (open source|a startup|a company) | open source /,
+      ["RacketConnect is an independent, open-source project. The code and the data pipeline are public, and the issue forms are the way to reach us: they go to a reviewer, no sign-in needed."],
+      [{title: "Source code and docs", detail: "GitHub", url: PRODUCT_URL.code}, {title: "Suggest a change", detail: "GitHub form", url: PRODUCT_URL.change}], undefined],
+    [/ (spanish|espanol|español|portuguese|french|german|translate|translation|translated|other languages?|in english) | (language|languages) /,
+      ["RacketConnect is written in English and has no translation of its own. Your browser can translate the page: Chrome and Edge have a Translate button in the address bar, Safari has it in the aA menu. Place, event and group names stay as written, and machine translation can be wrong."],
+      [], undefined],
+    [/ (app store|play store|google play|iphone app|android app|ios app|mobile app|an app|download|install) /,
+      ["There is no app to download. RacketConnect is a website that works in your phone's browser, so you can open it and add it to your home screen if you like."],
+      [], undefined],
+    [/ (what is|what s|whats|what are|tell me about|explain|describe) (racketconnect|racket connect|this (site|app|map|website|tool|project|bot|chat|chatbot))( | for )| (what|how) (do|does) (racketconnect|this (site|app|map|website|tool)|you) (do|work|help) | what can i (do|use) (here|this|it) for | racketconnect is | (about|purpose of) (racketconnect|this (site|app|map|website)) /,
+      ["RacketConnect is one free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona and Hawaii: tennis, pickleball, padel, squash, badminton, table tennis and the lesser-known sports. Use it to find a court, see events to watch, find groups to play with, and learn how to try a sport. Each place says how sure we are, and we link out to the venue's own page; we never take bookings or payments.", "This box is a simple helper with no AI model. It answers only from our own venue data."],
+      [], PRODUCT_CHIPS],
+    [/ (how (do|can|would) i (use|search|filter|find|get around)|how to use|how does (the |this )?(map|site|app) work|what do (the )?(pins|markers|dots|colors|colours|icons|circles) mean|legend|orange pins|grey pins|gray pins) /,
+      ["Pick a sport and zoom to your area, or type a city, ZIP or venue name in the search box; the list follows what the map shows. Tap a pin for its details, how sure we are, and the link to the venue's own page. Orange pins are stand-alone hitting walls. You can also switch between places to play, events to watch and groups."],
+      [], ["What does confirmed mean?", "What's in this view?"]]
+  ];
   const POPULAR = ["Los Angeles", "San Diego", "the Bay Area", "Las Vegas", "Seattle"];
   const SPORT_CHIPS = ["Tennis", "Pickleball", "Padel", "Squash"];
   const GREETING = /^ (hi|hello|hey|hiya|howdy|yo|hola|sup|good morning|good afternoon|good evening)( there| again| everyone| all| bot)? $/;
@@ -87,8 +132,8 @@
       return null;
     }
 
-    const STATES = {california: "CA", nevada: "NV", oregon: "OR", washington: "WA", hawaii: "HI"};
-    const stateOf = t => { for (const [n, c] of Object.entries(STATES)) if (t.includes(" " + n + " ")) return c; return t.includes(" nv ") ? "NV" : t.includes(" ca ") ? "CA" : ""; };
+    const STATES = {california: "CA", nevada: "NV", oregon: "OR", washington: "WA", hawaii: "HI", arizona: "AZ"};
+    const stateOf = t => { for (const [n, c] of Object.entries(STATES)) if (t.includes(" " + n + " ")) return c; return t.includes(" nv ") ? "NV" : t.includes(" ca ") ? "CA" : t.includes(" az ") ? "AZ" : ""; };
     // events and groups carry no state: use the state of the nearest venue pin
     const stateAt = (y, x) => { let best = "", bd = 1e9; for (const v of data.venues) { const d = (v.y - y) ** 2 + (v.x - x) ** 2; if (d < bd) { bd = d; best = v.r; } } return best; };
     const venueLink = v => (v.w && /^https?:\/\//.test(v.w)) ? v.w : (v.ac || []).map(a => a[2]).find(u => /^https?:\/\//.test(u || "")) || "";
@@ -161,8 +206,10 @@
       return {kind: "events", lines, chips: !ev.length ? (loc && sp ? [sp.name + " in " + loc.label] : loc ? sportChips(loc) : undefined) : undefined, items: ev.slice(0, 5).map(e => ({title: e.n, detail: [e.s + (e.e && e.e !== e.s ? " to " + e.e : ""), e.v + ", " + e.c, e.sp, e.d === "confirmed" ? "dates confirmed" : "dates " + e.d, e.t].filter(Boolean).join(" · "), url: /^https:\/\//.test(e.u || "") ? e.u : ""}))};
     }
 
+    const wallAccess = a => ["public", "yes", "permissive"].includes(a) ? "public" : ["restricted", "private", "customers", "members", "no"].includes(a) ? "restricted" : "access not checked";
+    const wallItem = v => ({title: (v.n || "Hitting wall") + (v.c ? " (" + v.c + ")" : ""),
+      detail: [(v.hw.t || []).join(", "), v.hw.wn > 1 ? v.hw.wn + " walls" : "", wallAccess(v.hw.ac), v.hw.cf === "tagged" ? "from OpenStreetMap tags, not checked" : v.hw.cf, v.hw.l === 1 ? "lit" : "", v.hw.f === 1 ? "free" : "", v.y.toFixed(4) + ", " + v.x.toFixed(4)].filter(Boolean).join(" · "), url: ""});
     function wallsAnswer(sp, loc, st) {
-      const acc = a => ["public", "yes", "permissive"].includes(a) ? "public" : ["restricted", "private", "customers", "members", "no"].includes(a) ? "restricted" : "access not checked";
       const near = v => !loc || km(loc.y, loc.x, v.y, v.x) <= Math.max(loc.r, 15);
       const w = data.venues.filter(v => v.kd === "w" && (!st || v.r === st) && near(v)
         && (!sp || v.p.some(e => e[0] === sp.idx) || (v.hw.sp || []).some(s => norm(s).includes(norm(sp.name)))));
@@ -171,8 +218,7 @@
       const where = loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + st : "";
       if (!w.length) return {kind: "walls", lines: ["No stand-alone hitting walls found" + where + " in our data. That does not prove there are none." + (onSite ? " " + onSite + " court venues there have walls on site." : "")], items: [], chips: loc ? sportChips(loc) : undefined};
       return {kind: "walls", lines: ["Found " + w.length + " stand-alone hitting wall pin" + (w.length > 1 ? "s" : "") + where + " (showing " + Math.min(5, w.length) + "). Many are only tagged in OpenStreetMap, not verified." + (onSite ? " Another " + onSite + " court venues have walls on site." : "")],
-        items: w.slice(0, 5).map(v => ({title: (v.n || "Hitting wall") + (v.c ? " (" + v.c + ")" : ""),
-          detail: [(v.hw.t || []).join(", "), v.hw.wn > 1 ? v.hw.wn + " walls" : "", acc(v.hw.ac), v.hw.cf === "tagged" ? "from OpenStreetMap tags, not checked" : v.hw.cf, v.hw.l === 1 ? "lit" : "", v.hw.f === 1 ? "free" : "", v.y.toFixed(4) + ", " + v.x.toFixed(4)].filter(Boolean).join(" · "), url: ""}))};
+        items: w.slice(0, 5).map(wallItem)};
     }
 
     function socialAnswer(sp, loc, st) {
@@ -186,6 +232,18 @@
       if (apps.length) { lines.push("Player-matching apps (we link out; we haven't tested them):"); apps.slice(0, 3).forEach(p => items.push({title: p.n, detail: p.d + " · listed " + p.vo, url: https(p.u)})); }
       if (!groups.length) lines.push("That only means we haven't listed any yet" + (loc && sp ? "; I can show places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " where you might meet people." : "."));
       return {kind: "social", lines, items, chips: !groups.length && loc && sp ? [sp.name + " in " + loc.label] : undefined};
+    }
+
+    // "What am I looking at?": the open pin, or what the map shows right now. ctx() comes from the page (map bounds + current filters); absent in Node tests.
+    function viewAnswer(sp, t, ctx) {
+      const c = ctx(), item = (v, i) => v.kd === "w" ? wallItem(v) : venueItem(v, sp ? sp.idx : ((v.p[0] || [])[0]), null, i);
+      if (c.selected && has(t, VIEW_THIS)) return {kind: "view", lines: ["You have this place open. What we know about it:"], items: [item(c.selected)], chips: ["What does confirmed mean?", "What's in this view?"]};
+      let rows = c.inView || [];
+      if (sp) rows = rows.filter(v => v.kd === "w" ? (v.p.some(e => e[0] === sp.idx) || (v.hw.sp || []).some(x => norm(x).includes(norm(sp.name)))) : v.p.some(e => e[0] === sp.idx && e[2] !== 128));
+      const filt = (c.sport ? " The map's sport filter (" + c.sport + ") also applies." : "");
+      if (!rows.length) return {kind: "view", lines: ["No" + (sp ? " " + sp.name : "") + " places in this view in our data." + filt + " Try zooming out or moving the map, or ask for a sport and city."], items: [], chips: STARTERS.slice(0, 3)};
+      const names = {}; rows.slice(0, 5).forEach(v => { names[v.n] = (names[v.n] || 0) + 1; });
+      return {kind: "view", lines: [rows.length + (sp ? " " + sp.name : "") + " place" + (rows.length > 1 ? "s" : "") + " in this view, nearest the centre first (showing " + Math.min(5, rows.length) + ")." + filt + (rows.length > 60 ? " Zoom in for a shorter list." : "") + " Tap a pin on the map, then ask \"what is this place?\" for its details."], items: rows.slice(0, 5).map(v => item(v, names[v.n] > 1))};
     }
 
     const sportByName = n => sports.find(s => s.n === n);
@@ -212,13 +270,13 @@
     }
 
     // every reply that is not a list of results gets next-step chips
-    function answer(question) {
-      const r = route(question);
+    function answer(question, ctx) {
+      const r = route(question, ctx);
       if (!r.chips && !(r.items || []).length) r.chips = STARTERS.slice();
       return r;
     }
 
-    function route(question) {
+    function route(question, ctx) {
       const t = norm(question);
       const profile = store.get() || {};
       let found = detectSports(t), loc = detectPlace(t), st = stateOf(t);
@@ -231,6 +289,9 @@
         if (GREETING.test(t) || HELP.test(t)) return {kind: "welcome", lines: ["Hi! I can help you find places to play tennis, pickleball, padel, squash and other racket sports, events to watch, groups to play with, and how to try a sport.", "Tell me a sport and a city, or pick one below."], items: []};
         if (THANKS.test(t)) return {kind: "welcome", lines: ["You're welcome! Want to look for anything else?"], items: []};
         if (FRUSTRATED.test(t)) return {kind: "support", lines: ["Sorry, that wasn't what you were hoping for. I'm a simple tool that only knows what's in our venue data, so I can miss things or misread a question.", "Tell me the sport and city (for example \"padel in Reno\") and I'll try again, or pick one below."], items: []};
+      }
+      for (const [re, lines, items, chips] of PRODUCT) {
+        if (has(t, re)) return {kind: "about", lines: lines.slice(), items: (items || []).slice(), chips: chips ? chips.slice() : undefined};
       }
       const other = !found.length && t.match(OTHER_SPORT);
       if (other) {
@@ -261,6 +322,7 @@
       if (has(t, GEAR) && !has(t, / equipment /)) {
         return done({kind: "gear", lines: ["I don't have racket-shop, restringing or rental data yet, so I won't name stores. " + (sp ? "I can show places to play " + sp.name + (loc ? (loc.area ? " in " : " near ") + loc.label : "") + " instead; some offer clinics or lessons where you can try gear. " : "") + "A ranked gear list (sport specialists first, then general sporting goods, then big-box) is planned once the data exists."], items: [], chips: sp && loc ? [sp.name + " in " + loc.label, "What is " + sp.name.toLowerCase() + "?"] : sp ? cityChips(sp).slice(0, 3) : undefined});
       }
+      if (ctx && !loc && !st && has(t, VIEW) && !has(t, EVENTS) && !has(t, SOCIAL) && (!found.length || !has(t, LEARN))) return done(viewAnswer(sp, t, ctx));
       if (has(t, EVENTS)) return done(eventsAnswer(sp, loc, st, t));
       if (has(t, WALLS)) return done(wallsAnswer(sp, loc, st));
       if (has(t, SOCIAL) || has(t, SOCIAL2)) return done(socialAnswer(sp, loc, st));

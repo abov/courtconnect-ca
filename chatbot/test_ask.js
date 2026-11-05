@@ -9,7 +9,10 @@ const data = JSON.parse(fs.readFileSync(path.join(root, "venues.json"), "utf8"))
 let saved = {};
 const store = {get: () => saved, set: v => { saved = v; }, clear: () => { saved = {}; }};
 
-// [question, expected kind(s), text that must appear (optional)]
+// A stand-in for the page's map context: Reno venues in view, nearest first; the first one is the open pin (issue 533).
+const renoView = data.venues.filter(v => v.c === "Reno" && v.kd !== "w").slice(0, 8);
+const ctx = () => ({selected: renoView[0], inView: renoView, sport: ""});
+// [question, expected kind(s), text that must appear (optional), uses the map context (optional)]
 const Q = [
   ["Where can I play pickleball in Reno?", "venues", "Neil Road"],
   ["Free public tennis courts near Santa Monica?", "venues", "marked free"],
@@ -56,10 +59,33 @@ const Q = [
   ["Where can I play golf?", "offtopic", "Golf"],
   ["Basketball courts in Reno", "offtopic", "near Reno"],
   ["What's the weather in Reno?", "refuse", "couldn't match"],
+  // issue 533: questions about the product and about the current map view
+  ["What is RacketConnect?", "about", "free map"],
+  ["Is this free to use?", "about", "no accounts"],
+  ["Do I need an account?", "about", "no accounts"],
+  ["Where does your data come from?", "about", "OpenStreetMap"],
+  ["How up to date is the data?", "about", "twice a month"],
+  ["What does confirmed mean?", "about", "in person"],
+  ["How do I add my club?", "about", "No sign-in"],
+  ["The address for this court is wrong", "about", "missing or wrong", false],
+  ["Which states do you cover?", "about", "Arizona"],
+  ["Do you have courts in Mexico?", "about", "aren't on the map"],
+  ["Is there an iPhone app?", "about", "no app"],
+  ["Do you speak Spanish?", "about", "no translation"],
+  ["Who built this?", "about", "open-source"],
+  ["What court am I looking at in this view?", "view", "You have this place open", true],
+  ["What is this place?", "view", "open", true],
+  ["What's in this view?", "view", "in this view", true],
+  ["pickleball near me", "view|clarify", "", true],
+  ["Where can I play padel in Las Vegas?", "venues", "P1 Padel", true],
+  ["List the pickleball courts in Reno", "venues", "Neil Road", true],
+  ["Suggest a place to play padel in Las Vegas", "venues", "P1 Padel", true],
+  ["What is padel?", "learn", "", true],
+  ["Private lessons for tennis in Reno", "venues", "", true],
 ];
 
 let ask = Ask.create(data, store), fails = 0;
-Q.forEach(([q, kind, must], i) => {
+Q.forEach(([q, kind, must, useCtx], i) => {
   let r;
   if (q === "MULTI") {
     saved = {};
@@ -70,7 +96,7 @@ Q.forEach(([q, kind, must], i) => {
     ask = Ask.create(data, store); // new page load, same browser storage
     q = "[new session] What did I say I play?";
     r = ask.answer("What did I say I play?");
-  } else { saved = {}; r = ask.answer(q); } // each question starts without a saved profile
+  } else { saved = {}; r = ask.answer(q, useCtx ? ctx : undefined); } // each question starts without a saved profile
   const text = [...r.lines, ...r.items.map(x => x.title + " | " + x.detail)].join("\n");
   // no result list means a next step: chips; and the old cold refusal text is gone
   const kindly = !text.includes("I only help with") && ((r.items || []).length > 0 || (r.chips || []).length > 0);
