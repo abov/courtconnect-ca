@@ -241,6 +241,16 @@ seeds:
         place_name: varchar
         evidence: varchar
         verified_on: varchar
+    overture_gone_places:   # Overture places in one release and gone from the next (ingestion/overture_release_diff.py); mart_venue_closure_signal reads it
+      +column_types:
+        place_id: varchar
+        place_name: varchar
+        category: varchar
+        lat: varchar
+        lon: varchar
+        last_seen_release: varchar
+        gone_in_release: varchar
+        kind: varchar
     osm_wall_overrides:      # imagery / source reads of an OSM wall's type (stg_osm_walls)
       +column_types:
         wall_key: varchar

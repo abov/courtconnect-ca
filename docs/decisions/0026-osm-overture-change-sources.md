@@ -26,3 +26,6 @@ The planet-scale plan listed "OSM minutely replication diffs filtered to CA/NV r
 - No new dependency, service or spend. The Overture diff reads about the same slice as the normal places extract, a few percent of the release (`docs/planet_scale_benchmark.md`).
 - README ADR count moves to 0026 (0023 to 0026 proposed). CLAUDE.md "After beta" favorites line gains a pointer to this ADR.
 - Risk: snapshot diffs cannot see an edit made and reverted between two refreshes, and Overture `gone` also fires when a place stops matching the racket filter, not only when it closes. The `detail` column says so; the feed treats both as leads.
+
+## Update 2026-11-06: first consumer, an inferred closure lead
+`overture_release_diff.py` now appends `gone`/`closed` places to `transform/seeds/overture_gone_places.csv` (the raw extract is overwritten each refresh, so the seed is the only memory). `mart_venue_closure_signal` flags a venue only when a gone place has the venue's own name within 300 m and no Overture place lists the venue any more; `mart_venue_confidence` then zeroes its freshness points until a dated check is newer than the release the place vanished in, and carries `closure_signal` (`confirmation = inferred`). First run, 2026-09-23.1 -> 2026-10-21.0 (CA + NV): 21 gone, 0 closed, 5 venues flagged. The diff must run before the extract overwrites the raw places file.

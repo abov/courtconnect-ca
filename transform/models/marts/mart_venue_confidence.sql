@@ -9,6 +9,8 @@
 --                 business-name word (weight 0.5; a distinctive word like "padel" is usually right) (mart_sport_evidence.needs_review). Derived sports (sport_also_played) are rule outputs and not counted.
 -- last_seen_on: newest date any source saw the venue (OSM extract, Overture release, hand-added confirmation, link-out check); the 35-day
 --   freshness SLA in `make quality` reads it. Nulls are coalesced to 1900-01-01 first so one missing date never nulls the greatest().
+-- closure_signal (mart_venue_closure_signal): INFERRED "may be closed" lead when Overture dropped the venue's own place between two releases and nothing in Overture lists the venue now.
+--   Freshness points are zeroed while the newest dated check is older than the release the place vanished in; it never says "closed" (a person confirms, ADR 0026).
 -- confidence_score_v1 keeps the old score so the effect of the penalty stays visible.
 -- Bands: high >= 60, medium 30-59, low < 30.
 {% set d0 = "cast('1900-01-01' as date)" %}
@@ -45,6 +47,11 @@ place_seen as (
     group by 1
 ),
 
+closure as (
+    select venue_id, closure_signal, gone_on, gone_place_name, gone_in_release
+    from {{ ref('mart_venue_closure_signal') }}
+),
+
 action_ev as (
     select venue_id, max(verified_on) as newest_verified
     from {{ ref('mart_venue_actions') }}
@@ -74,10 +81,18 @@ scored as (
          + case when v.opening_hours is not null then 4 else 0 end
          + case when v.address_line is not null then 4 else 0 end)                              as contact_pts,
         case
+            when cl.gone_on is not null
+                 and greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }})) < cl.gone_on then 0
             when greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }})) >= current_date - 35 then 15
             when greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }})) >= current_date - 90 then 8
             else 0
         end                                                                                     as fresh_pts,
+        case when cl.gone_on is not null
+                  and greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }})) < cl.gone_on
+             then cl.closure_signal end                                                         as closure_signal,
+        case when cl.gone_on is not null
+                  and greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }})) < cl.gone_on
+             then 'Overture place "' || cl.gone_place_name || '" no longer listed since release ' || cl.gone_in_release || ' (inferred; may be a data cleanup, not a closure)' end as closure_signal_detail,
         nullif(greatest(coalesce(me.newest_confirmed, {{ d0 }}), coalesce(ae.newest_verified, {{ d0 }}),
                         coalesce(os.osm_seen_on, {{ d0 }}), coalesce(ps.places_seen_on, {{ d0 }}), coalesce(v.source_seen_on, {{ d0 }})), {{ d0 }}) as last_seen_on,
         coalesce(sr.direct_sports, 0)                                                           as direct_sports,
@@ -88,6 +103,7 @@ scored as (
     left join src s on s.venue_id = v.venue_id
     left join manual_ev me on me.venue_id = v.venue_id
     left join action_ev ae on ae.venue_id = v.venue_id
+    left join closure cl on cl.venue_id = v.venue_id
     left join seen os on os.venue_id = v.venue_id
     left join place_seen ps on ps.venue_id = v.venue_id
     left join sport_roll sr on sr.venue_id = v.venue_id

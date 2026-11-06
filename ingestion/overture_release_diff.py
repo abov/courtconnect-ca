@@ -5,12 +5,15 @@ Feeds the change feed planned in ADR 0025 (`app/data/changes.json`); it writes a
     python ingestion/overture_release_diff.py                      # old = the shared raw snapshot, new = newest release
     python ingestion/overture_release_diff.py --new-release 2026-10-21.0
     python ingestion/overture_release_diff.py --old path/to/overture_places.csv
+    python ingestion/overture_release_diff.py --seed-from-csv        # no S3: add the `gone`/`closed` rows of an existing diff CSV to the seed
 
 The old side is read from a local extract (its `release` column says which release it is), the new side is read from S3
 with the same query as extract_overture_places.py. The shared raw CSV is NOT overwritten: run the extract for that.
 Overture ids (GERS) are stable across releases, so places are matched by id.
 
-Output: data/raw/overture_release_diff.csv
+Output: data/raw/overture_release_diff.csv. `gone` and `closed` rows are also added to transform/seeds/overture_gone_places.csv
+(the raw extract is overwritten each refresh, so the seed is the only memory of what vanished): a closure signal, not a closure
+(mart_venue_closure_signal, ADR 0026). Rows already in closed_places.csv are skipped; a place that later comes back is ignored by dbt.
 """
 from __future__ import annotations
 
@@ -26,6 +29,8 @@ from rawdir import raw_path
 
 CLOSED = {"permanently_closed", "temporarily_closed"}
 MOVED_M = 100
+GONE_SEED = Path(__file__).resolve().parent.parent / "transform" / "seeds" / "overture_gone_places.csv"
+GONE_FIELDS = ["place_id", "place_name", "category", "lat", "lon", "last_seen_release", "gone_in_release", "kind"]
 OUT_FIELDS = ["kind", "place_id", "name", "category", "city", "lat", "lon", "old_release", "new_release", "detail", "already_in_closed_places"]
 
 
@@ -65,13 +70,35 @@ def diff(old: dict[str, dict], new: dict[str, dict], old_rel: str, new_rel: str,
     return out
 
 
+def update_gone_seed(rows: list[dict], path: Path = GONE_SEED) -> int:
+    """Add the diff's gone/closed rows to the seed (one row per place_id, first sighting wins); returns how many were added."""
+    have = {r["place_id"] for r in csv.DictReader(path.open(encoding="utf-8"))} if path.exists() else set()
+    add = [r for r in rows if r["kind"] in ("gone", "closed") and not r["already_in_closed_places"] and r["place_id"] not in have]
+    new_file = not path.exists()
+    with path.open("a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=GONE_FIELDS, lineterminator="\n")
+        if new_file:
+            w.writeheader()
+        for r in add:
+            have.add(r["place_id"])
+            w.writerow({"place_id": r["place_id"], "place_name": r["name"].strip(), "category": r["category"], "lat": r["lat"],
+                        "lon": r["lon"], "last_seen_release": r["old_release"], "gone_in_release": r["new_release"], "kind": r["kind"]})
+    return len(add)
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--old", default=raw_path("overture_places.csv"))
     ap.add_argument("--new-release", default=None)
     ap.add_argument("--out", default=raw_path("overture_release_diff.csv"))
+    ap.add_argument("--seed-from-csv", action="store_true", help="only add the gone/closed rows already in --out to the seed (no S3 read)")
     args = ap.parse_args()
+
+    if args.seed_from_csv:
+        n = update_gone_seed(list(csv.DictReader(Path(args.out).open(encoding="utf-8"))))
+        print(f"Added {n} gone/closed places to {GONE_SEED}")
+        return
 
     old_rows = list(csv.DictReader(Path(args.old).open(encoding="utf-8")))
     old_rel = Counter(r["release"] for r in old_rows).most_common(1)[0][0]
@@ -95,6 +122,7 @@ def main() -> None:
         w.writeheader()
         w.writerows(rows)
     print(f"Wrote {len(rows):,} changes to {out}: " + ", ".join(f"{k} {n}" for k, n in sorted(Counter(r["kind"] for r in rows).items())))
+    print(f"Added {update_gone_seed(rows)} gone/closed places to {GONE_SEED}")
 
 
 if __name__ == "__main__":
