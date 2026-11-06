@@ -11,7 +11,8 @@ Pages: every link-out in venue_actions.csv and every hand-added venue website (m
 page, a pause between requests to the same host, the project User-Agent.
 Limit: a page whose text changes on every load (dates, counters, ads) reads as changed; after two changed checks in a row it is
 marked 'volatile' and no longer queued. A JavaScript-only page hashes its empty shell, so it reads as unchanged; check_action_links.py
-has the same blind spot.
+has the same blind spot. City and park sites that answer 403 to the project User-Agent (~100 of 1,074 pages, first run) stay
+'error' every run: they are blind, not dead. --retry-errors rechecks error rows regardless of age (transient timeouts).
 
 Output: data/raw/page_checks.csv (url, status, etag, last_modified, text_hash, changed_runs, checked_at, first_seen)
   status: new | unchanged | changed | volatile | gone | error. The queue printed at the end is the changed and gone rows.
@@ -71,8 +72,10 @@ def check(url: str, prev: dict | None) -> dict:
         if prev["last_modified"]:
             headers["If-Modified-Since"] = prev["last_modified"]
     try:
-        r = requests.get(url, headers=headers, timeout=25, allow_redirects=True)
-    except requests.RequestException:
+        r = requests.get(url, headers=headers, timeout=(8, 20), allow_redirects=True, stream=True)
+        body = r.raw.read(MAX_BYTES, decode_content=True) if r.status_code == 200 else b""     # never download more than MAX_BYTES
+        r.close()
+    except (requests.RequestException, OSError):
         return row
     if r.status_code == 304:
         return {**row, "status": "unchanged", "etag": prev["etag"], "last_modified": prev["last_modified"], "changed_runs": "0"}
@@ -80,7 +83,7 @@ def check(url: str, prev: dict | None) -> dict:
         return {**row, "status": "gone"}
     if r.status_code != 200:
         return row                       # 403, 429, 5xx: inconclusive, never read as a change
-    h = text_hash(r.content)
+    h = text_hash(body)
     row.update(etag=r.headers.get("ETag", ""), last_modified=r.headers.get("Last-Modified", ""), text_hash=h)
     if not prev or not prev["text_hash"]:
         return {**row, "status": "new", "changed_runs": "0"}
@@ -94,6 +97,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=raw_path("page_checks.csv"))
     ap.add_argument("--max-age-days", type=int, default=30, help="skip pages checked more recently than this")
+    ap.add_argument("--retry-errors", action="store_true", help="also recheck pages whose last check was an error, whatever its age")
     ap.add_argument("--limit", type=int, default=0, help="check at most this many pages (0 = all due)")
     args = ap.parse_args()
 
@@ -106,6 +110,8 @@ def main() -> None:
 
     def due(u: str) -> bool:
         p = previous.get(u)
+        if p and args.retry_errors and p["status"] == "error":
+            return True
         try:
             return not p or datetime.fromisoformat(p["checked_at"]) <= cutoff
         except (KeyError, ValueError):
@@ -118,22 +124,26 @@ def main() -> None:
         todo = todo[:args.limit]
     print(f"{len(urls):,} pages; {len(todo):,} due")
 
+    def save() -> None:
+        merged = {u: r for u, r in {**previous, **results}.items() if u in set(urls)}      # drop pages no longer used anywhere
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with out.open("w", encoding="utf-8", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=FIELDS)
+            w.writeheader()
+            w.writerows(merged[u] for u in sorted(merged))
+
     last_hit: dict[str, float] = {}
     results = {}
-    for u in todo:
+    for n, u in enumerate(todo, 1):
         host = urlsplit(u).hostname or ""
         wait = PAUSE - (time.monotonic() - last_hit.get(host, -PAUSE))
         if wait > 0:
             time.sleep(wait)
         results[u] = check(u, previous.get(u))
         last_hit[host] = time.monotonic()
-
-    merged = {u: r for u, r in {**previous, **results}.items() if u in set(urls)}      # drop pages no longer used anywhere
-    out.parent.mkdir(parents=True, exist_ok=True)
-    with out.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=FIELDS)
-        w.writeheader()
-        w.writerows(merged[u] for u in sorted(merged))
+        if n % 25 == 0:
+            save()               # a long run that dies keeps what it checked
+    save()
 
     counts: dict[str, int] = {}
     for r in results.values():
