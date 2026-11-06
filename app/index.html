@@ -646,7 +646,9 @@ const FORMAT = {in_person_ticketed: "Tickets required", in_person_free: "Free to
 const SCREENING = new Set(["watch_party", "dome_screening", "broadcast_only"]);   // shown on a screen, not played at the pin (ADR 0022)
 const LEVEL = {pro: "Pro", college: "College", amateur: "Amateur", junior: "Junior", exhibition: "Exhibition"};
 function todayIso() { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
-const isUpcoming = ev => !ev.e || ev.e >= todayIso();                   // recomputed in the browser, so a stale deploy still hides past events
+const STALE_MONTHS = 12;                                                // a hand confirmation older than this is shown as aging, never as current (no recheck cost)
+function monthsSince(iso) { const m = /^(\d{4})-(\d{2})/.exec(iso || ""); if (!m) return null; const n = new Date(); return (n.getFullYear() - +m[1]) * 12 + (n.getMonth() + 1 - +m[2]); }
+const isUpcoming = ev => !ev.e || ev.e >= todayIso();                // recomputed in the browser, so a stale deploy still hides past events
 function upcomingEvents() { return events.filter(isUpcoming); }
 function eventsFiltered() {
   const name = state.sport >= 0 ? sports[state.sport].n : null;
@@ -924,7 +926,8 @@ function wallNode(v) {
   if (w.cf === "tagged") src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"})));
   const q = new URLSearchParams({template: "suggest-a-change.yml", title: "Change: " + (v.n || "Hitting wall") + (v.c ? " (" + v.c + ")" : ""), venue: v.n || "", city: v.c || "", map_id: v.i});
   src.append(el("p", {class: "meta"}, el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Suggest a change"}), document.createTextNode(" (GitHub form)")));
-  box.append(src);
+  const rq = new URLSearchParams({usp: "pp_url", "entry.643805557": v.n || "", "entry.251841484": v.c || "", "entry.401515442": v.i});   // same prefill as the court popup
+  box.append(el("p", {class: "meta"}, document.createTextNode("Gone or wrong? "), el("a", {href: REPORT_FORM + "?" + rq, target: "_blank", rel: "noopener noreferrer", text: "Tell us"}), document.createTextNode(" (no account needed).")), src);
   return box;
 }
 
@@ -1112,6 +1115,8 @@ function venueNode(v) {
   const badges = [el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})];
   if (v.cf) {
     badges.push(el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf]}));   // short chip; the date and head-counts move to the details line below
+    const age = monthsSince(v.cd);
+    if (age !== null && age >= STALE_MONTHS) badges.push(el("span", {class: "badge warn", text: "Last confirmed " + (age >= 24 ? Math.floor(age / 12) + " years" : age + " months") + " ago, may have changed"}));
     more.push(CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "") + ".");
   }
   if (v.up) badges.push(el("span", {class: "badge warn", text: v.up}));
@@ -1169,7 +1174,7 @@ function venueNode(v) {
     src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (needs a free OSM account; add only what you have seen or the venue's own page says)")));
   }
   src.append(el("p", {class: "meta", text: "A reviewer checks every suggested change. RacketConnect takes no registrations or payments; the provider does."}));
-  box.append(src);
+  box.append(el("p", {class: "meta"}, document.createTextNode("Closed or wrong? "), el("a", {href: REPORT_FORM + "?" + rq, target: "_blank", rel: "noopener noreferrer", text: "Tell us"}), document.createTextNode(" (no account needed).")), src);   // always in view, not inside Details: a closure report is the cheapest staleness signal
   return box;
 }
 function showVenue(v, fly) {
