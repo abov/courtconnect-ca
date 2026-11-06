@@ -618,6 +618,19 @@ seeds:
       Overture places that no longer exist but are still listed as open. Excluded from the map. One row per place_id; each row needs
       `evidence` (what shows it closed) and `verified_on`.
 
+  - name: overture_gone_places
+    description: >
+      Overture places that were in one release and absent from the next, appended by ingestion/overture_release_diff.py (the raw extract is overwritten each refresh).
+      A closure LEAD, not a closure: `gone` also fires when a place stops matching the racket filter or is merged. One row per place_id.
+    columns:
+      - name: place_id
+        tests: [unique, not_null]
+      - name: kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['gone', 'closed']
+
   - name: osm_sport_map
     description: >
       Maps an OpenStreetMap `sport=` tag value to a sport on the master sheet, with a confidence. stg_osm_courts keeps only OSM
@@ -907,11 +920,39 @@ models:
           - not_null
       - name: last_seen_on
         description: Newest date any source saw the venue (OSM extract, Overture release, hand-added confirmation, link-out check). Null when nothing dated backs the venue (e.g. an undated reported row). The 35-day freshness SLA in `make quality` reads it.
+      - name: closure_signal
+        description: INFERRED lead, null unless Overture dropped the venue's own place since the newest dated check (mart_venue_closure_signal); freshness points are zeroed while it is set. Not a confirmed closure.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['overture_place_gone']
       - name: confidence_band
         tests:
           - accepted_values:
               arguments:
                 values: ['high', 'medium', 'low']
+
+  - name: mart_venue_closure_signal
+    description: >
+      INFERRED "may be closed" lead per venue: Overture dropped a place with the venue's own name between two releases and no Overture place lists the venue now
+      (seeds/overture_gone_places.csv). Never a confirmed closure; a person checks (ADR 0026). mart_venue_confidence zeroes the freshness points of a flagged venue.
+    columns:
+      - name: venue_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments: {to: "ref('dim_venue')", field: venue_id}
+      - name: closure_signal
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['overture_place_gone']
+      - name: confirmation
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['inferred']
 
   - name: mart_sport_evidence
     description: >
