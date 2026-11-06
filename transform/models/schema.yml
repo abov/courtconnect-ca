@@ -631,6 +631,20 @@ seeds:
               arguments:
                 values: ['gone', 'closed']
 
+  - name: osm_gone_elements
+    description: >
+      OSM court elements that were in one extract and absent from the next, appended by ingestion/osm_snapshot_diff.py (the raw extract and the manifest are overwritten each refresh).
+      `kind` is deleted (no such element in OSM any more), retagged (still there without a racket sport/leisure tag) or gone (not looked up). A closure LEAD, not a closure.
+      One row per element, `element_id` = `osm_type/osm_id` like stg_osm_courts.court_id.
+    columns:
+      - name: element_id
+        tests: [unique, not_null]
+      - name: kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['deleted', 'retagged', 'gone']
+
   - name: osm_sport_map
     description: >
       Maps an OpenStreetMap `sport=` tag value to a sport on the master sheet, with a confidence. stg_osm_courts keeps only OSM
@@ -921,11 +935,11 @@ models:
       - name: last_seen_on
         description: Newest date any source saw the venue (OSM extract, Overture release, hand-added confirmation, link-out check). Null when nothing dated backs the venue (e.g. an undated reported row). The 35-day freshness SLA in `make quality` reads it.
       - name: closure_signal
-        description: INFERRED lead, null unless Overture dropped the venue's own place since the newest dated check (mart_venue_closure_signal); freshness points are zeroed while it is set. Not a confirmed closure.
+        description: INFERRED lead, null unless the venue's Overture place and/or OSM court elements vanished since the newest dated check AND no live Overture place or OSM court is left (mart_venue_closure_signal); freshness points are zeroed while it is set. Not a confirmed closure.
         tests:
           - accepted_values:
               arguments:
-                values: ['overture_place_gone']
+                values: ['overture_place_gone', 'osm_courts_gone', 'overture_and_osm_gone']
       - name: confidence_band
         tests:
           - accepted_values:
@@ -934,8 +948,10 @@ models:
 
   - name: mart_venue_closure_signal
     description: >
-      INFERRED "may be closed" lead per venue: Overture dropped a place with the venue's own name between two releases and no Overture place lists the venue now
-      (seeds/overture_gone_places.csv). Never a confirmed closure; a person checks (ADR 0026). mart_venue_confidence zeroes the freshness points of a flagged venue.
+      INFERRED "may be closed" lead per venue: Overture dropped a place with the venue's own name between two releases (seeds/overture_gone_places.csv) and/or the OSM court
+      elements at its pin vanished or lost their racket tags between two extracts (seeds/osm_gone_elements.csv). `no_surviving_source` is true when no live Overture place and no
+      live OSM court is left; only those rows lower the confidence mart's freshness points. A venue that lost one source but keeps the other stays here as a lead (its score already
+      drops with the source). Never a confirmed closure; a person checks (ADR 0026).
     columns:
       - name: venue_id
         tests:
@@ -947,7 +963,9 @@ models:
         tests:
           - accepted_values:
               arguments:
-                values: ['overture_place_gone']
+                values: ['overture_place_gone', 'osm_courts_gone', 'overture_and_osm_gone']
+      - name: no_surviving_source
+        tests: [not_null]
       - name: confirmation
         tests:
           - accepted_values:

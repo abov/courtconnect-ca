@@ -1,0 +1,7 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+node,1,34.1000000,-118.1000000,Alpha Tennis Club,tennis,,,,,,,pitch,,,,,,,,,,2026-11-06T09:00:00+00:00,CA
+node,4,34.4005400,-118.4000000,,tennis,,,,,,,pitch,,,,,,,,,,2026-11-06T09:00:00+00:00,CA
+node,5,34.5000000,-118.5000000,Delta Padel Club,padel,,,,,,,sports_centre,,,,,,,,,,2026-11-06T09:00:00+00:00,CA
+node,6,34.6000000,-118.6000000,,tennis;pickleball,,,,,,,pitch,,,,,,,,,,2026-11-06T09:00:00+00:00,CA
+node,7,34.7000000,-118.7000000,Eta Pickleball,pickleball,,,,,,,pitch,,,,,,,,,,2026-11-06T09:00:00+00:00,CA
+way,8,34.8000000,-118.8000000,Theta Courts,squash,,,,,,,sports_centre,,,,,,,,,,2026-11-06T09:00:00+00:00,CA
