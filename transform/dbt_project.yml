@@ -251,6 +251,18 @@ seeds:
         last_seen_release: varchar
         gone_in_release: varchar
         kind: varchar
+    osm_gone_elements:       # OSM court elements in one extract and gone from the next (ingestion/osm_snapshot_diff.py); mart_venue_closure_signal reads it
+      +column_types:
+        element_id: varchar
+        osm_name: varchar
+        sport: varchar
+        leisure: varchar
+        lat: varchar
+        lon: varchar
+        region: varchar
+        last_seen_extract: varchar
+        gone_in_extract: varchar
+        kind: varchar
     osm_wall_overrides:      # imagery / source reads of an OSM wall's type (stg_osm_walls)
       +column_types:
         wall_key: varchar
@@ -340,6 +352,7 @@ vars:
   expected_racket_sports: 82   # the sheet should list 82 racket sports (Sandball is excluded by the sync script); a warn-level test flags any gap
   manual_match_radius_m: 150   # a hand-added venue within this distance of a known court/place is merged into it
   place_match_radius_m: 100    # an Overture place within this distance of an OSM court is part of that venue
+  osm_gone_match_radius_m: 150   # a hand-added or Overture-only venue within this distance of a vanished OSM court element, with its sport, counts as having lost that OSM source (mart_venue_closure_signal)
   place_name_match_radius_m: 300   # ...or within this distance when place and court have the same name
   place_facility_match_radius_m: 300   # ...or within this distance when the place name matches the court's park/school/centre name, or the place and the court's park/court share a street address (only for places the two rules above leave unmatched)
   place_inside_match_radius_m: 350   # inside_facility rule (int_place_venue_match): lesson/court record whose pin is inside a small park/school/centre footprint joins its nearest court within this distance

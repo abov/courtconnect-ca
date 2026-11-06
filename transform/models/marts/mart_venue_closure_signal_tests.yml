@@ -1,0 +1,58 @@
+version: 2
+
+# The shipped osm_gone_elements seed is empty until the first OSM snapshot diff, so the OSM branch of the closure signal is exercised here on mocked inputs.
+unit_tests:
+  - name: closure_signal_flags_only_venues_with_no_surviving_source
+    model: mart_venue_closure_signal
+    given:
+      - input: ref('overture_gone_places')
+        rows:
+          - {place_id: p1, place_name: Both Gone Club, lat: '34.30', lon: '-118.30', last_seen_release: '2026-09-23.1', gone_in_release: '2026-10-21.0'}
+      - input: ref('stg_overture_places')
+        rows:
+          - {place_id: other}
+      - input: ref('closed_places')
+        rows:
+          - {place_id: other}
+      - input: ref('osm_gone_elements')
+        rows:
+          - {element_id: node/1, sport: tennis, lat: '34.10', lon: '-118.10', last_seen_extract: '2026-10-23', gone_in_extract: '2026-11-06', kind: deleted}
+          - {element_id: node/2, sport: tennis, lat: '34.20', lon: '-118.20', last_seen_extract: '2026-10-23', gone_in_extract: '2026-11-06', kind: retagged}
+          - {element_id: node/3, sport: tennis, lat: '34.30', lon: '-118.30', last_seen_extract: '2026-10-23', gone_in_extract: '2026-11-06', kind: deleted}
+          - {element_id: node/4, sport: tennis, lat: '34.40', lon: '-118.40', last_seen_extract: '2026-10-23', gone_in_extract: '2026-11-06', kind: deleted}
+          - {element_id: node/5, sport: tennis, lat: '34.50', lon: '-118.50', last_seen_extract: '2026-10-23', gone_in_extract: '2026-11-06', kind: deleted}
+          - {element_id: node/6, sport: tennis, lat: '34.60', lon: '-118.60', last_seen_extract: '2026-10-23', gone_in_extract: '2026-11-06', kind: deleted}
+          - {element_id: node/7, sport: tennis, lat: '34.70', lon: '-118.70', last_seen_extract: '2026-10-23', gone_in_extract: '2026-11-06', kind: deleted}
+      - input: ref('osm_sport_map')
+        rows:
+          - {osm_sport_key: tennis, sport: Tennis}
+      - input: ref('dim_sport')
+        rows:
+          - {sport_id: 1, sport_name: Tennis}
+          - {sport_id: 2, sport_name: Pickleball}
+      - input: ref('stg_osm_courts')
+        rows:
+          - {court_id: node/7}
+      - input: ref('dim_venue')
+        rows:
+          - {venue_id: v_manual_only, venue_name: Manual Only, lat: 34.10, lon: -118.10, venue_kind: courts}
+          - {venue_id: v_overture_survives, venue_name: Overture Survives, lat: 34.20, lon: -118.20, venue_kind: courts}
+          - {venue_id: v_both_gone, venue_name: Both Gone Club, lat: 34.30, lon: -118.30, venue_kind: courts}
+          - {venue_id: v_far, venue_name: Far Away, lat: 34.405, lon: -118.40, venue_kind: courts}
+          - {venue_id: v_other_sport, venue_name: Other Sport, lat: 34.50, lon: -118.50, venue_kind: courts}
+          - {venue_id: v_live_osm, venue_name: Live Osm, lat: 34.60, lon: -118.60, venue_kind: courts}
+          - {venue_id: v_came_back, venue_name: Came Back, lat: 34.70, lon: -118.70, venue_kind: courts}
+      - input: ref('bridge_venue_sport')
+        rows:
+          - {venue_id: v_manual_only, sport_id: 1, in_osm: false, in_places: false}
+          - {venue_id: v_overture_survives, sport_id: 1, in_osm: false, in_places: true}
+          - {venue_id: v_both_gone, sport_id: 1, in_osm: false, in_places: false}
+          - {venue_id: v_far, sport_id: 1, in_osm: false, in_places: false}
+          - {venue_id: v_other_sport, sport_id: 2, in_osm: false, in_places: false}
+          - {venue_id: v_live_osm, sport_id: 1, in_osm: true, in_places: false}
+          - {venue_id: v_came_back, sport_id: 1, in_osm: false, in_places: false}
+    expect:
+      rows:
+        - {venue_id: v_manual_only, closure_signal: osm_courts_gone, no_surviving_source: true, gone_osm_elements: 1, gone_osm_element_id: node/1, gone_place_id: null}
+        - {venue_id: v_overture_survives, closure_signal: osm_courts_gone, no_surviving_source: false, gone_osm_elements: 1, gone_osm_element_id: node/2, gone_place_id: null}
+        - {venue_id: v_both_gone, closure_signal: overture_and_osm_gone, no_surviving_source: true, gone_osm_elements: 1, gone_osm_element_id: node/3, gone_place_id: p1}
