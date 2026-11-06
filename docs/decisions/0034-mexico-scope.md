@@ -82,3 +82,6 @@ Fourth core metro; the owner's 2026-11-05 pin rule applies (every court found is
 
 ## Phase 3, Mexico City, part 2 racket sports, partial (2026-11-06)
 18 more hand-verified pins in the Mexico City metro: pickleball (The Pickle Co, Pickleball Santa Fe, PBMX), club tennis and squash (Centro Deportivo Chapultepec, Parque Asturias, Club Campestre), five table tennis clubs and seven public frontones, each with access stated and map points from the OpenStreetMap geocoder (street-level where noted). Events and groups were not done (one lead), nor racquetball, Sports World / City Club, Estado de México east and north; see `docs/event_group_search.md`. No extract was run.
+
+## Phase 3, Mexico City, part 2b events and groups (2026-11-06)
+No Mexico City event with a 2027 date and a venue was found (the Mexico City Open at the Centro Deportivo Chapultepec has no 2027 dates yet; recheck January 2027). Added 4 social series (The Pickle Co league and retas, PBMX open play, CDMX Pride pickleball at Parque México), 6 player-group links (two Meetup groups, one group page, three club WhatsApp links) and the Parque México pickleball pin (reported play, court lines unconfirmed). Padel, tennis, squash, racquetball, table tennis, frontenis and badminton groups and federation calendars found nothing public for the metro. Details: `docs/event_group_search.md`.
