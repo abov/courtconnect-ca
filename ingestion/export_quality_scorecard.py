@@ -10,7 +10,7 @@ from __future__ import annotations
 import csv
 import json
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 import duckdb
@@ -36,7 +36,8 @@ def days_since(ts) -> int | None:
         return None
     s = str(ts)[:10]
     try:
-        return (date.today() - date.fromisoformat(s)).days
+        # Extract stamps are UTC dates; compare with today in UTC so an evening local run never reads -1.
+        return (datetime.now(timezone.utc).date() - date.fromisoformat(s)).days
     except ValueError:
         return None
 
