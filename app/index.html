@@ -646,7 +646,9 @@ const FORMAT = {in_person_ticketed: "Tickets required", in_person_free: "Free to
 const SCREENING = new Set(["watch_party", "dome_screening", "broadcast_only"]);   // shown on a screen, not played at the pin (ADR 0022)
 const LEVEL = {pro: "Pro", college: "College", amateur: "Amateur", junior: "Junior", exhibition: "Exhibition"};
 function todayIso() { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
-const isUpcoming = ev => !ev.e || ev.e >= todayIso();                   // recomputed in the browser, so a stale deploy still hides past events
+const STALE_MONTHS = 12;                                                // a hand confirmation older than this is shown as aging, never as current (no recheck cost)
+function monthsSince(iso) { const m = /^(\d{4})-(\d{2})/.exec(iso || ""); if (!m) return null; const n = new Date(); return (n.getFullYear() - +m[1]) * 12 + (n.getMonth() + 1 - +m[2]); }
+const isUpcoming = ev => !ev.e || ev.e >= todayIso();                // recomputed in the browser, so a stale deploy still hides past events
 function upcomingEvents() { return events.filter(isUpcoming); }
 function eventsFiltered() {
   const name = state.sport >= 0 ? sports[state.sport].n : null;
@@ -1112,6 +1114,8 @@ function venueNode(v) {
   const badges = [el("span", {class: "badge " + v.q, text: QNAME[v.q], title: QTIP[v.q]})];
   if (v.cf) {
     badges.push(el("span", {class: v.cf === "r" ? "badge warn" : "badge c", text: CONFIRM[v.cf]}));   // short chip; the date and head-counts move to the details line below
+    const age = monthsSince(v.cd);
+    if (age !== null && age >= STALE_MONTHS) badges.push(el("span", {class: "badge warn", text: "Last confirmed " + (age >= 24 ? Math.floor(age / 12) + " years" : age + " months") + " ago, may have changed"}));
     more.push(CONFIRM[v.cf] + (v.cd ? " (" + v.cd + ")" : "") + (v.cn ? " · " + (v.cf === "r" ? v.cn + (v.cn === 1 ? " confirmation" : " confirmations") + " waiting for review" : "confirmed by " + v.cn + (v.cn === 1 ? " person" : " people")) : "") + (v.rn ? " · reported by " + v.rn + (v.rn === 1 ? " person" : " people") : "") + ".");
   }
   if (v.up) badges.push(el("span", {class: "badge warn", text: v.up}));

@@ -5,7 +5,7 @@ STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import o
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 # Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
-.PHONY: setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback
+.PHONY: check-pages setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -106,6 +106,9 @@ app:             ## serve the map at http://localhost:8765
 
 report:           ## regenerate docs/coverage_snapshot.md and docs/sport_name_review.md
 	$(PY) ingestion/export_coverage_report.py
+
+check-pages:      ## list verified pages that changed or vanished since the last look (conditional requests + text hash; ARGS="--limit 50")
+	$(PY) ingestion/check_page_changes.py $(ARGS)
 
 check-links:      ## verify every link-out in venue_actions.csv still loads
 	$(PY) ingestion/check_action_links.py
