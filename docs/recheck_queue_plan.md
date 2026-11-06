@@ -26,3 +26,11 @@ One line next to `track("venue-open")` in `app/index.html`: `trackD("venue-view"
 
 ## Cost assumption
 `--usd-per-recheck` defaults to 0.05, a guess for one page reread by the reader; replace it with the measured figure from `docs/reader_pilot_results.csv` runs.
+
+## Why there is no auto-expiry of automatic pins (measured 2026-11-06)
+Idea: hide an automatic pin (no hand confirmation, no page check) after N months unless a free signal renews it. Measured on the local warehouse (16,506 pins); not built.
+- **Presence in the extract renews every pin.** All OSM courts and Overture places are in the latest extracts, the oldest `last_seen_on` is 2026-10-10 and the data only starts 2026-10-09, so N = 6, 12 or 18 months hides 0 pins today (earliest possible expiry 2027-04).
+- **Without presence, expiry hides most of the map.** Automatic pins with no Overture place and no live website are 85.6% of CA, 90.5% of AZ, 84.4% of WA, 83.8% of OR, 72.6% of NV, 78.9% of HI and 13.0% of MX (87% of tennis venues, 71% of pickleball). N only sets the date.
+- **OSM last-edit age is not an existence signal.** Hawaii test (1,041 elements, `out center tags meta;`): last edited over 6 months ago 87.5%, 12 months 82.6%, 18 months 79.6%, 36 months 68.6%; only 168 edited in 2026. Real courts are rarely re-edited, so edit age would hide working courts. Overture `update_time` covers only the pins with an Overture place (about 11%).
+- **Signals that stay viable, each partial:** still in the latest Overture release (and its absence is already the #607 "may be closed" flag), website domain resolves (`website_checks.csv`; 1,277 venues ok, 83 dead; few automatic pins have a site), closure flag absent. Outbound clicks are aggregate only (GoatCounter has no venue id), so they cannot renew a pin.
+- **A future expiry would need** a per-venue liveness signal that separates a live OSM-only court from a dead one (none is free today), a first-seen/last-renewed ledger (nothing records pin age), an owner-set default-OFF switch, and it must not become a verified-only gate (ADR 0034, lifted 2026-11-05). Until then the honest tools are the aging label (#604), the Overture-gone flag (#607) and this recheck queue.
