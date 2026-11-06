@@ -30,7 +30,6 @@ jobs:
       - run: python ci/check_review_priority.py
       - run: python ci/test_sync_reports.py
       - run: python ci/test_check_refresh_diff.py  # merge-gate classifier (ADR 0019), synthetic exports, offline
-      - run: python ci/test_osm_snapshot_diff.py  # OSM snapshot diff (ADR 0026) on a tiny fixture, offline
       - run: python ci/test_feedback_log.py  # feedback ledger sync, offline
       - run: python ci/test_init_fork.py  # fork script (docs/fork_guide.md), offline
       - run: python ingestion/eval_match_gold.py --check
@@ -43,6 +42,7 @@ jobs:
       - run: python ci/check_site_nav.py  # app/how-its-built.html, run-history.html, ask-the-data.html share one nav bar
       - run: python ci/check_regions.py --config-only  # dbt `regions` var equals ingestion/regions.json (ADR 0028)
       - run: python ci/check_page_reader.py  # ADR 0017 guard rail, offline (needs requests, pulled in by dbt)
+      - run: python ci/test_osm_snapshot_diff.py  # OSM snapshot diff (ADR 0026) on a tiny fixture, offline (imports the extract module, needs requests)
       # CI never calls OpenStreetMap: it loads a small committed sample of real OSM data
       # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
       - run: python ingestion/load_raw.py --data-dir ci/fixtures

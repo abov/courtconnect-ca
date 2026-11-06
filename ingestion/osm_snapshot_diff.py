@@ -33,7 +33,6 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-from extract_osm_courts import LEISURE, SPORT_KEYS
 from rawdir import raw_dir
 
 MANIFEST_FIELDS = ["osm_type", "osm_id", "lat", "lon", "name", "sport", "leisure", "region", "extracted_at"]
@@ -96,6 +95,7 @@ def diff(old: dict, new: dict, old_ext: str, new_ext: str) -> list[dict]:
 
 def is_racket_court(tags: dict) -> bool:
     """Would extract_osm_courts.py's query still return an element with these tags?"""
+    from extract_osm_courts import LEISURE, SPORT_KEYS   # lazy: it pulls in requests, which the offline CI step does not have
     sports = {s.strip() for s in (tags.get("sport") or "").split(";")}
     return bool(sports & set(SPORT_KEYS)) and (tags.get("leisure") in LEISURE.split("|") or tags.get("club") == "sport")
 
