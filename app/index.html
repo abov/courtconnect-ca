@@ -1173,7 +1173,7 @@ function venueNode(v) {
     src.append(el("p", {class: "meta"}, el("a", {href: "https://www.openstreetmap.org/edit#map=19/" + v.y + "/" + v.x, target: "_blank", rel: "noopener noreferrer", text: "Fix or improve this on OpenStreetMap"}), document.createTextNode(" (needs a free OSM account; add only what you have seen or the venue's own page says)")));
   }
   src.append(el("p", {class: "meta", text: "A reviewer checks every suggested change. RacketConnect takes no registrations or payments; the provider does."}));
-  box.append(src);
+  box.append(el("p", {class: "meta"}, document.createTextNode("Closed or wrong? "), el("a", {href: REPORT_FORM + "?" + rq, target: "_blank", rel: "noopener noreferrer", text: "Tell us"}), document.createTextNode(" (no account needed).")), src);   // always in view, not inside Details: a closure report is the cheapest staleness signal
   return box;
 }
 function showVenue(v, fly) {
