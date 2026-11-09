@@ -69,7 +69,12 @@ const Q = [
   ["How do I add my club?", "about", "No sign-in"],
   ["The address for this court is wrong", "about", "missing or wrong", false],
   ["Which states do you cover?", "about", "Arizona"],
-  ["Do you have courts in Mexico?", "about", "border pilot"],
+  ["Do you have courts in Mexico?", "about", "Mexico pilot"],
+  // issue 568: counts by state and by country
+  ["How many venues do you have by state and by country?", "count", "By state: California"],
+  ["How many pickleball courts are in California?", "count", "Pickleball places in California"],
+  ["How many padel courts in Mexico?", "count", "Padel places in Mexico"],
+  ["How many courts in Reno?", "count", "near Reno"],
   ["Is there an iPhone app?", "about", "no app"],
   ["Do you speak Spanish?", "about", "no translation"],
   ["Who built this?", "about", "open-source"],

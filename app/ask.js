@@ -21,6 +21,7 @@
   const SOCIAL = / (play with|who can i play|people to play|someone to play|meet people|find people|partner|partners|group|groups|league|leagues|meetup|social|join a team|teams) /;
   const SOCIAL2 = / play w+ with /;
   const BOOK = / (book|reserve|reservation|reservations) /;
+  const COUNT = / (how many|number of|count of|counts|totals?|tally|by state|by country|per state|per country|each state) |^ count /;
   const RACKET = / (court|courts|racket|rackets|racquet|racquets|paddle|paddles|shuttlecock|tennis|net) /;
   // Replies that are not an answer (hello, thanks, off-topic, ...) stay kind and always offer a next step as chips (todo: docs/chatbot_ux_todo.md).
   const STARTERS = ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "What is RacketConnect?"];
@@ -45,7 +46,7 @@
       ["The data is rebuilt about twice a month. Public access, hours and prices are often unknown, so I only say them when our data has them, and each place shows when it was last checked. If something is wrong, tell us and a reviewer will check it."],
       [{title: "Suggest a change", detail: "GitHub form", url: PRODUCT_URL.change}], ["What does confirmed mean?", "How do I add my club?"]],
     [/ (which|what) (states|regions|countries) | (do you|does it|does racketconnect|will you|are you going to) (cover|support|expand|add) | (mexico|canada|europe|texas|florida|new york|colorado|utah|idaho|montana|new mexico) | outside (of )?(california|the us|the u s|these states) /,
-      ["We cover California, Nevada, Oregon, Washington, Arizona, Hawaii and the Mexican border, plus a Mexican border pilot (Tijuana, Mexicali, Ensenada, Hermosillo, Nogales, San Luis Río Colorado): automatic map data there and a hand-checked set of Tijuana padel clubs. Other places, including the rest of Mexico, aren't on the map yet."],
+      ["We cover California, Nevada, Oregon, Washington, Arizona, Hawaii and the Mexican border, plus a Mexico pilot: the border cities (Tijuana, Mexicali, Ensenada, Hermosillo, Nogales, San Luis Río Colorado) and, newer, Mexico City, Guadalajara, Monterrey, Cancún and Mérida. Mexican pins are mostly automatic map data, with hand-checked padel clubs in some cities. Other places aren't on the map yet."],
       [], ["Pickleball in Reno", "Padel in Las Vegas", "Tennis in Seattle"]],
     [/ (is|are) (this|it|racketconnect|the (app|site|map|website)) (really |completely |a )?free | free to use | (do|will) i (need|have to) (.* )?(account|sign up|sign in|log in|login|pay|register) | (an |any )?account | sign up | sign in | log in | login | subscription | cost to use | how much (does|is) (racketconnect|the (app|site|map)|this (app|site|map)) /,
       ["RacketConnect is free to use. There are no accounts, no sign-in and no paid or featured placement. We link out to each venue's own page; we never take bookings or payments."],
@@ -171,6 +172,35 @@
       return rows;
     }
 
+    const STATE_NAMES = {CA: "California", NV: "Nevada", OR: "Oregon", WA: "Washington", AZ: "Arizona", HI: "Hawaii", MX: "Mexico"};
+    function countAnswer(sp, st, t, loc) {
+      const by = {}; let walls = 0;
+      for (const v of data.venues) {
+        if (loc && km(loc.y, loc.x, v.y, v.x) > loc.r) continue;
+        if (v.kd === "w") { if (!sp && (!st || v.r === st)) walls++; continue; }
+        if (sp && !v.p.some(e => e[0] === sp.idx && e[2] !== 128)) continue;
+        by[v.r] = (by[v.r] || 0) + 1;
+      }
+      const what = (sp ? sp.name + " " : "") + "places";
+      const fmt = n => n.toLocaleString("en-US");
+      const chips = sp ? [sp.name + " in " + (st && st !== "MX" ? STATE_NAMES[st] : "Los Angeles"), "Which states do you cover?"] : ["Pickleball places by state", "Padel places by state", "Which states do you cover?"];
+      const note = "These count places (parks, clubs, rec centers), not individual courts; court counts are only known for some places.";
+      if (loc) {
+        const n = Object.values(by).reduce((a, b) => a + b, 0), where = (loc.area ? "in " : "near ") + loc.label;
+        return {kind: "count", lines: [fmt(n) + " " + what + " " + where + " in our data." + (walls ? " Plus " + fmt(walls) + " stand-alone hitting walls." : ""), note], items: [], chips: sp ? [sp.name + " in " + loc.label] : sportChips(loc)};
+      }
+      if (st && !has(t, / by (state|country) | per (state|country) | breakdown | each state /)) {
+        const n = by[st] || 0;
+        return {kind: "count", lines: [fmt(n) + " " + what + " in " + STATE_NAMES[st] + " in our data." + (walls ? " Plus " + fmt(walls) + " stand-alone hitting walls." : ""), note], items: [], chips};
+      }
+      const order = Object.keys(STATE_NAMES).filter(k => by[k]).sort((a, b) => by[b] - by[a]);
+      const mx = by.MX || 0, total = order.reduce((a, k) => a + by[k], 0), us = total - mx;
+      const lines = [fmt(total) + " " + what + " in our data: " + fmt(us) + " in the US and " + fmt(mx) + " in Mexico.",
+        "By state: " + order.map(k => STATE_NAMES[k] + " " + fmt(by[k])).join(", ") + ".", note];
+      if (!sp && walls) lines.splice(2, 0, "Plus " + fmt(walls) + " stand-alone hitting walls.");
+      return {kind: "count", lines, items: [], chips};
+    }
+
     function venuesAnswer(sp, loc, st, t, lead) {
       const want = {pub: has(t, / (public|non members|non member|nonmembers|open to the public) /) || has(t, / free /), free: has(t, / (free|no cost) /), lit: has(t, / (lit|lights|lighting|night|evening) /)};
       const where = loc ? (loc.area ? "in " : "near ") + loc.label : st ? "in " + st : "in the states we cover";
@@ -288,6 +318,8 @@
       if (has(t, / (what did i say|what do i play|my profile|what do you remember|what do you know about me) /)) {
         return {kind: "profile", lines: Object.keys(profile).length ? ["Saved in this browser only: " + Object.entries(profile).map(([k, v]) => k + " = " + v).join(", ") + ". Say \"forget me\" to clear it."] : ["I don't have anything saved yet. Tell me, for example, \"I play padel in Reno, beginner\"."], items: []};
       }
+      // issue 568: counts by state and by country, from the same venue data the map shows
+      if (has(t, COUNT)) return countAnswer(found[0] || null, st || (has(t, / mexico /) ? "MX" : ""), t, loc);
       if (!found.length && !loc) {
         if (GREETING.test(t) || HELP.test(t)) return {kind: "welcome", lines: ["Hi! I can help you find places to play tennis, pickleball, padel, squash and other racket sports, events to watch, groups to play with, and how to try a sport.", "Tell me a sport and a city, or pick one below."], items: []};
         if (THANKS.test(t)) return {kind: "welcome", lines: ["You're welcome! Want to look for anything else?"], items: []};
