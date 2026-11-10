@@ -472,7 +472,7 @@ if (ANALYTICS_ON) {
   sc.addEventListener("load", () => trackRef());
   document.head.appendChild(sc);
 }
-// Events carry a short name only: never a venue name, location, search text or anything a visitor typed.
+// Events carry a short name only: never a venue name, location, search text or anything a visitor typed (one exception: trackAskFeedback, on a button press).
 const REPORT_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSf7BNf7oofeJxalLGwuWRXvZHhjQJkTqFsHFuZvJQ_foHTHyQ/viewform";   // community report form (Google Form, no sign-in): docs/community_reports_plan.md
 function track(name, title) {
   try { if (ANALYTICS_ON && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: "event/" + name, title: title || name, event: true}); } catch (e) { /* analytics must never break the map */ }
@@ -498,7 +498,7 @@ function trackEmpty() {
   } catch (e) { /* ignore */ }
 }
 // Ask box (ADR 0033): how often it is opened, what kind of reply each question got, whether it found anything, and the sport and place it was about.
-// Sport and place are names from our own lists (ask.js meta); the typed question is never sent.
+// Sport and place are names from our own lists (ask.js meta); the typed question is sent only by trackAskFeedback.
 let askOpenedOnce = false;
 function trackAskOpen() { if (!askOpenedOnce) { askOpenedOnce = true; track("ask-open"); } }
 function trackAsk(r) {
@@ -509,6 +509,17 @@ function trackAsk(r) {
     if (m.sport) trackD("ask-sport", m.sport);
     if (m.where) trackD("ask-where", m.where);
   } catch (e) { /* ignore */ }
+}
+// The one place typed text leaves the page: a question the visitor sends with the "Send this question to us" button (shown only on an unanswered reply).
+// Emails, links and phone-like numbers are cut out first (Ask.scrub). Returns false when nothing could be sent (Do Not Track, local dev, counter blocked),
+// so the widget can point to GitHub instead. docs/goat_analysis.md, `make ask-feedback`.
+function trackAskFeedback(text) {
+  try {
+    const q = window.Ask && Ask.scrub ? Ask.scrub(text) : "";
+    if (q.length < 3 || !ANALYTICS_ON || !window.goatcounter || !window.goatcounter.count) return false;
+    window.goatcounter.count({path: "event/ask-feedback/" + q.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 120), title: q, event: true});
+    return true;
+  } catch (e) { return false; }
 }
 // Which shared link brought the visitor: ?ref=reddit-pickleball logs the event "ref/reddit-pickleball". Only an allowlisted
 // source (plus an optional short community tag) is kept; anything else is ignored. GoatCounter also reads ?ref= as the referrer.
@@ -2020,7 +2031,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   if (resumed) showResume();
   if (store.get("welcomed", false)) document.querySelector(".welcome").hidden = true; else store.set("welcomed", true);   // the intro line shows on the first visit only (About keeps it)
   initMap();
-  if (window.AskWidget) AskWidget.mount(d, askContext, {opened: trackAskOpen, answered: trackAsk});   // ask pop-up (ADR 0033); the page works without it
+  if (window.AskWidget) AskWidget.mount(d, askContext, {opened: trackAskOpen, answered: trackAsk, feedback: trackAskFeedback});   // ask pop-up (ADR 0033); the page works without it
   if (state.mode === "watch") renderWatchList();
   $("loading").remove();
 }).catch(err => { document.querySelector("#loading .spin")?.remove(); $("loadmsg").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });
