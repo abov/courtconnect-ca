@@ -1,76 +1,76 @@
 osm_type,osm_id,lat,lon,name,sport,leisure,amenity,building,access,operator,website,addr_city,addr_state,addr_street,status,venue_key_or_note
-way,342590554,20.7549459,-103.441561,frontenis,tennis,pitch,,,,,,,,,,
+way,342590554,20.7549459,-103.441561,frontenis,tennis,pitch,,,,,,,,,pinned,unidad-deportiva-base-aerea-zapopan
 way,377001663,19.6052886,-104.4439118,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-el-fronton-la-resolana
-way,398848898,19.6999033,-103.4500192,,frontenis,pitch,,,,,,,,,,
-way,422346325,18.285828,-101.9015162,Cancha de Frontenis,,sports_hall,,yes,,,,,,,,
-way,480504176,20.704624,-103.2902809,,fronton,pitch,,,,,,,,,,
-way,480511347,20.7034211,-103.3082953,,fronton,pitch,,,,,,,,,,
-way,822306191,19.7656748,-104.3531158,,pelota,pitch,,,,,,,,,,
-way,822306192,19.7657044,-104.3528894,,pelota,pitch,,,,,,,,,,
-way,931053544,19.2690599,-103.7409533,,frontenis,pitch,,,,,,,,,,
-way,1188737844,19.2481861,-103.7007842,Canchas de Frontón,frontón;frontenis,pitch,,,,,,,,,,
+way,398848898,19.6999033,-103.4500192,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-las-penas-ciudad-guzman
+way,422346325,18.285828,-101.9015162,Cancha de Frontenis,,sports_hall,,yes,,,,,,,pinned,fronton-courts-calle-adolfo-lopez-mateos-infiernillo
+way,480504176,20.704624,-103.2902809,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-juan-soriano-guadalajara
+way,480511347,20.7034211,-103.3082953,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-no-9-plan-de-san-luis-guadalajara
+way,822306191,19.7656748,-104.3531158,,pelota,pitch,,,,,,,,,pinned,unidad-deportiva-revolucion-autlan-autlan-de-navarro
+way,822306192,19.7657044,-104.3528894,,pelota,pitch,,,,,,,,,pinned,unidad-deportiva-revolucion-autlan-autlan-de-navarro
+way,931053544,19.2690599,-103.7409533,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-gil-cabrera-gudino-villa-de-alvarez
+way,1188737844,19.2481861,-103.7007842,Canchas de Frontón,frontón;frontenis,pitch,,,,,,,,,pinned,fronton-courts-calle-del-estudiante-colima
 way,1188737845,19.2370414,-103.7294335,La Canchita Club Díaz Mirón (Frontenis),frontón;frontenis,pitch,,,,,,,,,pinned,la-canchita-club-diaz-miron-colima
-way,1190441168,19.382171,-103.5755191,,fronton;frontenis,pitch,,,,,,,,,,
-way,1247426687,20.6996335,-103.3913476,,frontenis,pitch,,,,,,,,,,
-way,1247426688,20.6997103,-103.3915042,,frontenis,pitch,,,,,,,,,,
-way,1247426689,20.6997778,-103.3912682,,frontenis,pitch,,,,,,,,,,
-way,1247426690,20.6998536,-103.3914219,,frontenis,pitch,,,,,,,,,,
-way,1249935940,19.2169331,-103.8042504,,fronton,pitch,,,,,,,,,,
-way,1249935941,19.2169157,-103.8041009,,fronton,pitch,,,,,,,,,,
-way,1316182026,20.7046161,-103.2901131,,fronton,pitch,,,,,,,,,,
-way,1316182027,20.7048122,-103.2901051,,fronton,pitch,,,,,,,,,,
-way,1316182028,20.70482,-103.2902695,,fronton,pitch,,,,,,,,,,
-way,1316182029,20.7044053,-103.2902907,,fronton,pitch,,,,,,,,,,
-way,1316182030,20.7043975,-103.2901265,,fronton,pitch,,,,,,,,,,
-way,1321425215,20.624127,-105.2276282,,frontenis,pitch,,,,,,,,,,
-way,1321425216,20.6241028,-105.2274798,,frontenis,pitch,,,,,,,,,,
-way,1321425217,20.6239104,-105.2275135,,frontenis,pitch,,,,,,,,,,
-way,1321425218,20.6239346,-105.2276618,,frontenis,pitch,,,,,,,,,,
-way,1324874857,20.7246169,-103.409215,,frontenis,pitch,,,,,,,,,,
+way,1190441168,19.382171,-103.5755191,,fronton;frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-queseria-profr-bernardo-toscano-campa-queseria
+way,1247426687,20.6996335,-103.3913476,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-code-revolucion-guadalajara
+way,1247426688,20.6997103,-103.3915042,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-code-revolucion-guadalajara
+way,1247426689,20.6997778,-103.3912682,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-code-revolucion-guadalajara
+way,1247426690,20.6998536,-103.3914219,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-code-revolucion-guadalajara
+way,1249935940,19.2169331,-103.8042504,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-norte-gustavo-alberto-vazquez-montes-coquimatlan
+way,1249935941,19.2169157,-103.8041009,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-norte-gustavo-alberto-vazquez-montes-coquimatlan
+way,1316182026,20.7046161,-103.2901131,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-juan-soriano-guadalajara
+way,1316182027,20.7048122,-103.2901051,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-juan-soriano-guadalajara
+way,1316182028,20.70482,-103.2902695,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-juan-soriano-guadalajara
+way,1316182029,20.7044053,-103.2902907,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-juan-soriano-guadalajara
+way,1316182030,20.7043975,-103.2901265,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-juan-soriano-guadalajara
+way,1321425215,20.624127,-105.2276282,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-agustin-gomez-contreras-puerto-vallarta
+way,1321425216,20.6241028,-105.2274798,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-agustin-gomez-contreras-puerto-vallarta
+way,1321425217,20.6239104,-105.2275135,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-agustin-gomez-contreras-puerto-vallarta
+way,1321425218,20.6239346,-105.2276618,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-agustin-gomez-contreras-puerto-vallarta
+way,1324874857,20.7246169,-103.409215,,frontenis,pitch,,,,,,,,,on_map,within 291 m of existing pin 'Club Conecta ANDARES' (same place not confirmed)
 way,1342183780,20.7100628,-103.3706057,Frontón Ávila Camacho,frontenis,pitch,,,,,,,,,pinned,fronton-avila-camacho-guadalajara
-way,1343183951,20.6713831,-103.3125032,,frontenis,pitch,,,,,,,,,,
-way,1343183958,20.6714774,-103.3128039,,frontenis,pitch,,,,,,,,,,
-way,1343825843,20.7141605,-103.3438532,,frontenis,pitch,,,,,,,,,,
-way,1343825844,20.7140153,-103.3437565,,frontenis,pitch,,,,,,,,,,
-way,1343825845,20.7140303,-103.343863,,frontenis,pitch,,,,,,,,,,
-way,1343825846,20.7141452,-103.3437465,,frontenis,pitch,,,,,,,,,,
+way,1343183951,20.6713831,-103.3125032,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-la-penal-guadalajara
+way,1343183958,20.6714774,-103.3128039,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-la-penal-guadalajara
+way,1343825843,20.7141605,-103.3438532,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-santa-elena-alcalde-guadalajara
+way,1343825844,20.7140153,-103.3437565,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-santa-elena-alcalde-guadalajara
+way,1343825845,20.7140303,-103.343863,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-santa-elena-alcalde-guadalajara
+way,1343825846,20.7141452,-103.3437465,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-santa-elena-alcalde-guadalajara
 way,1376873227,19.6054186,-104.444196,Unidad Deportiva El Frontón,,sports_centre,,,,,,,,,pinned,unidad-deportiva-el-fronton-la-resolana
-way,1380077837,20.6833215,-103.3043702,,frontenis,pitch,,,,,,,,,,
-way,1380077839,20.6833787,-103.3046885,,frontenis,pitch,,,,,,,,,,
-way,1380422880,20.6471075,-103.3227675,Canchas de Frontón,frontón,pitch,,,,,,,,,,
+way,1380077837,20.6833215,-103.3043702,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-no-8-cuauhtemoc-guadalajara
+way,1380077839,20.6833787,-103.3046885,,frontenis,pitch,,,,,,,,,pinned,unidad-deportiva-no-8-cuauhtemoc-guadalajara
+way,1380422880,20.6471075,-103.3227675,Canchas de Frontón,frontón,pitch,,,,,,,,,pinned,code-paradero-guadalajara
 way,1380942704,20.6957899,-103.3338427,"Canchas de Frontón ""El Muñecón""",frontón,pitch,,,,,,,,,pinned,fronton-el-munecon-guadalajara
 way,1380942705,20.6964536,-103.3334074,"Canchas de Frontón ""La Bola""",frontón,pitch,,,,,,,,,pinned,fronton-la-bola-guadalajara
-way,1414279558,19.3294337,-103.7516057,,fronton,pitch,,,,,,,,,,
-node,344410755,19.3841503,-99.1874368,Frontón,pelota,sports_centre,,,,,,,,,,
-node,1931726957,19.0671361,-98.2952952,Squash,,sports_centre,,,,,,,,,,
-node,2200895592,19.2001168,-100.133462,Club Deportivo Frontón,,sports_centre,,,,,,,,,,
+way,1414279558,19.3294337,-103.7516057,,fronton,pitch,,,,,,,,,pinned,unidad-deportiva-mary-villa-montero-comala
+node,344410755,19.3841503,-99.1874368,Frontón,pelota,sports_centre,,,,,,,,,pinned,parque-rosendo-arnaiz-ciudad-de-mexico
+node,1931726957,19.0671361,-98.2952952,Squash,,sports_centre,,,,,,,,,pinned,squash-calle-10-norte-cholula
+node,2200895592,19.2001168,-100.133462,Club Deportivo Frontón,,sports_centre,,,,,,,,,pinned,club-deportivo-fronton-valle-de-bravo
 node,4070528811,19.4023837,-99.1572634,Squash Club Delta,,sports_centre,,,,,https://squashdelta.com/,,,Pitágoras,pinned,squash-club-delta-cdmx
 node,4726264944,19.4290972,-99.1522279,Frontón Inclán,,sports_centre,,,,,,Cuauhtémoc,,Bucareli,pinned,fronton-inclan-cdmx
-node,6011381453,19.5140512,-99.2315114,Squash,,sports_centre,,,,,,,,,,
-node,6332202086,19.3460188,-99.1512756,Maha,lifting;squash,fitness_centre,,,,,,,,,,
-node,7248213783,19.2736536,-99.6812981,Fronton Albarran,,pitch,,,,,,,,,,
-node,7508738636,19.5088978,-99.2725104,Squash,tennis,pitch,,,,,,,,,,
-node,7508738637,19.5089065,-99.2726798,Squash,tennis,pitch,,,,,,,,,,
-node,9458836846,19.4040863,-99.533135,Sport House Xonacatlán,fitness;boxing;swimming;dance;soccer;taekwondo;squash;basketball;martial_arts,fitness_centre,,,,,,Xonacatlán,México,Calle Niños Héroes,,
-node,9859765016,19.1774138,-99.4666826,Squash Robles,squash,pitch,,,,,,,,,,
-node,9864977946,19.5626423,-98.8525254,Gimnasio Municipal Papalotla,fitness;boxing;taekwondo;basketball;gym;gymnastics;squash,sports_hall,,,,,,,,,,
-node,9943630032,19.3398166,-99.1941988,Sport city,fitness;squash;swimming;sauna,,,,,,,,,,,
-node,9946343218,19.3431523,-99.1513257,Wendy,pelota,,,,,,,,,,,
+node,6011381453,19.5140512,-99.2315114,Squash,,sports_centre,,,,,,,,,pinned,squash-avenida-circuito-centro-civico-naucalpan-de-juarez
+node,6332202086,19.3460188,-99.1512756,Maha,lifting;squash,fitness_centre,,,,,,,,,on_map,within 160 m of existing pin 'Eleva Padel' (same place not confirmed)
+node,7248213783,19.2736536,-99.6812981,Fronton Albarran,,pitch,,,,,,,,,pinned,fronton-albarran-toluca
+node,7508738636,19.5088978,-99.2725104,Squash,tennis,pitch,,,,,,,,,pinned,club-berimbau-naucalpan-de-juarez
+node,7508738637,19.5089065,-99.2726798,Squash,tennis,pitch,,,,,,,,,pinned,club-berimbau-naucalpan-de-juarez
+node,9458836846,19.4040863,-99.533135,Sport House Xonacatlán,fitness;boxing;swimming;dance;soccer;taekwondo;squash;basketball;martial_arts,fitness_centre,,,,,,Xonacatlán,México,Calle Niños Héroes,pinned,sport-house-xonacatlan-xonacatlan
+node,9859765016,19.1774138,-99.4666826,Squash Robles,squash,pitch,,,,,,,,,pinned,squash-robles-santiago-tianguistenco-de-galeana
+node,9864977946,19.5626423,-98.8525254,Gimnasio Municipal Papalotla,fitness;boxing;taekwondo;basketball;gym;gymnastics;squash,sports_hall,,,,,,,,,pinned,gimnasio-municipal-papalotla
+node,9943630032,19.3398166,-99.1941988,Sport city,fitness;squash;swimming;sauna,,,,,,,,,,pinned,sport-city-ciudad-de-mexico
+node,9946343218,19.3431523,-99.1513257,Wendy,pelota,,,,,,,,,,on_map,within 79 m of existing pin 'PadelTown Coyoacán' (same place not confirmed)
 node,12459866168,19.3769491,-99.1855345,British Squash Club,squash,sports_centre,,,,,,,,,pinned,british-squash-club-cdmx
-node,12511385550,19.2662606,-99.7317655,"Billares y canchas de squash ""Álvarez""",billiards;squash,,,,,,,Toluca,México,Carretera Antigua A Zinacantepec,,
-node,12521917108,19.2747932,-99.605016,Deporte de squash,squash,,,,,,,Metepec,México,Privada Villas Providencia,,
-node,12544936449,19.0605412,-99.5492985,Esquash Sin Nombre,,sports_centre,,,,,,Tenango del Valle,Estado de México,Calle Ignacio Allende,,
-node,12544957649,19.113753,-99.5338173,Scuach 203,squash,,,,,,,Tenango del Valle,Estado de México,Calle Hermenegildo Galeana,,
-node,12560181089,19.4975611,-99.1157873,,american_handball,pitch,,,,,,,,,,
-node,12568790482,19.3048175,-99.586325,Squash,squash,,,,,,,Toluca,México,Avenida Paseo Totoltepec,,
-node,12578997000,19.2316717,-99.5930976,Billares Y Squash San Miguel,billiards;squash,,,,,,,Metepec,Estado de México,Calle Insurgentes,,
-node,12588343589,19.1959465,-99.5007746,Squash Valencia,squash,fitness_centre,,,,,,Tianguistenco,Estado de México,Avenida Juárez,,
-node,12591827822,19.272751,-99.681989,Cancha De Fronton Zamudio Romero,fronton,sports_centre,,,,,,Toluca de Lerdo,México,Privada Jesus Romero,,
-way,27184883,19.5062195,-99.1263938,Deportivo Ejidal,soccer;fronton;baseball,park,,,,,,,,,,
+node,12511385550,19.2662606,-99.7317655,"Billares y canchas de squash ""Álvarez""",billiards;squash,,,,,,,Toluca,México,Carretera Antigua A Zinacantepec,pinned,billares-y-canchas-de-squash-alvarez-toluca
+node,12521917108,19.2747932,-99.605016,Deporte de squash,squash,,,,,,,Metepec,México,Privada Villas Providencia,pinned,squash-privada-villas-providencia-metepec
+node,12544936449,19.0605412,-99.5492985,Esquash Sin Nombre,,sports_centre,,,,,,Tenango del Valle,Estado de México,Calle Ignacio Allende,pinned,esquash-sin-nombre-san-francisco-tepexozuca
+node,12544957649,19.113753,-99.5338173,Scuach 203,squash,,,,,,,Tenango del Valle,Estado de México,Calle Hermenegildo Galeana,pinned,scuach-203-tenango-del-valle
+node,12560181089,19.4975611,-99.1157873,,american_handball,pitch,,,,,,,,,pinned,fronton-courts-avenida-huitzilihuitl-ciudad-de-mexico
+node,12568790482,19.3048175,-99.586325,Squash,squash,,,,,,,Toluca,México,Avenida Paseo Totoltepec,pinned,squash-avenida-paseo-totoltepec-san-pedro-totoltepec
+node,12578997000,19.2316717,-99.5930976,Billares Y Squash San Miguel,billiards;squash,,,,,,,Metepec,Estado de México,Calle Insurgentes,pinned,billares-y-squash-san-miguel-san-miguel-totocuitlapilco
+node,12588343589,19.1959465,-99.5007746,Squash Valencia,squash,fitness_centre,,,,,,Tianguistenco,Estado de México,Avenida Juárez,pinned,squash-valencia-san-pedro-tlaltizapan
+node,12591827822,19.272751,-99.681989,Cancha De Fronton Zamudio Romero,fronton,sports_centre,,,,,,Toluca de Lerdo,México,Privada Jesus Romero,pinned,fronton-albarran-toluca
+way,27184883,19.5062195,-99.1263938,Deportivo Ejidal,soccer;fronton;baseball,park,,,,,,,,,pinned,deportivo-ejidal-ciudad-de-mexico
 way,189156262,19.4933727,-99.1285687,Deportivo Miguel Alemán,soccer;fronton;baseball,sports_centre,,,,,,México,,Avenida Lindavista,pinned,deportivo-miguel-aleman-cdmx
-way,207140713,19.669848,-98.9636313,,pelota,pitch,,,,,,,,,,
+way,207140713,19.669848,-98.9636313,,pelota,pitch,,,,,,,,,pinned,fronton-courts-camino-al-cerro-tecamac
 way,217483564,19.4369736,-99.1534446,Frontón México,,sports_hall,,sports_centre,,,https://frontonmexico.com.mx/,Ciudad de México,,Avenida de la República,skipped,"Frontón México: professional jai alai and events arena, not a place to play"
-way,251222915,20.5903724,-100.4122103,,pelota,pitch,,yes,,,,,,,,
+way,251222915,20.5903724,-100.4122103,,pelota,pitch,,yes,,,,,,,pinned,centro-universitario-santiago-de-queretaro
 way,272529172,19.3276424,-99.1838422,,fronton,pitch,,,,,,,,,on_map,unam-fronton-cerrado-ciudad-universitaria-cdmx
 way,272529173,19.3273436,-99.1838129,,fronton,pitch,,,,,,,,,on_map,unam-fronton-cerrado-ciudad-universitaria-cdmx
 way,272529174,19.3268394,-99.184521,,fronton,pitch,,,,,,,,,on_map,unam-fronton-cerrado-ciudad-universitaria-cdmx
@@ -78,140 +78,140 @@ way,272529175,19.32653,-99.1844907,,fronton,pitch,,,,,,,,,on_map,unam-fronton-ce
 way,272529181,19.3257262,-99.185176,,fronton,pitch,,,,,,,,,on_map,unam-fronton-cerrado-ciudad-universitaria-cdmx
 way,272529182,19.3260257,-99.1852014,,fronton,pitch,,,,,,,,,on_map,unam-fronton-cerrado-ciudad-universitaria-cdmx
 way,272530234,19.3248254,-99.1859305,Frontón Cerrado,fronton,pitch,,,,,,,,,on_map,unam-fronton-cerrado-ciudad-universitaria-cdmx
-way,272531889,19.3284473,-99.1831945,,fronton,pitch,,,,,,,,,,
-way,272531890,19.3281639,-99.1831647,,fronton,pitch,,,,,,,,,,
-way,361639182,19.5343483,-101.6140456,Frontón,frontenis,sports_centre,,,,,,,,,,
-way,384760807,19.3976803,-99.5290351,Unidad Deportiva Tierra y Libertad,soccer;basketball;running;fitness;calisthenics;pelota,sports_centre,,,yes,,,,,,,
-way,401332295,19.9301511,-100.0055588,Fronton,,pitch,,,,,,,,,,
+way,272531889,19.3284473,-99.1831945,,fronton,pitch,,,,,,,,,pinned,fronton-courts-circuito-escolar-ciudad-de-mexico
+way,272531890,19.3281639,-99.1831647,,fronton,pitch,,,,,,,,,pinned,fronton-courts-circuito-escolar-ciudad-de-mexico
+way,361639182,19.5343483,-101.6140456,Frontón,frontenis,sports_centre,,,,,,,,,pinned,fronton-courts-calle-morelia-patzcuaro
+way,384760807,19.3976803,-99.5290351,Unidad Deportiva Tierra y Libertad,soccer;basketball;running;fitness;calisthenics;pelota,sports_centre,,,yes,,,,,,pinned,unidad-deportiva-tierra-y-libertad-col-emiliano-zapata
+way,401332295,19.9301511,-100.0055588,Fronton,,pitch,,,,,,,,,pinned,unidad-deportiva-temascalcingo
 way,418204194,18.9988477,-98.1983172,Fronton BUAP,fronton,pitch,,,,,,,,,pinned,fronton-buap-puebla
 way,418204195,18.9987082,-98.1980463,Fronton BUAP,Fronton,pitch,,,,,,,,,pinned,fronton-buap-puebla
 way,418204196,18.9985877,-98.1977687,Fronton BUAP,fronton,pitch,,,,,,,,,pinned,fronton-buap-puebla
-way,424129835,19.1103021,-99.5310115,Cancha de frontón,,pitch,,,,,,,,,,
-way,429478916,19.68736,-101.2081914,Canchas de fronton,Fronton,pitch,,,,,,Morelia,,Avenida Universidad,,
-way,436776458,19.4940582,-98.8924904,Fronton,,sports_centre,,yes,,,,,,,,
-way,452473790,19.5142966,-96.9146336,Frontón,,pitch,,,,,,,,,,
-way,452473797,19.5145527,-96.9145911,Frontón,,pitch,,,,,,,,,,
-way,456859187,19.3406757,-99.1293,Frontón,netball,pitch,,,,,,,,,,
+way,424129835,19.1103021,-99.5310115,Cancha de frontón,,pitch,,,,,,,,,pinned,fronton-courts-calle-vicente-guerrero-tenango-del-valle
+way,429478916,19.68736,-101.2081914,Canchas de fronton,Fronton,pitch,,,,,,Morelia,,Avenida Universidad,pinned,fronton-courts-avenida-universidad-morelia
+way,436776458,19.4940582,-98.8924904,Fronton,,sports_centre,,yes,,,,,,,pinned,fronton-courts-circuito-periferico-uach-texcoco-de-mora
+way,452473790,19.5142966,-96.9146336,Frontón,,pitch,,,,,,,,,pinned,fronton-courts-prolongacion-adolfo-ruiz-cortines-xalapa-enriquez
+way,452473797,19.5145527,-96.9145911,Frontón,,pitch,,,,,,,,,pinned,fronton-courts-prolongacion-adolfo-ruiz-cortines-xalapa-enriquez
+way,456859187,19.3406757,-99.1293,Frontón,netball,pitch,,,,,,,,,pinned,fronton-courts-calle-paseo-de-los-abetos-ciudad-de-mexico
 way,458587401,19.3597301,-99.0577477,Fronton,,pitch,,,,,,,,,on_map,fronton-vicente-guerrero-cdmx
 way,458587402,19.3598995,-99.0579041,Fronton,,pitch,,,,,,,,,on_map,fronton-vicente-guerrero-cdmx
-way,468926745,19.2825491,-99.6321592,,fronton,pitch,,,,,,Toluca,,,,
-way,468926752,19.2826407,-99.6318617,,squash,pitch,,,,,,,,,,
+way,468926745,19.2825491,-99.6321592,,fronton,pitch,,,,,,Toluca,,,pinned,fronton-courts-avenida-netzahualcoyotl-toluca
+way,468926752,19.2826407,-99.6318617,,squash,pitch,,,,,,,,,pinned,fronton-courts-avenida-netzahualcoyotl-toluca
 way,494316349,19.2541281,-99.6652514,Frontón Capultitlan,,sports_centre,,yes,,,,Toluca,Estado de México,Calle Cuauhtémoc,pinned,fronton-capultitlan-toluca
 way,528864042,19.443955,-99.1235631,Frontón Tepito,multi,sports_centre,,yes,,,,,,,pinned,fronton-las-aguilas-tepito-cdmx
-way,533406199,19.2395097,-99.5962468,Frontón,,pitch,,,,,,,,,,
-way,545379912,19.709397,-98.9155712,,fronton,pitch,,,,,,,,,,
+way,533406199,19.2395097,-99.5962468,Frontón,,pitch,,,,,,,,,pinned,fronton-courts-calle-agustin-de-iturbide-san-lorenzo-coacalco
+way,545379912,19.709397,-98.9155712,,fronton,pitch,,,,,,,,,pinned,fronton-courts-calle-manuel-martinez-teotihuacan
 way,548421438,19.1632767,-96.1228385,Centro de Raqueta,squash;racquet,sports_hall,,yes,,,,,,,pinned,centro-de-raqueta-leyes-de-reforma-veracruz
-way,550322345,19.3009976,-99.1297029,,squash,sports_centre,,yes,,,,,,,,
-way,555852741,19.5127263,-98.8605736,,frontenis,pitch,,,,,,,,,,
-way,557178708,19.6781333,-99.0309099,Deportivo Ojo de Agua,soccer;basketball;pelota;frontenis,sports_centre,,,,,,,,,,
-way,558927085,19.548009,-99.0378616,,fronton;handball,pitch,,,,,,,,,,
-way,577303273,18.8049659,-97.1788198,Cancha de Fronton,fronton,pitch,,,,,,,,,,
-way,612116673,19.2703947,-99.521636,Canchas de Fronton/Tenis,tennis,pitch,,,yes,,,,,,,
-way,626785338,19.4533975,-98.9106079,Fronton,fronton,sports_centre,,,,,,,,,,
-way,681958588,19.1208209,-98.8043352,Cancha de Fronton,,pitch,,,,,,,,,,
-way,683237676,19.031195,-98.7828545,Frontón,,pitch,,,,,,,,,,
-way,684385006,19.703504,-98.4029797,Cancha de Frontón,,pitch,,,,,,,,,,
-way,684485034,19.6392416,-98.4718343,Chancha de Fronton,,pitch,,,,,,,,,,
-way,684586105,19.66317,-98.5125476,Cancha de Frontón,multi,pitch,,,,,,,,,,
-way,685025180,20.0580383,-99.2232363,Squash Branyessi,,pitch,,,,,,,,,,
-way,689331739,19.9766267,-99.2438997,Cancha de Frontón,,pitch,,,,,,,,,,
-way,693117291,20.037607,-98.3286718,Fronton,pelota,pitch,,,,,,,,,,
-way,703847725,19.6510207,-98.5446383,Squash,,pitch,,,,,,,,,,
-way,704010896,19.6651942,-98.5674317,Cancha de Frontón,,pitch,,,,,,,,,,
-way,704027612,19.6823489,-98.5764317,Frontón,,pitch,,,,,,,,,,
-way,704134926,19.697993,-98.5806472,Canchas de Frontón,,pitch,,,,,,,,,,
-way,704169332,20.0177322,-98.6367785,Squash,,pitch,,,,,,,,,,
-way,741062388,19.5358989,-99.0807067,Frontón,tennis,pitch,,,,,,,,,,
-way,776321029,19.0381974,-98.8055343,Fronton,,pitch,,,,,,,,,,
-way,776321031,19.0380394,-98.8044976,Fronton techado,,pitch,,,,,,,,,,
-way,802711486,19.5098129,-99.2718052,Fronton,tennis,pitch,,,,,,,,,,
-way,835555275,17.0669607,-96.7112794,,pelota,pitch,,,,,,,,,,
-way,835555276,17.0669448,-96.7111239,,pelota,pitch,,,,,,,,,,
-way,930875527,19.346647,-98.9829747,,pelota,pitch,,,,,,,,,,
-way,930875563,19.3391227,-98.9887663,,pelota;basketball,pitch,,,,,,,,,,
-way,940543542,19.2591135,-99.4673012,Cancha de Frontón,tennis,pitch,,,yes,,,,,,,
-way,940544612,19.2590336,-99.4670301,Cancha de Frontón,tennis,pitch,,,,,,,,,,
-way,954308692,20.136517,-101.2254257,Fronton,,pitch,,,,,,,,,,
-way,954308693,20.1364972,-101.2253065,Fronton,,pitch,,,,,,,,,,
-way,954416778,19.6737023,-99.0782011,,Fronton;wallball,pitch,,,,,,,,,,
-way,955822551,20.0933225,-101.1942974,Squash,squash,pitch,,,,,,,,,,
-way,955822554,20.093062,-101.1941798,Fronton,fronton,pitch,,,,,,,,,,
-way,1059357328,19.1686301,-99.4697494,,pelota,pitch,,,,,,,,,,
-way,1059357329,19.1686427,-99.4698997,,pelota,pitch,,,,,,,,,,
-way,1059357330,19.16891,-99.4697199,,pelota,pitch,,,,,,,,,,
-way,1059357331,19.1689202,-99.4698665,,pelota,pitch,,,,,,,,,,
-way,1061562260,19.1857302,-99.4175741,Frontón,,pitch,,,,,,,,,,
-way,1061926483,19.1856595,-99.4102829,Frontón,,pitch,,,,,,,,,,
-way,1067469068,19.1674354,-99.4168186,Frontón,,pitch,,,,,,,,,,
+way,550322345,19.3009976,-99.1297029,,squash,sports_centre,,yes,,,,,,,pinned,la-hacienda-resort-and-fitness-center-ciudad-de-mexico
+way,555852741,19.5127263,-98.8605736,,frontenis,pitch,,,,,,,,,pinned,fronton-courts-calle-5-de-mayo-texcoco-de-mora
+way,557178708,19.6781333,-99.0309099,Deportivo Ojo de Agua,soccer;basketball;pelota;frontenis,sports_centre,,,,,,,,,pinned,deportivo-ojo-de-agua-ojo-de-agua
+way,558927085,19.548009,-99.0378616,,fronton;handball,pitch,,,,,,,,,pinned,deportivo-alfredo-del-mazo-ecatepec-de-morelos
+way,577303273,18.8049659,-97.1788198,Cancha de Fronton,fronton,pitch,,,,,,,,,pinned,fronton-courts-avenida-constituyentes-ciudad-mendoza
+way,612116673,19.2703947,-99.521636,Canchas de Fronton/Tenis,tennis,pitch,,,yes,,,,,,pinned,deportiva-de-san-mateo-atenco-col-alfredo-del-mazo
+way,626785338,19.4533975,-98.9106079,Fronton,fronton,sports_centre,,,,,,,,,pinned,parque-montecillos-texcoco-de-mora
+way,681958588,19.1208209,-98.8043352,Cancha de Fronton,,pitch,,,,,,,,,pinned,unidad-deportiva-ayapango-ayapango
+way,683237676,19.031195,-98.7828545,Frontón,,pitch,,,,,,,,,pinned,fronton-courts-calle-veracruz-atlautla
+way,684385006,19.703504,-98.4029797,Cancha de Frontón,,pitch,,,,,,,,,pinned,fronton-courts-miguel-hidalgo-almoloya
+way,684485034,19.6392416,-98.4718343,Chancha de Fronton,,pitch,,,,,,,,,pinned,fronton-courts-calle-16-de-septiembre-lazaro-cardenas
+way,684586105,19.66317,-98.5125476,Cancha de Frontón,multi,pitch,,,,,,,,,pinned,fronton-courts-calle-juarez-chimalpa-tlalayote
+way,685025180,20.0580383,-99.2232363,Squash Branyessi,,pitch,,,,,,,,,pinned,squash-branyessi-atitalaquia
+way,689331739,19.9766267,-99.2438997,Cancha de Frontón,,pitch,,,,,,,,,pinned,parque-bicentenario-conejos
+way,693117291,20.037607,-98.3286718,Fronton,pelota,pitch,,,,,,,,,pinned,unidad-deportiva-cuautepec-cuautepec-de-hinojosa
+way,703847725,19.6510207,-98.5446383,Squash,,pitch,,,,,,,,,pinned,squash-avenida-abasolo-emiliano-zapata
+way,704010896,19.6651942,-98.5674317,Cancha de Frontón,,pitch,,,,,,,,,pinned,fronton-courts-calle-independencia-santa-barbara
+way,704027612,19.6823489,-98.5764317,Frontón,,pitch,,,,,,,,,pinned,fronton-courts-avenida-san-luis-san-jose-morelos
+way,704134926,19.697993,-98.5806472,Canchas de Frontón,,pitch,,,,,,,,,pinned,fronton-courts-felipe-angeles-santa-clara
+way,704169332,20.0177322,-98.6367785,Squash,,pitch,,,,,,,,,pinned,squash-calle-santos-degollado-epazoyucan
+way,741062388,19.5358989,-99.0807067,Frontón,tennis,pitch,,,,,,,,,pinned,deportivo-benito-juarez-ecatepec-de-morelos
+way,776321029,19.0381974,-98.8055343,Fronton,,pitch,,,,,,,,,pinned,unidad-deportiva-raul-gonzalez-ozumba-ozumba-de-alzate
+way,776321031,19.0380394,-98.8044976,Fronton techado,,pitch,,,,,,,,,pinned,unidad-deportiva-raul-gonzalez-ozumba-ozumba-de-alzate
+way,802711486,19.5098129,-99.2718052,Fronton,tennis,pitch,,,,,,,,,pinned,club-berimbau-naucalpan-de-juarez
+way,835555275,17.0669607,-96.7112794,,pelota,pitch,,,,,,,,,pinned,centro-de-recreacion-y-acondicionamiento-deportivo-venustiano-carranza-oaxaca-de-juarez
+way,835555276,17.0669448,-96.7111239,,pelota,pitch,,,,,,,,,pinned,centro-de-recreacion-y-acondicionamiento-deportivo-venustiano-carranza-oaxaca-de-juarez
+way,930875527,19.346647,-98.9829747,,pelota,pitch,,,,,,,,,pinned,fronton-courts-prolongacion-juan-de-la-barrera-ciudad-de-mexico
+way,930875563,19.3391227,-98.9887663,,pelota;basketball,pitch,,,,,,,,,pinned,fronton-courts-cerrada-chabacano-ciudad-de-mexico
+way,940543542,19.2591135,-99.4673012,Cancha de Frontón,tennis,pitch,,,yes,,,,,,pinned,deportiva-luis-camarena-gonzalez-ocoyoacac
+way,940544612,19.2590336,-99.4670301,Cancha de Frontón,tennis,pitch,,,,,,,,,pinned,deportiva-luis-camarena-gonzalez-ocoyoacac
+way,954308692,20.136517,-101.2254257,Fronton,,pitch,,,,,,,,,pinned,unidad-deportiva-moroleon
+way,954308693,20.1364972,-101.2253065,Fronton,,pitch,,,,,,,,,pinned,unidad-deportiva-moroleon
+way,954416778,19.6737023,-99.0782011,,Fronton;wallball,pitch,,,,,,,,,pinned,deportivo-morelos-san-pablo-de-las-salinas
+way,955822551,20.0933225,-101.1942974,Squash,squash,pitch,,,,,,,,,pinned,club-campestre-moroleon-uriangato
+way,955822554,20.093062,-101.1941798,Fronton,fronton,pitch,,,,,,,,,pinned,club-campestre-moroleon-uriangato
+way,1059357328,19.1686301,-99.4697494,,pelota,pitch,,,,,,,,,pinned,unidad-deportiva-izcalli-atizapan-de-santa-cruz
+way,1059357329,19.1686427,-99.4698997,,pelota,pitch,,,,,,,,,pinned,unidad-deportiva-izcalli-atizapan-de-santa-cruz
+way,1059357330,19.16891,-99.4697199,,pelota,pitch,,,,,,,,,pinned,unidad-deportiva-izcalli-atizapan-de-santa-cruz
+way,1059357331,19.1689202,-99.4698665,,pelota,pitch,,,,,,,,,pinned,unidad-deportiva-izcalli-atizapan-de-santa-cruz
+way,1061562260,19.1857302,-99.4175741,Frontón,,pitch,,,,,,,,,pinned,fronton-courts-avenida-ninos-heroes-santiago-tilapa
+way,1061926483,19.1856595,-99.4102829,Frontón,,pitch,,,,,,,,,pinned,fronton-courts-calle-tepetitla-xalatlaco
+way,1067469068,19.1674354,-99.4168186,Frontón,,pitch,,,,,,,,,pinned,fronton-courts-calle-de-los-capulines-xalatlaco
 way,1068074233,19.6860567,-101.1652842,Squash Morelia,squash;frontball,sports_hall,,yes,yes,,,,,,pinned,squash-morelia
-way,1070768940,19.3992731,-99.4954508,Cancha de Fronton Santa Catarina,,pitch,,,,,,,,,,
+way,1070768940,19.3992731,-99.4954508,Cancha de Fronton Santa Catarina,,pitch,,,,,,,,,pinned,cancha-de-fronton-santa-catarina-santa-catarina
 way,1071314991,19.3985751,-99.073164,Frontón Leandro Valle,,pitch,,,,,,,,,pinned,fronton-leandro-valle-cdmx
 way,1071314992,19.3984727,-99.0728944,Frontón Leandro Valle,,pitch,,,,,,,,,pinned,fronton-leandro-valle-cdmx
-way,1081287881,19.1815429,-99.4920538,Frontón,squash,pitch,,,,,,,,,,
-way,1081344934,19.1248002,-99.4992397,Frontón,squash,pitch,,,,,,,,,,
-way,1085475575,19.5625147,-98.8525573,Squash,squash,sports_centre,,,,,,,,,,
-way,1091380028,19.2103203,-99.5778765,,squash,pitch,,,,,,,,,,
-way,1091380029,19.2103202,-99.5777152,,squash,pitch,,,,,,,,,,
-way,1091380030,19.2100423,-99.5776978,,squash,pitch,,,,,,,,,,
-way,1094095417,19.0493275,-99.5386481,,squash,pitch,,,,,,,,,,
-way,1124513209,19.1790941,-99.4160683,Squash San Juan,,pitch,,,,,,Xalatlaco,Estado de México,Calle Manuel González Coroy,,
-way,1176526946,19.4625909,-99.0793432,,pelota,pitch,,,customers,,,,,,,
-way,1187526200,19.3059615,-98.2077644,UNIDAD DEP. EL ALTO,baseball;pelota,sports_centre,,,,,,,,,,
-way,1233441238,19.5548475,-99.6093024,Área De Frontenis,padel,pitch,,,,,,,,,,
-way,1298839628,19.4542479,-99.1391586,Canchas de frontón,frontón,pitch,,,,,,,,,,
-way,1311573532,19.7286268,-101.1898992,,frontenis,pitch,,,,,,,,,,
+way,1081287881,19.1815429,-99.4920538,Frontón,squash,pitch,,,,,,,,,pinned,parque-recreativo-jaguey-atizapan-santa-cruz
+way,1081344934,19.1248002,-99.4992397,Frontón,squash,pitch,,,,,,,,,pinned,fronton-courts-camino-a-la-unidad-deportiva-san-mateo-texcalyacac
+way,1085475575,19.5625147,-98.8525573,Squash,squash,sports_centre,,,,,,,,,pinned,gimnasio-municipal-papalotla
+way,1091380028,19.2103203,-99.5778765,,squash,pitch,,,,,,,,,pinned,squash-calle-prisciliano-diaz-gonzalez-mexicaltzingo
+way,1091380029,19.2103202,-99.5777152,,squash,pitch,,,,,,,,,pinned,squash-calle-prisciliano-diaz-gonzalez-mexicaltzingo
+way,1091380030,19.2100423,-99.5776978,,squash,pitch,,,,,,,,,pinned,squash-calle-prisciliano-diaz-gonzalez-mexicaltzingo
+way,1094095417,19.0493275,-99.5386481,,squash,pitch,,,,,,,,,pinned,squash-calle-via-alfredo-del-mazo-joquicingo-de-leon-guzman
+way,1124513209,19.1790941,-99.4160683,Squash San Juan,,pitch,,,,,,Xalatlaco,Estado de México,Calle Manuel González Coroy,pinned,squash-san-juan-xalatlaco
+way,1176526946,19.4625909,-99.0793432,,pelota,pitch,,,customers,,,,,,pinned,balneario-del-bosque-de-san-juan-de-aragon-ciudad-de-mexico
+way,1187526200,19.3059615,-98.2077644,UNIDAD DEP. EL ALTO,baseball;pelota,sports_centre,,,,,,,,,pinned,unidad-dep-el-alto-santa-cruz-tetela
+way,1233441238,19.5548475,-99.6093024,Área De Frontenis,padel,pitch,,,,,,,,,pinned,unidad-deportiva-jiquipilco-san-juan-jiquipilco
+way,1298839628,19.4542479,-99.1391586,Canchas de frontón,frontón,pitch,,,,,,,,,pinned,fronton-courts-avenida-2-norte-ciudad-de-mexico
+way,1311573532,19.7286268,-101.1898992,,frontenis,pitch,,,,,,,,,pinned,complejo-deportivo-bicentenario-morelia
 way,1312498138,19.707351,-101.1824063,Centro Deportivo Felix Ireta Viveros (Frontones),,sports_centre,,,,,,,,,pinned,centro-deportivo-felix-ireta-morelia
-way,1314731396,20.4304145,-100.0595417,Canchas de Frontón El Porvenir,padel,pitch,,,private,,,,,,,
-way,1316974878,19.4370749,-99.0520848,,fronton,pitch,,,,,,,,,,
-way,1316974879,19.436982,-99.0521274,,fronton,pitch,,,,,,,,,,
-way,1316974886,19.4369871,-99.0518744,,fronton,pitch,,,,,,,,,,
-way,1316974887,19.4368942,-99.051917,,fronton,pitch,,,,,,,,,,
-way,1316974891,19.4368128,-99.0521974,,fronton,pitch,,,,,,,,,,
-way,1316974892,19.4367198,-99.05224,,fronton,pitch,,,,,,,,,,
-way,1316974896,19.4367364,-99.0519841,,fronton,pitch,,,,,,,,,,
-way,1316974897,19.4366434,-99.0520268,,fronton,pitch,,,,,,,,,,
+way,1314731396,20.4304145,-100.0595417,Canchas de Frontón El Porvenir,padel,pitch,,,private,,,,,,pinned,canchas-de-fronton-el-porvenir-la-estancia
+way,1316974878,19.4370749,-99.0520848,,fronton,pitch,,,,,,,,,pinned,alameda-oriente-fronton-courts-ciudad-de-mexico
+way,1316974879,19.436982,-99.0521274,,fronton,pitch,,,,,,,,,pinned,alameda-oriente-fronton-courts-ciudad-de-mexico
+way,1316974886,19.4369871,-99.0518744,,fronton,pitch,,,,,,,,,pinned,alameda-oriente-fronton-courts-ciudad-de-mexico
+way,1316974887,19.4368942,-99.051917,,fronton,pitch,,,,,,,,,pinned,alameda-oriente-fronton-courts-ciudad-de-mexico
+way,1316974891,19.4368128,-99.0521974,,fronton,pitch,,,,,,,,,pinned,alameda-oriente-fronton-courts-ciudad-de-mexico
+way,1316974892,19.4367198,-99.05224,,fronton,pitch,,,,,,,,,pinned,alameda-oriente-fronton-courts-ciudad-de-mexico
+way,1316974896,19.4367364,-99.0519841,,fronton,pitch,,,,,,,,,pinned,alameda-oriente-fronton-courts-ciudad-de-mexico
+way,1316974897,19.4366434,-99.0520268,,fronton,pitch,,,,,,,,,pinned,alameda-oriente-fronton-courts-ciudad-de-mexico
 way,1329421479,19.4760503,-99.0726434,Frontón Galeana,frontenis,pitch,,,,,,,,,pinned,fronton-galeana-cdmx
-way,1360415911,19.3578089,-99.3424184,Cancha de Fronton,badminton,pitch,,,,,,,,,,
-way,1367385420,19.3561843,-99.1461815,,frontenis;parque_xicoténcatl,pitch,,,,,,,,,,
-way,1367385421,19.355911,-99.1462146,,frontenis;parque_xicoténcatl,pitch,,,,,,,,,,
-way,1373517557,19.5906368,-98.9659822,Frontón Santa Rosa,pelota,pitch,,,,,,,,,,
-way,1389632215,19.5518171,-99.1462999,,pelota,pitch,,,,,,,,,,
-way,1395865413,19.339767,-99.4663853,Cancha de Fronton del CBT Gustavo Baz Prada,pelota,pitch,,,permit,,,,,,,
-way,1427829082,19.2562362,-99.0346646,Frontón,multi,pitch,,,yes,,,,,,,
-way,1472728810,19.5109244,-99.2083714,,pelota,pitch,,,,,,,,,,
-way,1534403356,19.6000577,-98.2681207,Cancha de Frontón de Tepeyahualco,american_handball,pitch,,,yes,,,,,,,
-way,1540173930,19.7572536,-99.9202318,,american_handball,pitch,,,,,,,,,,
-way,1547731086,19.2911225,-99.1349278,,pelota,pitch,,,,,,,,,,
-way,1547731087,19.2911115,-99.1347396,,pelota,pitch,,,,,,,,,,
-way,1547731088,19.290949,-99.1347325,,pelota,pitch,,,,,,,,,,
-way,1547731089,19.2909077,-99.1345888,,pelota,pitch,,,,,,,,,,
-way,1560301588,19.3976989,-99.5284906,,pelota,pitch,,,yes,,,,,,,
-node,5917516936,18.5402899,-92.6503794,Cancha de Fronton,badminton,pitch,,,,,,,,,,
+way,1360415911,19.3578089,-99.3424184,Cancha de Fronton,badminton,pitch,,,,,,,,,pinned,jardin-de-la-cultura-huixquilucan-de-degollado
+way,1367385420,19.3561843,-99.1461815,,frontenis;parque_xicoténcatl,pitch,,,,,,,,,pinned,centro-social-y-deportivo-churubusco-del-sntss-ciudad-de-mexico
+way,1367385421,19.355911,-99.1462146,,frontenis;parque_xicoténcatl,pitch,,,,,,,,,pinned,centro-social-y-deportivo-churubusco-del-sntss-ciudad-de-mexico
+way,1373517557,19.5906368,-98.9659822,Frontón Santa Rosa,pelota,pitch,,,,,,,,,pinned,fronton-santa-rosa-nueva-santa-rosa
+way,1389632215,19.5518171,-99.1462999,,pelota,pitch,,,,,,,,,pinned,fronton-courts-calle-18-de-marzo-ciudad-de-mexico
+way,1395865413,19.339767,-99.4663853,Cancha de Fronton del CBT Gustavo Baz Prada,pelota,pitch,,,permit,,,,,,pinned,cancha-de-fronton-del-cbt-gustavo-baz-prada-colonia-cucuhapan-atarasquillo
+way,1427829082,19.2562362,-99.0346646,Frontón,multi,pitch,,,yes,,,,,,pinned,fronton-courts-calle-acueducto-ciudad-de-mexico
+way,1472728810,19.5109244,-99.2083714,,pelota,pitch,,,,,,,,,pinned,fronton-courts-calle-herreros-ciudad-de-mexico
+way,1534403356,19.6000577,-98.2681207,Cancha de Frontón de Tepeyahualco,american_handball,pitch,,,yes,,,,,,pinned,cancha-de-fronton-de-tepeyahualco-san-jose-tepeyahualco
+way,1540173930,19.7572536,-99.9202318,,american_handball,pitch,,,,,,,,,pinned,fronton-courts-calle-pino-suarez-san-miguel-tenochtitlan
+way,1547731086,19.2911225,-99.1349278,,pelota,pitch,,,,,,,,,pinned,fronton-courts-calle-hacienda-de-san-nicolas-tolentino-ciudad-de-mexico
+way,1547731087,19.2911115,-99.1347396,,pelota,pitch,,,,,,,,,pinned,fronton-courts-calle-hacienda-de-san-nicolas-tolentino-ciudad-de-mexico
+way,1547731088,19.290949,-99.1347325,,pelota,pitch,,,,,,,,,pinned,fronton-courts-calle-hacienda-de-san-nicolas-tolentino-ciudad-de-mexico
+way,1547731089,19.2909077,-99.1345888,,pelota,pitch,,,,,,,,,pinned,fronton-courts-calle-hacienda-de-san-nicolas-tolentino-ciudad-de-mexico
+way,1560301588,19.3976989,-99.5284906,,pelota,pitch,,,yes,,,,,,pinned,unidad-deportiva-tierra-y-libertad-col-emiliano-zapata
+node,5917516936,18.5402899,-92.6503794,Cancha de Fronton,badminton,pitch,,,,,,,,,pinned,unidad-deportiva-frontera
 node,14079527107,20.6402786,-87.0846172,Kiin-ha Academia Deportiva,swimming;squash;aerial_acrobatics;triathlon;fitness,sports_centre,,,,,https://www.kiin-ha.com/,,,,pinned,kiin-ha-academia-deportiva-playa-del-carmen
-way,570485225,17.7690858,-91.2983885,Juego de Pelota,pelota,pitch,,,,,,,,,,
+way,570485225,17.7690858,-91.2983885,Juego de Pelota,pelota,pitch,,,,,,,,,skipped,"Maya ball court at an archaeological site (Moral-Reforma), not a racket court"
 way,1180707998,20.6345633,-87.0703898,Basque Pelota,pelota,pitch,,,,,,,,,pinned,deportivo-mario-villanueva-playa-del-carmen
 way,1458196053,20.6328822,-87.0946922,Basque Pelota,pelota,pitch,,,,,,,,,pinned,poliforum-playa-del-carmen-pelota
-way,175351488,27.0579154,-109.4504186,Fronton,,pitch,,,,,,,,,,
-way,1321780713,26.9987524,-105.0343521,Frontón,,pitch,,,,,,,,,,
-way,1442676259,22.2700869,-101.9806195,Fronton,tennis,pitch,,,,,,,,,,
-way,1446158852,21.5092798,-104.9004484,,fronton,pitch,,,,,,,,,,
-way,1495231365,27.041904,-105.1355752,,fronton,pitch,,,,,,,,,,
-way,1553201860,22.0321218,-102.3177508,frontón,,pitch,,,,,,,,,,
+way,175351488,27.0579154,-109.4504186,Fronton,,pitch,,,,,,,,,pinned,unidad-deportiva-faustino-felix-serna-navojoa
+way,1321780713,26.9987524,-105.0343521,Frontón,,pitch,,,,,,,,,pinned,deportivo-atotonilco-villa-lopez
+way,1442676259,22.2700869,-101.9806195,Fronton,tennis,pitch,,,,,,,,,pinned,unidad-deportiva-benjamin-galindo-loreto
+way,1446158852,21.5092798,-104.9004484,,fronton,pitch,,,,,,,,,pinned,la-alameda-tepic
+way,1495231365,27.041904,-105.1355752,,fronton,pitch,,,,,,,,,pinned,fronton-courts-carretera-salaices-villa-lopez-santa-ana-de-abajo
+way,1553201860,22.0321218,-102.3177508,frontón,,pitch,,,,,,,,,pinned,fronton-courts-libramiento-poniente-de-aguascalientes-cuota-valladolid
 way,1553277687,22.6500932,-103.0057991,Cancha de Raquetbol Paola Longoria,,sports_hall,,yes,,,,,,,pinned,cancha-raquetbol-paola-longoria-jerez
-way,100531809,25.4306515,-100.9779404,,pelota,pitch,,,,,,,,,,
-way,100531818,25.4306099,-100.9778066,,pelota,pitch,,,,,,,,,,
-way,181462734,25.4310192,-100.9776983,,pelota,pitch,,,,,,,,,,
-way,443711038,26.8963983,-101.4078934,,pelota,pitch,,,,,,,,,,
-way,445400745,26.9473396,-101.4294154,,pelota,pitch,,,,,,,,,,
-way,665664435,23.7400891,-99.1520355,Unidad Deportiva Adolfo Ruíz Cortines,basketball;soccer;swimming;tennis;volleyball;box;squash;skating;running;baseball,sports_centre,,,,,,,,,,
-way,683574129,25.6165312,-100.3043546,,squash,,,sports_hall,,,,,,,,
-node,1891068436,32.6326079,-115.4398391,Cancha de Fronton,,pitch,,,,,,,,,,
-node,12181244673,29.2057775,-110.7534072,Cancha de Basquetbol Sagrado Corazon,basketball;fitness;soccer;pelota,pitch,,,yes,,,,,,,
-way,252799797,32.4676575,-114.7335165,Cancha de frontón,,pitch,,,,,,,,,,
-way,1316049290,29.2010224,-110.770223,Estadio de Futbol Molino de Camou,soccer;running;pelota,pitch,,,yes,,,,,,,
+way,100531809,25.4306515,-100.9779404,,pelota,pitch,,,,,,,,,pinned,ciudad-deportiva-saltillo
+way,100531818,25.4306099,-100.9778066,,pelota,pitch,,,,,,,,,pinned,ciudad-deportiva-saltillo
+way,181462734,25.4310192,-100.9776983,,pelota,pitch,,,,,,,,,pinned,ciudad-deportiva-saltillo
+way,443711038,26.8963983,-101.4078934,,pelota,pitch,,,,,,,,,pinned,parque-xochipilli-i-monclova
+way,445400745,26.9473396,-101.4294154,,pelota,pitch,,,,,,,,,pinned,fronton-courts-calle-andres-olvera-monclova
+way,665664435,23.7400891,-99.1520355,Unidad Deportiva Adolfo Ruíz Cortines,basketball;soccer;swimming;tennis;volleyball;box;squash;skating;running;baseball,sports_centre,,,,,,,,,pinned,unidad-deportiva-adolfo-ruiz-cortines-ciudad-victoria
+way,683574129,25.6165312,-100.3043546,,squash,,,sports_hall,,,,,,,pinned,club-sonoma-monterrey-w683574129
+node,1891068436,32.6326079,-115.4398391,Cancha de Fronton,,pitch,,,,,,,,,on_map,within 46 m of existing pin 'Campos UABC' (same place not confirmed)
+node,12181244673,29.2057775,-110.7534072,Cancha de Basquetbol Sagrado Corazon,basketball;fitness;soccer;pelota,pitch,,,yes,,,,,,pinned,cancha-de-basquetbol-sagrado-corazon-molino-de-camou-san-isidro
+way,252799797,32.4676575,-114.7335165,Cancha de frontón,,pitch,,,,,,,,,pinned,unidad-deportiva-rafael-sanchez-san-luis-rio-colorado
+way,1316049290,29.2010224,-110.770223,Estadio de Futbol Molino de Camou,soccer;running;pelota,pitch,,,yes,,,,,,pinned,estadio-de-futbol-molino-de-camou-molino-de-camou-san-isidro
 way,306562430,28.6575212,-106.0815097,,fronton,pitch,,,,,,,,,on_map,ciudad-deportiva-chihuahua-frontones
 way,306562436,28.6598971,-106.0842228,,fronton,pitch,,,,,,,,,on_map,ciudad-deportiva-chihuahua-frontones
 way,1463988050,28.6577556,-106.0856899,,fronton,pitch,,,,,,,,,on_map,ciudad-deportiva-chihuahua-frontones
 way,1491333935,28.6562123,-106.0839174,,fronton,pitch,,,,,,,,,on_map,ciudad-deportiva-chihuahua-frontones
-way,1492286923,28.6525477,-106.0813416,,fronton,pitch,,,,,,,,,,
-way,1492286924,28.6523314,-106.0820143,,fronton,pitch,,,,,,,,,,
+way,1492286923,28.6525477,-106.0813416,,fronton,pitch,,,,,,,,,pinned,fronton-courts-avenida-gomez-morin-chihuahua
+way,1492286924,28.6523314,-106.0820143,,fronton,pitch,,,,,,,,,pinned,fronton-courts-avenida-gomez-morin-chihuahua
