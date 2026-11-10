@@ -805,6 +805,21 @@ models:
               arguments:
                 values: ['ok', 'dead', 'unknown']
 
+  - name: stg_ask_feedback
+    description: Questions visitors sent from the ask box because it could not answer them, one row per day and question (scrubbed of emails, links and phone-like numbers). Local warehouse only, never published.
+    columns:
+      - name: question
+        tests:
+          - not_null
+
+  - name: mart_ask_feedback
+    description: Unanswered ask-box questions grouped by normalized text, most-sent first, with first and last day sent. The review list for `make ask-feedback`; local warehouse only, never published.
+    columns:
+      - name: question_key
+        tests:
+          - unique
+          - not_null
+
   - name: mart_website_quality
     description: Dead-website rate by source and Overture confidence band.
 

@@ -21,9 +21,13 @@ How to turn the anonymous counts (ADR 0013) into decisions. Counts are direction
 | `event/ref/<source>` | the shared link that brought the visit (`?ref=`) |
 | `event/demand-when/<weekday>-<am\|pm\|eve>`, `event/demand-where/<city> <state>`, `event/demand-sport-where/<sport> <city>` | looks at a venue by visitor weekday and part of day, venue city, and active sport filter (interest, not play; `docs/court_usage_plan.md`) |
 | `event/ask-open`, `event/ask-kind/<reply kind>`, `event/ask-empty/<kind>`, `event/ask-sport/<sport>`, `event/ask-where/<city or area>` | the ask box (ADR 0033): opened, what kind of reply each question got (venues, events, clarify, refuse, ...), a search reply with no results, and the sport and place the question named. Sport and place are names from our own lists (`meta` in `app/ask.js`), never the typed text |
+| `event/ask-feedback/<slug>` | the ONE event that carries typed text: a question the visitor chose to send with "Send this question to us" (shown only on an unanswered reply: refusal, no results, no gear data, "that's wrong"). The title holds the question, with emails, links and phone-like numbers removed. `usage_daily.py` counts it but keeps the text out of the committed `usage_events.csv`; `make ask-feedback` loads it into the local warehouse (below) |
 | `share`, `shortlist-add/open/copy`, `focus-on`, `welcome-back`, `this-week-open`, `map-key` | habit events: is the feature used at all |
 
-Never sent: search text, venue names, places, coordinates. Details are fixed vocabularies.
+Never sent: search text, venue names, places, coordinates. Details are fixed vocabularies. The one exception is `ask-feedback`, only on a button press.
+
+## Unanswered ask-box questions (owner 2026-11-10)
+`make usage` then `make ask-feedback`: `ingestion/extract_ask_feedback.py` pulls the sent questions out of the GoatCounter export (merging days, since each export is 60 days), `load_raw.py` fills `raw.ask_feedback`, dbt builds `stg_ask_feedback` and `mart_ask_feedback` (grouped by normalized text, most-sent first, first and last day). Read it with `select * from marts.mart_ask_feedback` in DuckDB. For each question decide: a new rule in `app/ask.js` (add it to `chatbot/test_ask.js`), missing data (a seed edit or a lead), or out of scope; then log the outcome in `docs/feedback_log.csv` (`make feedback`). The CSV and the table stay local: the repo is public, so never commit the text or copy it into `docs/` or the dashboard. If a visitor has Do Not Track on or the counter is blocked, the button says it couldn't send and links to GitHub instead.
 
 ## Questions this answers
 | Question | Where |

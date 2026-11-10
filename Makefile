@@ -5,7 +5,7 @@ STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import o
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 # Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
-.PHONY: rank-rechecks check-pages setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback
+.PHONY: rank-rechecks check-pages setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback ask-feedback
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -135,6 +135,10 @@ usage:            ## export GoatCounter daily counts (and roll up docs/usage_dai
 	$(PY) ingestion/extract_goatcounter.py
 	$(PY) ingestion/usage_daily.py
 	$(PY) ingestion/goat_report.py $(ARGS)
+ask-feedback:     ## load the questions visitors sent from the ask box into raw.ask_feedback and build mart_ask_feedback (run `make usage` first; local warehouse only, never commit the text; docs/goat_analysis.md)
+	$(PY) ingestion/extract_ask_feedback.py
+	$(PY) ingestion/load_raw.py
+	$(DBT) build --select stg_ask_feedback mart_ask_feedback
 interest:         ## print Google Trends search interest vs venues per metro and write docs/search_interest_vs_coverage.csv for the dashboard (docs/search_interest_plan.md; re-export the seed about quarterly)
 	$(PY) ingestion/search_interest_report.py
 
