@@ -22,13 +22,16 @@
   const SOCIAL2 = / play w+ with /;
   const BOOK = / (book|reserve|reservation|reservations) /;
   const COUNT = / (how many|number of|count of|counts|totals?|tally|by state|by country|per state|per country|each state) |^ count /;
+  // issue 617: "when will X open?" and "when will you add Y?" get what we know plus a way to ask, never a guessed date
+  const WHEN_OPEN = / when (will|does|is|are|do|should|would) (.* )?(open|opens|opening|reopen|reopens|reopening|ready|launch|launching|built|finished|done) | opening (date|day) | (grand )?opening soon | coming soon | open yet /;
+  const WHEN_ADD = / when (will|are|do|would|is) (you|racketconnect|it|the (app|map|site)) (.* )?(add|adding|cover|covering|expand|expanding|include|including|support|get|have) /;
   const RACKET = / (court|courts|racket|rackets|racquet|racquets|paddle|paddles|shuttlecock|tennis|net) /;
   // Replies that are not an answer (hello, thanks, off-topic, ...) stay kind and always offer a next step as chips (todo: docs/chatbot_ux_todo.md).
   const STARTERS = ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "What is RacketConnect?"];
   // Questions about the page the visitor is looking at (needs the map's context from the widget; without it they fall through to the normal routing).
   const VIEW = / (this view|in view|on screen|on the screen|on the map|am i looking at|i m looking at|you re looking at|this pin|this court|this place|this venue|this spot|this one|selected|around here|nearby|near me|close to me|closest to me|visible) /;
   const VIEW_THIS = / (am i looking at|i m looking at|this pin|this court|this place|this venue|this spot|this one|selected|open) /;
-  const PRODUCT_URL = {change: "https://github.com/abov/courtconnect-ca/issues/new?template=suggest-a-change.yml", event: "https://github.com/abov/courtconnect-ca/issues/new?template=report-an-event.yml", code: "https://github.com/abov/courtconnect-ca"};
+  const PRODUCT_URL = {change: "https://github.com/abov/courtconnect-ca/issues/new?template=suggest-a-change.yml", event: "https://github.com/abov/courtconnect-ca/issues/new?template=report-an-event.yml", code: "https://github.com/abov/courtconnect-ca", ask: "https://github.com/abov/courtconnect-ca/issues/new"};
   const PRODUCT_CHIPS = ["What does confirmed mean?", "How do I add my club?", "Where does your data come from?", "Which states do you cover?"];
   // About RacketConnect itself. Every line repeats what the About card, README and llms.txt already say; nothing here is new policy.
   // [pattern, lines, link items, chips]
@@ -46,7 +49,7 @@
       ["The data is rebuilt about twice a month. Public access, hours and prices are often unknown, so I only say them when our data has them, and each place shows when it was last checked. If something is wrong, tell us and a reviewer will check it."],
       [{title: "Suggest a change", detail: "GitHub form", url: PRODUCT_URL.change}], ["What does confirmed mean?", "How do I add my club?"]],
     [/ (which|what) (states|regions|countries) | (do you|does it|does racketconnect|will you|are you going to) (cover|support|expand|add) | (mexico|canada|europe|texas|florida|new york|colorado|utah|idaho|montana|new mexico) | outside (of )?(california|the us|the u s|these states) /,
-      ["We cover California, Nevada, Oregon, Washington, Arizona, Hawaii and the Mexican border, plus a Mexico pilot: the border cities (Tijuana, Mexicali, Ensenada, Hermosillo, Nogales, San Luis Río Colorado) and, newer, Mexico City, Guadalajara, Monterrey, Cancún and Mérida. Mexican pins are mostly automatic map data, with hand-checked padel clubs in some cities. Other places aren't on the map yet."],
+      ["We cover California, Nevada, Oregon, Washington, Arizona and Hawaii, plus a Mexico pilot: the border cities (Tijuana, Mexicali, Ensenada, Hermosillo, Nogales, San Luis Río Colorado) have automatic map data, and Mexico City, Guadalajara, Monterrey, Cancún, Playa del Carmen and Mérida have clubs added by hand from their own public pages. Coverage in Mexico is partial, and other places aren't on the map yet."],
       [], ["Pickleball in Reno", "Padel in Las Vegas", "Tennis in Seattle"]],
     [/ (is|are) (this|it|racketconnect|the (app|site|map|website)) (really |completely |a )?free | free to use | (do|will) i (need|have to) (.* )?(account|sign up|sign in|log in|login|pay|register) | (an |any )?account | sign up | sign in | log in | login | subscription | cost to use | how much (does|is) (racketconnect|the (app|site|map)|this (app|site|map)) /,
       ["RacketConnect is free to use. There are no accounts, no sign-in and no paid or featured placement. We link out to each venue's own page; we never take bookings or payments."],
@@ -64,7 +67,7 @@
       ["There is no app to download. RacketConnect is a website that works in your phone's browser, so you can open it and add it to your home screen if you like."],
       [], undefined],
     [/ (what is|what s|whats|what are|tell me about|explain|describe) (racketconnect|racket connect|this (site|app|map|website|tool|project|bot|chat|chatbot))( | for )| (what|how) (do|does) (racketconnect|this (site|app|map|website|tool)|you) (do|work|help) | what can i (do|use) (here|this|it) for | racketconnect is | (about|purpose of) (racketconnect|this (site|app|map|website)) /,
-      ["RacketConnect is one free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, Hawaii and the Mexican border: tennis, pickleball, padel, squash, badminton, table tennis and the lesser-known sports. Use it to find a court, see events to watch, find groups to play with, and learn how to try a sport. Each place says how sure we are, and we link out to the venue's own page; we never take bookings or payments.", "This box is a simple helper with no AI model. It answers only from our own venue data."],
+      ["RacketConnect is one free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, Hawaii and parts of Mexico: tennis, pickleball, padel, squash, badminton, table tennis and the lesser-known sports. Use it to find a court, see events to watch, find groups to play with, and learn how to try a sport. Each place says how sure we are, and we link out to the venue's own page; we never take bookings or payments.", "This box is a simple helper with no AI model. It answers only from our own venue data."],
       [], PRODUCT_CHIPS],
     [/ (how (do|can|would) i (use|search|filter|find|get around)|how to use|how does (the |this )?(map|site|app) work|what do (the )?(pins|markers|dots|colors|colours|icons|circles) mean|legend|orange pins|grey pins|gray pins) /,
       ["Pick a sport and zoom to your area, or type a city, ZIP or venue name in the search box; the list follows what the map shows. Tap a pin for its details, how sure we are, and the link to the venue's own page. Orange pins are stand-alone hitting walls. You can also switch between places to play, events to watch and groups."],
@@ -170,6 +173,25 @@
       }
       rows.sort((a, b) => ((a[0].q !== "c") - (b[0].q !== "c")) || ((a[1] || 0) - (b[1] || 0)));
       return rows;
+    }
+
+    const ASK_ITEM = {title: "Ask us on GitHub", detail: "needs a free GitHub account; you get a notification when we reply", url: PRODUCT_URL.ask};
+    function whenOpen(sp, loc, st, t) {
+      // a place named in the question wins; otherwise filter by sport and area (a wider radius: city centres are rough)
+      const all = data.venues.filter(v => v.up), named = all.filter(v => v.n && t.includes(" " + norm(v.n.replace(/\(.*\)/, "")).trim() + " "));
+      const soon = named.length ? named : all.filter(v => (!sp || v.p.some(e => e[0] === sp.idx)) && (!st || v.r === st) && (!loc || km(loc.y, loc.x, v.y, v.x) <= Math.max(loc.r, 30)));
+      const where = named.length ? "" : loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + st : "";
+      const what = (sp && !named.length ? sp.name + " " : "") + (soon.length === 1 ? "place" : "places");
+      const wait = "I don't predict opening dates: our data only has what each club's own page said when we checked it, and none gives a firm date. The club's site or social page is the place to watch.";
+      if (!soon.length) return {kind: "opening", lines: ["No " + what + where + " are marked opening soon in our data.", wait, "If you know of one, or want us to look into a place, ask below and you'll get a notification when we reply."], items: [ASK_ITEM], chips: sp ? [sp.name + (loc ? " in " + loc.label : " in Los Angeles")] : undefined};
+      const items = soon.slice(0, 5).map(v => ({title: v.n || "Unnamed place", detail: [[v.c, v.r].filter(Boolean).join(" "), v.up + (v.ud ? " (page checked " + v.ud + ")" : "")].join(" · "), url: venueLink(v)}));
+      return {kind: "opening", lines: [(named.length === 1 ? (named[0].n + " is") : soon.length + " " + what + where + " " + (soon.length > 1 ? "are" : "is")) + " marked opening soon in our data" + (soon.length > 5 ? " (showing 5)" : "") + ".", wait, "Want us to check one again? Ask below and you'll get a notification when we reply."], items: [...items, ASK_ITEM]};
+    }
+    function whenAdd(sp, loc) {
+      const lines = ["There's no date for new areas or sports yet: we add them when we can map them properly, and we'd rather say no date than guess one."];
+      lines.push(loc ? "We already cover " + loc.label + "; ask for a sport and I'll look." : "Today we cover California, Nevada, Oregon, Washington, Arizona and Hawaii, plus a Mexico pilot.");
+      lines.push("Tell us where you'd like us next below; requests help us decide, and you'll get a notification when we reply.");
+      return {kind: "opening", lines, items: [ASK_ITEM], chips: loc ? sportChips(loc) : ["Which states do you cover?"]};
     }
 
     const STATE_NAMES = {CA: "California", NV: "Nevada", OR: "Oregon", WA: "Washington", AZ: "Arizona", HI: "Hawaii", MX: "Mexico"};
@@ -318,6 +340,8 @@
       if (has(t, / (what did i say|what do i play|my profile|what do you remember|what do you know about me) /)) {
         return {kind: "profile", lines: Object.keys(profile).length ? ["Saved in this browser only: " + Object.entries(profile).map(([k, v]) => k + " = " + v).join(", ") + ". Say \"forget me\" to clear it."] : ["I don't have anything saved yet. Tell me, for example, \"I play padel in Reno, beginner\"."], items: []};
       }
+      if (has(t, WHEN_ADD)) return whenAdd(found[0] || null, loc);
+      if (has(t, WHEN_OPEN) && !has(t, / open play /)) return whenOpen(found[0] || null, loc, st, t);
       // issue 568: counts by state and by country, from the same venue data the map shows
       if (has(t, COUNT)) return countAnswer(found[0] || null, st || (has(t, / mexico /) ? "MX" : ""), t, loc);
       if (!found.length && !loc) {

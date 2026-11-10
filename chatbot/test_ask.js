@@ -75,6 +75,11 @@ const Q = [
   ["How many pickleball courts are in California?", "count", "Pickleball places in California"],
   ["How many padel courts in Mexico?", "count", "Padel places in Mexico"],
   ["How many courts in Reno?", "count", "near Reno"],
+  // issue 617: opening dates and new areas get what we know plus a way to ask, never a guessed date
+  ["When will Oakland Padel open?", "opening", "Oakland Padel is marked opening soon"],
+  ["When will the padel courts in Los Angeles open?", "opening", "don't predict"],
+  ["When will pickleball courts open in Fresno?", "opening", "Ask us on GitHub"],
+  ["When will you add Texas?", "opening", "no date"],
   ["Is there an iPhone app?", "about", "no app"],
   ["Do you speak Spanish?", "about", "no translation"],
   ["Who built this?", "about", "open-source"],
