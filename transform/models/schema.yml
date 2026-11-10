@@ -1008,20 +1008,55 @@ models:
     description: >
       One row per hitting-wall map pin; pins that stand at no listed court venue become hitting-wall venues (int_wall_venue, ADR 0032). OSM walls of the same type within `wall_group_radius_m` of each other
       (a row of handball courts at a school) share one pin at their centre; `wall_count` says how many walls stand there.
+    config:
+      contract: {enforced: true}
     columns:
       - name: wall_key
+        data_type: varchar
         tests:
           - unique
           - not_null
       - name: wall_count
+        data_type: bigint
         tests:
           - not_null
+      - name: wall_name
+        data_type: varchar
+      - name: city
+        data_type: varchar
       - name: region
+        data_type: varchar
         tests:
           - not_null
           - accepted_values:
               arguments:
                 values: "{{ var('regions').keys() | list }}"
+      - name: lat
+        data_type: double
+      - name: lon
+        data_type: double
+      - name: location_precision
+        data_type: varchar
+      - name: wall_type
+        data_type: varchar
+      - name: sports_suited
+        data_type: varchar
+      - name: near_venue_name
+        data_type: varchar
+      - name: surface
+        data_type: varchar
+      - name: is_lit
+        data_type: boolean
+      - name: free_to_use
+        data_type: boolean
+      - name: access
+        data_type: varchar
+      - name: confirmation
+        data_type: varchar
+      - name: reported_on
+        data_type: date
+      - name: evidence
+        data_type: varchar
 
   - name: int_venue_court
     description: >
@@ -1097,27 +1132,100 @@ models:
       - elementary.schema_changes:
           tags: [observability]
           config: {severity: warn}
+    config:
+      contract: {enforced: true}
     columns:
       - name: venue_id
+        data_type: varchar
         description: Stable id of the venue cluster (dim_venue).
       - name: venue_name
+        data_type: varchar
         description: >
           Best available name. See name_source for how trustworthy it is. An inferred (enclosing_feature) name shared by 2+ venues in a city
           ends in a computed suffix, "(north courts, 6 courts)" (int_venue_display_name): position and court count, not a source.
       - name: name_source
+        data_type: varchar
         description: "How the name was found: court_name, operator, manual and places_directory are confirmed; enclosing_feature is a guess from the park or school the courts sit in; unnamed has none."
       - name: venue_source
+        data_type: varchar
         description: "Where the venue comes from: osm, osm+places, places_only or manual."
+      - name: venue_kind
+        data_type: varchar
       - name: sport_name
+        data_type: varchar
         description: Racket sport from the owner's sheet (the sheet is the source; never hand-edited).
       - name: courts_for_sport
+        data_type: bigint
         description: Number of mapped courts for that sport. Sports that share physical courts (see sport_also_played) are not extra courts.
-      - name: is_confirmed_public
-        description: True only when the data marks the courts public. False means unknown, not private.
-      - name: is_members_only
-        description: True when the courts are marked private or members and not marked public. Incomplete by design; an unmarked club is not flagged.
+      - name: in_osm
+        data_type: boolean
+      - name: in_places
+        data_type: boolean
+      - name: in_manual
+        data_type: boolean
+      - name: in_wall
+        data_type: boolean
+      - name: in_courts
+        data_type: boolean
+      - name: offerings
+        data_type: varchar
+      - name: lat
+        data_type: double
+      - name: lon
+        data_type: double
+      - name: city
+        data_type: varchar
+      - name: region
+        data_type: varchar
+      - name: address_line
+        data_type: varchar
+      - name: address_source
+        data_type: varchar
+      - name: address_distance_m
+        data_type: integer
+      - name: near_street
+        data_type: varchar
+      - name: website
+        data_type: varchar
+      - name: website_status
+        data_type: varchar
       - name: website_usable
+        data_type: varchar
         description: Website that passed the liveness check; dead links never reach the map.
+      - name: phone
+        data_type: varchar
+      - name: opening_hours
+        data_type: varchar
+      - name: google_place_id
+        data_type: varchar
+      - name: has_indoor
+        data_type: boolean
+      - name: indoor_basis
+        data_type: varchar
+      - name: has_outdoor
+        data_type: boolean
+      - name: has_sand_beach
+        data_type: boolean
+      - name: has_clay
+        data_type: boolean
+      - name: has_grass
+        data_type: boolean
+      - name: has_hard
+        data_type: boolean
+      - name: has_turf
+        data_type: boolean
+      - name: has_lit_courts
+        data_type: boolean
+      - name: is_confirmed_public
+        data_type: boolean
+        description: True only when the data marks the courts public. False means unknown, not private.
+      - name: has_free_courts
+        data_type: boolean
+      - name: is_members_only
+        data_type: boolean
+        description: True when the courts are marked private or members and not marked public. Incomplete by design; an unmarked club is not flagged.
+      - name: also_listed_as
+        data_type: varchar
 
   - name: mart_venue_actions
     description: >
