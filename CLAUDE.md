@@ -39,6 +39,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0036, all accepted except 0001, su
 
 ## Keeping usage low
 - Don't take browser screenshots unless I ask. Read pages as text (`get_page_text` / `read_page`) instead.
+- Don't `Read` images (`docs/screenshots/*.png`, downloaded jpgs) unless I ask: they stay in context and are re-read every turn. Read `app/index.html` (178 KB) only by line range (Grep first), never whole. For research, prefer `WebFetch` with a specific question over dumping whole pages.
 - In auto mode (or whenever I haven't picked an approach), always choose the cheapest path that does the job, and say in one line what it is:
   - Do it directly with Grep/Read/Edit; don't spawn subagents, run deep-research, or use extended web search unless I ask.
   - Run the narrowest check (`python ingestion/build_changed.py`, or `dbt build --select <changed models>`, one test) before the full build; run the full build once at the end.
@@ -46,7 +47,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0036, all accepted except 0001, su
   - Prefer one batched tool call over many; stop once the task is done instead of extra "nice to have" work.
   - If a task looks expensive (many pages to research, big refactor), propose the cheaper scoped version first and wait for my OK.
 - Read only the lines you need from big files; don't dump whole CSVs, logs or `venues.json`.
-- One task per session. Keep sessions small: when context passes ~200-300k tokens, tell me to start a fresh session.
+- One task per session; for research passes that means one region (or one sport in one region) per session. Keep sessions small: when context passes ~200-300k tokens, tell me to start a fresh session.
 - No session note for ordinary work: put what changed and what is next in the PR description. Only the automated routines write `docs/sessions/` notes (their handshake, see `docs/sessions/README.md`). Never add lines to a shared log (that caused merge conflicts). Update `docs/status.md` only when priorities change.
 - Use a lighter model for simple edits; save the biggest for hard problems.
 - Keep summaries short everywhere (owner 2026-10-22): chat replies lead with the result and use at most ~5 bullets, wrap-up recaps are 1-2 sentences, PR descriptions 2-4 bullets, commit messages one line plus at most two. No tables or per-feature breakdowns unless asked; offer detail instead.
