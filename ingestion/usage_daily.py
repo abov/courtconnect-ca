@@ -43,6 +43,8 @@ def main() -> None:
             fresh[r["day"]][1 if is_event else 0] += int(r["count"])
             if is_event:
                 name, detail = split_event(r["path"], r["title"])
+                if name == "ask-feedback":   # typed text a visitor chose to send: counted, but the text stays out of the committed file (extract_ask_feedback.py)
+                    detail = ""
                 if name:
                     ev[(r["day"], name, detail)] += int(r["count"])
     merged: dict[str, list[int]] = {}

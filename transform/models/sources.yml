@@ -20,5 +20,7 @@ sources:
         description: Racket-related places from Overture Maps (CDLA-Permissive, Apache and CC0). Loaded by ingestion/extract_overture_places.py.
       - name: overture_addresses
         description: Overture Maps address points within ~440 m of a pin (CDLA-Permissive). Loaded by ingestion/extract_overture_addresses.py; empty until it is run (CI).
+      - name: ask_feedback
+        description: Questions visitors chose to send from the ask box (scrubbed of emails, links and phone-like numbers), one row per day and question. Loaded by ingestion/extract_ask_feedback.py + load_raw.py from the GoatCounter export; empty until `make ask-feedback` runs. Local warehouse only, never published.
       - name: osm_parents
         description: Named parks, schools, clubs and sports centres (with bounding boxes) used to name unnamed courts.

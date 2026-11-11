@@ -55,7 +55,7 @@
       ["RacketConnect is free to use. There are no accounts, no sign-in and no paid or featured placement. We link out to each venue's own page; we never take bookings or payments."],
       [], ["Pickleball in Reno", "What is pop tennis?"]],
     [/ (privacy|tracking|tracked|cookies|cookie|personal (data|information)|my data|do you (store|save|collect|sell)) /,
-      ["There are no accounts. We count anonymous page visits and which kinds of places get opened (a count of looks, nothing about who you are). If you tell this box your sport and city, they are remembered in your browser only; say \"forget me\" to clear them."],
+      ["There are no accounts. We count anonymous page visits and which kinds of places get opened (a count of looks, nothing about who you are). Your questions are not saved; the only text we receive is a question you press \"Send this question to us\" on, with emails, links and phone-like numbers removed. If you tell this box your sport and city, they are remembered in your browser only; say \"forget me\" to clear them."],
       [], ["Forget me", "What did I say I play?"]],
     [/ (who|what company|which company) (made|built|created|runs|owns|is behind|developed) | (contact|email|e mail|reach) (you|the team|someone|support|the owner)| support team | is (this|it) (open source|a startup|a company) | open source /,
       ["RacketConnect is an independent, open-source project. The code and the data pipeline are public, and the issue forms are the way to reach us: they go to a reviewer, no sign-in needed."],
@@ -82,6 +82,16 @@
   const OTHER_SPORT = / (golf|cricket|soccer|football|basketball|baseball|softball|hockey|volleyball|swimming|swim|running|jogging|yoga|pilates|rugby|skiing|snowboarding|skateboarding|bowling|boxing|lacrosse|cycling|climbing|surfing|hiking|fishing|archery|darts|billiards|chess) /;
   const sportChips = (loc, skip) => SPORT_CHIPS.filter(n => n !== skip).slice(0, 4).map(n => n + " in " + loc.label);
   const cityChips = sp => POPULAR.map(c => sp.name + " in " + c);
+
+  // Replies that did not answer: a refusal, a frustrated visitor, no gear data, or a search with no results. The widget offers "send this question to us" on these.
+  const MISS_KINDS = new Set(["refuse", "support", "gear"]);
+  const RESULT_KINDS = new Set(["venues", "events", "social", "walls"]);
+  // A question the visitor chooses to send: emails, links and phone-like numbers are cut out first, whitespace collapsed, 200 characters at most.
+  // ingestion/extract_ask_feedback.py runs the same rules again before anything reaches the warehouse.
+  function scrub(text) {
+    return String(text || "").replace(/[^\s@]+@[^\s@]+/g, "[email]").replace(/(https?:\/\/|www\.)\S+/gi, "[link]")
+      .replace(/\+?\d[\d\s().-]{6,}\d/g, "[number]").replace(/\s+/g, " ").trim().slice(0, 200);
+  }
 
   function km(a, b, c, d) {
     const p = Math.PI / 180, h = Math.sin((c - a) * p / 2) ** 2 + Math.cos(a * p) * Math.cos(c * p) * Math.sin((d - b) * p / 2) ** 2;
@@ -327,7 +337,8 @@
       if (!r.chips && !(r.items || []).length) r.chips = STARTERS.slice();
       // What was asked about, as names from our own lists only (a sport, a city or area), for the anonymous usage counts; never the typed text.
       const t = norm(question), sp = detectSports(t)[0], where = detectPlace(t);
-      r.meta = {sport: sp ? sp.name : "", where: where ? where.label : "", hit: (r.items || []).length > 0};
+      const hit = (r.items || []).length > 0;
+      r.meta = {sport: sp ? sp.name : "", where: where ? where.label : "", hit, miss: MISS_KINDS.has(r.kind) || (RESULT_KINDS.has(r.kind) && !hit)};
       return r;
     }
 
@@ -395,6 +406,6 @@
     return {answer};
   }
 
-  const api = {create, starters: STARTERS};
+  const api = {create, scrub, starters: STARTERS};
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Ask = api;
 })(typeof window !== "undefined" ? window : globalThis);

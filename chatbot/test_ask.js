@@ -115,5 +115,14 @@ Q.forEach(([q, kind, must, useCtx], i) => {
   console.log(`\n${ok ? "PASS" : "FAIL"} ${i + 1}. ${q}  [${r.kind}]`);
   console.log(text.split("\n").slice(0, 4).map(l => "   " + l.slice(0, 230)).join("\n"));
 });
+// Unanswered replies are flagged so the widget can offer "Send this question to us"; answered ones are not. scrub() strips contact details.
+saved = {};
+[["Best restaurants near Reno", true], ["Where can I buy a pickleball paddle in San Diego?", true], ["Pickleball in Reno", false], ["What is pop tennis?", false]].forEach(([q, want]) => {
+  const m = ask.answer(q).meta, ok = m.miss === want;
+  if (!ok) fails++;
+  console.log(`${ok ? "PASS" : "FAIL"} miss flag: ${q} -> ${m.miss}`);
+});
+const scrubbed = Ask.scrub("call 415-555-0100 or mail a@b.co see https://x.io now");
+if (scrubbed !== "call [number] or mail [email] see [link] now") { fails++; console.log("FAIL scrub: " + scrubbed); } else console.log("PASS scrub");
 console.log(`\n${Q.length - fails}/${Q.length} passed`);
 process.exit(fails ? 1 : 0);

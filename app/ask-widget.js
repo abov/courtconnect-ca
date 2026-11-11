@@ -27,6 +27,7 @@
     #askfab { right: auto; left: 12px; bottom: calc(58vh + 12px); bottom: calc(58dvh + 12px); top: auto; }   /* phones: the map is the top 42dvh, so sit at its bottom-left */
     #askpanel { left: 0; right: 0; bottom: 0; width: auto; height: 70dvh; border-radius: var(--r-md, 12px) var(--r-md, 12px) 0 0; padding-bottom: env(safe-area-inset-bottom); }
   }
+  .askfb { font-size: 13px; color: var(--muted, inherit); }
   @media (pointer: coarse) { #askfab, .askchips button, #askform button, #askclose { min-height: 44px; } }`;
 
   function el(tag, attrs, text) {
@@ -71,7 +72,23 @@
         m.appendChild(d);
       });
       add(m);
+      if (r.meta && r.meta.miss && hooks && hooks.feedback) addFeedback(r);
       if (r.chips && r.chips.length) addChips(r.chips);
+    }
+    // An unanswered question can be sent to us (only when the visitor presses the button). "That's wrong" style replies send the question before it.
+    function addFeedback(r) {
+      const text = r.kind === "support" ? prevQ : curQ;
+      if (!text) return;
+      const row = el("div", {class: "askchips"}), b = el("button", {type: "button"}, "Send this question to us");
+      b.addEventListener("click", () => {
+        const sent = hooks.feedback(text);
+        row.replaceChildren(el("span", {class: "askfb"}, sent
+          ? "Sent, thank you. We read these to improve answers, but we can't reply. Want a reply? Ask on GitHub below."
+          : "Couldn't send from here (analytics is off or blocked). Ask us on GitHub instead."));
+        if (!sent) { const a = el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new", target: "_blank", rel: "noopener noreferrer"}, " Ask on GitHub"); row.appendChild(a); }
+      });
+      row.appendChild(b);
+      add(row);
     }
     // tappable next steps; only the newest row stays, so the log doesn't fill with stale buttons
     function addChips(list) {
@@ -79,16 +96,18 @@
       list.forEach(t => { const b = el("button", {type: "button"}, t); b.addEventListener("click", () => go(t)); chips.appendChild(b); });
       add(chips);
     }
+    let curQ = "", prevQ = "";
     function go(q) {
       if (!q.trim()) return;
+      prevQ = curQ; curQ = q.trim();
       log.querySelectorAll(".askchips").forEach(n => n.remove());
       add(el("div", {class: "am me"}, q));
       const r = ask.answer(q, ctx); render(r);
-      if (hooks && hooks.answered) hooks.answered(r);   // counts only: reply kind, sport and place names from our lists; never the question text
+      if (hooks && hooks.answered) hooks.answered(r);   // counts only: reply kind, sport and place names from our lists; the question text leaves only via hooks.feedback, on a button press
     }
 
     function intro() {
-      add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Ask about places to play, events, groups, how to try a sport, what is in the map view, or how RacketConnect works. Nothing is booked or paid here. Your sport and city are remembered in this browser only."));
+      add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Ask about places to play, events, groups, how to try a sport, what is in the map view, or how RacketConnect works. Nothing is booked or paid here. Your sport and city are remembered in this browser only. If I can't answer, you can send the question to us; it is only sent when you press the button."));
       addChips(root.Ask.starters);
     }
 

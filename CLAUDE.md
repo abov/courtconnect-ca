@@ -16,6 +16,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0036, all accepted except 0001, su
 - `make feedback`   sync every GitHub issue (open and closed) into `docs/feedback_log.csv`, list what is open/handled and any comment after close; log non-issue feedback with `ARGS="--add --channel message --reporter <tag> --summary ..."` (no emails/phones; commit the CSV)
 - `make usage`      export GoatCounter counts and print the usage metrics + sport demand vs coverage (needs `GOATCOUNTER_API_TOKEN` in `.env`; `docs/goat_analysis.md`)
 - `make interest`   Google Trends search interest vs venues per metro (planning signal, `docs/search_interest_plan.md`)
+- `make ask-feedback`   after `make usage`: load the ask-box questions visitors chose to send (unanswered ones) into the local warehouse (`mart_ask_feedback`; never commit the text; `docs/goat_analysis.md`)
 - `make report`     regenerate `docs/coverage_snapshot.md`
 - `make observability`   Elementary data-observability report from the local warehouse (`docs/data_observability.md`; `make build` records the history and installs the package)
 
