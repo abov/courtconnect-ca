@@ -1226,6 +1226,8 @@ models:
         data_type: integer
       - name: near_street
         data_type: varchar
+      - name: is_home_like
+        data_type: boolean
       - name: website
         data_type: varchar
       - name: website_status
