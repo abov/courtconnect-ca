@@ -36,6 +36,7 @@ The long version is the owner's Google Sheet [RacketConnect tool dictionary](htt
 
 ## CI/CD
 - GitHub Actions: `ci.yml` (fixture data, gate scripts, `dbt build`), `issue-to-pr.yml`, `pages.yml`.
+- Uptime check (proposed, ADR 0037): UptimeRobot free, two monitors on the live page and `data/venues.json`, email alert to the owner; nothing in the repo or the page. Pipeline health stays with Elementary (`docs/data_observability.md`).
 - Squash-merge after green checks; `venues.json` regenerated, never hand-merged.
 
 ## Front end
