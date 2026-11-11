@@ -303,7 +303,7 @@
 
   <div class="controls">
     <p id="resume" class="note" role="status" hidden></p>
-    <details id="whatsnew" class="note" hidden><summary id="whatsnew-t"></summary><ul id="whatsnew-l" class="wnlist"></ul><p id="whatsnew-f" class="sub"></p></details>
+    <details id="whatsnew" class="note" hidden><summary id="whatsnew-t"></summary><ul id="whatsnew-l" class="wnlist"></ul><p id="whatsnew-f" class="sub"></p><p id="whatsnew-e" class="sub"><button class="link" id="emailInterest" type="button">Would you want these by email?</button> <span id="emailInterestNote">We don’t send email yet and never ask for an address here. This only counts a tap.</span></p></details>
     <div class="locrow" role="group" aria-label="Zoom the map to a place">
       <div><label class="l" for="country">Country</label><select id="country"></select></div>
       <div id="stateWrap" hidden><label class="l" for="usState">State</label><select id="usState"></select></div>
@@ -645,6 +645,10 @@ async function initWhatsNew() {
   });
   $("whatsnew-t").textContent = "What’s new (" + rows.length + " in the last " + WN_DAYS + " days)";
   $("whatsnew-f").textContent = "What our data now says, not proof of a change on the ground. Labels are the data’s own." + (rows.length > WN_MAX ? " Showing the newest " + WN_MAX + "." : "");
+  const eb = $("emailInterest");   // interest count only (ADR 0025 option B waits on it): no address is asked or stored
+  const thanks = () => { eb.hidden = true; $("emailInterestNote").textContent = "Thanks, counted. We don’t send email yet and no address was collected."; };
+  if (store.get("emailInterest", false)) thanks();
+  else eb.addEventListener("click", () => { track("email-interest"); store.set("emailInterest", true); thanks(); });
   $("whatsnew").hidden = false;
 }
 
