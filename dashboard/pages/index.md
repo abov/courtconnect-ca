@@ -131,7 +131,7 @@ from courtconnect.ml_metrics order by 1
 
 ```sql ml_span
 select
-  arg_min(labels, date) as first_labels, arg_min(loo_accuracy, date) as first_accuracy,
+  arg_max(labels, loo_accuracy) as peak_labels, max(loo_accuracy) as peak_accuracy,
   arg_max(labels, date) as last_labels, arg_max(loo_accuracy, date) as last_accuracy,
   arg_max(likely_right, date) as last_likely_right
 from courtconnect.ml_metrics
@@ -307,7 +307,7 @@ The review-queue ranker guesses which uncertain sport labels are right, so the c
 
 <LineChart data={ml_history} x=date y={["loo_accuracy","likely_right"]} title="Ranker score over time" yFmt=pct0 yMin=0 yMax=1 />
 
-Accuracy went from <Value data={ml_span} column=first_accuracy fmt=pct0 /> to <Value data={ml_span} column=last_accuracy fmt=pct0 /> as the verdicts grew from <Value data={ml_span} column=first_labels fmt=num0 /> to <Value data={ml_span} column=last_labels fmt=num0 />. The newer verdicts are mostly padel, academies and clubs, which may be harder to tell apart, though we have not tested that. When the model rates a label "likely right", it is right <Value data={ml_span} column=last_likely_right fmt=pct0 /> of the time, so it still helps put the clearest cases first. It is not accurate enough to confirm anything: a person still checks every fact.
+Accuracy peaked at <Value data={ml_span} column=peak_accuracy fmt=pct0 /> with <Value data={ml_span} column=peak_labels fmt=num0 /> verdicts and now stands at <Value data={ml_span} column=last_accuracy fmt=pct0 /> with <Value data={ml_span} column=last_labels fmt=num0 /> verdicts in total. The newer verdicts are mostly padel, academies and clubs, which may be harder to tell apart, though we have not tested that. When the model rates a label "likely right", it is right <Value data={ml_span} column=last_likely_right fmt=pct0 /> of the time, so it still helps put the clearest cases first. It is not accurate enough to confirm anything: a person still checks every fact.
 
 <BarChart data={queue_guess} x=model_guess y=rows title="Review queue by the model's guess" />
 
