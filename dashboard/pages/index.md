@@ -35,7 +35,10 @@ order by 2 desc
 ```
 
 ```sql issues
-select cast(date as date) as date, opened, closed, open_now from courtconnect.issues order by 1
+select cast(date as date) as date, opened, closed, open_now,
+  sum(opened) over (order by date) as opened_total,
+  sum(closed) over (order by date) as closed_total
+from courtconnect.issues order by 1
 ```
 
 ```sql issue_totals
@@ -173,9 +176,9 @@ Reports sent through the map's forms, as GitHub issues. Updated daily.
 <BigValue data={issue_totals} value=opened title="Opened, all time" />
 <BigValue data={issue_totals} value=closed title="Closed, all time" />
 
-<LineChart data={issues} x=date y=open_now title="Open issues over time" yAxisTitle="Open" />
+<LineChart data={issues} x=date y={["opened_total","closed_total"]} title="Issues opened vs closed, running total" yAxisTitle="Issues" />
 
-<BarChart data={issues} x=date y={["opened","closed"]} title="Opened and closed per day" type=grouped />
+The gap between the two lines is the number of issues still open.
 
 ## Site views over time
 
