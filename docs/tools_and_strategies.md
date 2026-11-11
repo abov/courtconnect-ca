@@ -19,7 +19,7 @@ The long version is the owner's Google Sheet [RacketConnect tool dictionary](htt
 ## Transformation (dbt)
 - dbt-core + dbt-duckdb; staging, intermediate, core (star schema) and marts; about 28 CSV seeds as the knowledge layer; `adapter.dispatch` macros kept.
 - Proximity clustering of courts into venues, Overture-to-OSM place matching, rules-based confidence score (`rules_v2`), sport-fit reference table.
-- dbt tests and dbt docs (lineage and data dictionary).
+- dbt tests and dbt docs (lineage and data dictionary); dbt model contracts enforced on the five marts the app export reads (`transform/models/schema.yml`).
 
 ## Data quality and governance
 - Evidence required on every seed fact (`evidence` + `verified_on`); confirmation levels; `inferred` labels and provenance fields (`address_source`, `address_distance_m`).
@@ -36,6 +36,7 @@ The long version is the owner's Google Sheet [RacketConnect tool dictionary](htt
 
 ## CI/CD
 - GitHub Actions: `ci.yml` (fixture data, gate scripts, `dbt build`), `issue-to-pr.yml`, `pages.yml`.
+- Uptime check (live since 2026-11-11, ADR 0037): UptimeRobot free, two monitors on the live page and `data/venues.json`, email alert to the owner; nothing in the repo or the page. Pipeline health stays with Elementary (`docs/data_observability.md`).
 - Squash-merge after green checks; `venues.json` regenerated, never hand-merged.
 
 ## Front end
