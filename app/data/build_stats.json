@@ -1,9 +1,9 @@
 {
  "as_of": "2026-11-10",
- "venues": 16883,
+ "venues": 16919,
  "sports_with_venues": 43,
  "sports_total": 82,
- "named_pct": 18.2,
+ "named_pct": 18.3,
  "sla_met": 7,
  "sla_total": 8,
  "tests_pass": 308,
@@ -188,17 +188,17 @@
   },
   {
    "date": "2026-11-10",
-   "venues": 16883,
+   "venues": 16919,
    "sports_with_venues": 43,
    "events_upcoming": 76,
-   "actions_current": 648,
+   "actions_current": 662,
    "extract_age_days": 0,
    "sla_met": 7,
    "sla_total": 8,
    "tests_pass": 308,
    "tests_warn": 0,
    "tests_fail": 0,
-   "named_pct": 18.2,
+   "named_pct": 18.3,
    "sites_dead_pct": 0.0,
    "seen_35d_pct": 100.0
   }
