@@ -74,6 +74,9 @@
   .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
   button.link { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; }
   button.link:hover { text-decoration: underline; }
+  #whatsnew summary { cursor: pointer; font-weight: 600; color: var(--text); }
+  .wnlist { list-style: none; margin: 6px 0 0; padding: 0; } .wnlist li { padding: 4px 0; border-top: 1px solid var(--line); } .wnlist li:first-child { border-top: 0; }
+  .wnlist .wnk { display: block; font-size: 11.5px; color: var(--muted); } #whatsnew-f { margin: 6px 0 0; font-size: 11.5px; }
   #listbar { display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--line); }
   #listbar .barlinks { flex: none; display: flex; align-items: center; margin: 4px 8px 0 0; }
   #listbar .link { padding: 4px 6px; font-size: 12.5px; }
@@ -300,6 +303,7 @@
 
   <div class="controls">
     <p id="resume" class="note" role="status" hidden></p>
+    <details id="whatsnew" class="note" hidden><summary id="whatsnew-t"></summary><ul id="whatsnew-l" class="wnlist"></ul><p id="whatsnew-f" class="sub"></p></details>
     <div class="locrow" role="group" aria-label="Zoom the map to a place">
       <div><label class="l" for="country">Country</label><select id="country"></select></div>
       <div id="stateWrap" hidden><label class="l" for="usState">State</label><select id="usState"></select></div>
@@ -620,6 +624,28 @@ function showResume() {
   });
   $("resume").replaceChildren(el("span", {text: "Picked up where you left off: " + bits.join(" · ") + "."}), b);
   $("resume").hidden = false;
+}
+
+// ---------- what's new (the public change feed, ADR 0025 step 1) ----------
+// Reads data/changes.json (optional: without it the strip stays hidden). Shows additions and updates from the last 30 days only; "no longer listed" rows are leads for us, not claims, so they stay out.
+const WN_KINDS = {venue_new: "New on the map", venue_changed: "Updated", event_new: "New event", social_new: "New meetup"};
+const WN_DAYS = 30, WN_MAX = 8;
+async function initWhatsNew() {
+  let feed;
+  try { const r = await fetch("data/changes.json", {cache: "no-cache"}); if (!r.ok) return; feed = await r.json(); } catch { return; }
+  const cutoff = new Date(Date.now() - WN_DAYS * 864e5).toISOString().slice(0, 10);
+  const rows = (feed.changes || []).filter(c => WN_KINDS[c.k] && c.d >= cutoff);
+  if (!rows.length) return;
+  const ul = $("whatsnew-l");
+  rows.slice(0, WN_MAX).forEach(c => {
+    const v = c.i ? venues.find(x => x.i === c.i) : null;
+    const name = v ? el("button", {class: "link", type: "button", text: c.n}) : el("span", {text: c.n});
+    if (v) name.addEventListener("click", () => { if (!mapReady) return; if (state.mode !== "play") setMode("play"); showVenue(v, true); });
+    ul.append(el("li", {}, name, el("span", {class: "wnk", text: [WN_KINDS[c.k], c.c, c.l, c.t].filter(Boolean).join(" · ") + " · " + c.d})));
+  });
+  $("whatsnew-t").textContent = "What’s new (" + rows.length + " in the last " + WN_DAYS + " days)";
+  $("whatsnew-f").textContent = "What our data now says, not proof of a change on the ground. Labels are the data’s own." + (rows.length > WN_MAX ? " Showing the newest " + WN_MAX + "." : "");
+  $("whatsnew").hidden = false;
 }
 
 // ---------- filtering ----------
@@ -2031,6 +2057,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   if (resumed) showResume();
   if (store.get("welcomed", false)) document.querySelector(".welcome").hidden = true; else store.set("welcomed", true);   // the intro line shows on the first visit only (About keeps it)
   initMap();
+  initWhatsNew();
   if (window.AskWidget) AskWidget.mount(d, askContext, {opened: trackAskOpen, answered: trackAsk, feedback: trackAskFeedback});   // ask pop-up (ADR 0033); the page works without it
   if (state.mode === "watch") renderWatchList();
   $("loading").remove();
