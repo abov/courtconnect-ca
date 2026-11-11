@@ -1,4 +1,4 @@
-# Sport name review (2026-11-02)
+# Sport name review (2026-11-10)
 
 The master list (`all_racquet`, synced from the Google Sheet) has 82 racket sports. OpenStreetMap (our first court source) has a tag for **26** of them. These are the **56 that are not on the sport map**, and why.
 
