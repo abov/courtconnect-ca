@@ -128,6 +128,15 @@ About 40 page reads and searches, no events or groups (nothing new was searched 
 - **Estado de México east and north:** no Playtomic club; directory-only padel clubs are lead `mx-edomex-east-north-padel-directory`.
 - **Recheck next cycle:** a Sports World / City Club branch page that lists courts, Complejo Olímpico México 68 squash, and own pages for the Edomex clubs.
 
+## Mexico: Mexico City, part 4 (2026-11-10, ADR 0034 Phase 3)
+About 40 searches and page reads, no events or groups. Pages read: wellhub.com partner pages (Sportium San Ángel, Del Valle, Coyoacán, Arboledas, Cuautitlán), sportsworld.com.mx (club list, 2024 annual report, house rules), timeoutmexico.mx, xporty.com (Go Padel Club), mexicocity.cdmx.gob.mx; Desierto de los Leones was seen in search results only (its Wellhub page 404s on direct fetch). Points from the OpenStreetMap geocoder (project User-Agent, 1 request per second).
+- **Pinned (6 venues, 10 sport rows):** Sportium branches with squash, all access unknown, shown as reported: San Ángel (squash, padel), Del Valle, Coyoacán (squash, tennis), Desierto de los Leones, Arboledas in Tlalnepantla (squash, 1 padel) and Cuautitlán in Cuautitlán Izcalli (squash, padel). The squash directory's 'Sports World' list was Sportium; Sports World's own reports say only that some clubs have squash, padel or tennis and name none, so no Sports World branch is pinned. Sportium Coapa, Lindavista, Satélite and Lomas Verdes pages do not list squash.
+- **Racquetball:** still none in the metro (new lead `mx-cdmx-racquetball-clubs`; Centro Deportivo Salvador Allende squash and Frontón México to check).
+- **Estado de México east and north:** Go Padel Club (Tecámac) has an address on a 2024 Xporty page (Av. Reforma s/n, San Pedro Atzompa) but no map point; the Texcoco and Atenco clubs have no page besides padeldir.com. Lead stays.
+- **Dead Playtomic slugs:** Padelicious and Alfa Padel still 404; no own site found.
+- **Recheck next cycle:** Sportium Desierto page, a Go Padel Club map point, Complejo Olímpico México 68.
+
+
 ## Mexico: Mexico City, part 2b events and groups (2026-11-06, ADR 0034 Phase 3, fourth metro)
 About 20 Spanish and English searches and page reads. Pages read: meetup.com (CDMX Pride, Meetings and Parties Mexico City), cdmxpridepickleball.carrd.co, thepickleco.mx (home, /ligas, /events), pbmx.mx, pickleballstafe.com (home and CDMX CUP page), wikipedia (Mexico City Open, 2027 ATP Challenger Tour), luma.com and eventbrite.com.mx (single events), local.mx (Piong Club), itftennis.com search results.
 - **Events added: none.** No event with a 2027 date and a Mexico City venue has a source page. **Mexico City Open** (ATP Challenger 125, clay, Estadio Rafael Osuna, Centro Deportivo Chapultepec, a pinned venue) ran Apr 6-12 2026 and Apr 7-13 2025; the 2027 Challenger calendar (Wikipedia, read 2026-11-06) lists no Mexican event and every month from March is "to be confirmed". Not added without dates; lead `mx-cdmx-part2-events-groups`, recheck January 2027. **Not in scope:** Mexican Open 2027 (Feb 20-27, Acapulco), Mexico Major Premier Padel (Nov 23-29 2026, Acapulco).
