@@ -2,14 +2,16 @@
 -- int_wall_venue_link ties to a court venue is a feature of that venue instead, so no pin is listed twice. Same columns as
 -- int_venue_court so core.dim_venue can union them. A wall says nothing about indoor/outdoor or surface type: unknown, not "outdoor"
 -- (the same stance as places_only). Name quality follows the source: a hand-checked report/official row is 'manual', a real OSM name
--- is 'court_name', the generic default is 'unnamed'. Access comes from the wall's own access label, never assumed public.
+-- is 'court_name', the generic default takes the name of the park / school it stands in (int_wall_parent; 'enclosing_feature', inferred), else 'unnamed'. Access comes from the wall's own access label, never assumed public.
 select
     md5('wall:' || w.wall_key)                                  as venue_id,
-    w.wall_name                                                 as venue_name,
+    case when coalesce(w.confirmation, '') not in ('reported', 'official') and w.wall_name = 'Handball / wall court' and wp.parent_name is not null
+         then wp.parent_name else w.wall_name end               as venue_name,
     case when w.confirmation in ('reported', 'official') then 'manual'
          when w.wall_name <> 'Handball / wall court' then 'court_name'
+         when wp.parent_name is not null then 'enclosing_feature'   -- inferred from the park / school the wall stands in
          else 'unnamed' end                                     as name_source,
-    cast(null as varchar)                                       as name_feature_kind,
+    case when coalesce(w.confirmation, '') not in ('reported', 'official') and w.wall_name = 'Handball / wall court' then wp.parent_kind end as name_feature_kind,
     'walls'                                                     as venue_source,
     0                                                           as court_records,
     1                                                           as facility_records,
@@ -36,4 +38,5 @@ select
     cast(null as varchar)                                       as google_place_id,
     w.reported_on                                               as source_seen_on   -- when the wall was extracted from OSM or reported by a person
 from {{ ref('mart_wall_pins') }} w
+left join {{ ref('int_wall_parent') }} wp on wp.wall_key = w.wall_key
 where w.wall_key not in (select wall_key from {{ ref('int_wall_venue_link') }})
