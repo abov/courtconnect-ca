@@ -100,8 +100,8 @@ from courtconnect.city_scorecard where opens > 0 order by opens desc, venues des
 ```
 
 ```sql city_thin
-select city, region, venues, completeness, real_name_share, address_share, website_share
-from courtconnect.city_scorecard where venues >= 100 order by completeness, venues desc limit 10
+select city, region, venues, private_pins, completeness, real_name_share, address_share, website_share
+from courtconnect.city_scorecard where venues - private_pins >= 50 order by completeness, venues desc limit 10
 ```
 
 ```sql interest_gaps
@@ -229,7 +229,7 @@ No questions counted yet. Counting starts when this release reaches the live map
 
 ## Accuracy against popularity
 
-Popularity is what visitors do on the map: pick a sport, click out, ask about it. Traffic is small, so read it as a direction, not a ranking. Completeness is the average share of venues with a real name, a street address and a website. "Hand-checked" is the share someone visited or the operator confirmed. Sports assumed playable on tennis courts are left out, because they repeat the tennis venues.
+Popularity is what visitors do on the map: pick a sport, click out, ask about it. Traffic is small, so read it as a direction, not a ranking. Completeness is the average share of venues with a real name, a street address and a website. Pins that are likely private residence courts (unnamed, not known to be public; they never get a street, for privacy) are left out of that share and counted in "Private pins", so a neighbourhood of backyard courts does not read as bad data. "Hand-checked" is the share someone visited or the operator confirmed. Sports assumed playable on tennis courts are left out, because they repeat the tennis venues.
 
 <BarChart data={sport_popular} x=sport y=completeness title="Completeness of the most-used sports" yFmt=pct0 yMin=0 yMax=1 />
 
@@ -260,9 +260,10 @@ Cities where visitors opened a venue, then the biggest cities that are the least
 </DataTable>
 
 <DataTable data={city_thin} rows=10>
-  <Column id=city title="Least complete cities with 100+ venues" />
+  <Column id=city title="Least complete cities with 50+ non-private venues" />
   <Column id=region />
   <Column id=venues fmt=num0 />
+  <Column id=private_pins title="Private pins" fmt=num0 />
   <Column id=completeness fmt=pct0 contentType=colorscale colorScale=#6fb27c />
   <Column id=real_name_share title="Real name" fmt=pct0 />
   <Column id=address_share title="Address" fmt=pct0 />
