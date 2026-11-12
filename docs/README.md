@@ -74,7 +74,7 @@ When a tool, library, service or data source is added or removed, update its row
 
 ### Research passes and scans (dated results)
 - Venues: [`padel_scan.md`](padel_scan.md), [`public_facility_scan.md`](public_facility_scan.md), [`gym_chain_scan.md`](gym_chain_scan.md), [`hawaii_resorts.md`](hawaii_resorts.md), [`beach_tennis_watch.md`](beach_tennis_watch.md).
-- Mexico: [`mexico_metro_trial.md`](mexico_metro_trial.md), [`mexico_apps_research.md`](mexico_apps_research.md).
+- Mexico: [`mexico_metro_trial.md`](mexico_metro_trial.md), [`mexico_apps_research.md`](mexico_apps_research.md), [`mexico_states_outline.md`](mexico_states_outline.md).
 - Names: [`sport_name_review.md`](sport_name_review.md).
 
 ### ML and AI

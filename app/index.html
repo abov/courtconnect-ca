@@ -969,6 +969,9 @@ function initMap() {
     map.addSource("state-outline", {type: "geojson", data: "data/state_outline.json"});   // covered-state lines (US Census, simplified); drawn under the pins
     map.addLayer({id: "state-outline-line", type: "line", source: "state-outline",
                   paint: {"line-color": "#2f6f5e", "line-width": 0.6, "line-opacity": 0.7}});
+    map.addSource("mx-state-outline", {type: "geojson", data: "data/mx_state_outline.json"});   // Mexico's 32 federal entities (Overture divisions, simplified); a lighter line than the covered states
+    map.addLayer({id: "mx-state-outline-line", type: "line", source: "mx-state-outline",
+                  paint: {"line-color": "#2f6f5e", "line-width": 0.5, "line-opacity": 0.35}});
     map.addSource("v", {type: "geojson", data: geojson(current), cluster: true, clusterRadius: 38, clusterMaxZoom: 13});
     map.addLayer({id: "clusters", type: "circle", source: "v", filter: ["has", "point_count"],
       paint: {"circle-color": "#24292f", "circle-opacity": 0.85, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
