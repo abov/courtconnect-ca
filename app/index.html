@@ -470,7 +470,16 @@
 const BRAND = "RacketConnect", REGION = "California, Nevada, Oregon, Washington, Arizona, Hawaii and parts of Mexico";
 const GOATCOUNTER_CODE = "courts";
 const ANALYTICS_ON = !!GOATCOUNTER_CODE && navigator.doNotTrack !== "1" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+// Owner visits: open the live URL with #owner once per browser to tag them (paths get an "owner" prefix, e.g. /owner/ and owner/event/...), #owner-off to stop. Nothing is stored beyond a local flag.
+let OWNER = false;
+try {
+  if (location.hash === "#owner") localStorage.setItem("rc_owner", "1");
+  if (location.hash === "#owner-off") localStorage.removeItem("rc_owner");
+  OWNER = localStorage.getItem("rc_owner") === "1";
+} catch (e) { /* storage blocked: visits just count as everyone's */ }
+const gcPath = p => OWNER ? "owner/" + String(p).replace(/^\//, "") : p;
 if (ANALYTICS_ON) {
+  if (OWNER) window.goatcounter = {path: p => gcPath(p || location.pathname)};
   const sc = document.createElement("script");
   sc.async = true; sc.src = "https://gc.zgo.at/count.js";
   sc.dataset.goatcounter = "https://" + GOATCOUNTER_CODE + ".goatcounter.com/count";
@@ -480,7 +489,7 @@ if (ANALYTICS_ON) {
 // Events carry a short name only: never a venue name, location, search text or anything a visitor typed (one exception: trackAskFeedback, on a button press).
 const REPORT_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSf7BNf7oofeJxalLGwuWRXvZHhjQJkTqFsHFuZvJQ_foHTHyQ/viewform";   // community report form (Google Form, no sign-in): docs/community_reports_plan.md
 function track(name, title) {
-  try { if (ANALYTICS_ON && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: "event/" + name, title: title || name, event: true}); } catch (e) { /* analytics must never break the map */ }
+  try { if (ANALYTICS_ON && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: gcPath("event/" + name), title: title || name, event: true}); } catch (e) { /* analytics must never break the map */ }
 }
 // The detail goes in the event PATH (event/<name>/<detail>), not only the title, so every value counts as its own row in GoatCounter and in the export.
 // Details are fixed vocabularies (sport names, filter keys, domains, link kinds), never anything typed.
@@ -522,7 +531,7 @@ function trackAskFeedback(text) {
   try {
     const q = window.Ask && Ask.scrub ? Ask.scrub(text) : "";
     if (q.length < 3 || !ANALYTICS_ON || !window.goatcounter || !window.goatcounter.count) return false;
-    window.goatcounter.count({path: "event/ask-feedback/" + q.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 120), title: q, event: true});
+    window.goatcounter.count({path: gcPath("event/ask-feedback/" + q.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 120)), title: q, event: true});
     return true;
   } catch (e) { return false; }
 }
