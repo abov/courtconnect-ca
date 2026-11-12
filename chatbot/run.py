@@ -56,7 +56,12 @@ def load_key() -> str | None:
 
 def read_questions() -> dict[int, tuple[str, str]]:
     out = {}
+    in_questions = False  # docs/chatbot.md also holds the plan and UX todo: read only the test-questions section
     for line in QUESTIONS.read_text(encoding="utf-8").splitlines():
+        if line.startswith("## "):
+            in_questions = line.startswith("## Chatbot test questions")
+        if not in_questions:
+            continue
         m = re.match(r"^(\d+)\.\s+(.*)$", line)
         if m:
             q, _, expect = m.group(2).partition(" Expect:")
