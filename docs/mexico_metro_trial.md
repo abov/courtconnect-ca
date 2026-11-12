@@ -53,8 +53,7 @@ Applied to the sample, 5 of 26 pass (19%). Applied to all 67 automatic pins, the
 ## Recommendation: no-go on a nationwide pin run
 
 - **No** to loading nationwide OSM + Overture rows as pins. At about 1 in 5 precision, a nationwide layer would put roughly 4 wrong or unprovable pins on the map for each real one, against the owner's "only verifiable" rule.
-- **Superseded 2026-11-12 (ADR 0034, one rule for every region; do not do this):** ~~apply the gate to MX in the build~~ (hide pins that are not hand-verified, keep them as raw rows or leads) so the 67 automatic border pins stop showing. That is a separate dbt change; it is the same gate the nationwide run would need. Until it ships, the live map breaks the owner's rule in the six border metros.
-- **Go instead** with metro-by-metro, demand-gated work (ADR 0034 Phase 3): the padel route works (29 of 29 clubs verified from Playtomic), so extend it with Playtomic/PlayByPoint public club pages, plus federation and club-site lists for tennis, racquetball and table tennis. The automatic layer is useful only as a lead generator, not as pins.
+- **Superseded 2026-11-12 (ADR 0034, one rule for every region; do not do this):** ~~apply the gate to MX in the build~~ (hide pins that are not hand-verified, keep them as raw rows or leads) so the 67 automatic border pins stop showing.- **Go instead** with metro-by-metro, demand-gated work (ADR 0034 Phase 3): the padel route works (29 of 29 clubs verified from Playtomic), so extend it with Playtomic/PlayByPoint public club pages, plus federation and club-site lists for tennis, racquetball and table tennis. The automatic layer is useful only as a lead generator, not as pins.
 - The extract can still run nationwide later for leads only, once a gate exists, at 30-45 minutes.
 
 ## Verified, not newly pinned
