@@ -850,6 +850,34 @@ models:
         tests:
           - not_null
 
+  - name: mart_usage_metrics
+    description: >
+      The ADR 0013 usage metrics, one row per week: page views, venue opens, link-outs (north star), contributions, venue opens per view
+      and link-out rate. Built from the committed docs/usage_daily.csv and docs/usage_events.csv (`make usage` refreshes them). Approximate
+      and directional only; counts, never visitors.
+    columns:
+      - name: week_start
+        description: Monday of the week.
+        tests:
+          - unique
+          - not_null
+      - name: linkouts
+        description: North star. Outbound link-outs (event `linkout`).
+      - name: venue_opens_per_view
+        description: venue-open / page views. Null when the week has no page views.
+      - name: linkout_rate
+        description: linkout / venue-open. Null when the week has no venue opens.
+
+  - name: mart_usage_sport_demand
+    description: >
+      ADR 0013 demand by sport: sport-pick counts next to venues found and coverage status from mart_sport_gaps. Picks that match no sport on
+      the sheet keep a null venues_found. Directional only.
+    columns:
+      - name: sport_name
+        tests:
+          - unique
+          - not_null
+
   - name: mart_ask_feedback
     description: Unanswered ask-box questions grouped by normalized text, most-sent first, with first and last day sent. The review list for `make ask-feedback`; local warehouse only, never published.
     columns:
