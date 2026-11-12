@@ -42,7 +42,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0036, all accepted except 0001, su
 - Don't `Read` images (`docs/screenshots/*.png`, downloaded jpgs) unless I ask: they stay in context and are re-read every turn. Read `app/index.html` (178 KB) only by line range (Grep first), never whole. For research, prefer `WebFetch` with a specific question over dumping whole pages.
 - In auto mode (or whenever I haven't picked an approach), always choose the cheapest path that does the job, and say in one line what it is:
   - Do it directly with Grep/Read/Edit; don't spawn subagents, run deep-research, or use extended web search unless I ask.
-  - Run the narrowest check (`python ingestion/build_changed.py`, or `dbt build --select <changed models>`, one test) before the full build; run the full build once at the end.
+  - Run the narrowest check (`python ingestion/build_changed.py`, or `dbt build --select <changed models>`, one test) before the full build; run the full build once at the end. Selective builds are for iteration only; a full build is required before opening or merging a PR, after loading raw data, and after seed column changes.
   - Never start `make extract`/`make load`, or loops/scheduled tasks, without asking.
   - Prefer one batched tool call over many; stop once the task is done instead of extra "nice to have" work.
   - If a task looks expensive (many pages to research, big refactor), propose the cheaper scoped version first and wait for my OK.
