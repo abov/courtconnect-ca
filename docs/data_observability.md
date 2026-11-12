@@ -4,6 +4,7 @@ Free, open source, local: the [Elementary](https://docs.elementary-data.com/) db
 
 ## What it watches (warn-only, tag `observability`, never blocks a build)
 - `dim_court` and `mart_venue_finder` (the table behind the map): row-count anomalies and a per-`region` count anomaly (a state suddenly gaining or losing venues). `mart_venue_finder` also gets a `schema_changes` test (a column added, dropped or retyped).
+- Related guards that are not Elementary: dbt model contracts on the marts the export reads (the build fails on column drift), and the free uptime monitors on the live site (ADR 0037, [`tools_and_strategies.md`](tools_and_strategies.md)). Table counts have grown since Elementary was added; the anomaly tests watch only the tables listed here.
 - Add more by putting `elementary.volume_anomalies` / `dimension_anomalies` / `schema_changes` under a model's `tests:` in `transform/models/schema.yml`.
 
 ## See it

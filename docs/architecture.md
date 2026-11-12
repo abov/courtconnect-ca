@@ -21,7 +21,7 @@ No server or API: the static page in `app/` reads one exported file, `app/data/v
 | Layer | Objects | Purpose |
 |---|---|---|
 | raw | OSM courts, walls and parents, Overture places and addresses, Census boundaries, `all_racquet`, tag maps (full list: `transform/models/sources.yml`) | Untouched source data. `all_racquet` is synced from the Google Sheet. |
-| seeds | about 28 CSVs in `transform/seeds/`: `manual_venues`, `venue_actions`, `watch_events`, `social_events`, `venue_leads`, `place_sport_overrides`, `closed_places`, `sport_aliases` and others | Human knowledge as code. Every fact carries `evidence` + `verified_on`. |
+| seeds | about 40 CSVs in `transform/seeds/`: `manual_venues`, `venue_actions`, `watch_events`, `social_events`, `venue_leads`, `place_sport_overrides`, `closed_places`, `sport_aliases` and others | Human knowledge as code. Every fact carries `evidence` + `verified_on`. |
 | staging | `stg_*` (one per source or seed) | Typed, standardised, de-duplicated. Surface and indoor/outdoor derived here. |
 | intermediate | `int_court_pairs`, `int_court_clusters`, `int_court_parent`, `int_place_venue_match`, `int_manual_venue_match`, `int_venue_address`, `int_wall_clusters` | Proximity graph, venue clustering, enclosing park / school / club, Overture-to-OSM matching, address tiers and the home-privacy check |
 | core | `dim_venue`, `dim_court`, `dim_place`, `dim_sport`, `dim_wall`, `bridge_*`, `ref_sport_fit` | Business entities |
@@ -43,8 +43,16 @@ Warehouse: **DuckDB only** (ADR 0018; Snowflake retired 2026-10-14, see ADR 0001
 5. **Export**: `make app-data` writes `venues.json`; it is committed.
 6. **Measure**: `make quality` (scorecard with a 35-day freshness SLA), `make report`, `make eval-match`.
 7. **Ship**: PR, CI, squash-merge; `pages.yml` deploys by itself when `app/**` changed.
+8. **Monitor**: a free UptimeRobot check on the live map page and `venues.json` (ADR 0037); Elementary anomaly tests ([`data_observability.md`](data_observability.md)); the scorecard dashboard.
 
 Between syncs, the suggest-a-change flow (ADR 0008) turns an approved issue into a one-row seed PR through `issue-to-pr.yml`. Issue text is untrusted and reaches the script through environment variables only.
+
+## Scope and additions since the rename
+
+- **Regions:** California, Nevada, Oregon, Washington, Hawaii, Arizona and parts of Mexico (ADR 0028, 0034, 0035); the region list lives in `ingestion/regions.json`.
+- **Hitting walls are venues** (ADR 0032): `int_wall_clusters`, `dim_wall` and `mart_wall_pins` feed wall pins and the `wl` field on court venues.
+- **Racket vacations** (ADR 0036): `mart_racket_vacations`, link-out only, exported as `vacations`.
+- **Contracts and checks:** the marts the export reads have dbt model contracts (`transform/models/schema.yml`), so a changed column fails the build.
 
 ## CI/CD (GitHub Actions)
 
