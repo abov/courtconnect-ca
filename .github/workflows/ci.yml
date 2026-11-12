@@ -40,7 +40,8 @@ jobs:
       - run: |
           git fetch --no-tags --depth=1 origin main
           python ci/check_scorecard_regression.py --base-ref origin/main
-      - run: pip install dbt-core dbt-duckdb "duckdb<2" pandas python-dotenv
+      # requirements.txt is the pip cache key set up by setup-python above, so this install is a cache hit.
+      - run: pip install -r requirements.txt
       - run: python ci/check_ask_the_data.py  # app/ask-the-data.html: its SQL runs on the export, vendored engine files match their checksums
       - run: python ci/check_docs_hub.py  # docs/README.md lists every doc in docs/ and its local links resolve
       - run: python ci/check_site_nav.py  # app/how-its-built.html, run-history.html, ask-the-data.html share one nav bar

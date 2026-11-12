@@ -11,6 +11,8 @@ on:
   workflow_run:
     workflows: [ci]
     types: [completed]
+    # Only refresh PRs can merge here; filtering at the trigger stops the no-op runs for every other ci run.
+    branches: ['claude/refresh-**']
 permissions:
   contents: write
   pull-requests: write
