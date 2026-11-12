@@ -5,6 +5,8 @@ nothing, and the vendored engine files match app/vendor/duckdb/SHA256SUMS. Offli
 Run: python ci/check_ask_the_data.py"""
 import hashlib
 import json
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -43,6 +45,38 @@ for q in spec["questions"]:
     if not rows:
         problems.append(f"question {q['title']!r} returned no rows")
 
+# plain-English box (app/ask-the-data-nl.js): each test question must give SQL that runs and returns rows, or be declined.
+# It needs node (preinstalled on GitHub runners); the template logic lives in JS, so this is the only way to run it offline.
+nl_cases = 0
+if shutil.which("node") is None:
+    print("note: node not found, plain-English questions not checked")
+else:
+    proc = subprocess.run(["node", str(ROOT / "chatbot" / "dump_ask_the_data.js")], capture_output=True, text=True, encoding="utf-8")
+    if proc.returncode != 0:
+        problems.append("chatbot/dump_ask_the_data.js failed: " + proc.stderr.strip()[:300])
+    else:
+        cases = {c["question"]: c for c in json.loads((APP / "ask-the-data-questions.json").read_text(encoding="utf-8"))["cases"]}
+        for r in json.loads(proc.stdout):
+            res, c = r["result"], cases[r["question"]]
+            nl_cases += 1
+            if c["expect"] == "no":
+                if res["ok"]:
+                    problems.append(f"plain question {r['question']!r} should be declined but gave SQL")
+                continue
+            if not res["ok"]:
+                problems.append(f"plain question {r['question']!r} was declined: {res['message'][:80]}")
+                continue
+            for word in c.get("contains", []):
+                if word.lower() not in res["title"].lower():
+                    problems.append(f"plain question {r['question']!r}: title {res['title']!r} lacks {word!r}")
+            try:
+                rows = con.execute(res["sql"]).fetchall()
+            except Exception as e:  # noqa: BLE001
+                problems.append(f"plain question {r['question']!r}: SQL failed: {e}")
+                continue
+            if not rows and not c.get("may_be_empty"):
+                problems.append(f"plain question {r['question']!r} returned no rows")
+
 # the tables the page lists must exist, and each column named first in a description must be a real column
 for table, desc in spec["tables"].items():
     cols = {r[0] for r in con.execute(f"DESCRIBE {table}").fetchall()}
@@ -79,4 +113,4 @@ if problems:
     for p in problems:
         print(" -", p)
     sys.exit(1)
-print(f"ask-the-data: {len(spec['setup'])} setup statements and {len(spec['questions'])} questions run on {n_venues:,} venues; tables match meta; vendored files match SHA256SUMS")
+print(f"ask-the-data: {len(spec['setup'])} setup statements and {len(spec['questions'])} questions and {nl_cases} plain-English questions run on {n_venues:,} venues; tables match meta; vendored files match SHA256SUMS")
