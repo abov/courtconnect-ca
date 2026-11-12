@@ -27,7 +27,7 @@ def main() -> None:
     fc = json.loads(OUT.read_text(encoding="utf-8"))
     have = {f["properties"]["name"] for f in fc["features"]}
     for code, cfg in REGIONS.items():
-        name = {c: n for n, c in STATE_AREAS.items()}[code].title()
+        name = {c: n for n, c in STATE_AREAS.items()}[code].replace("_", " ").title()
         if name in have:
             continue
         poly = wkt.loads(Path(cfg["cache"]).read_text(encoding="utf-8")).simplify(0.01, preserve_topology=True)

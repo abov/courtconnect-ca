@@ -49,7 +49,7 @@ Between syncs, the suggest-a-change flow (ADR 0008) turns an approved issue into
 
 ## Scope and additions since the rename
 
-- **Regions:** California, Nevada, Oregon, Washington, Hawaii, Arizona and parts of Mexico (ADR 0028, 0034, 0035); the region list lives in `ingestion/regions.json`.
+- **Regions:** California, Nevada, Oregon, Washington, Hawaii, Arizona, New Mexico and parts of Mexico (ADR 0028, 0034, 0035, 0038); the region list lives in `ingestion/regions.json`.
 - **Hitting walls are venues** (ADR 0032): `int_wall_clusters`, `dim_wall` and `mart_wall_pins` feed wall pins and the `wl` field on court venues.
 - **Racket vacations** (ADR 0036): `mart_racket_vacations`, link-out only, exported as `vacations`.
 - **Contracts and checks:** the marts the export reads have dbt model contracts (`transform/models/schema.yml`), so a changed column fails the build.
