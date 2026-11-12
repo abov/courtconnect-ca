@@ -27,7 +27,7 @@ The one place to find everything: live pages, dashboards, tools, and every doc i
 | Tool dictionary (every tool, lifecycle, license, glossary) | [Google Sheet](https://docs.google.com/spreadsheets/d/1RWONK-tLDJh5lRNyAISlNMEY4UH9ZHWGSW2ytlo5k1c/edit?gid=0#gid=0) | private (owner) |
 | Site analytics (GoatCounter, site `courts`) | <https://courts.goatcounter.com/> | owner login; analysis in [`goat_analysis.md`](goat_analysis.md) |
 | Scheduled cloud routines | <https://claude.ai/code/routines> | owner login; see [`cloud_routines.md`](cloud_routines.md) |
-| Decision records (ADRs 0001-0037) | [`decisions/`](decisions) | in repo |
+| Decision records (ADRs 0001-0039) | [`decisions/`](decisions) | in repo |
 
 When a tool, library, service or data source is added or removed, update its row in the tool dictionary and [`tools_and_strategies.md`](tools_and_strategies.md) in the same task.
 

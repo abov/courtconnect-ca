@@ -348,6 +348,7 @@ vars:
     WA: {south: 45.5, west: -124.9, north: 49.05, east: -116.9}
     HI: {south: 18.85, west: -160.3, north: 22.35, east: -154.75}
     AZ: {south: 31.33, west: -114.82, north: 37.01, east: -109.04}
+    TX: {south: 25.83, west: -106.65, north: 36.51, east: -93.50}
     MX: {south: 14.3, west: -118.7, north: 32.8, east: -86.4}
   hide_unverified_regions: []   # off by default (owner 2026-11-12: one rule for every region, automatic pins show labelled inferred). List a region code here to show only seed-backed pins there (mart_venue_finder; docs/mexico_metro_trial.md)
   expected_racket_sports: 82  # the sheet should list 82 racket sports (Sandball is excluded by the sync script); a warn-level test flags any gap

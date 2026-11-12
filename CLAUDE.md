@@ -2,7 +2,7 @@
 
 Racket-sport venue finder for California + Nevada (ADR 0014, 0028): Python ingestion -> dbt (DuckDB, the only warehouse) -> static MapLibre map in `app/`. Product name RacketConnect (ADR 0029); the repo, DB file, dbt project and env vars keep the `courtconnect` names.
 README.md has the full story; read it only if you need background. Mission (ADR 0015): one map for every racket sport in CA + NV: find a court, watch a match, try a new sport, and find people to play with. Long-term goal: run itself with as little human review as possible, AI agents doing the work behind automated gates (see `docs/status.md`).
-Decisions are in `docs/decisions/` (ADRs 0001-0037, all accepted except 0001, superseded by 0018, 0023 deferred, and 0024-0026, 0032 and 0036, proposed; one file each, read only the one you need).
+Decisions are in `docs/decisions/` (ADRs 0001-0039, all accepted except 0001, superseded by 0018, 0023 deferred, and 0024-0026, 0032 and 0036, proposed; one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
@@ -74,7 +74,7 @@ Hand-off is the PR description and `git log`; `docs/sessions/` holds only the ro
 - Dirty main checkout: `git worktree add ../x -b branch origin/main`, use the main `.venv`.
 
 **Priorities** (dated detail for every item, the "After beta" list and the parked items: `docs/status.md`; edit it there when priorities change)
-1. Six states (ADR 0028/0029/0035): Oregon, Washington and Hawaii data layers are built, Arizona's is in progress; their events, leagues and groups passes are done (`docs/event_group_search.md`); rec centers, chains and campuses are not (Hawaii resorts: ask the owner first). New states and countries get full CA parity (walls, handball, events, social, leads): follow `docs/new_region_checklist.md` and do not call a region done until `python ci/region_parity.py --region XX --strict` passes (owner 2026-11-03; Arizona shipped as data layer only).
+1. Six states (ADR 0028/0029/0035): Oregon, Washington and Hawaii data layers are built, Arizona's is in progress; Texas's data layer is built (ADR 0039), its research passes are open; their events, leagues and groups passes are done (`docs/event_group_search.md`); rec centers, chains and campuses are not (Hawaii resorts: ask the owner first). New states and countries get full CA parity (walls, handball, events, social, leads): follow `docs/new_region_checklist.md` and do not call a region done until `python ci/region_parity.py --region XX --strict` passes (owner 2026-11-03; Arizona shipped as data layer only).
 2. Street addresses: after every extract run `ingestion/reverse_geocode_blanks.py` (+ build, `make app-data`); run `extract_osm_parents.py` after each OSM refresh. Home-like pins never get an inferred street.
 3. Match gold set: re-run `make eval-match` after each OSM refresh.
 4. Padel lead rechecks run in Part 3 of the cloud routines (`docs/cloud_routines.md`); facility scans and coverage leads are in `docs/status.md`.
