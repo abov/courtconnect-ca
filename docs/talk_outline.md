@@ -6,7 +6,7 @@
 
 ## 90-second pitch (interview opener)
 
-1. **What:** a free map of racket-sport venues in California and Nevada, for sports where a tennis court and a padel court are not the same pin. 16,919 venues; 43 of 82 sports have at least one ([scorecard](data_quality_trend.csv), 2026-11-10).
+1. **What:** a free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona and Hawaii (plus a Mexico pilot), for sports where a tennis court and a padel court are not the same pin. 16,919 venues; 43 of 82 sports have at least one ([scorecard](data_quality_trend.csv), 2026-11-10).
 2. **How:** Python ingestion, dbt on DuckDB, one 2.45 MB JSON file on GitHub Pages. No server, no accounts, $0 hosting ([running costs](running_costs.md)).
 3. **The interesting part:** I measure it. A labelled test set scores the place matcher (129 pairs, 0 wrong merges, 4 missed). A scorecard has stated service levels, and one is breached in public: 16.2% of venues have a real name against a 25% goal.
 4. **The decision I am proudest of:** a model never merges anything. A deterministic script decides, and it has merged one routine PR so far (#410).

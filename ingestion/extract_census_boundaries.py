@@ -1,7 +1,7 @@
-"""Extract US Census place + county boundaries for CA and NV as a reference table (raw.census_boundaries).
+"""Extract US Census place + county boundaries for the US regions in ingestion/regions.json as a reference table (raw.census_boundaries).
 
 Source: US Census Bureau cartographic boundary files, 2023, 1:500k (public domain), from
-https://www2.census.gov/geo/tiger/GENZ2023/shp/ : cb_2023_06_place_500k, cb_2023_32_place_500k, cb_2023_us_county_500k (~13 MB in all).
+https://www2.census.gov/geo/tiger/GENZ2023/shp/ : cb_2023_<state fips>_place_500k for each region, cb_2023_us_county_500k.
 "place" = incorporated cities and census-designated places. Boundaries change about once a year, so this runs rarely (not in the monthly extract).
 
     python ingestion/extract_census_boundaries.py
