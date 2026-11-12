@@ -9,7 +9,7 @@
   const PLACE_ALIASES = {"la": "Los Angeles", "vegas": "Las Vegas", "sf": "San Francisco", "san fran": "San Francisco"};
   const SKIP_CITY = new Set(["industry", "commerce", "mesa", "alpine", "orange", "bell", "mount", "live oak", "acme", "hope", "washington"]);
   const STATES = {california: "CA", nevada: "NV", oregon: "OR", hawaii: "HI", arizona: "AZ", mexico: "MX", "washington state": "WA", washington: "WA"};
-  const STATE_NAME = {CA: "California", NV: "Nevada", OR: "Oregon", WA: "Washington", HI: "Hawaii", AZ: "Arizona", MX: "Mexico"};
+  const STATE_NAME = {CA: "California", NV: "Nevada", OR: "Oregon", WA: "Washington", HI: "Hawaii", AZ: "Arizona", NM: "New Mexico", MX: "Mexico"};
   // places we cannot turn into one city: say so instead of searching everywhere
   const AREAS = / (bay area|silicon valley|orange county|inland empire|lake tahoe|tahoe|socal|southern california|norcal|northern california|central valley|east bay|south bay|san fernando valley|the valley|metro area|downtown) /;
 
@@ -154,7 +154,7 @@
           const w = where({city: sel.city}, f); if (sports.length) w.push(venueHasSport(sports));
           return out("Which states have the most" + (sportTitle ? " " + sportTitle : "") + " venues?",
             "SELECT v.region, count(*) AS venues FROM venues v" + whereSql(w) + " GROUP BY v.region ORDER BY venues DESC",
-            "Region codes: CA California, NV Nevada, OR Oregon, WA Washington, AZ Arizona, HI Hawaii, MX Mexico (pilot).");
+            "Region codes: CA California, NV Nevada, OR Oregon, WA Washington, AZ Arizona, NM New Mexico, HI Hawaii, MX Mexico (pilot).");
         }
         if (RE.rankSports.test(t) && !sports.length) {
           const w = where(sel, f); w.unshift("vs.shares_courts_with IS NULL");
