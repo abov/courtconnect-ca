@@ -12,6 +12,8 @@ concurrency:
 jobs:
   dbt-build:
     runs-on: ubuntu-latest
+    # A run was left "in progress" for 3 weeks (2026-10-22); never let one outlive the build.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
