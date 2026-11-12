@@ -349,7 +349,7 @@ vars:
     HI: {south: 18.85, west: -160.3, north: 22.35, east: -154.75}
     AZ: {south: 31.33, west: -114.82, north: 37.01, east: -109.04}
     MX: {south: 14.3, west: -118.7, north: 32.8, east: -86.4}
-  hide_unverified_regions: []   # was [MX] until 2026-11-12 (owner re-opened Mexico); automatic pins in a region listed here stay off the map unless a seed row verifies them (mart_venue_finder; docs/mexico_metro_trial.md)
+  hide_unverified_regions: []   # off by default (owner 2026-11-12: one rule for every region, automatic pins show labelled inferred). List a region code here to show only seed-backed pins there (mart_venue_finder; docs/mexico_metro_trial.md)
   expected_racket_sports: 82  # the sheet should list 82 racket sports (Sandball is excluded by the sync script); a warn-level test flags any gap
   manual_match_radius_m: 150   # a hand-added venue within this distance of a known court/place is merged into it
   place_match_radius_m: 100    # an Overture place within this distance of an OSM court is part of that venue
