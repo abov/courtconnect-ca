@@ -10,7 +10,8 @@ __pycache__/
 .terraform/
 *.tfstate*
 transform/.user.yml
-.claude/
+.claude/*
+!.claude/skills/
 .venv-aerial/
 data/aerial/
 data/reader_cache/

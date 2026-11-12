@@ -14,7 +14,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from issue_to_pr import parse_form, field, LINK_TYPES  # noqa: E402
+from issue_to_pr import parse_form, field, wall_count, LINK_TYPES  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 SEEDS = ROOT / "transform" / "seeds"
@@ -139,6 +139,8 @@ def check(issue, venues, keys, mentions, today, owner=""):
                 need.append("a confirmation needs a public link or 'I visited'")
         if kind == "change" and change.startswith("Add a way") and ltype not in LINK_TYPES:
             need.append("pick the kind of link (open play, league, ...)")
+        if kind == "change" and change.startswith("Add a hitting wall") and not wall_count(field(form, "If adding a hitting wall")):
+            need.append("say how many walls (one, three, four or not sure)")
 
     if map_id:
         v = venues.get(map_id)

@@ -25,6 +25,20 @@ LINK_TYPES = {"Open play": "open_play", "Drop-in": "drop_in", "Clinic": "clinic"
               "Court booking": "court_booking", "Club page": "club_page"}
 
 
+WALL_COUNTS = {"one wall": "one_wall", "three walls": "three_wall", "four walls": "four_wall (a closed court)", "not sure": "unknown"}
+
+
+def wall_count(text):
+    """The 'how many walls?' answer as the wall type a reviewer would enter, or None when blank / not applicable."""
+    t = text.strip().lower()
+    if not t or t.startswith("not applicable"):
+        return None
+    for label, wall_type in WALL_COUNTS.items():
+        if t.startswith(label):
+            return wall_type
+    return None
+
+
 class Rejected(Exception):
     """The report cannot be turned into a seed edit; the message says why."""
 
@@ -123,7 +137,11 @@ def process(form, num, user, origin=None, who=None, kind="issue", source_type="i
         fail("The date is not a real date.")
     if source and urlparse(source).scheme != "https":
         fail("The source link must be https.")
-    evidence = f"Suggested in {origin}, saw/checked {seen}: {details}" + (f" Source: {source}" if source else "")
+    walls = wall_count(field(form, "If adding a hitting wall"))
+    if change.startswith("Add a hitting wall") and not walls:
+        fail("A hitting wall needs the number of walls: pick One wall, Three walls, Four walls or Not sure.")
+    evidence = (f"Suggested in {origin}, saw/checked {seen}: {details}" + (f" Wall count reported: {walls}." if walls else "")
+                + (f" Source: {source}" if source else ""))
 
     sport_text = clean(field(form, "Sport played here"), 60)
     sport = canonical_sport(sport_text) if sport_text else None
@@ -175,7 +193,8 @@ def process(form, num, user, origin=None, who=None, kind="issue", source_type="i
         out.append(f"venue_actions.csv: {slug} for {key}")
     else:
         why = "venue not found in manual_venues; a reviewer must match it" if not key else "correction or closure"
-        append("venue_leads.csv", [f"{kind}-{num}", venue, city, "", clean(f"{change}: {details}", 500), source_type, source, "new",
+        wall_note = f" [walls: {walls}]" if walls else ""   # the reviewer needs the count when placing the wall in manual_walls.csv
+        append("venue_leads.csv", [f"{kind}-{num}", venue, city, "", clean(f"{change}: {details}", 500 - len(wall_note)) + wall_note, source_type, source, "new",
                                   f"Reviewer: check the source and place the change ({why})", date.today().isoformat(),
                                   f"{origin[0].upper() + origin[1:]}; map id {field(form, 'Map ID')}", ""])
         out.append(f"venue_leads.csv: {kind}-{num}")

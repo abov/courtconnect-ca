@@ -32,6 +32,14 @@ try:
     assert len(vc) == 1 and vc[0]["confirmed_by"].startswith("form:") and vc[0]["method"] == "reported", vc
     assert len(seed("venue_leads.csv")) == 2
     assert "@" not in "".join(r["evidence"] for r in mv) and "555" not in (tmp / "manual_venues.csv").read_text(encoding="utf-8")
+    # hitting-wall reports: the "how many walls?" answer must reach the lead; a missing answer is rejected
+    wall_row = {"Timestamp": "10/02/2025 09:00:00", "Venue name": "Test Park", "City": "Testville", "What are you reporting?": "A hitting wall to add (backboard or handball wall)",
+                "Date you saw it": "10/01/2025", "What did you see?": "Handball wall behind the gym.", sr.WALLS_COLUMN: "Three walls"}
+    assert sr.import_rows([wall_row]) == (1, 0, 0)
+    lead = seed("venue_leads.csv")[-1]
+    assert "[walls: three_wall]" in " ".join(lead.values()), lead
+    no_count = dict(wall_row, Timestamp="10/03/2025 09:00:00", **{sr.WALLS_COLUMN: ""})
+    assert sr.import_rows([no_count]) == (0, 0, 1)
     print("sync_reports: ok")
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
