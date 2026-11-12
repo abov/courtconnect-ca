@@ -355,6 +355,7 @@
         <button class="chip" data-k="members" aria-pressed="false">Private / members</button>
         <button class="chip" data-k="web" aria-pressed="false">Has website</button>
         <button class="chip" data-k="named" aria-pressed="false">Named only</button>
+        <button class="chip" data-k="priv" aria-pressed="false" title="Unnamed courts that look like private home or HOA courts. Hidden by default; location is approximate, no street shown.">Show unnamed private-looking courts</button>
       </div>
     </div>
     <div id="offerBox" hidden>
@@ -650,6 +651,7 @@ function matches(v, sm, tm, vf, sport = state.sport) {
   if (wantPub !== wantMem && (wantPub ? !(v.f & 2) : !(v.f & 8))) return false;
   if (state.on.has("web") && !v.w) return false;
   if (state.on.has("named") && v.q === "u") return false;
+  if (v.h === 1 && v.q === "u" && !state.on.has("priv")) return false;   // likely private home/HOA courts: hidden unless asked (owner 2026-11-12)
   if (state.offers.size && (noPrograms(sport) || ![...state.offers].some(c => v.o.includes(c)))) return false;
   if (state.text && !textOff && !textMatch(v.t)) return false;
   return true;
