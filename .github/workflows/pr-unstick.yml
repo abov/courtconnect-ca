@@ -1,0 +1,58 @@
+name: PR unstick
+
+# Two things stall PR checks (2026-11-11): (1) a PR that conflicts with main gets no
+# pull_request run at all; (2) GitHub sometimes leaves a pull_request run "queued" with no
+# jobs. This flags conflicting PRs (label + one comment) and cancels and re-runs ci runs that
+# sat queued for 20+ minutes. Runs when main moves (conflicts appear then) and every 15 min.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pr-unstick
+  cancel-in-progress: false
+
+jobs:
+  unstick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+    steps:
+      - name: Re-run ci runs stuck in the queue
+        run: |
+          cutoff=$(date -u -d '20 minutes ago' +%Y-%m-%dT%H:%M:%SZ)
+          gh run list --repo "$REPO" --workflow ci --status queued --limit 50 \
+            --json databaseId,createdAt,headBranch \
+            --jq ".[] | select(.createdAt < \"$cutoff\") | \"\(.databaseId) \(.headBranch)\"" |
+          while read -r id branch; do
+            echo "Stuck: run $id on $branch; cancel and re-run"
+            gh run cancel "$id" --repo "$REPO" || true
+            sleep 5
+            gh run rerun "$id" --repo "$REPO" || echo "::warning::could not re-run $id"
+          done
+
+      - name: Flag PRs that conflict with main
+        run: |
+          gh label create merge-conflict --repo "$REPO" --color d93f0b \
+            --description "Conflicts with main: no CI runs until synced" 2>/dev/null || true
+          gh pr list --repo "$REPO" --state open --limit 50 \
+            --json number,mergeStateStatus,labels \
+            --jq '.[] | "\(.number) \(.mergeStateStatus) \([.labels[].name] | index("merge-conflict") != null)"' |
+          while read -r n state flagged; do
+            if [ "$state" = "DIRTY" ] && [ "$flagged" = "false" ]; then
+              gh pr edit "$n" --repo "$REPO" --add-label merge-conflict
+              gh pr comment "$n" --repo "$REPO" --body "This PR conflicts with main, so GitHub will not start its CI checks. Merge or rebase main into the branch (for \`app/data/venues.json\`: take main's copy, rebuild, re-run \`make app-data\`) and push; this label clears itself."
+            elif [ "$state" != "DIRTY" ] && [ "$state" != "UNKNOWN" ] && [ "$flagged" = "true" ]; then
+              gh pr edit "$n" --repo "$REPO" --remove-label merge-conflict
+            fi
+          done
