@@ -1,4 +1,4 @@
-// RacketConnect "ask box", layer 1 (docs/chatbot_plan.md, ADR 0033): free, rule-based, no AI model, no server.
+// RacketConnect "ask box", layer 1 (docs/chatbot.md, ADR 0033): free, rule-based, no AI model, no server.
 // Reads a question, picks out sport / place / intent, and answers ONLY from venues.json (sport descriptions and facts come from its sports list).
 // Works in the browser (window.Ask) and in Node (module.exports) so chatbot/test_ask.js can check the 30 questions.
 (function (root) {
@@ -26,7 +26,7 @@
   const WHEN_OPEN = / when (will|does|is|are|do|should|would) (.* )?(open|opens|opening|reopen|reopens|reopening|ready|launch|launching|built|finished|done) | opening (date|day) | (grand )?opening soon | coming soon | open yet /;
   const WHEN_ADD = / when (will|are|do|would|is) (you|racketconnect|it|the (app|map|site)) (.* )?(add|adding|cover|covering|expand|expanding|include|including|support|get|have) /;
   const RACKET = / (court|courts|racket|rackets|racquet|racquets|paddle|paddles|shuttlecock|tennis|net) /;
-  // Replies that are not an answer (hello, thanks, off-topic, ...) stay kind and always offer a next step as chips (todo: docs/chatbot_ux_todo.md).
+  // Replies that are not an answer (hello, thanks, off-topic, ...) stay kind and always offer a next step as chips (todo: docs/chatbot.md).
   const STARTERS = ["Pickleball in Reno", "Padel in Las Vegas", "Squash in the Bay Area", "What is pop tennis?", "What is RacketConnect?"];
   // Questions about the page the visitor is looking at (needs the map's context from the widget; without it they fall through to the normal routing).
   const VIEW = / (this view|in view|on screen|on the screen|on the map|am i looking at|i m looking at|you re looking at|this pin|this court|this place|this venue|this spot|this one|selected|around here|nearby|near me|close to me|closest to me|visible) /;

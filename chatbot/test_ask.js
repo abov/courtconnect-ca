@@ -1,4 +1,4 @@
-// Runs the 30 questions of docs/chatbot_questions.md through the free ask box (app/ask.js) and checks the kind of answer.
+// Runs the 30 questions of docs/chatbot.md through the free ask box (app/ask.js) and checks the kind of answer.
 //   node chatbot/test_ask.js          (prints each answer; exit code 1 if a check fails)
 const fs = require("fs");
 const path = require("path");
@@ -44,7 +44,7 @@ const Q = [
   ["NEWSESSION", "profile", "Padel"],
   ["Write me a cover letter.", "refuse"],
   ["Book me a court at 6pm tomorrow.", "booking", "can't book"],
-  // extras beyond the 30 in docs/chatbot_questions.md: other states, social groups, wall pins
+  // extras beyond the 30 in docs/chatbot.md: other states, social groups, wall pins
   ["Where can I play badminton in Seattle?", "venues", " WA "],
   ["Pickleball in Honolulu", "venues", " HI "],
   ["Who can I play tennis with near Seattle?", "social"],

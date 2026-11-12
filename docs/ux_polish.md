@@ -73,7 +73,7 @@ Pros: biggest friendliness gain on the detail view, which is the heaviest screen
 ## Option C: "Playful bold" (largest; not recommended before the beta ends)
 
 Saturated hero header (logo blue gradient with a court-line pattern), large rounded mode tiles with illustrations, custom map style (warmer basemap tones).
-Pros: most distinctive. Cons: a custom basemap style is a separate maintenance cost, risks hurting map legibility and pin contrast, and it changes first impressions mid-beta (docs/feedback_round.md findings arrive 10-29..11-01). Mixing results with a redesign would muddy the feedback.
+Pros: most distinctive. Cons: a custom basemap style is a separate maintenance cost, risks hurting map legibility and pin contrast, and it changes first impressions mid-beta (docs/feedback.md findings arrive 10-29..11-01). Mixing results with a redesign would muddy the feedback.
 
 ## Recommendation
 

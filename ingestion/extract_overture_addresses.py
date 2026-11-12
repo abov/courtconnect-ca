@@ -1,4 +1,4 @@
-"""Extract Overture address points that sit near a map pin, for the address fill (docs/ml_plan.md, tier 2).
+"""Extract Overture address points that sit near a map pin, for the address fill (docs/ml.md, tier 2).
 
 Overture publishes every address point it knows (open data, same release as the places we load). We only need the ones
 within ~150 m of a pin, so this reads the pin coordinates from data/raw (OSM courts, Overture places) and

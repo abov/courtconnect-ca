@@ -1,6 +1,6 @@
 # Monetization ideas (brainstorm, 2026-10-29)
 
-Status: ideas only, nothing decided or built. Revisit after the December beta, when usage (GoatCounter, `make usage`) shows which sports and cities get traffic. Rank with RICE in `docs/feedback_findings.md`; an ADR comes before any build.
+Status: ideas only, nothing decided or built. Revisit after the December beta, when usage (GoatCounter, `make usage`) shows which sports and cities get traffic. Rank with RICE in `docs/feedback.md`; an ADR comes before any build.
 
 ## Guardrails (from CLAUDE.md and the ADRs)
 - Sponsored or paid items never change confirmation levels, ranking or "inferred vs confirmed" labels. Always labelled "Sponsored" / "Affiliate".
@@ -45,4 +45,4 @@ Status: ideas only, nothing decided or built. Revisit after the December beta, w
 ## Open questions for the owner
 - When to lift the no-partnership-outreach rule (needed for 1 and 2).
 - Entity / tax setup before taking any revenue.
-- Add a beta question on willingness to pay or to be sponsored? (`docs/feedback_round.md`)
+- Add a beta question on willingness to pay or to be sponsored? (`docs/feedback.md`)

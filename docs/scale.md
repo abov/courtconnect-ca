@@ -1,6 +1,6 @@
 # Scale: what the pipeline reads and how it grows
 
-Two measured checks in one place. Part 1 is how little of a planet-scale source the extracts read. Part 2 is how the build time grows when the data does. (Merged 2026-11-12 from `planet_scale_benchmark.md`, `planet_scale_plan.md` and `scaling.md`.)
+Two measured checks in one place. Part 1 is how little of a planet-scale source the extracts read. Part 2 is how the build time grows when the data does. (Merged 2026-11-12 from `scale.md`, `scale.md` and `scale.md`.)
 
 ## 1. Planet-scale read: Overture benchmark
 
@@ -47,4 +47,4 @@ Profile `int_court_parent` and `int_venue_address` and add grid bucketing, then 
 ## Not built (ideas, no work planned)
 - OSM minutely replication diffs filtered to CA/NV racket tags, written to `app/data/changes.json` (ADR 0025 step 1; needs its own ADR first, see ADR 0026).
 - An Overture release-to-release diff (new and closed places) into the same changes feed.
-- NAIP imagery stays dropped (`docs/ml_plan.md`).
+- NAIP imagery stays dropped (`docs/ml.md`).

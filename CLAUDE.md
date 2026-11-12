@@ -58,7 +58,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0037, all accepted except 0001, su
 - `ingestion/`   Python extract/load/export scripts (`ingestion/oneoff/`: one-time research scans, not in any make target; outside requests use `ingestion/useragent.py`)
 - `transform/`   dbt project (models, seeds, macros, tests)
 - `app/`         static map page (`ask.html`/`ask.js`: free rule-based ask box prototype, unlinked; ADR 0033)
-- `chatbot/`     ask-box checks (`node chatbot/test_ask.js`) and the optional Claude chat prototype (`docs/chatbot_plan.md`)
+- `chatbot/`     ask-box checks (`node chatbot/test_ask.js`) and the optional Claude chat prototype (`docs/chatbot.md`)
 - `ci/fixtures`  small sample data for CI
 
 ## Current status

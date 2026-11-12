@@ -1,11 +1,11 @@
 # Usage analysis with GoatCounter
 
-How to turn the anonymous counts (ADR 0013) into decisions. Counts are directional: ad blockers and Do Not Track hide some visits, there are no per-visitor funnels, and your own visits count until you exclude them (per browser and device: add `#toggle-goatcounter` to the live URL once, see `docs/feedback_round.md`; or GoatCounter -> Settings -> Ignore IPs).
+How to turn the anonymous counts (ADR 0013) into decisions. Counts are directional: ad blockers and Do Not Track hide some visits, there are no per-visitor funnels, and your own visits count until you exclude them (per browser and device: add `#toggle-goatcounter` to the live URL once, see `docs/feedback.md`; or GoatCounter -> Settings -> Ignore IPs).
 
 ## Run it
 1. One-off: GoatCounter -> Settings -> API -> create a token with "View statistics" only, put it in `.env` as `GOATCOUNTER_API_TOKEN`.
 2. `make usage` (or `ARGS="--days 7" make usage`) exports daily counts to `goatcounter_daily.csv` in the shared raw folder and prints the report. Nothing is written to the repo.
-3. For the beta, run it at the start and end of the round and paste the numbers into `docs/feedback_findings.md`.
+3. For the beta, run it at the start and end of the round and paste the numbers into `docs/feedback.md`.
 
 ## Events (all sent from `app/index.html`; the detail is in the path, so each value is its own row)
 | Event path | Meaning |
@@ -33,7 +33,7 @@ Never sent: search text, venue names, places, coordinates. Details are fixed voc
 ## Questions this answers
 | Question | Where |
 |---|---|
-| Does the map deliver? | link-out rate = `linkout` / `venue-open`, target 25% (`docs/feedback_round.md`) |
+| Does the map deliver? | link-out rate = `linkout` / `venue-open`, target 25% (`docs/feedback.md`) |
 | Which providers matter? | link-outs by domain: prioritise verifying those providers' pages |
 | Which sports convert? | link-outs by sport filter vs sport picks |
 | Where do people look but find nothing? | `empty-*` plus `search-miss/place-no-venues` vs `mart_sport_gaps`: the report's last table. A sport with many picks and empty or sparse coverage is the next facility scan |

@@ -1,6 +1,6 @@
 # Plan: "If you like X, try Y" sport suggestions
 
-Status: PLAN ONLY (2026-10-25), nothing built. Owner idea; brings back the "Try something new" recommender dropped 2026-10-21 (`docs/ml_strategy.md` row 8, ADR 0015), now with a concrete trigger. Rank with beta findings (December).
+Status: PLAN ONLY (2026-10-25), nothing built. Owner idea; brings back the "Try something new" recommender dropped 2026-10-21 (`docs/ml.md` row 8, ADR 0015), now with a concrete trigger. Rank with beta findings (December).
 
 ## Goal
 When someone keeps looking at one sport, offer one related sport they might enjoy, in a way that is light, optional and fun. Serves the mission (ADR 0015: try a new sport). Not a retention trick: no accounts, no streaks, no reminders (same stance as the focus helpers in `app/index.html`).
@@ -58,7 +58,7 @@ Show up to 3 places to ask about, rent or buy gear, closest to where the person 
 New events: `event/suggest-shown/<from>-<to>`, `suggest-accept/...`, `suggest-dismiss/...`, plus `event/getstarted-step/<kind>` (lesson, rent, buy, learn) for which step helps. Success = accept rate and whether accepted suggestions lead to a get-started step or `linkout-sport/<to>`. Drop a pair if shown 20+ times with no accepts.
 
 ## 6. Decide with the beta
-Ask in `docs/feedback_round.md`: "Would you like a nudge to try a similar sport?" and "Where would you expect it?" before building. Check demand with `make usage` first: how many visitors pick the same sport on 3+ days (needs a few weeks of traffic; today there is none to measure).
+Ask in `docs/feedback.md`: "Would you like a nudge to try a similar sport?" and "Where would you expect it?" before building. Check demand with `make usage` first: how many visitors pick the same sport on 3+ days (needs a few weeks of traffic; today there is none to measure).
 
 ## Order of work (small PRs, one per session)
 1. `sport_related.csv` seed + tests (not_null, both sports exist in the sheet, suggest != sport) + export key; 10-pair hand check.

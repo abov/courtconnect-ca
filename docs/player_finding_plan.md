@@ -1,6 +1,6 @@
 # Plan: find players by age group and level, for every sport
 
-Status: PLAN ONLY (2026-10-29), nothing built. Owner idea 2026-10-29, listed under "After beta" in CLAUDE.md. Builds on social phase A (ADR 0021) and stays inside ADR 0024 option B (discovery over link-outs). Rank with beta findings: question 8 in `docs/feedback_round.md`.
+Status: PLAN ONLY (2026-10-29), nothing built. Owner idea 2026-10-29, listed under "After beta" in CLAUDE.md. Builds on social phase A (ADR 0021) and stays inside ADR 0024 option B (discovery over link-outs). Rank with beta findings: question 8 in `docs/feedback.md`.
 
 ## What is true today
 - `social_events.csv`: 21 recurring series, 16 of them Padel. `skill_level` (free text) is filled on 12, `age_focus` on 2, `audience` on 3. Both are only what the organizer states.

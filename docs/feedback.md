@@ -1,20 +1,24 @@
-# Feedback round plan (friends beta, December 2026)
+# Feedback: beta round plan and findings
 
-Goal: learn whether RacketConnect helps people find a place to play, watch or find people to play with, and what is missing, before choosing between staying personal, open source or a paid layer. Output: a ranked backlog (`docs/feedback_findings.md`) and real numbers for `docs/case_study.md`. Dates are TBD (owner picks the start; the round is 2 weeks).
+Merged 2026-11-12 from `feedback_round.md`, `feedback_findings.md`; each is now a section below.
 
-## Owner checklist before sending
+## Feedback round plan (friends beta, December 2026)
+
+Goal: learn whether RacketConnect helps people find a place to play, watch or find people to play with, and what is missing, before choosing between staying personal, open source or a paid layer. Output: a ranked backlog (`docs/feedback.md`) and real numbers for `docs/case_study.md`. Dates are TBD (owner picks the start; the round is 2 weeks).
+
+### Owner checklist before sending
 - [ ] GoatCounter (ADR 0013, site `courts`, https://courts.goatcounter.com): exclude your own visits: open the live site once on each device and browser you use (laptop, phone) with `#toggle-goatcounter` added to the address, e.g. `https://abov.github.io/courtconnect-ca/#toggle-goatcounter`; GoatCounter then says tracking is disabled in that browser (it sets a local flag, so it survives changing IP; visit the same link again to turn counting back on); optionally also add your home IP under Settings > Ignore IPs (it changes, and a phone on mobile data uses another one). Date done: ____ (laptop), ____ (phone). Do not quote usage numbers from before it.
-- [ ] Write the start date and the baseline from `docs/data_quality.md` (venues, named %, events) at the top of `feedback_findings.md`.
+- [ ] Write the start date and the baseline from `docs/data_quality.md` (venues, named %, events) at the top of `feedback.md`.
 - [ ] Open the live map on your phone once and check the invite steps still match the screens (buttons "Places to play" / "Events & meetups" / "Find players" / "Find by court", the Established / Organized / Casual chips, "Suggest a change" in the popup).
 - [ ] Hard-refresh after the last deploy (Pages caches up to 10 minutes).
 
-## Who (6 to 10 people, ask first, no mailing list)
+### Who (6 to 10 people, ask first, no mailing list)
 Mix on purpose: 2 tennis, 2 pickleball, 1 padel, 1 beach tennis or squash, 1 badminton or table tennis, 1 person not into apps (usability check). At least 2 live outside the Bay Area and LA (Sacramento, Central Valley, San Diego, Nevada) to test coverage elsewhere.
 
-## Timeline
+### Timeline
 Day 1 invite (individually, not a group chat) -> day 7 to 10 one check-in -> day 14 replies due -> within 3 days write the findings.
 
-## Invite message
+### Invite message
 Swap in their sport (step 1) and a place they know (step 2). Give each person their own link tag so analytics can tell groups apart without names: `https://abov.github.io/courtconnect-ca/?ref=friend-padel` (the tag is the sport or area, any `friend-<a-z0-9-up to 20>`; never initials).
 
 > Hey [name]! I built a free map of racket-sport spots in California and Nevada (tennis, pickleball, padel, squash and more) and I'd love your honest take before I decide what to do with it.
@@ -39,7 +43,7 @@ Check-in (day 7 to 10):
 
 When they reply, ask what they did, not whether they liked it ("What did you search for first?"). If they would pay for something, ask what and how much, once, at the end.
 
-## Questions to cover (any order, async is fine)
+### Questions to cover (any order, async is fine)
 1. Did you find what you wanted (yes / partly / no)? What was missing?
 2. Anything wrong or out of date? Which place?
 3. Did the labels (confirmed, inferred, reported, members only) make sense? More or less trust because of them?
@@ -48,11 +52,11 @@ When they reply, ask what they did, not whether they liked it ("What did you sea
 6. Who else would use it?
 7. Did you find someone to play with through the site (a group, open play, an app we link)? Would you want to post that you are looking for a partner? (Evidence for ADR 0024; "no" is a useful answer.)
 
-### Built since the first draft (questions 12 and 13: one line each)
+#### Built since the first draft (questions 12 and 13: one line each)
 12. Do the Established / Organized / Casual chips (in Filters, "How organized the sport is") help you pick a sport, or confuse you? They are inferred from the sport sheet (world federation, named governing body), not from pro play: would you want a real pro-tour label? (`docs/archive/session_digest.md`)
 13. Did you ever want to search by court size or net height, or ask "I have a tennis court, what else fits?" Did "Find by court" give results that made sense? (`docs/archive/session_digest.md`)
 
-### Ask-first ideas (questions 8 to 11 and 14: one line each, a quick yes / maybe / no is enough; skip if the person is short on time)
+#### Ask-first ideas (questions 8 to 11 and 14: one line each, a quick yes / maybe / no is enough; skip if the person is short on time)
 These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is built for them; the answers decide whether they are.
 8. When you look for people to play with, what matters: their level, their age group, both, or neither? Where do you look today (an app, Facebook, WhatsApp, Reddit, Meetup, your club)? If nobody near you has a group, would a ready-to-post "start one" kit with a suggested court help? (`docs/player_finding_plan.md`)
 9. If you often look at one sport, would a single dismissible card suggesting a related sport nearby ("Like Pickleball? Try Padel, 2 miles away") be helpful, annoying, or ignored? Where would you expect it? (`docs/sport_recommendation_plan.md`, section 6)
@@ -60,7 +64,7 @@ These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is bui
 11. Would a rough cost label ("Free / $ / $$ / $$$") on each place help you choose? Would you trust it if it said "estimated"? (No tier is built; members-only places would get none.)
 14. Would you tap a quick "how busy is it right now?" (empty / some / full) when you are at a court, if it took one tap and no sign-in? Would you trust the same from strangers before you drive there? (`docs/court_usage_plan.md`; nothing is built)
 
-## Numbers (GoatCounter, directional only with 6 to 10 people; say so in the case study)
+### Numbers (GoatCounter, directional only with 6 to 10 people; say so in the case study)
 | Question | Measure | First target |
 |---|---|---|
 | Is it used? | visits per `ref=friend-*` tag | most invitees open it 2+ times |
@@ -70,14 +74,47 @@ These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is bui
 | Do the extras land? | `this-week-open`, `shortlist-add`, `share` | note counts, no target yet |
 | Do the new finders land? | `tier/*`, `court-open/*`, `court-pick/*`, `suggest-pick/*` | note counts, no target yet |
 
-## How to record (in `docs/feedback_findings.md`)
+### How to record (in `docs/feedback.md`)
 1. **Log** one row per finding: date, who (sport + area, no names or initials), type (bug / missing place / wrong data / confusing label / feature idea / pricing), what happened, severity 1-3, source (call / message / analytics). Nothing people would not want public.
 2. **Fix wrong or missing data now** through the normal seed workflow (evidence + `make build`); mark the row "fixed" with the PR.
 3. **Score the rest with RICE** in one table: Reach (people of N who hit it), Impact (3 big, 2 medium, 1 small, 0.5 minimal), Confidence (100 / 80 / 50 %), Effort (person-days), score = R x I x C / E. Take the top three into "Open, in order" in `docs/status.md`.
 4. **Close the loop:** short "you said, we did" message to the testers; fill the placeholders in `docs/case_study.md` and the scorecard trend.
 5. **Decision note** (new ADR if direction changes): stay personal, open source, or test a paid layer.
 
-## Risks
+### Risks
 - Low sample: discovery, not proof. People are kind: ask what they did.
 - Gaps outside the Bay Area and LA will dominate feedback; record them, then compare with `docs/data_quality.md` before building anything.
 - Do not change the look or labels mid-round (visual polish PRs wait until findings are in, or ship before the invite).
+
+## Feedback findings (friends beta)
+
+Plan and method: `docs/feedback.md`. Fill in when the round starts.
+
+Round: start ____, end ____. GoatCounter own-IP excluded since ____.
+Baseline (scorecard run locally 2026-10-29 via `make quality`; not committed because the CI no-regression gate rejects it until the refresh clears the breaches): venues 10,279, named 16.1% (target 25%, breach), upcoming events 71. Known SLA breaches at baseline: Overture places last seen 2026-09-23 (97.1% of venues fresh vs 99%), oldest event check 17 days (14 allowed); 5 of 8 service levels met.
+
+### Log
+All feedback (issues, comments, messages, form reports), beta or not, is tracked in `docs/feedback_log.csv` (`make feedback`). The table below is for the beta round only.
+
+| Date | Who (sport, area) | Type | What happened | Sev (1-3) | Source | Status / PR |
+|---|---|---|---|---|---|---|
+
+Type: bug / missing place / wrong data / confusing label / feature idea / pricing. Source: call / message / analytics.
+
+### RICE (score = Reach x Impact x Confidence / Effort)
+Reach = people hit (of N). Impact: 3 big, 2 medium, 1 small, 0.5 minimal. Confidence: 100 / 80 / 50 %. Effort: person-days.
+
+| Theme | Reach | Impact | Conf. | Effort | Score | Decision |
+|---|---|---|---|---|---|---|
+
+Top three go into "Open, in order" in `docs/status.md`.
+
+### Numbers (GoatCounter, directional only)
+| Measure | Result | Target |
+|---|---|---|
+| Invitees opening 2+ times | | most |
+| `linkout` / `venue-open` | | 25%+ |
+| Suggestions (`suggest-change` + `report-form` + `osm-edit`) | | 3+ |
+
+### Decision
+Stay personal / open source / paid layer: ____ (ADR if direction changes).

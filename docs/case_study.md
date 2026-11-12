@@ -62,10 +62,10 @@ Raw sources land untouched, dbt cleans, matches and tests them, and one export f
 
 ## Results and what is not measured yet
 - Coverage and service levels: see "At a glance". Live numbers regenerate with `make quality` and `make report`.
-- **Usage and friend feedback are not in yet:** a beta round is planned for December (`docs/feedback_round.md`). I will add weekly visitors, venue opens and link-out clicks then, and will not quote numbers before they exist.
+- **Usage and friend feedback are not in yet:** a beta round is planned for December (`docs/feedback.md`). I will add weekly visitors, venue opens and link-out clicks then, and will not quote numbers before they exist.
 
 ## What I would do next
-1. Run the beta and rank findings with RICE (`docs/feedback_findings.md`).
+1. Run the beta and rank findings with RICE (`docs/feedback.md`).
 2. Raise name quality with a contributor drive and the OSM link.
 3. Publish a lineage page and a small BI dashboard of the scorecard (static, fits Pages).
 4. Decide the path: community open source (ODbL attribution already required) or a paid layer; the link-out-only rule keeps both open.
