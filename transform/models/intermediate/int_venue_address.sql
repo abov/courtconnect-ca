@@ -120,6 +120,11 @@ parent_pick as (
         from {{ ref('dim_court') }} c
         join {{ ref('int_court_parent') }} cp on cp.court_id = c.court_id
         join {{ ref('stg_osm_parents') }} p on p.parent_id = cp.parent_id
+        union all
+        -- a hitting-wall venue named after its enclosing park / school (int_wall_venue) takes that feature's mapped address too
+        select md5('wall:' || wp.wall_key) as venue_id, p.address_line, p.addr_city, 1 as rn
+        from {{ ref('int_wall_parent') }} wp
+        join {{ ref('stg_osm_parents') }} p on p.parent_id = wp.parent_id
     ) x
     where rn = 1 and address_line is not null
 ),

@@ -129,6 +129,14 @@ select cast(date as date) as date, loo_accuracy, likely_right
 from courtconnect.ml_metrics order by 1
 ```
 
+```sql ml_span
+select
+  arg_max(labels, loo_accuracy) as peak_labels, max(loo_accuracy) as peak_accuracy,
+  arg_max(labels, date) as last_labels, arg_max(loo_accuracy, date) as last_accuracy,
+  arg_max(likely_right, date) as last_likely_right
+from courtconnect.ml_metrics
+```
+
 ```sql queue_guess
 select model_guess, sum(rows) as rows from courtconnect.review_queue group by 1 order by 2 desc
 ```
@@ -296,11 +304,11 @@ Two small models help with the review work. Neither one changes the map: a perso
 <BigValue data={ml_latest} value=labels title="Human verdicts it learns from" fmt=num0 />
 <BigValue data={ml_latest} value=queue_rows title="Rows waiting for review" fmt=num0 />
 
-The review-queue ranker guesses which uncertain sport labels are right, so the clearest cases are checked first. Each score is measured by predicting every verdict with a model that never saw it.
+The review-queue ranker guesses which uncertain sport labels are right, so the clearest cases are checked first. Each score is measured by "leave-one-out" testing: for every human verdict, the model is retrained without that verdict and asked to predict it, so it is never graded on an answer it has seen. Accuracy counts every verdict; "likely right" counts only the calls the model was confident about.
 
 <LineChart data={ml_history} x=date y={["loo_accuracy","likely_right"]} title="Ranker score over time" yFmt=pct0 yMin=0 yMax=1 />
 
-The score fell as the verdicts grew from 90 to 208. The newer ones cover padel, academies and clubs, which are harder to tell apart. It still orders the work usefully (its "likely" calls are right about 86% of the time), but it is not good enough to decide anything.
+Accuracy peaked at <Value data={ml_span} column=peak_accuracy fmt=pct0 /> with <Value data={ml_span} column=peak_labels fmt=num0 /> verdicts and now stands at <Value data={ml_span} column=last_accuracy fmt=pct0 /> with <Value data={ml_span} column=last_labels fmt=num0 /> verdicts in total. The newer verdicts are mostly padel, academies and clubs, which may be harder to tell apart, though we have not tested that. When the model rates a label "likely right", it is right <Value data={ml_span} column=last_likely_right fmt=pct0 /> of the time, so it still helps put the clearest cases first. It is not accurate enough to confirm anything: a person still checks every fact.
 
 <BarChart data={queue_guess} x=model_guess y=rows title="Review queue by the model's guess" />
 
