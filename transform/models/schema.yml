@@ -850,6 +850,12 @@ models:
         tests:
           - not_null
 
+  - name: stg_usage_daily
+    description: GoatCounter page views and events per day (ADR 0013), read from the committed docs/usage_daily.csv. Counts only.
+
+  - name: stg_usage_events
+    description: GoatCounter event counts per day, event name and detail (ADR 0013), read from the committed docs/usage_events.csv. Fixed vocabularies, no typed text.
+
   - name: mart_usage_metrics
     description: >
       The ADR 0013 usage metrics, one row per week: page views, venue opens, link-outs (north star), contributions, venue opens per view
