@@ -39,6 +39,7 @@ select
     a.address_source,
     a.address_distance_m,
     a.near_street,                                            -- road name only (inferred), for pins with no address; shown as "Near <street>"
+    a.is_home_like,                                           -- likely a private residence court (ADR 0016): no street is ever inferred; the dashboard scorecard leaves these out of completeness
     v.website,
     v.website_status,
     case when v.website_status = 'dead' then null else v.website end   as website_usable,   -- hides links to domains that no longer exist

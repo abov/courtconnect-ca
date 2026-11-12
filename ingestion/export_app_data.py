@@ -134,7 +134,7 @@ def main() -> None:
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, venue_kind, in_courts, sport_name, courts_for_sport, lat, lon, city, region, address_line,
                website_usable, offerings, address_source, address_distance_m, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
-               has_lit_courts, is_confirmed_public, has_free_courts, is_members_only, also_listed_as, near_street
+               has_lit_courts, is_confirmed_public, has_free_courts, is_members_only, also_listed_as, near_street, is_home_like
         from marts.mart_venue_finder""").fetchall()
 
     # Hitting-wall venues (ADR 0032): one row per wall pin that stands at no listed court venue. Unknown lit / free flags are left out of hw, never exported as 0.
@@ -197,7 +197,7 @@ def main() -> None:
     venues: dict[str, dict] = {}
     entries: dict[str, list] = defaultdict(list)
     for (vid, name, nsrc, vsrc, kind, in_courts, sport, courts, lat, lon, city, region, addr, web, offers, asrc, adist, indoor, outdoor, sand, clay, grass, hard, turf,
-         lit, public, free, members, also, near) in rows:
+         lit, public, free, members, also, near, home) in rows:
         if lat is None or lon is None:
             continue
         if vid not in venues:
@@ -223,6 +223,8 @@ def main() -> None:
                 venues[vid]["ad"] = int(adist)   # metres from the pin
             if asrc == "osm_parent":   # address mapped on the enclosing park / school / club (inferred for these courts)
                 venues[vid]["ap"] = 1
+            if home:                   # likely a private residence court: no street is shown, so the dashboard scorecard leaves it out of completeness
+                venues[vid]["h"] = 1
             if near and not addr:      # no address, but a named road: shown as "Near <street>", inferred
                 venues[vid]["ns"] = near
             if also:
