@@ -31,7 +31,9 @@ CHOICES = {   # the form's "What are you reporting?" options -> the issue form's
     "a racket sport is played here": "Report a racket sport played here",
     "i visited, or the operator's page says so": "Confirm a venue's details",
     "something is wrong or it closed": "Correction or closure",
+    "a hitting wall to add (backboard or handball wall)": "Add a hitting wall for solo practice",
 }
+WALLS_COLUMN = "How many walls? (only for a hitting wall)"   # optional form question; blank for other report types
 SEED_FILES = ["all_racquet.csv", "sport_aliases.csv", "manual_venues.csv", "venue_confirmations.csv", "venue_actions.csv", "venue_leads.csv"]
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
 PHONE = re.compile(r"(?<!\d)(?:\+?\d[\s().-]?){9,}\d(?!\d)")
@@ -91,7 +93,8 @@ def row_to_form(r):
     form = {"Venue name": r["Venue name"], "City": r["City"], "Map ID": r.get("Map ID", ""),
             "What are you suggesting": change, "Sport played here": r.get("Sport", ""),
             "Date you saw": seen.date().isoformat(), "What did you see": details,
-            "Link to a public page": r.get("Link to a public page (optional, https)", "")}
+            "Link to a public page": r.get("Link to a public page (optional, https)", ""),
+            "If adding a hitting wall, how many walls?": r.get(WALLS_COLUMN, "")}
     return stamp.strftime("%Y-%m-%dT%H:%M:%S"), form
 
 

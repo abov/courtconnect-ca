@@ -64,6 +64,11 @@ its confirmations read "N confirmations waiting for review" (not "confirmed by")
    - `Venue name` (short answer, required) - `City` (short answer, required) - `Map ID` (short answer, optional; the popup fills it)
    - `What are you reporting?` (multiple choice, required): `A racket sport is played here` / `I visited, or the operator's page says so` /
      `Something is wrong or it closed`
+   - Hitting walls (added 2026-11-12, owner step: the repo side is done, the Google Form is not): add a fourth `What are you reporting?` option
+     `A hitting wall to add (backboard or handball wall)` and an optional multiple-choice question titled exactly
+     `How many walls? (only for a hitting wall)` with options `One wall` / `Three walls` / `Four walls (a closed court)` / `Not sure`.
+     `make sync-reports` puts the answer in the lead text as `[walls: one_wall]` so a reviewer can type the wall in `manual_walls.csv`;
+     a wall report with no answer is rejected. The GitHub "Suggest a change" form has the same question.
    - `Sport` (short answer) - `Date you saw it` (date, required) - `What did you see?` (paragraph, required)
    - `Link to a public page (optional, https)` (short answer) - `Name or handle to credit you (optional, shown publicly)` (short answer)
    - Description at the top: "Please don't include phone numbers, emails or other personal details. A reviewer checks every report."

@@ -43,6 +43,19 @@ body:
       label: Sport played here
       description: Needed when reporting or confirming a sport, e.g. Pickleball, Tennis, Padel, Racquetball. Padel = walled glass court; pop tennis (paddle tennis) = open court with a low net.
   - type: dropdown
+    id: walls
+    attributes:
+      label: If adding a hitting wall, how many walls?
+      description: One wall = a single front wall to hit against (most school and park walls). Three walls = a front wall plus two side walls. Four walls = a closed court (that is a court, not a hitting wall).
+      options:
+        - Not applicable
+        - One wall
+        - Three walls
+        - Four walls (a closed court)
+        - Not sure
+    validations:
+      required: true
+  - type: dropdown
     id: link_type
     attributes:
       label: If adding a way to join or book, what kind?
