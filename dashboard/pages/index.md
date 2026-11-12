@@ -159,7 +159,7 @@ How complete the RacketConnect data is. Counts only; no venue details are shown.
 <BigValue data={stats} value=map_venues title="Venues on the map" fmt=num0 />
 <BigValue data={stats} value=map_sports_with_venues title="Sports with a venue" />
 
-{stats[0].map_sports_with_venues} of {stats[0].map_sports_total} sports have a venue. These two numbers come straight from the map's data file.
+{stats[0].map_sports_with_venues} of {stats[0].map_sports_total} sports have a venue on the map. {stats[0].map_sports_anywhere} more don't need an official venue and can be played at a beach, park or almost anywhere. The other {stats[0].map_sports_none} have no official venue yet: they aren't as popular in California and Nevada, and are mostly found in regions not yet added to this map. These numbers come straight from the map's data file.
 
 ### Quality checks, as of {stats[0].as_of}
 
