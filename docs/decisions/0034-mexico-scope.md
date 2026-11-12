@@ -65,7 +65,7 @@ Five Tijuana padel clubs are on the map, confirmed on their own Playtomic or clu
 ## Consequences
 Roughly doubles the covered population again with a second language, and coverage will look thin at first (hand-checked only at the border, automatic elsewhere, including Mexico City until demand says otherwise), so the scorecard must report per metro and the app must say "automatic data only" where nothing was hand-checked. One `MX` region keeps the pipeline unchanged for the five US states; splitting Mexico into per-state regions later stays possible through the `subregion` column.
 
-## Verified-only gate: lifted 2026-11-05, reinstated 2026-11-12
+## Verified-only gate: lifted 2026-11-05, reinstated and lifted again 2026-11-12
 The owner first ruled (2026-11-05) that showing unverified automatic pins in Mexico is okay, and the gate added the same day was reverted. On 2026-11-12 the owner asked to reinstate it: `mart_venue_finder` hides every pin in a region listed in the dbt var `hide_unverified_regions` (MX) unless a seed row backs it (`manual_venues.csv`, `venue_name_official.csv`); `assert_hidden_regions_verified_only` enforces it. The automatic rows stay in the warehouse as leads. To re-open a region, remove it from the var. Trial numbers: `docs/mexico_metro_trial.md` (automatic precision about 1 in 5).
 
 ## Phase 3, Monterrey (2026-11-05)
@@ -109,3 +109,5 @@ Follow-up (2026-11-10): the two Corregidora leads are pinned from the clubs' own
 FEMAC Pádel Club is still unlocated (lead).
 
 Monterrey automatic layer (2026-11-12, at the owner's request): the metro's OpenStreetMap extract (222 court elements, 1,526 parent features) and its 62 Overture places were merged into the shared `osm_courts_mx.csv`, `osm_parents_mx.csv` and `overture_places.csv` (the border-pilot rows untouched) and loaded into the warehouse: before the verified-only gate, Monterrey went from 54 to 118 venues (Mexico 530 to 594), 91% named, 60% with a street (OpenStreetMap tags and Nominatim only). Under the gate reinstated the same day (see above) the unverified ones stay out of `venues.json` until the owner re-opens Mexico (remove MX from `hide_unverified_regions`). Shops and an expo were rejected, three second Overture records of hand-built clubs rejected as duplicates, and seven hand-built pins kept apart with `manual_venue_no_merge.csv` where the radius merge would have swallowed a separate club or replaced the hand-built name. The padel guard-rail test (`assert_padel_has_supporting_signal`) now skips Mexico: the 2026-11-05 ruling shows unverified automatic pins there with their inferred labels. The four `mx-monterrey-*` leads are resolved.
+
+Mexico re-opened (2026-11-12, owner): `hide_unverified_regions` is now empty, so the automatic OSM and Overture pins (border metros and the Monterrey layer) show again with their inferred labels. To hide a region again, list it in the var.
