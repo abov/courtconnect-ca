@@ -1,6 +1,6 @@
 # You don't need a warehouse to read a planet
 
-*Draft, 2026-10-29. Facts come from [the Overture benchmark](../planet_scale_benchmark.md) (measured 2026-10-28, release `2026-10-21.0`), [ADR 0018](../decisions/0018-duckdb-only.md), and file sizes read from the working checkout on 2026-10-29.*
+*Draft, 2026-10-29. Facts come from [the Overture benchmark](../scale.md) (measured 2026-10-28, release `2026-10-21.0`), [ADR 0018](../decisions/0018-duckdb-only.md), and file sizes read from the working checkout on 2026-10-29.*
 
 RacketConnect needs venue names and addresses from Overture Maps, a public dataset with hundreds of gigabytes of places, addresses and buildings. My first instinct was that this called for a cloud warehouse. It didn't. A single DuckDB file on a laptop read the public files in place and downloaded a small slice of them. This note shows the numbers, and where the claim stops.
 
@@ -26,7 +26,7 @@ So the shape is: a very large source, a laptop-sized working set, a small publis
 ## What this does not prove
 
 - **It is not terabyte processing.** Two themes of one release, one query each. The benchmark doc says so too.
-- **It is not streaming.** Each extract is a batch read. Following changes minute by minute is a different design that I sketched ([plan](../planet_scale_plan.md)) and did not build.
+- **It is not streaming.** Each extract is a batch read. Following changes minute by minute is a different design that I sketched ([plan](../scale.md)) and did not build.
 - **I never ran the same job on a warehouse.** I retired Snowflake for cost and upkeep ([ADR 0018](../decisions/0018-duckdb-only.md)), not because a benchmark said DuckDB was faster. I have no head-to-head number, so I make no speed claim.
 - **The measurement has soft edges.** Bytes are the sum of `Content-Length` over logged GETs, so retries count twice. Timings come from one Windows machine on home internet. The address count depends on the pins loaded at run time.
 - **One reader, one writer.** Nothing here shows how it behaves with concurrent users or several people writing. For those, or for data that doesn't fit on one machine, a warehouse earns its place.
