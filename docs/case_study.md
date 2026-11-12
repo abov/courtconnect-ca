@@ -5,7 +5,7 @@ A free map of racket-sport venues in California and Nevada (tennis, pickleball, 
 **In one line:** the hard part was never the map. It was joining sources that disagree, saying honestly how far to trust each fact, and keeping the data current with as little human review as safe.
 
 ## At a glance
-- **10,288 venues** from three source families, 41 of 82 sports with at least one venue, 7 of 8 service levels met (scorecard `make quality`, 2026-10-29).
+- **16,919 venues** from three source families, 43 of 82 sports with at least one venue (15 more need no official venue, 24 have none yet), 7 of 8 service levels met (scorecard `make quality`, 2026-11-10).
 - **53 dbt models, 34 seeds, 32 custom SQL tests**, plus column tests; **26 decision records**; 11 CI gate scripts.
 - **Entity resolution measured on a gold set:** 129 labelled pairs, 0 wrong merges, 4 missed.
 - **Reads about 2% of a 40 GB columnar source** to keep a few thousand venues (743 MB fetched of 39.6 GB, places and addresses themes).
