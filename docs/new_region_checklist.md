@@ -20,7 +20,7 @@ Owner 2026-11-03: every new state (and country, ADR 0034) gets the same work the
 - [ ] **Arenas, stadiums, convention centers and resorts that host one-off pro or major events** (owner 2026-11-04; e.g. Intuit Dome's Laver Cup, Indian Wells, Mandalay Bay's US Open Table Tennis): search the region's arenas and event halls for dated, sourced racket events and add each to `watch_events.csv` with the event's own page, `location_precision` "venue (approximate)" until tickets are official. The venue is only a pin while the event is listed; never a standing "watch" venue. Log searched / empty in the region's section of `docs/event_group_search.md`.
 - [ ] **Padel, pop tennis, beach tennis, squash, table tennis, badminton, racquetball** passes (`docs/padel_scan.md`, `beach_tennis_watch.md`); a zero is fine only if logged as searched.
 - [ ] Leads you could not settle go to `venue_leads.csv`.
-- [ ] Street addresses: `reverse_geocode_blanks.py`, `extract_osm_parents.py` after each OSM refresh; never infer a street for home-like pins.
+- [ ] Street addresses: `reverse_geocode_blanks.py`, `extract_osm_parents.py` after each OSM refresh; never infer a street for home-like pins. The map hides unnamed home-like pins (`h=1`, `q=u`) by default in every region behind the "Show unnamed private-looking courts" chip (owner 2026-11-12).
 
 ## 3. Routines and docs
 - [ ] Routine source lists (`docs/cloud_routines.md`, `docs/tournament_run_parts.md`, refresh agent, search-interest metros in `search_metros.csv`) extended for the region once its research exists.
