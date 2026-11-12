@@ -6,7 +6,7 @@ Status: **PR 1 and PR 2 built 2026-10-22 (mode names, promise headline, stats to
 
 ## 1. The one-sentence product
 
-> **Find a place to play any racket sport in California and Nevada, see what is on, and find people to play with.**
+> **Find a place to play any racket sport in the western U.S., see what is on, and find people to play with.**
 
 Three verbs, from the mission (ADR 0015): **Find** (a court), **Watch** (a match or event), **Gather** (people to play with). "Try a new sport" is served by the sport picker and its About card (the separate "Try something new" card was dropped by the owner on 2026-10-21, so it is not proposed here).
 

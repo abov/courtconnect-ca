@@ -121,6 +121,12 @@ seeds:
         city: varchar
         evidence: varchar
         verified_on: varchar
+    venue_subregion:    # all text
+      +column_types:
+        venue_id: varchar
+        lat: varchar
+        lon: varchar
+        subregion: varchar
     venue_place_boundary:    # all text
       +column_types:
         venue_id: varchar

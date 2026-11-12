@@ -280,6 +280,39 @@ seeds:
       - name: checked_on
         tests: [not_null]
 
+  - name: venue_subregion
+    description: >
+      The Mexican federal entity (ISO 3166-2, e.g. MX-BCN) whose municipio boundary contains a Mexican pin
+      (ingestion/subregion_from_boundaries.py; Overture divisions, CDLA-Permissive). dim_venue.subregion reads it, and ignores the row if the pin has moved.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: subregion
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('mx_entities'), field: subregion}
+      - name: source
+        tests: [not_null]
+      - name: checked_on
+        tests: [not_null]
+
+  - name: mx_entities
+    description: Mexico's 32 federal entities (31 states and Mexico City), keyed by ISO 3166-2 code (docs/mexico_states_outline.md).
+    columns:
+      - name: subregion
+        tests: [unique, not_null]
+      - name: entity_name
+        tests: [not_null]
+      - name: entity_type
+        tests:
+          - accepted_values:
+              arguments: {values: [state, autonomous entity]}
+
   - name: website_overrides
     description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
     columns:
@@ -764,6 +797,11 @@ models:
     columns:
       - name: venue_id
         tests: [unique, not_null]
+      - name: subregion
+        description: Mexican federal entity (ISO 3166-2, e.g. MX-BCN) for an MX pin; null elsewhere (seeds/venue_subregion.csv).
+        tests:
+          - relationships:
+              arguments: {to: ref('mx_entities'), field: subregion}
       - name: venue_kind
         description: courts = a court facility; hitting_wall = a wall pin that stands at no listed venue (ADR 0032).
         tests:
@@ -1582,6 +1620,16 @@ models:
     description: >
       Places with weak sport evidence: a business name contains an ambiguous sport word ("Camino Real Tennis Center" is not Real Tennis).
       Never counted as a venue until a person confirms or rejects them in seeds/place_sport_overrides.csv.
+
+  - name: mart_mx_entity_coverage
+    description: >
+      Pin counts for each of Mexico's 32 federal entities, including entities with none (docs/mexico_states_outline.md). hand_built = pins from a
+      seed row a person added; automatic = pins from OSM or Overture alone.
+    columns:
+      - name: subregion
+        tests: [unique, not_null]
+      - name: pins
+        tests: [not_null]
 
   - name: mart_sport_coverage
     description: >

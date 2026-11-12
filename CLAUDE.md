@@ -1,7 +1,7 @@
 # RacketConnect
 
-Racket-sport venue finder for California + Nevada (ADR 0014, 0028): Python ingestion -> dbt (DuckDB, the only warehouse) -> static MapLibre map in `app/`. Product name RacketConnect (ADR 0029); the repo, DB file, dbt project and env vars keep the `courtconnect` names.
-README.md has the full story; read it only if you need background. Mission (ADR 0015): one map for every racket sport in CA + NV: find a court, watch a match, try a new sport, and find people to play with. Long-term goal: run itself with as little human review as possible, AI agents doing the work behind automated gates (see `docs/status.md`).
+Racket-sport venue finder for California, Nevada, Oregon, Washington, Arizona and Hawaii, plus a Mexico pilot (ADR 0014, 0028; region list: `ingestion/regions.json`): Python ingestion -> dbt (DuckDB, the only warehouse) -> static MapLibre map in `app/`. Product name RacketConnect (ADR 0029); the repo, DB file, dbt project and env vars keep the `courtconnect` names.
+README.md has the full story; read it only if you need background. Mission (ADR 0015): one map for every racket sport in every region covered: find a court, watch a match, try a new sport, and find people to play with. Long-term goal: run itself with as little human review as possible, AI agents doing the work behind automated gates (see `docs/status.md`).
 Decisions are in `docs/decisions/` (ADRs 0001-0037, all accepted except 0001, superseded by 0018, 0023 deferred, and 0024-0026, 0032 and 0036, proposed; one file each, read only the one you need).
 
 ## Commands (run from Git Bash on Windows)
