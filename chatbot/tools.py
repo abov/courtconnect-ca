@@ -238,7 +238,7 @@ def load_profile() -> dict:
 S = {"type": "string"}
 TOOL_DEFS = [
     {"name": "search_venues", "description": "Find places to play a racket sport. Use city for a city/area name, or near_city + radius_km for nearby cities. Results are only what our data holds (CA, NV, OR, WA, HI).",
-     "input_schema": {"type": "object", "properties": {"sport": S, "city": S, "near_city": S, "radius_km": {"type": "number"}, "state": {"type": "string", "enum": ["CA", "NV", "OR", "WA", "HI", ""]},
+     "input_schema": {"type": "object", "properties": {"sport": S, "city": S, "near_city": S, "radius_km": {"type": "number"}, "state": {"type": "string", "enum": ["CA", "NV", "OR", "WA", "HI", "AZ", "TX", ""]},
                                                        "public_only": {"type": "boolean"}, "free_only": {"type": "boolean"}, "limit": {"type": "integer"}}, "required": ["sport"]}},
     {"name": "get_venue", "description": "Full record for one venue id returned by search_venues.",
      "input_schema": {"type": "object", "properties": {"venue_id": S}, "required": ["venue_id"]}},

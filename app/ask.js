@@ -13,7 +13,7 @@
   const PLACE_ALIASES = {"la": ["Los Angeles", 12, "Los Angeles"], "vegas": ["Las Vegas", 12, "Las Vegas"], "sf": ["San Francisco", 12, "San Francisco"], "san fran": ["San Francisco", 12, "San Francisco"],
     "bay area": ["San Francisco", 60, "the Bay Area", 1], "silicon valley": ["San Jose", 30, "Silicon Valley", 1], "orange county": ["Santa Ana", 25, "Orange County", 1],
     "inland empire": ["Riverside", 40, "the Inland Empire", 1], "lake tahoe": ["South Lake Tahoe", 30, "Lake Tahoe", 1], "tahoe": ["South Lake Tahoe", 30, "Lake Tahoe", 1]};
-  const SKIP_CITY = new Set(["industry", "commerce", "mesa", "alpine", "orange", "bell", "mount", "live oak", "acme", "hope"]);
+  const SKIP_CITY = new Set(["industry", "commerce", "mesa", "alpine", "orange", "bell", "mount", "live oak", "acme", "hope", "wall"]);
   const GEAR = / (buy|shop|shops|store|stores|rent|rental|rentals|restring|restrung|stringing|deals|cheapest|discount) /;
   const EVENTS = / (watch|tournament|tournaments|event|events|spectate|spectators|big screen|this weekend|tonight|this week|what s on) /;
   const WALLS = / (wall|walls|backboard|backboards|hit against|hitting wall) /;
@@ -49,7 +49,7 @@
       ["The data is rebuilt about twice a month. Public access, hours and prices are often unknown, so I only say them when our data has them, and each place shows when it was last checked. If something is wrong, tell us and a reviewer will check it."],
       [{title: "Suggest a change", detail: "GitHub form", url: PRODUCT_URL.change}], ["What does confirmed mean?", "How do I add my club?"]],
     [/ (which|what) (states|regions|countries) | (do you|does it|does racketconnect|will you|are you going to) (cover|support|expand|add) | (mexico|canada|europe|texas|florida|new york|colorado|utah|idaho|montana|new mexico) | outside (of )?(california|the us|the u s|these states) /,
-      ["We cover California, Nevada, Oregon, Washington, Arizona, New Mexico and Hawaii, plus a Mexico pilot: the border cities (Tijuana, Mexicali, Ensenada, Hermosillo, Nogales, San Luis Río Colorado) have automatic map data, and Mexico City, Guadalajara, Monterrey, Cancún, Playa del Carmen and Mérida have clubs added by hand from their own public pages. Coverage in Mexico is partial, and other places aren't on the map yet."],
+      ["We cover California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas and Hawaii, plus a Mexico pilot: the border cities (Tijuana, Mexicali, Ensenada, Hermosillo, Nogales, San Luis Río Colorado) have automatic map data, and Mexico City, Guadalajara, Monterrey, Cancún, Playa del Carmen and Mérida have clubs added by hand from their own public pages. Coverage in Mexico is partial, and other places aren't on the map yet."],
       [], ["Pickleball in Reno", "Padel in Las Vegas", "Tennis in Seattle"]],
     [/ (is|are) (this|it|racketconnect|the (app|site|map|website)) (really |completely |a )?free | free to use | (do|will) i (need|have to) (.* )?(account|sign up|sign in|log in|login|pay|register) | (an |any )?account | sign up | sign in | log in | login | subscription | cost to use | how much (does|is) (racketconnect|the (app|site|map)|this (app|site|map)) /,
       ["RacketConnect is free to use. There are no accounts, no sign-in and no paid or featured placement. We link out to each venue's own page; we never take bookings or payments."],
@@ -67,7 +67,7 @@
       ["There is no app to download. RacketConnect is a website that works in your phone's browser, so you can open it and add it to your home screen if you like."],
       [], undefined],
     [/ (what is|what s|whats|what are|tell me about|explain|describe) (racketconnect|racket connect|this (site|app|map|website|tool|project|bot|chat|chatbot))( | for )| (what|how) (do|does) (racketconnect|this (site|app|map|website|tool)|you) (do|work|help) | what can i (do|use) (here|this|it) for | racketconnect is | (about|purpose of) (racketconnect|this (site|app|map|website)) /,
-      ["RacketConnect is one free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico: tennis, pickleball, padel, squash, badminton, table tennis and the lesser-known sports. Use it to find a court, see events to watch, find groups to play with, and learn how to try a sport. Each place says how sure we are, and we link out to the venue's own page; we never take bookings or payments.", "This box is a simple helper with no AI model. It answers only from our own venue data."],
+      ["RacketConnect is one free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico: tennis, pickleball, padel, squash, badminton, table tennis and the lesser-known sports. Use it to find a court, see events to watch, find groups to play with, and learn how to try a sport. Each place says how sure we are, and we link out to the venue's own page; we never take bookings or payments.", "This box is a simple helper with no AI model. It answers only from our own venue data."],
       [], PRODUCT_CHIPS],
     [/ (how (do|can|would) i (use|search|filter|find|get around)|how to use|how does (the |this )?(map|site|app) work|what do (the )?(pins|markers|dots|colors|colours|icons|circles) mean|legend|orange pins|grey pins|gray pins) /,
       ["Pick a sport and zoom to your area, or type a city, ZIP or venue name in the search box; the list follows what the map shows. Tap a pin for its details, how sure we are, and the link to the venue's own page. Orange pins are stand-alone hitting walls. You can also switch between places to play, events to watch and groups."],
@@ -110,13 +110,16 @@
     }
     sportKeys.sort((a, b) => b.key.length - a.key.length);
     // cities and their centres
-    const cities = new Map();
+    // One entry per city NAME, counted per state first: Reno, San Diego and Henderson also exist in Texas, and averaging both
+    // places would put the centre in the wrong spot. The state with the most pins for a name wins.
+    const cities = new Map(), byState = new Map();
     for (const v of data.venues) {
       if (!v.c) continue;
-      const k = norm(v.c);
-      const e = cities.get(k) || {name: v.c.replace(/\b(\w)(\w*)/g, (m, a, b) => a.toUpperCase() + b.toLowerCase()), n: 0, y: 0, x: 0};
-      e.n++; e.y += v.y; e.x += v.x; cities.set(k, e);
+      const k = norm(v.c), ks = k + "|" + (v.r || "");
+      const e = byState.get(ks) || {k, name: v.c.replace(/\b(\w)(\w*)/g, (m, a, b) => a.toUpperCase() + b.toLowerCase()), n: 0, y: 0, x: 0};
+      e.n++; e.y += v.y; e.x += v.x; byState.set(ks, e);
     }
+    for (const e of byState.values()) { const cur = cities.get(e.k); if (!cur || e.n > cur.n) cities.set(e.k, e); }
     const cityKeys = [...cities.keys()].filter(k => k.length > 5 && !SKIP_CITY.has(k.trim())).sort((a, b) => b.length - a.length);
     const placeAliasKeys = Object.keys(PLACE_ALIASES).map(a => [norm(a), a]).sort((a, b) => b[0].length - a[0].length);
 
@@ -146,7 +149,7 @@
       return null;
     }
 
-    const STATES = {california: "CA", nevada: "NV", oregon: "OR", washington: "WA", hawaii: "HI", arizona: "AZ"};
+    const STATES = {california: "CA", nevada: "NV", oregon: "OR", washington: "WA", hawaii: "HI", arizona: "AZ", texas: "TX"};
     const stateOf = t => { for (const [n, c] of Object.entries(STATES)) if (t.includes(" " + n + " ")) return c; return t.includes(" nv ") ? "NV" : t.includes(" ca ") ? "CA" : t.includes(" az ") ? "AZ" : ""; };
     // events and groups carry no state: use the state of the nearest venue pin
     const stateAt = (y, x) => { let best = "", bd = 1e9; for (const v of data.venues) { const d = (v.y - y) ** 2 + (v.x - x) ** 2; if (d < bd) { bd = d; best = v.r; } } return best; };
@@ -199,12 +202,12 @@
     }
     function whenAdd(sp, loc) {
       const lines = ["There's no date for new areas or sports yet: we add them when we can map them properly, and we'd rather say no date than guess one."];
-      lines.push(loc ? "We already cover " + loc.label + "; ask for a sport and I'll look." : "Today we cover California, Nevada, Oregon, Washington, Arizona, New Mexico and Hawaii, plus a Mexico pilot.");
+      lines.push(loc ? "We already cover " + loc.label + "; ask for a sport and I'll look." : "Today we cover California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas and Hawaii, plus a Mexico pilot.");
       lines.push("Tell us where you'd like us next below; requests help us decide, and you'll get a notification when we reply.");
       return {kind: "opening", lines, items: [ASK_ITEM], chips: loc ? sportChips(loc) : ["Which states do you cover?"]};
     }
 
-    const STATE_NAMES = {CA: "California", NV: "Nevada", OR: "Oregon", WA: "Washington", AZ: "Arizona", NM: "New Mexico", HI: "Hawaii", MX: "Mexico"};
+    const STATE_NAMES = {CA: "California", NV: "Nevada", OR: "Oregon", WA: "Washington", AZ: "Arizona", NM: "New Mexico", TX: "Texas", HI: "Hawaii", MX: "Mexico"};
     function countAnswer(sp, st, t, loc) {
       const by = {}; let walls = 0;
       for (const v of data.venues) {

@@ -10,20 +10,20 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#10151c" media="(prefers-color-scheme: dark)">
-<meta name="description" content="Find where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico: tennis, pickleball, padel, beach tennis and more, with honest notes on how complete the data is.">
+<meta name="description" content="Find where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico: tennis, pickleball, padel, beach tennis and more, with honest notes on how complete the data is.">
 <!-- Pages URL appears here and in og:url / og:image: update all three when the repo is renamed (roadmap item 1). -->
 <link rel="canonical" href="https://abov.github.io/courtconnect-ca/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RacketConnect">
-<meta property="og:title" content="RacketConnect: where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico">
+<meta property="og:title" content="RacketConnect: where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico">
 <meta property="og:description" content="Tennis, pickleball, padel, squash, badminton and more on one map, with honest notes on how complete the data is. Links out; no bookings or payments.">
 <meta property="og:url" content="https://abov.github.io/courtconnect-ca/">
 <meta property="og:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="RacketConnect logo: a racket with a map pin. Where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico.">
+<meta property="og:image:alt" content="RacketConnect logo: a racket with a map pin. Where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="RacketConnect: where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico">
+<meta name="twitter:title" content="RacketConnect: where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico">
 <meta name="twitter:description" content="Tennis, pickleball, padel, squash, badminton and more on one map, with honest notes on how complete the data is.">
 <meta name="twitter:image" content="https://abov.github.io/courtconnect-ca/share-card.png">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V" crossorigin="anonymous">
@@ -282,12 +282,12 @@
 </style>
 </head>
 <body>
-<div id="loading" role="status"><div class="spin" aria-hidden="true"></div><div id="loadmsg">Finding courts in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico...</div></div>
+<div id="loading" role="status"><div class="spin" aria-hidden="true"></div><div id="loadmsg">Finding courts in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico...</div></div>
 
 <aside id="panel" aria-label="Filters and results">
   <header>
     <h1 translate="no"><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">RacketConnect</h1>
-    <div class="sub" id="headline">Find where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico.</div>
+    <div class="sub" id="headline">Find where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico.</div>
     <p class="sub welcome">Every racket sport, every kind of court, from free parks to private clubs. Labelled by how sure we are. We link out and never take bookings or payments.</p>
     <div class="seg" role="group" aria-label="What are you looking for?">
       <button class="chip view" id="modePlay" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/></svg>Places to play</button>
@@ -394,14 +394,14 @@
   <footer><div id="stats"></div><div><button class="link" id="openAbout" type="button">About RacketConnect</button> &middot; <button class="link" id="openCoverage" type="button">How complete is this data?</button> &middot; <a href="dashboard/">Data quality (live)</a> &middot; <a href="how-its-built.html">How it's built</a> &middot; <a href="how-its-built.html#docs">Docs</a></div><div id="attr"></div></footer>
 </aside>
 
-<main id="map" aria-label="Map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico"></main>
+<main id="map" aria-label="Map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico"></main>
 
 <div id="toast" role="status" aria-live="polite" hidden></div>
 
 <dialog id="about" aria-labelledby="aboutTitle">
   <div class="dlg-h"><h2 id="aboutTitle">About RacketConnect</h2><button class="link" id="closeAbout" type="button">Close</button></div>
   <div class="dlg-b">
-    <p>One free map of every racket sport in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico: tennis, pickleball, padel, squash, badminton, table tennis and the lesser-known ones, on public parks, hitting walls, rec centers and private clubs. Each place says how sure we are (confirmed, official or reported) and when it was last checked. We link out to the venue's own page; we never take bookings or payments, and there are no accounts.</p>
+    <p>One free map of every racket sport in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico: tennis, pickleball, padel, squash, badminton, table tennis and the lesser-known ones, on public parks, hitting walls, rec centers and private clubs. Each place says how sure we are (confirmed, official or reported) and when it was last checked. We link out to the venue's own page; we never take bookings or payments, and there are no accounts.</p>
     <p id="aboutMexico">Mexico is a pilot: the border cities (Tijuana, Mexicali, Ensenada, Hermosillo, Nogales and San Luis Río Colorado) have automatic OpenStreetMap and Overture data, and Mexico City, Guadalajara, Monterrey, Cancún, Playa del Carmen and Mérida have clubs added by hand from their own public pages. Coverage there is partial, and ZIP search is US-only.</p>
     <h3>For players</h3>
     <p>Find a court, see what is on to watch, and find groups to play with. <button class="link" id="aboutUse" type="button">Use the map</button></p>
@@ -428,7 +428,7 @@
     <div id="playersGroups"></div>
     <h3>Apps that match players</h3>
     <div id="playersApps" class="apps"></div>
-    <p class="meta" style="margin-top:12px">Groups come from the organizer's own public page, with the date we last checked. RacketConnect stores no members, takes no sign-ups and has not checked how many players each app has in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii or parts of Mexico. <a id="playersTell" href="#" target="_blank" rel="noopener noreferrer">Know a group we are missing?</a> (no sign-in)</p>
+    <p class="meta" style="margin-top:12px">Groups come from the organizer's own public page, with the date we last checked. RacketConnect stores no members, takes no sign-ups and has not checked how many players each app has in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii or parts of Mexico. <a id="playersTell" href="#" target="_blank" rel="noopener noreferrer">Know a group we are missing?</a> (no sign-in)</p>
   </div>
 </dialog>
 
@@ -462,7 +462,7 @@
 // ---------- anonymous usage counts (ADR 0013) ----------
 // GoatCounter: no cookies, no personal data, honours Do Not Track. OFF until the owner sets the site code (the part before .goatcounter.com).
 // Display name and scope for text built in script. The static <title>, <meta> and About text below repeat them: change both (docs/decisions/0029).
-const BRAND = "RacketConnect", REGION = "California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico";
+const BRAND = "RacketConnect", REGION = "California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico";
 const GOATCOUNTER_CODE = "courts";
 const ANALYTICS_ON = !!GOATCOUNTER_CODE && navigator.doNotTrack !== "1" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // Owner visits: open the live URL with #owner once per browser to tag them (paths get an "owner" prefix, e.g. /owner/ and owner/event/...), #owner-off to stop. Nothing is stored beyond a local flag.
@@ -577,9 +577,9 @@ const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
 // The Country and State dropdowns only zoom the map (they never filter pins); the page still opens on HOME_BOUNDS. Rough state boxes, [west, south], [east, north].
-const STATE_NAMES = {AZ: "Arizona", NM: "New Mexico", CA: "California", HI: "Hawaii", NV: "Nevada", OR: "Oregon", WA: "Washington"};
+const STATE_NAMES = {AZ: "Arizona", NM: "New Mexico", CA: "California", HI: "Hawaii", NV: "Nevada", OR: "Oregon", TX: "Texas", WA: "Washington"};
 const STATE_BOUNDS = {AZ: [[-114.9, 31.3], [-109.0, 37.0]], NM: [[-109.1, 31.3], [-103.0, 37.0]], CA: [[-124.5, 32.5], [-114.1, 42.0]], HI: [[-160.3, 18.9], [-154.8, 22.3]],
-  NV: [[-120.0, 35.0], [-114.0, 42.0]], OR: [[-124.6, 42.0], [-116.4, 46.3]], WA: [[-124.8, 45.5], [-116.9, 49.0]]};
+  NV: [[-120.0, 35.0], [-114.0, 42.0]], OR: [[-124.6, 42.0], [-116.4, 46.3]], TX: [[-106.7, 25.8], [-93.5, 36.6]], WA: [[-124.8, 45.5], [-116.9, 49.0]]};
 const HOME_BOUNDS = [[-160.6, 18.0], [-85.0, 49.3]];   // the map's starting view and the "show everything" view: every venue we have, Hawaii and Mexico included (ADR 0028; owner 2026-11-02, so Places to play and Events frame the same area; owner 2026-11-05: open on all venues, not just the U.S.; east edge reaches Cancún, -86.8)
 const US_BOUNDS = [[-160.6, 18.5], [-108.4, 49.3]];   // the "United States" country pick: every state we cover
 let textOff = false, searchCentre = null, zips = null, places = null, hasMx = false;   // search: textOff = the typed text is a ZIP or matched nothing, so pins follow the other filters only
@@ -1686,7 +1686,7 @@ function showSportInfo() {
 }
 // "Find people to play with" (social phase A, ADR 0015): recurring groups and open plays (the social series) plus link-outs to player-matching apps, for one sport.
 // It is a dialog with three doors: the "Find players" button in the header, the callout under the sport picker, and a link in every venue popup.
-// RacketConnect stores no members and has not checked how many players each app has in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii or parts of Mexico, so the dialog says so.
+// RacketConnect stores no members and has not checked how many players each app has in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii or parts of Mexico, so the dialog says so.
 const playerGroups = idx => {
   const name = idx >= 0 && sports[idx] ? sports[idx].n : null;
   return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name)).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.n.localeCompare(b.n));
@@ -1891,7 +1891,7 @@ function showAnywhere() {
   if (s && s.w) n.textContent = s.wn;
   else if (none) {
     const q = new URLSearchParams({template: "report-a-venue.yml", sport: s.n});
-    n.append(document.createTextNode("No place for " + s.n + " is listed in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii or parts of Mexico yet. Know one? "),
+    n.append(document.createTextNode("No place for " + s.n + " is listed in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii or parts of Mexico yet. Know one? "),
       el("a", {href: "https://github.com/abov/courtconnect-ca/issues/new?" + q, target: "_blank", rel: "noopener noreferrer", text: "Tell us about it"}), document.createTextNode("."));
   }
   syncSportMore();
@@ -1899,14 +1899,14 @@ function showAnywhere() {
 function showNoPrograms() {
   const n = $("noprog"), name = noPrograms() ? sports[state.sport].n : "";
   n.hidden = !name;
-  if (name) n.textContent = "No " + name + " clinics, lessons, classes or leagues are known in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii or parts of Mexico, so these filters show nothing for it. Venues listed for " + name + " are regular courts of another sport.";
+  if (name) n.textContent = "No " + name + " clinics, lessons, classes or leagues are known in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii or parts of Mexico, so these filters show nothing for it. Venues listed for " + name + " are regular courts of another sport.";
 }
 function showWallNote() {
   const n = $("wallnote"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
   n.hidden = !(s && s.ws);
   if (!n.hidden) {
     $("wallnote-b").textContent = "Orange pins are hitting walls where " + s.n + " can be played" + (s.ws === 2 ? " (only walls marked public; the others are left out)" : "") + ": " + fmt(s.v) + (s.v === 1 ? " place" : " places") + " so far, inferred from the wall type, not confirmed play. Wall sizes are the sport's standard, not measured at each wall. "
-      + fmt(DATA.meta.walls_unchecked || 0) + " more handball and wall courts are mapped, but their wall type was not checked, so they are left out. Walls come from OpenStreetMap, city pages and visit reports across California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico; ones nobody has mapped or reported are missing.";
+      + fmt(DATA.meta.walls_unchecked || 0) + " more handball and wall courts are mapped, but their wall type was not checked, so they are left out. Walls come from OpenStreetMap, city pages and visit reports across California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico; ones nobody has mapped or reported are missing.";
   }
   syncSportMore();
 }
