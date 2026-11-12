@@ -1,0 +1,15 @@
+# 0038. New Mexico joins the map
+
+Date: 2026-11-12. Status: accepted, in progress (owner 2026-11-11 asked for New Mexico "with the same work as the other states"). The data layer is built (1,345 OpenStreetMap court records on the first build) and the first research passes ran on 2026-11-12: events, leagues and groups, city parks and rec centers (Albuquerque), chains (Genesis Health Clubs), Albuquerque Academy and Tennis Club of Albuquerque court counts, and the walls/handball pass. Open: Santa Fe and Las Cruces city pages, Taos, Roswell and other town clubs, campuses (UNM, NMSU), military, resorts (ask the owner first) and the leads in `venue_leads.csv` (`nm-*`). Extends ADR 0028 (multi-state scope) and follows the Arizona pattern (ADR 0035); the "new states get full CA parity" rule and `docs/new_region_checklist.md` apply unchanged.
+
+## Context
+New Mexico is one landmass bordering Arizona, Texas, Colorado, Utah and Mexico. OSM relation 162014 (New Mexico, `ISO3166-2` US-NM) was checked against Overpass on 2026-11-12; bounds 31.33 / -109.06 / 37.01 / -103.0. Census FIPS is 35; ZIPs run 870xx-884xx. The state line meets Chihuahua (Mexico pilot, ADR 0034) at the south, and El Paso, Texas lies a few miles from Sunland Park, where Padel Club EP sits.
+
+## Decision
+- Add `NM` to `ingestion/regions.json` (name `new_mexico`; the `_` becomes a space in the scripts' titles) and the dbt `regions` var; CI test points cover Gallup, Albuquerque, Santa Fe, Las Cruces, Farmington, Roswell, Hobbs and Tucumcari, plus a point near Springerville across the Arizona line (AZ).
+- The map's home view widens east to the New Mexico line; the region sentence now names New Mexico everywhere.
+- Research passes follow `docs/new_region_checklist.md`. The rules used: public pages and Overture + OSM only (no Google Places, no owner logins, no Pickleheads or Places2Play data); aggregator listings are leads; operator is not venue; courts are pinned with their access stated (the Genesis clubs are membership clubs, Albuquerque Academy's guest booking is described in the pin's rules); counts that differ from the operator's own page are overridden in `venue_court_counts.csv` with the page as evidence.
+- Zia and Yucca (Santa Fe) is the only public handball court the city lists; OpenStreetMap already maps it (way 484103694), so it is not duplicated by hand and stays "assumed one-wall" until imagery or a page settles the wall type.
+
+## Open for the owner
+Resorts and hotels with courts (ADR 0028: case by case, ask first); Kirtland and Holloman AFB (military rule, ADR 0014); research order against the remaining Hawaii and Arizona passes; Texas lands separately (ADR number to be taken by that branch).
