@@ -2,13 +2,13 @@
 -- often share one name inside a city (six "UC San Diego" pins in La Jolla). When 2+ venues share lower(name) + city, each inferred one gets
 -- a computed suffix: "<direction from the group's centroid> courts, <N courts>", e.g. "UC San Diego (north courts, 6 courts)".
 --   direction : 8-point compass of the venue relative to the centroid of ALL same-name venues in that city; "central" within 100 m of it
---   count     : dim_venue.court_records (mapped courts, all sports), else "court count unknown"
+--   count     : dim_venue.court_records (mapped courts, all sports), else "court count unknown"; a hitting-wall pin says "hitting wall"
 --   still equal after that (same direction and count): ", #1", ", #2"... by distance from the centroid, then venue_id
 -- The suffix comes from position and court count, NOT from a source, so the name stays inferred (name_source / name quality unchanged).
 -- Named by a person or a source (court_name, operator, manual, places_directory) are left alone: chain branches such as LA Fitness are
 -- real separate places. venue_id is untouched. City is the final city (int_venue_address), so this cannot live in dim_venue.
 with v as (
-    select d.venue_id, d.venue_name, d.name_source, d.lat, d.lon, d.court_records, lower(a.city) as city_key
+    select d.venue_id, d.venue_name, d.name_source, d.venue_kind, d.lat, d.lon, d.court_records, lower(a.city) as city_key
     from {{ ref('dim_venue') }} d
     join {{ ref('int_venue_address') }} a on a.venue_id = d.venue_id
     where d.name_source <> 'unnamed' and d.venue_name is not null and a.city is not null and d.lat is not null and d.lon is not null
@@ -38,7 +38,8 @@ dir as (
                else (['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest'])[
                         1 + cast(floor(((degrees(atan2(dx, dy)) + 360 + 22.5) % 360) / 45) as integer) % 8]
            end                                                   as direction,
-           case when court_records > 0
+           case when venue_kind = 'hitting_wall' then 'hitting wall'   -- a school's separate wall pins (int_wall_parent): no court count
+                when court_records > 0
                 then cast(court_records as varchar) || case when court_records = 1 then ' court' else ' courts' end
                 else 'court count unknown' end                   as count_label
     from pos
