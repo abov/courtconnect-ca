@@ -30,6 +30,8 @@ Added 2026-10-23 (pre-beta): further events, all with the detail in the path (`e
 - **Contribution:** `suggest-change` + `osm-edit` per week.
 - **Demand by sport:** `sport` events, to compare with coverage in `docs/data_quality.md` (where people look vs what we have).
 
+These are computed in the warehouse, so the definitions live in code: `mart_usage_metrics` (weekly: page views, venue opens, link-outs, contributions, opens per view, link-out rate; contributions also count `report-form`, as `goat_report.py` does) and `mart_usage_sport_demand` (`sport-pick` counts next to venues found). They read the committed `docs/usage_daily.csv` and `docs/usage_events.csv`, so `make usage` plus a build refreshes them.
+
 ## Owner setup (once)
 1. Create a free account at goatcounter.com and a site; pick a code (the part before `.goatcounter.com`).
 2. Set `GOATCOUNTER_CODE` in `app/index.html`, and merge (`pages.yml` deploys it).
