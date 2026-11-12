@@ -1,7 +1,7 @@
-"""Local chatbot prototype: Claude + tools over app/data/venues.json (docs/chatbot_plan.md, layer 2, step 2).
+"""Local chatbot prototype: Claude + tools over app/data/venues.json (docs/chatbot.md, layer 2, step 2).
 
     python chatbot/run.py --ask "Where can I play pickleball in Reno?"
-    python chatbot/run.py --questions 1,2,3        # run numbered questions from docs/chatbot_questions.md
+    python chatbot/run.py --questions 1,2,3        # run numbered questions from docs/chatbot.md
     python chatbot/run.py --questions all --budget-usd 0.25
 
 Needs ANTHROPIC_API_KEY (environment or .env; only that one key is read). Writes a transcript with token use and an
@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import tools  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-QUESTIONS = ROOT / "docs" / "chatbot_questions.md"
+QUESTIONS = ROOT / "docs" / "chatbot.md"
 RESULTS = Path(__file__).resolve().parent / "results"
 DEFAULT_MODEL = "claude-haiku-5-5"
 # $ per million tokens (cached prices from the claude-api skill, 2026-10-06; Haiku 5.5 is for prompts up to 100K)
@@ -56,7 +56,12 @@ def load_key() -> str | None:
 
 def read_questions() -> dict[int, tuple[str, str]]:
     out = {}
+    in_questions = False  # docs/chatbot.md also holds the plan and UX todo: read only the test-questions section
     for line in QUESTIONS.read_text(encoding="utf-8").splitlines():
+        if line.startswith("## "):
+            in_questions = line.startswith("## Chatbot test questions")
+        if not in_questions:
+            continue
         m = re.match(r"^(\d+)\.\s+(.*)$", line)
         if m:
             q, _, expect = m.group(2).partition(" Expect:")
@@ -104,7 +109,7 @@ def ask(client, model: str, question: str, usage: dict, log: list[str]) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ask")
-    ap.add_argument("--questions", help="comma list of numbers from docs/chatbot_questions.md, or 'all'")
+    ap.add_argument("--questions", help="comma list of numbers from docs/chatbot.md, or 'all'")
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--budget-usd", type=float, default=0.25)
     a = ap.parse_args()

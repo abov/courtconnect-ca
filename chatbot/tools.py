@@ -1,4 +1,4 @@
-"""Read-only data tools for the chatbot prototype (docs/chatbot_plan.md, ADR 0033).
+"""Read-only data tools for the chatbot prototype (docs/chatbot.md, ADR 0033).
 
 Every tool answers from app/data/venues.json only: no network, no model. Field codes are decoded here
 (see the docstring of ingestion/export_app_data.py) so the model never has to guess what "q" or "f" mean.
@@ -215,7 +215,7 @@ def find_walls(sport: str = "", city: str = "", near_city: str = "", radius_km: 
 
 def find_gear(sport: str = "", city: str = "") -> dict:
     return {"available": False,
-            "message": "We have no gear-store or rental data yet (docs/chatbot_plan.md, step 3). Do not name stores from memory."}
+            "message": "We have no gear-store or rental data yet (docs/chatbot.md, step 3). Do not name stores from memory."}
 
 
 def save_profile(sport: str = "", city: str = "", level: str = "") -> dict:

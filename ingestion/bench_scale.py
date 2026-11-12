@@ -8,7 +8,7 @@ For each scale it copies courtconnect.duckdb to a scratch folder, replicates the
 the copy and records the wall time, the slowest models, the peak memory of the dbt process and the size of the venue
 export. Nothing in the real database or in app/ is touched. Seeds and manual CSVs stay at 1x (they are hand-curated
 and do not grow with area), and tests are skipped (the region bounding-box tests would reject shifted points): this
-measures the transform, not correctness. Results go to stdout as markdown for docs/scaling.md.
+measures the transform, not correctness. Results go to stdout as markdown for docs/scale.md.
 """
 from __future__ import annotations
 

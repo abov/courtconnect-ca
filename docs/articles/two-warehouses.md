@@ -39,7 +39,7 @@ A few days later I brought the removal forward and did it in one change ([PR #30
 
 The honest downside is written into the ADR: if the project ever needs a cloud warehouse, portability has to be rebuilt and re-tested, and that would need a new decision record. I chose to pay that later, if at all, instead of paying a small tax every day for an option nobody was exercising.
 
-What it does not cost is capability. The data we keep is small (about 10,000 venues). DuckDB queries the large public Overture files on S3 in place and fetched about 743 MB of 39.6 GB for the real extracts ([benchmark](../planet_scale_benchmark.md)). The warehouse never needed to be big; the sources did.
+What it does not cost is capability. The data we keep is small (about 10,000 venues). DuckDB queries the large public Overture files on S3 in place and fetched about 743 MB of 39.6 GB for the real extracts ([benchmark](../scale.md)). The warehouse never needed to be big; the sources did.
 
 ## What I would take from this
 

@@ -3,7 +3,7 @@
 Date: 2026-10-23. Status: **proposed** (owner decides). Builds on ADR 0015 (phase B needs its own ADR) and ADR 0021 (phase A, closed 2026-10-21). Nothing is built under this ADR.
 
 ## Context
-Phase A is live and link-out only: the Watch & Social view (`social_events.csv`, 21 recurring series, 20 from the organizer's own site and 1 WhatsApp, mostly Padel), `player_platforms.csv` (10 apps and groups that match players, all run by others) and `player_groups.csv` (empty header; the scheduled step still looks for public groups, no shelf is planned). ADR 0015 said phase B (own accounts, partner matching, event posting) comes "only if beta findings show people want it, if at all". The beta round has not run yet (`docs/feedback_round.md`), so there is **no demand evidence yet**. This ADR picks a direction so the question is closed on paper, and names what evidence would reopen it.
+Phase A is live and link-out only: the Watch & Social view (`social_events.csv`, 21 recurring series, 20 from the organizer's own site and 1 WhatsApp, mostly Padel), `player_platforms.csv` (10 apps and groups that match players, all run by others) and `player_groups.csv` (empty header; the scheduled step still looks for public groups, no shelf is planned). ADR 0015 said phase B (own accounts, partner matching, event posting) comes "only if beta findings show people want it, if at all". The beta round has not run yet (`docs/feedback.md`), so there is **no demand evidence yet**. This ADR picks a direction so the question is closed on paper, and names what evidence would reopen it.
 
 Constraints that do not change: no owner logins (ADR 0007), no personal data stored (ADR 0015, 0019), links out and no bookings or payments, bare-minimum budget with a $20/month agent cap (ADR 0019), static site on GitHub Pages, one part-time owner.
 
@@ -34,6 +34,6 @@ Why not copy connectplayers.ca: it and `player_platforms.csv`'s other nine entri
 
 ## Consequences
 - CLAUDE.md "Open" list: replace the "Social / open-source next step (phase B, own ADR)" line with "Social phase B: ADR 0024 (proposed) recommends stopping at phase A; option B (discovery filters, link-out only) only if the beta asks for it; own accounts/matching rejected." Once the owner accepts, mark the line done.
-- Beta question 7 in `docs/feedback_round.md` (added with this ADR): "Did you find someone to play with through the site? Would you want to post that you are looking for a partner?" so the reopen test has data.
+- Beta question 7 in `docs/feedback.md` (added with this ADR): "Did you find someone to play with through the site? Would you want to post that you are looking for a partner?" so the reopen test has data.
 - No new seeds, models, app code or data stored. ADR 0015's "until phase B has an ADR, no user accounts or personal data" still holds; this ADR, if accepted, keeps it true.
 - Risk of the recommendation: if the beta shows strong demand, stopping at phase A leaves a gap that other apps fill. That is acceptable under the budget and safety limits, and the reopen test above is the way back in.

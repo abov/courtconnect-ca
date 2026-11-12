@@ -31,7 +31,7 @@ Constraints that do not change: static site on GitHub Pages, public repo (an ema
 | **C. Own backend** | Serverless function + database + mailer | Hosting + upkeep | We hold and secure the emails; out of budget |
 
 ## Decision (proposed)
-Build **A first** (no personal data, needed by B anyway), run **B** only if the beta shows people want it (add a question to `docs/feedback_round.md`: "Would you want an email when something changes at a saved spot or near you?") and the owner picks a provider, sender address and privacy text. **Reject C.** Digests stay draft-mode until the owner switches sending on.
+Build **A first** (no personal data, needed by B anyway), run **B** only if the beta shows people want it (add a question to `docs/feedback.md`: "Would you want an email when something changes at a saved spot or near you?") and the owner picks a provider, sender address and privacy text. **Reject C.** Digests stay draft-mode until the owner switches sending on.
 
 ## Consequences
 - CLAUDE.md "After beta" gets one line for this ADR. README ADR count moves to 0025 (0023, 0024, 0025 proposed).

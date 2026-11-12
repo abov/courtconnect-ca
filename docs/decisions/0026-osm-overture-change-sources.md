@@ -1,6 +1,6 @@
 # 0026. Where the change feed gets its "what changed" for OSM and Overture
 
-Date: 2026-10-29. Status: **proposed** (owner decides). Step 1 of ADR 0025 (the public `app/data/changes.json`, no personal data) needs a source for "a court or place appeared, closed or moved". Follow-up named in `docs/planet_scale_plan.md`. The Overture side is built as a script (below); nothing writes `changes.json` yet.
+Date: 2026-10-29. Status: **proposed** (owner decides). Step 1 of ADR 0025 (the public `app/data/changes.json`, no personal data) needs a source for "a court or place appeared, closed or moved". Follow-up named in `docs/scale.md`. The Overture side is built as a script (below); nothing writes `changes.json` yet.
 
 ## Context
 The pipeline refreshes twice a month (the extracts, then dbt). A change feed only needs to say what differs between two refreshes. Two outside sources move between them:
@@ -23,7 +23,7 @@ The planet-scale plan listed "OSM minutely replication diffs filtered to CA/NV r
 4. **Order of work if accepted:** (a) venue-id stability check and a first-seen date in the export (ADR 0025 prerequisites), (b) OSM snapshot diff script beside the Overture one, (c) a dbt or Python step that joins both diffs to venue ids and writes `changes.json`, (d) a "What's new" strip, only after the beta.
 
 ## Consequences
-- No new dependency, service or spend. The Overture diff reads about the same slice as the normal places extract, a few percent of the release (`docs/planet_scale_benchmark.md`).
+- No new dependency, service or spend. The Overture diff reads about the same slice as the normal places extract, a few percent of the release (`docs/scale.md`).
 - README ADR count moves to 0026 (0023 to 0026 proposed). CLAUDE.md "After beta" favorites line gains a pointer to this ADR.
 - Risk: snapshot diffs cannot see an edit made and reverted between two refreshes, and Overture `gone` also fires when a place stops matching the racket filter, not only when it closes. The `detail` column says so; the feed treats both as leads.
 

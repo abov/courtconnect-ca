@@ -17,13 +17,13 @@ Information about *where to play* tennis, padel, pickleball, squash and dozens o
 - **Links out, never bookings or payments.**
 
 ## Where to read more
-The live site is the one place for the project's story, numbers and documentation, so they stay current without hand edits here:
+**Start at the [project hub](docs/README.md)**: every live page, dashboard, tool, account and doc in one list (a CI check keeps it complete). The live site keeps the story and numbers current without hand edits here:
 - **[How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html)**: pipeline, gates, measured numbers and what is not measured yet.
 - **[Documentation index](https://abov.github.io/courtconnect-ca/how-its-built.html#docs)**: case study, architecture, decisions (ADRs), costs, runbooks, data dictionary.
 - **[Data-quality dashboard](https://abov.github.io/courtconnect-ca/dashboard/)** and [run history](https://abov.github.io/courtconnect-ca/run-history.html): scorecards after each refresh.
 - **[Ask the data](https://abov.github.io/courtconnect-ca/ask-the-data.html)**: SQL on the public venue file, in your browser.
 - Builders and AI tools: `app/data/venues.json` with a [data dictionary](app/data-dictionary.md) and [`llms.txt`](app/llms.txt).
-- Status and next steps: [`docs/status.md`](docs/status.md).
+- Status and next steps: [`docs/status.md`](docs/status.md). Tools and accounts: [hub](docs/README.md#2-source-tools-and-accounts).
 
 **Stack:** Python ingestion, a tested dbt project on DuckDB, a static MapLibre page on GitHub Pages. No server, no accounts, no cookies; location for "Near me" stays in the browser, phone numbers are never exported and homes show the city only. Map data from OpenStreetMap and Overture Maps ([`NOTICE.md`](NOTICE.md)).
 

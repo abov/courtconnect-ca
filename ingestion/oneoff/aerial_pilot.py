@@ -1,4 +1,4 @@
-"""Phase 3 pilot (docs/ml_plan.md): find courts in NAIP aerial photos.
+"""Phase 3 pilot (docs/ml.md): find courts in NAIP aerial photos.
 
 Stages (run in order; each caches under data/aerial/):
   osm     fetch OSM pitch polygons + context areas for the test area (--train-area: also the training area)

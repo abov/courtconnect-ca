@@ -1,4 +1,4 @@
-"""Measure how much of the Overture release the CA+NV extracts actually read (docs/planet_scale_plan.md).
+"""Measure how much of the Overture release the CA+NV extracts actually read (docs/scale.md).
 
 For each theme (places, addresses; --themes adds e.g. buildings for release size and row count only):
   release size  sum of object sizes under the theme prefix (public S3 listing, no account)

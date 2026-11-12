@@ -114,7 +114,7 @@ New anonymous events (short names only): `welcome-back` (the shortlist and focus
 
 ## 5. How to ship it (PM view)
 
-**Timing risk (important).** The friends beta is running: replies due 2026-10-28, findings 10-29 to 11-01 (`docs/feedback_round.md`), and `ux_polish.md` already warns that a redesign mid-beta muddies the feedback. The changes below are *subtractive* (less on screen, plainer words, no restyle), which is lower risk than Option C, but testers should be told the page changed and on what date.
+**Timing risk (important).** The friends beta is running: replies due 2026-10-28, findings 10-29 to 11-01 (`docs/feedback.md`), and `ux_polish.md` already warns that a redesign mid-beta muddies the feedback. The changes below are *subtractive* (less on screen, plainer words, no restyle), which is lower risk than Option C, but testers should be told the page changed and on what date.
 
 | PR | Change | Size | Check |
 |---|---|---|---|

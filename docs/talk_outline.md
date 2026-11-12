@@ -18,7 +18,7 @@
 |---|---|---|---|
 | 1 | The problem | Sources disagree: OSM has courts but few names, directories have names but not courts, clubs publish access rules only on their own pages. | [case study](case_study.md), "The problem" |
 | 2 | The shape | Raw lands untouched, dbt cleans and tests, one export feeds a static page. | [architecture](architecture.md); live [dbt docs](../app/how-its-built.html) |
-| 3 | You don't need a warehouse | Queried Overture's public Parquet in place: 743 MB fetched of 39.6 GB. A laptop file was enough; I never ran it on a warehouse, so no speed claim. | [article](articles/you-dont-need-a-warehouse.md), [benchmark](planet_scale_benchmark.md) |
+| 3 | You don't need a warehouse | Queried Overture's public Parquet in place: 743 MB fetched of 39.6 GB. A laptop file was enough; I never ran it on a warehouse, so no speed claim. | [article](articles/you-dont-need-a-warehouse.md), [benchmark](scale.md) |
 | 4 | Trust is a data model | Confirmation scale (visited / operator / reported / inferred); every seed row carries `evidence` and `verified_on`; inferred data is labelled. | [data dictionary](../app/data-dictionary.md) |
 | 5 | Measure the matcher | Gold set drove three rules, each judged by score not by eye. | [article](articles/entity-resolution-gold-set.md) |
 | 6 | Models suggest, a script merges | Risk classes, path allowlist, diff caps, scorecard no-regression, kill switch. Hardened this month; a review found two gaps, now closed. | [article](articles/models-suggest-scripts-merge.md), [threat model](merge_gate_threat_model.md) |

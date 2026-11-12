@@ -1,4 +1,4 @@
-"""Tier 3 of address fill (docs/ml_plan.md): reverse-geocode pins that still have no street address, via OSM's Nominatim.
+"""Tier 3 of address fill (docs/ml.md): reverse-geocode pins that still have no street address, via OSM's Nominatim.
 
 Only NON-HOME pins with no address after tiers 1-2 (`int_venue_address`) are queried; home-like pins stay city-only (owner rule).
 Results are cached in transform/seeds/nominatim_addresses.csv, one row per pin including misses, so a rerun never re-queries.

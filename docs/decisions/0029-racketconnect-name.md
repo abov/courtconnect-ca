@@ -13,4 +13,4 @@ Date: 2026-11-02. Status: accepted (owner, chat 2026-11-02).
 
 ## Open
 - Check the name and a domain are free before announcing it. Not done.
-- Ask the name question in the beta (`docs/feedback_round.md`).
+- Ask the name question in the beta (`docs/feedback.md`).

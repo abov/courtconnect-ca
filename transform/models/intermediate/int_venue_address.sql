@@ -1,4 +1,4 @@
--- One row per venue: the street address to show and where it came from (docs/ml_plan.md, address fill).
+-- One row per venue: the street address to show and where it came from (docs/ml.md, address fill).
 --   address_source 'osm'              : address tagged on the OSM court itself (kept as is)
 --   address_source 'overture_place'   : the Overture place record's address (kept as is)
 --   address_source 'osm_parent'       : INFERRED, tier 1b: the address mapped in OSM on the park / school / club that encloses a venue named after it

@@ -34,7 +34,7 @@ Raw sources land untouched, dbt cleans, matches and tests them, and one export f
 2. **Honesty over polish (ADR 0007).** Access is often inferred from a club's website, not stated. The map labels it inferred and the contributor workflow demands evidence and a date. A smaller, trustworthy dataset beat a bigger, guessed one.
 3. **What I chose not to do (ADRs 0005, 0009, 0010, 0012).** No Google Places, no scraping of Meta, WhatsApp or Meetup, no use of my logins. Social groups are link-outs from a club's own page. This cut off easy data but removed legal and privacy risk.
 4. **Portability, then retirement (ADR 0001, then 0018).** I first kept every model runnable on DuckDB and Snowflake. When Snowflake access went away (2026-10-14) nothing had run on it, so I recorded the decision, relaxed the portability rule and removed the dead code (PR #304) instead of maintaining an engine nobody tested. Lesson: a portability rule has a running cost, so drop it when its reason disappears.
-5. **Query big data in place, keep small data.** DuckDB reads the Overture parquet on S3 with range requests and keeps only the CA+NV rows. Measured: [planet-scale benchmark](planet_scale_benchmark.md). It is not terabyte processing, and the doc says so.
+5. **Query big data in place, keep small data.** DuckDB reads the Overture parquet on S3 with range requests and keeps only the CA+NV rows. Measured: [planet-scale benchmark](scale.md). It is not terabyte processing, and the doc says so.
 6. **Give back to the source (ADR 0011).** OSM is the main input, so the map links venues to the OSM editor with a contributor guide, and a fix list (`osm_fix_list.md`) goes to people who edit OSM; we never edit it ourselves.
 7. **Models suggest, code and people decide (ADR 0017, 0019).** See the next section.
 
@@ -62,10 +62,10 @@ Raw sources land untouched, dbt cleans, matches and tests them, and one export f
 
 ## Results and what is not measured yet
 - Coverage and service levels: see "At a glance". Live numbers regenerate with `make quality` and `make report`.
-- **Usage and friend feedback are not in yet:** a beta round is planned for December (`docs/feedback_round.md`). I will add weekly visitors, venue opens and link-out clicks then, and will not quote numbers before they exist.
+- **Usage and friend feedback are not in yet:** a beta round is planned for December (`docs/feedback.md`). I will add weekly visitors, venue opens and link-out clicks then, and will not quote numbers before they exist.
 
 ## What I would do next
-1. Run the beta and rank findings with RICE (`docs/feedback_findings.md`).
+1. Run the beta and rank findings with RICE (`docs/feedback.md`).
 2. Raise name quality with a contributor drive and the OSM link.
 3. Publish a lineage page and a small BI dashboard of the scorecard (static, fits Pages).
 4. Decide the path: community open source (ODbL attribution already required) or a paid layer; the link-out-only rule keeps both open.
