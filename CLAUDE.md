@@ -75,6 +75,7 @@ Hand-off is the PR description and `git log`; `docs/sessions/` holds only the ro
 **Priorities** (dated detail for every item, the "After beta" list and the parked items: `docs/status.md`; edit it there when priorities change)
 1. Six states (ADR 0028/0029/0035): Oregon, Washington and Hawaii data layers are built, Arizona's is in progress; their events, leagues and groups passes are done (`docs/event_group_search.md`); rec centers, chains and campuses are not (Hawaii resorts: ask the owner first). New states and countries get full CA parity (walls, handball, events, social, leads): follow `docs/new_region_checklist.md` and do not call a region done until `python ci/region_parity.py --region XX --strict` passes (owner 2026-11-03; Arizona shipped as data layer only).
 2. Street addresses: after every extract run `ingestion/reverse_geocode_blanks.py` (+ build, `make app-data`); run `extract_osm_parents.py` after each OSM refresh. Home-like pins never get an inferred street.
+   Every region, Mexico included: automatic OSM + Overture pins show labelled inferred, unnamed or home-like-looking ones too (shown unnamed, not hidden by default; owner 2026-11-12, `docs/decisions/0034-mexico-scope.md`).
 3. Match gold set: re-run `make eval-match` after each OSM refresh.
 4. Padel lead rechecks run in Part 3 of the cloud routines (`docs/cloud_routines.md`); facility scans and coverage leads are in `docs/status.md`.
 5. After the December beta: polish, player finding, sport suggestions, favorites email, ML phases, monetization (`docs/status.md`).
