@@ -23,7 +23,9 @@ DISTINCTIVE = {
     "platform tennis", "paddle tennis", "pop tennis", "frescobol", "tamburello", "jai alai", "soft tennis",
     "jokari", "smolball", "speedminton", "crossminton", "matkot", "racquet club", "racket club", "pickle ball",
     "paddleball", "touchtennis",
-    "club de tenis", "cancha de tenis", "tenis de mesa", "raquetbol", "racquetbol", "raquetball",   # Spanish (ADR 0034); bare "tenis" also means sneakers, so it stays ambiguous
+    "club de tenis", "cancha de tenis", "tenis de mesa", "raquetbol", "racquetbol", "raquetball",
+    "canchas de tenis", "clubes de tenis", "academia de tenis", "escuela de tenis", "tenis de campo", "tenis de playa",
+    "frontenis", "picklebol",   # Spanish (ADR 0034); bare "tenis" also means sneakers, so it stays ambiguous
 }
 
 # Extra spellings people use in business names; (term, sport on the sheet)

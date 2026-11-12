@@ -3,6 +3,7 @@ term,sport,reliability
 3 wall paddleball,3-wall Paddleball,ambiguous
 360ball,360Ball,ambiguous
 4 wall paddleball,4-wall Paddleball,ambiguous
+academia de tenis,Tennis,distinctive
 australian racquetball,Australian Racquetball,ambiguous
 badminton,Badminton,distinctive
 ball badminton,Ball Badminton,ambiguous
@@ -26,15 +27,18 @@ battlebird,Battlebird,ambiguous
 beach tennis,Beach Tennis,ambiguous
 biraq,Biraq,ambiguous
 cancha de tenis,Tennis,distinctive
+canchas de tenis,Tennis,distinctive
 club de tenis,Tennis,distinctive
+clubes de tenis,Tennis,distinctive
 crossminton,Crossminton,distinctive
 downside ball game,Downside Ball Game,ambiguous
 eclipseball,Eclipseball,ambiguous
+escuela de tenis,Tennis,distinctive
 floor pro mini tennis,Floor Pro Mini Tennis,ambiguous
 frescoball,Frescoball,ambiguous
 frescobol,Frescoball,distinctive
 frescotennis,Frescotennis,ambiguous
-frontenis,Basque Pelota: Frontenis,ambiguous
+frontenis,Basque Pelota: Frontenis,distinctive
 goodminton,Goodminton,ambiguous
 hand tennis,Hand Tennis,ambiguous
 indiaca tennis,Indiaca Tennis,ambiguous
@@ -75,9 +79,11 @@ pelota vasca,Basque Pelota: Paleta Goma,ambiguous
 pelota vasca,Basque Pelota: Xare,ambiguous
 pickle ball,Pickleball,distinctive
 pickleball,Pickleball,distinctive
+picklebol,Pickleball,distinctive
 ping pong,Table Tennis,distinctive
 pitton,Pitton,ambiguous
 platform tennis,Platform Tennis,distinctive
+pop tenis,Pop Tennis,ambiguous
 pop tennis,Pop Tennis,distinctive
 pro sunball,Pro Sunball,ambiguous
 qianball,Qianball,ambiguous
@@ -112,7 +118,9 @@ taiji bailong,Taiji Bailong,ambiguous
 tamburello,Tamburello,distinctive
 tenis,Tennis,ambiguous
 tenis criollo,Tenis criollo,ambiguous
+tenis de campo,Tennis,distinctive
 tenis de mesa,Table Tennis,distinctive
+tenis de playa,Beach Tennis,distinctive
 tennis,Tennis,distinctive
 tennis baseball,Tennis Baseball,ambiguous
 tennis triples,Tennis Triples,ambiguous
