@@ -24,6 +24,7 @@
     "ensenada": {"bbox": [31.75, -116.75, 31.95, -116.50], "states": ["MX"], "note": "Ensenada (border pilot)"},
     "hermosillo": {"bbox": [28.95, -111.15, 29.20, -110.85], "states": ["MX"], "note": "Hermosillo (border pilot)"},
     "nogales_son": {"bbox": [31.20, -111.05, 31.40, -110.85], "states": ["MX"], "note": "Nogales, Sonora (border pilot)"},
-    "slrc": {"bbox": [32.40, -114.85, 32.55, -114.70], "states": ["MX"], "note": "San Luis Rio Colorado (border pilot)"}
+    "slrc": {"bbox": [32.40, -114.85, 32.55, -114.70], "states": ["MX"], "note": "San Luis Rio Colorado (border pilot)"},
+    "monterrey": {"bbox": [25.5, -100.55, 25.85, -100.05], "states": ["MX"], "note": "Monterrey, San Pedro, Guadalupe, San Nicolas, Apodaca, Escobedo, Santa Catarina (Phase 3 trial)"}
   }
 }
