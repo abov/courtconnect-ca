@@ -35,10 +35,15 @@ def slug(text: str) -> str:
     return "".join(c if c.isalnum() else " " for c in text.lower()).strip()
 
 
-def completeness(vs: list[dict]) -> list[float]:
+def completeness(vs: list[dict]) -> list[float | None]:
     """Shares of venues with: a real name (court, operator or places-directory name, same as the scorecard), a street address, a website,
-    and a hand check (visited, or stated by the operator). Completeness is the mean of the first three."""
+    and a hand check (visited, or stated by the operator). Completeness is the mean of the first three.
+    Likely private-residence pins (`h`, ADR 0016) are left out: they never get a street and have no website, so they could never score.
+    A place that is all such pins has no score (None)."""
+    vs = [v for v in vs if not v.get("h")]
     n = len(vs)
+    if not n:
+        return [None] * 5
     real = sum(v["q"] in ("c", "p") for v in vs) / n
     addr = sum(bool(v["a"]) for v in vs) / n
     web = sum(bool(v["w"]) for v in vs) / n
@@ -132,9 +137,9 @@ def main() -> None:
     for (city, region), vs in by_city.items():
         opens = demand["demand-where"][slug(f"{city} {region}")]
         if len(vs) >= 15 or opens:   # small towns only appear once someone has looked at them
-            rows.append([city, region, len(vs), *completeness(vs), opens])
+            rows.append([city, region, len(vs), sum(bool(v.get("h")) for v in vs), *completeness(vs), opens])
     rows.sort(key=lambda r: (-r[-1], -r[2]))
-    write("city_scorecard.csv", ["city", "region", "venues", "real_name_share", "address_share", "website_share", "hand_checked_share",
+    write("city_scorecard.csv", ["city", "region", "venues", "private_pins", "real_name_share", "address_share", "website_share", "hand_checked_share",
                                   "completeness", "opens"], rows)
 
     # Google Trends interest per metro and sport next to venues and completeness (written from the warehouse by `make interest`; relative, sampled).
