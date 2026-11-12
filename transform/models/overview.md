@@ -2,7 +2,7 @@
 
 # RacketConnect: data model
 
-One map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, Texas, Hawaii and parts of Mexico, built from open data. This site documents the dbt project: every model, seed and test, and the lineage between them. Use the lineage graph (bottom right) to follow a venue from raw data to the exported map.
+One map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico, built from open data. This site documents the dbt project: every model, seed and test, and the lineage between them. Use the lineage graph (bottom right) to follow a venue from raw data to the exported map.
 
 **Layers, left to right**
 

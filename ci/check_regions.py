@@ -50,7 +50,16 @@ POINTS = [
     (32.68, -114.40, "AZ"),       # Yuma area, across the river from California
     (31.34, -110.94, "AZ"),       # Nogales, Arizona
     (37.10, -113.58, None),       # St. George, Utah
-    (35.53, -108.74, None),       # Gallup, New Mexico
+    (35.53, -108.74, "NM"),       # Gallup, New Mexico (was None before NM)
+    (35.08, -106.65, "NM"),       # Albuquerque
+    (35.69, -105.94, "NM"),       # Santa Fe
+    (32.32, -106.76, "NM"),       # Las Cruces, near the Texas line
+    (36.73, -108.22, "NM"),       # Farmington, Four Corners
+    (33.39, -104.52, "NM"),       # Roswell
+    (32.70, -103.14, "NM"),       # Hobbs, near the Texas line
+    (35.17, -103.72, "NM"),       # Tucumcari
+    (33.81, -109.31, "AZ"),       # near Springerville, Arizona (NM line)
+    (37.17, -104.50, None),       # Trinidad, Colorado
     (36.80, -114.07, "NV"),       # Mesquite, Nevada, on the Arizona line
     (34.85, -114.61, "CA"),       # Needles, California, across the river from Arizona
     (32.5150, -117.0382, "MX"),   # Tijuana
@@ -102,7 +111,7 @@ def check_outlines() -> int:
     until `python ingestion/add_state_outline.py` has added it."""
     fc = json.loads((Path(__file__).resolve().parent.parent / "app" / "data" / "state_outline.json").read_text(encoding="utf-8"))
     have = {f["properties"]["name"] for f in fc["features"]}
-    code_to_name = {c: n.title() for n, c in overpass.STATE_AREAS.items()}
+    code_to_name = {c: n.replace("_", " ").title() for n, c in overpass.STATE_AREAS.items()}
     missing = [code_to_name[c] for c in overpass.REGIONS if code_to_name[c] not in have]
     print(f"{'ok  ' if not missing else 'FAIL'} state_outline.json has a state line for every region in regions.json")
     if missing:

@@ -62,3 +62,5 @@ wtatennis.com,WTA Tour tournament pages,governing_body,Tennis,MX,WebFetch of the
 boletomovil.com,Boletomóvil (Abierto GNP Seguros tickets),ticketing,Tennis,MX,"Link only, from the WTA tournament page",active,2026-11-05,2026-11-05,Ticket purchase link for Abierto GNP Seguros; prices not read
 queretaro.travel,Querétaro state tourism board,governing_body,Tennis,MX,"WebFetch of the WTA 125 event page",active,2026-11-10,2026-11-10,"Querétaro Open (WTA 125) venue; recheck for 2027 dates"
 ymcapkc.org,YMCA of Pierce and Kitsap Counties pickleball page,venue_page,Pickleball,WA,browser pane,active,2026-11-10,2026-11-10,"Lists branch tournaments and workshops (Tacoma Center Nov 29 2026); open to non-members"
+abqpickleball.org,ABQ Pickleball Club upcoming tournaments,club,Pickleball,NM,browser pane page read,active,2026-11-12,2026-11-12,Ventana Ranch and Picklr tournaments; Albuquerque
+signupgenius.com,SignUpGenius (organizer sign-up pages),registration,Pickleball,NM,link from organizer page only,active,2026-11-12,2026-11-12,Registration link for the Toys for Tots tournament; not searched on its own

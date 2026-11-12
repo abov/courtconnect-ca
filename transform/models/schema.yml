@@ -280,6 +280,39 @@ seeds:
       - name: checked_on
         tests: [not_null]
 
+  - name: venue_subregion
+    description: >
+      The Mexican federal entity (ISO 3166-2, e.g. MX-BCN) whose municipio boundary contains a Mexican pin
+      (ingestion/subregion_from_boundaries.py; Overture divisions, CDLA-Permissive). dim_venue.subregion reads it, and ignores the row if the pin has moved.
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: subregion
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('mx_entities'), field: subregion}
+      - name: source
+        tests: [not_null]
+      - name: checked_on
+        tests: [not_null]
+
+  - name: mx_entities
+    description: Mexico's 32 federal entities (31 states and Mexico City), keyed by ISO 3166-2 code (docs/mexico_states_outline.md).
+    columns:
+      - name: subregion
+        tests: [unique, not_null]
+      - name: entity_name
+        tests: [not_null]
+      - name: entity_type
+        tests:
+          - accepted_values:
+              arguments: {values: [state, autonomous entity]}
+
   - name: website_overrides
     description: Websites a person found to be parked, hijacked or the wrong business; DNS cannot see these. They win over the automatic check.
     columns:
@@ -462,7 +495,7 @@ seeds:
     description: >
       Player-matching apps and sites shown under "Find people to play with" (social phase A, ADR 0015). Link-outs only: nothing is
       scraped, no member data is stored. `evidence` quotes the public page read on `verified_on`; none of them is checked for a
-      player pool in California, Nevada, Oregon, Washington, Arizona, Texas, Hawaii or Mexico, and the app says so.
+      player pool in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii or Mexico, and the app says so.
     columns:
       - name: platform
         tests: [unique, not_null]
@@ -764,6 +797,11 @@ models:
     columns:
       - name: venue_id
         tests: [unique, not_null]
+      - name: subregion
+        description: Mexican federal entity (ISO 3166-2, e.g. MX-BCN) for an MX pin; null elsewhere (seeds/venue_subregion.csv).
+        tests:
+          - relationships:
+              arguments: {to: ref('mx_entities'), field: subregion}
       - name: venue_kind
         description: courts = a court facility; hitting_wall = a wall pin that stands at no listed venue (ADR 0032).
         tests:
@@ -810,6 +848,40 @@ models:
     columns:
       - name: question
         tests:
+          - not_null
+
+  - name: stg_usage_daily
+    description: GoatCounter page views and events per day (ADR 0013), read from the committed docs/usage_daily.csv. Counts only.
+
+  - name: stg_usage_events
+    description: GoatCounter event counts per day, event name and detail (ADR 0013), read from the committed docs/usage_events.csv. Fixed vocabularies, no typed text.
+
+  - name: mart_usage_metrics
+    description: >
+      The ADR 0013 usage metrics, one row per week: page views, venue opens, link-outs (north star), contributions, venue opens per view
+      and link-out rate. Built from the committed docs/usage_daily.csv and docs/usage_events.csv (`make usage` refreshes them). Approximate
+      and directional only; counts, never visitors.
+    columns:
+      - name: week_start
+        description: Monday of the week.
+        tests:
+          - unique
+          - not_null
+      - name: linkouts
+        description: North star. Outbound link-outs (event `linkout`).
+      - name: venue_opens_per_view
+        description: venue-open / page views. Null when the week has no page views.
+      - name: linkout_rate
+        description: linkout / venue-open. Null when the week has no venue opens.
+
+  - name: mart_usage_sport_demand
+    description: >
+      ADR 0013 demand by sport: sport-pick counts next to venues found and coverage status from mart_sport_gaps. Picks that match no sport on
+      the sheet keep a null venues_found. Directional only.
+    columns:
+      - name: sport_name
+        tests:
+          - unique
           - not_null
 
   - name: mart_ask_feedback
@@ -1582,6 +1654,16 @@ models:
     description: >
       Places with weak sport evidence: a business name contains an ambiguous sport word ("Camino Real Tennis Center" is not Real Tennis).
       Never counted as a venue until a person confirms or rejects them in seeds/place_sport_overrides.csv.
+
+  - name: mart_mx_entity_coverage
+    description: >
+      Pin counts for each of Mexico's 32 federal entities, including entities with none (docs/mexico_states_outline.md). hand_built = pins from a
+      seed row a person added; automatic = pins from OSM or Overture alone.
+    columns:
+      - name: subregion
+        tests: [unique, not_null]
+      - name: pins
+        tests: [not_null]
 
   - name: mart_sport_coverage
     description: >

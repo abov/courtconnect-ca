@@ -4,7 +4,7 @@ Status: **proposal, no code changed.** Sources: `docs/product_brief.md`, `docs/c
 
 ## Why this exists (one paragraph)
 
-Court finders each cover one sport, or only places you can book. Racket players in California and Nevada also play on public park courts, hitting walls, rec centers and in sports most apps skip (padel, squash, badminton, table tennis, Pop Tennis, paddleball). RacketConnect is the one free map of all of them, honest about how sure it is, that also shows what to watch and who to play with.
+Court finders each cover one sport, or only places you can book. Racket players in the western U.S. also play on public park courts, hitting walls, rec centers and in sports most apps skip (padel, squash, badminton, table tennis, Pop Tennis, paddleball). RacketConnect is the one free map of all of them, honest about how sure it is, that also shows what to watch and who to play with.
 
 ## What other services do not do (our four differences)
 
