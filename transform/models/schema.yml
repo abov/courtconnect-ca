@@ -1226,6 +1226,8 @@ models:
         data_type: integer
       - name: near_street
         data_type: varchar
+      - name: is_home_like
+        data_type: boolean
       - name: website
         data_type: varchar
       - name: website_status
@@ -1541,6 +1543,16 @@ models:
     description: >
       For each court or facility, the smallest named park, school or club whose bounding box contains it. An approximation, labelled
       enclosing_feature downstream and never a confirmed court name. Golf courses, resorts and hotels are used only when nothing else contains the court.
+
+  - name: int_wall_parent
+    description: >
+      For each hitting-wall pin, the smallest named park, school or club whose bounding box contains it (same pick as int_court_parent).
+      int_wall_venue names an unnamed wall venue after it, labelled enclosing_feature (inferred); int_venue_address takes its mapped address.
+    columns:
+      - name: wall_key
+        tests:
+          - unique
+          - not_null
 
   - name: int_place_venue_match
     description: >
