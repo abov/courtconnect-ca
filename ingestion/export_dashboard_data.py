@@ -72,13 +72,17 @@ def main() -> None:
 
     s = json.loads((ROOT / "app" / "data" / "build_stats.json").read_text(encoding="utf-8"))
     # Venue and sport counts come from the map file itself so they always match the map; quality numbers keep the scorecard's own date.
-    m = json.loads((ROOT / "app" / "data" / "venues.json").read_text(encoding="utf-8"))["meta"]
+    mj = json.loads((ROOT / "app" / "data" / "venues.json").read_text(encoding="utf-8"))
+    m = mj["meta"]
+    # sports with no venue split in two: ones that need no official court (play anywhere, `w` on the sport) and ones with none mapped yet
+    anywhere = sum(1 for x in mj["sports"] if x["v"] == 0 and x.get("w"))
+    none_yet = sum(1 for x in mj["sports"] if x["v"] == 0 and not x.get("w"))
     write("stats.csv",
           ["as_of", "venues", "sports_with_venues", "sports_total", "named_pct", "sla_met", "sla_total", "tests_pass", "models", "seeds", "adrs",
-           "gold_pairs", "gold_wrong_merges", "gold_missed", "map_as_of", "map_venues", "map_sports_with_venues", "map_sports_total"],
+           "gold_pairs", "gold_wrong_merges", "gold_missed", "map_as_of", "map_venues", "map_sports_with_venues", "map_sports_total", "map_sports_anywhere", "map_sports_none"],
           [[s["as_of"], s["venues"], s["sports_with_venues"], s["sports_total"], s["named_pct"], s["sla_met"], s["sla_total"], s["tests_pass"],
             s["models"], s["seeds"], s["adrs"], s["gold"]["pairs"], s["gold"]["wrong_merges"], s["gold"]["missed"],
-            m["generated"], m["venues"], m["sports_with_venues"], m["sports_total"]]])
+            m["generated"], m["venues"], m["sports_with_venues"], m["sports_total"], anywhere, none_yet]])
 
     # Feedback issues: one row per day from the first report to today, so the chart shows open vs handled over time.
     log = live_issues()
