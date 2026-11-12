@@ -31,9 +31,11 @@ jobs:
       - name: Re-run ci runs stuck in the queue
         run: |
           cutoff=$(date -u -d '20 minutes ago' +%Y-%m-%dT%H:%M:%SZ)
+          # Ignore runs older than 3 h: ghost runs (queued, no jobs, can't be cancelled or deleted) would be retried forever.
+          oldest=$(date -u -d '3 hours ago' +%Y-%m-%dT%H:%M:%SZ)
           gh run list --repo "$REPO" --workflow ci --status queued --limit 50 \
             --json databaseId,createdAt,headBranch \
-            --jq ".[] | select(.createdAt < \"$cutoff\") | \"\(.databaseId) \(.headBranch)\"" |
+            --jq ".[] | select(.createdAt < \"$cutoff\" and .createdAt > \"$oldest\") | \"\(.databaseId) \(.headBranch)\"" |
           while read -r id branch; do
             echo "Stuck: run $id on $branch; cancel and re-run"
             gh run cancel "$id" --repo "$REPO" || true
