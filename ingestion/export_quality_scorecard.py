@@ -28,7 +28,7 @@ SLA_LINKCHECK_DAYS = 60     # website liveness checks
 SLA_DEAD_SITE_PCT = 10.0     # share of checked venue websites that are dead
 SLA_SEEN_DAYS = 35          # monthly freshness: a venue counts as fresh when some source saw it within this many days (mart_venue_confidence.last_seen_on)
 SLA_SEEN_PCT = 99.0          # share of venues that must be fresh; undated rows count as stale and are listed so they get a date
-SLA_NAMED_PCT = 25.0         # goal: share of venues with a real (non-guessed, non-empty) name; baseline 11.6% on 2026-10-13
+SLA_NAMED_PCT = 20.0         # goal: share of venues with a real (non-guessed, non-empty) name; baseline 11.6% on 2026-10-13; lowered to 20 on 2026-11-12 (facility-named venues now count, owner)
 
 
 def days_since(ts) -> int | None:
@@ -49,13 +49,19 @@ def main() -> None:
     q = lambda sql: con.execute(sql).fetchall()
     today = date.today().isoformat()
 
+    # A real name = a person or source named it, OR the courts stand inside a named facility (sports centre, community centre/clubhouse,
+    # or a club/resort/athletic site): the facility's name is the place's name. Park and school names stay inferred (owner 2026-11-12).
     venues, named, sited, in_osm, in_places, in_manual = q("""
-        select count(*), count(*) filter (where name_source in ('court_name','operator','manual','places_directory')),
+        select count(*), count(*) filter (where name_source in ('court_name','operator','manual','places_directory') or facility_named),
                count(*) filter (where website_usable is not null and website_usable <> ''),
                count(*) filter (where in_osm), count(*) filter (where in_places), count(*) filter (where in_manual)
-        from (select venue_id, any_value(name_source) name_source, any_value(website_usable) website_usable,
-                     bool_or(in_osm) in_osm, bool_or(in_places) in_places, bool_or(in_manual) in_manual
-              from marts.mart_venue_finder where lat is not null and lon is not null group by venue_id)""")[0]   # every venue on the map: court venues and hitting-wall venues (ADR 0032)
+        from (select f.venue_id, any_value(f.name_source) name_source, any_value(f.website_usable) website_usable,
+                     bool_or(coalesce(d.name_source = 'enclosing_feature' and (d.name_feature_kind in ('sports_facility','community')
+                         or (d.name_feature_kind = 'resort_or_other' and regexp_matches(lower(d.venue_name),
+                             'club|resort|racquet|tennis|athletic|sport|recreation|rec center|fitness|ymca'))), false)) facility_named,
+                     bool_or(f.in_osm) in_osm, bool_or(f.in_places) in_places, bool_or(f.in_manual) in_manual
+              from marts.mart_venue_finder f left join core.dim_venue d on d.venue_id = f.venue_id
+              where f.lat is not null and f.lon is not null group by f.venue_id)""")[0]   # every venue on the map: court venues and hitting-wall venues (ADR 0032)
     wall_venues = q("select count(distinct venue_id) from marts.mart_venue_finder where lat is not null and lon is not null and venue_kind = 'hitting_wall'")[0][0]
     sports_total, sports_covered, sports_empty = q("""
         select count(*), count(*) filter (where venues_found > 0), count(*) filter (where venues_found = 0) from marts.mart_sport_gaps""")[0]
@@ -126,7 +132,7 @@ def main() -> None:
           "## Coverage", "",
           f"- Venues on the map: **{venues:,}** ({in_osm:,} in OpenStreetMap, {in_places:,} in Overture places, {in_manual:,} hand-curated; sources overlap).",
           f"- Of those, hitting-wall venues (ADR 0032; a wall that stands at no listed court venue): **{wall_venues:,}**; court venues: **{venues - wall_venues:,}**.",
-          f"- Venues with a real name: **{named:,}** ({named_pct}%). The rest carry a name guessed from the park or school, or none.",
+          f"- Venues with a real name: **{named:,}** ({named_pct}%). The rest carry a name guessed from the park or school, or none. Counted as real: named by a source or person, or inside a named sports centre, community centre or club/resort.",
           f"- Venues with a usable website: **{sited:,}** ({round(100.0 * sited / venues, 1) if venues else 0}%).",
           f"- Sports on the sheet: **{sports_total}**; with at least one venue: **{sports_covered}**; empty: **{sports_empty}**.", "",
           "## Trust labels (hand-curated venues)", "",
