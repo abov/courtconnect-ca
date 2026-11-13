@@ -96,14 +96,14 @@
 
 <main class="wrap">
   <h2 id="numbers">The numbers, with dates</h2>
-  <p class="meta">From the data-quality scorecard and project checks of <span id="asof">2026-10-29</span>. They are written by <code>make stats</code> from the project's own checks at each refresh, and CI fails if they fall behind the scorecard.</p>
+  <p class="meta">Venue, sport and file counts as of <span id="asof">2026-11-12</span>; the scorecard checks (real names, service levels, tests) as of <span id="sc-asof">2026-11-10</span>. The site rebuilds these from the project's own files on every deploy and once a day, so they cannot fall behind.</p>
   <dl class="stats">
-    <div><dt>Venues on the map</dt><dd id="s-venues">16,919</dd><small id="s-venues-n">43 of 82 sports have at least one venue</small></div>
-    <div><dt>Service levels met</dt><dd id="s-sla">7 of 8</dd><small id="s-sla-n">16.2% of venues have a real name (goal 25%)</small></div>
+    <div><dt>Venues on the map</dt><dd id="s-venues">22,933</dd><small id="s-venues-n">44 of 82 sports have at least one venue</small></div>
+    <div><dt>Service levels met</dt><dd id="s-sla">7 of 8</dd><small id="s-sla-n">18.3% of venues have a real name (goal 25%)</small></div>
     <div><dt>Place-to-court matching</dt><dd id="s-gold">0 wrong merges</dd><small id="s-gold-n">129 hand-labelled pairs, 4 missed matches</small></div>
     <div><dt>Big source, small footprint</dt><dd id="s-big">743 MB</dd><small id="s-big-n">fetched of 39.6 GB of Overture places and addresses</small></div>
-    <div><dt>Warehouse</dt><dd id="s-models">53 models</dd><small id="s-models-n">34 seeds, 254 dbt tests passing</small></div>
-    <div><dt>Decisions on record</dt><dd id="s-adrs">26 ADRs</dd><small>one of them reverses an earlier choice</small></div>
+    <div><dt>Warehouse</dt><dd id="s-models">68 models</dd><small id="s-models-n">42 seeds, 308 dbt tests passing</small></div>
+    <div><dt>Decisions on record</dt><dd id="s-adrs">39 ADRs</dd><small id="s-adrs-n">one of them reverses an earlier choice</small></div>
   </dl>
 
   <h2 id="flow">From source to map</h2>
@@ -125,7 +125,7 @@
     </li>
     <li>
       <h3>Export</h3>
-      <p>One JSON file of about 2.4 MB, with a data dictionary and an <code>llms.txt</code> so people and AI tools can read it.</p>
+      <p>One JSON file of about <span id="s-mb">5.3</span> MB, with a data dictionary and an <code>llms.txt</code> so people and AI tools can read it.</p>
       <p class="gate"><b>Gate:</b> CI fails if the committed export is stale.</p>
     </li>
     <li>
@@ -135,7 +135,7 @@
     </li>
     <li>
       <h3>Refresh, twice a month</h3>
-      <p>A written runbook, plus scheduled agent runs that read public pages and open pull requests with evidence. A deterministic gate script, not a model, decides whether a routine refresh PR may merge itself. That switch was turned on on 2026-10-25 and has merged one PR so far (a routine refresh on 2026-10-25); everything else is merged by a person.</p>
+      <p>A written runbook, plus scheduled agent runs that read public pages and open pull requests with evidence. A deterministic gate script, not a model, decides whether a routine refresh PR may merge itself. That switch was turned on on 2026-10-25; every merge it makes is logged on the <a href="run-history.html">run history</a> page, and everything else is merged by a person.</p>
       <p class="gate"><b>Gate:</b> tests, freshness limits, a scorecard that must not regress, a cap on how much a change may touch, and evidence on every row. A free uptime monitor also watches the live site and emails the owner if it goes down.</p>
     </li>
   </ol>
@@ -201,6 +201,8 @@
   var n = function (v) { return Number(v).toLocaleString("en-US"); };
   fetch("data/build_stats.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
     set("asof", d.as_of);
+    set("sc-asof", d.scorecard_as_of);
+    set("s-mb", d.export_mb);
     set("s-venues", n(d.venues));
     set("s-venues-n", d.sports_with_venues + " of " + d.sports_total + " sports have at least one venue");
     set("s-sla", d.sla_met + " of " + d.sla_total);
@@ -212,6 +214,7 @@
     set("s-models", d.models + " models");
     set("s-models-n", d.seeds + " seeds, " + d.tests_pass + " dbt tests passing" + (d.tests_fail ? ", " + d.tests_fail + " failing" : ""));
     set("s-adrs", d.adrs + " ADRs");
+    set("s-adrs-n", d.adrs_superseded === 1 ? "one of them reverses an earlier choice" : d.adrs_superseded + " of them reverse an earlier choice");
   }).catch(function () { /* keep the dated fallback */ });
 })();
 </script>

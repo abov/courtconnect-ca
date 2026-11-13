@@ -64,8 +64,10 @@ select
 
     -- indoor / covered / outdoor
     case
-        when lower(coalesce(indoor, '')) = 'yes' or leisure = 'sports_hall'
-          or (building is not null and lower(building) <> 'no')                        then 'indoor'
+        when lower(coalesce(indoor, '')) = 'yes' or leisure = 'sports_hall'            then 'indoor'
+        -- an explicit indoor=no beats building=*: the way is the wall or fence structure (Santa Fe Handball Court, way/484103694)
+        when lower(coalesce(indoor, '')) = 'no' and lower(coalesce(covered, '')) <> 'yes' then 'outdoor'
+        when building is not null and lower(building) <> 'no'                           then 'indoor'
         when lower(coalesce(covered, '')) = 'yes'                                       then 'covered'
         when lower(coalesce(indoor, '')) = 'no'                                         then 'outdoor'
         when leisure = 'pitch'                                                          then 'likely_outdoor'  -- untagged: an assumption, not data

@@ -1,24 +1,27 @@
 """Write app/data/build_stats.json: the measured numbers shown on app/how-its-built.html.
 
     python ingestion/build_stats.py            (or: make stats)   run after `make quality`, in the refresh PR
+    python ingestion/build_stats.py --keep-gold   Pages deploy: rebuild everything but keep the last scored gold set
     python ingestion/build_stats.py --check    CI: the file is well formed and dated like the newest scorecard row
 
 Nothing is typed in by hand. Every number comes from a file or check that already exists:
-  scorecard   last row of docs/data_quality_trend.csv (venues, sports, service levels, dbt tests)
-  sports      app/data/venues.json meta.sports_total
+  the map     app/data/venues.json meta (venues, sports, export size): always the numbers the live map shows
+  scorecard   last row of docs/data_quality_trend.csv (real-name share, service levels, dbt tests), dated `scorecard_as_of`
   structure   file counts in transform/, ci/ and docs/decisions/
   gold set    ingestion/eval_match_gold.py against the local DuckDB; when the database is missing or locked the
               previous values in this file are kept (CI never builds the full warehouse)
   Overture    docs/planet_scale_benchmark.json (bytes the real extracts fetched vs the size of the themes)
   history     every row of docs/data_quality_trend.csv, for app/run-history.html
   agent_runs  every row of docs/agent_log.csv (re-run this script after the refresh agent appends its log row)
-The page shows `as_of` beside the numbers, and --check fails when the file is older than the newest scorecard row,
-so a refresh that runs `make quality` but forgets `make stats` is caught, not shipped.
+Nothing here goes stale on the live site: .github/workflows/pages.yml re-runs this script on every deploy (and daily), before the
+dashboard export, so the file the pages read is rebuilt from the current repo; the committed copy is only the offline fallback.
+--check fails when the committed history/agent rows differ from their CSVs or `scorecard_as_of` is not the newest scorecard row.
 """
 from __future__ import annotations
 
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -28,7 +31,7 @@ OUT = ROOT / "app" / "data" / "build_stats.json"
 TREND = ROOT / "docs" / "data_quality_trend.csv"
 VENUES = ROOT / "app" / "data" / "venues.json"
 BENCH = ROOT / "docs" / "planet_scale_benchmark.json"
-KEYS = ["as_of", "venues", "sports_with_venues", "sports_total", "named_pct", "sla_met", "sla_total", "tests_pass", "tests_fail",
+KEYS = ["as_of", "scorecard_as_of", "export_mb", "adrs_superseded", "venues", "sports_with_venues", "sports_total", "named_pct", "sla_met", "sla_total", "tests_pass", "tests_fail",
         "models", "seeds", "custom_tests", "adrs", "ci_checks", "gold", "overture", "history", "agent_runs"]
 AGENT_LOG = ROOT / "docs" / "agent_log.csv"
 HISTORY_INT = ["venues", "sports_with_venues", "events_upcoming", "actions_current", "extract_age_days", "sla_met", "sla_total",
@@ -62,6 +65,8 @@ def gold_numbers(previous: dict | None) -> dict:
     import eval_match_gold as gold
 
     rows = gold.load_gold()
+    if "--keep-gold" in sys.argv and previous and previous.get("gold"):   # the Pages deploy: its warehouse is the small CI fixture, never score against it
+        return {**previous["gold"], "pairs": len(rows)}
     try:
         tally, _wrong, stale = gold.evaluate(rows)
         t = tally["all"]
@@ -80,15 +85,26 @@ def overture_numbers() -> dict:
     return {"release": b["release"], "run_on": b["run_on"], "fetched_mb": round(fetched / 1e6), "themes_gb": round(size / 1e9, 1)}
 
 
+def adrs_superseded() -> int:
+    n = 0
+    for f in (ROOT / "docs" / "decisions").glob("[0-9][0-9][0-9][0-9]-*.md"):
+        if re.search(r"status:?\**:?\s*superseded", f.read_text(encoding="utf-8")[:1500], re.I):
+            n += 1
+    return n
+
+
 def build() -> dict:
     t = last_trend_row()
     meta = json.loads(VENUES.read_text(encoding="utf-8"))["meta"]
     previous = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else None
     return {
-        "as_of": t["date"],
-        "venues": int(t["venues"]),
-        "sports_with_venues": int(t["sports_with_venues"]),
+        "as_of": meta["generated"],
+        "scorecard_as_of": t["date"],
+        "venues": int(meta["venues"]),
+        "sports_with_venues": int(meta["sports_with_venues"]),
         "sports_total": int(meta["sports_total"]),
+        "export_mb": round(VENUES.stat().st_size / 1e6, 1),
+        "adrs_superseded": adrs_superseded(),
         "named_pct": float(t["named_pct"]),
         "sla_met": int(t["sla_met"]),
         "sla_total": int(t["sla_total"]),
@@ -115,8 +131,8 @@ def check() -> None:
         if k not in d:
             problems.append(f"missing key: {k}")
     if not problems:
-        if d["as_of"] != last_trend_row()["date"]:
-            problems.append(f"as_of {d['as_of']} is not the newest scorecard row {last_trend_row()['date']}: run `make stats` after `make quality`")
+        if d["scorecard_as_of"] != last_trend_row()["date"]:
+            problems.append(f"scorecard_as_of {d['scorecard_as_of']} is not the newest scorecard row {last_trend_row()['date']}: run `make stats` after `make quality`")
         for k in ("venues", "sports_total", "models", "seeds", "adrs"):
             if not isinstance(d[k], int) or d[k] <= 0:
                 problems.append(f"{k} must be a positive integer")
@@ -128,7 +144,7 @@ def check() -> None:
             problems.append("gold needs wrong_merges and missed")
     if problems:
         sys.exit("build_stats.json check failed:\n  " + "\n  ".join(problems))
-    print(f"build_stats.json ok: as of {d['as_of']}, {d['venues']} venues, gold set {d['gold']['pairs']} pairs")
+    print(f"build_stats.json ok: as of {d['as_of']} (scorecard {d['scorecard_as_of']}), {d['venues']} venues, gold set {d['gold']['pairs']} pairs")
 
 
 def main() -> None:
