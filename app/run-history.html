@@ -184,7 +184,7 @@
     });
     $("runs-sum").textContent = d.agent_runs.length + " logged run" + (d.agent_runs.length === 1 ? "" : "s") + ", about $" + total.toFixed(2) +
       " estimated in total. The merge gate’s own decisions are on each pull request.";
-    $("status").textContent = "Scorecard rows: " + h.length + ", from " + h[0].date + " to " + h[h.length - 1].date + ". Numbers as of " + d.as_of + ".";
+    $("status").textContent = "Scorecard rows: " + h.length + ", from " + h[0].date + " to " + h[h.length - 1].date + ". Scorecard as of " + (d.scorecard_as_of || d.as_of) + ".";
   }).catch(function () { $("status").textContent = "The logs could not be loaded. The same data is in the two CSV files linked below."; });
 })();
 </script>

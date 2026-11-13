@@ -4,7 +4,7 @@ A one-page BI-as-code scorecard: service-level numbers, venue and name-quality t
 
 ## Run it
 ```bash
-make quality && make stats && make app-data    # the numbers it reads
+make quality && make stats && make app-data    # the numbers it reads (the Pages deploy re-runs build_stats.py --keep-gold itself, so counts follow the repo)
 make dashboard-data                            # copies aggregates to dashboard/sources/courtconnect/*.csv (git-ignored)
 cd dashboard
 npm install            # once; Node 18+ (built and tested on Node 26.13, npm 11.20)
