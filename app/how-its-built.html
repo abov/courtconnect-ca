@@ -99,7 +99,7 @@
   <p class="meta">Venue, sport and file counts as of <span id="asof">2026-11-12</span>; the scorecard checks (real names, service levels, tests) as of <span id="sc-asof">2026-11-10</span>. The site rebuilds these from the project's own files on every deploy and once a day, so they cannot fall behind.</p>
   <dl class="stats">
     <div><dt>Venues on the map</dt><dd id="s-venues">22,933</dd><small id="s-venues-n">44 of 82 sports have at least one venue</small></div>
-    <div><dt>Service levels met</dt><dd id="s-sla">7 of 8</dd><small id="s-sla-n">18.3% of venues have a real name (goal 25%)</small></div>
+    <div><dt>Service levels met</dt><dd id="s-sla">7 of 8</dd><small id="s-sla-n">18.3% of venues have a real name (goal 20%)</small></div>
     <div><dt>Place-to-court matching</dt><dd id="s-gold">0 wrong merges</dd><small id="s-gold-n">129 hand-labelled pairs, 4 missed matches</small></div>
     <div><dt>Big source, small footprint</dt><dd id="s-big">743 MB</dd><small id="s-big-n">fetched of 39.6 GB of Overture places and addresses</small></div>
     <div><dt>Warehouse</dt><dd id="s-models">68 models</dd><small id="s-models-n">42 seeds, 308 dbt tests passing</small></div>
@@ -206,7 +206,7 @@
     set("s-venues", n(d.venues));
     set("s-venues-n", d.sports_with_venues + " of " + d.sports_total + " sports have at least one venue");
     set("s-sla", d.sla_met + " of " + d.sla_total);
-    set("s-sla-n", d.named_pct + "% of venues have a real name (goal 25%)");
+    set("s-sla-n", d.named_pct + "% of venues have a real name (goal 20%)");
     set("s-gold", d.gold.wrong_merges + " wrong merges");
     set("s-gold-n", d.gold.pairs + " hand-labelled pairs, " + d.gold.missed + " missed matches");
     set("s-big", n(d.overture.fetched_mb) + " MB");
