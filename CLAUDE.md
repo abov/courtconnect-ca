@@ -70,6 +70,7 @@ Hand-off is the PR description and `git log`; `docs/sessions/` holds only the ro
 - Seed column changes need `--full-refresh`. Snowflake was retired 2026-10-14 and its code removed 2026-10-21 (ADR 0018): DuckDB only.
 - Commit `app/data/venues.json` after `make app-data`. `pages.yml` deploys by itself when a merge to main touches `app/**` (or the workflow); check the latest run after merging (a newer run cancels an older one). `gh workflow run pages.yml` still runs it by hand. Confirm a PR is MERGED before calling it shipped.
 - Before starting a task: `git fetch`, check `git log origin/main --since=1.day --oneline` and `gh pr list`, so you don't redo work another session already landed (2026-10-17: city fill and the Padel guard-rail test were each built twice).
+- Before EVERY push (owner 2026-11-12): `git fetch`, rebase onto `origin/main`, run the local CI checks (build, `ci/check_export_fresh.py`, `ci/check_docs_hub.py`), fix what fails, then push. `.githooks/pre-push` enforces the cheap part (enable: `git config core.hooksPath .githooks`).
 - Avoid merge conflicts: sync with main (rebase or merge) right before opening and again before merging a PR. `app/data/venues.json` is generated and any two PRs that touch it collide: never hand-resolve it; take main's copy, rebuild (`dbt build --full-refresh`), re-run `make app-data`, commit.
 - Dirty main checkout: `git worktree add ../x -b branch origin/main`, use the main `.venv`.
 
