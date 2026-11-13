@@ -1,0 +1,3 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+way,1215154969,27.787814,-97.3999488,Pickleball Courts,pickleball,hard_court,yes,customers,,,,pitch,,,,,,,,,,2026-11-12T20:20:47+00:00,TX
+node,13643640589,29.577917,-98.3396951,The Picklr,pickleball,,,,,,,pitch,,,,,,,,,,2026-11-12T20:20:47+00:00,TX

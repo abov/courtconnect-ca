@@ -82,14 +82,14 @@ def main() -> None:
         # keep every existing row outside this region's cells, add the freshly read ones (same cells, so no duplicates)
         con.execute(f"create table fresh as {fetched}")
         con.execute(f"""copy (
-            select * from read_csv_auto('{out.as_posix()}', all_varchar=true)
+            select * from read_csv_auto('{out.as_posix()}', all_varchar=true, quote='"', escape='"')
             where not exists (select 1 from cells c where c.cx = cast(floor(cast(lon as double) * {CELLS_PER_DEGREE}) as integer)
                                                       and c.cy = cast(floor(cast(lat as double) * {CELLS_PER_DEGREE}) as integer))
             union all select columns(*)::varchar from fresh) to '{out.as_posix()}.new' (header, delimiter ',')""")
         os.replace(f"{out}.new", out)
     else:
         con.execute(f"copy ({fetched}) to '{out.as_posix()}' (header, delimiter ',')")
-    n = con.execute(f"select count(*) from read_csv_auto('{out.as_posix()}')").fetchone()[0]
+    n = con.execute(f"select count(*) from read_csv_auto('{out.as_posix()}', quote='\"', escape='\"')").fetchone()[0]
     print(f"Wrote {n:,} address points to {args.out}")
 
 

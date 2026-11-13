@@ -1,7 +1,7 @@
 {
   "name": "RacketConnect",
   "short_name": "RacketConnect",
-  "description": "Find where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Hawaii and parts of Mexico. Links out; no bookings or payments.",
+  "description": "Find where to play racket sports in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico. Links out; no bookings or payments.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

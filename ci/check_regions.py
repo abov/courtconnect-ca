@@ -70,7 +70,21 @@ POINTS = [
     (31.3040, -110.9440, "MX"),   # Nogales, Sonora (was None before MX)
     (32.4800, -114.7770, "MX"),   # San Luis Rio Colorado, Sonora
     (32.4870, -114.7820, "AZ"),   # San Luis, Arizona
-    (31.7600, -106.4850, None),   # El Paso, Texas (not covered)
+    (31.7600, -106.4850, "TX"),   # El Paso, Texas (across the Rio Grande from Ciudad Juarez)
+    (29.7604, -95.3698, "TX"),    # Houston
+    (32.7767, -96.7970, "TX"),    # Dallas
+    (30.2672, -97.7431, "TX"),    # Austin
+    (29.4241, -98.4936, "TX"),    # San Antonio
+    (26.2034, -98.2300, "TX"),    # McAllen (Rio Grande Valley)
+    (35.2220, -101.8313, "TX"),   # Amarillo, Panhandle
+    (25.9017, -97.4975, "TX"),    # Brownsville, on the Rio Grande
+    (25.8690, -97.5030, "MX"),    # Matamoros, across the river from Brownsville
+    (27.5036, -99.5075, "TX"),    # Laredo
+    (27.4800, -99.5160, "MX"),    # Nuevo Laredo
+    (32.7357, -97.1081, "TX"),    # Arlington (DFW)
+    (30.0, -94.0, "TX"),          # Beaumont area, near the Louisiana line
+    (32.5007, -93.7502, None),    # Shreveport, Louisiana
+    (35.4676, -97.5164, None),    # Oklahoma City, Oklahoma
     (31.6900, -106.4250, "MX"),   # Ciudad Juarez
     (21.1619, -86.8515, "MX"),    # Cancun
     (20.9674, -89.5926, "MX"),    # Merida
