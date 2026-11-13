@@ -1,0 +1,13 @@
+#!/bin/sh
+# Pre-push: block if behind origin/main, then run the cheap CI checks. Fix, then push again.
+# Enable once per clone: git config core.hooksPath .githooks   (bypass in an emergency: git push --no-verify)
+git fetch origin main --quiet || exit 0
+behind=$(git rev-list --count HEAD..origin/main)
+if [ "$behind" -gt 0 ]; then
+  echo "pre-push: branch is $behind commit(s) behind origin/main. Run: git rebase origin/main" >&2
+  exit 1
+fi
+PY=python
+[ -x .venv/Scripts/python.exe ] && PY=.venv/Scripts/python.exe
+$PY ci/check_docs_hub.py || exit 1
+$PY ci/check_export_fresh.py || exit 1
