@@ -13,6 +13,7 @@ basque pelota,Basque Pelota: Jai Alai,ambiguous
 basque pelota,Basque Pelota: Joko Garbi,ambiguous
 basque pelota,Basque Pelota: Pala Corta,ambiguous
 basque pelota,Basque Pelota: Paleta Cuero,ambiguous
+basque pelota,Basque Pelota: Paleta Frontón,ambiguous
 basque pelota,Basque Pelota: Paleta Goma,ambiguous
 basque pelota,Basque Pelota: Xare,ambiguous
 basque pelota frontenis,Basque Pelota: Frontenis,ambiguous
@@ -21,6 +22,7 @@ basque pelota jai alai,Basque Pelota: Jai Alai,ambiguous
 basque pelota joko garbi,Basque Pelota: Joko Garbi,ambiguous
 basque pelota pala corta,Basque Pelota: Pala Corta,ambiguous
 basque pelota paleta cuero,Basque Pelota: Paleta Cuero,ambiguous
+basque pelota paleta front n,Basque Pelota: Paleta Frontón,ambiguous
 basque pelota paleta goma,Basque Pelota: Paleta Goma,ambiguous
 basque pelota xare,Basque Pelota: Xare,ambiguous
 battlebird,Battlebird,ambiguous
@@ -58,8 +60,7 @@ outdoor racquetball,Outdoor Racquetball,ambiguous
 paddleball,4-wall Paddleball,distinctive
 padel,Padel,distinctive
 padel pingpong,Padel Pingpong,ambiguous
-paleta front n,Paleta frontón,ambiguous
-paleta fronton,Paleta frontón,ambiguous
+paleta fronton,Basque Pelota: Paleta Frontón,ambiguous
 pang pong,Pang Pong,ambiguous
 pelota,Basque Pelota: Frontenis,ambiguous
 pelota,Basque Pelota: Grand Chistera,ambiguous
@@ -67,6 +68,7 @@ pelota,Basque Pelota: Jai Alai,ambiguous
 pelota,Basque Pelota: Joko Garbi,ambiguous
 pelota,Basque Pelota: Pala Corta,ambiguous
 pelota,Basque Pelota: Paleta Cuero,ambiguous
+pelota,Basque Pelota: Paleta Frontón,ambiguous
 pelota,Basque Pelota: Paleta Goma,ambiguous
 pelota,Basque Pelota: Xare,ambiguous
 pelota vasca,Basque Pelota: Frontenis,ambiguous
@@ -75,6 +77,7 @@ pelota vasca,Basque Pelota: Jai Alai,ambiguous
 pelota vasca,Basque Pelota: Joko Garbi,ambiguous
 pelota vasca,Basque Pelota: Pala Corta,ambiguous
 pelota vasca,Basque Pelota: Paleta Cuero,ambiguous
+pelota vasca,Basque Pelota: Paleta Frontón,ambiguous
 pelota vasca,Basque Pelota: Paleta Goma,ambiguous
 pelota vasca,Basque Pelota: Xare,ambiguous
 pickle ball,Pickleball,distinctive
