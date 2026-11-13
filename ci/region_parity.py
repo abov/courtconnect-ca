@@ -127,7 +127,7 @@ def audit():
         r["link-outs (hand-added)"] = linkouts[code]
         r["zip codes"] = zips[code]
         r["places"] = places[code]
-        r["outline"] = int(cfg["name"] in outline)
+        r["outline"] = int(cfg["name"].replace("_", " ") in outline)
         r["home view fits"] = home_view_fits(cfg)
         r["doc sections"] = sum(cfg["name"] in t for t in docs_text.values())
         for sp in SPORTS:

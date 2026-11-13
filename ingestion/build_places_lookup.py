@@ -1,4 +1,4 @@
-"""Build app/data/places.json: every California + Nevada Census place (city, town or CDP) as [name, state, lat, lon], so the map search can centre on a city that has no venue pins yet.
+"""Build app/data/places.json: every Census place in the covered US regions (ingestion/regions.json), plus Mexican boundary names, (city, town or CDP) as [name, state, lat, lon], so the map search can centre on a city that has no venue pins yet.
 
 Source: US Census Bureau 2023 Gazetteer, places file (public domain), downloaded to a temp folder and deleted:
 https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2023_Gazetteer/2023_Gaz_place_national.zip

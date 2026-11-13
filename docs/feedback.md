@@ -21,7 +21,7 @@ Day 1 invite (individually, not a group chat) -> day 7 to 10 one check-in -> day
 ### Invite message
 Swap in their sport (step 1) and a place they know (step 2). Give each person their own link tag so analytics can tell groups apart without names: `https://abov.github.io/courtconnect-ca/?ref=friend-padel` (the tag is the sport or area, any `friend-<a-z0-9-up to 20>`; never initials).
 
-> Hey [name]! I built a free map of racket-sport spots in California and Nevada (tennis, pickleball, padel, squash and more) and I'd love your honest take before I decide what to do with it.
+> Hey [name]! I built a free map of racket-sport spots across the western U.S. (tennis, pickleball, padel, squash and more) and I'd love your honest take before I decide what to do with it.
 >
 > Link: https://abov.github.io/courtconnect-ca/?ref=friend-[tag]
 >

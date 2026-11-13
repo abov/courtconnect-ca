@@ -94,6 +94,8 @@
   .btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
   .btn:disabled { opacity: .6; cursor: default; }
   .qs button:focus-visible, .btn:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  input[type="text"] { flex: 1 1 280px; min-height: 44px; font: 16px/1.3 var(--font-body); color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); padding: 8px 12px; }
+  input[type="text"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   textarea { width: 100%; min-height: 150px; font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--text); background: var(--panel);
              border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 12px; resize: vertical; }
   label.lbl { display: block; font-size: 14px; color: var(--muted); margin: 14px 0 4px; }
@@ -121,7 +123,7 @@
       <a href="https://github.com/abov/courtconnect-ca">Source</a>
     </nav>
     <h1>Ask the data</h1>
-    <p class="lede">Run SQL on the map&rsquo;s public data file, inside your own browser. Nothing you type leaves this page.</p>
+    <p class="lede">Ask questions of the map&rsquo;s public data file in plain English, or run your own SQL, inside your own browser. Nothing you type leaves this page.</p>
   </div>
 </header>
 
@@ -135,7 +137,16 @@
   </div>
 
   <div id="app" hidden>
-    <h2 id="questions">Start with a question</h2>
+    <h2 id="questions">Ask in plain English</h2>
+    <form class="row" id="nlform">
+      <input type="text" id="nl" aria-label="Your question" placeholder="Where can I play padel in Las Vegas?" autocomplete="off" maxlength="200">
+      <button class="btn primary" id="nlgo" type="submit">Ask</button>
+    </form>
+    <p class="meta">The question is matched to a fixed SQL template (no AI model); the SQL it writes is shown below so you can check or edit it. Name a sport, a city or a state. Try:</p>
+    <ul class="qs" id="nlex"></ul>
+    <p class="err" id="nlerr"></p>
+
+    <h2 id="presets">Or start with a ready-made question</h2>
     <ul class="qs" id="qs"></ul>
 
     <label class="lbl" for="sql">SQL (edit it and press Run, or Ctrl+Enter)</label>
@@ -157,7 +168,7 @@
   <div class="note">
     <h3>Read these with care</h3>
     <ul class="plain">
-      <li>These are counts of what the export lists, not of every court in the two states. Many pins come from OpenStreetMap, where court counts and names are often missing; the &ldquo;how sure are the names&rdquo; question shows how many.</li>
+      <li>These are counts of what the export lists, not of every court in the regions covered. Many pins come from OpenStreetMap, where court counts and names are often missing; the &ldquo;how sure are the names&rdquo; question shows how many.</li>
       <li>A court count of 0 means unknown, not none. A venue that lists a sport is not proof that the sport can be booked or played there today.</li>
       <li>The export is rebuilt after each refresh; its date is shown once the data loads.</li>
       <li>Needs a current Chrome, Edge, Firefox or Safari. Not tested on phones; the engine file is large for a mobile connection.</li>
@@ -168,11 +179,12 @@
 <footer>
   <div class="wrap">This page sets no cookies and requests nothing from other sites. Pressing the button downloads the engine and <code>data/venues.json</code> from this site; your queries run on your device and are not sent anywhere.</div>
 </footer>
+<script src="ask-the-data-nl.js"></script>
 <script type="importmap">{"imports": {"apache-arrow": "./vendor/duckdb/apache-arrow.mjs"}}</script>
 <script type="module">
 const $ = (id) => document.getElementById(id);
 const FILE = "venues.json";
-let conn = null, spec = null;
+let conn = null, spec = null, nl = null;
 
 function cell(td, v) {
   if (v === null || v === undefined) { td.textContent = "NULL"; td.className = "null"; return; }
@@ -198,6 +210,15 @@ async function runSql(sql, note) {
     $("resultwrap").hidden = true; $("qstatus").textContent = "";
     $("error").textContent = String(e.message || e);
   }
+}
+
+async function ask(text) {
+  $("nlerr").textContent = "";
+  const r = nl.interpret(text);
+  if (!r.ok) { $("nlerr").textContent = r.message; return; }
+  document.querySelectorAll("#qs button").forEach((b) => b.setAttribute("aria-pressed", "false"));
+  $("sql").value = r.sql;
+  await runSql(r.sql, r.title + (r.note ? " " + r.note : ""));
 }
 
 function pick(i) {
@@ -235,6 +256,13 @@ $("load").addEventListener("click", async () => {
       const dt = document.createElement("dt"), dd = document.createElement("dd");
       dt.textContent = name; dd.textContent = desc; $("tables").append(dt, dd);
     }
+    const col = async (sql) => { const res = await conn.query(sql), name = res.schema.fields[0].name; return res.toArray().map((r) => r[name]); };
+    nl = AskTheDataNL.create({sports: await col("SELECT DISTINCT sport FROM venue_sport_names"), cities: await col("SELECT DISTINCT city FROM venues WHERE city IS NOT NULL")});
+    AskTheDataNL.EXAMPLES.forEach((text) => {
+      const li = document.createElement("li"), b = document.createElement("button");
+      b.type = "button"; b.textContent = text; b.addEventListener("click", () => { $("nl").value = text; ask(text); });
+      li.appendChild(b); $("nlex").appendChild(li);
+    });
     $("app").hidden = false;
     pick(0);
   } catch (e) {
@@ -242,6 +270,7 @@ $("load").addEventListener("click", async () => {
     btn.disabled = false;
   }
 });
+$("nlform").addEventListener("submit", (e) => { e.preventDefault(); if (nl) ask($("nl").value); });
 $("run").addEventListener("click", () => runSql($("sql").value, ""));
 $("sql").addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); runSql($("sql").value, ""); } });
 </script>

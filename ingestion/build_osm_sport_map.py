@@ -49,7 +49,7 @@ MAP = [
     # generic pelota / fronton tags do not say which variant is played; every Basque Pelota variant on the sheet is listed, labelled inferred (owner 2026-10-19)
     (key, f"Basque Pelota: {v}", "medium")
     for key in ("pelota", "fronton", "basque_pelota")
-    for v in ("Pala Corta", "Paleta Cuero", "Paleta Goma", "Grand Chistera", "Frontenis", "Jai Alai", "Joko Garbi", "Xare")
+    for v in ("Pala Corta", "Paleta Cuero", "Paleta Goma", "Paleta Frontón", "Grand Chistera", "Frontenis", "Jai Alai", "Joko Garbi", "Xare")
 ]
 
 

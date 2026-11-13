@@ -1,0 +1,22 @@
+{
+  "note": "Test questions for app/ask-the-data-nl.js (the plain-English box on ask-the-data.html). expect = ok: it must produce SQL that returns rows, and the title must contain every string in contains; no: it must say it cannot answer. Run by ci/check_ask_the_data.py.",
+  "cases": [
+    {"question": "Where can I play padel in Las Vegas?", "expect": "ok", "contains": ["padel", "Las Vegas"]},
+    {"question": "padel in vegas", "expect": "ok", "contains": ["Padel", "Las Vegas"]},
+    {"question": "How many pickleball courts are in Reno?", "expect": "ok", "contains": ["Pickleball courts", "Reno"]},
+    {"question": "How many venues have squash?", "expect": "ok", "contains": ["Squash"]},
+    {"question": "How many free pickleball venues in Oregon?", "expect": "ok", "contains": ["Pickleball", "Oregon"]},
+    {"question": "Which cities have the most squash venues?", "expect": "ok", "contains": ["cities", "Squash"]},
+    {"question": "Which state has the most padel?", "expect": "ok", "contains": ["states", "Padel"]},
+    {"question": "Which sports have the most venues in Washington?", "expect": "ok", "contains": ["sports", "Washington"]},
+    {"question": "Public tennis courts in Los Angeles", "expect": "ok", "contains": ["Tennis", "Los Angeles"]},
+    {"question": "Free tennis courts in Santa Monica", "expect": "ok", "contains": ["Tennis", "Santa Monica"], "may_be_empty": true},
+    {"question": "Which sports are in Reno?", "expect": "ok", "contains": ["Reno"]},
+    {"question": "How sure are the names in Seattle?", "expect": "ok", "contains": ["names", "Seattle"]},
+    {"question": "How much has anyone checked?", "expect": "ok", "contains": ["checked"]},
+    {"question": "How many table tennis venues are there?", "expect": "ok", "contains": ["Table Tennis"]},
+    {"question": "pop tennis and padel in California", "expect": "ok", "contains": ["Pop Tennis", "Padel", "California"]},
+    {"question": "What is the capital of France?", "expect": "no"},
+    {"question": "hello", "expect": "no"}
+  ]
+}

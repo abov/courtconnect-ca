@@ -28,7 +28,7 @@ Check the clip with your own test points in `ci/check_regions.py` (replace the C
 
 ## 2. Replace the CA/NV research
 
-These seeds hold the original owner's research for California and Nevada. Empty them (keep the header row) or replace them with your own:
+These seeds hold the original owner's research for California, Nevada and the other regions it covers. Empty them (keep the header row) or replace them with your own:
 
 `manual_venues`, `manual_walls`, `venue_actions`, `venue_confirmations`, `venue_leads`, `watch_events`, `social_events`, `player_groups`, `closed_places`, `venue_court_counts`, `place_sport_overrides`, `osm_court_sport_overrides`, `venue_*_official`, `website_overrides`, `nominatim_addresses`, `venue_place_boundary`, `search_interest`, `search_metros`.
 
@@ -59,9 +59,9 @@ make app         # http://localhost:8765
 ## Known leftovers (still CA/NV specific)
 
 - The dbt `regions` var in `transform/dbt_project.yml` mirrors `regions.json` (`init_fork.py` rewrites both; `python ci/check_regions.py --config-only` fails if they differ). Each region may carry `fips` (the two-digit Census state code, US only; `init_fork.py` takes it as an optional last value after the OSM relation); the Census steps below skip regions without one. Each region also needs its state line on the map: run `python ingestion/add_state_outline.py` after adding it (CI fails until `app/data/state_outline.json` has it).
-- `app/index.html` still starts on California + Nevada (`HOME_BOUNDS`) and its text names both states.
+- `app/index.html` still starts on the owner's venues (`HOME_BOUNDS`, framed on the western U.S. plus Mexico) and its text names the owner's regions.
 - The Census boundary and place-name steps (`make extract-boundaries`, `make city-boundaries`, `ingestion/build_places_lookup.py`) are US-only. Outside the US, replace the city source.
-- Some docs and the About card text describe California and Nevada.
+- Some docs and the About card text describe the owner's regions (California, Nevada and others).
 - Scheduled tasks and the agent workflows (refresh, issue triage) are tied to the owner's accounts. Leave them out until you have your own.
 
 ## Rules worth copying, and rules that are the owner's choice
