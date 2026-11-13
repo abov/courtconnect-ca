@@ -12,4 +12,4 @@ New Mexico is one landmass bordering Arizona, Texas, Colorado, Utah and Mexico. 
 - Zia and Yucca (Santa Fe) is the only public handball court the city lists; OpenStreetMap already maps it (way 484103694), so it is not duplicated by hand and stays "assumed one-wall" until imagery or a page settles the wall type.
 
 ## Open for the owner
-Resorts and hotels with courts (ADR 0028: case by case, ask first); Kirtland and Holloman AFB (military rule, ADR 0014); research order against the remaining Hawaii and Arizona passes; Texas lands separately (ADR number to be taken by that branch).
+Resorts and bases were approved ("add em all", 2026-11-13) and added where an official page names courts (Angel Fire, Taos Ski Valley pickleball, Kirtland, Holloman); still open: Hyatt Tamaya, Bishop's Lodge and Buffalo Thunder (no readable page), Cannon and White Sands (no page names courts); research order against the remaining Hawaii and Arizona passes; Texas lands separately (ADR number to be taken by that branch).
