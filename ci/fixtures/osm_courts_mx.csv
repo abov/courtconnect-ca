@@ -1,0 +1,4 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+way,675328874,32.4249455,-117.0855919,Cancha de Tenis Malibu,tennis,paved,no,yes,,,,pitch,,,,,,,,,,2026-11-05T04:09:03+00:00,MX
+way,1250224434,32.5147622,-116.988316,Novofut,soccer;pickleball,,,customers,,,,sports_centre,,,,https://www.novofut.com/,+526646223402,,12600,Avenida Vaquita,Tijuana,2026-11-05T04:09:03+00:00,MX
+way,1309069605,32.6550803,-115.3992929,Palestra Club Deportivo,padel,,,,,Palestra Club Deportivo,,sports_centre,,,,,,,,,,2026-11-05T04:09:31+00:00,MX
