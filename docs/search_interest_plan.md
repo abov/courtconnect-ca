@@ -6,7 +6,7 @@ Status: BUILT 2026-10-25 (first export 2026-10-25). Refresh runs from the cloud 
 
 ## What is in the repo
 - `transform/seeds/search_interest.csv`: one row per query geo (`US-CA` / `US-NV`), metro, sport. `index_value` is Trends' relative interest (100 = the top metro of that query), blank = Trends had no data (never 0). `query_set` A = the five busiest sports (tennis, pickleball, padel, badminton, table tennis), B = low-volume terms (racquetball, squash court, beach tennis, pop tennis, platform tennis), which Trends samples, so they are labelled `thin` and never flagged.
-- `transform/seeds/search_metros.csv`: the 14 Google metro codes covering CA + NV, each with one anchor city.
+- `transform/seeds/search_metros.csv`: the Google metro codes for the covered states (CA, NV, AZ, NM and, since 2026-11-12, six Texas metros; Trends data exists only for CA + NV so far), each with one anchor city.
 - `int_search_interest`: puts the CA and NV queries on one scale (Reno is in both, so Las Vegas is rescaled by Reno's ratio; no Reno data = no Las Vegas index).
 - `mart_search_vs_coverage`: per (metro, sport) interest next to the venues nearest that metro's anchor. `gap_candidate` = confidence ok, index >= 50 and 3 or fewer venues. A place to look for missing venues first, not proof of a gap.
 - `ingestion/search_interest_report.py` (`make interest`): prints the report and writes `docs/search_interest_vs_coverage.csv` (metro, sport, index, venues, completeness share; no venue rows). Commit it after a refresh: the Evidence dashboard reads it ("Search interest against coverage", `dashboard/README.md`), and `pages.yml` rebuilds when it changes. Test `assert_search_interest_valid`.
