@@ -1283,7 +1283,7 @@ function resetPlace() { $("country").value = ""; $("usState").value = ""; $("sta
 function initPlace(mx) {
   const country = $("country"), st = $("usState"), have = new Set(venues.map(v => v.r));
   country.replaceChildren(new Option("All countries", ""), new Option("United States", "US"), ...(mx.length ? [new Option("Mexico", "MX")] : []));
-  st.replaceChildren(new Option("All states", ""), ...Object.entries(STATE_NAMES).filter(([k]) => have.has(k)).map(([k, n]) => new Option(n, k)));
+  st.replaceChildren(new Option("All states", ""), ...Object.entries(STATE_NAMES).filter(([k]) => have.has(k)).sort((a, b) => a[1].localeCompare(b[1])).map(([k, n]) => new Option(n, k)));
   country.addEventListener("change", () => {
     st.value = ""; $("stateWrap").hidden = country.value !== "US";   // states exist only for the US (Mexico has no state list yet)
     if (country.value) trackD("place-pick", country.value);
