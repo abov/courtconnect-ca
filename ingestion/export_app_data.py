@@ -351,7 +351,7 @@ def main() -> None:
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(dump_lines({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "vacations": vacations, "platforms": platforms}),
-                   encoding="utf-8")
+                   encoding="utf-8", newline=NL)   # LF on Windows too: the merge driver and .gitattributes expect it
     size = OUT.stat().st_size / 1e6
     print(f"Wrote {OUT}: {len(out_venues):,} venues ({meta['hitting_walls']:,} hitting-wall venues), {len(sports)} sports, {size:.2f} MB  (named {named:,}; confirmed {meta['confirmed']:,})")
 
