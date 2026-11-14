@@ -40,7 +40,7 @@ Searched: Oregon racquetball state tournaments, Portland/Hillsboro badminton clu
 
 ### Oregon, third look (2026-11-13)
 Searched: Salem, Bend, Redmond and Roseburg pickleball clubs, Southern Oregon Pickleball Association, Oregon padel (Bend, Portland).
-- **Added:** groups for Salem-Keizer Pickleball Club (indoor open play Mon-Fri mornings, $10 non-member drop-in), Bend Pickleball Club (Pine Nursery Park) and Redmond Rock Chuck Pickleball Club; drop-in and club link-outs for the Roseburg Y, Ashland Lithia Park and Redmond. Nothing dated.
+- **Added:** groups for Salem-Keizer Pickleball Club (indoor open play Mon-Fri mornings, $10 non-member drop-in), Bend Pickleball Club (Pine Nursery Park) and Redmond Rock Chuck Pickleball Club; drop-in and club link-outs for the Roseburg Y, Ashland Lithia Park and Redmond. Nothing dated. Klamath Falls and Pendleton (2026-11-14): group added for the Klamath Basin Pickleball Association (Pickleball 101 lessons, Blazing Paddles tournament year unclear: lead `or-klamath-blazing-paddles-tournament`), a drop-in link-out for Mike's Field House and the Pendleton NET; no Pendleton group found.
 - **Empty:** Southern Oregon Pickleball Association (no own page found), Bend Racket Club and Padel PDX (no dates; leads stay).
 
 ## Hawaii (2026-11-02)
