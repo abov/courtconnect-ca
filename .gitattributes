@@ -1,1 +1,20 @@
 .githooks/* text eol=lf
+
+# Merge rules that cut PR conflicts (docs/merge_conflicts.md). Driver "venues" needs `python ingestion/setup_git.py` once per clone;
+# without it git falls back to a normal text merge.
+app/data/venues.json text eol=lf merge=venues
+# Append-only logs and seeds: when two PRs add lines at the same spot, keep both instead of conflicting.
+# Duplicate keys (both PRs edited one row) then fail the dbt unique tests loudly rather than slipping through.
+docs/event_group_search.md merge=union
+docs/public_facility_scan.md merge=union
+docs/gym_chain_scan.md merge=union
+docs/padel_scan.md merge=union
+docs/event_sources.csv merge=union
+docs/decisions/0034-mexico-scope.md merge=union
+transform/seeds/manual_venues.csv merge=union
+transform/seeds/venue_leads.csv merge=union
+transform/seeds/venue_actions.csv merge=union
+transform/seeds/venue_court_counts.csv merge=union
+transform/seeds/watch_events.csv merge=union
+transform/seeds/social_events.csv merge=union
+transform/seeds/player_groups.csv merge=union
