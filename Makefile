@@ -5,7 +5,7 @@ STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import o
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 # Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
-.PHONY: rank-rechecks check-pages setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability ops-metrics demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback ask-feedback
+.PHONY: rank-rechecks check-pages setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability ops-metrics agent-activity demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback ask-feedback
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -76,7 +76,10 @@ observability:    ## Elementary report from the local warehouse (docs/data_obser
 ops-metrics:      ## merged PRs/day, conflict-commit signal, CI/Pages durations, slowest dbt models, Claude token use (docs/ops_metrics.md; needs gh; ARGS="--days 7 --only prs,runs")
 	$(PY) ingestion/ops_metrics.py $(ARGS)
 
-demo: extract load build   ## the one-command demo
+agent-activity:   ## live local page of what every Claude Code session is doing (docs/agent_activity.md; ARGS="--hours 24 --port 8766")
+	$(PY) ingestion/agent_activity.py $(ARGS)
+
+demo: extract load build  ## the one-command demo
 	@echo "Done. Try: duckdb courtconnect.duckdb 'select * from marts.mart_sport_coverage'"
 
 refresh:          ## after make extract (docs/monthly_refresh.md steps 4, 6-8a): load, build, address fill, rebuild, scorecard, stats, reports, export, change feed; stops at the first failure
