@@ -27,6 +27,11 @@
     "hermosillo": {"bbox": [28.95, -111.15, 29.20, -110.85], "states": ["MX"], "note": "Hermosillo (border pilot)"},
     "nogales_son": {"bbox": [31.20, -111.05, 31.40, -110.85], "states": ["MX"], "note": "Nogales, Sonora (border pilot)"},
     "slrc": {"bbox": [32.40, -114.85, 32.55, -114.70], "states": ["MX"], "note": "San Luis Rio Colorado (border pilot)"},
+    "los_cabos": {"bbox": [22.80, -110.10, 23.15, -109.40], "states": ["MX"], "note": "Cabo San Lucas, San Jose del Cabo and the tourist corridor (Baja California Sur; OSM trial 2026-11-13)"},
+    "east_cape": {"bbox": [23.15, -109.80, 23.80, -109.40], "states": ["MX"], "note": "Cabo Pulmo, Los Barriles and the East Cape (Baja California Sur; OSM trial 2026-11-13)"},
+    "todos_santos": {"bbox": [23.25, -110.30, 23.50, -110.10], "states": ["MX"], "note": "Todos Santos and El Pescadero (Baja California Sur; OSM trial 2026-11-13)"},
+    "la_paz": {"bbox": [24.05, -110.50, 24.25, -110.20], "states": ["MX"], "note": "La Paz (Baja California Sur; OSM trial 2026-11-13)"},
+    "loreto": {"bbox": [25.65, -111.45, 26.10, -111.15], "states": ["MX"], "note": "Loreto, Nopolo and the Islands of Loreto (Baja California Sur; OSM trial 2026-11-13)"},
     "monterrey": {"bbox": [25.5, -100.55, 25.85, -100.05], "states": ["MX"], "note": "Monterrey, San Pedro, Guadalupe, San Nicolas, Apodaca, Escobedo, Santa Catarina (Phase 3 trial)"}
   }
 }

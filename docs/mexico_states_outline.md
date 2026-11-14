@@ -13,8 +13,8 @@ The map draws a light line around each of the 32 entities, under the pins, from 
 | # | ISO | Entity | Type | Pins (hand / auto) | Status (from ADR 0034) |
 |---|---|---|---|---|---|
 | 1 | MX-AGU | Aguascalientes | State | 1 (1 / 0) | automatic layer only |
-| 2 | MX-BCN | Baja California | State | 78 (16 / 62) | border pilot (Tijuana, Mexicali, Ensenada, Tecate) |
-| 3 | MX-BCS | Baja California Sur | State | 1 (1 / 0) | Cabo San Lucas leads and pins; rest automatic |
+| 2 | MX-BCN | Baja California | State | 78 (16 / 62) | border pilot (Tijuana, Mexicali, Ensenada, Tecate); Rosarito pickleball and El Dorado Ranch (San Felipe) added 2026-11-13 |
+| 3 | MX-BCS | Baja California Sur | State | 1 (1 / 0) | Los Cabos, East Cape, Todos Santos, La Paz and Loreto boxes extracted 2026-11-13 (101 OSM courts, automatic pins) plus hand pins in La Paz, Los Barriles, Loreto and El Pescadero (counts not refreshed); the north (Santa Rosalia, Guerrero Negro) is not extracted |
 | 4 | MX-CAM | Campeche | State | 0 (0 / 0) | automatic layer only |
 | 5 | MX-CHP | Chiapas | State | 0 (0 / 0) | automatic layer only |
 | 6 | MX-CHH | Chihuahua | State | 8 (8 / 0) | walled sports pass (Chihuahua City, Ciudad Juárez); FitMax pinned |
