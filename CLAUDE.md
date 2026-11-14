@@ -18,6 +18,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0039, all accepted except 0001, su
 - `make interest`   Google Trends search interest vs venues per metro (planning signal, `docs/search_interest_plan.md`)
 - `make ask-feedback`   after `make usage`: load the ask-box questions visitors chose to send (unanswered ones) into the local warehouse (`mart_ask_feedback`; never commit the text; `docs/goat_analysis.md`)
 - `make report`     regenerate `docs/coverage_snapshot.md`
+- `make ops-metrics`   merged PRs/day, conflict-commit signal, CI/Pages/dbt durations, Claude token use (`docs/ops_metrics.md`; needs `gh`)
 - `make observability`   Elementary data-observability report from the local warehouse (`docs/data_observability.md`; `make build` records the history and installs the package)
 
 ## Rules
