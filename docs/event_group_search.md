@@ -38,6 +38,11 @@ Searched: Oregon racquetball state tournaments, Portland/Hillsboro badminton clu
 - **Empty:** racquetball (Oregon Racquetball Association has no 2026-27 tournament page found; the only Portland event was the 2020 national high-school championships), badminton (Portland Badminton Club, Oregon Badminton Academy and Look Badminton have no readable site or schedule; a Lake Oswego Parks open-play badminton listing (LORAC, Sep 12 - Dec 26 2026) appears only on active.com), Eugene and Springfield pickleball (community-edited open-play lists only, no club page), SOPA (KOBI articles say it runs events all year and the Medford Summer Classic; no SOPA site or Facebook link found).
 - **Recheck next cycle:** the Lloyd Athletic Club and Courthouse Club Fitness pages for league dates, medfordoregon.gov for SOPA tournaments at the new courts, active.com LORAC badminton (Lake Oswego Parks & Rec's own page).
 
+### Oregon, third look (2026-11-13)
+Searched: Salem, Bend, Redmond and Roseburg pickleball clubs, Southern Oregon Pickleball Association, Oregon padel (Bend, Portland).
+- **Added:** groups for Salem-Keizer Pickleball Club (indoor open play Mon-Fri mornings, $10 non-member drop-in), Bend Pickleball Club (Pine Nursery Park) and Redmond Rock Chuck Pickleball Club; drop-in and club link-outs for the Roseburg Y, Ashland Lithia Park and Redmond. Nothing dated.
+- **Empty:** Southern Oregon Pickleball Association (no own page found), Bend Racket Club and Padel PDX (no dates; leads stay).
+
 ## Hawaii (2026-11-02)
 Searched: pickleball tournaments (Oahu, Maui), padel (Honolulu and the islands), USTA Hawaii Pacific, table tennis, badminton, Meetup pickleball groups, Pickles at Forté, City and County of Honolulu parks. Organizer pages read: meetup.com/oahu-pickleball-association, picklesatforte.com, ustahawaii.com/league-championships, hawaiipacifichealth.org (ESPN Honolulu Open).
 - **Added:** Oahu Pickleball Association (Meetup group, 6,800 members) and its drop-in series at Diamond Head Tennis Center; open play and $10 specials at Pickles at Forté (downtown Honolulu).
