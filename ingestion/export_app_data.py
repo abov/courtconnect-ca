@@ -84,6 +84,24 @@ def add_sport_details(con, sports: list, sport_index: dict) -> None:
             entry["u"] = links
 
 
+NL = chr(10)
+
+
+def dump_lines(doc):
+    """Compact JSON with one record per line (still plain valid JSON). A minified single line made every pair of PRs that
+    touched this file conflict; with one venue per line git merges edits to different venues by itself. Line 1 is the
+    meta object (ingestion/merge_venues.py merges that line by arithmetic). Keep this layout in sync with that script."""
+    def j(x):
+        return json.dumps(x, ensure_ascii=False, separators=(",", ":"))
+    parts = ['{"meta":' + j(doc["meta"])]
+    for key, rows in doc.items():
+        if key == "meta":
+            continue
+        body = ("," + NL).join(j(r) for r in rows)
+        parts.append('"' + key + '":[' + (NL + body + NL if rows else "") + "]")
+    return ("," + NL).join(parts) + "}" + NL
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     con = duckdb.connect("courtconnect.duckdb", read_only=True)
@@ -270,7 +288,7 @@ def main() -> None:
             if opening[vid][0].startswith("Reported"):
                 v["ul"] = 1                      # only a directory / press listing says it is coming: lighter pin, softer caveat
         out_venues.append(v)
-    out_venues.sort(key=lambda v: (v["y"], v["x"]))
+    out_venues.sort(key=lambda v: (v["y"], v["x"], v["i"]))   # id last: pins on the same spot keep one stable order, so the diff stays small
 
     # Watch events: link-out discovery only (nothing is sold or booked here). Dates stay ISO strings; the page hides past events itself.
     events = []
@@ -332,7 +350,7 @@ def main() -> None:
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "vacations": vacations, "platforms": platforms}, ensure_ascii=False, separators=(",", ":")),
+    OUT.write_text(dump_lines({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "vacations": vacations, "platforms": platforms}),
                    encoding="utf-8")
     size = OUT.stat().st_size / 1e6
     print(f"Wrote {OUT}: {len(out_venues):,} venues ({meta['hitting_walls']:,} hitting-wall venues), {len(sports)} sports, {size:.2f} MB  (named {named:,}; confirmed {meta['confirmed']:,})")
