@@ -5,3 +5,15 @@ tid,event_key,name,decision,seen_on,note
 54405,racquetball-players-championship-2027,The Players Championship,added,2026-10-24,Racquetball Apr 29-May 2 2027 Fountain Valley CA (R2 lists the venue as "Los Cab")
 54323,outdoor-nationals-huntington-beach-2027,2027 Outdoor Nationals by 3Wall Ball,added,2026-10-24,Outdoor racquetball Jul 9-11 2027 Marina Park Huntington Beach CA; info_url stays the organizer site 3wallball.com and the TID is in source_note
 52776,tx-state-racquetball-championship-2026,2026 Texas State Racquetball Championship,added,2026-11-12,Racquetball Nov 13-15 2026 Thousand Oaks Family YMCA San Antonio TX (USA Racquetball sanctioned)
+53065,sunset-winter-blast-junior-racquetball-2027,R2 racquetball event,added,2026-11-15,"Racquetball, R2 listing 2026-11-15"
+54423,oregon-state-racquetball-championships-2027,R2 racquetball event,added,2026-11-15,"Racquetball, R2 listing 2026-11-15"
+52089,pelham-memorial-tournament-of-champions-2027,R2 racquetball event,added,2026-11-15,"Racquetball, R2 listing 2026-11-15"
+54444,usa-racquetball-high-school-championships-2027,R2 racquetball event,added,2026-11-15,"Racquetball, R2 listing 2026-11-15"
+52771,arizona-open-racquetball-2027,R2 racquetball event,added,2026-11-15,"Racquetball, R2 listing 2026-11-15"
+54488,usa-racquetball-intercollegiate-championships-2027,R2 racquetball event,added,2026-11-15,"Racquetball, R2 listing 2026-11-15"
+54341,tucson-open-irt-satellite-2027,R2 racquetball event,added,2026-11-15,"Racquetball, R2 listing 2026-11-15"
+54372,chile-traditions-cinco-de-mayo-racquetball-2027,R2 racquetball event,added,2026-11-15,"Racquetball, R2 listing 2026-11-15"
+53399,,Hotel Castaneda IRT/IRF Pro-Am Racquetball,out_of_region,2026-11-15,"Nov 19-22 2026 Las Vegas NM (Abe Montoya Recreation Center); no pin at that venue, lead in tournament_sources.md"
+54363,,2026 Fran Davis Racquetball Portland Camp,not_racket,2026-11-15,"Camp/clinic, not a tournament, Dec 4-6 2026 Sunset Athletic Club"
+54251,,Track Town Open Presented by Bates Estates,out_of_region,2026-11-15,"May 13-16 2027 Downtown Athletic Club, Eugene OR; no pin at that club, lead in tournament_sources.md"
+52432,,2026 Washington State Doubles,out_of_region,2026-11-15,"May 15-17 2027, R2 gives no venue or city (""-, WA""); lead only"
