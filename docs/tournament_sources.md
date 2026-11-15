@@ -197,3 +197,13 @@ Catch-up for the clubs only added as link-outs in PR 272. Rules: ADR 0009 and it
 - icctt.org/upcoming-tournaments: JOOLA Autumn Open Oct 24-25; the page says a $10 gate fee applies on Sunday for non-players (stale August date on the page).
 - octabletennisacademy.com/tournament-schedule: Autumn Open Oct 24-25 (matches Omnipong); Winter Open Dec 19-20 (Omnipong says Dec 26-27, so `dates_not_confirmed`).
 - smashbsd.com (SMASH Badminton San Diego): only past tournaments. pongplanet.com: no tournaments page loads. mmtta.io: none. lttt.life: none. Fresno Badminton: Google Sites FAQ only (not read for events).
+
+## Pass 13 (2026-11-15)
+
+### Part 1 (tennis, pickleball, ITF)
+Last run: 2026-11-15. Added 3 events; re-dated 15 rows whose source still shows the same dates.
+- **Added:** 2026 Coachella Valley Grand Prix Pickleball at Paradise Pickleball (Dec 11-13, back on the USA Pickleball list next to the Nov 13-15 Monterey CC event); APP Sacramento Open (Apr 29-May 2 2027, Johnson Ranch Sports Club, listed on the Golden Ticket page, `dates_not_confirmed`, year inferred); Newport Beach PPA Challenger (Aug 20-22 2027, on ppatour.com/schedule, TBA on pickleball.com's Challenger list, `dates_not_confirmed`, no venue named).
+- **Read:** USA Pickleball tournament list (server-rendered; shows all states, only 2 CA rows, no NV), USA Pickleball Golden Ticket page (CA + Las Vegas rows match), ppatour.com/schedule (all CA rows match; Junior PPA Finals event page read), USTA NorCal 2026 sheet (Level 4-5 and Open rows match; nothing new), bounce.game Las Vegas (third-party; Silver State Games, Toys for Tots already in; "Dink The Halls" Reno Dec 27-28 is a lead only, no organizer page read).
+- **ITF (CA + NV):** Wikipedia 2026 Oct-Dec ITF women's and men's pages list no CA/NV event after Oct 15 (last was Las Vegas, past). 2027: USTA 2027 Pro Circuit bid document only lists West Coast slots (W35 Jan 25, M25 Feb 15) as bid preferences, no published calendar; no 2027 CA/NV ITF event found. No browser pane, so itftennis.com was not opened.
+- **Failed / needs browser, not read:** USTA SoCal playtennis.usta.com search (HTTP 403 to scripts); 2027 ITF Beach Tennis provisional calendar PDF (itftennis.com returns a bot-check page; a search found no US event).
+- **Note:** the full dbt build in this cloud sandbox fails one test (`relationships_place_sport_overrides_place_id`, 59 rows; fails without my change too), which skips the marts; the export was made with that one test excluded.
