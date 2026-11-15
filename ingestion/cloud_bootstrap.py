@@ -15,9 +15,15 @@ import argparse
 import gzip
 import importlib.util
 import os
+import hashlib
+import io
+import json
 import shutil
 import subprocess
 import sys
+import tarfile
+import time
+import urllib.request
 from pathlib import Path
 
 from rawdir import ROOT, raw_dir
@@ -49,6 +55,59 @@ def unpack(src: Path, dest: Path) -> None:
         print(f"  {name}: {(dest / name).stat().st_size / 1e6:.1f} MB")
 
 
+HUB = "https://hub.getdbt.com/api/v1/{}.json"
+PKG_DIR = ROOT / "transform" / "dbt_packages"
+
+
+def _get(url: str, tries: int = 3) -> bytes:
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "courtconnect-ca/0.1 (+https://github.com/abov/courtconnect-ca)"})
+            with urllib.request.urlopen(req, timeout=60) as r:  # honours HTTPS_PROXY and SSL_CERT_FILE; TLS stays verified
+                return r.read()
+        except Exception as e:  # noqa: BLE001
+            if i == tries - 1:
+                raise
+            print(f"  retry {url}: {e}")
+            time.sleep(2 ** i)
+    raise AssertionError
+
+
+def hub_install(spec: str, version: str, dest: Path) -> None:
+    """Fetch one package from the dbt hub CDN (public.cdn.getdbt.com), check its sha1, unpack into dest/<name>."""
+    info = json.loads(_get(HUB.format(spec)))["versions"][version]
+    body = _get(info["downloads"]["hub"]["tarball"])
+    if hashlib.sha1(body).hexdigest() != info["downloads"]["sha1"]:
+        sys.exit(f"{spec} {version}: sha1 mismatch")
+    name = info["name"]
+    with tarfile.open(fileobj=io.BytesIO(body)) as tf:
+        top = tf.getnames()[0].split("/")[0]
+        tf.extractall(dest, filter="data")
+    shutil.rmtree(dest / name, ignore_errors=True)
+    (dest / top).rename(dest / name)
+    print(f"  {spec} {version} -> {dest / name}")
+
+
+def install_dbt_packages() -> None:
+    """`dbt deps`, with a hub-CDN fallback.
+
+    In the cloud sandbox the proxy answers the codeload.github.com / github.com archive URLs that dbt deps downloads with a
+    403 JSON body unless that repo is attached to the session; dbt reports it as "not a gzip file". hub.getdbt.com and
+    public.cdn.getdbt.com are reachable, so install the versions pinned in transform/package-lock.yml from there.
+    """
+    dbt = [sys.executable, "-m", "dbt.cli.main", "deps", "--project-dir", "transform", "--profiles-dir", "transform"]
+    for _ in range(2):
+        if subprocess.run(dbt, cwd=ROOT).returncode == 0:
+            return
+        time.sleep(3)
+    print("dbt deps failed; installing the pinned packages from the dbt hub CDN")
+    import yaml  # installed with dbt-core
+    lock = yaml.safe_load((ROOT / "transform" / "package-lock.yml").read_text())["packages"]
+    PKG_DIR.mkdir(exist_ok=True)
+    for p in lock:
+        hub_install(p["package"], str(p["version"]), PKG_DIR)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-repo")
@@ -61,6 +120,7 @@ def main() -> None:
 
     if importlib.util.find_spec("dbt") is None:
         subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", str(ROOT / "requirements.txt")], check=True)
+    install_dbt_packages()
     if not a.no_build:
         subprocess.run([sys.executable, str(ROOT / "ingestion" / "fresh_db.py")], cwd=ROOT, check=True)
 
