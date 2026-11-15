@@ -22,7 +22,8 @@ def main() -> None:
     subprocess.run([py, str(ROOT / "ingestion" / "load_raw.py")], cwd=ROOT, check=True)   # the shrink guard still protects an existing db
     exe = Path(py).parent / ("dbt.exe" if sys.platform == "win32" else "dbt")
     dbt = [str(exe)] if exe.exists() else [py, "-m", "dbt.cli.main"]
-    subprocess.run(dbt + ["deps", "--project-dir", "transform", "--profiles-dir", "transform"], cwd=ROOT, check=True)   # packages (Elementary)
+    if not (ROOT / "transform" / "dbt_packages" / "elementary").is_dir():   # cloud_bootstrap.py has a CDN fallback
+        subprocess.run(dbt + ["deps", "--project-dir", "transform", "--profiles-dir", "transform"], cwd=ROOT, check=True)   # packages (Elementary)
     subprocess.run(dbt + ["build", "--project-dir", "transform", "--profiles-dir", "transform", "--full-refresh"], cwd=ROOT, check=True)
 
 
