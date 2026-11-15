@@ -11,3 +11,4 @@ PY=python
 [ -x .venv/Scripts/python.exe ] && PY=.venv/Scripts/python.exe
 $PY ci/check_docs_hub.py || exit 1
 $PY ci/check_export_fresh.py || exit 1
+$PY ci/check_venue_drop.py || exit 1
