@@ -1,2 +1,2 @@
 # Tournaments part 4 (2026-11-15)
-Cloud run: bootstrap failed at `dbt deps` (package download blocked), so no build or export. Instagram blocked (429). Re-dated 14 social series, added lead The Club @ Vacaville. Unread: most state recheck lists, player groups, social discovery rotation; see Pass 13 Part 4.
+Instagram blocked (429). Re-dated 16 social series, pinned The Club @ Vacaville. dbt packages unpacked by hand (hub CDN); full build green except the known relationships test, which was excluded. Unread: most state recheck lists, player groups, social discovery rotation; see Pass 13 Part 4.
