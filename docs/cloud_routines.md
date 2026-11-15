@@ -15,6 +15,8 @@ Each part is gated on the one before it (`docs/tournament_run_parts.md`). Retire
 
 **Raw data.** The gitignored `data/raw` CSVs live gzipped in the private repo `abov/courtconnect-data` (`raw/`; `overture_addresses.csv.gz` is split in `.partNN` chunks). Each routine has it as a second git source; `python ingestion/cloud_bootstrap.py` unpacks it into `data/raw`, installs `requirements.txt` and builds `courtconnect.duckdb`. After a local extract + load, refresh the data repo: gzip each file in `data/raw`, `split -b 80M -d overture_addresses.csv.gz overture_addresses.csv.gz.part`, commit, push.
 
+**dbt packages in the sandbox.** The agent proxy blocks `codeload.github.com` (403 JSON, "not a gzip file"), so `dbt deps` fails. `ingestion/fresh_db.py` then installs Elementary and dbt_utils by hand from the dbt hub CDN (versions resolved from `transform/packages.yml` and `hub.getdbt.com/api/v1/<org>/<pkg>.json`) and carries on to `dbt build` without re-running deps. Local runs still just use `dbt deps`.
+
 **What differs from local runs** (the routine prompts say so; the docs stay written for the local run): no browser pane (ITF, Club Locker, padelusa, Instagram, Google Trends and reddit.com are read with WebFetch once, otherwise listed as "needs browser, not read"); no `.env` (sports sheet sync, form reports, GoatCounter not checked); no extract; if `gh` is not authenticated a part pushes its branch and puts the PR text in the session note, and Part 5 stops at its preflight.
 
 **To change a routine:** edit the steps in `docs/tournament_run_parts.md` / `docs/refresh_agent.md` on `main` (the prompts read them at run time); edit a routine's own prompt, cron or enabled flag only at claude.ai/code/routines. Run now on a part to retest it.
