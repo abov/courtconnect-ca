@@ -1,5 +1,5 @@
 domain,name,kind,sports,region,method,status,last_checked,last_yielded,notes
-playtennis.usta.com,USTA Play Tennis (SoCal; Intermountain for NV),governing_body,Tennis,CA+NV,browser pane search (docs/tournament_refresh.md),active,2026-10-24,2026-10-24,Level 1-5 and prize-money Level 6 only
+playtennis.usta.com,USTA Play Tennis (SoCal; Intermountain for NV),governing_body,Tennis,CA+NV,browser pane search (docs/tournament_refresh.md),active,2026-10-24,2026-10-24,Level 1-5 and prize-money Level 6 only; 403 to scripts 2026-11-15 so cloud runs skip it (ustasocal.com/adult/tournaments only links the search)
 docs.google.com,USTA NorCal tournament calendar (public Google Sheet),governing_body,Tennis,CA,curl the sheet CSV export,active,2026-10-24,2026-10-12,Sheet link changes each January
 usapickleball.org,USA Pickleball tournaments + Golden Tickets,governing_body,Pickleball,CA+NV,WebFetch or browser pane,active,2026-10-24,2026-10-24,Script-formatted list can show dates a day early
 ppatour.com,PPA Tour schedule,organizer,Pickleball,CA,WebFetch,active,2026-10-24,2026-10-24,
@@ -12,8 +12,8 @@ omnipong.com,OmniPong USATT tournament list,platform,Table Tennis,CA+NV,browser 
 usatt.org,USA Table Tennis,governing_body,Table Tennis,CA+NV,WebFetch,active,,2026-10-15,
 888ttc.com,888 TTC (NorCal Challenge Series),organizer,Table Tennis,CA,WebFetch,active,2026-11-15,2026-10-19,
 icctt.org,ICC Table Tennis,organizer,Table Tennis,CA,WebFetch,active,2026-11-15,2026-10-19,
-fremonttabletennis.com,Fremont Table Tennis,organizer,Table Tennis,CA,WebFetch,active,2026-11-15,2026-11-01,
-octabletennisacademy.com,OC Table Tennis Academy,organizer,Table Tennis,CA,WebFetch,active,2026-11-15,2026-10-19,
+fremonttabletennis.com,Fremont Table Tennis,organizer,Table Tennis,CA,browser pane (bot check to scripts),active,2026-11-15,2026-11-01,Cloud substitute: Omnipong entry-form PDF or butterflyonline.com tournament posts
+octabletennisacademy.com,OC Table Tennis Academy,organizer,Table Tennis,CA,browser pane at https://octabletennisacademy.com/tournament-schedule (no trailing slash; old /tournament-schedule/ is 404),active,2026-11-15,2026-10-19,Cloud fetch 404/parked 2026-11-15; Omnipong entry-form PDFs are the non-browser substitute; see docs/tournament_run_parts.md Browser-only sources
 r2sports.com,R2 Sports,platform,Racquetball;Squash;Table Tennis;Padel;Badminton;Paddle Tennis;Paddleball;Pickleball,CA+NV,curl method (docs/tournament_refresh.md R2 row),active,2026-11-15,2026-11-15,Do not loop searches: IP-blocks on reCAPTCHA
 3wallball.com,3WallBall / World Outdoor Racquetball,organizer,Outdoor Racquetball,CA,WebFetch,active,,2026-10-19,
 padelusa.org,Padel USA calendar,platform,Padel,CA+NV,browser pane (4 pages of 20),active,,2026-10-19,Calendar-only rows are dates_not_confirmed
@@ -25,13 +25,13 @@ olabeachtennis.com,OLA Beach Tennis,organizer,Beach Tennis,CA,WebFetch,active,,2
 btcaliclub.com,BT Cali Club,organizer,Beach Tennis,CA,WebFetch,active,,2026-10-19,docs/beach_tennis_watch.md
 bracketsync.com,BracketSync,platform,Pop Tennis,CA,WebFetch,active,,2026-10-20,
 instagram.com,Instagram (public pages only),social,Padel;Pickleball,CA+NV,Instagram sweep snippet; never sign in,active,,2026-10-19,ADR 0009; organizer page beats a post
-itftennis.com,ITF tournament fact-sheets,governing_body,Tennis,CA+NV,browser pane one page at a time; scripts hit a bot check,blocked,2026-10-24,2026-10-17,Do not curl or work around the bot check; facts only
+itftennis.com,ITF tournament fact-sheets,governing_body,Tennis,CA+NV,browser pane one page at a time; scripts hit a bot check,blocked,2026-10-24,2026-10-17,Do not curl or work around the bot check; facts only; cloud substitute: host club event page or tennistourtalk.com / sportsdestinations.com news
 bnpparibasopen.com,BNP Paribas Open,organizer,Tennis,CA,WebFetch,active,,2026-10-09,
 lavercup.com,Laver Cup,organizer,Tennis,CA,WebFetch,active,,2026-10-15,
 siliconvalleyopen.com,Silicon Valley Open (squash),organizer,Squash,CA,WebFetch,active,2026-11-15,2026-10-12,
 brctennisclub.com,BRC Tennis Club,organizer,Tennis,CA,WebFetch,active,,2026-10-17,
 dragonridgeopen.com,Dragon Ridge Open,organizer,Tennis,NV,WebFetch,active,,2026-10-17,
-clublocker.com,Club Locker (squash),platform,Squash,CA+NV,browser pane; script-loaded list,blocked,2026-11-15,,2026-11-01: /tournaments shows only a cookie-consent banner (no decline option) and the home page redirects to login; list not readable without consent/login
+clublocker.com,Club Locker (squash),platform,Squash,CA+NV,browser pane; script-loaded list,blocked,2026-11-15,,2026-11-01: /tournaments shows only a cookie-consent banner (no decline option) and the home page redirects to login; list not readable without consent/login; cloud runs skip it; no public non-browser substitute found (use host club pages and thesquashsite.com)
 ussquash.org,US Squash calendar,governing_body,Squash,CA+NV,WebFetch,active,2026-11-01,,Junior calendar
 skyball.us,Skyball,organizer,Skyball,CA,browser pane (click Show past),active,2026-11-15,,"2026-11-01: ""No tournaments currently scheduled""; NYC-only events"
 cosm.com,Cosm Los Angeles,venue,Tennis;Pickleball;Padel;Badminton;Squash,CA,browser pane regex,active,,,Dome screenings only
