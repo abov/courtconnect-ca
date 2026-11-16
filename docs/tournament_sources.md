@@ -257,3 +257,9 @@ Last run: 2026-11-16. Added 0 events; changed 0; no seed edits.
 - **Padel rechecks:** Oakland Padel: still "Opening in December", 3 lighted outdoor courts, 2102 Dennison St Ste B (seed not changed this run; check court count). Padel N9NE: home page gives no status (club page not opened). King of Padel: domain redirects to a for-sale page (needs owner decision). nationalpadelleague.us: no Southwest Regional dates or venue.
 - **Teq:** one standard search (California/Las Vegas parks) found no standing table. Live pins and `teq-*` leads not reread.
 - **Not read:** Ballers DTLA, WynPadel, other `venue_leads.csv` padel clubs, Teq pins, federation table finder.
+
+### Part 4 (Instagram sweep, social series, court discovery) - 2026-11-16
+Last run: 2026-11-16. Added 1 pin; no events. Cloud run, no build or export run (see session note).
+- **Instagram sweep: needs browser, not read** (instagram.com/btcaliclub returned HTTP 429; not retried). New-venue handles and the player-group recheck not done.
+- **dailyracquetball.com Nevada list read:** all but Mesquite Recreation Center already pins or leads; Mesquite confirmed on the city's own page (2 racquetball courts) and added as a pin. Colleges, California page, reddit thread (needs browser) and national-body finders not read.
+- **Not read:** state "Recheck next cycle" lists, social-series recheck and discovery rotation (last venue covered: none), walls pass, further sport searches. Court-discovery rotation: last sport covered = Squash (unchanged; 1 search run).
