@@ -234,7 +234,10 @@ Last run: 2026-11-15. Added 0 events; re-dated 14 social series; 1 new lead. **N
 ## Pass 14 (2026-11-16)
 
 ### Part 1 (tennis, pickleball, ITF)
-Last run: 2026-11-16. Added 0 events; re-dated 14 rows whose source still shows the same dates.
-- **Read:** USA Pickleball tournament list (server-rendered; only the Coachella Valley Grand Prix in CA, no NV), USA Pickleball Golden Ticket page (San Diego, Las Vegas, APP SoCal Open match; APP Sacramento Open still shows no year; the Silicon Valley Golden Ticket row is no longer on the page, so it was not re-dated), ppatour.com/schedule (all 8 CA rows match, no NV), USTA NorCal 2026 sheet (Operation Pride Open Nov 20-22 matches; nothing new for Level 4-5/Open after today), ITF substitute: one web search, no 2027 CA/NV ITF event published (USTA 2027 Pro Circuit bid document lists only bid slots).
-- **Browser-only, skipped in cloud:** playtennis.usta.com SoCal search, itftennis.com fact sheets, 2027 ITF Beach Tennis calendar.
-- **Note:** narrow build (`stg_watch_events watch_events mart_watch_events`) passes 15/15; `ci/check_export_fresh.py` passes. The full build in this sandbox fails only `assert_no_duplicate_venues` (one pair, 'Cancha de Tenis de la UAN', Mexico, stale raw data), unrelated to this change.
+Last run: 2026-11-16. Added 4 PPA events outside CA (WA, AZ, TX); re-dated 12 rows whose source still shows the same dates.
+- **Browser-only, skipped in cloud:** USTA SoCal playtennis search, itftennis.com fact sheets.
+- **Added (ppatour.com/schedule, venue not listed, city centre):** Seattle PPA Challenger Aug 6-8 2027; Gilbert PPA Challenger Jan 22-24 2027; Carvana Mesa Cup Feb 15-21 2027; Houston PPA Challenger (Atascocita) Mar 5-7 2027. Texas Open (Mar 8-14 2027) lists location TBD: not added.
+- **Read, unchanged:** ppatour.com/schedule (all 8 CA rows match, now re-dated); USA Pickleball California list (only the two Coachella Valley Grand Prix rows, no NV); USTA NorCal 2026 sheet (Level 4-5/Open: only the two Operation Pride Berkeley rows, both match); USTA Intermountain adult tournaments page (listings did not load).
+- **ITF (CA + NV):** web search found no 2027 CA/NV ITF event (USTA 2027 Pro Circuit bid document lists only West Coast preference slots, W35 Jan 25 and M25 Feb 15).
+- **Failed / not read:** USA Pickleball Golden Ticket page (fetch returned empty; existing rows not re-dated), USTA SoCal search, itftennis.com, USTA Intermountain listings.
+- **Follow-up read (2026-11-16, second run):** USA Pickleball Golden Ticket page now loads: San Diego, Las Vegas and APP SoCal Open match, APP Sacramento Open still has no year (all four re-dated). The Silicon Valley Golden Ticket row is no longer on the page, so it was not re-dated (needs owner decision).

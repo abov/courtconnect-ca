@@ -1,2 +1,3 @@
-# Tournament part 1 (2026-11-16)
-Read USA Pickleball list + Golden Ticket, PPA schedule, USTA NorCal sheet; re-dated 14 rows, added none. SoCal search and itftennis.com skipped (browser-only). Full build fails only assert_no_duplicate_venues (Mexico UAN pair, stale raw data); narrow build passes.
+# 2026-11-16 tournament part 1 (cloud)
+Added 4 PPA 2027 events (Seattle, Gilbert, Mesa, Houston/Atascocita), re-dated 12 rows read at ppatour.com, USA Pickleball and the NorCal sheet.
+Not read: Golden Ticket page (empty fetch), USTA SoCal search and itftennis.com (browser-only), Intermountain listings (did not load).
