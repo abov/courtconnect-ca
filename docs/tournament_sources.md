@@ -249,3 +249,11 @@ Last run: 2026-11-16. Added 5 events; changed 2 (OCTTA Winter Open now Dec 26-27
 - **Omnipong city-only opens processed:** read entry-form PDFs. Added LATTA Dec 5 (El Monte), ETTA Dec 5-6 (Redmond WA), Paddle Palace Tigard Dec 12-13, Top Spin USA Winter Open Dec 12 (Plano). Leads, no pin: SoCal December Open Dec 4-6 (8430 Production Ave, San Diego), FMQTTA Fullerton (1535 Deerpark Dr; Nov 7-8 passed; next Feb 13-14 2027). Later LATTA/OCTTA/Top Spin/Paddle Palace months (2027) not added yet: add as they near. Sac Fall Open, Butterfly San Antonio not read.
 - **Other:** Silicon Valley Open (Oct, past); skyball.us/play shows no tournaments; ussquash.org/tournaments is script-loaded (no list); thesquashsite.com no CA/NV events. Browser-only, skipped in cloud: Club Locker, fremonttabletennis.com, octabletennisacademy.com (404 again).
 - **Event-report issues:** none open. New candidate: usaracquetballevents.com lists Friendsgiving Open (Lodi, Nov 21-22 2026), venue not read; lead.
+
+### Part 3 (padel, beach tennis, lead rechecks) - 2026-11-16
+Last run: 2026-11-16. Added 0 events; changed 0; no seed edits.
+- **USA Padel official list: NOT read** (`read_usa_padel_list.js` printed "NO ROWS" again). No padel event re-dated; none confirmed.
+- **Beach tennis:** BTSM, OLA, BT Cali Club home pages show no December/2027 dates (BTSM tournament subpages not opened); beachtennislove.com lists only Oct 25 events and Winter Kickoff Classic Nov 20-22 (matches seeds).
+- **Padel rechecks:** Oakland Padel: still "Opening in December", 3 lighted outdoor courts, 2102 Dennison St Ste B (seed not changed this run; check court count). Padel N9NE: home page gives no status (club page not opened). King of Padel: domain redirects to a for-sale page (needs owner decision). nationalpadelleague.us: no Southwest Regional dates or venue.
+- **Teq:** one standard search (California/Las Vegas parks) found no standing table. Live pins and `teq-*` leads not reread.
+- **Not read:** Ballers DTLA, WynPadel, other `venue_leads.csv` padel clubs, Teq pins, federation table finder.
