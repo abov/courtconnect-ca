@@ -23,6 +23,11 @@ jobs:
       - run: python ci/check_r2_events.py
       - run: python ci/check_event_sources.py
       - run: python ci/check_export_fresh.py
+      # 2026-11-15: a cloud run exported from incomplete raw data and the map lost 8,300 pins; fail on a >10% drop vs main (total or any region).
+      - run: |
+          git fetch --no-tags --depth=1 origin main
+          python ci/check_venue_drop.py --base-ref origin/main
+      - run: python ci/test_check_venue_drop.py
       # ADR 0025/0026: change feed is well formed and venue ids stayed stable against main.
       - run: |
           git fetch --no-tags --depth=1 origin main
