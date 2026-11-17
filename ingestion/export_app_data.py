@@ -26,6 +26,7 @@ File shape (kept small on purpose; ~2 MB for ~10,000 venues):
               au audience women/men/mixed, ag age focus, ct courts at the venue, pi price info, sk how it was found, u info link, g signup link, vo verified on}]   (recurring social get-togethers;
               every one links out to the organizer; au/ag are only what the organizer states, absent = not stated)
   platforms : [{n name, sp [sport indexes], d what it does, p price note, u https link, vo verified on}]   (player-matching apps, link-outs only)
+  gear      : [{n shop, sp [sport indexes], k buy/rent/both, c city, y, x, u https link, d note, vo verified on}]   (hand-confirmed shops for the "Get started" guide; link-outs only)
      q name quality: c confirmed (court/operator name or hand-curated), p business listing, i inferred from nearby park/school, u unnamed
                 (q i names shared in a city carry a computed "(north courts, 6 courts)" suffix: position + court count, not a source)
      s source: o OpenStreetMap, p places, b both, m hand-curated
@@ -337,6 +338,13 @@ def main() -> None:
         platforms.append({"n": name, "sp": [sport_index[s.strip()] for s in sps.split(";") if s.strip() in sport_index], "d": what, "p": price,
                           "u": https_only(url), "vo": verified})
 
+    # Hand-confirmed gear shops for the "Get started" guide (docs/sport_recommendation_plan.md). Link-outs only.
+    gear = []
+    for name, sps, kind, city, lat, lon, url, note, verified in con.execute(
+            "select trim(shop), trim(sports), trim(kind), trim(city), lat, lon, trim(url), trim(note), trim(verified_on) from raw.gear_shops order by shop").fetchall():
+        gear.append({"n": name, "sp": [sport_index[s.strip()] for s in sps.split(";") if s.strip() in sport_index], "k": kind, "c": city,
+                     "y": round(lat, 5), "x": round(lon, 5), "u": https_only(url), "d": note, "vo": verified})
+
     named = sum(1 for v in out_venues if v["q"] != "u")
     meta = {
         "generated": date.today().isoformat(),
@@ -355,7 +363,7 @@ def main() -> None:
         "attribution": "Venue data: OpenStreetMap contributors (ODbL) and Overture Maps Foundation (CDLA-Permissive / Apache / CC0), plus hand-curated entries.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(dump_lines({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "vacations": vacations, "platforms": platforms}),
+    OUT.write_text(dump_lines({"meta": meta, "sports": sports, "venues": out_venues, "events": events, "social": social, "vacations": vacations, "platforms": platforms, "gear": gear}),
                    encoding="utf-8", newline=NL)   # LF on Windows too: the merge driver and .gitattributes expect it
     size = OUT.stat().st_size / 1e6
     print(f"Wrote {OUT}: {len(out_venues):,} venues ({meta['hitting_walls']:,} hitting-wall venues), {len(sports)} sports, {size:.2f} MB  (named {named:,}; confirmed {meta['confirmed']:,})")

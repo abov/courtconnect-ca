@@ -24553,4 +24553,10 @@
 {"n":"Playtomic","sp":[11,0,5],"d":"Phone app to join or create open matches, see player levels and book courts at clubs","p":"Player prices not stated on the public homepage","u":"https://playtomic.com/","vo":"2026-10-21"},
 {"n":"RacketPal","sp":[0,20,18,17,11],"d":"Phone app to find players, chat and set up matches, with local leagues and a court finder","p":"Free to download; premium features for a fee per third-party profiles","u":"https://apps.apple.com/app/id1453817491","vo":"2026-10-21"},
 {"n":"UTR Sports","sp":[0,5],"d":"Phone app to find players near your rating, join local groups and events and set up matches","p":"Free to sign up per search summaries; paid subscription adds extras","u":"https://www.utrsports.net/pages/players","vo":"2026-10-21"}
+],
+"gear":[
+{"n":"Cupertino Sports Center Pro Shop","sp":[0],"k":"rent","c":"Cupertino","y":37.32361,"x":-122.0429,"u":"https://www.lifetimeactivities.com/cupertino/pro-shop/","d":"Demo racquets and ball machine rental; stringing; grips and balls","vo":"2026-11-17"},
+{"n":"Goldman Tennis Center Pro Shop","sp":[0,5],"k":"buy","c":"San Francisco","y":37.7701,"x":-122.4591,"u":"https://lifetimeactivities.com/san-francisco/pro-shop","d":"Tennis racquets and pickleball paddles; demo program; stringing","vo":"2026-11-17"},
+{"n":"Santa Barbara Pickleball Shop","sp":[5],"k":"both","c":"Santa Barbara","y":34.4294,"x":-119.68969,"u":"https://sbpickleballshop.com","d":"Pickleball-only store; free demo paddles with an in-store appointment","vo":"2026-11-17"},
+{"n":"Santa Barbara Pickleball Shop (Newbury Park)","sp":[5],"k":"buy","c":"Newbury Park","y":34.18654,"x":-118.91169,"u":"https://sbpickleballshop.com","d":"Second store of the Santa Barbara shop","vo":"2026-11-17"}
 ]}

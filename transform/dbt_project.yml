@@ -219,6 +219,19 @@ seeds:
         price_note: varchar
         evidence: varchar
         verified_on: varchar
+    gear_shops:              # all text except lat/lon; hand-confirmed shops for the Get started guide, exported as `gear`
+      +column_types:
+        shop: varchar
+        sports: varchar
+        kind: varchar
+        city: varchar
+        state: varchar
+        lat: double
+        lon: double
+        url: varchar
+        note: varchar
+        evidence: varchar
+        verified_on: varchar
     player_groups:           # all text; leads for the groups shelf (ADR 0009 amendment 2026-10-21), not exported yet
       +column_types:
         group_key: varchar

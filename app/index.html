@@ -427,6 +427,11 @@
   </div>
 </dialog>
 
+<dialog id="guide" aria-labelledby="guideTitle">
+  <div class="dlg-h"><h2 id="guideTitle">Get started</h2><button class="link" id="closeGuide" type="button">Close</button></div>
+  <div class="dlg-b" id="guideBody"></div>
+</dialog>
+
 <dialog id="court" aria-labelledby="courtTitle">
   <div class="dlg-h"><h2 id="courtTitle">Find by court</h2><button class="link" id="closeCourt" type="button">Close</button></div>
   <div class="dlg-b">
@@ -566,7 +571,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   courtreserve: "CourtReserve", matchtime: "MatchTime", p1padel_site: "P1 Padel", vip_site: "Vegas Indoor Pickleball", darling_site: "Darling Tennis Center",
   ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson", washoe_county: "Washoe County Regional Parks", clark_county: "Clark County Parks & Recreation", suncity_summerlin: "Sun City Summerlin", lifetime_site: "Life Time", nlv_gov: "City of North Las Vegas"};
 
-let DATA, sports, venues, events = [], socials = [], socialPins = [], platforms = [], trips = [];
+let DATA, sports, venues, events = [], socials = [], socialPins = [], platforms = [], gear = [], trips = [];
 const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers: new Set(), solo: false, soloPub: false};   // solo = the hitting-alone filter: hitting-wall venues and court venues with walls on site, every wall type together   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
@@ -1641,6 +1646,7 @@ function showSportInfo() {
   $("sportinfo-t").textContent = "About " + s.n;
   if (s.d) body.append(el("p", {text: s.d}));
   if (facts.length) body.append(el("p", {class: "facts", text: facts.join(" · ")}));
+  const gb = el("button", {class: "link", type: "button", text: "Get started with " + s.n}); gb.addEventListener("click", () => openGuide(state.sport, "about")); body.append(el("p", {}, gb));
   if (links.length) {
     const row = el("p", {class: "links"});
     for (const [k, label] of links) {
@@ -1843,6 +1849,40 @@ function openPlayers(idx, src) {
   $("players").showModal();
   trackD("players-open", src);
 }
+// "Get started with <sport>": what it is, where to try it near you, gear, shops and where to learn more. Every row is sourced or hidden, link-outs only, no affiliate links.
+// "Near you" is the searched place, else the "Near me" spot, else the map centre; nothing is stored or sent anywhere.
+const GUIDE_WAYS = ["group_class", "clinic", "private_lesson", "drop_in", "open_play"], GUIDE_MI = 25, GUIDE_KIND = {buy: "Sells gear", rent: "Demo or rental", both: "Sells and lends gear"};
+function guideCentre() { if (searchCentre) return {c: searchCentre, from: "your search"}; if (userPos) return {c: userPos, from: "your location"}; const m = map.getCenter(); return {c: {lat: m.lat, lng: m.lng}, from: "the map centre"}; }
+function guideSection(box, title, ...kids) { const k = kids.filter(Boolean); if (k.length) box.append(el("h3", {text: title}), ...k); }
+function openGuide(idx, src) {
+  const s = sports[idx]; if (!s) return;
+  const box = $("guideBody"), {c, from} = guideCentre(), f = s.f || {}, u = s.u || {}, mi = p => distKm(p, c) * 0.621371, miLabel = p => { const m = mi(p); return m < 10 ? m.toFixed(1) + " mi" : Math.round(m) + " mi"; };
+  $("guideTitle").textContent = "Get started with " + s.n; box.replaceChildren();
+  guideSection(box, "What it is", s.d ? el("p", {text: s.d}) : null, f.p || f.g ? el("p", {class: "facts", text: [f.p ? f.p + " players" : "", f.g ? "Typical gear: " + f.g : ""].filter(Boolean).join(" · ")}) : null);
+  const near = venues.filter(v => !v.kd && !(v.f & 8) && v.p.some(x => x[0] === idx)).sort((a, b) => distKm(a, c) - distKm(b, c));
+  const lc = s.n.toLowerCase(), longer = sports.map(x => x.n.toLowerCase()).filter(n => n !== lc && n.includes(lc)), named = t => { t = t.toLowerCase(); return t.includes(lc) && !longer.some(n => t.includes(n)); };   // "Beach Tennis class" is not a Tennis link
+  const ways = [];
+  for (const v of near) {
+    const acts = (v.ac || []).filter(a => GUIDE_WAYS.includes(a[0]) && safeUrl(a[2]) && named(a[1]));   // link-outs are per venue, not per sport: show one only when its own title names the sport
+    if (acts.length) ways.push({v, acts});
+    if (ways.length === 3) break;
+  }
+  const way = ({v, acts}) => el("div", {class: "pcard"}, el("h4", {text: v.n || "Unnamed courts", translate: "no"}), el("p", {class: "meta", text: [v.c, miLabel(v) + " from " + from].filter(Boolean).join(" · ")}),
+    ...acts.slice(0, 3).map(a => el("a", {class: "act", href: safeUrl(a[2]), target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(a[1]), el("span", {class: "sub", text: (ACTION[a[0]] || a[0]) + " · " + (PROVIDER[a[3]] || a[3])}))));
+  if (ways.length) guideSection(box, "Try it near you", ...ways.map(way), el("p", {class: "fine", text: "Links whose title names " + s.n + ", from each venue's own page, nearest first. RacketConnect takes no bookings."}));
+  else if (near.length) guideSection(box, "Try it near you", el("p", {text: "No lesson, clinic or drop-in link is listed yet. The closest place with " + s.n + " is " + (near[0].n || "unnamed courts") + (near[0].c ? " in " + near[0].c : "") + " (" + miLabel(near[0]) + " from " + from + "): ask them about beginners."}));
+  const shops = gear.filter(g => g.sp.includes(idx) && mi(g) <= GUIDE_MI).sort((a, b) => distKm(a, c) - distKm(b, c)).slice(0, 3);
+  const links = [["g", "Gear guide"], ["l", "Learn more"], ["r", "Rules"]].filter(([k]) => u[k]);
+  if (f.ou) links.push(["ou", "Official site"]);
+  guideSection(box, "Gear",
+    f.g ? el("p", {text: "You will need: " + f.g + ". Ask the venue whether it lends gear to beginners."}) : null,
+    ...shops.map(g => el("p", {}, el("a", {href: g.u, target: "_blank", rel: "noopener noreferrer", text: g.n}), document.createTextNode(" (" + g.c + ", " + miLabel(g) + "): " + GUIDE_KIND[g.k] + ". " + g.d + ". Read " + g.vo + "."))),
+    !shops.length && gear.some(g => g.sp.includes(idx)) ? el("p", {class: "fine", text: "No confirmed " + s.n + " shop within " + GUIDE_MI + " miles of " + from + ". We list only shops we have confirmed from their own page."}) : null,
+    shops.length ? el("p", {class: "fine", text: "A short, hand-checked list, not every shop. Call before you go: stock changes."}) : null);
+  const row = links.map(([k, label]) => { const url = k === "ou" ? f.ou : u[k]; let host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) { return null; } return el("a", {href: url, target: "_blank", rel: "noopener noreferrer"}, document.createTextNode(label + " "), el("small", {text: "(" + host + ")"})); }).filter(Boolean);
+  guideSection(box, "Learn more", row.length ? el("p", {class: "links"}, ...row) : null);
+  $("guide").showModal(); trackD("guide-open", src + "-" + s.n);
+}
 // The sport blurb and the wall note share one disclosure under the picker, shown only while one of them has something to say.
 function syncSportMore() {
   const box = $("sportmore"), s = state.sport >= 0 ? sports[state.sport] : null;
@@ -1882,10 +1922,11 @@ function renderSuggest() {
   const a = sports[from].n, t = sports[o.to].n, key = a + "-" + t;
   if (box.dataset.key === key && !box.hidden) return;   // already showing this one: a map move must not rebuild it
   const go = el("button", {class: "chip", type: "button", text: "Show me " + t}), no = el("button", {class: "chip", type: "button", text: "Not now"});
+  const how = el("button", {class: "chip", type: "button", text: "How to start " + t}); how.addEventListener("click", () => openGuide(o.to, "suggest"));
   go.addEventListener("click", () => { trackD("suggest-accept", key); const sel = $("sport"); sel.value = String(o.to); sel.dispatchEvent(new Event("change")); });
   no.addEventListener("click", () => { trackD("suggest-dismiss", key); const q = store.get("suggested", {}); q[a] = new Date().toISOString(); store.set("suggested", q); box.hidden = true; box.dataset.key = ""; });
   box.replaceChildren(el("p", {}, el("b", {text: o.nothing ? "Nothing for " + a + " in view. Try " + t + "?" : "Like " + a + "? Try " + t + "."}), document.createTextNode(" " + o.why + ".")),
-    el("p", {class: "fine", text: "Our own suggestion from a hand-made list, not measured. " + countWord(o.n, "place", "places") + " for " + t + " in view."}), el("div", {class: "chips"}, go, no));
+    el("p", {class: "fine", text: "Our own suggestion from a hand-made list, not measured. " + countWord(o.n, "place", "places") + " for " + t + " in view."}), el("div", {class: "chips"}, go, how, no));
   box.dataset.key = key; box.hidden = false; trackD("suggest-shown", key);
 }
 function showAnywhere() {
@@ -1956,6 +1997,7 @@ function initControls() {
   $("peopleBtn").addEventListener("click", () => openPlayers(state.sport, "sport"));
   $("playersSport").addEventListener("change", renderPlayers);
   $("closePlayers").addEventListener("click", () => $("players").close());
+  $("closeGuide").addEventListener("click", () => $("guide").close());
   $("playersTell").href = REPORT_FORM;
   sel.addEventListener("change", () => { state.solo = false; state.soloPub = false; state.sport = +sel.value; updateSportIcon(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { bumpSportSeen(sports[state.sport].n); track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
@@ -2030,7 +2072,7 @@ function initCoverage() {
 // ---------- boot ----------
 let byKey = {};
 fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(async d => {
-  DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; socials = d.social || []; platforms = d.platforms || [];
+  DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; socials = d.social || []; platforms = d.platforms || []; gear = d.gear || [];
   trips = (d.vacations || []).map(x => Object.assign(x, {c: x.d}));   // c = destination, so search and "closest name" treat a trip like any pinned place
   $("modeTrips").hidden = !trips.length;
   venues.forEach((v, i) => {
