@@ -33,7 +33,7 @@ def table(con, sql: str) -> str:
 def write_csv(con) -> None:
     cur = con.execute("""select metro_name as metro, sport_name as sport, interest_index, interest_rank, venues_found as venues,
                                 completeness_share, confidence, gap_candidate, exported_on,
-                                interest_vs_avg, supply_index, gap_score, metro_pins
+                                interest_vs_avg, supply_index, gap_score, metro_pins, usable_venues
                          from marts.mart_search_vs_coverage where interest_index is not null order by sport_name, interest_index desc, metro_name""")
     cols = [d[0] for d in cur.description]
     rows = cur.fetchall()
@@ -52,8 +52,9 @@ def main() -> None:
     exported, = con.execute("select max(exported_on) from marts.mart_search_vs_coverage").fetchone()
     print(f"# Search interest vs venues (Google Trends export {exported}; relative, sampled; re-export about quarterly)\n")
     print("## Gap candidates (busiest sports; interest >= the average metro, pins < 90% of the average share, gap score >= 1.5)\n")
-    print("gap_score = interest vs the average metro / the sport's share of the metro's pins vs the average metro. 2 = searched twice as much as listed.\n")
-    print(table(con, """select metro_name as metro, sport_name as sport, gap_score, interest_vs_avg, supply_index, venues_found as venues, metro_pins
+    print("gap_score = interest vs the average metro / the sport's share of the metro's pins vs the average metro (pins weighted 0.5-1 by name, address and website). 2 = searched twice as much as listed.\n")
+    print(table(con, """select metro_name as metro, sport_name as sport, gap_score, interest_vs_avg, supply_index, venues_found as venues, usable_venues,
+                               completeness_share, metro_pins
                         from marts.mart_search_vs_coverage where gap_candidate order by gap_score desc"""))
     print("## Thin sports with the highest gap score (Trends samples these: weak hints, never flagged)\n")
     print(table(con, """select metro_name as metro, sport_name as sport, gap_score, interest_vs_avg, supply_index, venues_found as venues

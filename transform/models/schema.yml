@@ -1078,8 +1078,10 @@ models:
         description: Mean share of the venues near the anchor with a real name, an address and a usable website (0-1); null when there are none.
       - name: interest_vs_avg
         description: 100 * interest_index / the sport's mean index over metros with data (100 = average metro).
+      - name: usable_venues
+        description: The sport's pins weighted by completeness, each 0.5 + 0.5 * share of real name, address and usable website (home-like pins 0.5).
       - name: supply_index
-        description: 100 * the sport's share of the metro's pins / its share across the metros with data (100 = average metro; all pins stand in for metro size).
+        description: 100 * usable_venues / the metro's pins, against the same ratio across the metros with data (100 = average metro; all pins, raw count, stand in for metro size).
       - name: gap_score
         description: interest_vs_avg / supply_index (2 = searched twice as much as listed). Null without Trends data.
       - name: gap_candidate
