@@ -172,6 +172,25 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: venue_website_official
+    description: >
+      A website for an OSM court group that has none (OSM and Overture list none), taken from the operator's own public page (park, school,
+      club or city page) that names the facility and its tennis courts. Used only when no OSM/Overture website exists. Keyed by venue_id
+      with the pin's lat/lon: a row is ignored if the pin has moved. Public data only (ADR 0005, 0007).
+    columns:
+      - name: venue_id
+        tests: [unique, not_null]
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: website
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: venue_court_counts
     description: >
       A person's court count for one sport at one venue where the OpenStreetMap count is wrong (core.bridge_venue_sport replaces the count for a
