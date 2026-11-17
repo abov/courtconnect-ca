@@ -27,6 +27,13 @@ Read-only use of the public Trends pages in the built-in browser pane: no sign-i
 6. Open a PR with the report's gap list in the description (2-4 bullets) and a new `docs/sessions/` note. If Trends returns 429 or empty widgets, stop, write the note and do not retry in a loop.
 7. Act on the top 2-3 gaps only if the owner asks; otherwise they feed the next facility scan or padel lead pass choice.
 
+## Related queries as leads (pilot 2026-11-17, padel + pickleball, CA + NV)
+Method: open the explore page for one term and state (`https://trends.google.com/trends/explore?date=today%2012-m&geo=US-CA&q=padel&hl=en`), scroll down until the widgets load, then `read_network_requests` with `urlPattern=relatedsearches`; the second of each pair is "related queries" (top 25 + rising), the first is related topics (no place names). Keep only queries naming a place or club; drop gear brands, pro tours, generic terms and other states. Check each name against `mart_venue_finder`, `manual_venues.csv` and `venue_leads.csv`; new ones go into `venue_leads.csv` (`source_type=other`, "Google Trends related query" + date in `claim`). Never source a lead's details from Pickleheads or other off-limits directories; confirm from the club's own page before pinning.
+
+Pilot result: 4 pages, about 180 queries, 10 name a place or club. Already on the map: Bay Padel, Padel Up, Park Padel, P1 Padel, Sunset Park (Las Vegas), Vegas Indoor Pickleball, Pickleball City (Fremont). New lead: West Coast Pickleball Pomona (rising +1,700%; the club's page says opening 2026, no address yet; lead `wcpb-pomona-pickleball`). No venue found: GamePoint Pickleball, RPM Pickleball (RPM looks like a paddle brand). Hit rate: 1 new lead from ~180 queries (1 of 10 place names). The lists are mostly gear, and the clubs people search for are the big ones we already have; the rising list is where the one new club showed up.
+
+Verdict: cheap (about 10 minutes for 4 pages) but low yield. Not worth its own routine; add it to the quarterly refresh only as an optional step for the two or three gap sports (`gap_candidate`), reading the rising list, where a newly opened club shows up first.
+
 ## Not now (kept here so it is not lost; revisit after the beta, ADR 0015)
 - Showing trends in the app (a "trending sport" badge, per-venue demand): guesses presented as fact, so no.
 - Per-capita comparison: needs metro population (a second seed); the pin-mix `supply_index` stands in for it. Revisit if a metro dominated by one sport (Palm Springs: 93% tennis pins) misleads.
