@@ -1,6 +1,6 @@
 # Plan: "If you like X, try Y" sport suggestions
 
-Status: PLAN ONLY (2026-10-25), nothing built. Owner idea; brings back the "Try something new" recommender dropped 2026-10-21 (`docs/ml.md` row 8, ADR 0015), now with a concrete trigger. Rank with beta findings (December).
+Status: steps 1 and 3 built (2026-11-17: step 3 = suggestion card under the sport picker, `renderSuggest` in `app/index.html`; `sport_related.csv` seed, tests, `rl` export key on each sport); guide and gear shops not built. Owner idea; brings back the "Try something new" recommender dropped 2026-10-21 (`docs/ml.md` row 8, ADR 0015), now with a concrete trigger. Rank with beta findings (December).
 
 ## Goal
 When someone keeps looking at one sport, offer one related sport they might enjoy, in a way that is light, optional and fun. Serves the mission (ADR 0015: try a new sport). Not a retention trick: no accounts, no streaks, no reminders (same stance as the focus helpers in `app/index.html`).

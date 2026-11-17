@@ -133,6 +133,7 @@
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   #sport option.nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; }
+  .suggest { margin-top: 8px; border-color: var(--accent); } .suggest p { margin: 0 0 6px; color: var(--text); } .suggest .fine { color: var(--muted); font-size: 11.5px; }
   .sportinfo { margin-top: 8px; } .sportinfo summary { font-size: 12.5px; }
   .sportinfo h4 { margin: 10px 0 0; font-size: 12.5px; }
   .sportinfo p { margin: 6px 0 0; } .sportinfo .facts { color: var(--muted); }
@@ -304,6 +305,7 @@
       <label class="l" for="sport">Sport</label>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
       <button class="chip callout" id="peopleBtn" type="button" aria-haspopup="dialog" hidden></button>
+      <div id="suggest" class="note suggest" hidden></div>
       <p id="anywhere" class="note" hidden></p>
       <details id="sportmore" class="note sportinfo" hidden><summary id="sportmore-t">More about this sport</summary>
         <div id="sportinfo" hidden><h4 id="sportinfo-t"></h4><div id="sportinfo-b"></div></div>
@@ -1493,6 +1495,7 @@ function updateCount() {
     const wn = inView.reduce((s, v) => s + wallsIn(v), 0), wall = current.reduce((s, v) => s + wallsIn(v), 0);
     if (wall) kids.push(document.createTextNode(" · "), el("b", {text: fmt(wn)}), document.createTextNode(noun(wn, " hitting wall", " hitting walls") + (wn !== wall ? " of " + fmt(wall) : "")));
     box.replaceChildren(...kids);
+    renderSuggest();
     return;
   }
   if (state.mode === "trips") {
@@ -1846,9 +1849,49 @@ function syncSportMore() {
   box.hidden = [...box.querySelectorAll(":scope > div")].every(d => d.hidden || getComputedStyle(d).display === "none");
   $("sportmore-t").textContent = s ? "More about " + s.n : "More about this sport";
 }
+// "If you like X, try Y" (docs/sport_recommendation_plan.md, step 3): one optional card from a hand-made list (seed sport_related.csv, export key rl). Not learned and not a ranker.
+// Shown when the same sport was picked on 3 different days (counted only in this browser: cc.sportSeen) or when the picked sport has nothing in view.
+// Gates: the pair is curated, the suggested sport is not one they already picked, a non-members venue for it is in view under the current filters. No gate passes = no card.
+const TIE_RANK = {court: 0, equipment: 1, skills: 2, feel: 3}, SUGGEST_QUIET_DAYS = 60;
+const today = () => new Date().toLocaleDateString("en-CA");
+function bumpSportSeen(name) {
+  const seen = store.get("sportSeen", {}), e = seen[name] || {days: []}, d = today();
+  if (!e.days.includes(d)) { e.days = [...e.days, d].slice(-10); seen[name] = e; store.set("sportSeen", seen); }
+}
+function suggestPick(from) {
+  const s = sports[from], seen = store.get("sportSeen", {}), quiet = store.get("suggested", {});
+  if (!s || !s.rl) return null;
+  const last = quiet[s.n]; if (last && (Date.now() - Date.parse(last)) / 864e5 < SUGGEST_QUIET_DAYS) return null;
+  const b = map.getBounds(), nothing = !current.some(v => b.contains([v.x, v.y]));
+  if (!nothing && ((seen[s.n] || {}).days || []).length < 3) return null;
+  const sm = surfMask(), tm = setMask(), vf = state.on.has("lit") ? 1 : 0;
+  const opts = [];
+  for (const [to, why, tie, effort] of s.rl) {
+    const t = sports[to]; if (!t || seen[t.n]) continue;
+    const near = venues.filter(v => !(v.f & 8) && b.contains([v.x, v.y]) && matches(v, sm, tm, vf, to));
+    if (near.length) opts.push({to, why, tie, effort, n: near.length, nothing});
+  }
+  opts.sort((a, c) => TIE_RANK[a.tie] - TIE_RANK[c.tie] || (a.effort === "easy" ? 0 : 1) - (c.effort === "easy" ? 0 : 1) || c.n - a.n);
+  return opts[0] || null;
+}
+function renderSuggest() {
+  const box = $("suggest"), from = state.sport;
+  if (!map || state.mode !== "play" || from < 0 || state.solo) { box.hidden = true; box.dataset.key = ""; return; }
+  const o = suggestPick(from);
+  if (!o) { box.hidden = true; box.dataset.key = ""; return; }
+  const a = sports[from].n, t = sports[o.to].n, key = a + "-" + t;
+  if (box.dataset.key === key && !box.hidden) return;   // already showing this one: a map move must not rebuild it
+  const go = el("button", {class: "chip", type: "button", text: "Show me " + t}), no = el("button", {class: "chip", type: "button", text: "Not now"});
+  go.addEventListener("click", () => { trackD("suggest-accept", key); const sel = $("sport"); sel.value = String(o.to); sel.dispatchEvent(new Event("change")); });
+  no.addEventListener("click", () => { trackD("suggest-dismiss", key); const q = store.get("suggested", {}); q[a] = new Date().toISOString(); store.set("suggested", q); box.hidden = true; box.dataset.key = ""; });
+  box.replaceChildren(el("p", {}, el("b", {text: o.nothing ? "Nothing for " + a + " in view. Try " + t + "?" : "Like " + a + "? Try " + t + "."}), document.createTextNode(" " + o.why + ".")),
+    el("p", {class: "fine", text: "Our own suggestion from a hand-made list, not measured. " + countWord(o.n, "place", "places") + " for " + t + " in view."}), el("div", {class: "chips"}, go, no));
+  box.dataset.key = key; box.hidden = false; trackD("suggest-shown", key);
+}
 function showAnywhere() {
   showSportInfo();
   showPeople();
+  renderSuggest();
   const n = $("anywhere"), s = state.mode === "play" && state.sport >= 0 ? sports[state.sport] : null;
   const none = !!(s && !s.w && s.v === 0);
   n.hidden = !(s && (s.w || none));
@@ -1914,7 +1957,7 @@ function initControls() {
   $("playersSport").addEventListener("change", renderPlayers);
   $("closePlayers").addEventListener("click", () => $("players").close());
   $("playersTell").href = REPORT_FORM;
-  sel.addEventListener("change", () => { state.solo = false; state.soloPub = false; state.sport = +sel.value; updateSportIcon(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } });
+  sel.addEventListener("change", () => { state.solo = false; state.soloPub = false; state.sport = +sel.value; updateSportIcon(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { bumpSportSeen(sports[state.sport].n); track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
   $("q").addEventListener("input", debounce(renderSug, 120));

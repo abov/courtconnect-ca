@@ -377,6 +377,31 @@ seeds:
       `same_table` = yes: the two sports share one piece of equipment and are equally valid there (Teqpong / Teqis on a Teqboard), so the map
       lists them together in the Plays line (one shared court count) instead of as an optional note.
 
+  - name: sport_related
+    description: >
+      Hand-curated "if you like `sport`, try `suggest`" pairs for the sport suggestion card (docs/sport_recommendation_plan.md). Not a ranker and
+      not learned: each pair has a one-line `reason` a regular player would agree with, written by us and inferred, not measured. `tie` is the
+      link (court, equipment, skills, feel); `effort` easy or medium (how far the skills carry over). The app adds its own gates (startable near
+      you, not already known); a missing suggestion beats a poor one.
+    columns:
+      - name: sport
+        tests:
+          - not_null
+      - name: suggest
+        tests:
+          - not_null
+      - name: reason
+        tests:
+          - not_null
+      - name: tie
+        tests:
+          - accepted_values:
+              values: [court, equipment, skills, feel]
+      - name: effort
+        tests:
+          - accepted_values:
+              values: [easy, medium]
+
   - name: osm_court_sport_overrides
     description: >
       A person found an OpenStreetMap sport tag wrong, so that court (court_id like way/123) is not counted for that sport.

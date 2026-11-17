@@ -1,0 +1,17 @@
+sport,suggest,reason,tie,effort
+Pickleball,Padel,"Same court-sized game, but you can play off the glass walls",equipment,easy
+Pickleball,Tennis,Same doubles feel with a bigger court and a livelier ball,skills,medium
+Pickleball,Racquetball,A fast indoor game where the walls are part of play,feel,medium
+Tennis,Padel,"Tennis strokes carry over, played on a smaller walled court",skills,easy
+Tennis,Pickleball,"Doubles on a smaller court, quick to pick up",skills,easy
+Tennis,Squash,"Racket and footwork carry over, played off the walls",skills,medium
+Padel,Pickleball,Small-court doubles with a gentler learning curve,feel,easy
+Padel,Tennis,Same stroke family on a full-size court,skills,medium
+Padel,Squash,Walls are part of the game,feel,medium
+Squash,Racquetball,Indoor walled-court game with a bouncier ball,court,easy
+Racquetball,Squash,Indoor walled-court game with a smaller racket and tighter court,court,medium
+Badminton,Tennis,Racket skills and footwork carry over,skills,medium
+Badminton,Table Tennis,"Quick reflexes and wrist work, easy to start indoors",feel,easy
+Table Tennis,Badminton,"Fast hand-eye racket play, played standing on a court",feel,easy
+Beach Tennis,Padel,"Same doubles, short-court rhythm with a different surface",feel,easy
+Pop Tennis,Pickleball,Paddle sport with the same small-court rhythm,equipment,easy
