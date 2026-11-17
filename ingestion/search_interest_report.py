@@ -4,7 +4,8 @@
 
 Reads marts.mart_search_vs_coverage in courtconnect.duckdb (run `dbt build` first; the warehouse is not changed). Writes docs/search_interest_vs_coverage.csv,
 one row per metro and sport with data: no venue rows, commit it after a refresh (the Pages build has no warehouse and the dashboard reads this file).
-Interest is relative and sampled, not volumes; 'thin' sports are noisy. A gap candidate is a place to look for missing venues, not proof of one.
+Interest is relative and sampled, not volumes; 'thin' sports are noisy. gap_score compares interest with the sport's share of the metro's pins,
+both against the average metro (mart_search_vs_coverage). A gap candidate is a place to look for missing venues, not proof of one.
 """
 from __future__ import annotations
 
@@ -31,7 +32,8 @@ def table(con, sql: str) -> str:
 
 def write_csv(con) -> None:
     cur = con.execute("""select metro_name as metro, sport_name as sport, interest_index, interest_rank, venues_found as venues,
-                                completeness_share, confidence, gap_candidate, exported_on
+                                completeness_share, confidence, gap_candidate, exported_on,
+                                interest_vs_avg, supply_index, gap_score, metro_pins
                          from marts.mart_search_vs_coverage where interest_index is not null order by sport_name, interest_index desc, metro_name""")
     cols = [d[0] for d in cur.description]
     rows = cur.fetchall()
@@ -49,9 +51,14 @@ def main() -> None:
     write_csv(con)
     exported, = con.execute("select max(exported_on) from marts.mart_search_vs_coverage").fetchone()
     print(f"# Search interest vs venues (Google Trends export {exported}; relative, sampled; re-export about quarterly)\n")
-    print("## Gap candidates (interest index >= 50, 3 or fewer venues, busiest sports only)\n")
-    print(table(con, """select metro_name as metro, sport_name as sport, interest_index as interest, venues_found as venues, interest_rank as rank
-                        from marts.mart_search_vs_coverage where gap_candidate order by interest_index desc"""))
+    print("## Gap candidates (busiest sports; interest >= the average metro, pins < 90% of the average share, gap score >= 1.5)\n")
+    print("gap_score = interest vs the average metro / the sport's share of the metro's pins vs the average metro. 2 = searched twice as much as listed.\n")
+    print(table(con, """select metro_name as metro, sport_name as sport, gap_score, interest_vs_avg, supply_index, venues_found as venues, metro_pins
+                        from marts.mart_search_vs_coverage where gap_candidate order by gap_score desc"""))
+    print("## Thin sports with the highest gap score (Trends samples these: weak hints, never flagged)\n")
+    print(table(con, """select metro_name as metro, sport_name as sport, gap_score, interest_vs_avg, supply_index, venues_found as venues
+                        from marts.mart_search_vs_coverage where confidence = 'thin' and gap_score >= 2 and interest_vs_avg >= 100
+                        order by gap_score desc limit 8"""))
     print("## Venues near each metro anchor, by sport (busiest sports)\n")
     print(table(con, """select metro_name as metro,
                                max(case when sport_name = 'Tennis' then venues_found end) as tennis,

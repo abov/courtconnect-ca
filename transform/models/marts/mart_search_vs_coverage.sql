@@ -4,7 +4,17 @@
 --   completeness_share : mean of the shares of those venues with a real name (court, operator, manual or places-directory name), an address and a usable website;
 --                        the same three parts as the dashboard's completeness (ingestion/export_dashboard_data.py), leaving out likely private-residence pins
 --                        (is_home_like, ADR 0016: they never get a street or a website). Null when no venues or only such pins.
---   gap_candidate : confidence 'ok', index >= 50 and 3 or fewer venues for the sport: a place to look for missing venues first, not proof of a gap
+--   Raw venue counts are not comparable across metros (a big metro, or one whose 120-mile catchment is wide, always has many). So both sides are put on
+--   "100 = the average metro" scales and compared:
+--   interest_vs_avg : 100 * interest_index / the sport's mean index over the metros with data. Trends already divides by each metro's total searches,
+--                     so this is a share of local searches, not a head count.
+--   supply_index    : 100 * (the sport's share of the metro's pins) / (the sport's share of all pins in the metros with data for that sport).
+--                     All the metro's pins (any sport) stand in for its size: no population seed, and the same catchment on both sides.
+--                     venues_found + 0.5 keeps a metro with no pins for the sport finite.
+--   gap_score       : interest_vs_avg / supply_index. 1 = searched about as much as we list; 2 = twice as much searched as listed.
+--   gap_candidate   : confidence 'ok', interest_vs_avg >= 100 (at least an average metro's searches), supply_index < 90 (clearly fewer pins than an
+--                     average metro for its size; keeps a sport that already fills a metro, like Palm Springs tennis, out) and gap_score >= 1.5: a place to look for
+--                     missing venues first, not proof of a gap. Thin sports are scored but never flagged (Trends samples them).
 with metro as (
     select metro_code, metro_name, anchor_lat, anchor_lon from {{ ref('search_metros') }}
 ),
@@ -35,6 +45,12 @@ nearest as (
     where rn = 1 and dist_mi <= 120
 ),
 
+metro_pins as (
+    select metro_code, count(distinct venue_id) as metro_pins
+    from nearest
+    group by 1
+),
+
 venues as (
     select metro_code, sport_name, count(distinct venue_id) as venues_found,
            avg(has_real_name::int) filter (where not is_home_like) as real_name_share,
@@ -42,21 +58,46 @@ venues as (
            avg(has_website::int) filter (where not is_home_like) as website_share
     from nearest
     group by 1, 2
+),
+
+joined as (
+    select
+        i.*,
+        coalesce(v.venues_found, 0)                                                  as venues_found,
+        mp.metro_pins,
+        round((v.real_name_share + v.address_share + v.website_share) / 3, 4)        as completeness_share
+    from {{ ref('int_search_interest') }} i
+    left join venues v      on v.metro_code = i.metro_code and v.sport_name = i.sport
+    left join metro_pins mp on mp.metro_code = i.metro_code
+),
+
+scored as (
+    select
+        *,
+        100 * index_value / avg(index_value) over (partition by sport)                    as interest_vs_avg_raw,
+        100 * ((venues_found + 0.5) / nullif(metro_pins, 0))
+            / nullif(sum(case when index_value is not null then venues_found end) over (partition by sport)
+                     / nullif(sum(case when index_value is not null then metro_pins end) over (partition by sport), 0), 0)
+                                                                                           as supply_index_raw
+    from joined
 )
 
 select
-    i.metro_code,
-    i.metro_name,
-    i.sport                                                                       as sport_name,
-    i.term                                                                        as search_term,
-    i.index_value                                                                 as interest_index,
-    i.index_source,
-    i.confidence,
-    coalesce(v.venues_found, 0)                                                   as venues_found,
-    round((v.real_name_share + v.address_share + v.website_share) / 3, 4)         as completeness_share,
-    case when i.index_value is not null
-         then rank() over (partition by i.sport order by i.index_value desc nulls last) end as interest_rank,
-    coalesce(i.confidence = 'ok' and i.index_value >= 50 and coalesce(v.venues_found, 0) <= 3, false) as gap_candidate,
-    i.exported_on
-from {{ ref('int_search_interest') }} i
-left join venues v on v.metro_code = i.metro_code and v.sport_name = i.sport
+    metro_code,
+    metro_name,
+    sport                                                                         as sport_name,
+    term                                                                          as search_term,
+    index_value                                                                   as interest_index,
+    index_source,
+    confidence,
+    venues_found,
+    metro_pins,
+    completeness_share,
+    case when index_value is not null
+         then rank() over (partition by sport order by index_value desc nulls last) end as interest_rank,
+    round(interest_vs_avg_raw, 0)                                                 as interest_vs_avg,
+    case when index_value is not null then round(supply_index_raw, 0) end          as supply_index,
+    case when index_value is not null then round(interest_vs_avg_raw / supply_index_raw, 2) end as gap_score,
+    coalesce(confidence = 'ok' and interest_vs_avg_raw >= 100 and supply_index_raw < 90 and interest_vs_avg_raw / supply_index_raw >= 1.5, false) as gap_candidate,
+    exported_on
+from scored
