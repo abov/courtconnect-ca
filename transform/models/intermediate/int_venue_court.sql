@@ -178,7 +178,7 @@ places_only as (
         0                                                     as court_records,
         1                                                     as facility_records,
         p.lat, p.lon,
-        coalesce(p.website, x.any_website, bm.website)        as website,
+        coalesce(p.website, x.any_website, bm.website, pw.website) as website,
         coalesce(p.phone, x.any_phone)                        as phone,
         cast(null as varchar)                                 as opening_hours,
         coalesce(p.address_line, x.any_address)               as address_line,
@@ -198,6 +198,9 @@ places_only as (
     left join {{ ref('venue_name_official') }} pn
         on pn.venue_id = p.venue_id
        and abs(p.lat - cast(pn.lat as double)) < 0.0003 and abs(p.lon - cast(pn.lon as double)) < 0.0003
+    left join {{ ref('venue_website_official') }} pw
+        on pw.venue_id = p.venue_id
+       and abs(p.lat - cast(pw.lat as double)) < 0.0003 and abs(p.lon - cast(pw.lon as double)) < 0.0003
     where p.rn = 1
 ),
 
