@@ -43,7 +43,7 @@ Palm Springs CA,Pickleball,100.0,1,137,0.4291,ok,false,2026-10-25,183.0,145.0,1.
 San Diego CA,Pickleball,83.0,2,143,0.7937,ok,false,2026-10-25,151.0,135.0,1.12,972,113.2
 San Francisco-Oakland-San Jose CA,Pickleball,72.0,3,184,0.6983,ok,true,2026-10-25,131.0,67.0,1.97,2299,132.5
 Las Vegas NV,Pickleball,70.0,4,83,0.6471,ok,false,2026-10-25,128.0,178.0,0.72,414,63.5
-Los Angeles CA,Pickleball,63.0,5,457,0.6965,ok,false,2026-10-25,115.0,101.0,1.14,3733,325.7
+Los Angeles CA,Pickleball,63.0,5,457,0.6989,ok,false,2026-10-25,115.0,101.0,1.14,3733,326.0
 Santa Barbara-Santa Maria-San Luis Obispo CA,Pickleball,59.0,6,45,0.6812,ok,true,2026-10-25,108.0,61.0,1.78,588,30.3
 Sacramento-Stockton-Modesto CA,Pickleball,55.0,7,127,0.6977,ok,false,2026-10-25,100.0,126.0,0.8,863,93.5
 Monterey-Salinas CA,Pickleball,44.0,8,12,0.5455,ok,false,2026-10-25,80.0,36.0,2.24,306,9.0
@@ -103,7 +103,7 @@ Yuma AZ-El Centro CA,Table Tennis,24.0,13,1,0.6667,ok,false,2026-10-25,55.0,183.
 Palm Springs CA,Tennis,100.0,1,646,0.4173,ok,false,2026-10-25,257.0,102.0,2.52,698,377.7
 San Francisco-Oakland-San Jose CA,Tennis,63.0,2,2026,0.5319,ok,false,2026-10-25,162.0,101.0,1.6,2299,1235.3
 San Diego CA,Tennis,51.0,3,848,0.6094,ok,false,2026-10-25,131.0,101.0,1.29,972,523.3
-Los Angeles CA,Tennis,45.0,4,3204,0.5012,ok,false,2026-10-25,116.0,97.0,1.19,3733,1922.0
+Los Angeles CA,Tennis,45.0,4,3204,0.5043,ok,false,2026-10-25,116.0,97.0,1.19,3733,1924.0
 Santa Barbara-Santa Maria-San Luis Obispo CA,Tennis,44.0,5,515,0.4454,ok,false,2026-10-25,113.0,91.0,1.25,588,282.7
 Las Vegas NV,Tennis,36.0,6,358,0.4475,ok,false,2026-10-25,92.0,103.0,0.89,414,227.3
 Monterey-Salinas CA,Tennis,34.0,7,294,0.4436,ok,false,2026-10-25,87.0,108.0,0.81,306,175.8
