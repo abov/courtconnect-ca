@@ -17,7 +17,7 @@ select
     1                                                           as facility_records,
     w.lat,
     w.lon,
-    cast(null as varchar)                                       as website,
+    ww.website                                                  as website,   -- seeds/wall_websites.csv: the official page of the park / school the wall stands in
     cast(null as varchar)                                       as phone,
     cast(null as varchar)                                       as opening_hours,
     cast(null as varchar)                                       as address_line,
@@ -39,4 +39,5 @@ select
     w.reported_on                                               as source_seen_on   -- when the wall was extracted from OSM or reported by a person
 from {{ ref('mart_wall_pins') }} w
 left join {{ ref('int_wall_parent') }} wp on wp.wall_key = w.wall_key
+left join {{ ref('wall_websites') }} ww on ww.wall_key = w.wall_key
 where w.wall_key not in (select wall_key from {{ ref('int_wall_venue_link') }})

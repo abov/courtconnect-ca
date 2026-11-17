@@ -519,6 +519,20 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: wall_websites
+    description: >
+      Official website of the park, school or city page for the place a hitting-wall pin stands in (int_wall_venue). The name stays inferred
+      and the page need not mention the wall: `evidence` says which page was read and that. One row per wall pin (`wall_key` = mart_wall_pins key).
+    columns:
+      - name: wall_key
+        tests: [unique, not_null]
+      - name: website
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: player_platforms
     description: >
       Player-matching apps and sites shown under "Find people to play with" (social phase A, ADR 0015). Link-outs only: nothing is

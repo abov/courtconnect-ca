@@ -29,7 +29,7 @@ OWNER_SEEDS = [
     "player_groups", "closed_places", "venue_court_counts", "place_sport_overrides", "osm_court_sport_overrides",
     "venue_*_official", "website_overrides", "nominatim_addresses", "venue_place_boundary", "search_interest", "search_metros",
     # keyed by CA/NV venue ids or places: meaningless in another area
-    "court_group_merge", "manual_venue_no_merge", "manual_venue_sport_blocks", "place_no_group", "osm_wall_overrides",
+    "court_group_merge", "manual_venue_no_merge", "manual_venue_sport_blocks", "place_no_group", "osm_wall_overrides", "wall_websites",
     "venue_opening_status",
 ]
 

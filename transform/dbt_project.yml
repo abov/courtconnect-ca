@@ -284,6 +284,12 @@ seeds:
         confirmation: varchar
         evidence: varchar
         verified_on: varchar
+    wall_websites:           # official site of the park / school a hitting-wall pin stands in (int_wall_venue); starts empty
+      +column_types:
+        wall_key: varchar
+        website: varchar
+        evidence: varchar
+        verified_on: varchar
     place_sport_overrides:   # starts empty: pin the types so an empty file is not guessed as INTEGER
       +column_types:
         place_id: varchar
