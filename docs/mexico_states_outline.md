@@ -14,7 +14,7 @@ The map draws a light line around each of the 32 entities, under the pins, from 
 |---|---|---|---|---|---|
 | 1 | MX-AGU | Aguascalientes | State | 1 (1 / 0) | automatic layer only |
 | 2 | MX-BCN | Baja California | State | 84 (22 / 62) | border pilot (Tijuana, Mexicali, Ensenada, Tecate); Rosarito pickleball and El Dorado Ranch (San Felipe) added 2026-11-13; Ensenada padel (Costa Pádel, Coral y Marina) and Campestre padel added 2026-11-16 |
-| 3 | MX-BCS | Baja California Sur | State | 69 (15 / 54) | Los Cabos, East Cape, Todos Santos, La Paz and Loreto boxes extracted 2026-11-13 (automatic pins) plus hand pins in La Paz, Los Barriles, Loreto and El Pescadero (counts refreshed 2026-11-16); the north (Santa Rosalia, Guerrero Negro) is not extracted |
+| 3 | MX-BCS | Baja California Sur | State | 72 (15 / 57) | Los Cabos, East Cape, Todos Santos, La Paz and Loreto boxes extracted 2026-11-13, plus Santa Rosalia, Mulege, San Ignacio, Guerrero Negro and Ciudad Insurgentes boxes 2026-11-16 (3 unnamed OSM pitch pins; Overture already covered the country: Club Racquetbol Guerrero Negro); hand pins in La Paz, Los Barriles, Loreto and El Pescadero; web search for courts in the north found none |
 | 4 | MX-CAM | Campeche | State | 0 (0 / 0) | automatic layer only |
 | 5 | MX-CHP | Chiapas | State | 0 (0 / 0) | automatic layer only |
 | 6 | MX-CHH | Chihuahua | State | 8 (8 / 0) | walled sports pass (Chihuahua City, Ciudad Juárez); FitMax pinned |
