@@ -1,0 +1,13 @@
+region,city_from,city_to,evidence
+TX,City Of El Paso,El Paso,Same city; the Overture label carried a 'City Of' prefix
+TX,Mcallen,McAllen,Spelling: the city is McAllen
+TX,Mckinney,McKinney,Spelling: the city is McKinney
+AZ,Mesa Desert,Mesa,Mesa planning district; owner 2026-11-17 merged sub-areas into the city
+AZ,Mesa Dobson,Mesa,Mesa planning district; owner 2026-11-17 merged sub-areas into the city
+AZ,Mesa Falcon Field,Mesa,Mesa planning district; owner 2026-11-17 merged sub-areas into the city
+AZ,Mesa Four Peaks,Mesa,Mesa planning district; owner 2026-11-17 merged sub-areas into the city
+AZ,Mesa Mountain View,Mesa,Mesa planning district; owner 2026-11-17 merged sub-areas into the city
+AZ,Scottsdale Airpark,Scottsdale,Scottsdale district; owner 2026-11-17 merged sub-areas into the city
+AZ,Scottsdale Fountain Hills,Scottsdale,Scottsdale district; owner 2026-11-17 merged sub-areas into the city
+AZ,Scottsdale Hopi,Scottsdale,Scottsdale district; owner 2026-11-17 merged sub-areas into the city
+AZ,Scottsdale Kachina,Scottsdale,Scottsdale district; owner 2026-11-17 merged sub-areas into the city
