@@ -271,3 +271,10 @@ Metros: Los Cabos, East Cape, Todos Santos, La Paz, Loreto (boxes added in PR #7
 - **La Paz:** no padel, tennis or pickleball convocatoria for 2026-27; the INSUDE "Copa de Oro" PDF (Jul 2026) could not be fetched, sport unknown (recheck). The 2024 Dink Minor League event at San Juan Club Deportivo is past.
 - **Loreto, Todos Santos, East Cape:** no club league, tournament or open-play page beyond the pins already added (Loreto Pickleball Club, Palmas, Pescadero Tennis Club); no Meetup group. Facebook, Instagram and WhatsApp groups are login-walled and not searched; nothing added to `player_groups.csv` or `social_events.csv`.
 - **Recheck next cycle (Jan 2027):** INSUDE Copa de Oro PDF, tournament pages of Palmas, Tres Palapas and Hotel Buenavista, Playtomic competitions for Altapadel and Remate.
+
+## Mexico: Baja California Sur (2026-11-16, ADR 0034)
+5 searches and 2 page reads (Los Cabos, La Paz, Cabo San Lucas, Todos Santos, Loreto; pickleball, padel, tennis, groups). Pages read: atptour.com (Los Cabos 7480), search snippets from zonaturistica.com, mexiconewsdaily.com, wetravel.com, pickleballplusapp.com.
+- **Added:** `mifel-tennis-open-los-cabos-2027` in `watch_events.csv` (ATP 250 at Cabo Sports Complex, San Jose del Cabo; Ticketmaster; dates not confirmed, estimated from the 2026 edition of Jul 27 - Aug 1; reported to become a Challenger 175 in 2028).
+- **Not added:** Pickleball Cabo tournament week (Mar 15-21 2027) and Pickleball in Paradise (Apr 4-8 2027, Los Barriles) are paid travel packages, not public events. Club San Lazaro (Cabo San Lucas) lists open play Mon-Sat 8-11 am, 220 pesos drop-in, from a Pickleball Plus entry only (no club page read): lead, not a social series.
+- **Nothing found:** La Paz padel (no tournament page), Todos Santos and Loreto (no event of any racket sport), any Meetup group, any federation calendar. Pickleheads and Facebook groups are off limits or login-walled.
+- **Recheck:** loscabostennisopen.com for 2027 dates and tickets (spring 2027); Club San Lazaro and Cabo Pickleball Club own pages for a published schedule.
