@@ -94,6 +94,14 @@ official_name as (
     where abs(v.lat - cast(o.lat as double)) < 0.0003 and abs(v.lon - cast(o.lon as double)) < 0.0003
 ),
 
+-- A hand-checked website for an OSM court group with none (seeds/venue_website_official.csv); counts only while the pin is where it was checked.
+official_website as (
+    select o.venue_id, o.website
+    from {{ ref('venue_website_official') }} o
+    join osm_venues v on v.venue_id = o.venue_id
+    where abs(v.lat - cast(o.lat as double)) < 0.0003 and abs(v.lon - cast(o.lon as double)) < 0.0003
+),
+
 osm_final as (
     select
         v.venue_id,
@@ -114,7 +122,7 @@ osm_final as (
         v.court_records,
         v.facility_records,
         v.lat, v.lon,
-        coalesce(v.website, bm.website, pl.website)           as website,
+        coalesce(v.website, bm.website, pl.website, ow.website) as website,
         coalesce(v.phone, pl.phone)                           as phone,
         v.opening_hours,
         coalesce(v.address_line, pl.address_line)             as address_line,
@@ -133,6 +141,7 @@ osm_final as (
     left join best_place pl on pl.venue_id = v.venue_id
     left join best_manual bm on bm.venue_id = v.venue_id
     left join official_name on_ on on_.venue_id = v.venue_id
+    left join official_website ow on ow.venue_id = v.venue_id
 ),
 
 -- Places that share an address are one venue (dim_place.venue_id): the best-confidence record names it, the others are

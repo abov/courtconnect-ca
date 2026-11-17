@@ -112,6 +112,14 @@ seeds:
         venue_name: varchar
         evidence: varchar
         verified_on: varchar
+    venue_website_official:     # all text
+      +column_types:
+        venue_id: varchar
+        lat: varchar
+        lon: varchar
+        website: varchar
+        evidence: varchar
+        verified_on: varchar
     venue_city_official:     # all text
       +column_types:
         venue_id: varchar
