@@ -17,6 +17,7 @@ SPORT_COLUMNS = {
     "manual_venues.csv": ["sport"],
     "manual_walls.csv": ["sports_suited"],
     "sport_also_played.csv": ["sport", "also_sport"],
+    "sport_related.csv": ["sport", "suggest"],
     "sport_aliases.csv": ["sport"],          # the alias column is free text on purpose
     "place_sport_overrides.csv": ["sport"],
     "watch_events.csv": ["sport"],

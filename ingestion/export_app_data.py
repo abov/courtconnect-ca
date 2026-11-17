@@ -149,6 +149,11 @@ def main() -> None:
             if same == "yes":
                 sports[sport_index[name]]["st"] = 1
 
+    # curated "if you like X, try Y" pairs (seed sport_related.csv): rl = [[index of suggested sport, reason, tie, effort]], inferred, not measured
+    for name, sug, why, tie, eff in con.execute("select trim(sport), trim(suggest), trim(reason), trim(tie), trim(effort) from raw.sport_related").fetchall():
+        if name in sport_index and sug in sport_index and name != sug:
+            sports[sport_index[name]].setdefault("rl", []).append([sport_index[sug], why, tie, eff])
+
     rows = con.execute("""
         select venue_id, venue_name, name_source, venue_source, venue_kind, in_courts, sport_name, courts_for_sport, lat, lon, city, region, address_line,
                website_usable, offerings, address_source, address_distance_m, has_indoor, has_outdoor, has_sand_beach, has_clay, has_grass, has_hard, has_turf,
