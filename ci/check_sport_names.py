@@ -24,6 +24,7 @@ SPORT_COLUMNS = {
     "social_events.csv": ["sport"],
     "player_platforms.csv": ["sports"],
     "player_groups.csv": ["sports"],
+    "gear_shops.csv": ["sports"],
 }
 
 

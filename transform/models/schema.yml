@@ -575,6 +575,28 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: gear_shops
+    description: >
+      Hand-confirmed shops and pro shops where a person can ask about, try or buy racket-sport gear, shown in the "Get started" guide (docs/sport_recommendation_plan.md).
+      Link-outs only, no affiliate links. `kind` is buy, rent (demo or rental, nothing for sale listed) or both; `evidence` quotes the shop's own page read on `verified_on`.
+    columns:
+      - name: shop
+        tests: [unique, not_null]
+      - name: kind
+        tests:
+          - not_null
+          - accepted_values: {values: [buy, rent, both]}
+      - name: lat
+        tests: [not_null]
+      - name: lon
+        tests: [not_null]
+      - name: url
+        tests: [not_null]
+      - name: evidence
+        tests: [not_null]
+      - name: verified_on
+        tests: [not_null]
+
   - name: player_groups
     description: >
       Public player-group links (Meetup, WhatsApp, Partiful, Facebook) that a club or organizer publishes itself, kept as leads for
