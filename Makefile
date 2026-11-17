@@ -95,7 +95,7 @@ refresh:          ## after make extract (docs/monthly_refresh.md steps 4, 6-8a):
 	$(PY) ci/check_scorecard_regression.py --base-ref origin/main
 	$(MAKE) app-data
 	$(MAKE) changes
-	@echo "Refresh done. Still by hand: sync-sports, issues, check-links, social series, sport of the month (app/data/featured_sport.json), then commit and open the PR (docs/monthly_refresh.md)."
+	@echo "Refresh done. Still by hand: sync-sports, issues, check-links, social series, then commit and open the PR (docs/monthly_refresh.md)."
 
 docs:
 	$(DBT) docs generate && $(DBT) docs serve

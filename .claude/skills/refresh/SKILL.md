@@ -17,7 +17,7 @@ Cost rules (CLAUDE.md): no subagents, no screenshots, public pages only, narrow 
 4. Step 5: `make check-links`, `make check-websites`, `make check-pages`; re-date `verified_on` only for rows you re-read. Step 5c: `make rank-rechecks ARGS="--top 25"`, reread down to the cap and stop. Social series (5b) is done by the scheduled run unless Part 4 was skipped.
 5. Step 6: build (narrow, then one full; `--full-refresh` for new seed columns). After raw data loads, `ingestion/build_changed.py` cannot see the change: use `--full`. Then `make eval-match`.
 6. Step 7: `make quality`, `make stats`, `make report`, `make market-snapshot`, then `python ci/check_scorecard_regression.py` (add `--base-ref origin/main`). A failure is explained in the PR or fixed, never ignored.
-7. Step 8: `make app-data`; 8a `make changes` and read the printed id drift (over 2% means stop and look); 8b edit `app/data/featured_sport.json`.
+7. Step 8: `make app-data`; 8a `make changes` and read the printed id drift (over 2% means stop and look).
 8. Step 9: ship with the `ship-pr` skill, PR titled `Monthly refresh YYYY-MM`; add the 2 status lines to CLAUDE.md "Current status" and the row to the Log in `docs/monthly_refresh.md`.
 
 `make` is not in Git Bash: run the command the target wraps (see the Makefile).
