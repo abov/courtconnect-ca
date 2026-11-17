@@ -10,6 +10,7 @@ with this branch's seeds, so the result matches this branch. About a minute, mos
 """
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -23,7 +24,9 @@ def main() -> None:
     exe = Path(py).parent / ("dbt.exe" if sys.platform == "win32" else "dbt")
     dbt = [str(exe)] if exe.exists() else [py, "-m", "dbt.cli.main"]
     if not (ROOT / "transform" / "dbt_packages" / "elementary").is_dir():   # cloud_bootstrap.py has a CDN fallback
-        subprocess.run(dbt + ["deps", "--project-dir", "transform", "--profiles-dir", "transform"], cwd=ROOT, check=True)   # packages (Elementary)
+        if subprocess.run(dbt + ["deps", "--project-dir", "transform", "--profiles-dir", "transform"], cwd=ROOT).returncode != 0:
+            from cloud_bootstrap import install_dbt_packages   # the cloud proxy blocks the GitHub tarballs: hub-CDN fallback
+            install_dbt_packages()
     subprocess.run(dbt + ["build", "--project-dir", "transform", "--profiles-dir", "transform", "--full-refresh"], cwd=ROOT, check=True)
 
 
