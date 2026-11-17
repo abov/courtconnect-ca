@@ -82,3 +82,4 @@ propadelleague.com,Pro Padel League tournaments,organizer,Padel,US,WebFetch,acti
 ticketmaster.com,Ticketmaster,ticketing,Padel,unknown,link only,active,,2026-11-13,Ticket link on an event row; the event is found on the organizer page
 sincityclassic.org,Sin City Classic,organizer,Pickleball;Tennis,NV,WebFetch,active,2026-11-13,2026-11-13,Organizer page prints no dates; third-party listing gave Jan 14-17 2027
 usaracquetballevents.com,USA Racquetball tournament site (California events page),governing_body,Racquetball,CA,"WebFetch; featured events list, R2-powered",candidate,2026-11-16,,"Found by search 2026-11-16: lists Friendsgiving Open (Lodi, Nov 21-22 2026) with no R2 TID seen; lead only until the organizer page is read"
+atptour.com,ATP Tour tournament pages,governing_body,Tennis,MX,WebFetch of the tournament page (Los Cabos 7480),active,2026-11-16,2026-11-16,"Mifel Tennis Open 2026 dates and Ticketmaster link; 2027 dates not posted, recheck in spring 2027"
