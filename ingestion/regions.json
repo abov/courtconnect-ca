@@ -32,6 +32,11 @@
     "todos_santos": {"bbox": [23.25, -110.30, 23.50, -110.10], "states": ["MX"], "note": "Todos Santos and El Pescadero (Baja California Sur; OSM trial 2026-11-13)"},
     "la_paz": {"bbox": [24.05, -110.50, 24.25, -110.20], "states": ["MX"], "note": "La Paz (Baja California Sur; OSM trial 2026-11-13)"},
     "loreto": {"bbox": [25.65, -111.45, 26.10, -111.15], "states": ["MX"], "note": "Loreto, Nopolo and the Islands of Loreto (Baja California Sur; OSM trial 2026-11-13)"},
+    "santa_rosalia": {"bbox": [27.00, -112.45, 27.55, -112.10], "states": ["MX"], "note": "Santa Rosalia (Baja California Sur; OSM 2026-11-16)"},
+    "mulege": {"bbox": [26.80, -112.15, 27.05, -111.90], "states": ["MX"], "note": "Mulege and Bahia Concepcion (Baja California Sur; OSM 2026-11-16)"},
+    "san_ignacio": {"bbox": [27.20, -112.95, 27.45, -112.60], "states": ["MX"], "note": "San Ignacio (Baja California Sur; OSM 2026-11-16)"},
+    "guerrero_negro": {"bbox": [27.85, -114.15, 28.10, -113.80], "states": ["MX"], "note": "Guerrero Negro and Ejido Vizcaino (Baja California Sur; OSM 2026-11-16)"},
+    "ciudad_insurgentes": {"bbox": [24.95, -111.80, 25.15, -111.55], "states": ["MX"], "note": "Ciudad Insurgentes and Ciudad Constitucion area (Baja California Sur; OSM 2026-11-16)"},
     "monterrey": {"bbox": [25.5, -100.55, 25.85, -100.05], "states": ["MX"], "note": "Monterrey, San Pedro, Guadalupe, San Nicolas, Apodaca, Escobedo, Santa Catarina (Phase 3 trial)"}
   }
 }
