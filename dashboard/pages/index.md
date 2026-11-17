@@ -106,9 +106,9 @@ from courtconnect.city_scorecard where venues - private_pins >= 50 order by comp
 ```
 
 ```sql interest_gaps
-select metro, sport, interest_index, venues, completeness_share
+select metro, sport, gap_score, interest_vs_avg, supply_index, venues, completeness_share
 from courtconnect.search_interest
-where gap_candidate order by interest_index desc, venues
+where gap_candidate order by gap_score desc, venues
 ```
 
 ```sql interest_all
@@ -275,12 +275,14 @@ Cities where visitors opened a venue, then the biggest cities that are the least
 
 An outside signal for popularity: how much people in each metro search Google for a sport, next to what we list there (Google Trends, exported {interest_meta[0].exported_on}, refreshed about quarterly). The index is relative and sampled: 100 is the metro with the most searches for that sport, so compare metros within one sport, never one sport with another. It is not a count of players. Venues are assigned to the nearest metro anchor city within 120 miles, our own approximation, so border and rural pins can land in the wrong metro. Yuma-El Centro also includes Arizona searches, so a gap there is weak. A gap is a place to look for missing venues, not proof of one.
 
-High interest and 3 or fewer venues:
+Raw venue counts favour big metros, so the gap score compares two "100 = the average metro" numbers: interest against the average metro's, and the sport's share of the metro's pins against its average share (all of a metro's pins stand in for its size). A score of 2 means the sport is searched twice as much as we list it. Listed: busiest sports, at least average interest, clearly below-average pins, score 1.5 or more.
 
 <DataTable data={interest_gaps} rows=12>
   <Column id=metro />
   <Column id=sport />
-  <Column id=interest_index title="Interest" fmt=num0 contentType=colorscale colorScale=#e9a23b />
+  <Column id=gap_score title="Gap score" fmt=num1 contentType=colorscale colorScale=#e9a23b />
+  <Column id=interest_vs_avg title="Interest vs avg" fmt=num0 />
+  <Column id=supply_index title="Pins vs avg" fmt=num0 />
   <Column id=venues fmt=num0 />
   <Column id=completeness_share title="Completeness" fmt=pct0 />
 </DataTable>
