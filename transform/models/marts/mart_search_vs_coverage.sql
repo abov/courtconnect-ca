@@ -8,9 +8,12 @@
 --   "100 = the average metro" scales and compared:
 --   interest_vs_avg : 100 * interest_index / the sport's mean index over the metros with data. Trends already divides by each metro's total searches,
 --                     so this is a share of local searches, not a head count.
---   supply_index    : 100 * (the sport's share of the metro's pins) / (the sport's share of all pins in the metros with data for that sport).
---                     All the metro's pins (any sport) stand in for its size: no population seed, and the same catchment on both sides.
---                     venues_found + 0.5 keeps a metro with no pins for the sport finite.
+--   usable_venues   : the sport's pins weighted by how findable they are (2026-11-17): each pin counts 0.5 for being a court plus 0.5 * the share of
+--                     real name, address and usable website it has (0.5-1). Likely private-residence pins (is_home_like) count 0.5: by rule they never
+--                     get a street or website, so they are not penalised as incomplete.
+--   supply_index    : 100 * (usable_venues / the metro's pins) / (the same ratio over all the metros with data for that sport). The metro's pins
+--                     (any sport, raw count) stand in for its size: no population seed, and the same catchment on both sides.
+--                     usable_venues + 0.5 keeps a metro with no pins for the sport finite.
 --   gap_score       : interest_vs_avg / supply_index. 1 = searched about as much as we list; 2 = twice as much searched as listed.
 --   gap_candidate   : confidence 'ok', interest_vs_avg >= 100 (at least an average metro's searches), supply_index < 90 (clearly fewer pins than an
 --                     average metro for its size; keeps a sport that already fills a metro, like Palm Springs tennis, out) and gap_score >= 1.5: a place to look for
@@ -53,6 +56,9 @@ metro_pins as (
 
 venues as (
     select metro_code, sport_name, count(distinct venue_id) as venues_found,
+           sum(case when coalesce(is_home_like, false) then 0.5
+                    else 0.5 + 0.5 * (coalesce(has_real_name, false)::int + coalesce(has_address, false)::int + coalesce(has_website, false)::int) / 3.0
+               end)                                         as usable_venues,
            avg(has_real_name::int) filter (where not is_home_like) as real_name_share,
            avg(has_address::int) filter (where not is_home_like) as address_share,
            avg(has_website::int) filter (where not is_home_like) as website_share
@@ -64,6 +70,7 @@ joined as (
     select
         i.*,
         coalesce(v.venues_found, 0)                                                  as venues_found,
+        coalesce(v.usable_venues, 0)                                                 as usable_venues,
         mp.metro_pins,
         round((v.real_name_share + v.address_share + v.website_share) / 3, 4)        as completeness_share
     from {{ ref('int_search_interest') }} i
@@ -75,8 +82,8 @@ scored as (
     select
         *,
         100 * index_value / avg(index_value) over (partition by sport)                    as interest_vs_avg_raw,
-        100 * ((venues_found + 0.5) / nullif(metro_pins, 0))
-            / nullif(sum(case when index_value is not null then venues_found end) over (partition by sport)
+        100 * ((usable_venues + 0.5) / nullif(metro_pins, 0))
+            / nullif(sum(case when index_value is not null then usable_venues end) over (partition by sport)
                      / nullif(sum(case when index_value is not null then metro_pins end) over (partition by sport), 0), 0)
                                                                                            as supply_index_raw
     from joined
@@ -91,6 +98,7 @@ select
     index_source,
     confidence,
     venues_found,
+    round(usable_venues, 1)                                                       as usable_venues,
     metro_pins,
     completeness_share,
     case when index_value is not null
