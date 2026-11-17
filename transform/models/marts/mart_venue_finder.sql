@@ -33,7 +33,7 @@ select
     v.offerings,
     v.lat,
     v.lon,
-    a.city,                                                   -- venue city, else the nearest address point's city
+    coalesce(cf.city_to, a.city)                              as city,   -- venue city, else the nearest address point's city; seeds/city_label_fixes.csv merges duplicate/sub-area labels
     v.region,                                                 -- CA / NV (ADR 0014)
     a.address_line,                                           -- own address, else the nearest Overture address (inferred); never a street for home-like pins
     a.address_source,
@@ -65,6 +65,7 @@ join {{ ref('dim_venue') }} v on v.venue_id = bvs.venue_id
 join {{ ref('int_venue_address') }} a on a.venue_id = bvs.venue_id
 left join {{ ref('int_venue_display_name') }} dn on dn.venue_id = bvs.venue_id
 join {{ ref('dim_sport') }} s on s.sport_id = bvs.sport_id
+left join {{ ref('city_label_fixes') }} cf on cf.region = v.region and lower(cf.city_from) = lower(a.city)
 left join osm_facts f on f.venue_id = bvs.venue_id and f.sport_id = bvs.sport_id
 -- exclude_private_members = yes (Pitton on badminton courts): a members-only venue does not get the sport by inference, even when its
 -- own court is unmarked; a seed row that lists the sport itself is kept.

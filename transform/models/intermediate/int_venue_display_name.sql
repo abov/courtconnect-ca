@@ -8,9 +8,10 @@
 -- Named by a person or a source (court_name, operator, manual, places_directory) are left alone: chain branches such as LA Fitness are
 -- real separate places. venue_id is untouched. City is the final city (int_venue_address), so this cannot live in dim_venue.
 with v as (
-    select d.venue_id, d.venue_name, d.name_source, d.venue_kind, d.lat, d.lon, d.court_records, lower(a.city) as city_key
+    select d.venue_id, d.venue_name, d.name_source, d.venue_kind, d.lat, d.lon, d.court_records, lower(coalesce(cf.city_to, a.city)) as city_key
     from {{ ref('dim_venue') }} d
     join {{ ref('int_venue_address') }} a on a.venue_id = d.venue_id
+    left join {{ ref('city_label_fixes') }} cf on cf.region = d.region and lower(cf.city_from) = lower(a.city)
     where d.name_source <> 'unnamed' and d.venue_name is not null and a.city is not null and d.lat is not null and d.lon is not null
 ),
 

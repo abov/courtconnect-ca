@@ -357,6 +357,15 @@ seeds:
           - relationships:
               arguments: {to: "ref('dim_sport')", field: sport_name}
 
+  - name: city_label_fixes
+    description: >
+      Display-city corrections applied in mart_venue_finder: `city_from` in `region` becomes `city_to` (duplicate label, spelling, or a
+      sub-area merged into its city). Pins keep their address; only the city label changes.
+    columns:
+      - name: city_from
+        tests:
+          - not_null
+
   - name: sport_also_played
     description: >
       A court or place that counts for sport `sport` also counts for `also_sport` (racquetball courts host 4-wall paddle). Derived rows
