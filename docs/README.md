@@ -78,6 +78,7 @@ Each question has one home; other pages link here instead of repeating it.
 ### Run it (runbooks)
 - [`monthly_refresh.md`](monthly_refresh.md): the twice-monthly refresh.
 - [`merge_conflicts.md`](merge_conflicts.md): how the repo avoids PR merge conflicts (venues.json layout and merge driver, union merges, rerere).
+- [`working_practices.md`](working_practices.md), [`commands.md`](commands.md), [`token_efficiency.md`](token_efficiency.md): build and ship practices, every `make` target, and the hooks that keep sessions cheap (moved out of `CLAUDE.md`).
 - [`cloud_routines.md`](cloud_routines.md): the scheduled cloud routines and their ids.
 - [`tournament_run_parts.md`](tournament_run_parts.md) (the five parts), [`tournament_refresh.md`](tournament_refresh.md) (tournament steps), [`tournament_sources.md`](tournament_sources.md) (source list and the table tennis/badminton pass), [`event_group_search.md`](event_group_search.md) (events, leagues, groups per state).
 - [`refresh_agent.md`](refresh_agent.md), [`merge_gate_threat_model.md`](merge_gate_threat_model.md): the agent and its merge gate (ADR 0019).
