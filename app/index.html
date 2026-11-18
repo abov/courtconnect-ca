@@ -275,6 +275,25 @@
     .maplibregl-popup-content { max-width: none; max-height: 58vh; max-height: 58dvh; border-radius: var(--r-md) var(--r-md) 0 0; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
     footer { padding: 6px 14px; }
     #map { order: -1; } #panel { border-right: 0; border-top: 1px solid var(--line); }
+    /* Readability: the desktop type is 11.5-12.5 px in many places, too small at arm's length. Raise it, and give the header less height so the list starts sooner. */
+    h1 { font-size: 18px; }
+    #headline { display: none; }   /* the view chips below already say what the page is for */
+    .seg { flex-wrap: nowrap; overflow-x: auto; margin-top: 8px; padding-bottom: 2px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .seg::-webkit-scrollbar { display: none; }
+    .seg .chip { flex: none; white-space: nowrap; padding: 6px 12px; font-size: 14px; }
+    label.l { font-size: 13px; margin-bottom: 4px; }
+    .controls { gap: 12px; }
+    .note, .suggest .fine, summary, .sportinfo summary { font-size: 14px; }
+    .meta, #count, .legend, footer { font-size: 13.5px; }
+    #listbar .link { font-size: 14px; }
+    .legend { gap: 6px 14px; }
+    .badge { font-size: 12.5px; padding: 2px 9px; }
+    #list li.lh { font-size: 13.5px; padding-top: 12px; }
+    #list li.thisweek .lh2 { font-size: 12.5px; }
+    #list li.thisweek button, #list li.thisweek .nm, #list li.thisweek .meta, #list li.thisweek .none { font-size: 13px; }
+    #list button { padding-top: 12px; padding-bottom: 12px; line-height: 1.4; }
+    .maplibregl-popup-content { font-size: 15px; line-height: 1.5; }
+    .maplibregl-popup-content .meta { font-size: 14px; }
   }
 </style>
 </head>
