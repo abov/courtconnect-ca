@@ -5,20 +5,25 @@ Read-only. Reads outputs the project already writes, never changes anything, nev
   - the newest scorecard line (failing SLAs, failing tests, old extract, old event checks, regression vs the line before)
   - docs/agent_log.csv (PRs still open, rejected, or escalated R3), the kill switch, the scheduled-chain watchdog signal
   - open GitHub issues waiting over 14 days or labelled needs-owner, via `gh`
+  - the private data repo `abov/courtconnect-data` behind the newest local raw extract CSV (skipped silently if `gh` or the repo is unreachable)
   - seeds: venue_opening_status rows past the 90-day staleness window, open venue_leads that name an owner call
 Anything routine (green PR, SLA met, fresh seed) is not listed. An empty queue prints "Nothing needs the owner."
 `--no-gh` skips the GitHub parts (offline). Exit code is always 0: this is a report, not a gate.
 """
-import argparse, csv, json, re, subprocess
+import argparse, csv, json, re, subprocess, sys
 from datetime import date, datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "ingestion"))
+from rawdir import raw_dir  # noqa: E402  shared data/raw of the main checkout
 STALE_OPENING_DAYS = 90    # same window as assert_opening_status_fresh
 EXTRACT_MAX_DAYS = 30      # 35-day freshness SLA: warn before it breaches
 EVENT_CHECK_MAX_DAYS = 14  # "oldest upcoming-event check" SLA
 PR_WAIT_HOURS = 24
 ISSUE_WAIT_DAYS = 14
+DATA_REPO = "abov/courtconnect-data"
+DATA_REPO_SLACK_HOURS = 1  # ignore a data-repo push made just before the files were last touched
 CHAIN_MAX_DAYS = 20        # ADR 0019: alert if no scheduled-chain PR in 20 days
 OWNER_CALL = re.compile(r"owner (call|decision|ruling)\b|ask the owner|owner to (give|decide|confirm)", re.I)
 DECISION_HEAD = re.compile(r"needs? owner decisions?", re.I)
@@ -183,6 +188,25 @@ def gh_items(today):
     return items
 
 
+def data_repo_items():
+    """Warn when the data repo's latest commit is older than the newest local extract CSV (osm_*, overture_*, census_*)."""
+    files = [f for pat in ("osm_*.csv", "overture_*.csv", "census_*.csv") for f in raw_dir().glob(pat)]
+    if not files:
+        return []
+    newest = max(files, key=lambda f: f.stat().st_mtime)
+    local = datetime.fromtimestamp(newest.stat().st_mtime, timezone.utc)
+    data = gh_json(["api", f"repos/{DATA_REPO}/commits?per_page=1"])
+    try:
+        pushed = datetime.fromisoformat(data[0]["commit"]["committer"]["date"].replace("Z", "+00:00"))
+    except (TypeError, KeyError, IndexError, ValueError):
+        return []
+    behind_h = (local - pushed).total_seconds() / 3600
+    if behind_h <= DATA_REPO_SLACK_HOURS:
+        return []
+    return [f"{DATA_REPO} is behind local data/raw: last commit {pushed:%Y-%m-%d}, newest file {newest.name} {local:%Y-%m-%d}; "
+            "refresh it (docs/cloud_routines.md, Raw data) or cloud runs build from stale extracts"]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--no-gh", action="store_true", help="skip the GitHub parts (offline)")
@@ -190,6 +214,7 @@ def main():
     today = date.today()
     sections = [
         ("PRs, issues, schedule", [] if args.no_gh else gh_items(today)),
+        ("Data repo", [] if args.no_gh else data_repo_items()),
         ("Scorecard", scorecard_items()),
         ("Agents", agent_log_items(not args.no_gh)),
         ("Seeds (owner calls, stale rows)", seed_items(today)),

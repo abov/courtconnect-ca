@@ -116,8 +116,8 @@ Reserved to the owner by CLAUDE.md and the ADRs. A session records one as a line
 - Lightest model tier the gates can check (above); the largest only for design.
 
 ## Proposed, not started (each needs the owner's OK)
-1. Run `make exception-queue` at the end of Part 5 and paste it into that PR's body (a one-line edit to `docs/refresh_agent.md` step 9; no new schedule).
+1. **Done 2026-11-18.** Run `make exception-queue` at the end of Part 5 and paste it into that PR's body (one line in `docs/refresh_agent.md` step 9; no new schedule).
 2. A weekly GitHub Action that runs the queue and posts it as one issue (a new scheduled workflow; also covers the digest half of threat-model gap 4).
 3. The Haiku 5.5 trial for Part 5 and the quarterly routine.
-4. Script the data-repo refresh after an extract, and have the queue warn when `abov/courtconnect-data` is behind.
+4. Queue warning **done 2026-11-18** (`ci/exception_queue.py` compares the newest local extract CSV with the data repo's latest commit; skipped silently if `gh` or the repo is unreachable). Still open: script the data-repo refresh after an extract (`make_data_bundle.py` exists).
 5. One branch prefix for refresh PRs (`claude/refresh-*` in the gate vs `claude/monthly-*` in the runbook).
