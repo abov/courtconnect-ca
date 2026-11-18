@@ -12,6 +12,8 @@ __pycache__/
 transform/.user.yml
 .claude/*
 !.claude/skills/
+!.claude/hooks/
+!.claude/settings.json
 .venv-aerial/
 data/aerial/
 data/reader_cache/

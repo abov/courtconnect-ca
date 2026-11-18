@@ -1,0 +1,8 @@
+# Keep generated and bulky files out of Grep/ripgrep results (CLAUDE.md "Ignore generated/bulky paths").
+# Explicit file paths still work: `rg x app/data/venues.json`.
+app/data/venues.json
+transform/target/
+transform/logs/
+transform/dbt_packages/
+*.duckdb
+*.duckdb.wal
