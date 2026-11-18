@@ -151,7 +151,7 @@ select sum(facts) as facts, sum(facts) filter (where outcome = 'agree') as agree
 from courtconnect.reader_outcomes
 ```
 
-[Map](https://abov.github.io/courtconnect-ca/) · [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html) · **Data quality** · [Docs](https://abov.github.io/courtconnect-ca/how-its-built.html#docs) · [Run history](https://abov.github.io/courtconnect-ca/run-history.html) · [Ask the data](https://abov.github.io/courtconnect-ca/ask-the-data.html) · [Source](https://github.com/abov/courtconnect-ca)
+[Map](https://abov.github.io/courtconnect-ca/) · [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html) · **Data quality** · [Hub](https://abov.github.io/courtconnect-ca/hub.html) · [Run history](https://abov.github.io/courtconnect-ca/run-history.html) · [Ask the data](https://abov.github.io/courtconnect-ca/ask-the-data.html) · [Source](https://github.com/abov/courtconnect-ca)
 
 How complete the RacketConnect data is. Counts only; no venue details are shown.
 
