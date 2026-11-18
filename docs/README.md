@@ -1,34 +1,32 @@
 # RacketConnect project hub
 
-The one place to find everything: live pages, dashboards, tools, and every doc in this folder. Start here; every other index points back here. `ci/check_docs_hub.py` fails CI if a doc in `docs/` is not listed below or a link here is broken, so this page cannot drift.
+Everything about RacketConnect in one place: the live pages, the numbers, the tools and every doc, grouped by what you want to do. Every other index points here.
 
-**To update:** add or rename a doc, then add or fix its one line in the right section below (same PR). Live-page and tool links are in the first three tables; change them here only.
+**To update:** this file is the only list. Add or rename a doc, then fix its one line below in the same PR and run `make hub` (`ingestion/build_hub_page.py`), which writes the web copy (`app/hub.html`, live at <https://abov.github.io/courtconnect-ca/hub.html>). `ci/check_docs_hub.py` fails CI if a doc in `docs/` is missing here, a link is broken or the web copy is stale.
 
-## 1. Live pages (public)
+## 1. Use it
+
+The public pages. Nothing to install.
 
 | What | Link |
 |---|---|
-| Live map | <https://abov.github.io/courtconnect-ca/> |
-| How it's built (numbers, gates, limits) | <https://abov.github.io/courtconnect-ca/how-its-built.html> |
-| Ask the data (plain-English questions or SQL on the public venue file, in your browser) | <https://abov.github.io/courtconnect-ca/ask-the-data.html> |
+| Live map: find a court, an event to watch, a group to play with | <https://abov.github.io/courtconnect-ca/> |
+| How it's built: pipeline, gates, measured numbers, limits | <https://abov.github.io/courtconnect-ca/how-its-built.html> |
+| Ask the data: plain-English questions or SQL on the public venue file, in your browser | <https://abov.github.io/courtconnect-ca/ask-the-data.html> |
 | Database docs and lineage (dbt docs, built from sample data) | <https://abov.github.io/courtconnect-ca/dbt-docs/#!/overview> |
-| Venue data dictionary and `llms.txt` (for builders and AI tools) | [`app/data-dictionary.md`](../app/data-dictionary.md), [`app/llms.txt`](../app/llms.txt) |
+| Venue data dictionary and `llms.txt`, for builders and AI tools | [`app/data-dictionary.md`](../app/data-dictionary.md), [`app/llms.txt`](../app/llms.txt) |
 
-## 2. Source, tools and accounts
+## 2. Start here
 
-| What | Link | Access |
-|---|---|---|
-| Repository and README | <https://github.com/abov/courtconnect-ca> | public |
-| Competitor differences | [`competitor_scan.md`](competitor_scan.md) | in repo |
-| What it costs to run | [`running_costs.md`](running_costs.md) | in repo |
-| Tools and strategies (one-page inventory) | [`tools_and_strategies.md`](tools_and_strategies.md) | in repo |
-| Tool dictionary (every tool, lifecycle, license, glossary) | [Google Sheet](https://docs.google.com/spreadsheets/d/1RWONK-tLDJh5lRNyAISlNMEY4UH9ZHWGSW2ytlo5k1c/edit?gid=0#gid=0) | private (owner) |
-| Scheduled cloud routines | <https://claude.ai/code/routines> | owner login; see [`cloud_routines.md`](cloud_routines.md) |
-| Decision records (ADRs 0001-0041) | [`decisions/`](decisions) | in repo |
+New to the project? Read these in order.
 
-When a tool, library, service or data source is added or removed, update its row in the tool dictionary and [`tools_and_strategies.md`](tools_and_strategies.md) in the same task.
+1. [`../README.md`](../README.md): what it is, quick start, how to edit the data. Then [`case_study.md`](case_study.md): the story in one read.
+2. Understand the build: [`architecture.md`](architecture.md), [`data_guide.md`](data_guide.md), the [decision records](decisions).
+3. Change something: seeds under `transform/seeds/`, then `make build` and `make app-data` ([`data_guide.md`](data_guide.md); [`../CONTRIBUTING.md`](../CONTRIBUTING.md) for reports and PRs).
+4. Reuse it elsewhere: [`fork_guide.md`](fork_guide.md). Add a state or country: [`new_region_checklist.md`](new_region_checklist.md).
+5. What is being worked on now: [`status.md`](status.md).
 
-## Metrics and monitoring (every view, one table)
+## 3. Check it: metrics and monitoring
 
 Each question has one home; other pages link here instead of repeating it.
 
@@ -42,14 +40,25 @@ Each question has one home; other pages link here instead of repeating it.
 | What are the agents doing right now? (live sessions, tool calls, errors) | [`agent_activity.md`](agent_activity.md) | `make agent-activity` |
 | What does it cost? | [`running_costs.md`](running_costs.md) | by hand |
 
-## 3. Quick start for a new person
-1. Read [`../README.md`](../README.md) (what it is, quick start, how to edit the data), then [`case_study.md`](case_study.md) (the story in one read).
-2. Understand the build: [`architecture.md`](architecture.md), [`data_guide.md`](data_guide.md), the ADRs.
-3. Change something: seeds under `transform/seeds/`, then `make build` and `make app-data` ([`data_guide.md`](data_guide.md); [`../CONTRIBUTING.md`](../CONTRIBUTING.md) for reports and PRs).
-4. Reuse it elsewhere: [`fork_guide.md`](fork_guide.md). Add a state or country: [`new_region_checklist.md`](new_region_checklist.md).
-5. What is being worked on: [`status.md`](status.md).
+## 4. Source, tools and accounts
 
-## 4. Every doc, by purpose
+Where the code lives and what runs it.
+
+| What | Link | Access |
+|---|---|---|
+| Repository and README | <https://github.com/abov/courtconnect-ca> | public |
+| Competitor differences | [`competitor_scan.md`](competitor_scan.md) | in repo |
+| What it costs to run | [`running_costs.md`](running_costs.md) | in repo |
+| Tools and strategies (one-page inventory) | [`tools_and_strategies.md`](tools_and_strategies.md) | in repo |
+| Tool dictionary (every tool, lifecycle, license, glossary) | [Google Sheet](https://docs.google.com/spreadsheets/d/1RWONK-tLDJh5lRNyAISlNMEY4UH9ZHWGSW2ytlo5k1c/edit?gid=0#gid=0) | private (owner) |
+| Scheduled cloud routines | <https://claude.ai/code/routines> | owner login; see [`cloud_routines.md`](cloud_routines.md) |
+| Decision records (ADRs 0001-0041) | [`decisions/`](decisions) | in repo |
+
+When a tool, library, service or data source is added or removed, update its row in the tool dictionary and [`tools_and_strategies.md`](tools_and_strategies.md) in the same task.
+
+## 5. Every doc, by purpose
+
+The full list. Docs open on GitHub.
 
 ### Understand it
 - [`case_study.md`](case_study.md): the problem, trade-offs and incidents.

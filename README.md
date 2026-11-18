@@ -2,7 +2,7 @@
 
 **Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico** (scope: [ADR 0014](docs/decisions/0014-ca-nv-scope.md), growing in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
 
-**[Open the live map](https://abov.github.io/courtconnect-ca/)** · [How it's built and all the docs](https://abov.github.io/courtconnect-ca/how-its-built.html#docs) · [Data quality (live)](https://abov.github.io/courtconnect-ca/dashboard/)
+**[Open the live map](https://abov.github.io/courtconnect-ca/)** · [Project hub: every page, dashboard and doc](https://abov.github.io/courtconnect-ca/hub.html) · [Data quality (live)](https://abov.github.io/courtconnect-ca/dashboard/)
 
 | Play | Watch |
 |---|---|
@@ -17,13 +17,9 @@ Information about *where to play* tennis, padel, pickleball, squash and dozens o
 - **Links out, never bookings or payments.**
 
 ## Where to read more
-**Start at the [project hub](docs/README.md)**: every live page, dashboard, tool, account and doc in one list (a CI check keeps it complete). The live site keeps the story and numbers current without hand edits here:
-- **[How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html)**: pipeline, gates, measured numbers and what is not measured yet.
-- **[Documentation index](https://abov.github.io/courtconnect-ca/how-its-built.html#docs)**: case study, architecture, decisions (ADRs), costs, runbooks, data dictionary.
-- **Dashboards and metrics** (data quality, pipeline health, uptime, usage, delivery speed and conflicts): [one table in the hub](docs/README.md#metrics-and-monitoring-every-view-one-table).
-- **[Ask the data](https://abov.github.io/courtconnect-ca/ask-the-data.html)**: SQL on the public venue file, in your browser.
+**Everything is in one place: the [project hub](https://abov.github.io/courtconnect-ca/hub.html)** (live pages, metrics and monitoring, tools and accounts, every doc, with a search box). Its source is [`docs/README.md`](docs/README.md); a CI check keeps both complete.
+- New here? The hub's [Start here](https://abov.github.io/courtconnect-ca/hub.html#2-start-here) list, then [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html) for the pipeline and measured numbers.
 - Builders and AI tools: `app/data/venues.json` with a [data dictionary](app/data-dictionary.md) and [`llms.txt`](app/llms.txt).
-- Status and next steps: [`docs/status.md`](docs/status.md). Tools and accounts: [hub](docs/README.md#2-source-tools-and-accounts).
 
 **Stack:** Python ingestion, a tested dbt project on DuckDB, a static MapLibre page on GitHub Pages. No server, no accounts, no cookies; location for "Near me" stays in the browser, phone numbers are never exported and homes show the city only. Map data from OpenStreetMap and Overture Maps ([`NOTICE.md`](NOTICE.md)).
 

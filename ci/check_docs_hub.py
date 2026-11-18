@@ -1,4 +1,4 @@
-"""Check the docs hub (docs/README.md): every doc in docs/ is listed, and every local link in the hub resolves.
+"""Check the docs hub (docs/README.md): every doc in docs/ is listed, every local link in the hub resolves, and its web copy app/hub.html is current.
 Keeps the single entry point from drifting: add a doc, add its line to the hub in the same PR."""
 import re
 import sys
@@ -31,6 +31,11 @@ for src in (ROOT / "README.md",):
         page = u.split("#")[0].rstrip("/")
         if page not in hub_pages and page != SITE.rstrip("/") + "/how-its-built.html" and page != SITE.rstrip("/"):
             errors.append(f"{src.name} links {page}, which is not in docs/README.md")
+# The web copy (app/hub.html) must match docs/README.md.
+sys.path.insert(0, str(ROOT / "ingestion"))
+from build_hub_page import OUT, render  # noqa: E402
+if not OUT.exists() or OUT.read_text(encoding="utf-8") != render():
+    errors.append("app/hub.html is stale: run python ingestion/build_hub_page.py and commit it")
 if errors:
     print("docs hub check FAILED:")
     for e in errors:

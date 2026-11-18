@@ -1,4 +1,4 @@
-/* Shared page links for the project pages (how-its-built, run-history, ask-the-data). Uses each page's own colour tokens.
+/* Shared page links for the project pages (how-its-built, run-history, ask-the-data, hub). Uses each page's own colour tokens.
    The same <nav class="site-nav"> markup is in every page; ci/check_site_nav.py keeps them in step. */
 .site-nav { display: flex; flex-wrap: wrap; gap: 4px 6px; margin: 0 0 6px -8px; font-size: 14px; }
 .site-nav a { color: var(--muted); text-decoration: none; padding: 4px 8px; border-radius: 6px; border-bottom: 2px solid transparent; }
