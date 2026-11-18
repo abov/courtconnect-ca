@@ -5,7 +5,7 @@ STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import o
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 # Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
-.PHONY: rank-rechecks check-pages find-websites setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability ops-metrics agent-activity demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback ask-feedback
+.PHONY: rank-rechecks check-pages find-websites setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability ops-metrics agent-activity demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback ask-feedback exception-queue
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -156,6 +156,9 @@ market-snapshot:  ## append today's venue counts (city x sport) to docs/market_s
 
 sync-reports:     ## import approved community-form reports (Google Form) as seed edits; needs REPORTS_CSV_URL in .env
 	$(PY) ci/sync_reports.py $(ARGS)
+
+exception-queue:  ## print what still needs the owner: stuck PRs, failing SLAs, owner-call leads, stale rows (needs gh; ARGS=--no-gh offline; docs/self_service_plan.md)
+	$(PY) ci/exception_queue.py $(ARGS)
 
 issues:           ## check open GitHub issues: what is missing, already done, duplicate or waiting (needs gh, read-only)
 	$(PY) ci/check_issues.py
