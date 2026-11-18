@@ -31,6 +31,7 @@ The long version is the owner's Google Sheet [RacketConnect tool dictionary](htt
 - scikit-learn review-queue ranker (suggests only; never feeds dbt or the map).
 - Gold-set evaluation of the entity-resolution rules, enforced in CI.
 - Address fill by deterministic tiers (OSM tags, nearest Overture point, Nominatim, official page).
+- Website finder (`make find-websites`, `docs/website_finder.md`): lists pins with no website, proposes pages from Overture neighbours, Wikidata (CC0), district host patterns and a person's hints, checks each page by code (name, place kind, city/street), writes seed rows for the sure ones and a review queue for the rest; a cheap model (Haiku) judges only the queue.
 - LLM page reader (ADR 0017): fixed fields, exact-quote check in code, staged candidates, human approval, spend cap.
 - NAIP aerial-imagery pilot (lead generator for OSM); imagery checks for padel court size.
 

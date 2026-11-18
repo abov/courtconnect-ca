@@ -86,7 +86,7 @@ Each question has one home; other pages link here instead of repeating it.
 - Session notes from the automated routines only: [`sessions/`](sessions).
 
 ### Research passes and scans (dated results)
-- Venues: [`padel_scan.md`](padel_scan.md), [`public_facility_scan.md`](public_facility_scan.md), [`gym_chain_scan.md`](gym_chain_scan.md), [`hawaii_resorts.md`](hawaii_resorts.md), [`beach_tennis_watch.md`](beach_tennis_watch.md).
+- Venues: [`padel_scan.md`](padel_scan.md), [`website_finder.md`](website_finder.md) (official websites for pins with none: script first, model for the rest), [`public_facility_scan.md`](public_facility_scan.md), [`gym_chain_scan.md`](gym_chain_scan.md), [`hawaii_resorts.md`](hawaii_resorts.md), [`beach_tennis_watch.md`](beach_tennis_watch.md).
 - Mexico: [`mexico_metro_trial.md`](mexico_metro_trial.md), [`mexico_apps_research.md`](mexico_apps_research.md), [`mexico_states_outline.md`](mexico_states_outline.md).
 - Names: [`sport_name_review.md`](sport_name_review.md).
 
