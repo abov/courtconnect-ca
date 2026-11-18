@@ -67,7 +67,7 @@ The table above is the 2026-10-18 classification. Since then the chain went live
 | Noticing a stuck or red PR, a failing SLA, a stopped chain | read GitHub and the scorecard by hand | `make exception-queue` | built (this PR) |
 | Owner calls buried in leads and PR bodies ("owner call before pinning") | found by chance | the queue lists open leads that name an owner call and any "needs owner decision" section in open or recently merged PR bodies | built (this PR) |
 | Authorizing an extract (cost and time control) | owner says yes each cycle | a time and spend budget instead of a yes; the cloud sandbox cannot reach Overpass, so OSM extracts stay on the owner's machine | proposed, needs owner |
-| Refreshing `abov/courtconnect-data` after a local extract | manual gzip, split, push; skipping it broke the cloud build on 2026-11-15 | one script (`make_data_bundle.py` exists) called by the extract step; the queue warns when the data repo is behind `data/raw` | proposed |
+| Refreshing `abov/courtconnect-data` after a local extract | manual gzip, split, push; skipping it broke the cloud build on 2026-11-15 | one script, `ingestion/push_data_bundle.py` (`make push-data`, dry run by default, `--push` to push, refuses files that shrank >10%); the queue warns when the data repo is behind `data/raw` | script done 2026-11-18; the owner runs it after each extract |
 | `approved` label on issues, form-report review | person | stays human until the page reader's quote check exists (ADR 0019 section 6) | unchanged |
 | Weekly audit digest, "no chain PR in 20 days" alert | digest not built (threat model gap 4); the watchdog covers only "Tournaments" PRs | the queue flags 20 days without a chain PR; a weekly digest is a new scheduled workflow | proposed, needs owner OK |
 | A routine's model, cron, enabled flag | claude.ai/code/routines only | cannot be edited from the repo | owner |
@@ -119,5 +119,5 @@ Reserved to the owner by CLAUDE.md and the ADRs. A session records one as a line
 1. **Done 2026-11-18.** Run `make exception-queue` at the end of Part 5 and paste it into that PR's body (one line in `docs/refresh_agent.md` step 9; no new schedule).
 2. A weekly GitHub Action that runs the queue and posts it as one issue (a new scheduled workflow; also covers the digest half of threat-model gap 4).
 3. The Haiku 5.5 trial for Part 5 and the quarterly routine.
-4. Queue warning **done 2026-11-18** (`ci/exception_queue.py` compares the newest local extract CSV with the data repo's latest commit; skipped silently if `gh` or the repo is unreachable). Still open: script the data-repo refresh after an extract (`make_data_bundle.py` exists).
+4. Queue warning **done 2026-11-18** (`ci/exception_queue.py` compares the newest local extract CSV with the data repo's latest commit; skipped silently if `gh` or the repo is unreachable). Data-repo refresh scripted **2026-11-18** (`make push-data`; dry run by default).
 5. One branch prefix for refresh PRs (`claude/refresh-*` in the gate vs `claude/monthly-*` in the runbook).
