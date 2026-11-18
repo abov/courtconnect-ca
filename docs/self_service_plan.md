@@ -1,6 +1,6 @@
 # Self-service plan: which refresh steps a machine can own
 
-Goal (ADR 0015, long-term): the project runs itself with as little human review as possible. Rules for when an agent may merge on its own are in ADR 0019. This page is step 1 of that plan: classify every step of `docs/monthly_refresh.md` and say what blocks automating it. Written 2026-10-18; nothing is automated yet.
+Goal (ADR 0015, long-term): the project runs itself with as little human review as possible. Rules for when an agent may merge on its own are in ADR 0019. This page is step 1 of that plan: classify every step of `docs/monthly_refresh.md` and say what blocks automating it. Written 2026-10-18; the section "Update 2026-11-17" at the end says what changed since and what is left.
 
 ## Classes
 | Class | Meaning | Agent may |
@@ -54,3 +54,70 @@ Outside the runbook but on the "Open, in order" list in `docs/status.md`:
 2. Wrap steps 1, 2, 4-9 into one `refresh` agent in **draft mode**: it opens the PR, a person merges (ADR 0019 stage 0).
 3. Build the page reader and the triage agent, also in draft mode; log how often the owner changes the output.
 4. Promote classes to auto-merge only by the ADR 0019 rule.
+
+---
+
+# Update 2026-11-17: what still needs a person, and the exception queue
+
+The table above is the 2026-10-18 classification. Since then the chain went live (cloud routines, `docs/cloud_routines.md`), every PR is merged by its own session once `dbt-build` is green (CLAUDE.md, owner 2026-11-16), and the R0 merge gate exists (ADR 0019, `docs/merge_gate_threat_model.md`). So "review every PR" is already gone. What is left is **noticing** that something failed and **making the calls only the owner can make**. The smallest change that turns that into an exception queue is a read-only report over outputs we already write: `make exception-queue` (`python ci/exception_queue.py`; `--no-gh` offline). It prints only exceptions, and "Nothing needs the owner." when there are none.
+
+## Where a person is still in the loop
+| Touchpoint | Today | Fix | Status |
+|---|---|---|---|
+| Noticing a stuck or red PR, a failing SLA, a stopped chain | read GitHub and the scorecard by hand | `make exception-queue` | built (this PR) |
+| Owner calls buried in leads and PR bodies ("owner call before pinning") | found by chance | the queue lists open leads that name an owner call and any "needs owner decision" section in open or recently merged PR bodies | built (this PR) |
+| Authorizing an extract (cost and time control) | owner says yes each cycle | a time and spend budget instead of a yes; the cloud sandbox cannot reach Overpass, so OSM extracts stay on the owner's machine | proposed, needs owner |
+| Refreshing `abov/courtconnect-data` after a local extract | manual gzip, split, push; skipping it broke the cloud build on 2026-11-15 | one script (`make_data_bundle.py` exists) called by the extract step; the queue warns when the data repo is behind `data/raw` | proposed |
+| `approved` label on issues, form-report review | person | stays human until the page reader's quote check exists (ADR 0019 section 6) | unchanged |
+| Weekly audit digest, "no chain PR in 20 days" alert | digest not built (threat model gap 4); the watchdog covers only "Tournaments" PRs | the queue flags 20 days without a chain PR; a weekly digest is a new scheduled workflow | proposed, needs owner OK |
+| A routine's model, cron, enabled flag | claude.ai/code/routines only | cannot be edited from the repo | owner |
+
+## Model tier per routine
+The model is chosen at claude.ai/code/routines (the repo cannot read or set it), so this is a recommendation; commit trailers show the chain runs on Sonnet 5.5 today. Rule: the model does the cheapest thing the gates can verify.
+
+| Routine | Work | Tier | Why |
+|---|---|---|---|
+| Parts 1-2 tournaments | read organizer pages, write event rows | Sonnet 5.5 | wrong dates or venues are public facts; `check_seed_evidence` and `check_r2_events` catch form, not truth |
+| Parts 3-4 leads, new courts, social | judge an official page against a press claim; promote or leave | Sonnet 5.5, never lower | the promote-or-not call is the judgment step (class E) |
+| Part 5 data refresh | run scripts, read pass/fail gates, write a 4-bullet PR | **Haiku 5.5 trial** | steps are class M and every outcome is a deterministic gate (scorecard regression, diff cap, export fresh, dbt); the model only orchestrates |
+| Quarterly search interest | run `make interest`, open the PR | **Haiku 5.5 trial** | script-driven, planning signal only, not shown in the app |
+| Interactive sessions | research passes, design | Sonnet 5.5; the largest model only for hard design | CLAUDE.md |
+
+Trial rule: switch one routine, compare two cycles (gates green first time, PR edited by a person, `est_cost_usd` in `docs/agent_log.csv`); revert on the first gate failure caused by the model. The $5/week and $10/month caps do not change.
+
+## Gates an auto-merge needs (session or merge gate)
+All must pass; a failure is an exception, never a bypass.
+1. `dbt-build` green in CI (models, tests, Elementary) and the other `ci.yml` checks: `check_export_fresh`, `check_docs_hub`, `check_seed_evidence`, `check_sport_names`, `check_regions`, `eval_match_gold --check`.
+2. `ci/check_venue_drop.py`: the total, or any region of 50+ venues, drops at most 10% against `origin/main`.
+3. `ci/check_scorecard_regression.py --base-ref origin/main` on refresh PRs: venues down at most 1%, "seen in 35 days" not lower, no more failing SLAs, no failing tests. The 35-day freshness SLA and the 14-day oldest-event-check SLA live in that scorecard.
+4. `ci/region_parity.py --region XX --strict` for any PR that touches a region's data layer.
+5. `ci/check_refresh_diff.py`: path allowlist and diff caps for `claude/refresh-*` PRs (the R0 gate). Tournament and research PRs stay session-merged (class R2).
+6. `make check-pages` when a PR re-dates `verified_on`: only pages that changed or vanished get re-read, and a re-date without a read is not allowed (ADR 0017).
+7. Rebased on `origin/main` right before the merge; `venues.json` never hand-resolved.
+
+Always an exception, whatever is green: anything on the ADR 0019 R3 list (closing a venue on one source, raising a confirmation level, home-like pins, new sources, edits to ADRs, workflows, models, tests, macros or `ingestion/`).
+
+## Owner decisions list
+Reserved to the owner by CLAUDE.md and the ADRs. A session records one as a line under "Needs owner decision" in its PR body, or as a `venue_leads.csv` row whose next step says "owner call"; the queue then surfaces it. Nobody works around these.
+- Resorts and hotels with courts, in every state (ADR 0028): case by case, access stated.
+- Military bases and other restricted access (Fort Bliss, Davis-Monthan, JBPHH): pin or not.
+- New regions and countries (the 2026-11-13 ruling keeps OK, CO and Montana off).
+- Any extract, `--force` load, or run that needs the owner's machine or `.env`; scheduled loops, new routines, cron or model changes, spend caps.
+- New or renamed sports (the sheet is the owner's), new data sources, anything touching ADRs, `CLAUDE.md`, workflows or merge-gate rules.
+- Closing a venue on thin evidence, a confirmation-level rise on one source, anything touching a home-like pin or personal data.
+- Partnerships, data licences, outside emails, monetization, Google Places data (closed or deferred).
+- Mexico: what to do with the unverified automatic layer (`mx-auto-unverified-overture`).
+
+## Session-size budget
+- One task per session; a research pass is one region, or one sport in one region.
+- End or hand off around **150k tokens of context** (or about 100 tool calls). Check `get_usage` every ~25 calls; do not wait for 200-300k.
+- The hand-off is the PR description (2-4 bullets: what changed, what is not verified, what is next), never a session note or a shared log. Unfinished work becomes a draft PR and a fresh session picks it up.
+- A routine that cannot finish lists exactly which sources it did not read (`docs/tournament_run_parts.md`) rather than reading fewer.
+- Lightest model tier the gates can check (above); the largest only for design.
+
+## Proposed, not started (each needs the owner's OK)
+1. Run `make exception-queue` at the end of Part 5 and paste it into that PR's body (a one-line edit to `docs/refresh_agent.md` step 9; no new schedule).
+2. A weekly GitHub Action that runs the queue and posts it as one issue (a new scheduled workflow; also covers the digest half of threat-model gap 4).
+3. The Haiku 5.5 trial for Part 5 and the quarterly routine.
+4. Script the data-repo refresh after an extract, and have the queue warn when `abov/courtconnect-data` is behind.
+5. One branch prefix for refresh PRs (`claude/refresh-*` in the gate vs `claude/monthly-*` in the runbook).
