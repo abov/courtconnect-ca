@@ -19,30 +19,40 @@ from rawdir import ROOT, raw_dir
 SKIP = {"goatcounter_daily.csv"}
 
 
+def bundle_file(src: Path, out: Path, max_bytes: int) -> list[Path]:
+    """Gzip one raw file into `out` (reproducible: no timestamp, so the same data gives the same bytes).
+
+    A .gz over max_bytes is split into `.gz.partNN` byte slices of ONE gzip stream (cloud_bootstrap.unpack joins them).
+    Returns the files written; push_data_bundle.py uses it too.
+    """
+    out.mkdir(parents=True, exist_ok=True)
+    gz = out / (src.name + ".gz")
+    with open(src, "rb") as fin, open(gz, "wb") as raw, gzip.GzipFile("", "wb", 6, raw, mtime=0) as fout:
+        shutil.copyfileobj(fin, fout)
+    if gz.stat().st_size <= max_bytes:
+        return [gz]
+    parts = []
+    with open(gz, "rb") as f:
+        while chunk := f.read(max_bytes):
+            part = out / f"{gz.name}.part{len(parts):02d}"
+            part.write_bytes(chunk)
+            parts.append(part)
+    gz.unlink()
+    return parts
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(ROOT / "dist" / "data-bundle"))
     ap.add_argument("--max-mb", type=int, default=1500)
     a = ap.parse_args()
     out = Path(a.out)
-    out.mkdir(parents=True, exist_ok=True)
     for src in sorted(raw_dir().iterdir()):
         if src.suffix not in (".csv", ".wkt") or src.name in SKIP:
             continue
-        gz = out / (src.name + ".gz")
-        with open(src, "rb") as fin, gzip.open(gz, "wb", compresslevel=6) as fout:
-            shutil.copyfileobj(fin, fout)
-        size = gz.stat().st_size
-        if size > a.max_mb * 1_000_000:
-            n = 0
-            with open(gz, "rb") as f:
-                while chunk := f.read(a.max_mb * 1_000_000):
-                    (out / f"{gz.name}.part{n:02d}").write_bytes(chunk)
-                    n += 1
-            gz.unlink()
-            print(f"{src.name}: {size / 1e6:.0f} MB -> {n} parts")
-        else:
-            print(f"{src.name}: {size / 1e6:.1f} MB")
+        files = bundle_file(src, out, a.max_mb * 1_000_000)
+        size = sum(f.stat().st_size for f in files)
+        print(f"{src.name}: {size / 1e6:.0f} MB -> {len(files)} parts" if len(files) > 1 else f"{src.name}: {size / 1e6:.1f} MB")
 
 
 if __name__ == "__main__":

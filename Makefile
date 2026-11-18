@@ -5,7 +5,7 @@ STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import o
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 # Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
-.PHONY: rank-rechecks check-pages find-websites setup extract fetch-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability ops-metrics agent-activity demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback ask-feedback exception-queue
+.PHONY: rank-rechecks check-pages find-websites setup extract fetch-data push-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability ops-metrics agent-activity demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats usage interest market-snapshot sync-reports issues feedback ask-feedback exception-queue
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -17,6 +17,9 @@ extract:          ## pull ALL courts for every state in regions.json + named par
 
 fetch-data:        ## download the public raw-data bundle (GitHub Release) into data/raw instead of running the extract; then make fresh-db
 	$(PY) ingestion/fetch_data_bundle.py
+
+push-data:       ## refresh the private data repo abov/courtconnect-data from data/raw after extract + load; dry run lists changes, ARGS=--push pushes (refuses files that shrank >10%)
+	$(PY) ingestion/push_data_bundle.py $(ARGS)
 
 fresh-db:         ## new worktree (or a stale/broken db): rebuild courtconnect.duckdb here from the shared raw CSVs + this branch's seeds (~1 min)
 	$(PY) ingestion/fresh_db.py

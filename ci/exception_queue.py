@@ -204,7 +204,7 @@ def data_repo_items():
     if behind_h <= DATA_REPO_SLACK_HOURS:
         return []
     return [f"{DATA_REPO} is behind local data/raw: last commit {pushed:%Y-%m-%d}, newest file {newest.name} {local:%Y-%m-%d}; "
-            "refresh it (docs/cloud_routines.md, Raw data) or cloud runs build from stale extracts"]
+            "run `python ingestion/push_data_bundle.py --push` (dry run first; make push-data) or cloud runs build from stale extracts"]
 
 
 def main():

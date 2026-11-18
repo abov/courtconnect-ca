@@ -6,6 +6,7 @@ Moved out of `CLAUDE.md` on 2026-11-17 so every session does not load it (token 
 - `make build-changed`   only what changed since the last good build, plus downstream (`ingestion/build_changed.py`; no `make` in Git Bash: run the script; `--full` or `--dry-run`). Use it for seed, model, macro and test edits. After loading raw data (new state, refresh) it cannot see the change: run `--full`. CI and the last check before a PR are the full build.
 - `make app-data`   export `app/data/venues.json` for the map (commit it after any seed change; CI runs `ci/check_export_fresh.py`); `make app` serves it at localhost:8765
 - `make extract` / `make load`   refresh raw data (extract takes ~15 min; don't run unless asked)
+- `make push-data`   after extract + load: dry-run list of what differs from the private data repo `abov/courtconnect-data`; `ARGS=--push` commits and pushes it (`ingestion/push_data_bundle.py`; refuses files that shrank >10% unless `--force`)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
 - `make check-pages`   list verified pages that changed or vanished since the last look (conditional requests + text hash, no model); recheck only those
 - `make sync-reports`   import owner-approved community-form reports as seed edits (needs `REPORTS_CSV_URL` in `.env`; `ARGS=--dry-run` previews)
