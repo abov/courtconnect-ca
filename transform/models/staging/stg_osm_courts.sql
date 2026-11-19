@@ -3,7 +3,9 @@
 -- Only records whose sport tag maps to a racket sport on the master sheet are kept
 -- (e.g. a pitch tagged only 'tetherball' is dropped, see ADR 0004).
 with src as (
-    select o.*
+    select o.*,
+           lower(replace(o.sport, ' ', '')) as sport_key,
+           floor(o.lat * 1000)               as lat_cell   -- 0.001 deg (~111 m) cells: lets the dedupe join prune on lat before the exact distance test
     from {{ source('raw', 'osm_courts') }} o
     where o.lat is not null and o.lon is not null
       and exists (
@@ -24,7 +26,8 @@ deduped as (
             select 1
             from src d
             where d.leisure = 'pitch'
-              and lower(replace(d.sport, ' ', '')) = lower(replace(s.sport, ' ', ''))
+              and d.sport_key = s.sport_key
+              and d.lat_cell between s.lat_cell - 1 and s.lat_cell + 1
               and (d.osm_id < s.osm_id or (d.osm_id = s.osm_id and d.osm_type < s.osm_type))
               and abs(d.lat - s.lat) < 0.0001
               and sqrt(
