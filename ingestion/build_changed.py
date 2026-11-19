@@ -17,6 +17,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Local speed-up (121s -> 95s on a full build): skip Elementary's artifact/run-result/invocation uploads, which only feed its
+# dashboard. Anomaly and schema tests still run; CI's plain `dbt build` is unchanged. `--elementary` keeps the uploads.
+LIGHT_VARS = "{disable_dbt_artifacts_autoupload: true, disable_run_results: true, disable_dbt_invocation_autoupload: true}"
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "transform" / ".state"
 MANIFEST = ROOT / "transform" / "target" / "manifest.json"
@@ -32,6 +35,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--full", action="store_true", help="ignore the saved state and build everything")
     ap.add_argument("--dry-run", action="store_true", help="only list the selected nodes")
+    ap.add_argument("--elementary", action="store_true", help="keep Elementary's observability uploads (slower)")
     args = ap.parse_args()
 
     incremental = (STATE / "manifest.json").exists() and not args.full
@@ -40,7 +44,7 @@ def main() -> int:
         print("No saved state (or --full): full build." if not args.full else "--full: full build.")
     if args.dry_run:
         return run(["dbt", "ls", *DBT_OPTS, *sel])
-    code = run(["dbt", "build", *DBT_OPTS, *sel])
+    code = run(["dbt", "build", *DBT_OPTS, *sel, *([] if args.elementary else ["--vars", LIGHT_VARS])])
     if code != 0:
         print("Build failed: the saved state was left as it was.")
         return code
