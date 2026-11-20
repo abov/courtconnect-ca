@@ -30,6 +30,11 @@ APP = ROOT / "app"
 SPORTS = ["Pickleball", "Padel", "Pop Tennis", "Beach Tennis", "Squash", "Table Tennis", "Badminton", "Racquetball"]
 # Wall types in the export (`hw.t`): 1-wall and 3-wall handball/wallball courts and backboards, each searched for in every state.
 WALL_KINDS = ["one_wall", "three_wall", "backboard"]
+# Walled-sport COURTS (frontón/frontenis/pelota, squash, racquetball, 4-wall paddleball) are ordinary venues with those sports, not "hitting walls": the
+# wall rows above count only standalone 1-wall/3-wall/backboard/handball structures. Mexico pins its fronton courts as venues (Basque Pelota: Frontenis), so its
+# wall rows can be zero while "walled-sport pins" is large; both are shown so a zero is never read as "no walls".
+WALLED_SPORTS = ("Squash", "Racquetball", "4-wall Paddleball")
+PELOTA_PREFIX = "Basque Pelota"
 # Docs that need a section per state (case-insensitive substring of the state's `name` in regions.json).
 DOCS = ["docs/event_group_search.md", "docs/public_facility_scan.md", "docs/padel_scan.md", "docs/gym_chain_scan.md"]
 # Items that may not be zero before a state is called done (everything else is shown but only reported).
@@ -91,6 +96,10 @@ def audit():
     wall_pins = [v for v in export["venues"] if isinstance(v.get("hw"), dict)]
     wall_kind = {k: Counter(v["r"] for v in wall_pins if k in v["hw"].get("t", [])) for k in WALL_KINDS}
     handball = Counter(v["r"] for v in wall_pins if "Handball" in v["hw"].get("sp", []))
+    walled_idx = {i for n, i in sport_idx.items() if n in WALLED_SPORTS or n.startswith(PELOTA_PREFIX)}
+    pelota_idx = {i for n, i in sport_idx.items() if n.startswith(PELOTA_PREFIX)}
+    walled_court = Counter(v["r"] for v in export["venues"] if any(p[0] in walled_idx for p in v["p"]))
+    pelota_court = Counter(v["r"] for v in export["venues"] if any(p[0] in pelota_idx for p in v["p"]))
     per_sport = {sp: Counter(v["r"] for v in export["venues"] if any(p[0] == sport_idx.get(sp) for p in v["p"])) for sp in SPORTS}
 
     manual = seed("manual_venues.csv")
@@ -120,6 +129,8 @@ def audit():
         for k in WALL_KINDS:
             r[f"{k} wall pins"] = wall_kind[k][code]
         r["handball wall pins"] = handball[code]
+        r["walled-sport court pins (fronton, pelota, squash, racquetball)"] = walled_court[code]
+        r["of which fronton/frontenis/pelota pins"] = pelota_court[code]
         r["hitting walls (OSM)"] = walls_osm[code]
         r["walls (hand-added)"] = walls_manual[code]
         r["watch events"] = events[code]
