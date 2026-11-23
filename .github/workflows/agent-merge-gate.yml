@@ -40,13 +40,13 @@ jobs:
           echo "found=yes" >> "$GITHUB_OUTPUT"
           echo "number=$(echo "$json" | jq -r .number)" >> "$GITHUB_OUTPUT"
           echo "base=$(echo "$json" | jq -r .baseRefName)" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         if: steps.pr.outputs.found == 'yes'
         with: {ref: main, path: trusted}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         if: steps.pr.outputs.found == 'yes'
         with: {ref: "${{ github.event.workflow_run.head_sha }}", path: pr, fetch-depth: 0}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: steps.pr.outputs.found == 'yes'
         with: {python-version: "3.12"}
       - name: Classify (main's script, the PR's files)
