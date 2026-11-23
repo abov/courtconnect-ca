@@ -37,7 +37,7 @@ LIKELY = 0.7   # p(confirm) at or above -> likely_confirm; at or below 1 - LIKEL
 
 
 def words(text: str | None) -> list[str]:
-    return re.findall(r"[a-z]+", (text or "").lower())
+    return re.findall(r"[a-z]+", (text if isinstance(text, str) else "").lower())
 
 
 def nearest_m(lat: np.ndarray, lon: np.ndarray, clat: np.ndarray, clon: np.ndarray) -> np.ndarray:
@@ -59,8 +59,8 @@ def features(row: pd.Series, sports: list[str]) -> dict:
     name_words = words(row["name"])
     name = " ".join(name_words)
     phrase = " ".join(words(sport))
-    domain = (row["website_domain"] or "").lower()
-    category = row["category"] or "none"
+    domain = (row["website_domain"] if pd.notna(row["website_domain"]) else "").lower()   # pandas 3 gives NaN, not None, for missing text
+    category = row["category"] if pd.notna(row["category"]) and row["category"] else "none"
     f: dict = {f"sport={sport}": 1, f"category={category}": 1}
     # name words other than the sport's own (e.g. "club", "academy", "beach", "warehouse")
     for w in set(name_words) - sport_words:
