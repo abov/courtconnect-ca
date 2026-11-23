@@ -158,5 +158,32 @@ Each of Street Tennis, Road Tennis, Street Racket, Tennis Baseball, Naked Tennis
 Not checked: the sports' own sites where none was found, Facebook groups and Instagram (not readable as public pages), the AANR naturist directory, and Chinese, Korean and Portuguese-language searches.
 
 Sheet changes proposed in the PR description, none made here.
+## Ninth pass, 2026-11-22: social sources, non-English queries, AANR (zero-venue sports)
+
+Scope: the sports recorded as "none found" in passes three to eight, re-searched through what those passes skipped: public Facebook pages, Instagram profiles and Meetup groups (web search limited to those domains, then the page header read without a login), Chinese, Korean, Japanese, Portuguese and Spanish queries, and the AANR naturist directory. Standard search only; about 25 searches, grouped by sport family (not one per sport per region), so a small local group could still be missed. "None found" means these searches showed none, not that none exists.
+
+Limits hit: **Reddit** is blocked for the search tool (no Reddit result is possible). **Facebook and Instagram** show only the page header (name, follower count, bio) without a login; posts, events and addresses are behind a login wall, so nothing was read past the header. The **AANR club directory** is not indexed by the search tool (only its fact pages came back) and the ICO community map still needs a browser. Neither Korean nor Japanese queries surfaced a single community club page.
+
+Added: 1 pin (reported) and 4 leads. No sheet or `all_racquet.csv` change.
+
+| Sport | Source read | Result (searched 2026-11-22) |
+|---|---|---|
+| Taiji Bailong (Roliball, 柔力球) | World Journal (2026-01-05), Chinese-language search | **Found, pinned as reported:** a FlowBall USA Invitational was held at the South Coast Chinese Cultural Center, 9 Truman St, Irvine, CA (`taiji-bailong-south-coast-chinese-cultural-center`; one event, no regular practice found; coordinates approximate; lead `flowball-usa-invitational-irvine-2026`). Nothing for San Francisco, Houston, Seattle or Mexico. |
+| Beach Tennis | Facebook, Instagram and Meetup pages (headers) | Hawaii Beach Tennis Association (Honolulu, Facebook, 993 followers) and Beach Tennis - Houston (Instagram, about 2,185 followers) both exist and say they offer play, but neither names a beach or address: leads `hawaii-beach-tennis-association` and `beach-tennis-houston-instagram`. Beach Tennis PlayBT California (Instagram) lists Manhattan Beach 7th St, Tue/Thu/Sat 9:00-12:00: second operator at the existing pin (lead `playbt-california-manhattan-beach`). OLA Beach Tennis, Beach Tennis Santa Monica, Beach Tennis San Diego and BT Cali Club were already mapped. Beach Tennis SoCal (Meetup, Long Beach) is confirmed stale: its newest listed event is 2013-12-07 and nothing is scheduled. ATX Beach (Austin): still only the waiver mention. Spanish query for TX, AZ, NM and MX: none found. |
+| Crossminton and Speedminton | Facebook, Instagram, Meetup; Spanish query for Mexico | No result found in any covered region. Crossminton USA (Facebook, 70 followers) is a governing-body page with no club or venue; Speedminton USA (Carlsbad CA, Facebook and Instagram) is a gear seller, not a venue. No Meetup group found. |
+| Real Tennis, Tamburello | Facebook, Instagram, Meetup; Italian-American club search | No result found. Only Prince's Court (McLean, VA, already known, outside our regions) and a club in Sicily. Bocce clubs came back for Italian-American groups, none with tamburello. |
+| Miniten Thug | Web search of AANR, Facebook, Meetup | No result found. The AANR directory could not be read; the only AANR-linked page found (a Minnesota non-landed club) does not mention it. Glen Eden (Corona, CA) lists tennis courts but nothing says Miniten. Miniten stays a UK/NZ sport in the pages found. |
+| Naked Tennis | AANR search, earlier pass | No result found: it is a net-less Italian variant, not a naturist sport (see the eighth pass), so the AANR route does not apply. |
+| Soft Tennis, Tennis Baseball, Road Tennis | Japanese and Korean queries, Facebook and Meetup | No result found in any covered region. Only general tennis and Nippon Club (New York) pages returned. |
+| Qianball | Chinese query | No result found. |
+| Frescoball / Frescobol, Smashball (Kadima) | Portuguese query, Facebook, Instagram, Meetup | No result found for a play group in CA, TX, HI or AZ. Brand and shop pages only (Frescobol Carioca, Freskoball in San Clemente, Vero Frescobol in Florida); Kadima groups found are in New York. No pin. |
+| Padel Pingpong | Facebook and Instagram | No result found: only ordinary padel clubs in Mexico. Quarterly recheck of the sport's own news page still due (next 2027-02). |
+| Ricochet, Table Squash, Wall Pong, Racket Hockey, Totem Tennis, Street Racket | Facebook, Instagram, Meetup | No result found. Ricochet has a Czech Facebook page (outside our regions) and a Kansas City bar venue (outside). The other names returned only table tennis, squash and racquetball pages. |
+| Ball Badminton, Biraq, Battlebird, Shuttleball, Speedball, 360Ball, Pro Sunball, Toccer, Jokari, Smolball, Wackitball, String Paddleball, Downside Ball, Eclipseball, Ketball, Pang Pong, Rapidball, Floor Pro Mini Tennis, Street Tennis | Not re-searched | No new source type applies (retail, school or non-US only in the earlier passes); results from passes three to eight stand. |
+
+Still not covered: Reddit, the logged-in parts of Facebook and Instagram, the AANR directory and ICO map (need a browser), WeChat and Naver or Daum community groups, and school PE forums.
+
+Sheet changes proposed in the PR description, none made here.
+
 Remaining families not yet searched per region: none of the 2026-10-10 groups are left. Still not searched on their own: Loboton, Micro Pickleball, Spec Tennis, Teqis and Teqpong (they have venues).
 
