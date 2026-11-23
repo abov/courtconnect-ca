@@ -69,7 +69,7 @@ The table above is the 2026-10-18 classification. Since then the chain went live
 | Authorizing an extract (cost and time control) | owner says yes each cycle | a time and spend budget instead of a yes; the cloud sandbox cannot reach Overpass, so OSM extracts stay on the owner's machine | proposed, needs owner |
 | Refreshing `abov/courtconnect-data` after a local extract | manual gzip, split, push; skipping it broke the cloud build on 2026-11-15 | one script, `ingestion/push_data_bundle.py` (`make push-data`, dry run by default, `--push` to push, refuses files that shrank >10%); the queue warns when the data repo is behind `data/raw` | script done 2026-11-18; the owner runs it after each extract |
 | `approved` label on issues, form-report review | person | stays human until the page reader's quote check exists (ADR 0019 section 6) | unchanged |
-| Weekly audit digest, "no chain PR in 20 days" alert | digest not built (threat model gap 4); the watchdog covers only "Tournaments" PRs | the queue flags 20 days without a chain PR; a weekly digest is a new scheduled workflow | proposed, needs owner OK |
+| Weekly audit digest, "no chain PR in 20 days" alert | the watchdog covers only "Tournaments" PRs | `weekly-audit.yml` (Mondays): digest issue plus a failing run when no chain PR in 20 days; the queue shows the same signal on demand | built 2026-11-22 (rule-based; no second-model re-check yet) |
 | A routine's model, cron, enabled flag | claude.ai/code/routines only | cannot be edited from the repo | owner |
 
 ## Model tier per routine

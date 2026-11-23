@@ -90,7 +90,7 @@ The full list. Docs open on GitHub.
 - [`working_practices.md`](working_practices.md), [`commands.md`](commands.md), [`token_efficiency.md`](token_efficiency.md): build and ship practices, every `make` target, and the hooks that keep sessions cheap (moved out of `CLAUDE.md`).
 - [`cloud_routines.md`](cloud_routines.md): the scheduled cloud routines and their ids.
 - [`tournament_run_parts.md`](tournament_run_parts.md) (the five parts), [`tournament_refresh.md`](tournament_refresh.md) (tournament steps), [`tournament_sources.md`](tournament_sources.md) (source list and the table tennis/badminton pass), [`event_group_search.md`](event_group_search.md) (events, leagues, groups per state).
-- [`refresh_agent.md`](refresh_agent.md), [`merge_gate_threat_model.md`](merge_gate_threat_model.md): the agent and its merge gate (ADR 0019).
+- [`refresh_agent.md`](refresh_agent.md), [`merge_gate_threat_model.md`](merge_gate_threat_model.md): the agent and its merge gate (ADR 0019). The weekly audit digest and the Dependabot config are described in the threat model and [`SECURITY.md`](https://github.com/abov/courtconnect-ca/blob/main/SECURITY.md) (reporting a vulnerability, scope, what is in place).
 - [`new_region_checklist.md`](new_region_checklist.md), [`fork_guide.md`](fork_guide.md): new regions and forks.
 - Session notes from the automated routines only: [`sessions/`](sessions).
 
