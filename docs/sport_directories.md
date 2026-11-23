@@ -47,7 +47,8 @@ Searched in grouped queries (3-6 sports per query), public web only. A grouped s
 | 360Ball, Qianball, Taiji Bailong | No US club list. 360Ball (South Africa) and Qianball (Denmark) have no US clubs in the results. No usable directory found. |
 | Riftball, Skyball, Toccer, Miniten Thug, Floor Pro Mini Tennis, Pro Sunball | Mostly retail products; no clubs or courts found. No usable directory found. |
 | Wall Pong, Xare, Jokari, Smolball | No result naming a California venue. Xare is a Basque pelota discipline (see Basque Pelota above). Jokari is a home game, no venue needed. No usable directory found. |
-| Downside Ball Game, Eclipseball, Ketball, Loboton, Micro Pickleball, Pang Pong, Rapidball, Spec Tennis, Teqis, Teqpong | **Not searched** in this pass. Unchecked, not negative. |
+| Downside Ball Game, Eclipseball, Ketball, Pang Pong, Rapidball | Searched on their own on 2026-11-22: see the fourth pass below. |
+| Loboton, Micro Pickleball, Spec Tennis, Teqis, Teqpong | **Not searched** in this pass. They have venues now, so no search needed. |
 
 ## Third pass, 2026-11-22: federation finders, per sport and region
 
@@ -61,3 +62,17 @@ Each of Real Tennis, Tamburello, Crossminton and Soft Tennis searched on its own
 | Soft Tennis | ISTF site and member pages | No result found. The US is a provisional ISTF member with no contact or club list; Mexico is not an ISTF member; USSTA-style sites did not resolve. Japanese-American community clubs not checked. |
 
 Next step if the owner wants more: the ICO community map (needs a browser), Italian-American associations for Tamburello, and a Japanese-language search for Soft Tennis clubs.
+
+## Fourth pass, 2026-11-22: sports never searched, per sport and region
+
+Each of Downside Ball Game, Eclipseball, Ketball, Pang Pong and Rapidball searched on its own for CA, NV, OR, WA, HI, AZ, NM, TX and the Mexico pilot. Public pages only (web search, the sport's own site, Wikipedia). "No result found" means these searches showed none, not that none exists. No pin or lead was added.
+
+| Sport | Pages read | Result (searched 2026-11-22; CA, NV, OR, WA, HI, AZ, NM, TX, MX) |
+|---|---|---|
+| Downside Ball Game | Wikipedia; Downside School site | No result found in any covered region. Played by pupils at one school's outdoor court ("The Ball Place"), Downside School, Somerset, England, since 1820. No US or Mexican school found. Not a venue sport for us. |
+| Eclipseball | topendsports.com; retailer pages (BSN, US Games, Wolverine, Gopher) | No result found in any covered region. Created in Grant, Michigan (1985), sold as a school and gym PE set; played on a volleyball court with a net, indoors or outdoors. No league, club or event page found. Retail-only and play-anywhere. **Proposed, not added:** a `sport_play_anywhere.csv` row (`anywhere`, any volleyball court), for the owner to decide. |
+| Ketball | ketball.com (about, rules) | No result found in any covered region. A pool-based game from the Netherlands (padel-like court with panels over a swimming pool); the site says its 2027 host is still to be found, and names no venue. No US or Mexico pool found. |
+| Pang Pong | Wikipedia; Hitachi's own article on the sport | No result found in any covered region. Played mainly in Hitachi City, Ibaraki, Japan, within Hitachi's factory community. Outside Japan only one past event found (Harrodsburg, Kentucky, a Hitachi plant town, 2004) and a 2014 Nordic championship in Sweden. A Hitachi (now Astemo) plant exists in Queretaro, Mexico; no pang pong activity there was found. |
+| Rapidball | rapidball.info; ACLO (Netherlands) page; map data (`sport_also_played.csv`) | No dedicated Rapidball club or event found in any covered region. The sport is played mainly in Mallorca, Spain, plus Denmark and the Netherlands. Its 57 map venues are **inferred**, not found: Rapidball is derived from Squash courts through `sport_also_played.csv` (owner, 2026-10-27), and the site itself says it is played on any regular squash court. Nothing removed. |
+
+Next step if the owner wants more: Spanish-language search for Rapidball in Mallorca-linked clubs is outside our regions; Loboton, Micro Pickleball, Spec Tennis, Teqis and Teqpong need no search.
