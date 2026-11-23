@@ -76,3 +76,21 @@ Each of Downside Ball Game, Eclipseball, Ketball, Pang Pong and Rapidball search
 | Rapidball | rapidball.info; ACLO (Netherlands) page; map data (`sport_also_played.csv`) | No dedicated Rapidball club or event found in any covered region. The sport is played mainly in Mallorca, Spain, plus Denmark and the Netherlands. Its 57 map venues are **inferred**, not found: Rapidball is derived from Squash courts through `sport_also_played.csv` (owner, 2026-10-27), and the site itself says it is played on any regular squash court. Nothing removed. |
 
 Next step if the owner wants more: Spanish-language search for Rapidball in Mallorca-linked clubs is outside our regions; Loboton, Micro Pickleball, Spec Tennis, Teqis and Teqpong need no search.
+
+## Fifth pass, 2026-11-22: badminton-like sports, per sport and region
+
+Each of Ball Badminton, Battlebird, Biraq, Goodminton, Jazzminton, Shuttleball and Speedball searched on its own (standard web search, public pages only), with the region names CA, NV, OR, WA, HI, AZ, NM, TX and Mexico (English and Spanish) in the query. One search per sport plus three follow-ups (Ball Badminton in Indian-American association pages, Speedball/Speedminton on Meetup, Mexico in Spanish); not one search per sport per region, so a small local group could still be missed. "No result found" means these searches showed none, not that none exists. No pin or lead was added.
+
+| Sport | Pages read | Result (searched 2026-11-22; CA, NV, OR, WA, HI, AZ, NM, TX, MX) |
+|---|---|---|
+| Ball Badminton | Search results (USA Badminton member clubs, worldbadminton.com club directory, Indian-American association event pages) | No result found in any covered region. Every hit was ordinary shuttlecock badminton (clubs in CA, TX, AZ, WA, HI; Indian-American associations run badminton tournaments elsewhere in the US). The sport is South Indian; no US or Mexico club found. |
+| Battlebird | Search results only | No result found: no page mentioning the sport at all. It is already in `sport_play_anywhere.csv` (anywhere), so no pin is needed. |
+| Biraq | topendsports.com; search results | No result found in any covered region. Created in 1996 in Itapetininga, São Paulo, Brazil; played with a racket in each hand on a 14 x 4.5 m court. Only encyclopedia-style pages mention it; no club or league. |
+| Goodminton | Search results | No result found in any covered region. One social-badminton club page (reclub.co) lists a venue called "Goodminton" among its courts; its country was not stated on the page and it is a venue name, not a sport club, so it was not used. Already in `sport_play_anywhere.csv`. |
+| Jazzminton | Search results (USA Badminton pages) | No result found in any covered region. No page mentioned the sport. Already in `sport_play_anywhere.csv`. |
+| Shuttleball | Search results | No result found in any covered region. Every hit was ordinary badminton leagues. |
+| Speedball | Search results (worldbadminton.com, Meetup, local press) | No result found in any covered region. The name is ambiguous; no racket-sport "Speedball" club or Meetup group turned up in CA, NV, OR, WA, HI, AZ, TX. Only ordinary badminton venues came back (for example the Arizona Badminton Center in Mesa, already a badminton venue, not this sport). |
+
+Not checked: the sports' own sites where they exist (none found for Battlebird, Jazzminton, Shuttleball), Facebook groups (not public-page readable), and Instagram.
+
+Remaining families, not yet searched per region (first pass 2026-10-10 only, California): wall and handball-like (Ricochet, Racket Hockey, Wall Pong, Wackitball, Smolball, Table Squash, String Paddleball); tennis-like (Floor Pro Mini Tennis, Miniten Thug, Naked Tennis, Road Tennis, Street Tennis, Street Racket, Tennis Baseball, Totem Tennis, Padel Pingpong, Jokari); beach, soccer-tennis and novelty (360Ball, Qianball, Taiji Bailong, Riftball, Frescoball, Smashball, Pro Sunball, Toccer).
