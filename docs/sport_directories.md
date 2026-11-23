@@ -93,4 +93,26 @@ Each of Ball Badminton, Battlebird, Biraq, Goodminton, Jazzminton, Shuttleball a
 
 Not checked: the sports' own sites where they exist (none found for Battlebird, Jazzminton, Shuttleball), Facebook groups (not public-page readable), and Instagram.
 
-Remaining families, not yet searched per region (first pass 2026-10-10 only, California): wall and handball-like (Ricochet, Racket Hockey, Wall Pong, Wackitball, Smolball, Table Squash, String Paddleball); tennis-like (Floor Pro Mini Tennis, Miniten Thug, Naked Tennis, Road Tennis, Street Tennis, Street Racket, Tennis Baseball, Totem Tennis, Padel Pingpong, Jokari); beach, soccer-tennis and novelty (360Ball, Qianball, Taiji Bailong, Riftball, Frescoball, Smashball, Pro Sunball, Toccer).
+## Sixth pass, 2026-11-22: wall and racquetball-like sports, per sport
+
+Each of Jokari, Wall Pong, Smolball, Table Squash, Wackitball, Riftball, Ricochet, Racket Hockey and String Paddleball searched on its own (standard web search, public pages only; one to three searches per sport, plus one Spanish-language search for Mexico). Region names (CA, NV, OR, WA, HI, AZ, NM, TX, Mexico) went into the queries, but this was not one search per sport per region, so a small local group could still be missed. The search engine handled long OR queries badly, so most sports were re-run with plain queries. "No result found" means these searches showed none, not that none exists. No pin or lead was added.
+
+Not searched, because they already have venues: 1-, 3- and 4-wall Paddleball, Wacquetball, Knuckle Racket, Australian Racquetball and every Basque Pelota discipline including Xare (all `covered` in `coverage_snapshot.md`; the last three families come from `sport_also_played.csv` and the Basque Pelota seeds).
+
+| Sport | Pages read | Result (searched 2026-11-22; CA, NV, OR, WA, HI, AZ, NM, TX, MX) |
+|---|---|---|
+| Jokari | Wikipedia; donaldsauter.com and oocities.org enthusiast pages; search results | No result found in any covered region. A casual home and pavement game (ball on an elastic cord tied to a floor anchor); the pages say any paved area works and name no club, league or court. Not a venue sport. |
+| Wall Pong | topendsports.com | No result found in any covered region. Created in Illinois in 2015 (a ping pong table 14 inches from a wall); the page says it can be played at home. No tournament, league or venue found. |
+| Smolball | mobilesport.ch (Swiss school-sport teaching pages); wikimonde.com | No result found in any covered region. Swiss school PE game (1970s), taught in Swiss schools; no US or Mexican club, school or event found. Not read: smolball.com (not returned by search). |
+| Table Squash | Wikipedia (via search); search results | No result found in any covered region. Searches returned only ordinary squash clubs (Bay Clubs, Life Time in CA, TX, AZ, WA, OR) and table tennis clubs; none mention table squash. The ITSA site was not found. |
+| Wackitball | IDEMA activity guides (Belgian school-equipment seller) | No result found in any covered region. Found only as a school-equipment product from a Belgian seller; no federation, club or event page returned. wackitball.be was not reached. |
+| Riftball | Retailer pages (Target, Scheels, Tractor Supply, School Health) and one product review | No result found in any covered region. A retail paddle-ball set (B3 Games) with two nets, sold for backyards and schools; no club, league or event. **Proposed, not added:** a `sport_play_anywhere.csv` row (`anywhere`, backyard or any flat space with the set), for the owner to decide. |
+| Ricochet | Search results (racquetball and IRF pages) | No result found in any covered region: no page describing the sport as separate from racquetball. The sheet says it is played in Czech Republic, Germany and Poland. The two weak name matches already in `mart_places_to_review` stay unreviewed here. |
+| Racket Hockey | topendsports.com | No result found in any covered region. Created in Missouri in 2016; no league or club page. Already in `sport_play_anywhere.csv` (any roller hockey rink or smooth pavement), so no pin is needed. |
+| String Paddleball | Search results | No result found in any covered region. Only one-wall and 3-wall paddleball (NYC events, the Pacific Paddleball Association in San Diego) came back, which are other sports already on the map. Already in `sport_play_anywhere.csv`. |
+
+Mexico (Spanish search for squash de mesa, Jokari, hockey de raqueta): only ordinary squash, racquetball and table tennis news came back; nothing for these sports.
+
+Not checked: Facebook groups and Instagram (not readable as public pages), school PE-teacher forums, the sports' own sites that did not load, and non-English searches beyond the one Spanish query.
+
+Remaining families, not yet searched per region (first pass 2026-10-10 only, California): tennis-like (Floor Pro Mini Tennis, Miniten Thug, Naked Tennis, Road Tennis, Street Tennis, Street Racket, Tennis Baseball, Totem Tennis, Padel Pingpong); beach, soccer-tennis and novelty (360Ball, Qianball, Taiji Bailong, Frescoball, Smashball, Pro Sunball, Toccer).
