@@ -116,3 +116,22 @@ Mexico (Spanish search for squash de mesa, Jokari, hockey de raqueta): only ordi
 Not checked: Facebook groups and Instagram (not readable as public pages), school PE-teacher forums, the sports' own sites that did not load, and non-English searches beyond the one Spanish query.
 
 Remaining families, not yet searched per region (first pass 2026-10-10 only, California): tennis-like (Floor Pro Mini Tennis, Miniten Thug, Naked Tennis, Road Tennis, Street Tennis, Street Racket, Tennis Baseball, Totem Tennis, Padel Pingpong); beach, soccer-tennis and novelty (360Ball, Qianball, Taiji Bailong, Frescoball, Smashball, Pro Sunball, Toccer).
+
+Remaining families, not yet searched per region (first pass 2026-10-10 only, California): wall and handball-like (Ricochet, Racket Hockey, Wall Pong, Wackitball, Smolball, Table Squash, String Paddleball); tennis-like (Floor Pro Mini Tennis, Miniten Thug, Naked Tennis, Road Tennis, Street Tennis, Street Racket, Tennis Baseball, Totem Tennis, Padel Pingpong, Jokari); beach, soccer-tennis and novelty (360Ball, Qianball, Taiji Bailong, Riftball, Frescoball, Smashball, Pro Sunball, Toccer).
+
+## Sixth pass, 2026-11-22: Beach Tennis, per region
+
+Scope: the only sheet sport not covered by the other family passes or earlier ones is Beach Tennis (thin: 9 venues, 0 courts). Kadima/Matkot is not its own sheet row (Smashball carries it, tennis-like pass). Standard web search only, public pages, one query per region group. "None found" means these searches showed none, not that none exists. The venues already pinned stand (Santa Monica Tower 26, Manhattan Beach 7th St, Hermosa Beach 14th St, SF Bay Area four sfbeachtennis.com spots, San Diego Ocean Beach, Giammalva in Spring TX, Active Beach House in Cancún).
+
+| Region | Result (searched 2026-11-22) |
+|---|---|
+| CA | Beyond the pins above, no new club, court or event found in Orange County, Long Beach, Santa Barbara, Santa Cruz, Sacramento, Tahoe, Venice or Redondo. Lead only: Beach Tennis SoCal Meetup (Long Beach, 136 members), newest listed event 2013-12-07, so likely stale. The iBeach31 open-play pages that surfaced are in Westfield, Indiana, not California. |
+| NV | None found (Las Vegas, Reno, Henderson, Lake Las Vegas, Tahoe): only ordinary tennis clubs and sand volleyball. |
+| OR, WA | None found (Portland, Seattle): padel, tennis, pickleball and sand volleyball only. |
+| HI | None found (Oahu, Maui, Kauai, Big Island): resort tennis, pickleball and beach volleyball only. |
+| AZ | None found (Phoenix, Scottsdale, Tempe, Tucson, Lake Havasu): sand volleyball courts (Scottsdale Ranch Park) exist but nothing names beach tennis. |
+| NM | None found (Albuquerque, Santa Fe). |
+| TX | One lead, not pinned: ATX Beach, Austin (8 sand volleyball courts, 11000 Middle Fiskville Rd) names "beach tennis" only in its waiver's activity list; its home page shows volleyball only. Houston, Dallas, Galveston, Corpus Christi: none beyond Giammalva (already pinned). |
+| MX | None found beyond Active Beach House (pinned) and the 2025 Cancún Open already in `venue_leads.csv`. Spanish searches ("tenis de playa") for Tijuana, Rosarito, Ensenada, La Paz, Cabo, Mazatlán, Puerto Vallarta, Sayulita, Playa del Carmen, Tulum, Cozumel returned only conventional tennis, padel and surf. |
+
+Not checked: Instagram and Facebook (club accounts often post sessions there), the ITF BT10 calendar for CA events (already tracked in `docs/beach_tennis_watch.md`), and in-person asks. Sheet changes proposed: none.
