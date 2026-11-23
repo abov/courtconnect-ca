@@ -119,7 +119,7 @@ Remaining families, not yet searched per region (first pass 2026-10-10 only, Cal
 
 Remaining families, not yet searched per region (first pass 2026-10-10 only, California): wall and handball-like (Ricochet, Racket Hockey, Wall Pong, Wackitball, Smolball, Table Squash, String Paddleball); tennis-like (Floor Pro Mini Tennis, Miniten Thug, Naked Tennis, Road Tennis, Street Tennis, Street Racket, Tennis Baseball, Totem Tennis, Padel Pingpong, Jokari); beach, soccer-tennis and novelty (360Ball, Qianball, Taiji Bailong, Riftball, Frescoball, Smashball, Pro Sunball, Toccer).
 
-## Sixth pass, 2026-11-22: Beach Tennis, per region
+## Seventh pass, 2026-11-22: Beach Tennis, per region
 
 Scope: the only sheet sport not covered by the other family passes or earlier ones is Beach Tennis (thin: 9 venues, 0 courts). Kadima/Matkot is not its own sheet row (Smashball carries it, tennis-like pass). Standard web search only, public pages, one query per region group. "None found" means these searches showed none, not that none exists. The venues already pinned stand (Santa Monica Tower 26, Manhattan Beach 7th St, Hermosa Beach 14th St, SF Bay Area four sfbeachtennis.com spots, San Diego Ocean Beach, Giammalva in Spring TX, Active Beach House in Cancún).
 
