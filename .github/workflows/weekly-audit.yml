@@ -1,0 +1,29 @@
+name: Weekly audit
+
+# ADR 0019 safety net, rule-based (docs/merge_gate_threat_model.md gap 4). Mondays: opens one issue listing last
+# week's merged PRs that touched guarded paths or merged without a green dbt-build, plus a reproducible 10% sample
+# to spot-check. Also the "no scheduled-chain PR in 20 days" alert: the run fails (and GitHub emails the owner) when it fires.
+on:
+  schedule:
+    - cron: '0 16 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Digest and chain alert
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch --no-tags --shallow-since="10 days ago" origin main
+          python ci/weekly_audit.py --post
