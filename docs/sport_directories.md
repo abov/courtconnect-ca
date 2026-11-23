@@ -188,7 +188,7 @@ Sheet changes proposed in the PR description, none made here.
 Remaining families not yet searched per region: none of the 2026-10-10 groups are left. Still not searched on their own: Loboton, Micro Pickleball, Spec Tennis, Teqis and Teqpong (they have venues).
 
 
-## Fifth pass, 2026-11-23: OSM keyword sweep, every sport, Mexico and the US regions
+## Tenth pass, 2026-11-23: OSM keyword sweep, every sport, Mexico and the US regions
 
 `ingestion/oneoff/keyword_sport_sweep.py` queried Overpass over MX, CA, NV, OR, WA, HI, AZ, NM and TX for `sport=` values and English and Spanish `name~` / `description~` keywords of every sport in `all_racquet.csv`, then kept hits with no pin for that sport within 200 m. Tennis, table tennis and pickleball `sport=` tags were queried separately for MX only (outside the metros the extract never read them). OSM only; no page was read for any new pin.
 
