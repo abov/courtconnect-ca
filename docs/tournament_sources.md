@@ -263,3 +263,13 @@ Last run: 2026-11-16. Added 1 pin; no events. Cloud run, no build or export run 
 - **Instagram sweep: needs browser, not read** (instagram.com/btcaliclub returned HTTP 429; not retried). New-venue handles and the player-group recheck not done.
 - **dailyracquetball.com Nevada list read:** all but Mesquite Recreation Center already pins or leads; Mesquite confirmed on the city's own page (2 racquetball courts) and added as a pin. Colleges, California page, reddit thread (needs browser) and national-body finders not read.
 - **Not read:** state "Recheck next cycle" lists, social-series recheck and discovery rotation (last venue covered: none), walls pass, further sport searches. Court-discovery rotation: last sport covered = Squash (unchanged; 1 search run).
+
+## Pass 15 (2026-11-23)
+
+### Part 1 (tennis, pickleball, ITF)
+Last run: 2026-11-23 (started by hand, not on the 1st/15th). Added 0 events; re-dated 17 rows whose source still shows the same dates.
+- **Browser-only, skipped in cloud:** USTA SoCal playtennis search, itftennis.com fact sheets.
+- **Read, unchanged:** ppatour.com/schedule (all CA rows, Seattle, Gilbert, Mesa, Houston match); USA Pickleball Golden Ticket page (San Diego, Las Vegas, Silicon Valley Jul 5-11 at The HUB, APP Sacramento Open, APP SoCal Open all match; Silicon Valley row is back on the page); USA Pickleball California list (Coachella Valley Grand Prix matches; no NV rows); USTA NorCal 2026 sheet (no new Level 4-5/Open row); bounce.game Las Vegas/Reno (Toys for Tots already in; Dink The Halls Reno Dec 27-28 still a lead, no venue).
+- **Lead (not added):** "Serve Hope, Rally Together 2026", Dec 12 2026, The Picklr - Fairfield, 1574 Gateway Blvd, Fairfield CA (USA Pickleball list, MMP sanctioned). Event page returned empty and no pin exists for the club, so no row.
+- **ITF (CA + NV):** one web search; still no 2027 CA/NV ITF event (USTA bid document lists only preference slots, W35 Jan 25, M25 Feb 15).
+- **Failed / not read:** USTA SoCal search, itftennis.com, USTA Intermountain, USA Pickleball event page for Fairfield (empty).
