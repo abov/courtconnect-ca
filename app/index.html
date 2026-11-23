@@ -895,7 +895,7 @@ function renderWatchList() {
 // ---------- hitting walls (ADR 0032: a wall is a venue) ----------
 // A hitting wall that stands at no listed court venue is a venue of kind kd "w" (details in v.hw); walls at a court venue are v.wl on that venue. The wall type decides the sports
 // (export: seed wall_type_sports.csv, flag 128 in p = inferred from the wall type, never confirmed play), so there is no wall-specific sport table here.
-const WALL_TYPE = {one_wall: "One-wall", three_wall: "Three-wall", backboard: "Backboard", other: "Wall"};
+const WALL_TYPE = {one_wall: "One-wall", three_wall: "Three-wall", backboard: "Backboard", fronton: "Frontón", other: "Wall"};
 const WALL_CONF = {reported: "Reported by a player, not independently verified", official: "Confirmed from an official source", tagged: "From OpenStreetMap tags", inferred: "Inferred"};
 // Who may use a wall: the same access vocabulary as venues (public / customers / private / members), blank = not known.
 const WALL_ACCESS_LABEL = {public: "Public", customers: "Customers only", private: "Private, not open to walk-up use", members: "Members only"};
@@ -905,7 +905,7 @@ const isWall = v => v.kd === "w";
 const SOLO_TYPE = new Set(["one_wall", "backboard", "three_wall"]);
 const soloType = types => types.split(";").some(t => SOLO_TYPE.has(t));
 // Venue popup line: walls standing at this court venue (v.wl = [[types, walls, confirmation, access], ...], from int_wall_venue_link).
-const WALL_LINK_TYPE = {one_wall: "one-wall", three_wall: "three-wall", backboard: "backboard", other: "handball-type"};
+const WALL_LINK_TYPE = {one_wall: "one-wall", three_wall: "three-wall", backboard: "backboard", fronton: "fronton", other: "handball-type"};
 const WALL_LINK_CONF = {tagged: "from OpenStreetMap tags, not checked", inferred: "inferred", reported: "reported, not verified", official: "official source"};
 function wallLinkText(wl) {
   return wl.map(([types, n, cf]) => n + " " + types.split(";").map(t => WALL_LINK_TYPE[t] || t).join(" / ") + " (" + (WALL_LINK_CONF[cf] || cf) + ")").join("; ");

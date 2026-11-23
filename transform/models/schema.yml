@@ -533,7 +533,7 @@ seeds:
         tests:
           - accepted_values:
               arguments:
-                values: ['one_wall', 'three_wall', 'backboard']
+                values: ['one_wall', 'three_wall', 'backboard', 'fronton']
       - name: confirmation
         tests:
           - accepted_values:
