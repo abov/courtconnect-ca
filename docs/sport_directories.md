@@ -17,7 +17,6 @@ First pass, 2026-10-10: a general web search per sport for a California club or 
 | Tamburello | No California club found. Third pass (2026-11-22): no US or Mexico club found. | None planned. |
 | Touchtennis | Searched on its own 2026-10-10: official site is touchtennis.com, but its venue finder and rules point to the UK section; no US body or California venue list found. | None planned. |
 
-
 ## Second pass, 2026-10-10
 
 ### USA Racquetball outdoor court list: terms
@@ -115,10 +114,6 @@ Mexico (Spanish search for squash de mesa, Jokari, hockey de raqueta): only ordi
 
 Not checked: Facebook groups and Instagram (not readable as public pages), school PE-teacher forums, the sports' own sites that did not load, and non-English searches beyond the one Spanish query.
 
-Remaining families, not yet searched per region (first pass 2026-10-10 only, California): tennis-like (Floor Pro Mini Tennis, Miniten Thug, Naked Tennis, Road Tennis, Street Tennis, Street Racket, Tennis Baseball, Totem Tennis, Padel Pingpong); beach, soccer-tennis and novelty (360Ball, Qianball, Taiji Bailong, Frescoball, Smashball, Pro Sunball, Toccer).
-
-Remaining families, not yet searched per region (first pass 2026-10-10 only, California): wall and handball-like (Ricochet, Racket Hockey, Wall Pong, Wackitball, Smolball, Table Squash, String Paddleball); tennis-like (Floor Pro Mini Tennis, Miniten Thug, Naked Tennis, Road Tennis, Street Tennis, Street Racket, Tennis Baseball, Totem Tennis, Padel Pingpong, Jokari); beach, soccer-tennis and novelty (360Ball, Qianball, Taiji Bailong, Riftball, Frescoball, Smashball, Pro Sunball, Toccer).
-
 ## Seventh pass, 2026-11-22: Beach Tennis, per region
 
 Scope: the only sheet sport not covered by the other family passes or earlier ones is Beach Tennis (thin: 9 venues, 0 courts). Kadima/Matkot is not its own sheet row (Smashball carries it, tennis-like pass). Standard web search only, public pages, one query per region group. "None found" means these searches showed none, not that none exists. The venues already pinned stand (Santa Monica Tower 26, Manhattan Beach 7th St, Hermosa Beach 14th St, SF Bay Area four sfbeachtennis.com spots, San Diego Ocean Beach, Giammalva in Spring TX, Active Beach House in Cancún).
@@ -135,3 +130,33 @@ Scope: the only sheet sport not covered by the other family passes or earlier on
 | MX | None found beyond Active Beach House (pinned) and the 2025 Cancún Open already in `venue_leads.csv`. Spanish searches ("tenis de playa") for Tijuana, Rosarito, Ensenada, La Paz, Cabo, Mazatlán, Puerto Vallarta, Sayulita, Playa del Carmen, Tulum, Cozumel returned only conventional tennis, padel and surf. |
 
 Not checked: Instagram and Facebook (club accounts often post sessions there), the ITF BT10 calendar for CA events (already tracked in `docs/beach_tennis_watch.md`), and in-person asks. Sheet changes proposed: none.
+
+## Eighth pass, 2026-11-22: tennis-like and beach/novelty sports, per sport and region
+
+Each of Street Tennis, Road Tennis, Street Racket, Tennis Baseball, Naked Tennis, Floor Pro Mini Tennis, Miniten Thug, Totem Tennis, Padel Pingpong, 360Ball, Qianball, Taiji Bailong, Frescoball/Frescobol, Smashball (Kadima/Matkot), Pro Sunball and Toccer searched on its own (standard web search, public pages only) with the region names CA, NV, OR, WA, HI, AZ, NM, TX and Mexico in the query, plus follow-ups for Miniten (US naturist clubs), Platform Tennis (APTA public-access list, the club's own page) and a Spanish-language search for Mexico. One search per sport, not one per sport per region, so a small local group could still be missed. "No result found" means these searches showed none, not that none exists. One pin was added (Platform Tennis, Arizona); no lead.
+
+| Sport | Pages read | Result (searched 2026-11-22; CA, NV, OR, WA, HI, AZ, NM, TX, MX) |
+|---|---|---|
+| Street Tennis | Search results (Meetup, USTA SoCal, club leagues) | No result found for the sport. Only ordinary tennis leagues came back; Club Volley (Los Angeles) is an informal open-play community on public courts, not a named Street Tennis group, so it was not used. Already in `sport_play_anywhere.csv`. |
+| Road Tennis | Search results (USTA Hawaii, club pages), Spanish-language search for Mexico | No result found in any covered region. No US or Mexico club or Korean-American association page mentioned the sport. A Korean-language search was not run. Already in `sport_play_anywhere.csv`. |
+| Street Racket | Search results (Meetup topic pages) | No result found: no page mentioning the sport. Already in `sport_play_anywhere.csv`. |
+| Tennis Baseball | Search results | No result found: only ordinary baseball and tennis pages. Already in `sport_play_anywhere.csv`. |
+| Naked Tennis | topendsports.com; search results | No result found in any covered region. It is a net-less tennis variant invented in Italy in 2020 (despite the name, not about nudity); the only event hit was an unrelated fashion party in Switzerland. Already in `sport_play_anywhere.csv`. |
+| Floor Pro Mini Tennis | Search results (VersaCourt and other floor-tile sellers) | No result found in any covered region. Only retail mini-tennis court tiles; no club or court. |
+| Miniten Thug | Wikipedia; NZ Naturist Federation page; naturist-resort search | No result found in any covered region. Miniten is a naturist sport played in the UK and New Zealand (the "thug" is the bat). No US or Mexico naturist club listing mentioned a Miniten court; the AANR club directory was not read. |
+| Totem Tennis | Search results | No result found: no page mentioning the sport. Nothing mapped yet in `coverage_snapshot.md`; no US or Mexico page found. |
+| Padel Pingpong | padelpingpong.squarespace.com (official site and news) | No result found in any covered region. Courts reported by the sport's site: Italy (Caserta), the Netherlands (Nijkerk), Georgia (Padel Island), Denmark (Bork) and Colombia (partnership). None in the US or Mexico. Recheck the news page quarterly: it is a new padel hybrid that may reach US padel clubs. |
+| 360Ball | topendsports.com; search results | No result found in any covered region. Created in South Africa; the only other hits were the unrelated 360Player club software. |
+| Qianball | Wikipedia; topendsports.com; lex.dk | No result found in any covered region. Organised in China and Denmark (KFUM); no US or Mexico club. Chinese-language search not run. |
+| Taiji Bailong | Same search as Qianball | No result found in any covered region. No page found for a US or Mexico group. |
+| Frescoball / Frescobol | Search results, topendsports.com, Spanish-language search for Mexico | No result found in any covered region: no club or tournament; only beach volleyball, pickleball and beach tennis events. It is in `sport_play_anywhere.csv` (any beach). A Portuguese-language search for Brazilian-American beach groups was not run. |
+| Smashball (Kadima / Matkot) | Wikipedia; topendsports.com; Hadassah Magazine | No result found in any covered region. Matkot is a recreational beach game in Israel (called kadima in the US); no organised club or tournament in CA, HI, TX, AZ or Mexico. In `sport_play_anywhere.csv` (any beach). |
+| Pro Sunball | Search results | No result found: only an unrelated basketball event named "Sunball Classic" (South Carolina). In `sport_play_anywhere.csv`. |
+| Toccer | Search results | No result found: no page mentioning the sport (TOCA Soccer is an unrelated indoor-soccer company). In `sport_play_anywhere.csv`. |
+| Platform Tennis | platformtennis.org public-access list (static, by state); Sun City West Tennis Club pages (tennis.scwclubs.com/2023-platform-tennis/, /benefits-of-club-membership/); Yourvalley.net coverage | **One find, pinned: Sun City West Tennis Complex, Sun City West, AZ** (`az-sun-city-west-platform-tennis`, official, 4 courts, club members, drop-in play listed daily). The APTA list names no site in CA, NV, OR, WA, HI, NM, TX or Mexico; it lists only public-access courts, so private clubs are missing by design (it does not list Lagunitas Country Club, Ross CA, which stays an unconfirmed lead pin). Seattle stays a community lead (no deck built). |
+
+Not checked: the sports' own sites where none was found, Facebook groups and Instagram (not readable as public pages), the AANR naturist directory, and Chinese, Korean and Portuguese-language searches.
+
+Sheet changes proposed in the PR description, none made here.
+Remaining families not yet searched per region: none of the 2026-10-10 groups are left. Still not searched on their own: Loboton, Micro Pickleball, Spec Tennis, Teqis and Teqpong (they have venues).
+
