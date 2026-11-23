@@ -6,6 +6,6 @@ torchvision>=0.17
 rasterio>=1.3
 pystac-client>=0.7
 planetary-computer>=1.0
-pyproj>=3.6
+pyproj>=3.8.0
 shapely>=2.0
 pillow>=13.0.0
