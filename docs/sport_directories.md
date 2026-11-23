@@ -187,3 +187,13 @@ Sheet changes proposed in the PR description, none made here.
 
 Remaining families not yet searched per region: none of the 2026-10-10 groups are left. Still not searched on their own: Loboton, Micro Pickleball, Spec Tennis, Teqis and Teqpong (they have venues).
 
+
+## Tenth pass, 2026-11-23: OSM keyword sweep, every sport, Mexico and the US regions
+
+`ingestion/oneoff/keyword_sport_sweep.py` queried Overpass over MX, CA, NV, OR, WA, HI, AZ, NM and TX for `sport=` values and English and Spanish `name~` / `description~` keywords of every sport in `all_racquet.csv`, then kept hits with no pin for that sport within 200 m. Tennis, table tennis and pickleball `sport=` tags were queried separately for MX only (outside the metros the extract never read them). OSM only; no page was read for any new pin.
+
+- **Added (Mexico, tag-only, `reported`):** 95 pins: Padel 49, Table Tennis 20, Pickleball 16, Badminton 10. All say "Mapped on OpenStreetMap"; sport, use and access are not confirmed. Hotel courts say guests-only is likely.
+- **Not added:** `sport=paddle` alone (ambiguous), padel tags on frontón courts, resort ping pong, street and shop names, and padel/pop-tennis/squash tags on school and park pitches in CA and AZ (OSM padel tags there are unreliable, see the padel audit). 
+- **No OSM hit by `sport=`, name or description in any covered region (searched 2026-11-23):** every sport in `all_racquet.csv` not named below, including Tamburello, Soft Tennis, Crossminton, Touchtennis, Totem Tennis, Frescoball, Smashball, Jokari, Hand Tennis, Real Tennis (only a bank named "Real Tennis" in Yucatan), Table Squash, Tennis Baseball, 1/3/4-wall Paddleball and the never-searched sports above.
+- **Hits too weak to pin:** Ricochet (a word), Street Tennis, Road Tennis, Skyball (artwork), Pang Pong (a name).
+- **Still unswept:** MX `sport=tennis` outside the metros; the 150+ Spanish "pelota/paleta" name hits in MX (mostly not courts); the US-region candidates (squash, badminton, pickleball names in AZ, WA, TX) are listed in the PR description for a follow-up.
