@@ -134,6 +134,11 @@ def main() -> None:
     metrics = {"date": date.today().isoformat(), "labels": len(y), "confirms": int(y.sum()), "rejects": int(len(y) - y.sum()),
                "loo_accuracy": round(float(((p_loo >= 0.5) == y).mean()), 3), "loo_auc": round(float(roc_auc_score(y, p_loo)), 3),
                "likely_calls": int(sure.sum()), "likely_right": round(float(((p_loo[sure] >= 0.5) == y[sure]).mean()), 3) if sure.any() else ""}
+    # skew check: a headline number can hide one sport or one verdict doing much worse than the rest
+    hit = pd.Series((p_loo >= 0.5) == y, index=labels.index)
+    by = hit.groupby(labels["sport_name"]).agg(["size", "mean"]).sort_values("size", ascending=False)
+    print("by sport: " + ", ".join(f"{s} {r['mean']:.0%} (n={int(r['size'])})" for s, r in by.head(6).iterrows()))
+    print("by verdict: " + ", ".join(f"{v} {hit[labels['verdict'] == v].mean():.0%}" for v in ("confirm", "reject")))
     wrong = labels.loc[(p_loo >= 0.5) != y, ["name", "sport_name", "verdict"]]
     if len(wrong):
         print("missed:", "; ".join(f"{r.name} / {r.sport_name} ({r.verdict})" for r in wrong.itertuples()))
