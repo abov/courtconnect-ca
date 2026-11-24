@@ -26,6 +26,16 @@ SPORT_KEYS = [
 
 # leisure types that are a court ('pitch') or a facility that contains/names courts
 LEISURE = "pitch|sports_centre|sports_hall|fitness_centre|stadium"
+# Also kept when the feature carries a racket sport= tag (2026-11-24: Larsen Pickleball Courts SF is landuse=recreation_ground +
+# sport=pickleball, so it never reached the extract). Stored as leisure=recreation_ground / park etc.; stg_osm_courts treats
+# every non-pitch as a facility. Shops and unlabelled nodes stay out (they need one of these tags).
+LEISURE_EXTRA = "park|recreation_ground|pitch_area|court"
+
+
+def keeps(tags: dict) -> bool:
+    """Tag test the Overpass query below applies (also used by osm_snapshot_diff for the sport/leisure check)."""
+    return (tags.get("leisure") in LEISURE.split("|") + LEISURE_EXTRA.split("|") or tags.get("club") == "sport"
+            or tags.get("landuse") == "recreation_ground")
 
 FIELDS = ["osm_type", "osm_id", "lat", "lon", "name", "sport", "surface", "lit", "access", "fee", "operator",
           "courts", "leisure", "indoor", "covered", "building", "website", "phone", "opening_hours",
@@ -40,6 +50,8 @@ def build_query(bbox) -> str:
     (
       nwr["sport"~"{sport_re}"]["leisure"~"^({LEISURE})$"];
       nwr["sport"~"{sport_re}"]["club"="sport"];
+      nwr["sport"~"{sport_re}"]["leisure"~"^({LEISURE_EXTRA})$"];
+      nwr["sport"~"{sport_re}"]["landuse"="recreation_ground"];
     );
     out center tags;
     """
@@ -53,7 +65,7 @@ def to_row(el: dict, ts: str) -> dict:
         "lat": el.get("lat", c.get("lat")), "lon": el.get("lon", c.get("lon")),
         "name": t.get("name"), "sport": t.get("sport"), "surface": t.get("surface"), "lit": t.get("lit"),
         "access": t.get("access"), "fee": t.get("fee"), "operator": t.get("operator"), "courts": t.get("courts"),
-        "leisure": t.get("leisure") or ("club" if t.get("club") else None),
+        "leisure": t.get("leisure") or ("club" if t.get("club") else None) or ("recreation_ground" if t.get("landuse") == "recreation_ground" else None),
         "indoor": t.get("indoor"), "covered": t.get("covered"), "building": t.get("building"),
         "website": t.get("website") or t.get("contact:website"),
         "phone": t.get("phone") or t.get("contact:phone"),
