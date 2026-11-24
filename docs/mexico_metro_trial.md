@@ -69,3 +69,90 @@ No new pins in this PR (`mx-verified-venues` is adding Mexico venues in parallel
 **Update 2026-11-12:** one rule for every region (owner, ADR 0034): the automatic border-metro pins show, labelled inferred (Mexico 471 to 595 with Monterrey's automatic layer).
 
 **Update 2026-11-24 (Tijuana, Tecate, Rosarito pass, partial):** Flou Padel Club, New City (`playtomic.com/clubs/flou-padel-club-new-city`) still returns HTTP 404 (browser, en and es paths, direct fetch, and a web-fetch check), so it is **not promoted**; it stays a lead in `venue_leads.csv`. A search snippet shows a Playtomic listing with 07:00-23:00 slots, but that is not evidence. Beach tennis, pop tennis, frontenis/paleta, and paddleball or racquetball: no courts found in Tijuana, Tecate or Rosarito (Rosarito's Punta Azul centre hosts 2026 tennis tournament plans and already has its pickleball on the map). Jai Alai Palace is closed (not pinned). No seed changes in this PR.
+
+## CDMX sport-by-sport sweep (2026-11-24, PR for funny-maxwell)
+
+One line per `all_racquet.csv` sport. [x] = pinned, lead added, searched with none found, covered by existing pins, or skipped by scope. [ ] = not searched this pass (gap, for a follow-up). Pins: none added this pass: no candidate has a reliable point (the Nominatim geocoder resolves street names, not house numbers), so all new candidates are leads. Named-pin and override work on unnamed automatic CDMX pins was not started.
+
+- [ ] Badminton: lead added: mx-cdmx-p6-club-france-badminton (query: bádminton canchas CDMX). Centro Asturiano badminton already pinned
+- [x] Beach Tennis: searched, none found (query: beach tennis canchas CDMX)
+- [x] Padel: skipped: padel covered by 77+ pins (scope: existing seeds)
+- [x] Pickleball: covered by existing pins and mx-cdmx-pickleball-public-ymca; not re-searched this pass
+- [x] Pop Tennis: searched, none found (query: pop tennis canchas CDMX)
+- [x] Racquetball: searched, none found (queries: frontón raquetbol CDMX racquetball; paddleball frontenis racquetball 2026)
+- [x] Real Tennis: searched, none found (grouped: ball badminton, table squash, real tennis, jeu de paume)
+- [ ] Squash: lead added: mx-cdmx-p6-squash-73-san-rafael (queries: canchas de squash CDMX; Squash 73). ProSquash, Sportium and existing pins already on the map
+- [x] Table Tennis: covered by 5 existing CDMX pins; not re-searched this pass
+- [x] Tennis: leads added: mx-cdmx-p6-teniscapa-coyoacan, mx-cdmx-p6-tennis-itto-coapa, mx-cdmx-p6-escuela-mexicana-de-tenis, mx-cdmx-p6-club-de-tenis-tepepan, mx-cdmx-p6-club-de-tenis-lomas (queries: canchas de tenis CDMX club; Club de Tenis Lomas; Tepepan; Tennis itto Coapa; Escuela Mexicana de Tenis; El Árbol Popotla; Teniscapa). Existing pins cover Chapultepec, Mundet, Centro Libanés, Hyatt, Campestre, Grand Slam
+- [x] 1-wall Paddleball: searched, none found (same racquetball query)
+- [x] 3-wall Paddleball: searched, none found (same racquetball query)
+- [x] 4-wall Paddleball: searched, none found (same racquetball query)
+- [x] Australian Racquetball: searched, none found (same racquetball query)
+- [x] Ball Badminton: searched, none found (grouped: ball badminton, table squash, real tennis)
+- [x] Basque Pelota: Frontenis: skipped: frontón variants per existing seeds
+- [x] Basque Pelota: Grand Chistera: skipped: frontón variants per existing seeds
+- [x] Basque Pelota: Jai Alai: skipped: frontón variants per existing seeds
+- [x] Basque Pelota: Joko Garbi: skipped: frontón variants per existing seeds
+- [x] Basque Pelota: Pala Corta: skipped: frontón variants per existing seeds
+- [x] Basque Pelota: Paleta Cuero: skipped: frontón variants per existing seeds
+- [x] Basque Pelota: Paleta Frontón: skipped: frontón variants per existing seeds
+- [x] Basque Pelota: Paleta Goma: skipped: frontón variants per existing seeds
+- [x] Basque Pelota: Xare: skipped: frontón variants per existing seeds
+- [ ] Downside Ball Game: not searched this pass (no query run)
+- [x] Frescoball: searched, none found (query: frescoball tenis criollo CDMX)
+- [ ] Naked Tennis: not searched this pass (no query run)
+- [x] Road Tennis: searched, none found (same grouped query)
+- [x] Smashball: searched, none found (grouped: Smashball, Touchtennis, Wackitball, Smolball, Skyball, Ricochet, Rapidball)
+- [ ] Spec Tennis: not searched this pass (no query run)
+- [x] Tamburello: searched, none found (grouped: tenis de mano, Tamburello, Jokari, Road tennis, Totem tennis)
+- [x] Riftball: searched, none found (same grouped query)
+- [x] 360Ball: searched, none found (same grouped query)
+- [ ] Battlebird: not searched this pass (no query run)
+- [x] Biraq: searched, none found (same grouped query)
+- [x] Eclipseball: searched, none found (same grouped query)
+- [ ] Floor Pro Mini Tennis: not searched this pass (no query run)
+- [ ] Frescotennis: not searched this pass (no query run)
+- [ ] Goodminton: not searched this pass (no query run)
+- [x] Hand Tennis: searched, none found (same grouped query; frontón 'Mano' category only)
+- [ ] Indiaca Tennis: not searched this pass (no query run)
+- [ ] Jazzminton: not searched this pass (no query run)
+- [x] Jokari: searched, none found (same grouped query)
+- [ ] Ketball: not searched this pass (no query run)
+- [ ] Knuckle Racket: not searched this pass (no query run)
+- [ ] Lite Tennis: not searched this pass (no query run)
+- [x] Loboton: searched, none found (same grouped query)
+- [ ] Micro Pickleball: not searched this pass (no query run)
+- [ ] Miniten Thug: not searched this pass (no query run)
+- [x] Outdoor Racquetball: searched, none found (same racquetball query)
+- [ ] Padel Pingpong: not searched this pass
+- [ ] Pang Pong: not searched this pass (no query run)
+- [ ] Pitton: not searched this pass (no query run)
+- [ ] Pro Sunball: not searched this pass (no query run)
+- [x] Qianball: searched, none found (same grouped query)
+- [ ] Racket Hockey: not searched this pass (no query run)
+- [x] Rapidball: searched, none found (same grouped query)
+- [x] Ricochet: searched, none found (same grouped query)
+- [ ] Shuttleball: not searched this pass (no query run)
+- [x] Skyball: searched, none found (same grouped query)
+- [x] Smolball: searched, none found (same grouped query)
+- [ ] Soft Tennis: not searched this pass (no query run)
+- [ ] Speedball: not searched this pass (no query run)
+- [ ] Street Racket: not searched this pass (no query run)
+- [ ] Street Tennis: not searched this pass (no query run)
+- [x] String Paddleball: searched, none found (same racquetball query)
+- [x] Table Squash: searched, none found (grouped: table squash query)
+- [ ] Taiji Bailong: not searched this pass (no query run)
+- [x] Tenis criollo: searched, none found (same frescoball/criollo query)
+- [ ] Tennis Baseball: not searched this pass (no query run)
+- [ ] Tennis Triples: not searched this pass (no query run)
+- [x] Toccer: searched, none found (grouped: Toccer, Eclipseball, Riftball, Biraq, Qianball, Loboton, 360Ball)
+- [x] Totem Tennis: searched, none found (same grouped query)
+- [x] Touchtennis: searched, none found (same grouped query)
+- [x] Wackitball: searched, none found (same grouped query)
+- [ ] Wacquetball: not searched this pass (no query run)
+- [ ] Wall Pong: not searched this pass (no query run)
+- [ ] Crossminton: not searched this pass (no query run)
+- [x] Platform Tennis: searched, none found (query: tenis de plataforma platform tennis CDMX)
+- [ ] Teqis: not searched this pass (no query run)
+- [ ] Teqpong: not searched this pass (no query run)
+- [ ] Typti: not searched this pass (no query run)
