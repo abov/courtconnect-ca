@@ -2,7 +2,7 @@
 
     python ingestion/search_interest_report.py        (or: make interest)
 
-Reads marts.mart_search_vs_coverage in courtconnect.duckdb (run `dbt build` first; the warehouse is not changed). Writes docs/search_interest_vs_coverage.csv,
+Also prints pins per million people per region (marts.mart_pins_per_million). Reads marts.mart_search_vs_coverage in courtconnect.duckdb (run `dbt build` first; the warehouse is not changed). Writes docs/search_interest_vs_coverage.csv,
 one row per metro and sport with data: no venue rows, commit it after a refresh (the Pages build has no warehouse and the dashboard reads this file).
 Interest is relative and sampled, not volumes; 'thin' sports are noisy. gap_score compares interest with the sport's share of the metro's pins,
 both against the average metro (mart_search_vs_coverage). A gap candidate is a place to look for missing venues, not proof of one.
@@ -60,6 +60,16 @@ def main() -> None:
     print(table(con, """select metro_name as metro, sport_name as sport, gap_score, interest_vs_avg, supply_index, venues_found as venues
                         from marts.mart_search_vs_coverage where confidence = 'thin' and gap_score >= 2 and interest_vs_avg >= 100
                         order by gap_score desc limit 8"""))
+    print("## Pins per million people, by region (supply, not interest: covers regions Trends does not; 2020 census, state/country level)\n")
+    print(table(con, """select region,
+                               max(case when is_total then pins end) as pins,
+                               max(case when is_total then pins_per_million end) as per_million,
+                               max(case when sport_name = 'Tennis' then pins_per_million end) as tennis,
+                               max(case when sport_name = 'Pickleball' then pins_per_million end) as pickleball,
+                               max(case when sport_name = 'Padel' then pins_per_million end) as padel,
+                               max(case when sport_name = 'Badminton' then pins_per_million end) as badminton,
+                               max(case when sport_name = 'Table Tennis' then pins_per_million end) as table_tennis
+                        from marts.mart_pins_per_million group by 1 order by per_million desc"""))
     print("## Venues near each metro anchor, by sport (busiest sports)\n")
     print(table(con, """select metro_name as metro,
                                max(case when sport_name = 'Tennis' then venues_found end) as tennis,

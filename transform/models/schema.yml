@@ -212,6 +212,19 @@ seeds:
       - name: verified_on
         tests: [not_null]
 
+  - name: region_population
+    description: >
+      Population per region (state or country, 2020 census; sources in the seed). Denominator for mart_pins_per_million. Not metro level.
+    columns:
+      - name: region
+        tests: [unique, not_null]
+      - name: population
+        tests: [not_null]
+      - name: year
+        tests: [not_null]
+      - name: source
+        tests: [not_null]
+
   - name: search_metros
     description: >
       The 14 Google Trends metros that cover California and Nevada (Google's metro codes) with one anchor city each. A venue belongs to the nearest
@@ -1105,6 +1118,20 @@ models:
                 values: ['covered', 'sparse', 'possible_only', 'tagged_none_found', 'not_found']
       - name: recommended_next_source
         data_type: varchar
+
+  - name: mart_pins_per_million
+    description: >
+      Pins per million people for every region, in total ('All sports') and per sport. Measures supply, not interest: a stand-in for search interest where
+      Google Trends has no data (it covers CA + NV only). Planning signal, not exported to the app.
+    columns:
+      - name: region
+        tests: [not_null]
+      - name: sport_name
+        tests: [not_null]
+      - name: pins
+        tests: [not_null]
+      - name: pins_per_million
+        tests: [not_null]
 
   - name: mart_search_vs_coverage
     description: >
