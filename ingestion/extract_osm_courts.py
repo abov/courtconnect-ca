@@ -29,6 +29,7 @@ LEISURE = "pitch|sports_centre|sports_hall|fitness_centre|stadium"
 # Also kept when the feature carries a racket sport= tag (2026-11-24: Larsen Pickleball Courts SF is landuse=recreation_ground +
 # sport=pickleball, so it never reached the extract). Stored as leisure=recreation_ground / park etc.; stg_osm_courts treats
 # every non-pitch as a facility. Shops and unlabelled nodes stay out (they need one of these tags).
+# Checked against real extracts 2026-11-24 (AZ full, SF bbox): few rows, no noise; park = 0 in AZ, 1 in SF (Helen Wills Park, real tennis courts).
 LEISURE_EXTRA = "park|recreation_ground|pitch_area|court"
 
 
