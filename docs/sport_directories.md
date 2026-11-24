@@ -199,6 +199,12 @@ Remaining families not yet searched per region: none of the 2026-10-10 groups ar
 - **Hits too weak to pin:** Ricochet (a word), Street Tennis, Road Tennis, Skyball (artwork), Pang Pong (a name).
 - **Still unswept:** MX `sport=tennis` outside the metros; the 150+ Spanish "pelota/paleta" name hits in MX (mostly not courts); the US-region candidates (squash, badminton, pickleball names in AZ, WA, TX) are listed in the PR description for a follow-up.
 
+## Twelfth pass, 2026-11-23: US triage of the keyword sweep (CA, OR, WA, HI, AZ, TX)
+
+- **Added (US, tag-only, `reported`):** 29 pins from OSM tags or names only (no page read): Pickleball 18, Badminton 5, Racquetball 4, Squash 2 (AZ 5, CA 10, HI 1, OR 1, TX 8, WA 5). Sport, use and access are not confirmed.
+- **Not added:** all 70 `sport=padel` pitches (unreliable, same as the padel audit); `sport=squash` and `paddle_tennis` tags on park and school pitches, and badminton/pickleball tags 1 to 30 m from an existing pin (the venue exists, the sport tag is the only gap); Squash Blossom and Ricochet street names; "pelota/paleta" hits (ice-cream bars, streets, schools); Seal Beach/Newport Beach "Beach Tennis" name hits; Ladera and Sandpipers communities; the Naval Base San Diego racquetball node (military).
+- **Still unswept:** NV (no hits in the candidate file); same-venue sport tags (pickleball, pop tennis, badminton on parks that have only a tennis pin, e.g. Larsen Park SF, Public Pickleball and Badminton Courts in Port Townsend); MX `sport=tennis` outside the metros.
+
 ## Eleventh pass, 2026-11-23: the "not re-searched" sports (Ball Badminton, Battlebird, Speedball, Shuttleball)
 
 Scope: the four of the 19 sports left out of the ninth pass with the most plausible US club activity, through sources earlier passes skipped: Meetup and Facebook (web search limited to those domains), Tamil and South Asian community angles, federation pages. Standard search, 6 searches.
