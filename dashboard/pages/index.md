@@ -22,9 +22,9 @@ order by 1
 ```
 
 ```sql coverage
-select sport, venues, status
+select sport, venues, status, next_step
 from courtconnect.sport_coverage
-order by venues desc, sport
+order by case status when 'covered' then 6 when 'sparse' then 1 when 'possible_only' then 2 when 'tagged_none_found' then 3 else 4 end, venues desc, sport
 ```
 
 ```sql status_counts
@@ -329,12 +329,13 @@ Sports grouped by how well they are covered.
 
 <BarChart data={status_counts} x=status y=sports title="Sports by coverage status" />
 
-Some sports share one number because they are assumed to be playable on tennis courts. The map marks those as inferred. A venue that hosts several sports counts once for each, so the table does not add up to the venue total.
+Some sports share one number because they are assumed to be playable on tennis courts. The map marks those as inferred. A venue that hosts several sports counts once for each, so the table does not add up to the venue total. The table lists the thinnest sports first, with the next source to try for each.
 
 <DataTable data={coverage} rows=15 search=true>
   <Column id=sport />
   <Column id=venues fmt=num0 />
   <Column id=status />
+  <Column id=next_step title="What to do next" wrap=true />
 </DataTable>
 
 ## How it is made
