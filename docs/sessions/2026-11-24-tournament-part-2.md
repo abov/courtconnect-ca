@@ -1,0 +1,1 @@
+Tournament Part 2, 2026-11-24: added 5 events (WA racquetball, OCTTA x2, 888TTC x2); 33 rows re-dated. Leads: SoCal Dec Open San Diego (no pin), LATTA 2027 (no form). Club Locker skipped (browser-only).
