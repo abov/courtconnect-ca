@@ -95,9 +95,9 @@ def diff(old: dict, new: dict, old_ext: str, new_ext: str) -> list[dict]:
 
 def is_racket_court(tags: dict) -> bool:
     """Would extract_osm_courts.py's query still return an element with these tags?"""
-    from extract_osm_courts import LEISURE, SPORT_KEYS   # lazy: it pulls in requests, which the offline CI step does not have
+    from extract_osm_courts import SPORT_KEYS, keeps   # lazy: it pulls in requests, which the offline CI step does not have
     sports = {s.strip() for s in (tags.get("sport") or "").split(";")}
-    return bool(sports & set(SPORT_KEYS)) and (tags.get("leisure") in LEISURE.split("|") or tags.get("club") == "sport")
+    return bool(sports & set(SPORT_KEYS)) and keeps(tags)
 
 
 def classify_gone(current: dict | None) -> str:
