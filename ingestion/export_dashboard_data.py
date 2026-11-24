@@ -110,7 +110,7 @@ def main() -> None:
     write("views.csv", ["day", "page_views", "events"], rows)
 
     venues = json.loads((ROOT / "app" / "data" / "venues.json").read_text(encoding="utf-8"))
-    write("sport_coverage.csv", ["sport", "venues", "status"], [[x["n"], x["v"], x["s"]] for x in venues["sports"]])
+    write("sport_coverage.csv", ["sport", "venues", "status", "next_step"], [[x["n"], x["v"], x["s"], x.get("r", "")] for x in venues["sports"]])
 
     # Event counts by day, name and detail (the vocabulary in docs/goat_analysis.md): the ask box, sport picks, link-outs, demand by city.
     with (ROOT / "docs" / "usage_events.csv").open(encoding="utf-8") as f:
