@@ -197,3 +197,11 @@ Remaining families not yet searched per region: none of the 2026-10-10 groups ar
 - **No OSM hit by `sport=`, name or description in any covered region (searched 2026-11-23):** every sport in `all_racquet.csv` not named below, including Tamburello, Soft Tennis, Crossminton, Touchtennis, Totem Tennis, Frescoball, Smashball, Jokari, Hand Tennis, Real Tennis (only a bank named "Real Tennis" in Yucatan), Table Squash, Tennis Baseball, 1/3/4-wall Paddleball and the never-searched sports above.
 - **Hits too weak to pin:** Ricochet (a word), Street Tennis, Road Tennis, Skyball (artwork), Pang Pong (a name).
 - **Still unswept:** MX `sport=tennis` outside the metros; the 150+ Spanish "pelota/paleta" name hits in MX (mostly not courts); the US-region candidates (squash, badminton, pickleball names in AZ, WA, TX) are listed in the PR description for a follow-up.
+
+## Eleventh pass, 2026-11-23: the "not re-searched" sports (Ball Badminton, Battlebird, Speedball, Shuttleball)
+
+Scope: the four of the 19 sports left out of the ninth pass with the most plausible US club activity, through sources earlier passes skipped: Meetup and Facebook (web search limited to those domains), Tamil and South Asian community angles, federation pages. Standard search, 6 searches.
+
+- **Result: none found, no pin, no lead.** Ball Badminton: only the Federation of India page and non-US Tamil groups; US badminton clubs found are ordinary badminton (UW, Caltech, San Diego, Tukwila). Battlebird: no page at all (the only near hit is Battle Court, a Miami jai alai league, outside our regions). Speedball: only Egyptian-origin and Decathlon shop pages. Shuttleball: no page.
+- **Reddit is blocked** for both the search tool and the browser pane (`old.reddit.com` refused), so it stays uncovered. The other 15 sports in that row stay as the ninth pass left them (retail or non-US only).
+- Next useful step, if wanted: ask the owner for any local Tamil sangam or South Asian community group that plays ball badminton, since public pages show none.
