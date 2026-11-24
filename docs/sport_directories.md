@@ -216,3 +216,17 @@ Scope: the four of the 19 sports left out of the ninth pass with the most plausi
 ## Sixth pass, 2026-11-24: Platform Tennis, Teqpong, Teqis, Crossminton
 
 Standard web search per sport (CA, NV, OR, WA, AZ, NM, HI), public pages only. No new court found: Platform Tennis only Sun City West AZ (already pinned); Teqball tables only in Texas results; Crossminton nothing new. No pin or lead added. Five false name matches rejected in `place_sport_overrides.csv` (2 Ricochet: a stable and a pistol range; 2 Street Tennis and 1 Road Tennis: tennis courts on streets with those names).
+
+## Thirteenth pass, 2026-11-24: five sports never searched in the Mexico metros
+
+Soft Tennis, Tamburello, Crossminton, Platform Tennis and Tenis criollo, searched in the border pilot metros (Tijuana with Tecate and Rosarito, Mexicali, Ensenada, Hermosillo, Nogales, San Luis Río Colorado). Federation finders first (FIBaT member list, ISTF national list, ICO entries, APTA public-access list, CATP venue finder, FMT statutes), then one or two standard web searches per sport covering the metro cluster, in English and Spanish. Not one search per metro, so a small local group could still be missed. Public pages only; no logins, no Google data. "No result found" means these searches showed none, not that none exists. No pin or lead was added.
+
+Existing map: no Mexico pin carries any of the five sports (checked `app/data/venues.json`, region MX, 2026-11-24). The 36 Soft Tennis and 26 Tenis criollo venues are non-Mexico, and Platform Tennis stays at the one pin (`az-sun-city-west-platform-tennis`).
+
+- **Soft Tennis:** the ISTF national list (62 federations) has no Mexico entry, and the FMT statutes do not name the sport. No club found in any metro.
+- **Tamburello:** the FIBaT member list (26 national federations, no Mexico) names no club anywhere. No Italian-Mexican club or court found in Mexicali or elsewhere in the metros.
+- **Crossminton:** the ICO's Mexico entry is national (Mexico City) with no club or event. Nothing found in any metro.
+- **Platform Tennis:** the APTA public-access list covers US courts only. No Mexico court found in any metro. The Sun City West pin is unchanged.
+- **Tenis criollo:** the CATP venue finder lists Argentina only. In Mexican Spanish "tenis" also means sneakers, and no local game under this name turned up. Nothing found in any metro.
+
+Not searched in this pass: Baja California Sur metros (Los Cabos, La Paz and the rest) and Monterrey. Recall limit: the search tool is US-focused, and Facebook gives titles only. A local club or a Spanish-only group would be found by a phone call or a local sports paper, not by these searches.
