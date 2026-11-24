@@ -212,3 +212,7 @@ Scope: the four of the 19 sports left out of the ninth pass with the most plausi
 - **Result: none found, no pin, no lead.** Ball Badminton: only the Federation of India page and non-US Tamil groups; US badminton clubs found are ordinary badminton (UW, Caltech, San Diego, Tukwila). Battlebird: no page at all (the only near hit is Battle Court, a Miami jai alai league, outside our regions). Speedball: only Egyptian-origin and Decathlon shop pages. Shuttleball: no page.
 - **Reddit is blocked** for both the search tool and the browser pane (`old.reddit.com` refused), so it stays uncovered. The other 15 sports in that row stay as the ninth pass left them (retail or non-US only).
 - Next useful step, if wanted: ask the owner for any local Tamil sangam or South Asian community group that plays ball badminton, since public pages show none.
+
+## Sixth pass, 2026-11-24: Platform Tennis, Teqpong, Teqis, Crossminton
+
+Standard web search per sport (CA, NV, OR, WA, AZ, NM, HI), public pages only. No new court found: Platform Tennis only Sun City West AZ (already pinned); Teqball tables only in Texas results; Crossminton nothing new. No pin or lead added. Five false name matches rejected in `place_sport_overrides.csv` (2 Ricochet: a stable and a pistol range; 2 Street Tennis and 1 Road Tennis: tennis courts on streets with those names).
