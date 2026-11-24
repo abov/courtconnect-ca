@@ -36,7 +36,12 @@ Verdict: cheap (about 10 minutes for 4 pages) but low yield. Not worth its own r
 
 ## Not now (kept here so it is not lost; revisit after the beta, ADR 0015)
 - Showing trends in the app (a "trending sport" badge, per-venue demand): guesses presented as fact, so no.
-- Per-capita comparison: needs metro population (a second seed); the pin-mix `supply_index` stands in for it. Revisit if a metro dominated by one sport (Palm Springs: 93% tennis pins) misleads.
+- Metro-level per-capita comparison: needs metro population (a second seed); the pin-mix `supply_index` stands in for it. Region level is done (below). Revisit if a metro dominated by one sport (Palm Springs: 93% tennis pins) misleads.
 - Cross-sport comparison on one scale: needs the interest-over-time averages per state.
 - Auto-fetching Trends or an official API: revisit if a stable one appears.
 - Cities below metro level: Trends has no stable city-level pages for these terms.
+
+## Pins per million people (2026-11-24)
+- `mart_pins_per_million` (seed `region_population`: 2020 census / INEGI Censo 2020, state or country level) gives pins per million people for every region, in total and per sport. `make interest` prints it.
+- It stands in for search interest where Trends has no data (Trends: CA + NV only; Mexico none). 2026-11-24: HI 311, AZ 308, OR 283, WA 271, CA 255, NM 253, TX 190, NV 176, MX 15 (ADR 0034 expected 15-40).
+- Limits: it measures supply, not interest or demand; a low number can mean few courts or few we found. Region-wide counts hide metro differences (Mexico's pins sit in a few metros), and a state's tourists and snowbirds are not in its census population. No metro-level populations yet.
