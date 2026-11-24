@@ -15,9 +15,11 @@ permissions:
   id-token: write
 concurrency: {group: pages, cancel-in-progress: true}
 jobs:
-  deploy:
+  # Build and deploy are separate jobs (GitHub's standard Pages layout): deploy-pages reads the artifact list right after the upload,
+  # and in one job that read sometimes came back empty ("No artifacts named github-pages", 2026-11-20..24) though the upload had worked.
+  # A separate job also lets "Re-run failed jobs" redeploy without uploading a second copy (a full re-run hit "Multiple artifacts").
+  build:
     runs-on: ubuntu-latest
-    environment: {name: github-pages, url: "${{ steps.deployment.outputs.page_url }}"}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -52,5 +54,17 @@ jobs:
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with: {path: app}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: {name: github-pages, url: "${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}"}
+    steps:
       - id: deployment
+        uses: actions/deploy-pages@v5
+        continue-on-error: true
+      # One retry after a pause, for the same empty-artifact-list glitch; a real failure fails here too.
+      - if: steps.deployment.outcome == 'failure'
+        run: sleep 30
+      - id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
