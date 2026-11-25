@@ -2,7 +2,7 @@
 
 One free map of every racket sport, from park courts to private clubs. Pick the door that fits you.
 
-**To update:** this page stays short on purpose. Every other doc, runbook and tool is listed in [`all_docs.md`](all_docs.md) (web copy: <https://abov.github.io/courtconnect-ca/all-docs.html>). Edit either file, then run `make hub` (`ingestion/build_hub_page.py`); `ci/check_docs_hub.py` fails CI if a doc in `docs/` is in neither list, a link is broken or a web copy is stale.
+**To update:** this page stays short on purpose; every other doc is in [`all_docs.md`](all_docs.md). Edit either, then run `make hub`.
 
 ## 1. Use it
 

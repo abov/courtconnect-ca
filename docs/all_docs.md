@@ -1,14 +1,15 @@
 # RacketConnect: all docs and tools
 
-Every doc, runbook, monitor and tool, grouped by purpose, for whoever maintains the project. Players and reviewers start at the [project hub](https://abov.github.io/courtconnect-ca/hub.html) instead.
+Every doc, runbook, monitor and tool, grouped by purpose, for whoever maintains the project.
 
-**To update:** this file and [`README.md`](README.md) (the hub) are the only lists. Add or rename a doc, then fix its one line here in the same PR and run `make hub` (`ingestion/build_hub_page.py`), which writes the web copies (`app/hub.html` and `app/all-docs.html`). `ci/check_docs_hub.py` fails CI if a doc in `docs/` is in neither list, a link is broken or a web copy is stale.
+**To update:** add or rename a doc, fix its one line here (the hub, [`README.md`](README.md), has the three front doors only), then run `make hub`; CI fails if a doc is unlisted, a link is broken or a web copy is stale.
 
 ## Live pages
 
 | What | Link |
 |---|---|
 | Live map | <https://abov.github.io/courtconnect-ca/> |
+| Project hub: the three front doors | <https://abov.github.io/courtconnect-ca/hub.html> |
 | How it's built: pipeline, gates, measured numbers, limits | <https://abov.github.io/courtconnect-ca/how-its-built.html> |
 | Ask the data: plain-English questions or SQL on the public venue file, in your browser | <https://abov.github.io/courtconnect-ca/ask-the-data.html> |
 | Run history: each refresh run and its numbers | <https://abov.github.io/courtconnect-ca/run-history.html> |
