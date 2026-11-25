@@ -737,6 +737,7 @@ venue_id,lat,lon,subregion,source,checked_on
 5d050c3d0d66e89b9f5fc86da0f35936,19.501495,-99.235611,MX-MEX,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 5d0601a91d0dac6cdd126f9784210a4b,17.523033,-99.503372,MX-GRO,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 5d1fb157c6212cfe08bbc6a1f479cb44,19.44525,-99.238545,MX-MEX,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
+5d237f111dad365697cc8cb735f3ab3d,19.035135,-98.22356,MX-PUE,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 5d8bb6e53d7bb8be87ec46fc0cf5a26a,21.147659,-98.41423,MX-HID,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 5dc71eb610e6889db3c4a84b832e51ab,21.11278,-101.636673,MX-GUA,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 5dca89a072815681a20e01dbc27f52ed,21.125961,-86.842758,MX-ROO,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
@@ -1767,6 +1768,7 @@ e45fe8476d8d564de090defc8ed62169,23.284196,-106.460842,MX-SIN,Overture Maps divi
 e47c63d7bd91546d7f652d6b3518ca72,32.5479,-116.674,MX-BCN,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 e4ed79dc3129a7938bcb4f65266b8700,20.211229,-87.462227,MX-ROO,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 e56501480d55359c778e4d3c90b31dca,20.971048,-89.631523,MX-YUC,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
+e569a98f5f6508414ab9e24306e0f018,19.059303,-98.269,MX-PUE,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 e586cffcaf4e58ad1759c7aae389babf,19.275808,-99.128143,MX-CMX,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 e58e3c00ef66d21bc72595da75885ac8,19.600058,-98.268121,MX-TLA,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
 e5c43488bd6240f3e66c783c61a737b8,20.685379,-101.378494,MX-GUA,Overture Maps divisions municipio boundary (CDLA-Permissive),2026-11-24
