@@ -27,7 +27,7 @@ For reviewers and hiring managers: the whole story in about five minutes.
 For whoever maintains the project.
 
 - [All docs and tools](#all-docs-and-tools), below: every runbook, monitor, plan and research note.
-- [Project README](../README.md): quick start and how to edit the data. Then the [twice-monthly refresh](monthly_refresh.md).
+- [Project README](../README.md): quick start. Editing the data: [data guide](data_guide.md). Then the [twice-monthly refresh](monthly_refresh.md).
 - [Status](status.md): what is being worked on now.
 
 ## All docs and tools
