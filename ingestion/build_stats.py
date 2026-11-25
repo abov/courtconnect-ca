@@ -13,6 +13,9 @@ Nothing is typed in by hand. Every number comes from a file or check that alread
   Overture    docs/planet_scale_benchmark.json (bytes the real extracts fetched vs the size of the themes)
   history     every row of docs/data_quality_trend.csv, for app/run-history.html
   agent_runs  every row of docs/agent_log.csv (re-run this script after the refresh agent appends its log row)
+  ask         the Ask box test set (`node chatbot/test_ask.js`: questions passed of total; the previous values are kept when Node is
+              missing) and its last 7 days of use from docs/usage_events.csv: questions asked and how many it could not answer
+              (a refuse, support or gear reply, or a search with no results). The questions themselves stay local (`make ask-feedback`).
 Nothing here goes stale on the live site: .github/workflows/pages.yml re-runs this script on every deploy (and daily), before the
 dashboard export, so the file the pages read is rebuilt from the current repo; the committed copy is only the offline fallback.
 --check fails when the committed history/agent rows differ from their CSVs or `scorecard_as_of` is not the newest scorecard row.
@@ -32,8 +35,10 @@ TREND = ROOT / "docs" / "data_quality_trend.csv"
 VENUES = ROOT / "app" / "data" / "venues.json"
 BENCH = ROOT / "docs" / "planet_scale_benchmark.json"
 KEYS = ["as_of", "scorecard_as_of", "export_mb", "adrs_superseded", "venues", "sports_with_venues", "sports_total", "named_pct", "sla_met", "sla_total", "tests_pass", "tests_fail",
-        "models", "seeds", "custom_tests", "adrs", "ci_checks", "gold", "overture", "history", "agent_runs"]
+        "models", "seeds", "custom_tests", "adrs", "ci_checks", "gold", "overture", "history", "agent_runs", "ask"]
 AGENT_LOG = ROOT / "docs" / "agent_log.csv"
+USAGE_EVENTS = ROOT / "docs" / "usage_events.csv"
+ASK_MISS_KINDS = {"refuse", "support", "gear"}   # app/ask.js MISS_KINDS; a search with no results is counted by its own ask-empty event
 HISTORY_INT = ["venues", "sports_with_venues", "events_upcoming", "actions_current", "extract_age_days", "sla_met", "sla_total",
                "tests_pass", "tests_warn", "tests_fail"]
 HISTORY_FLOAT = ["named_pct", "sites_dead_pct", "seen_35d_pct"]  # seen_35d_pct is blank on the first row: kept as null
@@ -119,7 +124,36 @@ def build() -> dict:
         "overture": overture_numbers(),
         "history": history_rows(),
         "agent_runs": agent_run_rows(),
+        "ask": ask_numbers(previous, meta["generated"]),
     }
+
+
+def ask_numbers(previous: dict | None, today: str) -> dict:
+    """Ask box quality: the test set's pass count and the last 7 days of questions (ending today) and misses."""
+    import datetime
+    import subprocess
+    tests = (previous or {}).get("ask", {}).get("tests") or {"passed": None, "total": None}
+    try:
+        out = subprocess.run(["node", str(ROOT / "chatbot" / "test_ask.js")], capture_output=True, text=True, timeout=300, cwd=ROOT).stdout
+        m = re.search(r"^(\d+)/(\d+) passed$", out, re.M)
+        if m:
+            tests = {"passed": int(m.group(1)), "total": int(m.group(2))}
+    except (OSError, subprocess.SubprocessError) as e:
+        print(f"Ask box tests not run ({type(e).__name__}); keeping the previous values", file=sys.stderr)
+    end = datetime.date.fromisoformat(today)
+    start = (end - datetime.timedelta(days=6)).isoformat()
+    asked = missed = 0
+    if USAGE_EVENTS.exists():
+        with USAGE_EVENTS.open(encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if not (start <= r["day"] <= today):
+                    continue
+                if r["event"] == "ask-kind":
+                    asked += int(r["count"])
+                    missed += int(r["count"]) if r["detail"].lower() in ASK_MISS_KINDS else 0
+                elif r["event"] == "ask-empty":
+                    missed += int(r["count"])
+    return {"tests": tests, "week_from": start, "week_to": today, "asked": asked, "missed": missed}
 
 
 def check() -> None:
@@ -140,6 +174,8 @@ def check() -> None:
             problems.append("history differs from docs/data_quality_trend.csv: run `make stats`")
         if d["agent_runs"] != agent_run_rows():
             problems.append("agent_runs differs from docs/agent_log.csv: run `make stats` after the agent appends its log row")
+        if not isinstance(d["ask"].get("asked"), int) or not isinstance(d["ask"].get("missed"), int):
+            problems.append("ask needs asked and missed counts: run `make stats`")
         if d["gold"].get("wrong_merges") is None or d["gold"].get("missed") is None:
             problems.append("gold needs wrong_merges and missed")
     if problems:

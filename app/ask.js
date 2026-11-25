@@ -287,6 +287,47 @@
       return {kind: "count", lines, items: [], chips};
     }
 
+    // Kinder dead ends: when a search finds nothing, point to the nearest place that has some, the sports we do hold there, and a way to report a missing place.
+    const REPORT_ITEM = {title: "Report a missing place", detail: "send a link to its public page; a reviewer checks it before anything changes (free GitHub account)", url: PRODUCT_URL.change, empty: true};
+    const dist = n => n < 10 ? n.toFixed(1) + " km" : Math.round(n) + " km";
+    // the closest row to loc that has a city we can search for; returns {row, d, city} or null
+    function nearestOf(rows, loc) {
+      let best = null;
+      for (const o of rows) {
+        if (!o.c || !isFinite(o.y)) continue;
+        const d = km(loc.y, loc.x, o.y, o.x);
+        if (d <= Math.max(loc.r, 25) || (best && d >= best.d)) continue;
+        const pl = detectPlace(norm(o.c));
+        if (!pl) continue;
+        best = {row: o, d, city: pl.label};
+      }
+      return best;
+    }
+    // well-known sports with places near loc, most first (skip: a sport name to leave out). Variants that share every tennis court
+    // (Frescotennis, Hand Tennis, ...) are left out, or they would crowd the list with the same courts.
+    const MAIN_SPORTS = new Set(["Tennis", "Pickleball", "Padel", "Squash", "Racquetball", "Badminton", "Table Tennis", "Pop Tennis", "Platform Tennis", "Beach Tennis"]);
+    function sportsNear(loc, skip) {
+      const n = {};
+      for (const v of data.venues) {
+        if (v.kd === "w" || km(loc.y, loc.x, v.y, v.x) > loc.r) continue;
+        for (const e of v.p) if (e[2] !== 128) n[e[0]] = (n[e[0]] || 0) + 1;
+      }
+      return Object.keys(n).map(i => [data.sports[i], n[i]]).filter(([s]) => s && s.n !== skip && MAIN_SPORTS.has(s.n)).sort((a, b) => b[1] - a[1]).slice(0, 3);
+    }
+    function deadEnd(kind, lines, sp, loc, nearRows, noun) {
+      const chips = [], out = lines.slice();
+      if (loc && sp && nearRows) {
+        const nb = nearestOf(nearRows, loc);
+        if (nb) { out.push("The nearest " + noun + " we have is in " + nb.city + ", about " + dist(nb.d) + " away."); chips.push(sp.name + (kind === "events" ? " events" : kind === "social" ? " groups" : kind === "walls" ? " walls" : "") + " in " + nb.city); }
+      }
+      if (loc && kind !== "walls") {
+        const other = sportsNear(loc, sp && sp.name);
+        if (other.length) { out.push("Near " + loc.label + " we do have places for " + other.map(([s, c]) => s.n + " (" + c + ")").join(", ") + "."); other.forEach(([s]) => chips.push(s.n + " in " + loc.label)); }
+      }
+      out.push("Know a place we're missing? Send us its public page below.");
+      return {kind, lines: out, items: [REPORT_ITEM], chips: chips.length ? chips.slice(0, 4) : loc ? sportChips(loc, sp && sp.name) : sp ? cityChips(sp) : STARTERS.slice()};
+    }
+
     function venuesAnswer(sp, loc, st, t, lead) {
       const want = {pub: has(t, / (public|non members|non member|nonmembers|open to the public) /) || has(t, / free /), free: has(t, / (free|no cost) /), lit: has(t, / (lit|lights|lighting|night|evening) /)};
       const where = loc ? (loc.area ? "in " : "near ") + loc.label : st ? "in " + st : "in the states we cover";
@@ -299,7 +340,8 @@
       if (!loc && !st && rows.length > 8) {
         return {kind: "clarify", lines: [lead, "We hold " + rows.length + " places for " + sp.name + " across the states we cover. Which city or area? (for example Reno, Las Vegas, San Diego, the Bay Area)"], items: [], chips: cityChips(sp)};
       }
-      if (!rows.length) return {kind: "venues", lines: [lead, "No " + sp.name + " places found " + where + " in our data. That does not prove there are none; it may just not be mapped yet.", loc ? "You could try another sport " + (loc.area ? "in " : "near ") + loc.label + ", or the same sport in a bigger nearby city." : "You could try a city or another sport."], items: [], chips: loc ? sportChips(loc, sp.name) : cityChips(sp)};
+      if (!rows.length) return deadEnd("venues", [lead, "No " + sp.name + " places " + where + " in our data yet. That doesn't mean there are none; they may just not be mapped."], sp, loc,
+        loc && data.venues.filter(v => v.kd !== "w" && (!st || v.r === st) && v.p.some(e => e[0] === sp.idx && e[2] !== 128)), sp.name + " place");
       const applied = [want.free && "free", want.lit && "lit", want.pub && !want.free && "public"].filter(Boolean);
       if (applied.length && !notes.length) notes.push("Only places marked " + applied.join(" and ") + " in our data are shown.");
       const shown = rows.slice(0, 5), names = {};
@@ -318,7 +360,14 @@
       if (has(t, / big screen /)) lines.push("We list events you can attend in person. Screenings of matches on a big screen aren't covered yet.");
       if (!ev.length) lines.push("No upcoming" + (sp ? " " + sp.name : "") + " events listed" + (loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + st : "") + (soon ? " this week" : "") + " in our data (as of " + data.meta.generated + ").");
       else lines.push(ev.length + " upcoming event" + (ev.length > 1 ? "s" : "") + " in our data:");
-      if (!ev.length) lines.push("That doesn't mean nothing is happening, only that we haven't listed it." + (loc && sp ? " I can show places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " instead." : ""));
+      if (!ev.length) {
+        lines.push("That doesn't mean nothing is happening, only that we haven't listed it.");
+        const r = deadEnd("events", lines, sp, loc, loc && sp && data.events.filter(e => (e.e || e.s || "9999") >= today && e.sp === sp.name), sp ? sp.name + " event" : "event");
+        r.items = [Object.assign({}, REPORT_ITEM, {title: "Tell us about an event", url: PRODUCT_URL.event})];
+        if (loc && sp) r.chips.unshift(sp.name + " in " + loc.label);
+        r.chips = r.chips.slice(0, 4);
+        return r;
+      }
       return {kind: "events", lines, chips: !ev.length ? (loc && sp ? [sp.name + " in " + loc.label] : loc ? sportChips(loc) : undefined) : undefined, items: ev.slice(0, 5).map(e => ({title: e.n, detail: [e.s + (e.e && e.e !== e.s ? " to " + e.e : ""), e.v + ", " + e.c, e.sp, e.d === "confirmed" ? "dates confirmed" : "dates " + e.d, e.t].filter(Boolean).join(" · "), url: /^https:\/\//.test(e.u || "") ? e.u : ""}))};
     }
 
@@ -332,7 +381,8 @@
       w.sort((a, b) => loc ? km(loc.y, loc.x, a.y, a.x) - km(loc.y, loc.x, b.y, b.x) : 0);
       const onSite = data.venues.filter(v => v.wl && v.kd !== "w" && (!st || v.r === st) && near(v)).length;
       const where = loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + st : "";
-      if (!w.length) return {kind: "walls", lines: ["No stand-alone hitting walls found" + where + " in our data. That does not prove there are none." + (onSite ? " " + onSite + " court venues there have walls on site." : "")], items: [], chips: loc ? sportChips(loc) : undefined};
+      if (!w.length) return deadEnd("walls", ["No stand-alone hitting walls" + where + " in our data yet. That does not prove there are none." + (onSite ? " " + onSite + " court venues there have walls on site." : "")], sp, loc,
+        loc && data.venues.filter(v => v.kd === "w" && (!sp || v.p.some(e => e[0] === sp.idx) || (v.hw.sp || []).some(s => norm(s).includes(norm(sp.name))))), "hitting wall");
       return {kind: "walls", lines: ["Found " + w.length + " stand-alone hitting wall pin" + (w.length > 1 ? "s" : "") + where + " (showing " + Math.min(5, w.length) + "). Many are only tagged in OpenStreetMap, not verified." + (onSite ? " Another " + onSite + " court venues have walls on site." : "")],
         items: w.slice(0, 5).map(wallItem)};
     }
@@ -346,8 +396,14 @@
       const https = u => /^https:\/\//.test(u || "") ? u : "";
       const items = groups.slice(0, 4).map(g => ({title: g.n, detail: [g.o, g.v + ", " + g.c, g.sc, g.sl && "level: " + g.sl, g.pi].filter(Boolean).join(" · "), url: https(g.g) || https(g.u)}));
       if (apps.length) { lines.push("Player-matching apps (we link out; we haven't tested them):"); apps.slice(0, 3).forEach(p => items.push({title: p.n, detail: p.d + " · listed " + p.vo, url: https(p.u)})); }
-      if (!groups.length) lines.push("That only means we haven't listed any yet" + (loc && sp ? "; I can show places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " where you might meet people." : "."));
-      return {kind: "social", lines, items, chips: !groups.length && loc && sp ? [sp.name + " in " + loc.label] : undefined};
+      if (!groups.length) {
+        const nb = loc && sp && nearestOf((data.social || []).filter(g => g.sp === sp.name), loc);
+        lines.splice(1, 0, "That only means we haven't listed any yet" + (loc && sp ? "; places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " are a good way to meet people." : "."),
+          ...(nb ? ["The nearest " + sp.name + " group we have is in " + nb.city + ", about " + dist(nb.d) + " away."] : []));
+        const chips = [loc && sp && sp.name + " in " + loc.label, nb && sp.name + " groups in " + nb.city].filter(Boolean);
+        return {kind: "social", lines, items: [...items, Object.assign({}, REPORT_ITEM, {title: "Tell us about a group", url: PRODUCT_URL.event})], chips: chips.length ? chips : undefined};
+      }
+      return {kind: "social", lines, items, chips: undefined};
     }
 
     // "What am I looking at?": the open pin, or what the map shows right now. ctx() comes from the page (map bounds + current filters); absent in Node tests.
@@ -388,7 +444,7 @@
     // every reply that is not a list of results gets next-step chips
     function answer(question, ctx) {
       const r = route(question, ctx);
-      if (!r.chips && !(r.items || []).length) r.chips = STARTERS.slice();
+      if (!r.chips && !(r.items || []).some(x => !x.empty)) r.chips = STARTERS.slice();
       // remember this search for follow-ups (this visit only), and say where to show it on the map
       if (cur && (RESULT_KINDS.has(r.kind) || (r.kind === "clarify" && cur.sp))) last = Object.assign({}, cur, {intent: r.kind});
       if (cur && (cur.loc || cur.sp) && RESULT_KINDS.has(r.kind)) {
@@ -397,7 +453,7 @@
       }
       // What was asked about, as names from our own lists only (a sport, a city or area), for the anonymous usage counts; never the typed text.
       const t = norm(question), sp = (cur && cur.sp) || detectSports(t)[0], where = (cur && cur.loc) || detectPlace(t);
-      const hit = (r.items || []).length > 0;
+      const hit = (r.items || []).some(x => !x.empty);
       r.meta = {sport: sp ? sp.name : "", where: where ? where.label : "", hit, miss: MISS_KINDS.has(r.kind) || (RESULT_KINDS.has(r.kind) && !hit)};
       return r;
     }

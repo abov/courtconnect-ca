@@ -119,7 +119,7 @@ Problem: `answer()` in `app/ask.js` ends in one `REFUSE` string. Anything it can
 - [ ] More phrasings: "where can I play", "any courts open tonight", "I'm new to...", "lessons for my kid".
 
 ### 3. Kinder dead ends (no results)
-- [ ] Empty venue/event/group result: say "not in our data yet, which doesn't mean there are none", then offer the nearest city that has some, other sports in the same city, and the community-report link so they can add it.
+- [x] Empty venue/event/group result (done 2026-11-25: nearest city that has some, well-known sports held there, a report link that doesn't count as a result): say "not in our data yet, which doesn't mean there are none", then offer the nearest city that has some, other sports in the same city, and the community-report link so they can add it.
 - [ ] Gear questions: keep the honest "no store data yet" but add something useful (places that offer lessons or clinics, the sport's gear list, what to look for).
 - [ ] Booking questions: already honest; add the venue link right in the answer when a sport and city are known.
 

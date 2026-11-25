@@ -255,5 +255,15 @@
    "outcome": "open",
    "est_cost_usd": 1.5
   }
- ]
+ ],
+ "ask": {
+  "tests": {
+   "passed": 98,
+   "total": 98
+  },
+  "week_from": "2026-11-18",
+  "week_to": "2026-11-24",
+  "asked": 0,
+  "missed": 0
+ }
 }
