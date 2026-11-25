@@ -1,5 +1,5 @@
 """Write the web copies of the project hub: app/hub.html (docs/README.md, three short doors: use it, see how it's built,
-run it) and app/all-docs.html (docs/all_docs.md, every doc and tool, with a search box).
+run it, then every doc and tool with a search box). app/all-docs.html is only a redirect to it.
 
 The two markdown files stay the only lists anyone edits; this turns them into HTML with no extra library (they use only
 headings, paragraphs, lists, tables, links, `code` and **bold**). Doc links open on GitHub; live-site links become
@@ -18,10 +18,17 @@ OUT = ROOT / "app" / "hub.html"
 # (source in docs/, output in app/, <title>, meta description, search box, sections drawn as cards)
 PAGES = [
     ("README.md", "hub.html", "RacketConnect project hub",
-     "RacketConnect in three doors: use the map, see how it is built, or run it.", False, True),
-    ("all_docs.md", "all-docs.html", "RacketConnect: all docs and tools",
-     "Every RacketConnect doc, runbook, monitor and tool, grouped by purpose.", True, False),
+     "RacketConnect in three doors (use the map, see how it is built, run it), then every doc, runbook and tool.", True, True),
 ]
+# The old all-docs.html address now redirects to the one hub page.
+STUB = """<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moved to the project hub</title>
+<link rel="canonical" href="https://abov.github.io/courtconnect-ca/hub.html#all-docs-and-tools">
+<meta http-equiv="refresh" content="0; url=hub.html#all-docs-and-tools">
+<meta name="robots" content="noindex">
+</head><body><p>All docs and tools are now on the <a href="hub.html#all-docs-and-tools">project hub</a>.</p></body></html>
+"""
 REPO = "https://github.com/abov/courtconnect-ca"
 SITE = "https://abov.github.io/courtconnect-ca/"
 
@@ -248,8 +255,12 @@ def render(src="README.md"):
 
 def stale():
     """Web copies that do not match their source, as app/ paths."""
-    return [f"app/{out}" for src, out, *_ in PAGES
-            if not (ROOT / "app" / out).exists() or (ROOT / "app" / out).read_text(encoding="utf-8") != render(src)]
+    bad = [f"app/{out}" for src, out, *_ in PAGES
+           if not (ROOT / "app" / out).exists() or (ROOT / "app" / out).read_text(encoding="utf-8") != render(src)]
+    stub = ROOT / "app" / "all-docs.html"
+    if not stub.exists() or stub.read_text(encoding="utf-8") != STUB:
+        bad.append("app/all-docs.html")
+    return bad
 
 
 if __name__ == "__main__":
@@ -258,8 +269,10 @@ if __name__ == "__main__":
         if bad:
             print(f"{', '.join(bad)} stale: run python ingestion/build_hub_page.py and commit")
             sys.exit(1)
-        print("app/hub.html and app/all-docs.html match their sources")
+        print("app/hub.html matches its source")
     else:
         for src, out, *_ in PAGES:
             (ROOT / "app" / out).write_text(render(src), encoding="utf-8", newline="\n")
             print(f"wrote app/{out}")
+        (ROOT / "app" / "all-docs.html").write_text(STUB, encoding="utf-8", newline="\n")
+        print("wrote app/all-docs.html (redirect)")

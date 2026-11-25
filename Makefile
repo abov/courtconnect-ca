@@ -143,7 +143,7 @@ dashboard-data:   ## aggregate CSVs for the Evidence.dev dashboard (dashboard/RE
 stats:            ## regenerate app/data/build_stats.json (numbers on app/how-its-built.html) and the numbers in docs/case_study.md and docs/talk_outline.md; run after make quality
 	$(PY) ingestion/build_stats.py --docs
 
-hub:              ## regenerate app/hub.html and app/all-docs.html from docs/README.md and docs/all_docs.md; run after editing either
+hub:              ## regenerate app/hub.html from docs/README.md; run after editing it
 	$(PY) ingestion/build_hub_page.py
 
 usage:            ## export GoatCounter daily counts (and roll up docs/usage_daily.csv and docs/usage_events.csv for the dashboard; commit them) and print the usage metrics (needs GOATCOUNTER_API_TOKEN in .env; docs/goat_analysis.md)
