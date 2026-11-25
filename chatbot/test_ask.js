@@ -122,7 +122,36 @@ saved = {};
   if (!ok) fails++;
   console.log(`${ok ? "PASS" : "FAIL"} miss flag: ${q} -> ${m.miss}`);
 });
+// Follow-ups (this visit only), typo guesses and the "Show on map" target. Each list is one visit: [question, kind, text that must appear, text that must not appear, map check]
+const VISITS = [
+  [["Where can I play pickleball in Reno?", "venues", "Neil Road", "from your last question", m => m && m.sport === "Pickleball" && m.label === "Reno" && m.mode === "play"],
+   ["what about Sparks?", "venues", "Using Pickleball from your last question", "", m => m && m.label === "Sparks" && m.sport === "Pickleball"],
+   ["and padel?", "venues", "Using Sparks from your last question", "", m => m && m.sport === "Padel"],
+   ["any free ones?", "venues", "Using Padel and Sparks", ""],
+   ["Las Vegas", "venues", "P1 Padel", ""],
+   ["What is padel?", "learn", "", "from your last question", m => !m],
+   ["Hi", "welcome", "", "from your last question"],
+   ["Where can I play tennis in Sacramento?", "venues", "", "from your last question"]],
+  [["tennis tournaments near Redding", "events", "", "", m => m && m.mode === "watch"],
+   ["what about Fresno?", "events", "Using Tennis from your last question", "", m => m && m.label === "Fresno" && m.mode === "watch"]],
+  [["what about Reno?", "venues|clarify|refuse", "", "from your last question"]],   // nothing to follow up on yet
+  [["pickelball in sacramento", "venues", "Did you mean Pickleball?", "", m => m && m.sport === "Pickleball"],
+   ["racketball near las vagas", "venues", "Did you mean Las Vegas?", "", m => m && m.sport === "Racquetball" && m.label === "Las Vegas"],
+   ["Where is the weather nice?", "refuse", "", "Did you mean"],
+   ["Where can I play golf?", "offtopic", "Golf", "Did you mean"]],
+];
+VISITS.forEach(visit => {
+  saved = {};
+  const a = Ask.create(data, store);
+  visit.forEach(([q, kind, must, mustNot, mapOk]) => {
+    const r = a.answer(q), text = [...r.lines, ...r.items.map(x => x.title + " | " + x.detail)].join("\n");
+    const ok = kind.split("|").includes(r.kind) && (!must || text.includes(must)) && (!mustNot || !text.includes(mustNot)) && (!mapOk || mapOk(r.map));
+    if (!ok) { fails++; console.log(`FAIL visit: ${q} [${r.kind}] ${JSON.stringify(r.map || null)}\n   ${text.split("\n").slice(0, 2).join(" / ").slice(0, 200)}`); }
+    else console.log(`PASS visit: ${q}`);
+  });
+});
 const scrubbed = Ask.scrub("call 415-555-0100 or mail a@b.co see https://x.io now");
 if (scrubbed !== "call [number] or mail [email] see [link] now") { fails++; console.log("FAIL scrub: " + scrubbed); } else console.log("PASS scrub");
-console.log(`\n${Q.length - fails}/${Q.length} passed`);
+const total = Q.length + 4 + 1 + VISITS.flat().length;   // questions, miss flags, scrub, visit steps
+console.log(`\n${total - fails}/${total} passed`);
 process.exit(fails ? 1 : 0);
