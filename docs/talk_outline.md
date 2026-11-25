@@ -1,14 +1,16 @@
 # Talk and walkthrough outline
 
-*Written 2026-10-29 for interviews, meetups and a screen-recorded walkthrough. It is an outline, not a finished deck: every number below has a source in brackets, and the recheck list at the end says how to refresh them. No slides file has been made; turn this into one when a date and audience are fixed.*
+*Written 2026-10-29 (the pitch numbers are refreshed by `make stats`) for interviews, meetups and a screen-recorded walkthrough. It is an outline, not a finished deck: every number below has a source in brackets, and the recheck list at the end says how to refresh them. No slides file has been made; turn this into one when a date and audience are fixed.*
 
 **The one sentence:** the hard part of this project was never the map. It was joining sources that disagree, saying how far to trust each fact, and keeping the data current with as little human review as is safe ([case study](case_study.md)).
 
 ## 90-second pitch (interview opener)
 
-1. **What:** a free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas and Hawaii (plus a Mexico pilot), for sports where a tennis court and a padel court are not the same pin. 16,919 venues; 43 of 82 sports have at least one ([scorecard](data_quality_trend.csv), 2026-11-10).
-2. **How:** Python ingestion, dbt on DuckDB, one 2.45 MB JSON file on GitHub Pages. No server, no accounts, $0 hosting ([running costs](running_costs.md)).
-3. **The interesting part:** I measure it. A labelled test set scores the place matcher (129 pairs, 0 wrong merges, 4 missed). A scorecard has stated service levels, and one is breached in public: 16.2% of venues have a real name against a 25% goal.
+<!-- numbers: filled in by make stats (ingestion/build_stats.py, STORY); edit the template there -->
+1. **What:** a free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas and Hawaii (plus a Mexico pilot), for sports where a tennis court and a padel court are not the same pin. 24,506 venues; 45 of 82 sports have at least one ([scorecard](data_quality_trend.csv), 2026-11-25).
+2. **How:** Python ingestion, dbt on DuckDB, one 6.0 MB JSON file on GitHub Pages. No server, no accounts, $0 hosting ([running costs](running_costs.md)).
+3. **The interesting part:** I measure it. A labelled test set scores the place matcher (129 pairs, 0 wrong merges, 4 missed). A scorecard has stated service levels, published even when they miss: 6 of 8 met, and 28.1% of venues have a real name.
+<!-- /numbers -->
 4. **The decision I am proudest of:** a model never merges anything. A deterministic script decides, and it has merged one routine PR so far (#410).
 5. **Close:** "It is a one-person project at small scale. I can tell you exactly where that stops."
 
@@ -60,4 +62,4 @@ Open four tabs before recording. Press the load button on "Ask the data" first (
 - Gold-set result: `python ingestion/eval_match_gold.py --check`.
 - Ask-the-data question results: run the page, or `python ci/check_ask_the_data.py` for a pass/fail.
 - Agent runs and cost: [`agent_log.csv`](agent_log.csv); open PRs and the gate's decisions on GitHub.
-- Number of ADRs, models and seeds: [case study](case_study.md), "At a glance" (53 models, 34 seeds, 26 decisions as of 2026-10-29).
+- Number of ADRs, models and seeds: [case study](case_study.md), "At a glance" (filled in by `make stats`, so it matches the live How it's built page).

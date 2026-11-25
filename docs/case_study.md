@@ -5,11 +5,15 @@ A free map of racket-sport venues in California, Nevada, Oregon, Washington, Ari
 **In one line:** the hard part was never the map. It was joining sources that disagree, saying honestly how far to trust each fact, and keeping the data current with as little human review as safe.
 
 ## At a glance
-- **16,919 venues** from three source families, 43 of 82 sports with at least one venue (15 more need no official venue, 24 have none yet), 7 of 8 service levels met (scorecard `make quality`, 2026-11-10).
-- **53 dbt models, 34 seeds, 32 custom SQL tests**, plus column tests; **26 decision records**; 11 CI gate scripts.
+<!-- numbers: filled in by make stats (ingestion/build_stats.py, STORY); edit the template there -->
+- **24,506 venues** from three source families, 45 of 82 sports with at least one venue, 6 of 8 service levels met (scorecard `make quality`, 2026-11-25).
+- **69 dbt models, 48 seeds, 39 custom SQL tests**, plus column tests (370 dbt tests passing); **41 decision records**; 16 CI gate scripts.
 - **Entity resolution measured on a gold set:** 129 labelled pairs, 0 wrong merges, 4 missed.
-- **Reads about 2% of a 40 GB columnar source** to keep a few thousand venues (743 MB fetched of 39.6 GB, places and addresses themes).
-- **No server, no database service, $0 hosting:** one 2.4 MB JSON export on GitHub Pages.
+- **Reads about 2% of a 40 GB columnar source** (743 MB fetched of 39.6 GB, places and addresses themes).
+- **No server, no database service, $0 hosting:** one 6.0 MB JSON export on GitHub Pages.
+- **Ask box:** 98 of 98 test questions answered right, rule-based with no AI model; CI runs the set on every change.
+- *Numbers as of 2026-11-25, filled in by `make stats`; the live figures are on [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html).*
+<!-- /numbers -->
 
 ## The problem
 Players of smaller racket sports cannot answer "where can I play this near me, and can I walk on?" Each sport has scattered, incomplete sources, and big map platforms treat a tennis court and a padel court as the same pin. Sources also disagree: OpenStreetMap has courts but few names, business directories have names but not courts, and clubs publish access rules only on their own pages.
@@ -27,7 +31,7 @@ Raw sources land untouched, dbt cleans, matches and tests them, and one export f
 | Warehouse | dbt on DuckDB: staging, intermediate (proximity graph, clustering, matching), core dimensions, marts | Human knowledge lives in seeds with `evidence` + `verified_on`, so facts are code-reviewed |
 | Serving | Static MapLibre page fed by one JSON export, GitHub Pages | CI fails if the export is stale |
 | Operations | Twice-monthly runbook, scheduled agent runs, issue-to-PR workflow, evidence checker | Data stays current without me guessing what changed |
-| Governance | 26 ADRs, a confirmation scale (visited / official / reported / inferred) | Every claim says how we know it |
+| Governance | Decision records (ADRs), a confirmation scale (visited / official / reported / inferred) | Every claim says how we know it |
 
 ## Decisions and trade-offs
 1. **Cluster courts into venues by proximity (ADR 0003).** OSM stores individual courts; users want places. Trade-off: some wrong merges and splits, so a convergence test, a duplicate guard and a gold set exist.
