@@ -298,3 +298,11 @@ Trigger: the map had one unnamed badminton pin in the Baja states and 22 in Mexi
 - **Unread:** El Sol de Tlaxcala, "crea gobierno estatal escuela de badminton" (oem.com.mx returned 403); a Tlaxcala state badminton school is a lead.
 - **Nothing found:** Baja California Sur (La Paz, Los Cabos: GUM La Paz lists no badminton), Jalisco, Monterrey, Mérida clubs.
 - **Recheck:** Tlaxcala article via another source; Baja California state association and INDEBC pages for CAR Tijuana badminton hours; FEMEBA site if it appears (BWF grant started Feb 2025).
+
+## California: South Bay Table Tennis calendar (2026-11-24)
+
+Searched: the club site (southbaytt.com) and its activity calendar, which is an embedded Google Calendar. Read as the calendar agenda view, Nov 24 - Dec 11 2026. Club pages read: home and calendar only.
+- **Added to `watch_events.csv` (3):** Youth Round Robin Nov 27, Season Finale Tournament and Awards Dec 10, Doubles Round Robin Dec 11. All at the club, 540 Maple Ave, Torrance; link is the club calendar page.
+- **Added to `social_events.csv` (1):** weekly club tournaments (Mon and Wed 6:30-9:30 PM, Sat 1-4 PM).
+- **Not added:** weekly group classes and youth classes (lessons, not get-togethers; no `kind` fits) and the all-day "Open" entries (open play and rentals; the club's rentals page was not read this run).
+- **Recheck next cycle:** the calendar past Dec 11, the club's Club Tournaments page, and whether the Season Finale and round robins allow spectators.
