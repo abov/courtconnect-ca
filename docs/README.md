@@ -67,10 +67,7 @@ Every doc, runbook, monitor and tool, grouped by purpose, with a search box. Doc
 - Session notes from the automated routines only: [`sessions/`](sessions).
 
 ### Plans, market notes and research scans
-- Dated plans, market and competitor notes, beta feedback and one-off research passes live in the [docs folder](https://github.com/abov/courtconnect-ca/tree/main/docs); [`status.md`](status.md) has what is current.
+- Dated plans, market and competitor notes, beta feedback and one-off research passes live in the [docs folder](https://github.com/abov/courtconnect-ca/tree/main/docs); [`status.md`](status.md) has what is current. The CSV and JSON files there are script outputs: do not hand-edit them.
 
 ### ML and AI
 - [`ml.md`](ml.md): strategy, plan and discovery in one file.
-
-### Data files kept here
-CSV and JSON files in `docs/` are outputs of scripts (`agent_log.csv`, `data_quality_trend.csv`, `feedback_log.csv`, `usage_*.csv`, `ml_metrics.csv`, `planet_scale_benchmark.json`, scan results and more); the dashboard reads several of them. Do not hand-edit. Screenshots are in `screenshots/`, gym scan results in `gym_scans/`.
