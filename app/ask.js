@@ -80,6 +80,29 @@
   const THANKS = / (thanks|thank you|thx|cheers|appreciate it) /;
   const FRUSTRATED = / (useless|not helpful|unhelpful|doesn t work|does not work|not working|stupid|dumb|bad bot|this sucks|terrible|that s wrong|that is wrong|not what i asked|not what i wanted|you re wrong) /;
   const OTHER_SPORT = / (golf|cricket|soccer|football|basketball|baseball|softball|hockey|volleyball|swimming|swim|running|jogging|yoga|pilates|rugby|skiing|snowboarding|skateboarding|bowling|boxing|lacrosse|cycling|climbing|surfing|hiking|fishing|archery|darts|billiards|chess) /;
+  // Follow-ups reuse the last sport, place and kind of question in this visit (never saved): "what about Reno?", "and padel?", "any free ones?".
+  const FOLLOW = /^ (what about|how about|and|also|ok and|okay and|then|now|same for|same in|same thing (for|in)|what of|try|instead) /;
+  const FILLER = new Set(["in", "near", "at", "around", "the", "a", "court", "courts", "place", "places", "one", "ones", "please", "then", "instead", "too", "also", "and", "about", "ok", "okay", "now", "for", "of", "same", "any", "only", "just", "free", "lit", "public", "open", "to", "non", "member", "members", "there", "with", "lights", "night", "nights", "evening", "try", "thing"]);
+  const REFINE = / (free|lit|lights|public|non members|open to the public|night|evening) /;
+  // Typo help: words close to a sport or city name (edit distance 1, or 2 for long names), never these everyday words.
+  const COMMON = new Set(["where", "there", "their", "these", "those", "court", "courts", "place", "places", "play", "plays", "playing", "player", "players", "near", "nearby", "closest", "should", "would", "could", "about", "other", "under", "think", "light", "lights", "night", "evening", "public", "member", "members", "lesson", "lessons", "private", "event", "events", "group", "groups", "league", "leagues", "watch", "weekend", "tonight", "today", "cheap", "store", "stores", "price", "prices", "racket", "rackets", "racquet", "paddle", "paddles", "people", "partner", "partners", "beginner", "beginners", "advanced", "indoor", "outdoor", "clinic", "clinics", "open", "free", "which", "what", "anything", "something", "someone", "looking", "find", "show", "tell", "know", "learn", "rules", "started", "start", "best", "good", "great", "around", "close", "state", "states", "city", "cities", "county", "area", "areas", "there", "again", "thanks", "hello", "please", "sport", "sports", "game", "games", "team", "teams", "coach", "coaches", "class", "classes", "kids", "adults", "senior", "seniors", "night", "nights", "cost", "costs", "money", "parks", "park", "school", "schools", "center", "centre", "centers", "clubs", "club", "venue", "venues", "spots", "spot", "walls", "wall", "hitting", "board", "boards", "match", "matches", "tournament", "tournaments", "screen", "useless", "wrong", "account", "privacy", "spanish", "english", "app", "apps", "download", "install"]);
+  function edits(a, b, max) {   // optimal string alignment distance (a swap of two letters counts once), capped at max + 1
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    let p2 = null, p1 = [...Array(b.length + 1).keys()];
+    for (let i = 1; i <= a.length; i++) {
+      const cur = [i];
+      let low = i;
+      for (let j = 1; j <= b.length; j++) {
+        let v = Math.min(p1[j] + 1, cur[j - 1] + 1, p1[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        if (p2 && i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) v = Math.min(v, p2[j - 2] + 1);
+        cur.push(v); if (v < low) low = v;
+      }
+      if (low > max) return max + 1;
+      p2 = p1; p1 = cur;
+    }
+    return p1[b.length];
+  }
+  const allow = n => n >= 9 ? 2 : n >= 5 ? 1 : 0;
   const sportChips = (loc, skip) => SPORT_CHIPS.filter(n => n !== skip).slice(0, 4).map(n => n + " in " + loc.label);
   const cityChips = sp => POPULAR.map(c => sp.name + " in " + c);
 
@@ -148,6 +171,34 @@
       }
       return null;
     }
+
+    // "pickelball", "racketball", "las vagas": the nearest sport or city name, only when nothing matched exactly; the reply says it is a guess
+    function grams(t) {
+      const w = t.trim().split(" ").filter(Boolean), out = [];
+      for (let n = 3; n >= 1; n--) for (let i = 0; i + n <= w.length; i++) {
+        const g = w.slice(i, i + n);
+        if (g.every(x => COMMON.has(x) || FILLER.has(x) || x.length < 3)) continue;
+        out.push(g.join(" "));
+      }
+      return out;
+    }
+    function nearest(t, keys) {   // keys: [{key, ...}]; returns the closest within the allowed distance, first letters equal
+      let best = null, bd = 9;
+      for (const g of grams(t)) {
+        const max = allow(g.replace(/ /g, "").length);
+        if (!max) continue;
+        for (const k of keys) {
+          const kk = k.key.trim();
+          if (kk[0] !== g[0] || kk === g) continue;
+          const d = edits(g, kk, max);
+          if (d <= max && d < bd) { bd = d; best = k; }
+        }
+      }
+      return best;
+    }
+    const fuzzySport = t => { const k = nearest(t, sportKeys); return k ? {idx: k.idx, name: k.name, pos: 0} : null; };
+    const cityList = cityKeys.map(k => ({key: k}));
+    const fuzzyPlace = t => { const k = nearest(t, cityList); return k ? detectPlace(k.key) : null; };
 
     const STATES = {california: "CA", nevada: "NV", oregon: "OR", washington: "WA", hawaii: "HI", arizona: "AZ", texas: "TX"};
     const stateOf = t => { for (const [n, c] of Object.entries(STATES)) if (t.includes(" " + n + " ")) return c; return t.includes(" nv ") ? "NV" : t.includes(" ca ") ? "CA" : t.includes(" az ") ? "AZ" : ""; };
@@ -338,18 +389,50 @@
     function answer(question, ctx) {
       const r = route(question, ctx);
       if (!r.chips && !(r.items || []).length) r.chips = STARTERS.slice();
+      // remember this search for follow-ups (this visit only), and say where to show it on the map
+      if (cur && (RESULT_KINDS.has(r.kind) || (r.kind === "clarify" && cur.sp))) last = Object.assign({}, cur, {intent: r.kind});
+      if (cur && (cur.loc || cur.sp) && RESULT_KINDS.has(r.kind)) {
+        r.map = {sport: cur.sp ? cur.sp.name : "", mode: r.kind === "events" || r.kind === "social" ? "watch" : "play"};
+        if (cur.loc) Object.assign(r.map, {y: cur.loc.y, x: cur.loc.x, label: cur.loc.label, area: !!cur.loc.area});
+      }
       // What was asked about, as names from our own lists only (a sport, a city or area), for the anonymous usage counts; never the typed text.
-      const t = norm(question), sp = detectSports(t)[0], where = detectPlace(t);
+      const t = norm(question), sp = (cur && cur.sp) || detectSports(t)[0], where = (cur && cur.loc) || detectPlace(t);
       const hit = (r.items || []).length > 0;
       r.meta = {sport: sp ? sp.name : "", where: where ? where.label : "", hit, miss: MISS_KINDS.has(r.kind) || (RESULT_KINDS.has(r.kind) && !hit)};
       return r;
     }
 
+    let last = null, cur = null;   // this visit only: the sport, place and kind of the last answered search
     function route(question, ctx) {
-      const t = norm(question);
+      let t = norm(question);
       const profile = store.get() || {};
       let found = detectSports(t), loc = detectPlace(t), st = stateOf(t);
       const lines0 = [];
+      cur = null;
+      const other0 = !found.length && OTHER_SPORT.test(t);
+      // typos: only when the question is about places, events or sports and nothing matched exactly
+      if (!other0 && !has(t, COUNT) && !GREETING.test(t) && !THANKS.test(t)) {
+        if (!found.length) { const f = fuzzySport(t); if (f) { found = [f]; lines0.push("Did you mean " + f.name + "? Showing " + f.name + "."); } }
+        if (!loc && !st && (found.length || has(t, RACKET) || has(t, / (play|where|near|in) /))) { const l = fuzzyPlace(t); if (l) { loc = l; lines0.push("Did you mean " + l.label + "?"); } }
+      }
+      // follow-ups: "what about Reno?", "and padel?", "any free ones?", or just "Reno" after a search
+      if (last && !other0) {
+        let rest = t;
+        for (const s of sportKeys) rest = rest.split(s.key).join(" ");
+        if (loc) rest = rest.split(" " + norm(loc.label).trim() + " ").join(" ").split(" " + (loc.city || "").trim() + " ").join(" ");
+        const words = rest.trim().split(" ").filter(Boolean);
+        const bare = words.every(w => FILLER.has(w));
+        if ((has(t, FOLLOW) || bare) && (found.length || loc || st || has(t, REFINE))) {
+          const used = [];
+          if (!found.length && last.sp) { found = [last.sp]; used.push(last.sp.name); }
+          if (!loc && !st && (last.loc || last.st)) { loc = last.loc; st = last.st; used.push(last.loc ? last.loc.label : last.st); }
+          if (used.length) {
+            lines0.push("Using " + used.join(" and ") + " from your last question.");
+            const keep = {events: " events ", social: " groups ", walls: " walls "}[last.intent];
+            if (keep && !has(t, EVENTS) && !has(t, SOCIAL) && !has(t, WALLS)) t = t + keep.trim() + " ";
+          }
+        }
+      }
       if (has(t, / (forget|clear) (me|my profile|what i said|everything) /)) { store.clear(); return {kind: "profile", lines: ["Cleared. Nothing is saved in this browser now."], items: []}; }
       if (has(t, / (what did i say|what do i play|my profile|what do you remember|what do you know about me) /)) {
         return {kind: "profile", lines: Object.keys(profile).length ? ["Saved in this browser only: " + Object.entries(profile).map(([k, v]) => k + " = " + v).join(", ") + ". Say \"forget me\" to clear it."] : ["I don't have anything saved yet. Tell me, for example, \"I play padel in Reno, beginner\"."], items: []};
@@ -383,6 +466,7 @@
       if (!loc && !st && profile.city && has(t, / (where|near|closest|should i|play) /) && found.length && !has(t, EVENTS)) { loc = detectPlace(norm(profile.city)); if (loc) lines0.push("Using your saved city: " + profile.city + "."); }
       const lead = lines0.join(" ");
       const sp = found[0] || null;
+      cur = {sp, loc, st};
       const done = r => { if (lead && !r.lines.includes(lead)) r.lines.unshift(lead); return r; };
 
       if (has(t, BOOK) || (has(t, / rent /) && has(t, / (court|courts) /))) {

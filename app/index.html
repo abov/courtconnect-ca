@@ -555,6 +555,16 @@ function trackAsk(r) {
     if (m.where) trackD("ask-where", m.where);
   } catch (e) { /* ignore */ }
 }
+// "Show on map" under an Ask box answer: the right mode (Play, or Watch and meet for events and groups), the answer's sport when the list has it, then the place.
+function askShowOnMap(m) {
+  try {
+    if (m.mode === "watch" || m.mode === "play") setMode(m.mode);
+    const i = sports.findIndex(s => s.n === m.sport), sel = $("sport");
+    if (i >= 0 && i !== state.sport && [...sel.options].some(o => o.value === String(i))) { sel.value = String(i); sel.dispatchEvent(new Event("change")); }
+    if (isFinite(m.x) && isFinite(m.y)) setTimeout(() => map.flyTo({center: [m.x, m.y], zoom: m.area ? 9 : 11.5}), 60);
+    trackD("ask-map", m.sport || "any sport");
+  } catch (e) { /* ignore */ }
+}
 // The one place typed text leaves the page: a question the visitor sends with the "Send this question to us" button (shown only on an unanswered reply).
 // Emails, links and phone-like numbers are cut out first (Ask.scrub). Returns false when nothing could be sent (Do Not Track, local dev, counter blocked),
 // so the widget can point to GitHub instead. docs/goat_analysis.md, `make ask-feedback`.
@@ -2132,7 +2142,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   if (resumed) showResume();
   if (store.get("welcomed", false)) document.querySelector(".welcome").hidden = true; else store.set("welcomed", true);   // the intro line shows on the first visit only (About keeps it)
   initMap();
-  if (window.AskWidget) AskWidget.mount(d, askContext, {opened: trackAskOpen, answered: trackAsk, feedback: trackAskFeedback});   // ask pop-up (ADR 0033); the page works without it
+  if (window.AskWidget) AskWidget.mount(d, askContext, {opened: trackAskOpen, answered: trackAsk, feedback: trackAskFeedback, showOnMap: askShowOnMap});   // ask pop-up (ADR 0033); the page works without it
   if (state.mode === "watch") renderWatchList();
   $("loading").remove();
 }).catch(err => { document.querySelector("#loading .spin")?.remove(); $("loadmsg").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });
