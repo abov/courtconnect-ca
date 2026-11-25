@@ -249,7 +249,7 @@
   },
   {
    "date": "2026-11-25",
-   "pr": null,
+   "pr": 958,
    "class": "R3",
    "gates": "scorecard regression (seen in 35 days 100.0->98.3; SLAs failing 1->2); other gates pass",
    "outcome": "open",
