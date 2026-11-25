@@ -54,6 +54,9 @@
   #map { min-height: 0; }
   header { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
   h1 { font: 800 22px/1.2 var(--font-head); letter-spacing: -.02em; margin: 0 0 4px; color: var(--accent); }
+  header { position: relative; }
+  .hublink { position: absolute; top: 14px; right: 16px; font-size: 13px; text-decoration: none; padding: 2px 6px; border-radius: 6px; }
+  .hublink:hover { background: var(--tint, transparent); text-decoration: underline; }
   header { border-bottom: 3px solid var(--hi); background: linear-gradient(180deg, color-mix(in srgb, var(--hi) 16%, var(--panel)), var(--panel)); }
   h2, h3, h4, .nm, .seg .chip, .callout b, #list li.lh, #list li.thisweek .lh2, label.l, .join h3 { font-family: var(--font-head); }
   .nm { letter-spacing: -.005em; }
@@ -317,6 +320,7 @@
 <aside id="panel" aria-label="Filters and results">
   <button id="sheetHandle" type="button" aria-expanded="false" aria-controls="panel" aria-label="Show more results"><span aria-hidden="true"></span></button>
   <header>
+    <a class="hublink" href="hub.html">Project hub</a>
     <h1 translate="no"><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">RacketConnect</h1>
     <div id="headline">Find a court for any racket sport near you.</div>
     <p class="sub welcome">Free parks to private clubs in the western U.S., Texas, Hawaii and parts of Mexico. Each place is labelled by how sure we are. We link out and never book or charge.</p>

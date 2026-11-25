@@ -2,7 +2,7 @@
 
 **Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico** (scope: [ADR 0014](docs/decisions/0014-ca-nv-scope.md), growing in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
 
-**[Open the live map](https://abov.github.io/courtconnect-ca/)** · [Project hub](https://abov.github.io/courtconnect-ca/hub.html) · [Data quality (live)](https://abov.github.io/courtconnect-ca/dashboard/)
+**[Open the live map](https://abov.github.io/courtconnect-ca/)** · [Project hub](https://abov.github.io/courtconnect-ca/hub.html) (every doc, page and tool starts there)
 
 | Play | Watch |
 |---|---|
@@ -16,10 +16,7 @@ Information about *where to play* tennis, padel, pickleball, squash and dozens o
 - **Honest labels:** each fact is marked official, reported or inferred, with dates ([ADR 0007](docs/decisions/0007-confirmation-levels-and-leads.md)).
 - **Links out, never bookings or payments.**
 
-## Where to read more
-**Start at the [project hub](https://abov.github.io/courtconnect-ca/hub.html)**: three doors (use the map, see how it's built, run it). Every doc, runbook and tool, with a search box, is on [All docs and tools](https://abov.github.io/courtconnect-ca/all-docs.html). Sources: [`docs/README.md`](docs/README.md) and [`docs/all_docs.md`](docs/all_docs.md); a CI check keeps them complete.
-- New here? The hub's [See how it's built](https://abov.github.io/courtconnect-ca/hub.html#2-see-how-its-built) door, then [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html) for the pipeline and measured numbers.
-- Builders and AI tools: `app/data/venues.json` with a [data dictionary](app/data-dictionary.md) and [`llms.txt`](app/llms.txt).
+Builders and AI tools: `app/data/venues.json` with a [data dictionary](app/data-dictionary.md) and [`llms.txt`](app/llms.txt).
 
 **Stack:** Python ingestion, a tested dbt project on DuckDB, a static MapLibre page on GitHub Pages. No server, no accounts, no cookies; location for "Near me" stays in the browser, phone numbers are never exported and homes show the city only. Map data from OpenStreetMap and Overture Maps ([`NOTICE.md`](NOTICE.md)).
 
