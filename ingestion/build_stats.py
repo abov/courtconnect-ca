@@ -3,7 +3,6 @@
     python ingestion/build_stats.py            (or: make stats)   run after `make quality`, in the refresh PR
     python ingestion/build_stats.py --keep-gold   Pages deploy: rebuild everything but keep the last scored gold set
     python ingestion/build_stats.py --check    CI: the file is well formed and dated like the newest scorecard row
-    python ingestion/build_stats.py --docs     (make stats) also rewrites the numbers blocks in docs/case_study.md and docs/talk_outline.md
 
 Nothing is typed in by hand. Every number comes from a file or check that already exists:
   the map     app/data/venues.json meta (venues, sports, export size): always the numbers the live map shows
@@ -172,41 +171,6 @@ def ask_numbers(previous: dict | None, today: str) -> dict:
     return {"tests": tests, "week_from": start, "week_to": today, "asked": asked, "missed": missed}
 
 
-# The "at a glance" numbers in the story docs, filled from this file so they never trail the map. Only `--docs` (make stats) writes them:
-# the refresh agent runs plain build_stats.py, so its PRs stay inside the R0 allowlist (ci/check_refresh_diff.py). --check warns when they trail.
-STORY = {
-    "docs/case_study.md": lambda d: [
-        f"- **{d['venues']:,} venues** from three source families, {d['sports_with_venues']} of {d['sports_total']} sports with at least one venue, {d['sla_met']} of {d['sla_total']} service levels met (scorecard `make quality`, {d['scorecard_as_of']}).",
-        f"- **{d['models']} dbt models, {d['seeds']} seeds, {d['custom_tests']} custom SQL tests**, plus column tests ({d['tests_pass']} dbt tests passing); **{d['adrs']} decision records**; {d['ci_checks']} CI gate scripts.",
-        f"- **Entity resolution measured on a gold set:** {d['gold']['pairs']} labelled pairs, {d['gold']['wrong_merges']} wrong merges, {d['gold']['missed']} missed.",
-        f"- **Reads about {round(100 * d['overture']['fetched_mb'] / (d['overture']['themes_gb'] * 1000))}% of a {d['overture']['themes_gb']:.0f} GB columnar source** ({d['overture']['fetched_mb']:,} MB fetched of {d['overture']['themes_gb']} GB, places and addresses themes).",
-        f"- **No server, no database service, $0 hosting:** one {d['export_mb']} MB JSON export on GitHub Pages.",
-        *([f"- **Fast on phones:** the map first downloads only what draws the pins, {d['load']['first_gz_kb']:,} KB instead of {d['load']['export_gz_kb']:,} KB (gzip), so it opens about {d['load']['saved_s_slow4g']} s sooner on a slow phone connection (estimate at 1.6 Mbps); addresses and links follow."] if d.get("load") else []),
-        *([f"- **Ask box:** {d['ask']['tests']['passed']} of {d['ask']['tests']['total']} test questions answered right, rule-based with no AI model; CI runs the set on every change."] if d.get("ask", {}).get("tests", {}).get("total") else []),
-        f"- *Numbers as of {d['as_of']}, filled in by `make stats`; the live figures are on [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html).*",
-    ],
-    "docs/talk_outline.md": lambda d: [
-        f"1. **What:** a free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas and Hawaii (plus a Mexico pilot), for sports where a tennis court and a padel court are not the same pin. {d['venues']:,} venues; {d['sports_with_venues']} of {d['sports_total']} sports have at least one ([scorecard](data_quality_trend.csv), {d['scorecard_as_of']}).",
-        f"2. **How:** Python ingestion, dbt on DuckDB, one {d['export_mb']} MB JSON file on GitHub Pages. No server, no accounts, $0 hosting ([running costs](running_costs.md)).",
-        f"3. **The interesting part:** I measure it. A labelled test set scores the place matcher ({d['gold']['pairs']} pairs, {d['gold']['wrong_merges']} wrong merges, {d['gold']['missed']} missed). A scorecard has stated service levels, published even when they miss: {d['sla_met']} of {d['sla_total']} met, and {d['named_pct']}% of venues have a real name.",
-    ],
-}
-BEGIN, END = "<!-- numbers: filled in by make stats (ingestion/build_stats.py, STORY); edit the template there -->", "<!-- /numbers -->"
-
-
-def story_docs(d: dict) -> dict[str, tuple[str, str]]:
-    """{path: (current text, text with the numbers block refreshed)}"""
-    out = {}
-    for rel, lines in STORY.items():
-        p = ROOT / rel
-        text = p.read_text(encoding="utf-8")
-        m = re.search(re.escape(BEGIN) + r"\n.*?" + re.escape(END), text, re.S)
-        if not m:
-            sys.exit(f"{rel} has no numbers block ({BEGIN} ... {END})")
-        out[rel] = (text, text[:m.start()] + BEGIN + "\n" + "\n".join(lines(d)) + "\n" + END + text[m.end():])
-    return out
-
-
 def check() -> None:
     problems = []
     if not OUT.exists():
@@ -231,9 +195,6 @@ def check() -> None:
             problems.append("gold needs wrong_merges and missed")
     if problems:
         sys.exit("build_stats.json check failed:\n  " + "\n  ".join(problems))
-    trailing = [rel for rel, (cur, new) in story_docs(d).items() if cur != new]
-    if trailing:   # a warning, not a failure: refresh PRs update the json but not the docs
-        print(f"::warning::numbers in {', '.join(trailing)} trail app/data/build_stats.json: run `make stats` (it passes --docs) and commit")
     print(f"build_stats.json ok: as of {d['as_of']} (scorecard {d['scorecard_as_of']}), {d['venues']} venues, gold set {d['gold']['pairs']} pairs")
 
 
@@ -242,11 +203,6 @@ def main() -> None:
         return check()
     d = build()
     OUT.write_text(json.dumps(d, indent=1) + "\n", encoding="utf-8")
-    if "--docs" in sys.argv:
-        for rel, (cur, new) in story_docs(d).items():
-            if cur != new:
-                (ROOT / rel).write_text(new, encoding="utf-8")
-                print(f"Updated the numbers in {rel}")
     print(f"Wrote {OUT.relative_to(ROOT)}: as of {d['as_of']}, {d['venues']} venues, {d['models']} models, {d['tests_pass']} dbt tests passing, "
           f"gold set {d['gold']['pairs']} pairs ({d['gold']['wrong_merges']} wrong, {d['gold']['missed']} missed)")
 

@@ -17,9 +17,8 @@ For players. Nothing to install, no sign-in.
 For reviewers and hiring managers: the whole story in about five minutes.
 
 1. [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html): the pipeline, its checks and live numbers.
-2. [Case study](case_study.md): the problem, trade-offs, incidents and results.
-3. [Architecture](architecture.md): the layers and how data flows, in one diagram.
-4. [Data quality dashboard](https://abov.github.io/courtconnect-ca/dashboard/): freshness, coverage and service levels, live.
+2. [Architecture](architecture.md): the layers and how data flows, in one diagram.
+3. [Data quality dashboard](https://abov.github.io/courtconnect-ca/dashboard/): freshness, coverage and service levels, live.
 5. [Decision records](decisions): one short record per design decision.
 
 ## 3. Run it
@@ -40,14 +39,12 @@ Every doc, runbook, monitor and tool, grouped by purpose, with a search box. Doc
 
 ### Understand it
 - [Source repository](https://github.com/abov/courtconnect-ca) and [`../README.md`](../README.md): what it is, quick start, how to edit the data. Reports and PRs: [`../CONTRIBUTING.md`](../CONTRIBUTING.md).
-- [`case_study.md`](case_study.md): the problem, trade-offs and incidents.
 - [Decision records](decisions) (ADRs 0001-0041).
 - [`architecture.md`](architecture.md) (with `architecture.svg`): layers and flow.
 - [`tools_and_strategies.md`](tools_and_strategies.md): tools, sources, governance, ML, CI. The tool dictionary (every tool, lifecycle, license) is a private [Google Sheet](https://docs.google.com/spreadsheets/d/1RWONK-tLDJh5lRNyAISlNMEY4UH9ZHWGSW2ytlo5k1c/edit?gid=0#gid=0) (owner); update its row and this file's in the same task whenever a tool, library, service or data source is added or removed.
 - [`data_guide.md`](data_guide.md): sources, seeds and how to edit them.
 - [`scale.md`](scale.md): what the extracts read of Overture, and how build time grows with data.
 - [`running_costs.md`](running_costs.md): hosting, data, CI and the capped AI agents.
-- [`talk_outline.md`](talk_outline.md), [`articles/`](articles): walkthrough outline and write-ups.
 
 ### Data quality and monitoring
 - Live: the [dashboard](https://abov.github.io/courtconnect-ca/dashboard/) and [run history](https://abov.github.io/courtconnect-ca/run-history.html). Site up? UptimeRobot monitors (owner email alerts), [`decisions/0037-uptime-monitoring.md`](decisions/0037-uptime-monitoring.md).

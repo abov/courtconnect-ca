@@ -10,7 +10,7 @@ What Snowflake code still exists (grep, 2026-10-17):
 - **Scripts:** `Makefile` target `snowflake-build`; `ingestion/load_raw.py` (`--target snowflake`, `snowflake_connection`, `load_snowflake`).
 - **Models:** `dim_venue.sql` has one `{% if target.type == 'snowflake' %}` block (a `GEOGRAPHY` column that no downstream model or the export reads). `cross_db.sql` has a `default__` and a `duckdb__` version of each macro and no `snowflake__` one, so the dispatch only separates DuckDB from "anything else". Other macros and comments (`website.sql`, `mart_venue_confidence.sql`) are written to be portable and mention Snowflake in comments only.
 - **Workflows:** none. `ci.yml` and `pages.yml` never touch Snowflake.
-- **Docs:** README, `docs/architecture.md` (+ svg), `docs/monthly_refresh.md` (two Snowflake steps), `docs/tournament_refresh.md`, ADRs 0003/0004/0005/0014 (history), the status log, `docs/case_study.md`.
+- **Docs:** README, `docs/architecture.md` (+ svg), `docs/monthly_refresh.md` (two Snowflake steps), `docs/tournament_refresh.md`, ADRs 0003/0004/0005/0014 (history), the status log.
 - **Sheet sync:** `make sync-sports` writes the Google Sheet into the seed `all_racquet.csv`. The Snowflake `RAW.ALL_RACQUET` copy was part of the retired build only.
 
 ## Decision
@@ -25,4 +25,4 @@ What Snowflake code still exists (grep, 2026-10-17):
 + CLAUDE.md, README and ADR 0001 agree. New SQL can use DuckDB features (for example richer string, list and spatial functions) without a portability check.
 + One engine to test; "identical on both engines" claims in ADRs 0003, 0004 and 0005 stay true as history.
 - If the project later needs a cloud warehouse, portability will have to be rebuilt and re-tested; that would need a new ADR.
-- The dead Snowflake code and `SNOWFLAKE_*` keys are gone (removal done 2026-10-21, PR #304; leftover doc lines in ADR 0014, `docs/case_study.md` and `docs/self_service_plan.md` fixed 2026-10-22). ADRs 0001/0003/0004/0005 keep their Snowflake wording as history.
+- The dead Snowflake code and `SNOWFLAKE_*` keys are gone (removal done 2026-10-21, PR #304; leftover doc lines in ADR 0014 and `docs/self_service_plan.md` fixed 2026-10-22). ADRs 0001/0003/0004/0005 keep their Snowflake wording as history.

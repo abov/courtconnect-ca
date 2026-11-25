@@ -329,7 +329,7 @@ The script now picks the UTM zone from the bbox (10N or 11N; a bbox across 120 W
 Written 2026-11-04. PLAN ONLY: nothing here runs, spends money or edits a seed until the owner says so. It scopes track 1 and track 7 of `docs/ml.md` to one question: how do we find venues in states that have no data layer yet, with the least human reading.
 
 ### What the evidence says
-- Aerial detection is parked (`docs/articles/the-ml-pilot-i-killed.md`): ~2 new sites per city, pickleball invisible. Not the route.
+- Aerial detection is parked: ~2 new sites per city, pickleball invisible. Not the route.
 - Overture and OSM give the net-court skeleton for any state (`docs/new_region_checklist.md`, section 1). The cost per state is section 2, the hand research: city parks and rec, clubs, YMCAs, campuses, walls, events, groups.
 - That research is reading public pages. The reader (`ingestion/page_reader.py`, `--engine claude`, quote check, spend cap) already does the reading part. 49 pages have been read so far (`docs/reader_pilot_results.csv`).
 - **The gap is finding pages, not reading them.** In the current build only 921 of 9,720 CA venues and 129 of 547 NV venues carry a website (measured 2026-11-04 from `marts.mart_venue_finder`, about 9% and 24%). The reader's pilot input (hand-settled `manual_venues.csv` rows) does not exist for a new state.
