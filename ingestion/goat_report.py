@@ -72,7 +72,7 @@ def main() -> None:
     print("## Habits\n")
     print(table(con, """select replace(path, 'event/', '') as event, sum(count) as n from h
         where path in ('event/share', 'event/shortlist-add', 'event/shortlist-open', 'event/shortlist-copy', 'event/focus-on',
-                       'event/welcome-back', 'event/this-week-open', 'event/map-key') group by 1 order by 2 desc"""))
+                       'event/welcome-back', 'event/this-week-open', 'event/map-key', 'event/sheet-up') group by 1 order by 2 desc"""))
 
     if DB.exists():
         db = duckdb.connect(str(DB), read_only=True)
