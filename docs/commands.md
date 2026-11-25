@@ -10,7 +10,7 @@ Moved out of `CLAUDE.md` on 2026-11-17 so every session does not load it (token 
 - `make push-data`   after extract + load: dry-run list of what differs from the private data repo `abov/courtconnect-data`; `ARGS=--push` commits and pushes it (`ingestion/push_data_bundle.py`; refuses files that shrank >10% unless `--force`)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
 - `make check-pages`   list verified pages that changed or vanished since the last look (conditional requests + text hash, no model); recheck only those
-- `make reconfirm`   re-read the own pages of hand-added venues confirmed 28+ days ago; re-dates only rows whose page still names the place and its sport, queues the rest in `data/raw/reconfirm_queue.csv` (`ARGS="--dry-run"`; run from a home connection, then build + `make app-data`)
+- `make reconfirm`   re-read the own pages of hand-added venues confirmed 28+ days ago; re-dates only rows whose page still names the place and its sport, queues the rest in `data/raw/reconfirm_queue.csv` (`ARGS="--dry-run"`; run from a home connection, then build + `make app-data`). GitHub runs it monthly (`venue-recheck.yml`) and opens a PR
 - `make sync-reports`   import owner-approved community-form reports as seed edits (needs `REPORTS_CSV_URL` in `.env`; `ARGS=--dry-run` previews)
 - `make issues`     read-only check of open GitHub issues (missing info, already in seeds, duplicates, waiting); runbook step 2b
 - `make feedback`   sync every GitHub issue (open and closed) into `docs/feedback_log.csv`, list what is open/handled and any comment after close; log non-issue feedback with `ARGS="--add --channel message --reporter <tag> --summary ..."` (no emails/phones; commit the CSV)
