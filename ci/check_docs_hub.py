@@ -7,6 +7,40 @@ from pathlib import Path
 
 DOCS = Path(__file__).resolve().parents[1] / "docs"
 LISTS = ("README.md",)
+# Plans, market notes, beta feedback and dated research scans are reachable through the hub's one link to the docs folder instead of a line each.
+# Any other doc in docs/ must still be listed in docs/README.md; add a new plan or scan here only if it belongs in that group.
+FOLDER_ONLY = {
+    "beach_tennis_watch.md",
+    "chatbot.md",
+    "community_reports_plan.md",
+    "competitor_scan.md",
+    "court_usage_plan.md",
+    "email_provider_comparison.md",
+    "feedback.md",
+    "gym_chain_scan.md",
+    "hawaii_resorts.md",
+    "market_insights.md",
+    "mexico_apps_research.md",
+    "mexico_metro_trial.md",
+    "mexico_states_outline.md",
+    "monetization_ideas.md",
+    "padel_scan.md",
+    "player_finding_plan.md",
+    "product_brief.md",
+    "public_facility_scan.md",
+    "racket_vacations_plan.md",
+    "recheck_queue_plan.md",
+    "search_interest_plan.md",
+    "self_service_plan.md",
+    "sport_directories.md",
+    "sport_discovery_plan.md",
+    "sport_name_review.md",
+    "sport_recommendation_plan.md",
+    "ux_polish.md",
+    "value_proposition.md",
+    "walls_into_venues_plan.md",
+    "website_finder.md",
+}
 hub = "\n".join((DOCS / name).read_text(encoding="utf-8") for name in LISTS)
 links = re.findall(r"\]\(([^)\s]+)\)", hub)
 local = [l.split("#")[0] for l in links if not l.startswith(("http", "#", "mailto:")) and l.split("#")[0]]
@@ -17,7 +51,7 @@ for target in local:
         errors.append(f"broken link in docs/README.md: {target}")
 listed = {Path(t).as_posix() for t in local}
 for md in sorted(DOCS.glob("*.md")):
-    if md.name not in LISTS and md.name not in listed:
+    if md.name not in LISTS and md.name not in listed and md.name not in FOLDER_ONLY:
         errors.append(f"docs/{md.name} is not listed in docs/README.md")
 # Drift guards: every `make <target>` the hub names must exist, and every live-site page that README.md or the app nav names must be in the hub.
 ROOT = DOCS.parent
@@ -43,4 +77,4 @@ if errors:
     for e in errors:
         print("  -", e)
     sys.exit(1)
-print(f"docs hub: {len(local)} local links resolve, all {len(list(DOCS.glob('*.md'))) - len(LISTS)} docs listed")
+print(f"docs hub: {len(local)} local links resolve, all {len(list(DOCS.glob('*.md'))) - len(LISTS)} docs listed or in the folder-only group")
