@@ -140,8 +140,8 @@ quality:          ## regenerate docs/data_quality.md and append to the trend CSV
 dashboard-data:   ## aggregate CSVs for the Evidence.dev dashboard (dashboard/README.md); run after make quality, stats, app-data
 	$(PY) ingestion/export_dashboard_data.py
 
-stats:            ## regenerate app/data/build_stats.json (numbers on app/how-its-built.html); run after make quality
-	$(PY) ingestion/build_stats.py
+stats:            ## regenerate app/data/build_stats.json (numbers on app/how-its-built.html) and the numbers in docs/case_study.md and docs/talk_outline.md; run after make quality
+	$(PY) ingestion/build_stats.py --docs
 
 hub:              ## regenerate app/hub.html and app/all-docs.html from docs/README.md and docs/all_docs.md; run after editing either
 	$(PY) ingestion/build_hub_page.py
