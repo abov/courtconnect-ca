@@ -13,7 +13,7 @@
   const PLACE_ALIASES = {"la": ["Los Angeles", 12, "Los Angeles"], "vegas": ["Las Vegas", 12, "Las Vegas"], "sf": ["San Francisco", 12, "San Francisco"], "san fran": ["San Francisco", 12, "San Francisco"],
     "bay area": ["San Francisco", 60, "the Bay Area", 1], "silicon valley": ["San Jose", 30, "Silicon Valley", 1], "orange county": ["Santa Ana", 25, "Orange County", 1],
     "inland empire": ["Riverside", 40, "the Inland Empire", 1], "lake tahoe": ["South Lake Tahoe", 30, "Lake Tahoe", 1], "tahoe": ["South Lake Tahoe", 30, "Lake Tahoe", 1]};
-  const SKIP_CITY = new Set(["industry", "commerce", "mesa", "alpine", "orange", "bell", "mount", "live oak", "acme", "hope", "wall"]);
+  const SKIP_CITY = new Set(["industry", "commerce", "mesa", "alpine", "orange", "bell", "mount", "live oak", "acme", "hope", "wall", "washington"]);   // "Washington" means the state, not the small Arizona town
   const GEAR = / (buy|shop|shops|store|stores|rent|rental|rentals|restring|restrung|stringing|deals|cheapest|discount) /;
   const EVENTS = / (watch|tournament|tournaments|event|events|spectate|spectators|big screen|this weekend|tonight|this week|what s on) /;
   const WALLS = / (wall|walls|backboard|backboards|hit against|hitting wall) /;
@@ -80,6 +80,29 @@
   const THANKS = / (thanks|thank you|thx|cheers|appreciate it) /;
   const FRUSTRATED = / (useless|not helpful|unhelpful|doesn t work|does not work|not working|stupid|dumb|bad bot|this sucks|terrible|that s wrong|that is wrong|not what i asked|not what i wanted|you re wrong) /;
   const OTHER_SPORT = / (golf|cricket|soccer|football|basketball|baseball|softball|hockey|volleyball|swimming|swim|running|jogging|yoga|pilates|rugby|skiing|snowboarding|skateboarding|bowling|boxing|lacrosse|cycling|climbing|surfing|hiking|fishing|archery|darts|billiards|chess) /;
+  // Follow-ups reuse the last sport, place and kind of question in this visit (never saved): "what about Reno?", "and padel?", "any free ones?".
+  const FOLLOW = /^ (what about|how about|and|also|ok and|okay and|then|now|same for|same in|same thing (for|in)|what of|try|instead) /;
+  const FILLER = new Set(["in", "near", "at", "around", "the", "a", "court", "courts", "place", "places", "one", "ones", "please", "then", "instead", "too", "also", "and", "about", "ok", "okay", "now", "for", "of", "same", "any", "only", "just", "free", "lit", "public", "open", "to", "non", "member", "members", "there", "with", "lights", "night", "nights", "evening", "try", "thing"]);
+  const REFINE = / (free|lit|lights|public|non members|open to the public|night|evening) /;
+  // Typo help: words close to a sport or city name (edit distance 1, or 2 for long names), never these everyday words.
+  const COMMON = new Set(["where", "there", "their", "these", "those", "court", "courts", "place", "places", "play", "plays", "playing", "player", "players", "near", "nearby", "closest", "should", "would", "could", "about", "other", "under", "think", "light", "lights", "night", "evening", "public", "member", "members", "lesson", "lessons", "private", "event", "events", "group", "groups", "league", "leagues", "watch", "weekend", "tonight", "today", "cheap", "store", "stores", "price", "prices", "racket", "rackets", "racquet", "paddle", "paddles", "people", "partner", "partners", "beginner", "beginners", "advanced", "indoor", "outdoor", "clinic", "clinics", "open", "free", "which", "what", "anything", "something", "someone", "looking", "find", "show", "tell", "know", "learn", "rules", "started", "start", "best", "good", "great", "around", "close", "state", "states", "city", "cities", "county", "area", "areas", "there", "again", "thanks", "hello", "please", "sport", "sports", "game", "games", "team", "teams", "coach", "coaches", "class", "classes", "kids", "adults", "senior", "seniors", "night", "nights", "cost", "costs", "money", "parks", "park", "school", "schools", "center", "centre", "centers", "clubs", "club", "venue", "venues", "spots", "spot", "walls", "wall", "hitting", "board", "boards", "match", "matches", "tournament", "tournaments", "screen", "useless", "wrong", "account", "privacy", "spanish", "english", "app", "apps", "download", "install"]);
+  function edits(a, b, max) {   // optimal string alignment distance (a swap of two letters counts once), capped at max + 1
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    let p2 = null, p1 = [...Array(b.length + 1).keys()];
+    for (let i = 1; i <= a.length; i++) {
+      const cur = [i];
+      let low = i;
+      for (let j = 1; j <= b.length; j++) {
+        let v = Math.min(p1[j] + 1, cur[j - 1] + 1, p1[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        if (p2 && i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) v = Math.min(v, p2[j - 2] + 1);
+        cur.push(v); if (v < low) low = v;
+      }
+      if (low > max) return max + 1;
+      p2 = p1; p1 = cur;
+    }
+    return p1[b.length];
+  }
+  const allow = n => n >= 9 ? 2 : n >= 5 ? 1 : 0;
   const sportChips = (loc, skip) => SPORT_CHIPS.filter(n => n !== skip).slice(0, 4).map(n => n + " in " + loc.label);
   const cityChips = sp => POPULAR.map(c => sp.name + " in " + c);
 
@@ -149,7 +172,35 @@
       return null;
     }
 
-    const STATES = {california: "CA", nevada: "NV", oregon: "OR", washington: "WA", hawaii: "HI", arizona: "AZ", texas: "TX"};
+    // "pickelball", "racketball", "las vagas": the nearest sport or city name, only when nothing matched exactly; the reply says it is a guess
+    function grams(t) {
+      const w = t.trim().split(" ").filter(Boolean), out = [];
+      for (let n = 3; n >= 1; n--) for (let i = 0; i + n <= w.length; i++) {
+        const g = w.slice(i, i + n);
+        if (g.every(x => COMMON.has(x) || FILLER.has(x) || x.length < 3)) continue;
+        out.push(g.join(" "));
+      }
+      return out;
+    }
+    function nearest(t, keys) {   // keys: [{key, ...}]; returns the closest within the allowed distance, first letters equal
+      let best = null, bd = 9;
+      for (const g of grams(t)) {
+        const max = allow(g.replace(/ /g, "").length);
+        if (!max) continue;
+        for (const k of keys) {
+          const kk = k.key.trim();
+          if (kk[0] !== g[0] || kk === g) continue;
+          const d = edits(g, kk, max);
+          if (d <= max && d < bd) { bd = d; best = k; }
+        }
+      }
+      return best;
+    }
+    const fuzzySport = t => { const k = nearest(t, sportKeys); return k ? {idx: k.idx, name: k.name, pos: 0} : null; };
+    const cityList = cityKeys.map(k => ({key: k}));
+    const fuzzyPlace = t => { const k = nearest(t, cityList); return k ? detectPlace(k.key) : null; };
+
+    const STATES = {"new mexico": "NM", california: "CA", nevada: "NV", oregon: "OR", washington: "WA", hawaii: "HI", arizona: "AZ", texas: "TX"};
     const stateOf = t => { for (const [n, c] of Object.entries(STATES)) if (t.includes(" " + n + " ")) return c; return t.includes(" nv ") ? "NV" : t.includes(" ca ") ? "CA" : t.includes(" az ") ? "AZ" : ""; };
     // events and groups carry no state: use the state of the nearest venue pin
     const stateAt = (y, x) => { let best = "", bd = 1e9; for (const v of data.venues) { const d = (v.y - y) ** 2 + (v.x - x) ** 2; if (d < bd) { bd = d; best = v.r; } } return best; };
@@ -209,14 +260,25 @@
 
     const STATE_NAMES = {CA: "California", NV: "Nevada", OR: "Oregon", WA: "Washington", AZ: "Arizona", NM: "New Mexico", TX: "Texas", HI: "Hawaii", MX: "Mexico"};
     function countAnswer(sp, st, t, loc) {
-      const by = {}; let walls = 0;
+      const F = flagsOf(t), anyF = Object.values(F).some(Boolean), by = {}; let walls = 0, courts = 0, withCount = 0, unknown = 0;
+      const ownCourts = sp && !sports[sp.idx].b && has(t, / (courts?|court count) /);   // a sport played on another sport's courts has no court count of its own
       for (const v of data.venues) {
         if (loc && km(loc.y, loc.x, v.y, v.x) > loc.r) continue;
-        if (v.kd === "w") { if (!sp && (!st || v.r === st)) walls++; continue; }
+        if (v.kd === "w") { if (!sp && !anyF && (!st || v.r === st)) walls++; continue; }
         if (sp && !v.p.some(e => e[0] === sp.idx && e[2] !== 128)) continue;
+        if (anyF && !keepF(v, F)) continue;
         by[v.r] = (by[v.r] || 0) + 1;
+        if (ownCourts && (loc || !st || v.r === st)) { const n = v.p.find(e => e[0] === sp.idx)[1]; if (n > 0) { courts += n; withCount++; } else unknown++; }
       }
-      const what = (sp ? sp.name + " " : "") + "places";
+      const what = flagWords(F) + (sp ? sp.name + " " : "") + placesWord(F);
+      const fmtC = n => n.toLocaleString("en-US");
+      const courtLine = ownCourts && (withCount || unknown) ? "Mapped " + sp.name + " courts there: " + fmtC(courts) + " at " + fmtC(withCount) + " place" + (withCount === 1 ? "" : "s") + "; the court count is unknown at " + fmtC(unknown) + " more." : "";
+      const r0 = countLines(sp, st, t, loc, by, walls, what);
+      if (courtLine) r0.lines.splice(1, 0, courtLine);
+      if (F.free || F.pub) r0.lines.push(FLAG_NOTE);
+      return r0;
+    }
+    function countLines(sp, st, t, loc, by, walls, what) {
       const fmt = n => n.toLocaleString("en-US");
       const chips = sp ? [sp.name + " in " + (st && st !== "MX" ? STATE_NAMES[st] : "Los Angeles"), "Which states do you cover?"] : ["Pickleball places by state", "Padel places by state", "Which states do you cover?"];
       const note = "These count places (parks, clubs, rec centers), not individual courts; court counts are only known for some places.";
@@ -236,6 +298,145 @@
       return {kind: "count", lines, items: [], chips};
     }
 
+
+    // Folded in from the old "Ask the data" page (2026-11): how sure the names are, how much has been checked, which cities, states or
+    // sports have the most places, what a place has, and mapped court counts. Counted here from the same venue data the map shows; no SQL engine.
+    const FLAG_RE = {free: / (free|no cost|no charge) /, nonMember: / (non members?|nonmembers?|not members only|without (a )?membership|no membership|open to non members) /,
+      membersOnly: / (members only|member only|private clubs?) /, website: / (websites?|web sites?|has a site|with a site) /, pub: / (public|open to the public) /};
+    function flagsOf(t) {
+      const F = {}; for (const [k, re] of Object.entries(FLAG_RE)) F[k] = re.test(t);
+      if (F.nonMember) F.pub = false;
+      return F;
+    }
+    const keepF = (v, F) => { const f = v.f || 0; return (!F.free || f & 4) && (!F.pub || f & 2) && (!F.nonMember || !(f & 8)) && (!F.membersOnly || f & 8) && (!F.website || !!v.w); };
+    const flagWords = F => [F.free && "free", F.pub && "public", F.membersOnly && "members-only", F.nonMember && "non-member"].filter(Boolean).map(w => w + " ").join("");
+    const placesWord = F => "places" + (F.website ? " with a website" : "");
+    const FLAG_NOTE = "Free and public are set only where a source says so; most places are not marked either way, so a short count does not mean the rest cost money.";
+    const RANK = / (most|top|biggest|largest|best covered|highest|popular|common|ranked|ranking|rank) /;
+    const RANK_CITY = / (cities|city|towns?) /, RANK_STATE = / (states?|regions?|countries) /, RANK_SPORT = / (sports?) /;
+    const SPORTS_IN = / (which|what) (racket )?sports | what (is|s) there | what can (i|you) play there /;
+    const BY_SPORT = / (by|per|each|every|for each) sport | (which|what) sports /;
+    const NAMES_Q = / (names?|named|unnamed|nameless) /, CHECKED_Q = / (checked|verified|visited|confirmed) /;
+    const HOW_MUCH = / (how sure|how much|how many|what share|what percent|percentage|what fraction|breakdown|how good|how accurate|how reliable|has anyone|has anybody|has someone|have you) /;
+    const pct = (n, total) => total ? Math.round(1000 * n / total) / 10 + "%" : "0%";
+    const fmtN = n => n.toLocaleString("en-US");
+    const whereText = (loc, st) => loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + STATE_NAMES[st] : "";
+    // the places in scope: a city or area (radius), a state, or everywhere; walls are counted separately, as in countAnswer
+    function scoped(sp, st, loc, F) {
+      return data.venues.filter(v => v.kd !== "w" && (!loc || km(loc.y, loc.x, v.y, v.x) <= loc.r) && (loc || !st || v.r === st)
+        && (!sp || v.p.some(e => e[0] === sp.idx && e[2] !== 128)) && keepF(v, F));
+    }
+    const rowItems = (pairs, total, unit) => pairs.map(([label, n]) => ({title: label, detail: fmtN(n) + " " + unit + (n === 1 ? "" : "s") + (total ? " (" + pct(n, total) + ")" : "")}));
+
+    function statsAnswer(sp, st, t, loc) {
+      const F = flagsOf(t), fw = flagWords(F), noun = fw + (sp ? sp.name + " " : "") + placesWord(F), where = whereText(loc, st);
+      const tail = F.free || F.pub ? [FLAG_NOTE] : [];
+      const chips = sp ? [sp.name + (loc ? " in " + loc.label : " in Los Angeles"), "Which cities have the most " + sp.name + "?"] : ["Which sports have the most places?", "How sure are the names?"];
+      // 1. how sure are the names
+      if (has(t, NAMES_Q) && has(t, HOW_MUCH)) {
+        const rows = scoped(sp, st, loc, F), n = {c: 0, p: 0, i: 0, u: 0};
+        for (const v of rows) n[v.q in n ? v.q : "u"]++;
+        if (!rows.length) return {kind: "stats", lines: ["No " + noun + where + " in our data to count."], items: [], chips};
+        const pairs = [["Confirmed or hand-curated", n.c], ["Business listing", n.p], ["Inferred from a nearby park or school", n.i], ["Unnamed", n.u]].filter(x => x[1]).sort((a, b) => b[1] - a[1]);
+        return {kind: "stats", lines: ["How sure the names are for " + fmtN(rows.length) + " " + noun + where + ":", "Most OpenStreetMap courts have no name, so many pins carry a name inferred from the park or school; the map labels those as inferred.", ...tail],
+          items: rowItems(pairs, rows.length, "place"), chips: ["How much has anyone checked?", ...chips.slice(0, 1)]};
+      }
+      // 2. how much has anyone checked
+      if (has(t, CHECKED_Q) && has(t, HOW_MUCH)) {
+        const rows = scoped(sp, st, loc, F), n = {v: 0, o: 0, r: 0, m: 0};
+        for (const v of rows) n[v.cf in n ? v.cf : "m"]++;
+        if (!rows.length) return {kind: "stats", lines: ["No " + noun + where + " in our data to count."], items: [], chips};
+        const pairs = [["Visited in person", n.v], ["Stated by the operator", n.o], ["Reported only", n.r], ["Map data only", n.m]].filter(x => x[1]).sort((a, b) => b[1] - a[1]);
+        return {kind: "stats", lines: ["How much has been checked, for " + fmtN(rows.length) + " " + noun + where + ":", "Most pins are map data only. A visit, an operator's statement or a report is shown as that, and nothing stronger.", ...tail],
+          items: rowItems(pairs, rows.length, "place"), chips: ["How sure are the names?", ...chips.slice(0, 1)]};
+      }
+      // 3. mapped court counts by sport
+      if (has(t, COUNT) && has(t, / (courts?|court count) /) && !sp && has(t, BY_SPORT)) {
+        const tot = {};
+        for (const v of scoped(null, st, loc, F)) for (const e of v.p) {
+          if (e[2] === 128 || sports[e[0]].b) continue;
+          const x = tot[e[0]] || (tot[e[0]] = [0, 0, 0]);
+          if (e[1] > 0) { x[0] += e[1]; x[1]++; } else x[2]++;
+        }
+        const top = Object.entries(tot).sort((a, b) => b[1][0] - a[1][0] || b[1][1] + b[1][2] - a[1][1] - a[1][2]).slice(0, 10);
+        return {kind: "stats", lines: ["Mapped courts by sport" + where + ", top " + top.length + ":", "Courts as OpenStreetMap or a person counted them, for sports with courts of their own. Where the count is unknown we say so instead of guessing.", ...tail],
+          items: top.map(([i, [c, w, u]]) => ({title: sports[i].n, detail: fmtN(c) + " courts at " + fmtN(w) + " place" + (w === 1 ? "" : "s") + "; count unknown at " + fmtN(u) + " more"})), chips};
+      }
+      if (has(t, COUNT)) return null;
+      // 4. rankings: cities, states, sports; and "which sports are in Reno?"
+      const rankCity = has(t, RANK) && has(t, RANK_CITY), rankState = has(t, RANK) && has(t, RANK_STATE) && !rankCity && !has(t, RANK_SPORT);
+      const rankSport = !sp && ((has(t, RANK) && has(t, RANK_SPORT) && !rankCity) || has(t, SPORTS_IN));
+      if (rankCity) {
+        const by = new Map();
+        for (const v of scoped(sp, st, null, F)) { const k = v.c + "|" + v.r; by.set(k, (by.get(k) || 0) + 1); }
+        const top = [...by.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 10);
+        if (!top.length) return {kind: "stats", lines: ["No " + noun + (st ? " in " + STATE_NAMES[st] : "") + " in our data."], items: [], chips};
+        return {kind: "stats", lines: ["Cities with the most " + noun + (st ? " in " + STATE_NAMES[st] : "") + ":", "City names come from the data sources. These count places, not courts.", ...tail],
+          items: top.map(([k, n]) => { const [c, r] = k.split("|"); return {title: c + ", " + r, detail: fmtN(n) + " place" + (n === 1 ? "" : "s")}; }),
+          chips: sp ? [sp.name + " in " + top[0][0].split("|")[0], "Which state has the most " + sp.name + "?"] : chips};
+      }
+      if (rankState) {
+        const by = {};
+        for (const v of scoped(sp, null, null, F)) by[v.r] = (by[v.r] || 0) + 1;
+        const top = Object.keys(by).sort((a, b) => by[b] - by[a]);
+        if (!top.length) return {kind: "stats", lines: ["No " + noun + " in our data."], items: [], chips};
+        const total = top.reduce((a, k) => a + by[k], 0);
+        return {kind: "stats", lines: ["States with the most " + noun + ", out of " + fmtN(total) + ":", "Mexico is a pilot with partial coverage. These count places, not courts.", ...tail],
+          items: rowItems(top.map(k => [STATE_NAMES[k] || k, by[k]]), total, "place"), chips: sp ? ["Which cities have the most " + sp.name + "?"] : chips};
+      }
+      if (rankSport) {
+        const by = {}, rows = scoped(null, st, loc, F);
+        for (const v of rows) for (const e of v.p) if (e[2] !== 128 && !sports[e[0]].b) by[e[0]] = (by[e[0]] || 0) + 1;
+        const top = Object.keys(by).sort((a, b) => by[b] - by[a] || sports[a].n.localeCompare(sports[b].n)).slice(0, 10);
+        if (!top.length) return {kind: "stats", lines: ["No places" + where + " in our data."], items: [], chips: loc ? sportChips(loc) : chips};
+        return {kind: "stats", lines: ["Sports with the most " + fw + placesWord(F) + where + ":", "A place with tennis and pickleball counts once for each. Sports played on another sport's courts are left out so they don't repeat the tennis count.", ...tail],
+          items: top.map(i => ({title: sports[i].n, detail: fmtN(by[i]) + " place" + (by[i] === 1 ? "" : "s")})),
+          chips: loc || st ? top.slice(0, 3).map(i => sports[i].n + " in " + (loc ? loc.label : STATE_NAMES[st])) : ["Which cities have the most places?", "How sure are the names?"]};
+      }
+      return null;
+    }
+
+    // Kinder dead ends: when a search finds nothing, point to the nearest place that has some, the sports we do hold there, and a way to report a missing place.
+    const REPORT_ITEM = {title: "Report a missing place", detail: "send a link to its public page; a reviewer checks it before anything changes (free GitHub account)", url: PRODUCT_URL.change, empty: true};
+    const dist = n => n < 10 ? n.toFixed(1) + " km" : Math.round(n) + " km";
+    // the closest row to loc that has a city we can search for; returns {row, d, city} or null
+    function nearestOf(rows, loc) {
+      let best = null;
+      for (const o of rows) {
+        if (!o.c || !isFinite(o.y)) continue;
+        const d = km(loc.y, loc.x, o.y, o.x);
+        if (d <= Math.max(loc.r, 25) || (best && d >= best.d)) continue;
+        const pl = detectPlace(norm(o.c));
+        if (!pl) continue;
+        best = {row: o, d, city: pl.label};
+      }
+      return best;
+    }
+    // well-known sports with places near loc, most first (skip: a sport name to leave out). Variants that share every tennis court
+    // (Frescotennis, Hand Tennis, ...) are left out, or they would crowd the list with the same courts.
+    const MAIN_SPORTS = new Set(["Tennis", "Pickleball", "Padel", "Squash", "Racquetball", "Badminton", "Table Tennis", "Pop Tennis", "Platform Tennis", "Beach Tennis"]);
+    function sportsNear(loc, skip) {
+      const n = {};
+      for (const v of data.venues) {
+        if (v.kd === "w" || km(loc.y, loc.x, v.y, v.x) > loc.r) continue;
+        for (const e of v.p) if (e[2] !== 128) n[e[0]] = (n[e[0]] || 0) + 1;
+      }
+      return Object.keys(n).map(i => [data.sports[i], n[i]]).filter(([s]) => s && s.n !== skip && MAIN_SPORTS.has(s.n)).sort((a, b) => b[1] - a[1]).slice(0, 3);
+    }
+    function deadEnd(kind, lines, sp, loc, nearRows, noun) {
+      const chips = [], out = lines.slice();
+      if (loc && sp && nearRows) {
+        const nb = nearestOf(nearRows, loc);
+        if (nb) { out.push("The nearest " + noun + " we have is in " + nb.city + ", about " + dist(nb.d) + " away."); chips.push(sp.name + (kind === "events" ? " events" : kind === "social" ? " groups" : kind === "walls" ? " walls" : "") + " in " + nb.city); }
+      }
+      if (loc && kind !== "walls") {
+        const other = sportsNear(loc, sp && sp.name);
+        if (other.length) { out.push("Near " + loc.label + " we do have places for " + other.map(([s, c]) => s.n + " (" + c + ")").join(", ") + "."); other.forEach(([s]) => chips.push(s.n + " in " + loc.label)); }
+      }
+      out.push("Know a place we're missing? Send us its public page below.");
+      return {kind, lines: out, items: [REPORT_ITEM], chips: chips.length ? chips.slice(0, 4) : loc ? sportChips(loc, sp && sp.name) : sp ? cityChips(sp) : STARTERS.slice()};
+    }
+
     function venuesAnswer(sp, loc, st, t, lead) {
       const want = {pub: has(t, / (public|non members|non member|nonmembers|open to the public) /) || has(t, / free /), free: has(t, / (free|no cost) /), lit: has(t, / (lit|lights|lighting|night|evening) /)};
       const where = loc ? (loc.area ? "in " : "near ") + loc.label : st ? "in " + st : "in the states we cover";
@@ -248,7 +449,8 @@
       if (!loc && !st && rows.length > 8) {
         return {kind: "clarify", lines: [lead, "We hold " + rows.length + " places for " + sp.name + " across the states we cover. Which city or area? (for example Reno, Las Vegas, San Diego, the Bay Area)"], items: [], chips: cityChips(sp)};
       }
-      if (!rows.length) return {kind: "venues", lines: [lead, "No " + sp.name + " places found " + where + " in our data. That does not prove there are none; it may just not be mapped yet.", loc ? "You could try another sport " + (loc.area ? "in " : "near ") + loc.label + ", or the same sport in a bigger nearby city." : "You could try a city or another sport."], items: [], chips: loc ? sportChips(loc, sp.name) : cityChips(sp)};
+      if (!rows.length) return deadEnd("venues", [lead, "No " + sp.name + " places " + where + " in our data yet. That doesn't mean there are none; they may just not be mapped."], sp, loc,
+        loc && data.venues.filter(v => v.kd !== "w" && (!st || v.r === st) && v.p.some(e => e[0] === sp.idx && e[2] !== 128)), sp.name + " place");
       const applied = [want.free && "free", want.lit && "lit", want.pub && !want.free && "public"].filter(Boolean);
       if (applied.length && !notes.length) notes.push("Only places marked " + applied.join(" and ") + " in our data are shown.");
       const shown = rows.slice(0, 5), names = {};
@@ -267,7 +469,14 @@
       if (has(t, / big screen /)) lines.push("We list events you can attend in person. Screenings of matches on a big screen aren't covered yet.");
       if (!ev.length) lines.push("No upcoming" + (sp ? " " + sp.name : "") + " events listed" + (loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + st : "") + (soon ? " this week" : "") + " in our data (as of " + data.meta.generated + ").");
       else lines.push(ev.length + " upcoming event" + (ev.length > 1 ? "s" : "") + " in our data:");
-      if (!ev.length) lines.push("That doesn't mean nothing is happening, only that we haven't listed it." + (loc && sp ? " I can show places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " instead." : ""));
+      if (!ev.length) {
+        lines.push("That doesn't mean nothing is happening, only that we haven't listed it.");
+        const r = deadEnd("events", lines, sp, loc, loc && sp && data.events.filter(e => (e.e || e.s || "9999") >= today && e.sp === sp.name), sp ? sp.name + " event" : "event");
+        r.items = [Object.assign({}, REPORT_ITEM, {title: "Tell us about an event", url: PRODUCT_URL.event})];
+        if (loc && sp) r.chips.unshift(sp.name + " in " + loc.label);
+        r.chips = r.chips.slice(0, 4);
+        return r;
+      }
       return {kind: "events", lines, chips: !ev.length ? (loc && sp ? [sp.name + " in " + loc.label] : loc ? sportChips(loc) : undefined) : undefined, items: ev.slice(0, 5).map(e => ({title: e.n, detail: [e.s + (e.e && e.e !== e.s ? " to " + e.e : ""), e.v + ", " + e.c, e.sp, e.d === "confirmed" ? "dates confirmed" : "dates " + e.d, e.t].filter(Boolean).join(" · "), url: /^https:\/\//.test(e.u || "") ? e.u : ""}))};
     }
 
@@ -281,7 +490,8 @@
       w.sort((a, b) => loc ? km(loc.y, loc.x, a.y, a.x) - km(loc.y, loc.x, b.y, b.x) : 0);
       const onSite = data.venues.filter(v => v.wl && v.kd !== "w" && (!st || v.r === st) && near(v)).length;
       const where = loc ? (loc.area ? " in " : " near ") + loc.label : st ? " in " + st : "";
-      if (!w.length) return {kind: "walls", lines: ["No stand-alone hitting walls found" + where + " in our data. That does not prove there are none." + (onSite ? " " + onSite + " court venues there have walls on site." : "")], items: [], chips: loc ? sportChips(loc) : undefined};
+      if (!w.length) return deadEnd("walls", ["No stand-alone hitting walls" + where + " in our data yet. That does not prove there are none." + (onSite ? " " + onSite + " court venues there have walls on site." : "")], sp, loc,
+        loc && data.venues.filter(v => v.kd === "w" && (!sp || v.p.some(e => e[0] === sp.idx) || (v.hw.sp || []).some(s => norm(s).includes(norm(sp.name))))), "hitting wall");
       return {kind: "walls", lines: ["Found " + w.length + " stand-alone hitting wall pin" + (w.length > 1 ? "s" : "") + where + " (showing " + Math.min(5, w.length) + "). Many are only tagged in OpenStreetMap, not verified." + (onSite ? " Another " + onSite + " court venues have walls on site." : "")],
         items: w.slice(0, 5).map(wallItem)};
     }
@@ -295,8 +505,14 @@
       const https = u => /^https:\/\//.test(u || "") ? u : "";
       const items = groups.slice(0, 4).map(g => ({title: g.n, detail: [g.o, g.v + ", " + g.c, g.sc, g.sl && "level: " + g.sl, g.pi].filter(Boolean).join(" · "), url: https(g.g) || https(g.u)}));
       if (apps.length) { lines.push("Player-matching apps (we link out; we haven't tested them):"); apps.slice(0, 3).forEach(p => items.push({title: p.n, detail: p.d + " · listed " + p.vo, url: https(p.u)})); }
-      if (!groups.length) lines.push("That only means we haven't listed any yet" + (loc && sp ? "; I can show places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " where you might meet people." : "."));
-      return {kind: "social", lines, items, chips: !groups.length && loc && sp ? [sp.name + " in " + loc.label] : undefined};
+      if (!groups.length) {
+        const nb = loc && sp && nearestOf((data.social || []).filter(g => g.sp === sp.name), loc);
+        lines.splice(1, 0, "That only means we haven't listed any yet" + (loc && sp ? "; places to play " + sp.name + " " + (loc.area ? "in " : "near ") + loc.label + " are a good way to meet people." : "."),
+          ...(nb ? ["The nearest " + sp.name + " group we have is in " + nb.city + ", about " + dist(nb.d) + " away."] : []));
+        const chips = [loc && sp && sp.name + " in " + loc.label, nb && sp.name + " groups in " + nb.city].filter(Boolean);
+        return {kind: "social", lines, items: [...items, Object.assign({}, REPORT_ITEM, {title: "Tell us about a group", url: PRODUCT_URL.event})], chips: chips.length ? chips : undefined};
+      }
+      return {kind: "social", lines, items, chips: undefined};
     }
 
     // "What am I looking at?": the open pin, or what the map shows right now. ctx() comes from the page (map bounds + current filters); absent in Node tests.
@@ -337,19 +553,51 @@
     // every reply that is not a list of results gets next-step chips
     function answer(question, ctx) {
       const r = route(question, ctx);
-      if (!r.chips && !(r.items || []).length) r.chips = STARTERS.slice();
+      if (!r.chips && !(r.items || []).some(x => !x.empty)) r.chips = STARTERS.slice();
+      // remember this search for follow-ups (this visit only), and say where to show it on the map
+      if (cur && (RESULT_KINDS.has(r.kind) || (r.kind === "clarify" && cur.sp))) last = Object.assign({}, cur, {intent: r.kind});
+      if (cur && (cur.loc || cur.sp) && RESULT_KINDS.has(r.kind)) {
+        r.map = {sport: cur.sp ? cur.sp.name : "", mode: r.kind === "events" || r.kind === "social" ? "watch" : "play"};
+        if (cur.loc) Object.assign(r.map, {y: cur.loc.y, x: cur.loc.x, label: cur.loc.label, area: !!cur.loc.area});
+      }
       // What was asked about, as names from our own lists only (a sport, a city or area), for the anonymous usage counts; never the typed text.
-      const t = norm(question), sp = detectSports(t)[0], where = detectPlace(t);
-      const hit = (r.items || []).length > 0;
+      const t = norm(question), sp = (cur && cur.sp) || detectSports(t)[0], where = (cur && cur.loc) || detectPlace(t);
+      const hit = (r.items || []).some(x => !x.empty);
       r.meta = {sport: sp ? sp.name : "", where: where ? where.label : "", hit, miss: MISS_KINDS.has(r.kind) || (RESULT_KINDS.has(r.kind) && !hit)};
       return r;
     }
 
+    let last = null, cur = null;   // this visit only: the sport, place and kind of the last answered search
     function route(question, ctx) {
-      const t = norm(question);
+      let t = norm(question);
       const profile = store.get() || {};
       let found = detectSports(t), loc = detectPlace(t), st = stateOf(t);
       const lines0 = [];
+      cur = null;
+      const other0 = !found.length && OTHER_SPORT.test(t);
+      // typos: only when the question is about places, events or sports and nothing matched exactly
+      if (!other0 && !has(t, COUNT) && !GREETING.test(t) && !THANKS.test(t)) {
+        if (!found.length) { const f = fuzzySport(t); if (f) { found = [f]; lines0.push("Did you mean " + f.name + "? Showing " + f.name + "."); } }
+        if (!loc && !st && (found.length || has(t, RACKET) || has(t, / (play|where|near|in) /))) { const l = fuzzyPlace(t); if (l) { loc = l; lines0.push("Did you mean " + l.label + "?"); } }
+      }
+      // follow-ups: "what about Reno?", "and padel?", "any free ones?", or just "Reno" after a search
+      if (last && !other0) {
+        let rest = t;
+        for (const s of sportKeys) rest = rest.split(s.key).join(" ");
+        if (loc) rest = rest.split(" " + norm(loc.label).trim() + " ").join(" ").split(" " + (loc.city || "").trim() + " ").join(" ");
+        const words = rest.trim().split(" ").filter(Boolean);
+        const bare = words.every(w => FILLER.has(w));
+        if ((has(t, FOLLOW) || bare) && (found.length || loc || st || has(t, REFINE))) {
+          const used = [];
+          if (!found.length && last.sp) { found = [last.sp]; used.push(last.sp.name); }
+          if (!loc && !st && (last.loc || last.st)) { loc = last.loc; st = last.st; used.push(last.loc ? last.loc.label : last.st); }
+          if (used.length) {
+            lines0.push("Using " + used.join(" and ") + " from your last question.");
+            const keep = {events: " events ", social: " groups ", walls: " walls "}[last.intent];
+            if (keep && !has(t, EVENTS) && !has(t, SOCIAL) && !has(t, WALLS)) t = t + keep.trim() + " ";
+          }
+        }
+      }
       if (has(t, / (forget|clear) (me|my profile|what i said|everything) /)) { store.clear(); return {kind: "profile", lines: ["Cleared. Nothing is saved in this browser now."], items: []}; }
       if (has(t, / (what did i say|what do i play|my profile|what do you remember|what do you know about me) /)) {
         return {kind: "profile", lines: Object.keys(profile).length ? ["Saved in this browser only: " + Object.entries(profile).map(([k, v]) => k + " = " + v).join(", ") + ". Say \"forget me\" to clear it."] : ["I don't have anything saved yet. Tell me, for example, \"I play padel in Reno, beginner\"."], items: []};
@@ -357,6 +605,10 @@
       if (has(t, WHEN_ADD)) return whenAdd(found[0] || null, loc);
       if (has(t, WHEN_OPEN) && !has(t, / open play /)) return whenOpen(found[0] || null, loc, st, t);
       // issue 568: counts by state and by country, from the same venue data the map shows
+      if (!has(t, GEAR) && !has(t, EVENTS) && !has(t, SOCIAL)) {
+        const sr = statsAnswer(found[0] || null, st || (has(t, / mexico /) ? "MX" : ""), t, loc);
+        if (sr) return sr;
+      }
       if (has(t, COUNT)) return countAnswer(found[0] || null, st || (has(t, / mexico /) ? "MX" : ""), t, loc);
       if (!found.length && !loc) {
         if (GREETING.test(t) || HELP.test(t)) return {kind: "welcome", lines: ["Hi! I can help you find places to play tennis, pickleball, padel, squash and other racket sports, events to watch, groups to play with, and how to try a sport.", "Tell me a sport and a city, or pick one below."], items: []};
@@ -383,6 +635,7 @@
       if (!loc && !st && profile.city && has(t, / (where|near|closest|should i|play) /) && found.length && !has(t, EVENTS)) { loc = detectPlace(norm(profile.city)); if (loc) lines0.push("Using your saved city: " + profile.city + "."); }
       const lead = lines0.join(" ");
       const sp = found[0] || null;
+      cur = {sp, loc, st};
       const done = r => { if (lead && !r.lines.includes(lead)) r.lines.unshift(lead); return r; };
 
       if (has(t, BOOK) || (has(t, / rent /) && has(t, / (court|courts) /))) {
@@ -401,7 +654,15 @@
       if (has(t, SOCIAL) || has(t, SOCIAL2)) return done(socialAnswer(sp, loc, st));
       if (has(t, / paddle | paddles /) && !found.length && !has(t, / (padel|pop tennis|pickleball|beach tennis) /)) return done({kind: "clarify", lines: ["\"Paddle\" can mean a pickleball paddle, pop tennis (also called paddle tennis), or padel (a different sport on a walled court). Which one?"], items: [], chips: ["What is pickleball?", "What is pop tennis?", "What is padel?"]});
       if ((has(t, LEARN) && (found.length || has(t, / (sport|sports|racket|rackets|racquet|racquets|recommend|should i try|get started|how do i start|how do i begin|equipment|rules) /))) || (found.length && has(t, / (how do i|beginner|get started) /))) return done(learnAnswer(found, t));
-      if (sp) return done(venuesAnswer(sp, loc, st, t, ""));
+      if (sp) {
+        const r = venuesAnswer(sp, loc, st, t, "");
+        if (found.length > 1) {   // "pop tennis and padel in California": one sport per answer, the others one tap away
+          const at = loc ? " in " + loc.label : st ? " in " + STATE_NAMES[st] : "";
+          r.lines.push("You named " + found.length + " sports, so this shows " + sp.name + " first. Tap below for the other" + (found.length > 2 ? "s" : "") + ".");
+          r.chips = found.slice(1, 4).map(f => f.name + at);
+        }
+        return done(r);
+      }
       if (loc && has(t, RACKET)) return done({kind: "clarify", lines: ["Which sport " + (loc.area ? "in " : "near ") + loc.label + "? For example tennis, pickleball, padel, squash or racquetball."], items: [], chips: sportChips(loc)});
       if (has(t, RACKET)) return done({kind: "clarify", lines: ["Tell me the sport and a city, for example \"pickleball in Reno\"."], items: []});
       return {kind: "refuse", lines: ["Sorry, I couldn't match that. I'm built for racket sports: where to play, events to watch, groups to play with, and how to try a sport.", "Try something like \"pickleball in Reno\", or pick one below."], items: []};

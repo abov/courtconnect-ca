@@ -1,4 +1,4 @@
-// Runs the 30 questions of docs/chatbot.md through the free ask box (app/ask.js) and checks the kind of answer.
+// Runs the 30 questions of docs/chatbot.md, plus the ones the old Ask the data page answered, through the free ask box (app/ask.js) and checks the kind of answer.
 //   node chatbot/test_ask.js          (prints each answer; exit code 1 if a check fails)
 const fs = require("fs");
 const path = require("path");
@@ -92,6 +92,35 @@ const Q = [
   ["Suggest a place to play padel in Las Vegas", "venues", "P1 Padel", true],
   ["What is padel?", "learn", "", true],
   ["Private lessons for tennis in Reno", "venues", "", true],
+  // kinder dead ends: nothing found still points somewhere (nearest place that has some, sports we hold there, a report link)
+  ["Padel in Bakersfield", "venues", "The nearest Padel place we have is in Los Angeles"],
+  ["Squash in Redding", "venues", "Report a missing place"],
+  ["Pickleball groups in Redding", "social", "The nearest Pickleball group we have is in"],
+  ["Padel tournaments near Reno", "events", "Tell us about an event"],
+  // folded in from the old "Ask the data" page (its test questions, now answered here without SQL)
+  ["padel in vegas", "venues", "P1 Padel"],
+  ["How many pickleball courts are in Reno?", "count", "Mapped Pickleball courts there"],
+  ["How many venues have squash?", "count", "Squash places in our data"],
+  ["How many free pickleball venues in Oregon?", "count", "free Pickleball places in Oregon"],
+  ["Which cities have the most squash venues?", "stats", "Cities with the most Squash places"],
+  ["Which state has the most padel?", "stats", "States with the most Padel places"],
+  ["Which sports have the most venues in Washington?", "stats", "Sports with the most places in Washington"],
+  ["Public tennis courts in Los Angeles", "venues", "marked public"],
+  ["Free tennis courts in Santa Monica", "venues", "marked free"],
+  ["Which sports are in Reno?", "stats", "Sports with the most places near Reno"],
+  ["How sure are the names in Seattle?", "stats", "How sure the names are"],
+  ["How sure are the names?", "stats", "Inferred from a nearby park or school"],
+  ["How much has anyone checked?", "stats", "Map data only"],
+  ["How many confirmed pickleball venues?", "stats", "Pickleball places"],
+  ["How many table tennis venues are there?", "count", "Table Tennis places"],
+  ["pop tennis and padel in California", "venues", "You named 2 sports"],
+  ["Which sports have the most venues?", "stats", "Tennis | "],
+  ["Which cities have the most venues?", "stats", "Cities with the most places"],
+  ["How many courts are known, by sport?", "stats", "courts at"],
+  ["How many venues have a website?", "count", "places with a website"],
+  ["How many members-only tennis venues in California?", "count", "members-only Tennis places in California"],
+  ["Top cities for pickleball in Texas", "stats", "Houston, TX"],
+  ["What is the capital of France?", "refuse"],
 ];
 
 let ask = Ask.create(data, store), fails = 0;
@@ -117,12 +146,41 @@ Q.forEach(([q, kind, must, useCtx], i) => {
 });
 // Unanswered replies are flagged so the widget can offer "Send this question to us"; answered ones are not. scrub() strips contact details.
 saved = {};
-[["Best restaurants near Reno", true], ["Where can I buy a pickleball paddle in San Diego?", true], ["Pickleball in Reno", false], ["What is pop tennis?", false]].forEach(([q, want]) => {
+[["Best restaurants near Reno", true], ["Where can I buy a pickleball paddle in San Diego?", true], ["Pickleball in Reno", false], ["What is pop tennis?", false], ["Padel in Bakersfield", true]].forEach(([q, want]) => {
   const m = ask.answer(q).meta, ok = m.miss === want;
   if (!ok) fails++;
   console.log(`${ok ? "PASS" : "FAIL"} miss flag: ${q} -> ${m.miss}`);
 });
+// Follow-ups (this visit only), typo guesses and the "Show on map" target. Each list is one visit: [question, kind, text that must appear, text that must not appear, map check]
+const VISITS = [
+  [["Where can I play pickleball in Reno?", "venues", "Neil Road", "from your last question", m => m && m.sport === "Pickleball" && m.label === "Reno" && m.mode === "play"],
+   ["what about Sparks?", "venues", "Using Pickleball from your last question", "", m => m && m.label === "Sparks" && m.sport === "Pickleball"],
+   ["and padel?", "venues", "Using Sparks from your last question", "", m => m && m.sport === "Padel"],
+   ["any free ones?", "venues", "Using Padel and Sparks", ""],
+   ["Las Vegas", "venues", "P1 Padel", ""],
+   ["What is padel?", "learn", "", "from your last question", m => !m],
+   ["Hi", "welcome", "", "from your last question"],
+   ["Where can I play tennis in Sacramento?", "venues", "", "from your last question"]],
+  [["tennis tournaments near Redding", "events", "", "", m => m && m.mode === "watch"],
+   ["what about Fresno?", "events", "Using Tennis from your last question", "", m => m && m.label === "Fresno" && m.mode === "watch"]],
+  [["what about Reno?", "venues|clarify|refuse", "", "from your last question"]],   // nothing to follow up on yet
+  [["pickelball in sacramento", "venues", "Did you mean Pickleball?", "", m => m && m.sport === "Pickleball"],
+   ["racketball near las vagas", "venues", "Did you mean Las Vegas?", "", m => m && m.sport === "Racquetball" && m.label === "Las Vegas"],
+   ["Where is the weather nice?", "refuse", "", "Did you mean"],
+   ["Where can I play golf?", "offtopic", "Golf", "Did you mean"]],
+];
+VISITS.forEach(visit => {
+  saved = {};
+  const a = Ask.create(data, store);
+  visit.forEach(([q, kind, must, mustNot, mapOk]) => {
+    const r = a.answer(q), text = [...r.lines, ...r.items.map(x => x.title + " | " + x.detail)].join("\n");
+    const ok = kind.split("|").includes(r.kind) && (!must || text.includes(must)) && (!mustNot || !text.includes(mustNot)) && (!mapOk || mapOk(r.map));
+    if (!ok) { fails++; console.log(`FAIL visit: ${q} [${r.kind}] ${JSON.stringify(r.map || null)}\n   ${text.split("\n").slice(0, 2).join(" / ").slice(0, 200)}`); }
+    else console.log(`PASS visit: ${q}`);
+  });
+});
 const scrubbed = Ask.scrub("call 415-555-0100 or mail a@b.co see https://x.io now");
 if (scrubbed !== "call [number] or mail [email] see [link] now") { fails++; console.log("FAIL scrub: " + scrubbed); } else console.log("PASS scrub");
-console.log(`\n${Q.length - fails}/${Q.length} passed`);
+const total = Q.length + 5 + 1 + VISITS.flat().length;   // questions, miss flags, scrub, visit steps
+console.log(`\n${total - fails}/${total} passed`);
 process.exit(fails ? 1 : 0);

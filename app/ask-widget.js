@@ -18,6 +18,7 @@
   #askpanel .ai { border-top: 1px solid var(--line); padding-top: 6px; margin-top: 6px; }
   #askpanel .ai b { display: block; } #askpanel .ai span { color: var(--muted); font-size: 13px; }
   #askpanel .ai a { color: var(--accent); }
+  .askmap { display: block; margin-top: 8px; font: inherit; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: var(--r-pill, 999px); border: 1px solid var(--accent, #1F5FA8); background: none; color: var(--accent, #1F5FA8); cursor: pointer; }
   .askchips { display: flex; flex-wrap: wrap; gap: 6px; }
   .askchips button { font: inherit; font-size: 13px; padding: 5px 10px; border-radius: var(--r-pill, 999px); border: 1px solid var(--line); background: var(--chip); color: var(--text); cursor: pointer; }
   #askform { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); }
@@ -28,7 +29,7 @@
     #askpanel { left: 0; right: 0; bottom: 0; width: auto; height: 70dvh; border-radius: var(--r-md, 12px) var(--r-md, 12px) 0 0; padding-bottom: env(safe-area-inset-bottom); }
   }
   .askfb { font-size: 13px; color: var(--muted, inherit); }
-  @media (pointer: coarse) { #askfab, .askchips button, #askform button, #askclose { min-height: 44px; } }`;
+  @media (pointer: coarse) { #askfab, .askmap, .askchips button, #askform button, #askclose { min-height: 44px; } }`;
 
   function el(tag, attrs, text) {
     const e = document.createElement(tag);
@@ -71,6 +72,12 @@
         if (it.url && /^https?:\/\//.test(it.url)) { const a = el("a", {href: it.url, target: "_blank", rel: "noopener noreferrer"}, " Open link"); d.appendChild(a); }
         m.appendChild(d);
       });
+      // "Show on map": moves the map to the answer's sport and place; on a phone the panel closes so the map is visible
+      if (r.map && hooks && hooks.showOnMap) {
+        const b = el("button", {type: "button", class: "askmap"}, r.map.label ? "Show " + r.map.label + " on the map" : "Show on map");
+        b.addEventListener("click", () => { hooks.showOnMap(r.map); if (root.matchMedia && root.matchMedia("(max-width: 800px)").matches) open(false); });
+        m.appendChild(b);
+      }
       add(m);
       if (r.meta && r.meta.miss && hooks && hooks.feedback) addFeedback(r);
       if (r.chips && r.chips.length) addChips(r.chips);
@@ -102,12 +109,15 @@
       prevQ = curQ; curQ = q.trim();
       log.querySelectorAll(".askchips").forEach(n => n.remove());
       add(el("div", {class: "am me"}, q));
-      const r = ask.answer(q, ctx); render(r);
-      if (hooks && hooks.answered) hooks.answered(r);   // counts only: reply kind, sport and place names from our lists; the question text leaves only via hooks.feedback, on a button press
+      // hooks.ready: the map loads addresses and links after the pins; answers wait for them (a no-op once loaded)
+      Promise.resolve(hooks && hooks.ready ? hooks.ready() : null).then(() => {
+        const r = ask.answer(q, ctx); render(r);
+        if (hooks && hooks.answered) hooks.answered(r);   // counts only: reply kind, sport and place names from our lists; the question text leaves only via hooks.feedback, on a button press
+      });
     }
 
     function intro() {
-      add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Ask about places to play, events, groups, how to try a sport, what is in the map view, or how RacketConnect works. Nothing is booked or paid here. Your sport and city are remembered in this browser only. If I can't answer, you can send the question to us; it is only sent when you press the button."));
+      add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Ask about places to play, events, groups, how to try a sport, what is in the map view, how RacketConnect works, or the data itself (which cities have the most padel, how sure the names are, how many courts are mapped). Nothing is booked or paid here. Your sport and city are remembered in this browser only. If I can't answer, you can send the question to us; it is only sent when you press the button."));
       addChips(root.Ask.starters);
     }
 
@@ -119,6 +129,8 @@
     close.addEventListener("click", () => open(false));
     panel.addEventListener("keydown", e => { if (e.key === "Escape") open(false); });
     form.addEventListener("submit", e => { e.preventDefault(); go(input.value); input.value = ""; });
+    // ?ask on the map's address opens the box (old "Ask the data" links land here); ?ask=<question> also asks it
+    return {open: () => open(true), ask: q => { open(true); go(String(q || "")); }};
   }
 
   root.AskWidget = {mount};

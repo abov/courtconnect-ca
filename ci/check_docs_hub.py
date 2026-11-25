@@ -1,11 +1,47 @@
-"""Check the docs hub (docs/README.md): every doc in docs/ is listed, every local link in the hub resolves, and its web copy app/hub.html is current.
-Keeps the single entry point from drifting: add a doc, add its line to the hub in the same PR."""
+"""Check the docs hub: docs/README.md (three doors, then every doc and tool) lists every doc in docs/,
+every local link in it resolves, and its web copy (app/hub.html, plus the all-docs.html redirect) is current.
+Keeps the entry point from drifting: add a doc, add its line under All docs and tools in the same PR."""
 import re
 import sys
 from pathlib import Path
 
 DOCS = Path(__file__).resolve().parents[1] / "docs"
-hub = (DOCS / "README.md").read_text(encoding="utf-8")
+LISTS = ("README.md",)
+# Plans, market notes, beta feedback and dated research scans are reachable through the hub's one link to the docs folder instead of a line each.
+# Any other doc in docs/ must still be listed in docs/README.md; add a new plan or scan here only if it belongs in that group.
+FOLDER_ONLY = {
+    "beach_tennis_watch.md",
+    "chatbot.md",
+    "community_reports_plan.md",
+    "competitor_scan.md",
+    "court_usage_plan.md",
+    "email_provider_comparison.md",
+    "feedback.md",
+    "gym_chain_scan.md",
+    "hawaii_resorts.md",
+    "market_insights.md",
+    "mexico_apps_research.md",
+    "mexico_metro_trial.md",
+    "mexico_states_outline.md",
+    "monetization_ideas.md",
+    "padel_scan.md",
+    "player_finding_plan.md",
+    "product_brief.md",
+    "public_facility_scan.md",
+    "racket_vacations_plan.md",
+    "recheck_queue_plan.md",
+    "search_interest_plan.md",
+    "self_service_plan.md",
+    "sport_directories.md",
+    "sport_discovery_plan.md",
+    "sport_name_review.md",
+    "sport_recommendation_plan.md",
+    "ux_polish.md",
+    "value_proposition.md",
+    "walls_into_venues_plan.md",
+    "website_finder.md",
+}
+hub = "\n".join((DOCS / name).read_text(encoding="utf-8") for name in LISTS)
 links = re.findall(r"\]\(([^)\s]+)\)", hub)
 local = [l.split("#")[0] for l in links if not l.startswith(("http", "#", "mailto:")) and l.split("#")[0]]
 
@@ -15,7 +51,7 @@ for target in local:
         errors.append(f"broken link in docs/README.md: {target}")
 listed = {Path(t).as_posix() for t in local}
 for md in sorted(DOCS.glob("*.md")):
-    if md.name != "README.md" and md.name not in listed:
+    if md.name not in LISTS and md.name not in listed and md.name not in FOLDER_ONLY:
         errors.append(f"docs/{md.name} is not listed in docs/README.md")
 # Drift guards: every `make <target>` the hub names must exist, and every live-site page that README.md or the app nav names must be in the hub.
 ROOT = DOCS.parent
@@ -23,7 +59,7 @@ makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
 targets = set(re.findall(r"^([a-z][\w-]*):", makefile, re.M))
 for t in sorted(set(re.findall(r"`make ([a-z][\w-]*)", hub))):
     if t not in targets:
-        errors.append(f"docs/README.md names `make {t}` but the Makefile has no such target")
+        errors.append(f"the hub names `make {t}` but the Makefile has no such target")
 SITE = "https://abov.github.io/courtconnect-ca/"
 hub_pages = {u.rstrip("/") for u in re.findall(r"https://abov\.github\.io/courtconnect-ca/[^\s)>|\"']*", hub)}
 for src in (ROOT / "README.md",):
@@ -31,14 +67,14 @@ for src in (ROOT / "README.md",):
         page = u.split("#")[0].rstrip("/")
         if page not in hub_pages and page != SITE.rstrip("/") + "/how-its-built.html" and page != SITE.rstrip("/"):
             errors.append(f"{src.name} links {page}, which is not in docs/README.md")
-# The web copy (app/hub.html) must match docs/README.md.
+# The web copies (app/hub.html and the all-docs.html redirect) must match their source.
 sys.path.insert(0, str(ROOT / "ingestion"))
-from build_hub_page import OUT, render  # noqa: E402
-if not OUT.exists() or OUT.read_text(encoding="utf-8") != render():
-    errors.append("app/hub.html is stale: run python ingestion/build_hub_page.py and commit it")
+from build_hub_page import stale  # noqa: E402
+for page in stale():
+    errors.append(f"{page} is stale: run python ingestion/build_hub_page.py and commit it")
 if errors:
     print("docs hub check FAILED:")
     for e in errors:
         print("  -", e)
     sys.exit(1)
-print(f"docs hub: {len(local)} local links resolve, all {len(list(DOCS.glob('*.md'))) - 1} docs listed")
+print(f"docs hub: {len(local)} local links resolve, all {len(list(DOCS.glob('*.md'))) - len(LISTS)} docs listed or in the folder-only group")

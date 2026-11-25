@@ -86,7 +86,7 @@
       <a href="dashboard/">Data quality</a>
       <a href="hub.html">Hub</a>
       <a href="run-history.html">Run history</a>
-      <a href="ask-the-data.html">Ask the data</a>
+      <a href="./?ask">Ask</a>
       <a href="https://github.com/abov/courtconnect-ca">Source</a>
     </nav>
     <h1>How RacketConnect is built</h1>
@@ -103,6 +103,7 @@
     <div><dt>Place-to-court matching</dt><dd id="s-gold">0 wrong merges</dd><small id="s-gold-n">129 hand-labelled pairs, 4 missed matches</small></div>
     <div><dt>Big source, small footprint</dt><dd id="s-big">743 MB</dd><small id="s-big-n">fetched of 39.6 GB of Overture places and addresses</small></div>
     <div><dt>Warehouse</dt><dd id="s-models">68 models</dd><small id="s-models-n">42 seeds, 308 dbt tests passing</small></div>
+    <div><dt>Ask box test questions</dt><dd id="s-ask">98 of 98 right</dd><small id="s-ask-n">rule-based, no AI model; CI runs the set on every change</small></div>
     <div><dt>Decisions on record</dt><dd id="s-adrs">39 ADRs</dd><small id="s-adrs-n">one of them reverses an earlier choice</small></div>
   </dl>
 
@@ -125,7 +126,7 @@
     </li>
     <li>
       <h3>Export</h3>
-      <p>One JSON file of about <span id="s-mb">5.3</span> MB, with a data dictionary and an <code>llms.txt</code> so people and AI tools can read it.</p>
+      <p>One JSON file of about <span id="s-mb">5.3</span> MB, with a data dictionary and an <code>llms.txt</code> so people and AI tools can read it. The map loads it in two parts: <span id="s-first">428</span> KB (gzip) for the pins first, then addresses and links.</p>
       <p class="gate"><b>Gate:</b> CI fails if the committed export is stale.</p>
     </li>
     <li>
@@ -159,7 +160,7 @@
   </div>
 
   <h2 id="docs">Documentation</h2>
-  <p>Every page, dashboard, metric, tool and doc is in one place: the <a href="hub.html">project hub</a>, grouped by what you want to do, with a search box.</p>
+  <p>Every page, dashboard, tool and doc is on <a href="hub.html#all-docs-and-tools">All docs and tools</a>.</p>
 </main>
 
 <footer>
@@ -174,6 +175,7 @@
     set("asof", d.as_of);
     set("sc-asof", d.scorecard_as_of);
     set("s-mb", d.export_mb);
+    if (d.load) set("s-first", n(d.load.first_gz_kb));
     set("s-venues", n(d.venues));
     set("s-venues-n", d.sports_with_venues + " of " + d.sports_total + " sports have at least one venue");
     set("s-sla", d.sla_met + " of " + d.sla_total);
@@ -185,6 +187,11 @@
     set("s-models", d.models + " models");
     set("s-models-n", d.seeds + " seeds, " + d.tests_pass + " dbt tests passing" + (d.tests_fail ? ", " + d.tests_fail + " failing" : ""));
     set("s-adrs", d.adrs + " ADRs");
+    if (d.ask && d.ask.tests && d.ask.tests.total) {
+      set("s-ask", d.ask.tests.passed + " of " + d.ask.tests.total + " right");
+      set("s-ask-n", d.ask.asked ? n(d.ask.asked) + " questions asked " + d.ask.week_from + " to " + d.ask.week_to + "; " + n(d.ask.missed) + " it couldn't answer, which show what to teach it next"
+        : "no visitor questions " + d.ask.week_from + " to " + d.ask.week_to + "; CI runs the set on every change");
+    }
     set("s-adrs-n", d.adrs_superseded === 1 ? "one of them reverses an earlier choice" : d.adrs_superseded + " of them reverse an earlier choice");
   }).catch(function () { /* keep the dated fallback */ });
 })();

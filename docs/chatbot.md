@@ -112,18 +112,19 @@ Problem: `answer()` in `app/ask.js` ends in one `REFUSE` string. Anything it can
 - [x] Never end a reply without a next step: every `refuse`, `clarify` and empty-result answer carries chips.
 
 ### 2. Understand more of what people type
-- [ ] Typos: fuzzy-match sport and city names (edit distance 1-2 on keys of 5+ letters; "pickelball", "las vagas", "racketball"). Say "Did you mean pickleball?" when the match is a guess.
-- [ ] Follow-ups: remember the last sport, place and intent in the session (not only the saved profile), so "what about Reno?", "any free ones?", "and padel?" reuse the previous question.
+- [x] Typos: fuzzy-match sport and city names (edit distance 1-2 on keys of 5+ letters; "pickelball", "las vagas", "racketball"). Say "Did you mean pickleball?" when the match is a guess.
+- [x] Follow-ups: remember the last sport, place and intent in the session (not only the saved profile), so "what about Reno?", "any free ones?", "and padel?" reuse the previous question. The reply says what it reused ("Using Pickleball from your last question."); nothing is saved past the visit.
 - [ ] Unknown place: when a place isn't in `cities`, say "I don't have a city called X; try a nearby bigger one" (or list a few close ones) instead of ignoring it.
 - [ ] Zip codes / "near me": ask permission for browser location (or a city) rather than refusing.
 - [ ] More phrasings: "where can I play", "any courts open tonight", "I'm new to...", "lessons for my kid".
 
 ### 3. Kinder dead ends (no results)
-- [ ] Empty venue/event/group result: say "not in our data yet, which doesn't mean there are none", then offer the nearest city that has some, other sports in the same city, and the community-report link so they can add it.
+- [x] Empty venue/event/group result (done 2026-11-25: nearest city that has some, well-known sports held there, a report link that doesn't count as a result): say "not in our data yet, which doesn't mean there are none", then offer the nearest city that has some, other sports in the same city, and the community-report link so they can add it.
 - [ ] Gear questions: keep the honest "no store data yet" but add something useful (places that offer lessons or clinics, the sport's gear list, what to look for).
 - [ ] Booking questions: already honest; add the venue link right in the answer when a sport and city are known.
 
 ### 4. Interaction in the widget (`app/ask-widget.js`)
+- [x] "Show on map" under answers that name a place: switches to Play (or Watch and meet for events and groups), picks the sport and moves the map there; on phones the panel closes (`r.map` in `ask.js`, `askShowOnMap` in `index.html`).
 - [ ] Show follow-up chips under each answer (e.g. after venues: "Only free ones", "Lit at night", "Events nearby", "Another sport"), not just at intro.
 - [ ] Say what I can do in the intro in one plain line instead of "Prototype. Answers come only from...": move the disclaimer to a small "How this works" link.
 - [ ] Make a "Start over" / "Forget me" chip easy to find; show saved sport and city as removable chips.
@@ -134,7 +135,7 @@ Problem: `answer()` in `app/ask.js` ends in one `REFUSE` string. Anything it can
 - [ ] Write 8-10 lines in `docs/chatbot.md`: plain words, one friendly sentence max before the answer, no blame ("I couldn't match that" not "you must ask..."), never pretend to know, labels (confirmed/inferred) stay. Use it as the system prompt base if layer 2 is ever built.
 
 ### 6. Tests
-- [ ] (partly done: greetings, thanks, frustration, other sports, off-topic, chips check in `chatbot/test_ask.js`) Still to add to `docs/chatbot.md` and the tests: greetings, thanks, typos, follow-ups, unknown city, other sports, frustration, and a check that no reply is the bare old REFUSE text and every non-answer has chips.
+- [ ] (partly done: greetings, thanks, frustration, other sports, off-topic, chips check in `chatbot/test_ask.js`) Typos, follow-ups and the map button are tested too. Still to add: unknown city, other sports, frustration, and a check that no reply is the bare old REFUSE text and every non-answer has chips.
 - [ ] Keep the existing "Write me a cover letter." case: still declined, now kindly.
 - [ ] Run `node chatbot/test_ask.js`.
 

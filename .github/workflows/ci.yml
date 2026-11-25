@@ -41,6 +41,8 @@ jobs:
       - run: python ci/test_weekly_audit.py  # weekly audit digest and chain alert (ADR 0019), synthetic PRs, offline
       - run: python ci/test_feedback_log.py  # feedback ledger sync, offline
       - run: python ci/test_ask_feedback.py  # ask-box feedback extract: scrubbing and merging, offline
+      - run: python ingestion/split_app_data.py && node ci/test_split_data.js --measure  # the map's two data files rebuild venues.json exactly; prints the phone download size
+      - run: node chatbot/test_ask.js  # the Ask box's test questions (follow-ups, typos, dead ends); its pass count is shown on how-its-built.html
       - run: python ci/test_init_fork.py  # fork script (docs/fork_guide.md), offline
       - run: python ingestion/eval_match_gold.py --check
       # ADR 0019 gate 4: fires only when this branch appends a scorecard line worse than main's last line.
@@ -49,12 +51,12 @@ jobs:
           python ci/check_scorecard_regression.py --base-ref origin/main
       # requirements.txt is the pip cache key set up by setup-python above, so this install is a cache hit.
       - run: pip install -r requirements.txt
-      - run: python ci/check_ask_the_data.py  # app/ask-the-data.html: its SQL runs on the export, vendored engine files match their checksums
-      - run: python ci/check_docs_hub.py  # docs/README.md lists every doc in docs/ and its local links resolve
-      - run: python ci/check_site_nav.py  # app/how-its-built.html, run-history.html, ask-the-data.html and hub.html share one nav bar
+      - run: python ci/check_docs_hub.py  # docs/README.md lists every doc in docs/, links resolve, web copy current
+      - run: python ci/check_site_nav.py  # app/how-its-built.html, run-history.html and hub.html share one nav bar
       - run: python ci/check_regions.py --config-only  # dbt `regions` var equals ingestion/regions.json (ADR 0028)
       - run: python ci/check_page_reader.py  # ADR 0017 guard rail, offline (needs requests, pulled in by dbt)
       - run: python ci/test_osm_snapshot_diff.py  # OSM snapshot diff (ADR 0026) on a tiny fixture, offline (imports the extract module, needs requests)
+      - run: python ci/test_reconfirm_manual_venues.py  # stale-venue re-read: re-dates only rows whose page names place + sport, offline
       # CI never calls OpenStreetMap: it loads a small committed sample of real OSM data
       # (ci/fixtures, Pasadena area) and builds + tests the entire project on DuckDB.
       - run: python ingestion/load_raw.py --data-dir ci/fixtures
