@@ -20,7 +20,7 @@ The public pages. Nothing to install.
 
 New to the project? Read these in order.
 
-1. [`../README.md`](../README.md): what it is, quick start, how to edit the data. Then [`case_study.md`](case_study.md): the story in one read.
+1. [`../README.md`](../README.md): what it is, quick start, how to edit the data.
 2. Understand the build: [`architecture.md`](architecture.md), [`data_guide.md`](data_guide.md), the [decision records](decisions).
 3. Change something: seeds under `transform/seeds/`, then `make build` and `make app-data` ([`data_guide.md`](data_guide.md); [`../CONTRIBUTING.md`](../CONTRIBUTING.md) for reports and PRs).
 4. Reuse it elsewhere: [`fork_guide.md`](fork_guide.md). Add a state or country: [`new_region_checklist.md`](new_region_checklist.md).
@@ -61,13 +61,11 @@ When a tool, library, service or data source is added or removed, update its row
 The full list. Docs open on GitHub.
 
 ### Understand it
-- [`case_study.md`](case_study.md): the problem, trade-offs and incidents.
 - [`architecture.md`](architecture.md) (with `architecture.svg`): layers and flow.
 - [`tools_and_strategies.md`](tools_and_strategies.md): tools, sources, governance, ML, CI.
 - [`data_guide.md`](data_guide.md): sources, seeds and how to edit them.
 - [`scale.md`](scale.md): what the extracts read of Overture, and how build time grows with data.
 - [`running_costs.md`](running_costs.md): hosting, data, CI and the capped AI agents.
-- [`talk_outline.md`](talk_outline.md), [`articles/`](articles): walkthrough outline and write-ups.
 
 ### Product, market and plans
 - [`product_brief.md`](product_brief.md), [`value_proposition.md`](value_proposition.md): who it is for and why each piece exists.

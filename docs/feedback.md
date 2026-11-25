@@ -4,7 +4,7 @@ Merged 2026-11-12 from `feedback_round.md`, `feedback_findings.md`; each is now 
 
 ## Feedback round plan (friends beta, December 2026)
 
-Goal: learn whether RacketConnect helps people find a place to play, watch or find people to play with, and what is missing, before choosing between staying personal, open source or a paid layer. Output: a ranked backlog (`docs/feedback.md`) and real numbers for `docs/case_study.md`. Dates are TBD (owner picks the start; the round is 2 weeks).
+Goal: learn whether RacketConnect helps people find a place to play, watch or find people to play with, and what is missing, before choosing between staying personal, open source or a paid layer. Output: a ranked backlog (`docs/feedback.md`) and real numbers for the scorecard. Dates are TBD (owner picks the start; the round is 2 weeks).
 
 ### Owner checklist before sending
 - [ ] GoatCounter (ADR 0013, site `courts`, https://courts.goatcounter.com): exclude your own visits: open the live site once on each device and browser you use (laptop, phone) with `#toggle-goatcounter` added to the address, e.g. `https://abov.github.io/courtconnect-ca/#toggle-goatcounter`; GoatCounter then says tracking is disabled in that browser (it sets a local flag, so it survives changing IP; visit the same link again to turn counting back on); optionally also add your home IP under Settings > Ignore IPs (it changes, and a phone on mobile data uses another one). Date done: ____ (laptop), ____ (phone). Do not quote usage numbers from before it.
@@ -64,7 +64,7 @@ These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is bui
 11. Would a rough cost label ("Free / $ / $$ / $$$") on each place help you choose? Would you trust it if it said "estimated"? (No tier is built; members-only places would get none.)
 14. Would you tap a quick "how busy is it right now?" (empty / some / full) when you are at a court, if it took one tap and no sign-in? Would you trust the same from strangers before you drive there? (`docs/court_usage_plan.md`; nothing is built)
 
-### Numbers (GoatCounter, directional only with 6 to 10 people; say so in the case study)
+### Numbers (GoatCounter, directional only with 6 to 10 people; say so wherever they are shared)
 | Question | Measure | First target |
 |---|---|---|
 | Is it used? | visits per `ref=friend-*` tag | most invitees open it 2+ times |
@@ -78,7 +78,7 @@ These four ideas are marked "ask in the beta first" in CLAUDE.md. Nothing is bui
 1. **Log** one row per finding: date, who (sport + area, no names or initials), type (bug / missing place / wrong data / confusing label / feature idea / pricing), what happened, severity 1-3, source (call / message / analytics). Nothing people would not want public.
 2. **Fix wrong or missing data now** through the normal seed workflow (evidence + `make build`); mark the row "fixed" with the PR.
 3. **Score the rest with RICE** in one table: Reach (people of N who hit it), Impact (3 big, 2 medium, 1 small, 0.5 minimal), Confidence (100 / 80 / 50 %), Effort (person-days), score = R x I x C / E. Take the top three into "Open, in order" in `docs/status.md`.
-4. **Close the loop:** short "you said, we did" message to the testers; fill the placeholders in `docs/case_study.md` and the scorecard trend.
+4. **Close the loop:** short "you said, we did" message to the testers; fill the placeholders and the scorecard trend.
 5. **Decision note** (new ADR if direction changes): stay personal, open source, or test a paid layer.
 
 ### Risks
