@@ -40,7 +40,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0040, all accepted except 0001, su
 - Priorities, dated detail, parked items: `docs/status.md` (edit it only when priorities change). Hand-off is the PR description and `git log`; only automated routines write `docs/sessions/` notes. Never add lines to a shared log. Older history: `docs/archive/session_digest.md`.
 - Resorts and hotels with courts (all states, ADR 0028): case by case; add what non-guests can book with access stated, flag guests/members-only; Hawaii resorts: ask the owner first.
 - Closed, don't redo: City of Sparks, the Google place-ID layer (dormant), NAIP aerial pilot, partnership emails. Basque Pelota only from public online sources.
-- Project hub: `docs/README.md` indexes every doc, page and tool; add, rename or remove a doc there in the same task (`ci/check_docs_hub.py`). Tool changes also update the tool dictionary row (link in `docs/tools_and_strategies.md`).
+- Project hub: `docs/README.md` is the short three-door hub (use it, how it's built, run it); `docs/all_docs.md` indexes every doc, page and tool. Add, rename or remove a doc in `all_docs.md` in the same task, then `make hub` (`ci/check_docs_hub.py`). Tool changes also update the tool dictionary row (link in `docs/tools_and_strategies.md`).
 - Layout: `ingestion/` (extract/load/export; `oneoff/` = one-time scans, outside requests use `ingestion/useragent.py`), `transform/` (dbt), `app/` (static map), `chatbot/` (ask-box checks), `ci/` (checks; `ci/fixtures` = sample data).
 
 ## Keeping usage low (hooks enforce the first three: `docs/token_efficiency.md`)
