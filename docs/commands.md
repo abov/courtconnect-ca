@@ -5,7 +5,7 @@ Moved out of `CLAUDE.md` on 2026-11-17 so every session does not load it (token 
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
 - `make build-changed`   only what changed since the last good build, plus downstream (`ingestion/build_changed.py`; no `make` in Git Bash: run the script; `--full` or `--dry-run`). Use it for seed, model, macro and test edits. After loading raw data (new state, refresh) it cannot see the change: run `--full`. It skips Elementary's dashboard uploads (~25s; tests still run; `--elementary` keeps them). CI and the last check before a PR are the plain full `dbt build`.
 - `make app-data`   export `app/data/venues.json` for the map (commit it after any seed change; CI runs `ci/check_export_fresh.py`); `make app` serves it at localhost:8765
-- `make hub`   regenerate `app/hub.html` (the short project hub) and `app/all-docs.html` (every doc and tool) from `docs/README.md` and `docs/all_docs.md`; run after editing either, CI (`ci/check_docs_hub.py`) fails when it is stale
+- `make hub`   regenerate `app/hub.html` (the project hub: three doors, then every doc and tool) from `docs/README.md`; run after editing it, CI (`ci/check_docs_hub.py`) fails when it is stale
 - `make extract` / `make load`   refresh raw data (extract takes ~15 min; don't run unless asked)
 - `make push-data`   after extract + load: dry-run list of what differs from the private data repo `abov/courtconnect-data`; `ARGS=--push` commits and pushes it (`ingestion/push_data_bundle.py`; refuses files that shrank >10% unless `--force`)
 - `make check-links` / `make check-websites`   verify link-outs / flag dead venue sites
