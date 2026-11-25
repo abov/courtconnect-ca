@@ -126,7 +126,7 @@
     </li>
     <li>
       <h3>Export</h3>
-      <p>One JSON file of about <span id="s-mb">5.3</span> MB, with a data dictionary and an <code>llms.txt</code> so people and AI tools can read it.</p>
+      <p>One JSON file of about <span id="s-mb">5.3</span> MB, with a data dictionary and an <code>llms.txt</code> so people and AI tools can read it. The map loads it in two parts: <span id="s-first">428</span> KB (gzip) for the pins first, then addresses and links.</p>
       <p class="gate"><b>Gate:</b> CI fails if the committed export is stale.</p>
     </li>
     <li>
@@ -175,6 +175,7 @@
     set("asof", d.as_of);
     set("sc-asof", d.scorecard_as_of);
     set("s-mb", d.export_mb);
+    if (d.load) set("s-first", n(d.load.first_gz_kb));
     set("s-venues", n(d.venues));
     set("s-venues-n", d.sports_with_venues + " of " + d.sports_total + " sports have at least one venue");
     set("s-sla", d.sla_met + " of " + d.sla_total);

@@ -91,6 +91,20 @@ def overture_numbers() -> dict:
     return {"release": b["release"], "run_on": b["run_on"], "fetched_mb": round(fetched / 1e6), "themes_gb": round(size / 1e9, 1)}
 
 
+def load_numbers() -> dict:
+    """What a phone downloads before the map shows pins (data/map.json, ingestion/split_app_data.py) vs the whole export, gzipped as
+    GitHub Pages serves it, and the time saved at Lighthouse's mobile test speed (1.6 Mbps). An estimate, not a field measurement."""
+    import gzip
+    from split_app_data import j, split
+
+    full = VENUES.read_bytes()
+    core, det = split(json.loads(full))
+    gz = lambda b: len(gzip.compress(b, 6))
+    whole, first = gz(full), gz(j(core).encode("utf-8"))
+    return {"export_gz_kb": round(whole / 1000), "first_gz_kb": round(first / 1000), "details_gz_kb": round(gz(j(det).encode("utf-8")) / 1000),
+            "saved_s_slow4g": round((whole - first) * 8 / 1638400, 1)}
+
+
 def adrs_superseded() -> int:
     n = 0
     for f in (ROOT / "docs" / "decisions").glob("[0-9][0-9][0-9][0-9]-*.md"):
@@ -126,6 +140,7 @@ def build() -> dict:
         "history": history_rows(),
         "agent_runs": agent_run_rows(),
         "ask": ask_numbers(previous, meta["generated"]),
+        "load": load_numbers(),
     }
 
 
@@ -166,6 +181,7 @@ STORY = {
         f"- **Entity resolution measured on a gold set:** {d['gold']['pairs']} labelled pairs, {d['gold']['wrong_merges']} wrong merges, {d['gold']['missed']} missed.",
         f"- **Reads about {round(100 * d['overture']['fetched_mb'] / (d['overture']['themes_gb'] * 1000))}% of a {d['overture']['themes_gb']:.0f} GB columnar source** ({d['overture']['fetched_mb']:,} MB fetched of {d['overture']['themes_gb']} GB, places and addresses themes).",
         f"- **No server, no database service, $0 hosting:** one {d['export_mb']} MB JSON export on GitHub Pages.",
+        *([f"- **Fast on phones:** the map first downloads only what draws the pins, {d['load']['first_gz_kb']:,} KB instead of {d['load']['export_gz_kb']:,} KB (gzip), so it opens about {d['load']['saved_s_slow4g']} s sooner on a slow phone connection (estimate at 1.6 Mbps); addresses and links follow."] if d.get("load") else []),
         *([f"- **Ask box:** {d['ask']['tests']['passed']} of {d['ask']['tests']['total']} test questions answered right, rule-based with no AI model; CI runs the set on every change."] if d.get("ask", {}).get("tests", {}).get("total") else []),
         f"- *Numbers as of {d['as_of']}, filled in by `make stats`; the live figures are on [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html).*",
     ],

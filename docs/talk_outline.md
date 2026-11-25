@@ -7,7 +7,7 @@
 ## 90-second pitch (interview opener)
 
 <!-- numbers: filled in by make stats (ingestion/build_stats.py, STORY); edit the template there -->
-1. **What:** a free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas and Hawaii (plus a Mexico pilot), for sports where a tennis court and a padel court are not the same pin. 24,506 venues; 45 of 82 sports have at least one ([scorecard](data_quality_trend.csv), 2026-11-25).
+1. **What:** a free map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas and Hawaii (plus a Mexico pilot), for sports where a tennis court and a padel court are not the same pin. 24,617 venues; 45 of 82 sports have at least one ([scorecard](data_quality_trend.csv), 2026-11-25).
 2. **How:** Python ingestion, dbt on DuckDB, one 6.0 MB JSON file on GitHub Pages. No server, no accounts, $0 hosting ([running costs](running_costs.md)).
 3. **The interesting part:** I measure it. A labelled test set scores the place matcher (129 pairs, 0 wrong merges, 4 missed). A scorecard has stated service levels, published even when they miss: 6 of 8 met, and 28.1% of venues have a real name.
 <!-- /numbers -->

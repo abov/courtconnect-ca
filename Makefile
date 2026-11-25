@@ -104,8 +104,9 @@ docs:
 	$(DBT) docs generate && $(DBT) docs serve
 
 
-app-data:        ## export the venue finder to app/data/venues.json for the map
+app-data:        ## export the venue finder to app/data/venues.json for the map (+ its uncommitted split, map.json and details.json, that the map loads)
 	$(PY) ingestion/export_app_data.py
+	$(PY) ingestion/split_app_data.py
 
 changes:         ## diff venues.json with origin/main into app/data/changes.json (public change feed, ADR 0025)
 	$(PY) ingestion/build_changes.py
