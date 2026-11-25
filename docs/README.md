@@ -9,7 +9,7 @@ One free map of every racket sport, from park courts to private clubs. Pick the 
 For players. Nothing to install, no sign-in.
 
 - [Open the live map](https://abov.github.io/courtconnect-ca/): find a court, an event to watch or a group to play with.
-- [Ask the data](https://abov.github.io/courtconnect-ca/ask-the-data.html): ask a plain-English question about the venues.
+- [Ask a question](https://abov.github.io/courtconnect-ca/?ask): the map's Ask box answers plain-English questions about places and the data (counts, rankings, how sure the names are).
 - Something wrong or missing? Use "Fix or add your listing" in the map's About card, or see [how to contribute](../CONTRIBUTING.md).
 
 ## 2. See how it's built
@@ -36,7 +36,7 @@ Every doc, runbook, monitor and tool, grouped by purpose, with a search box. Doc
 
 ### Live pages
 
-[Map](https://abov.github.io/courtconnect-ca/), [project hub](https://abov.github.io/courtconnect-ca/hub.html), [how it's built](https://abov.github.io/courtconnect-ca/how-its-built.html), [ask the data](https://abov.github.io/courtconnect-ca/ask-the-data.html), [run history](https://abov.github.io/courtconnect-ca/run-history.html), [database docs and lineage](https://abov.github.io/courtconnect-ca/dbt-docs/#!/overview) (dbt docs, built from sample data), and for builders and AI tools the [data dictionary](../app/data-dictionary.md) and [`llms.txt`](../app/llms.txt).
+[Map](https://abov.github.io/courtconnect-ca/), [project hub](https://abov.github.io/courtconnect-ca/hub.html), [how it's built](https://abov.github.io/courtconnect-ca/how-its-built.html), [run history](https://abov.github.io/courtconnect-ca/run-history.html), [database docs and lineage](https://abov.github.io/courtconnect-ca/dbt-docs/#!/overview) (dbt docs, built from sample data), and for builders and AI tools the [data dictionary](../app/data-dictionary.md) and [`llms.txt`](../app/llms.txt).
 
 ### Understand it
 - [Source repository](https://github.com/abov/courtconnect-ca) and [`../README.md`](../README.md): what it is, quick start, how to edit the data. Reports and PRs: [`../CONTRIBUTING.md`](../CONTRIBUTING.md).

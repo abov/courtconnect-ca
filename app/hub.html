@@ -70,7 +70,7 @@
       <a href="dashboard/">Data quality</a>
       <a href="hub.html" aria-current="page">Hub</a>
       <a href="run-history.html">Run history</a>
-      <a href="ask-the-data.html">Ask the data</a>
+      <a href="./?ask">Ask</a>
       <a href="https://github.com/abov/courtconnect-ca">Source</a>
     </nav>
     <h1>RacketConnect project hub</h1>
@@ -84,7 +84,7 @@
 <section class="door">
 <h2 id="1-use-it">1. Use it</h2>
 <p>For players. Nothing to install, no sign-in.</p>
-<ul><li><a href="./">Open the live map</a>: find a court, an event to watch or a group to play with.</li><li><a href="ask-the-data.html">Ask the data</a>: ask a plain-English question about the venues.</li><li>Something wrong or missing? Use "Fix or add your listing" in the map's About card, or see <a href="https://github.com/abov/courtconnect-ca/blob/main/CONTRIBUTING.md">how to contribute</a>.</li></ul>
+<ul><li><a href="./">Open the live map</a>: find a court, an event to watch or a group to play with.</li><li><a href="./?ask">Ask a question</a>: the map's Ask box answers plain-English questions about places and the data (counts, rankings, how sure the names are).</li><li>Something wrong or missing? Use "Fix or add your listing" in the map's About card, or see <a href="https://github.com/abov/courtconnect-ca/blob/main/CONTRIBUTING.md">how to contribute</a>.</li></ul>
 </section><section class="door">
 <h2 id="2-see-how-its-built">2. See how it's built</h2>
 <p>For reviewers and hiring managers: the whole story in about five minutes.</p>
@@ -97,7 +97,7 @@
 <h2 id="all-docs-and-tools">All docs and tools</h2>
 <p>Every doc, runbook, monitor and tool, grouped by purpose, with a search box. Docs open on GitHub; each question has one home here, other pages link instead of repeating it.</p>
 <h3 id="live-pages">Live pages</h3>
-<p><a href="./">Map</a>, <a href="hub.html">project hub</a>, <a href="how-its-built.html">how it's built</a>, <a href="ask-the-data.html">ask the data</a>, <a href="run-history.html">run history</a>, <a href="dbt-docs/#!/overview">database docs and lineage</a> (dbt docs, built from sample data), and for builders and AI tools the <a href="https://github.com/abov/courtconnect-ca/blob/main/app/data-dictionary.md">data dictionary</a> and <a href="llms.txt"><code>llms.txt</code></a>.</p>
+<p><a href="./">Map</a>, <a href="hub.html">project hub</a>, <a href="how-its-built.html">how it's built</a>, <a href="run-history.html">run history</a>, <a href="dbt-docs/#!/overview">database docs and lineage</a> (dbt docs, built from sample data), and for builders and AI tools the <a href="https://github.com/abov/courtconnect-ca/blob/main/app/data-dictionary.md">data dictionary</a> and <a href="llms.txt"><code>llms.txt</code></a>.</p>
 <h3 id="understand-it">Understand it</h3>
 <ul><li><a href="https://github.com/abov/courtconnect-ca">Source repository</a> and <a href="https://github.com/abov/courtconnect-ca/blob/main/README.md"><code>../README.md</code></a>: what it is, quick start, how to edit the data. Reports and PRs: <a href="https://github.com/abov/courtconnect-ca/blob/main/CONTRIBUTING.md"><code>../CONTRIBUTING.md</code></a>.</li><li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/case_study.md"><code>case_study.md</code></a>: the problem, trade-offs and incidents.</li><li><a href="https://github.com/abov/courtconnect-ca/tree/main/docs/decisions">Decision records</a> (ADRs 0001-0041).</li><li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/architecture.md"><code>architecture.md</code></a> (with <code>architecture.svg</code>): layers and flow.</li><li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/tools_and_strategies.md"><code>tools_and_strategies.md</code></a>: tools, sources, governance, ML, CI. The tool dictionary (every tool, lifecycle, license) is a private <a href="https://docs.google.com/spreadsheets/d/1RWONK-tLDJh5lRNyAISlNMEY4UH9ZHWGSW2ytlo5k1c/edit?gid=0#gid=0">Google Sheet</a> (owner); update its row and this file's in the same task whenever a tool, library, service or data source is added or removed.</li><li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/data_guide.md"><code>data_guide.md</code></a>: sources, seeds and how to edit them.</li><li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/scale.md"><code>scale.md</code></a>: what the extracts read of Overture, and how build time grows with data.</li><li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/running_costs.md"><code>running_costs.md</code></a>: hosting, data, CI and the capped AI agents.</li><li><a href="https://github.com/abov/courtconnect-ca/blob/main/docs/talk_outline.md"><code>talk_outline.md</code></a>, <a href="https://github.com/abov/courtconnect-ca/tree/main/docs/articles"><code>articles/</code></a>: walkthrough outline and write-ups.</li></ul>
 <h3 id="data-quality-and-monitoring">Data quality and monitoring</h3>

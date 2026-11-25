@@ -40,7 +40,8 @@ def slug(text):
 
 def href(url):
     if url.startswith(SITE):
-        return url[len(SITE):] or "./"
+        rest = url[len(SITE):]
+        return "./" + rest if not rest or rest[0] in "?#" else rest   # the map itself: "./", "./?ask"
     if url.startswith(("http", "mailto:", "#")):
         return url
     path, _, frag = url.partition("#")
@@ -129,7 +130,7 @@ NAV = """<nav class="site-nav" aria-label="RacketConnect pages">
       <a href="dashboard/">Data quality</a>
       <a href="hub.html" aria-current="page">Hub</a>
       <a href="run-history.html">Run history</a>
-      <a href="ask-the-data.html">Ask the data</a>
+      <a href="./?ask">Ask</a>
       <a href="https://github.com/abov/courtconnect-ca">Source</a>
     </nav>"""
 
