@@ -41,8 +41,8 @@ ADR 0036. Verified rows only; link-out only, nothing is booked here. `n` name, `
 ## changes.json (change feed)
 File `data/changes.json`, built by `ingestion/build_changes.py` after each refresh. `meta` has `generated`, `base` (what it was compared with), `this_run` counts and `id_drift` (venues whose id changed; should be ~0). `changes` is newest first, 180 days kept: `d` date, `k` kind (`venue_new`, `venue_gone`, `venue_changed`, `event_new`, `event_changed`, `event_removed`, `social_new`, `social_removed`), `i` venue id (matches `venues[].i`; venues only), `n` name, `c` city, `l` label (`confirmed`, `reported`, `inferred`: the data's own), `t` detail. `venue_gone` means the source stopped listing it, a lead and not proof of closure. No personal data.
 
-## Query it in the browser
-`ask-the-data.html` loads this file into DuckDB-WebAssembly and flattens it into `venues`, `sports` and `venue_sports` tables; the SQL is in `ask-the-data-queries.json` and `ci/check_ask_the_data.py` runs it on every change. A sport with `b` set is played on another sport's courts, so leave it out when counting courts or venues. The plain-English box on that page (`ask-the-data-nl.js`) matches a question to fixed SQL templates, with no AI model, and shows the SQL it wrote; its test questions are in `ask-the-data-questions.json`.
+## Ask it in the browser
+The map's Ask box (`ask.js`, opened with `./?ask`) answers plain-English questions from this file with fixed rules and no AI model: places to play, counts by state or city, which cities, states or sports have the most places, mapped court counts by sport, how sure the names are (`q`) and how much has been checked (`cf`). A sport with `b` set is played on another sport's courts, so it is left out when counting courts or ranking sports. Its test questions are in `chatbot/test_ask.js`. (This replaced the old `ask-the-data.html` SQL page, which now sends visitors to the Ask box.)
 
 ## Answering well
 - To find courts for a sport: look up its index in `sports`, then filter `venues` where any `p[i][0]` equals it; compute distance from `y`/`x`.

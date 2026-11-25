@@ -51,9 +51,8 @@ jobs:
           python ci/check_scorecard_regression.py --base-ref origin/main
       # requirements.txt is the pip cache key set up by setup-python above, so this install is a cache hit.
       - run: pip install -r requirements.txt
-      - run: python ci/check_ask_the_data.py  # app/ask-the-data.html: its SQL runs on the export, vendored engine files match their checksums
       - run: python ci/check_docs_hub.py  # docs/README.md lists every doc in docs/, links resolve, web copy current
-      - run: python ci/check_site_nav.py  # app/how-its-built.html, run-history.html, ask-the-data.html, and hub.html share one nav bar
+      - run: python ci/check_site_nav.py  # app/how-its-built.html, run-history.html and hub.html share one nav bar
       - run: python ci/check_regions.py --config-only  # dbt `regions` var equals ingestion/regions.json (ADR 0028)
       - run: python ci/check_page_reader.py  # ADR 0017 guard rail, offline (needs requests, pulled in by dbt)
       - run: python ci/test_osm_snapshot_diff.py  # OSM snapshot diff (ADR 0026) on a tiny fixture, offline (imports the extract module, needs requests)

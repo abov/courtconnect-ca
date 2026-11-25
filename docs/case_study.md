@@ -7,12 +7,12 @@ A free map of racket-sport venues in California, Nevada, Oregon, Washington, Ari
 ## At a glance
 <!-- numbers: filled in by make stats (ingestion/build_stats.py, STORY); edit the template there -->
 - **24,617 venues** from three source families, 45 of 82 sports with at least one venue, 6 of 8 service levels met (scorecard `make quality`, 2026-11-25).
-- **69 dbt models, 48 seeds, 39 custom SQL tests**, plus column tests (370 dbt tests passing); **41 decision records**; 16 CI gate scripts.
+- **69 dbt models, 48 seeds, 39 custom SQL tests**, plus column tests (370 dbt tests passing); **41 decision records**; 15 CI gate scripts.
 - **Entity resolution measured on a gold set:** 129 labelled pairs, 0 wrong merges, 4 missed.
 - **Reads about 2% of a 40 GB columnar source** (743 MB fetched of 39.6 GB, places and addresses themes).
 - **No server, no database service, $0 hosting:** one 6.0 MB JSON export on GitHub Pages.
 - **Fast on phones:** the map first downloads only what draws the pins, 431 KB instead of 1,117 KB (gzip), so it opens about 3.3 s sooner on a slow phone connection (estimate at 1.6 Mbps); addresses and links follow.
-- **Ask box:** 98 of 98 test questions answered right, rule-based with no AI model; CI runs the set on every change.
+- **Ask box:** 121 of 121 test questions answered right, rule-based with no AI model; CI runs the set on every change.
 - *Numbers as of 2026-11-24, filled in by `make stats`; the live figures are on [How it's built](https://abov.github.io/courtconnect-ca/how-its-built.html).*
 <!-- /numbers -->
 

@@ -15,7 +15,7 @@
  "seeds": 48,
  "custom_tests": 39,
  "adrs": 41,
- "ci_checks": 16,
+ "ci_checks": 15,
  "gold": {
   "pairs": 129,
   "wrong_merges": 0,
@@ -258,8 +258,8 @@
  ],
  "ask": {
   "tests": {
-   "passed": 98,
-   "total": 98
+   "passed": 121,
+   "total": 121
   },
   "week_from": "2026-11-18",
   "week_to": "2026-11-24",

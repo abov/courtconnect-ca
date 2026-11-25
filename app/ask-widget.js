@@ -117,7 +117,7 @@
     }
 
     function intro() {
-      add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Ask about places to play, events, groups, how to try a sport, what is in the map view, or how RacketConnect works. Nothing is booked or paid here. Your sport and city are remembered in this browser only. If I can't answer, you can send the question to us; it is only sent when you press the button."));
+      add(el("div", {class: "am note"}, "Prototype. Answers come only from our own venue data, no AI model. Ask about places to play, events, groups, how to try a sport, what is in the map view, how RacketConnect works, or the data itself (which cities have the most padel, how sure the names are, how many courts are mapped). Nothing is booked or paid here. Your sport and city are remembered in this browser only. If I can't answer, you can send the question to us; it is only sent when you press the button."));
       addChips(root.Ask.starters);
     }
 
@@ -129,6 +129,8 @@
     close.addEventListener("click", () => open(false));
     panel.addEventListener("keydown", e => { if (e.key === "Escape") open(false); });
     form.addEventListener("submit", e => { e.preventDefault(); go(input.value); input.value = ""; });
+    // ?ask on the map's address opens the box (old "Ask the data" links land here); ?ask=<question> also asks it
+    return {open: () => open(true), ask: q => { open(true); go(String(q || "")); }};
   }
 
   root.AskWidget = {mount};

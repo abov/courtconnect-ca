@@ -31,11 +31,11 @@ Timing: slides 1–2 two minutes; 3–5 four; 6–7 three; 8 one.
 
 ## 5-minute screen-recording script
 
-Open four tabs before recording. Press the load button on "Ask the data" first (35.7 MB) so the recording has no wait.
+Open four tabs before recording.
 
 1. **Map (60 s).** Filter to padel. Open a pin and read aloud how its name is labelled (confirmed or inferred). Say: "this label is the product."
 2. **How it's built (45 s).** Scroll the pipeline and the numbers. Say they come from `build_stats.json`, not typed in.
-3. **Ask the data (90 s).** Run "How sure are the names?" (5,743 unnamed, 2,875 inferred, 922 confirmed or hand-curated, 748 business listings). Edit one query live, then run a deliberately wrong column to show the error. Say: "this runs in your browser on the same file the map reads; nothing is sent anywhere."
+3. **Ask box (90 s).** On the map, ask "How sure are the names?", then "Which cities have the most padel?". Then ask something off-topic to show the kind refusal and the "Send this question to us" button. Say: "this runs in your browser on the same file the map reads, with fixed rules and a tested question set; nothing is sent unless you press that button."
 4. **Run history (45 s).** Show the scorecard trend and the agent-runs table, including its cost estimates and that the log can lag GitHub.
 5. **Close (60 s).** Open the merge-gate threat model. Say what is still open (gaps 1 and 4–7) rather than ending on a win.
 
@@ -60,6 +60,6 @@ Open four tabs before recording. Press the load button on "Ask the data" first (
 
 - Venue and sport counts, service levels, tests: `python ingestion/build_stats.py` then read `app/data/build_stats.json`, or the last row of [`data_quality_trend.csv`](data_quality_trend.csv).
 - Gold-set result: `python ingestion/eval_match_gold.py --check`.
-- Ask-the-data question results: run the page, or `python ci/check_ask_the_data.py` for a pass/fail.
+- Ask box answers (including the data questions the old Ask the data page took): ask on the map, or `node chatbot/test_ask.js` for a pass/fail.
 - Agent runs and cost: [`agent_log.csv`](agent_log.csv); open PRs and the gate's decisions on GitHub.
 - Number of ADRs, models and seeds: [case study](case_study.md), "At a glance" (filled in by `make stats`, so it matches the live How it's built page).

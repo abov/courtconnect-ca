@@ -1,4 +1,4 @@
-// Runs the 30 questions of docs/chatbot.md through the free ask box (app/ask.js) and checks the kind of answer.
+// Runs the 30 questions of docs/chatbot.md, plus the ones the old Ask the data page answered, through the free ask box (app/ask.js) and checks the kind of answer.
 //   node chatbot/test_ask.js          (prints each answer; exit code 1 if a check fails)
 const fs = require("fs");
 const path = require("path");
@@ -97,6 +97,30 @@ const Q = [
   ["Squash in Redding", "venues", "Report a missing place"],
   ["Pickleball groups in Redding", "social", "The nearest Pickleball group we have is in"],
   ["Padel tournaments near Reno", "events", "Tell us about an event"],
+  // folded in from the old "Ask the data" page (its test questions, now answered here without SQL)
+  ["padel in vegas", "venues", "P1 Padel"],
+  ["How many pickleball courts are in Reno?", "count", "Mapped Pickleball courts there"],
+  ["How many venues have squash?", "count", "Squash places in our data"],
+  ["How many free pickleball venues in Oregon?", "count", "free Pickleball places in Oregon"],
+  ["Which cities have the most squash venues?", "stats", "Cities with the most Squash places"],
+  ["Which state has the most padel?", "stats", "States with the most Padel places"],
+  ["Which sports have the most venues in Washington?", "stats", "Sports with the most places in Washington"],
+  ["Public tennis courts in Los Angeles", "venues", "marked public"],
+  ["Free tennis courts in Santa Monica", "venues", "marked free"],
+  ["Which sports are in Reno?", "stats", "Sports with the most places near Reno"],
+  ["How sure are the names in Seattle?", "stats", "How sure the names are"],
+  ["How sure are the names?", "stats", "Inferred from a nearby park or school"],
+  ["How much has anyone checked?", "stats", "Map data only"],
+  ["How many confirmed pickleball venues?", "stats", "Pickleball places"],
+  ["How many table tennis venues are there?", "count", "Table Tennis places"],
+  ["pop tennis and padel in California", "venues", "You named 2 sports"],
+  ["Which sports have the most venues?", "stats", "Tennis | "],
+  ["Which cities have the most venues?", "stats", "Cities with the most places"],
+  ["How many courts are known, by sport?", "stats", "courts at"],
+  ["How many venues have a website?", "count", "places with a website"],
+  ["How many members-only tennis venues in California?", "count", "members-only Tennis places in California"],
+  ["Top cities for pickleball in Texas", "stats", "Houston, TX"],
+  ["What is the capital of France?", "refuse"],
 ];
 
 let ask = Ask.create(data, store), fails = 0;
