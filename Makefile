@@ -5,7 +5,7 @@ STATES = $(shell $(PY) -c "import sys; sys.path.insert(0, 'ingestion'); import o
 RAW = $(shell $(PY) ingestion/rawdir.py)   # shared raw-CSV folder: the main checkout's data/raw, even from a worktree
 
 # Without this, `make app` and `make docs` see the app/ and docs/ directories and report "up to date".
-.PHONY: rank-rechecks check-pages find-websites setup extract fetch-data push-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability ops-metrics agent-activity demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats hub usage interest market-snapshot sync-reports issues feedback ask-feedback exception-queue
+.PHONY: rank-rechecks check-pages reconfirm find-websites setup extract fetch-data push-data fresh-db extract-boundaries extract-boundaries-mx city-boundaries extract-addresses reverse-geocode extract-places search-terms extract-walls extract-la sport-map sync-sports check-websites load deps build build-changed observability ops-metrics agent-activity demo refresh docs app-data changes app report check-links rank-review eval-match quality dashboard-data stats hub usage interest market-snapshot sync-reports issues feedback ask-feedback exception-queue
 
 setup:            ## one-time: create venv and install deps
 	$(PY) -m venv .venv && .venv/bin/pip install -r requirements.txt || .venv/Scripts/pip install -r requirements.txt
@@ -118,6 +118,9 @@ report:           ## regenerate docs/coverage_snapshot.md and docs/sport_name_re
 
 check-pages:      ## list verified pages that changed or vanished since the last look (conditional requests + text hash; ARGS="--limit 50")
 	$(PY) ingestion/check_page_changes.py $(ARGS)
+
+reconfirm:        ## re-read stale hand-added venues' own pages; re-date only rows whose page still names the place and sport (ARGS="--dry-run"); run from home, then build + app-data
+	$(PY) ingestion/reconfirm_manual_venues.py $(ARGS)
 
 find-websites:    ## official websites for pins with none: scripts first, review queue for a model (ARGS="--region OR --city Eugene"; --eval, --hints, --apply; docs/website_finder.md)
 	$(PY) ingestion/find_websites.py $(ARGS)
