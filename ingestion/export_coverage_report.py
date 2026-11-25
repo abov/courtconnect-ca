@@ -28,6 +28,21 @@ NAME_NOTES = {
 }
 
 
+def write_if_changed(path: Path, text: str) -> bool:
+    """Write `text` only if it differs from the file on disk, ignoring the dated title line.
+
+    A rerun on another day with the same numbers keeps the old file, so it makes no diff and no PR.
+    Returns True when the file was written.
+    """
+    def body(s: str) -> str:
+        return s.split("\n", 1)[1] if "\n" in s else s
+
+    if path.exists() and body(path.read_text(encoding="utf-8")) == body(text):
+        return False
+    path.write_text(text, encoding="utf-8", newline="")
+    return True
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     con = duckdb.connect("courtconnect.duckdb", read_only=True)
@@ -85,7 +100,7 @@ def main() -> None:
 
 Filling these gaps needs a second source (Google Places, club and league directories). See `docs/decisions/0004`.
 """]
-    Path("docs/coverage_snapshot.md").write_text("\n".join(L), encoding="utf-8", newline="")
+    snap_written = write_if_changed(Path("docs/coverage_snapshot.md"), "\n".join(L))
 
     with open("transform/seeds/all_racquet.csv", encoding="utf-8", newline="") as f:
         sheet = list(csv.DictReader(f))
@@ -103,8 +118,9 @@ Filling these gaps needs a second source (Google Places, club and league directo
         s = r["sport"].strip()
         note = NAME_NOTES.get(s) or "No OpenStreetMap tag exists" + ("" if r["url"] else " and no website listed")
         R.append(f"| {i} | {s} | {r['players'] or '-'} | {note} |")
-    Path("docs/sport_name_review.md").write_text("\n".join(R) + "\n", encoding="utf-8", newline="")
-    print(f"Wrote docs/coverage_snapshot.md ({len(rows)} sports) and docs/sport_name_review.md ({len(unmapped)} unmapped)")
+    review_written = write_if_changed(Path("docs/sport_name_review.md"), "\n".join(R) + "\n")
+    print(f"coverage_snapshot.md: {'written' if snap_written else 'unchanged (no diff)'} ({len(rows)} sports); "
+          f"sport_name_review.md: {'written' if review_written else 'unchanged (no diff)'} ({len(unmapped)} unmapped)")
 
 
 if __name__ == "__main__":

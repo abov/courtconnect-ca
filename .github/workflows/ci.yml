@@ -37,6 +37,7 @@ jobs:
       - run: python ci/check_review_priority.py
       - run: python ci/test_sync_reports.py
       - run: python ci/test_check_refresh_diff.py  # merge-gate classifier (ADR 0019), synthetic exports, offline
+      - run: python ci/test_export_coverage_report.py  # snapshot writer keeps the file when only the date would change, offline
       - run: python ci/test_weekly_audit.py  # weekly audit digest and chain alert (ADR 0019), synthetic PRs, offline
       - run: python ci/test_feedback_log.py  # feedback ledger sync, offline
       - run: python ci/test_ask_feedback.py  # ask-box feedback extract: scrubbing and merging, offline
