@@ -158,3 +158,9 @@ One line per `all_racquet.csv` sport. [x] = pinned, lead added, searched with no
 - [ ] Typti: not searched this pass (no query run)
 
 **Update 2026-11-24 (Tijuana, Tecate, Rosarito, second pass: sheet sports left over from the first pass):** searched in English and Spanish for soft tennis, tenis criollo, crossminton, tamburello, platform tennis, teqball and pickleball. Nothing found for any of them in the three cities (teqball returned only product listings). Pickleball: Parque México (one free outdoor court, Playas de Tijuana) and the members-only clubs appear only on Pickleheads and Pickle Plus, which are not evidence; the existing lead `mx-bc-public-pickleball-courts` already covers Parque México. Flou Padel Club, New City: Playtomic page re-checked, still HTTP 404; stays a lead. No pins, leads or events added: the 2026 Club Campestre and Club Britania tennis tournaments are past and participant-only. Not swept (niche sheet sports with no sign in any Mexican search so far): Smolball, Speedball, Street Tennis, Touchtennis, Smashball, Frescoball and the other Subculture or Rec rows.
+
+## CDMX/Edomex follow-up (2026-11-25)
+
+- The 7 leads from the sweep: Tepepan, Escuela Mexicana, Tennis itto Coapa and Club de Tenis Lomas were already pinned (part 5, 2026-11-20): marked resolved. Squash 73 rejected (squash73.mx: cultural space, old courts are rehearsal rooms, no play). Teniscapa stays a lead (2024 article only, no address).
+- No automatic CDMX/Edomex pin is unnamed (all 523 are manual or directory-named); no closures found. Directory-only pins without a website (about 200) not individually checked this pass.
+- Nominatim cannot place house numbers for Tepepan, Lindavista or Rancho Estanzuela streets.
