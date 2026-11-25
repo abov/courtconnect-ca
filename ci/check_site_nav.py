@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 APP = Path(__file__).resolve().parents[1] / "app"
-PAGES = {"how-its-built.html": "how-its-built.html", "run-history.html": "run-history.html", "ask-the-data.html": "ask-the-data.html", "hub.html": "hub.html"}
+PAGES = {"how-its-built.html": "how-its-built.html", "run-history.html": "run-history.html", "ask-the-data.html": "ask-the-data.html", "hub.html": "hub.html", "all-docs.html": "hub.html"}  # all-docs is the hub's second page
 NAV = re.compile(r'<nav class="site-nav".*?</nav>', re.S)
 CURRENT = re.compile(r' aria-current="page"')
 
