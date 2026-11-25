@@ -1,21 +1,21 @@
 {
- "as_of": "2026-11-12",
- "scorecard_as_of": "2026-11-10",
- "venues": 22933,
- "sports_with_venues": 44,
+ "as_of": "2026-11-25",
+ "scorecard_as_of": "2026-11-25",
+ "venues": 24506,
+ "sports_with_venues": 45,
  "sports_total": 82,
- "export_mb": 5.3,
+ "export_mb": 6.0,
  "adrs_superseded": 1,
- "named_pct": 18.3,
- "sla_met": 7,
+ "named_pct": 28.1,
+ "sla_met": 6,
  "sla_total": 8,
- "tests_pass": 308,
+ "tests_pass": 370,
  "tests_fail": 0,
- "models": 68,
- "seeds": 42,
- "custom_tests": 38,
- "adrs": 39,
- "ci_checks": 15,
+ "models": 69,
+ "seeds": 48,
+ "custom_tests": 39,
+ "adrs": 41,
+ "ci_checks": 16,
  "gold": {
   "pairs": 129,
   "wrong_merges": 0,
@@ -204,6 +204,22 @@
    "named_pct": 18.3,
    "sites_dead_pct": 0.0,
    "seen_35d_pct": 100.0
+  },
+  {
+   "date": "2026-11-25",
+   "venues": 24506,
+   "sports_with_venues": 45,
+   "events_upcoming": 97,
+   "actions_current": 1002,
+   "extract_age_days": 11,
+   "sla_met": 6,
+   "sla_total": 8,
+   "tests_pass": 370,
+   "tests_warn": 0,
+   "tests_fail": 0,
+   "named_pct": 28.1,
+   "sites_dead_pct": 0.0,
+   "seen_35d_pct": 98.3
   }
  ],
  "agent_runs": [
@@ -228,6 +244,14 @@
    "pr": 463,
    "class": "R3",
    "gates": "pass after 4 unreadable-source events moved to leads",
+   "outcome": "edited",
+   "est_cost_usd": 1.5
+  },
+  {
+   "date": "2026-11-25",
+   "pr": null,
+   "class": "R3",
+   "gates": "scorecard regression (seen in 35 days 100.0->98.3; SLAs failing 1->2); other gates pass",
    "outcome": "open",
    "est_cost_usd": 1.5
   }

@@ -1,36 +1,36 @@
 # Data quality scorecard
 
-Generated 2026-11-10 by `make quality` (`ingestion/export_quality_scorecard.py`) from the current DuckDB build. Targets are stated service levels, not guarantees: they are set in the script and a breach is reported, not hidden.
+Generated 2026-11-25 by `make quality` (`ingestion/export_quality_scorecard.py`) from the current DuckDB build. Targets are stated service levels, not guarantees: they are set in the script and a breach is reported, not hidden.
 
 ## Service levels
 
 | Measure | Now | Target | Status |
 |---|---|---|---|
-| OSM extract age | 0 days | <= 90 days | OK |
-| Oldest current link-out check | 31 days | <= 60 days | OK |
-| Oldest upcoming-event check | 12 days | <= 14 days | OK |
-| Oldest current social-series check | 20 days | <= 35 days | OK |
-| Website link-check age | 13 days | <= 60 days | OK |
+| OSM extract age | 11 days | <= 90 days | OK |
+| Oldest current link-out check | 46 days | <= 60 days | OK |
+| Oldest upcoming-event check | 27 days | <= 14 days | **BREACH** |
+| Oldest current social-series check | 35 days | <= 35 days | OK |
+| Website link-check age | 27 days | <= 60 days | OK |
 | Dead venue websites (of checked) | 0.0 % | <= 10.0 % | OK |
-| Venues seen in the last 35 days | 100.0 % | >= 99.0 % | OK |
-| Venues with a real name | 18.3 % | >= 25.0 % | **BREACH** |
+| Venues seen in the last 35 days | 98.3 % | >= 99.0 % | **BREACH** |
+| Venues with a real name | 28.1 % | >= 20.0 % | OK |
 
-**7 of 8 service levels met.**
+**6 of 8 service levels met.**
 
 ## Coverage
 
-- Venues on the map: **16,919** (15,020 in OpenStreetMap, 1,448 in Overture places, 1,688 hand-curated; sources overlap).
-- Of those, hitting-wall venues (ADR 0032; a wall that stands at no listed court venue): **389**; court venues: **16,530**.
-- Venues with a real name: **3,103** (18.3%). The rest carry a name guessed from the park or school, or none.
-- Venues with a usable website: **2,265** (13.4%).
-- Sports on the sheet: **82**; with at least one venue: **43**; empty: **39**.
+- Venues on the map: **24,506** (20,770 in OpenStreetMap, 3,255 in Overture places, 2,565 hand-curated; sources overlap).
+- Of those, hitting-wall venues (ADR 0032; a wall that stands at no listed court venue): **393**; court venues: **24,113**.
+- Venues with a real name: **6,880** (28.1%). The rest carry a name guessed from the park or school, or none. Counted as real: named by a source or person, or inside a named sports centre, community centre or club/resort.
+- Venues with a usable website: **4,448** (18.2%).
+- Sports on the sheet: **82**; with at least one venue: **45**; empty: **37**.
 
 ## Trust labels (hand-curated venues)
 
 | Confirmation | Venues |
 |---|---|
-| official | 1723 |
-| reported | 309 |
+| official | 2450 |
+| reported | 546 |
 | visited | 3 |
 
 Visited = seen in person; official = stated on the operator's own page; reported = told to us, not verified. Inferred data is labeled inferred on the map and never counted as confirmed.
@@ -41,23 +41,23 @@ Community reports: **0** venues reported by 1 person, **0** by 2 or more (2+ ind
 
 Rule-based score from `mart_venue_confidence` (rules_v2): high >= 60, medium 30-59, low < 30. It is an inferred heuristic for prioritizing review, not a probability; it is not shown on the map.
 
-| Band | All | AZ | CA | HI | MX | NV | OR | WA |
-|---|---|---|---|---|---|---|---|---|
-| high | 1,468 | 111 | 614 | 40 | 276 | 98 | 128 | 201 |
-| medium | 1,127 | 68 | 659 | 40 | 197 | 39 | 41 | 83 |
-| low | 14,355 | 1,911 | 8,811 | 372 | 57 | 410 | 1,002 | 1,792 |
-| total | 16,950 | 2,090 | 10,084 | 452 | 530 | 547 | 1,171 | 2,076 |
+| Band | All | AZ | CA | HI | MX | NM | NV | OR | TX | WA |
+|---|---|---|---|---|---|---|---|---|---|---|
+| high | 1,938 | 144 | 494 | 50 | 522 | 47 | 63 | 213 | 184 | 221 |
+| medium | 2,099 | 65 | 812 | 32 | 468 | 21 | 80 | 36 | 498 | 87 |
+| low | 20,498 | 1,897 | 8,788 | 371 | 973 | 467 | 404 | 954 | 4,867 | 1,777 |
+| total | 24,535 | 2,106 | 10,094 | 453 | 1,963 | 535 | 547 | 1,203 | 5,549 | 2,085 |
 
 ## Freshness
 
-- OSM extract: 0 days old.
-- Current link-outs: 662; 0 older than 60 days.
-- Upcoming events: 76; 0 not re-checked in 14+ days.
-- Current social series: 37; 0 not re-checked in 35+ days.
-- Website liveness check: 13 days old; 0 of 949 checked venue sites dead (0.0%).
-- Venues seen by any source in the last 35 days: 16,946 of 16,950 (100.0%); oldest date 2026-10-10; 4 undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check (monthly runbook: docs/monthly_refresh.md).
+- OSM extract: 11 days old.
+- Current link-outs: 1002; 0 older than 60 days.
+- Upcoming events: 97; 26 not re-checked in 14+ days.
+- Current social series: 157; 0 not re-checked in 35+ days.
+- Website liveness check: 27 days old; 0 of 1013 checked venue sites dead (0.0%).
+- Venues seen by any source in the last 35 days: 24,126 of 24,535 (98.3%); oldest date 2026-10-10; 4 undated. Sources: OSM extract date, Overture release date, hand-added confirmation, link-out check (monthly runbook: docs/monthly_refresh.md).
 
-Stale or undated venues (first 4):
+Stale or undated venues (first 25):
 
 | Venue | Source | Last seen |
 |---|---|---|
@@ -65,20 +65,41 @@ Stale or undated venues (first 4):
 | Calabasas Pickleball Club | manual | undated |
 | Manhattan Heights Park | manual | undated |
 | PDR | manual | undated |
+| Calismash | manual | 2026-10-10 |
+| Equinox Sports Club/LA | manual | 2026-10-10 |
+| Prince O' Whales | manual | 2026-10-10 |
+| Padel Up (Culver City) | manual | 2026-10-12 |
+| 24 Hour Fitness Costa Mesa Newport Super Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Eastvale Super Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Fontana Super Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Glendale Super Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Lancaster West Super Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Livermore Super Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Orange Village Super Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Pleasanton Super Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Rancho Cordova Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Santee Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Stadium Sport | manual | 2026-10-14 |
+| 24 Hour Fitness Summerlin Super Sport | manual | 2026-10-14 |
+| Bay Club Redondo Beach | manual | 2026-10-14 |
+| Betty Ainsworth Sports Center (City of Hawthorne) | manual | 2026-10-14 |
+| Chuck Minker Sports Complex | manual | 2026-10-14 |
+| Chuck Minker Sports Complex (City of Las Vegas) | manual | 2026-10-14 |
+| ClubSport Aliso Viejo | manual | 2026-10-14 |
 
 ## Open leads
 
 | Status | Leads |
 |---|---|
-| new | 177 |
-| resolved | 98 |
-| needs_location | 19 |
-| confirmed | 11 |
+| new | 373 |
+| resolved | 132 |
+| needs_location | 23 |
+| needs_visit | 12 |
+| confirmed | 12 |
 | rejected | 10 |
-| needs_visit | 5 |
 
 ## Tests
 
-Last dbt run: 308 tests passed, 0 warned, 0 failed.
+Last dbt run: 370 tests passed, 0 warned, 0 failed.
 
 History: [data_quality_trend.csv](data_quality_trend.csv) (one row per run).
