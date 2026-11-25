@@ -43,7 +43,7 @@ Run commands from Git Bash with the main checkout's venv first on PATH (`export 
 
 **7. Gates (deterministic, all must be run and reported pass/fail).**
 1. `python ingestion/export_quality_scorecard.py` (appends the trend line), `python ingestion/export_coverage_report.py`.
-2. `python ci/check_scorecard_regression.py --base-ref origin/main`: venues fell > 1%, "seen in 35 days" fell, more SLAs fail, or a dbt test fails.
+2. `python ci/check_scorecard_regression.py --base-ref origin/main`: venues fell > 1% or a dbt test fails (owner 2026-11-25: "seen in 35 days" falling and more SLAs failing are warnings only; report them in the PR).
 3. `python ingestion/export_app_data.py`, then `python ci/check_export_fresh.py`.
 4. `python ci/check_refresh_diff.py --base-ref origin/main`: path allowlist and diff cap (venues added + removed <= 2%, changed <= 5%).
 5. As CI does: `python ci/check_seed_evidence.py`, `python ci/check_sport_names.py`, `python ci/check_regions.py`, `python ci/check_review_priority.py`, `python ingestion/eval_match_gold.py --check`.
