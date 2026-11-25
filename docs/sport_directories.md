@@ -230,3 +230,16 @@ Existing map: no Mexico pin carries any of the five sports (checked `app/data/ve
 - **Tenis criollo:** the CATP venue finder lists Argentina only. In Mexican Spanish "tenis" also means sneakers, and no local game under this name turned up. Nothing found in any metro.
 
 Not searched in this pass: Baja California Sur metros (Los Cabos, La Paz and the rest) and Monterrey. Recall limit: the search tool is US-focused, and Facebook gives titles only. A local club or a Spanish-only group would be found by a phone call or a local sports paper, not by these searches.
+
+## Fourteenth pass, 2026-11-24: the five sports in Baja California Sur and Monterrey
+
+Scope: the Mexico metros the thirteenth pass left open. Four clusters: (A) Los Cabos, East Cape, Todos Santos; (B) La Paz, Loreto, Ciudad Insurgentes; (C) Santa Rosalía, Mulegé, San Ignacio, Guerrero Negro; (D) Monterrey. Federation finders were not repeated (FIBaT, ISTF, ICO, APTA, CATP and FMT statutes, per the thirteenth pass). Then standard web searches, one or more per sport per cluster, with Spanish follow-ups for Monterrey: 19 searches. Public pages only; no logins, no Google data.
+
+- **Result: nothing found, no pin, no link-out, no lead.** "No result found" means these searches showed none, not that none exists.
+- **Soft Tennis:** A, B and D return only tennis, padel and pickleball venues (Cabo Sports Complex, Club Baja Tennis, Pedregal Tennis Center, Somos Pádel). C is covered by the combined Loreto/Mulegé/Santa Rosalía query, with nothing. Spanish "soft tenis" and "tenis de salón" in Monterrey find nothing.
+- **Tamburello:** none in A, B, C or D. The only fronton-type hits are a "Pistas de Frontenis" listing at 75 Carabineros, La Paz (Pickleball Plus, described as a pickleball venue) and a fronton at Nicolás Bravo 26, Monterrey (frontons.net). Frontenis is a Basque pelota sport, not tamburello, so both are out of scope here (see follow-ups).
+- **Crossminton:** none in A, B, C or D. Mexico-wide and Monterrey searches return padel clubs only.
+- **Platform Tennis:** none in A, B, C or D. Hits are padel and pickleball courts (Altapadel La Paz, Swing Padel Cabo, Power Padel and others in Monterrey).
+- **Tenis criollo:** none in A, B, C or D. The Baja California Sur results are a 2020 state tennis federation restructuring story; the Monterrey results name a sneaker shop (INTER TENIS), not the sport.
+- **Limits:** the search tool is US-focused, Playtomic and Pickleheads were read from search snippets (not opened), and Facebook and WhatsApp groups were not reached. A small local club is found by a phone call or a local sports paper, not by these searches.
+- **Follow-ups (not added to any seed):** (1) the La Paz "Pistas de Frontenis" and the Monterrey Nicolás Bravo fronton: check them in a Basque Pelota pass using public pages only; (2) if the owner knows a local tamburello, crossminton or platform tennis group in these metros, that is the one lead this search could not produce.
