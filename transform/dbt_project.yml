@@ -340,6 +340,9 @@ seeds:
         anchor_name: varchar
         anchor_lat: double
         anchor_lon: double
+        trends_geo: varchar
+        queries_es: varchar
+        evidence: varchar
     venue_court_counts:   # starts empty in a fork: columns are pinned so an empty file is not guessed as INTEGER (numbers stay numbers)
       +column_types:
         venue_id: varchar
