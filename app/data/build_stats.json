@@ -1,7 +1,7 @@
 {
- "as_of": "2026-11-25",
+ "as_of": "2026-11-24",
  "scorecard_as_of": "2026-11-25",
- "venues": 24506,
+ "venues": 24617,
  "sports_with_venues": 45,
  "sports_total": 82,
  "export_mb": 6.0,
@@ -265,5 +265,11 @@
   "week_to": "2026-11-24",
   "asked": 0,
   "missed": 0
+ },
+ "load": {
+  "export_gz_kb": 1117,
+  "first_gz_kb": 431,
+  "details_gz_kb": 482,
+  "saved_s_slow4g": 3.3
  }
 }

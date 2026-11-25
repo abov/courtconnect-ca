@@ -24,3 +24,6 @@ transform/.state/
 chatbot/profile.json
 chatbot/results/
 data/website_proposals/
+# map's split of venues.json, made by make app-data and the Pages deploy (ingestion/split_app_data.py); venues.json is the committed source
+app/data/map.json
+app/data/details.json

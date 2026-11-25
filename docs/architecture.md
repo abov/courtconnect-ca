@@ -14,7 +14,7 @@ Hand-edited seeds (with evidence) ──────┘
    extract / sync (Python)               load (idempotent)        dbt: tests, docs, lineage
 ```
 
-No server or API: the static page in `app/` reads one exported file, `app/data/venues.json`, hosted on GitHub Pages.
+No server or API: the static page in `app/` reads one exported file, `app/data/venues.json`, hosted on GitHub Pages. The deploy splits it in two (`ingestion/split_app_data.py`) so phones load the pins first (`map.json`) and addresses and links after (`details.json`).
 
 ## Layers (dbt, DuckDB)
 

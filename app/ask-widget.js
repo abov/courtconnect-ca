@@ -109,8 +109,11 @@
       prevQ = curQ; curQ = q.trim();
       log.querySelectorAll(".askchips").forEach(n => n.remove());
       add(el("div", {class: "am me"}, q));
-      const r = ask.answer(q, ctx); render(r);
-      if (hooks && hooks.answered) hooks.answered(r);   // counts only: reply kind, sport and place names from our lists; the question text leaves only via hooks.feedback, on a button press
+      // hooks.ready: the map loads addresses and links after the pins; answers wait for them (a no-op once loaded)
+      Promise.resolve(hooks && hooks.ready ? hooks.ready() : null).then(() => {
+        const r = ask.answer(q, ctx); render(r);
+        if (hooks && hooks.answered) hooks.answered(r);   // counts only: reply kind, sport and place names from our lists; the question text leaves only via hooks.feedback, on a button press
+      });
     }
 
     function intro() {

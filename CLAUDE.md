@@ -7,7 +7,7 @@ Decisions are in `docs/decisions/` (ADRs 0001-0040, all accepted except 0001, su
 ## Commands (run from Git Bash on Windows; full list with every `make` target: `docs/commands.md`)
 - `make build`      dbt seeds + models + tests (the main check; run after any change to `transform/`)
 - `make build-changed`   only what changed since the last good build, plus downstream (`ingestion/build_changed.py`; no `make` in Git Bash: run the script; `--full` or `--dry-run`). For seed, model, macro and test edits. After loading raw data it cannot see the change: run `--full`. CI and the last check before a PR are the full build.
-- `make app-data`   export `app/data/venues.json` (commit it after any seed change; CI runs `ci/check_export_fresh.py`); `make app` serves it at localhost:8765
+- `make app-data`   export `app/data/venues.json` (commit it after any seed change; CI runs `ci/check_export_fresh.py`) and its uncommitted split `map.json` + `details.json`, which the map loads; `make app` serves it at localhost:8765
 - `make extract` / `make load`   refresh raw data (extract ~15 min; don't run unless asked)
 - `make check-pages`   verified pages that changed or vanished since the last look (no model); recheck only those
 

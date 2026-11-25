@@ -313,6 +313,12 @@
     .maplibregl-popup-content .meta { font-size: 14px; }
   }
 </style>
+<script>
+// Start the pin data download now, alongside the map library, not after it. map.json holds what pins, list, search and filters need;
+// details.json (addresses, links, notes) follows once the map shows (ingestion/split_app_data.py). null = not there: fall back to venues.json.
+window.CC_CORE = fetch("data/map.json", {cache: "no-cache"}).then(r => r.ok ? r.json() : null).catch(() => null);
+</script>
+<link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
 </head>
 <body>
 <div id="loading" role="status"><div class="spin" aria-hidden="true"></div><div id="loadmsg">Finding courts in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico...</div></div>
@@ -494,6 +500,7 @@
   </div>
 </dialog>
 
+<script src="venue-data.js"></script>
 <script src="ask.js"></script>
 <script src="ask-widget.js"></script>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" integrity="sha384-SYKAG6cglRMN0RVvhNeBY0r3FYKNOJtznwA0v7B5Vp9tr31xAHsZC0DqkQ/pZDmj" crossorigin="anonymous"></script>
@@ -1006,14 +1013,19 @@ let map, popup, current = [], mapReady = false, viewEv = [], viewSoc = [], viewT
 function geojson(list) {
   return {type: "FeatureCollection", features: list.map(v => ({type: "Feature", id: v.k, properties: {k: v.k, q: v.q, up: v.up ? (v.ul ? 2 : 1) : 0, g: pinFamily(v), h: isWall(v) ? (wallAccess(v.hw) === "restricted" ? 2 : 1) : 0}, geometry: {type: "Point", coordinates: [v.x, v.y]}}))};
 }
-function initMap() {
+let styleReady = null;   // the basemap's style.load; the map is made before the venue data arrives, so the two download side by side
+function createMap() {
   map = new maplibregl.Map({container: "map", style: "https://tiles.openfreemap.org/styles/liberty", bounds: HOME_BOUNDS,
                             fitBoundsOptions: {padding: 20}, attributionControl: false});
   map.addControl(new maplibregl.NavigationControl({showCompass: false}), "top-right");
   map.addControl(new maplibregl.AttributionControl({compact: true, customAttribution: "Venues: OpenStreetMap, Overture Maps"}));
   popup = new maplibregl.Popup({closeButton: true, maxWidth: "300px", offset: 12, anchor: "bottom"});
   popup.on("close", () => { shownVenue = null; });
-  map.once("style.load", () => {                                   // as soon as the style is ready, without waiting for every basemap tile
+  styleReady = new Promise(res => map.once("style.load", res));
+}
+function initMap() {
+  if (!styleReady) createMap();
+  styleReady.then(() => {                                          // as soon as the style is ready (and the data), without waiting for every basemap tile
     map.resize();                                                  // the grid may not have settled when the map was created
     map.fitBounds(HOME_BOUNDS, {padding: 20, animate: false});
     map.addSource("state-outline", {type: "geojson", data: "data/state_outline.json"});   // covered-state lines (US Census, simplified); drawn under the pins
@@ -1085,9 +1097,11 @@ function initMap() {
     mapReady = true;
     applyMode(state.mode === "trips");   // a shared #mode=trips link frames its pins; the other modes open on the home view
     if (state.text) runSearch(true);   // a shared #q= link zooms to its result
-    const shared = sharedVenue && state.mode === "play" ? venues.find(v => v.i === sharedVenue) : null;   // an unknown id (venue removed since) is ignored
+    const id = state.mode === "play" ? sharedVenue : "";
     sharedVenue = "";
-    if (shared) showVenue(shared, true);
+    if (id) loadDetails().then(() => { const shared = venues.find(v => v.i === id); if (shared) showVenue(shared, true); }, () => {});   // ids come with the details; an unknown id (venue removed since) is ignored
+    map.once("idle", () => loadDetails().catch(() => {}));   // first view drawn: fetch the details now, so a popup opens at once
+    setTimeout(() => loadDetails().catch(() => {}), 6000);    // or a little later, if the basemap tiles are still loading
   });
 }
 function debounce(fn, ms) { let t; const f = (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; f.cancel = () => clearTimeout(t); return f; }
@@ -1255,6 +1269,10 @@ function showVenue(v, fly) {
   hideToast();
   if (fly) map.flyTo({center: [v.x, v.y], zoom: Math.max(map.getZoom(), 15), essential: true, offset: popupRoom()});
   track("venue-open"); trackDemand(v);
+  if (!detailsDone) { loadDetails().catch(() => {}).then(() => openVenuePopup(v)); return; }   // the address, links and notes are still on their way
+  openVenuePopup(v);
+}
+function openVenuePopup(v) {
   popup.setLngLat([v.x, v.y]).setDOMContent((isWall(v) ? wallNode : venueNode)(v)).addTo(map);
   shownVenue = v;   // after addTo: swapping pins closes the old popup first, and that close clears it
 }
@@ -1494,7 +1512,7 @@ function renderList() {
   if (state.mode !== "play") return;
   const c = map.getCenter(), b = map.getBounds();
   const all = current.filter(v => b.contains([v.x, v.y])).map(v => [dist2(v, c), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);   // only what the map shows right now, nearest the centre first
-  const ul = $("list"), key = all.slice(0, LIST_STEP).map(v => v.i).join("|");
+  const ul = $("list"), key = all.slice(0, LIST_STEP).map(v => v.k).join("|");
   if (key !== renderList.key) listShown = LIST_STEP;   // a new view starts with 5 again
   const top = all.slice(0, listShown);
   ul.replaceChildren();
@@ -2127,8 +2145,24 @@ function initCoverage() {
 }
 
 // ---------- boot ----------
-let byKey = {};
-fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(async d => {
+let byKey = {}, detailsP = null, detailsDone = false;
+// Ids, addresses, website links, notes and the source line, merged into the same venue objects (app/venue-data.js). A failed try is tried again later.
+function loadDetails() {
+  if (!detailsP) detailsP = fetch("data/details.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(det => { VenueData.mergeDetails(venues, det); detailsDone = true; })
+    .catch(err => { detailsP = null; throw err; });
+  return detailsP;
+}
+// map.json (started in <head>) when the split files are there: the live site, or locally after make app-data. Otherwise the full venues.json, which has everything.
+function loadVenueData() {
+  return (window.CC_CORE || Promise.resolve(null)).then(core => {
+    if (core && core.vc && window.VenueData) return VenueData.decodeCore(core);
+    detailsDone = true; detailsP = Promise.resolve();
+    return fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  });
+}
+try { createMap(); } catch (e) { /* the map library did not load; initMap() tries again and the error shows on the loading screen */ }
+loadVenueData().then(async d => {
   DATA = d; sports = d.sports; venues = d.venues; events = d.events || []; socials = d.social || []; platforms = d.platforms || []; gear = d.gear || [];
   trips = (d.vacations || []).map(x => Object.assign(x, {c: x.d}));   // c = destination, so search and "closest name" treat a trip like any pinned place
   $("modeTrips").hidden = !trips.length;
@@ -2146,7 +2180,7 @@ fetch("data/venues.json", {cache: "no-cache"}).then(r => { if (!r.ok) throw new 
   if (resumed) showResume();
   if (store.get("welcomed", false)) document.querySelector(".welcome").hidden = true; else store.set("welcomed", true);   // the intro line shows on the first visit only (About keeps it)
   initMap();
-  if (window.AskWidget) AskWidget.mount(d, askContext, {opened: trackAskOpen, answered: trackAsk, feedback: trackAskFeedback, showOnMap: askShowOnMap});   // ask pop-up (ADR 0033); the page works without it
+  if (window.AskWidget) AskWidget.mount(d, askContext, {ready: () => loadDetails().catch(() => {}), opened: trackAskOpen, answered: trackAsk, feedback: trackAskFeedback, showOnMap: askShowOnMap});   // ask pop-up (ADR 0033); the page works without it
   if (state.mode === "watch") renderWatchList();
   $("loading").remove();
 }).catch(err => { document.querySelector("#loading .spin")?.remove(); $("loadmsg").textContent = "Could not load the venue data (" + err.message + "). If you opened this file directly, serve the folder with a web server."; });
