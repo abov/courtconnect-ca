@@ -227,7 +227,9 @@ seeds:
 
   - name: search_metros
     description: >
-      The 14 Google Trends metros that cover California and Nevada (Google's metro codes) with one anchor city each. A venue belongs to the nearest
+      The Google Trends metros that cover California and Nevada (Google's metro codes) with one anchor city each, plus 15 Mexican rows (2026-11-24).
+      Mexican metro_code 9001-9015 is project-internal: Google has no metro codes for Mexico, and Trends gives state (MX-xxx) data only;
+      trends_geo is an unconfirmed ISO 3166-2 code and no Mexican interest data is pulled yet. A venue belongs to the nearest
       anchor within 120 miles (mart_search_vs_coverage): our own approximation, NOT the Nielsen/Google metro boundaries (Nielsen owns those).
     columns:
       - name: metro_code
