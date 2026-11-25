@@ -50,6 +50,7 @@
   body { font: 15px/1.5 var(--font-body); color: var(--text); background: var(--bg);
          display: grid; grid-template-columns: 390px 1fr; }
   #panel { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+  #sheetHandle { display: none; }   /* phones only, see the max-width: 800px block */
   #map { min-height: 0; }
   header { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
   h1 { font: 800 22px/1.2 var(--font-head); letter-spacing: -.02em; margin: 0 0 4px; color: var(--accent); }
@@ -174,6 +175,7 @@
   .chip[hidden] { display: none; }
   #moreSummary .link { margin-left: 10px; font-weight: 400; }   /* "Clear" sits on the Filters line: no extra row of chips */
   footer { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+  footer .footlinks { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
   footer #attr { flex-basis: 100%; }
   /* Venue popup: a status band at the top (green confirmed name, blue listed business, gold guessed name, grey unnamed: the pin colours) and sections split by thin rules. The colour repeats the text badge, never replaces it. */
   .vhead { --band: var(--muted); margin: -14px -16px 8px; padding: 10px 16px 6px; border-top: 4px solid var(--band); border-radius: var(--r-md) var(--r-md) 0 0; background: var(--panel); }
@@ -279,6 +281,14 @@
     .maplibregl-popup-content { max-width: none; max-height: 58vh; max-height: 58dvh; border-radius: var(--r-md) var(--r-md) 0 0; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
     footer { padding: 6px 14px; }
     #map { order: -1; } #panel { border-right: 0; border-top: 1px solid var(--line); }
+    /* phones: the results panel is a sheet with rounded top corners that slides over the bottom of the map; the handle pulls it up to show more results */
+    body { grid-template-rows: 50vh minmax(0, 1fr); grid-template-rows: 50dvh minmax(0, 1fr); }
+    body.sheet-up { grid-template-rows: 20vh minmax(0, 1fr); grid-template-rows: 20dvh minmax(0, 1fr); }
+    #panel { position: relative; z-index: 2; margin-top: -16px; border-top: 0; border-radius: 18px 18px 0 0; box-shadow: 0 -4px 16px rgba(20, 30, 50, .14); }
+    #sheetHandle { display: flex; position: sticky; top: 0; z-index: 3; justify-content: center; align-items: center; width: 100%; min-height: 24px; padding: 8px 0 4px; border: 0; border-radius: 18px 18px 0 0; background: var(--panel); cursor: pointer; }
+    #sheetHandle span { width: 40px; height: 5px; border-radius: 999px; background: var(--line); }
+    #sheetHandle:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    .maplibregl-ctrl-bottom-left, .maplibregl-ctrl-bottom-right { margin-bottom: 16px; }   /* keep the attribution and scale above the sheet's overlap */
     /* Readability: the desktop type is 11.5-12.5 px in many places, too small at arm's length. Raise it, and give the header less height so the list starts sooner. */
     h1 { font-size: 18px; }
     #headline { display: none; }   /* the view chips below already say what the page is for */
@@ -305,6 +315,7 @@
 <div id="loading" role="status"><div class="spin" aria-hidden="true"></div><div id="loadmsg">Finding courts in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico...</div></div>
 
 <aside id="panel" aria-label="Filters and results">
+  <button id="sheetHandle" type="button" aria-expanded="false" aria-controls="panel" aria-label="Show more results"><span aria-hidden="true"></span></button>
   <header>
     <h1 translate="no"><img src="favicon.svg" alt="" width="24" height="24" style="vertical-align:-4px;margin-right:8px">RacketConnect</h1>
     <div id="headline">Find a court for any racket sport near you.</div>
@@ -411,7 +422,7 @@
     </div>
   </div>
   <ul id="list"></ul>
-  <footer><div id="stats"></div><div><button class="link" id="openAbout" type="button">About RacketConnect</button> &middot; <button class="link" id="openCoverage" type="button">How complete is this data?</button> &middot; <a href="dashboard/">Data quality (live)</a> &middot; <a href="how-its-built.html">How it's built</a> &middot; <a href="hub.html">Project hub</a></div><div id="attr"></div></footer>
+  <footer><div id="stats"></div><div class="footlinks"><button class="link" id="openAbout" type="button">About this project</button><span>We link out, never book or charge</span></div><div id="attr"></div></footer>
 </aside>
 
 <main id="map" aria-label="Map of racket-sport venues in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico"></main>
@@ -430,9 +441,9 @@
     <h3>For companies and organizers</h3>
     <p>Running a tournament, league or open play? Send us the dates and your public page; we review it and list it as an event when the page backs it up. <a id="aboutEvent" href="#" target="_blank" rel="noopener noreferrer">Add an event</a> (no sign-in)</p>
     <h3>Can you trust it?</h3>
-    <p>See how complete and fresh the data is: <a href="dashboard/">the live data scorecard</a> (counts and trends after each refresh), <a href="run-history.html">run history</a>, or <a href="ask-the-data.html">ask the data</a> your own SQL question in the browser.</p>
+    <p>See how complete and fresh the data is: <button class="link" id="openCoverage" type="button">how complete is this data?</button> (by sport), <a href="dashboard/">the live data scorecard</a> (counts and trends after each refresh), <a href="run-history.html">run history</a>, or <a href="ask-the-data.html">ask the data</a> your own SQL question in the browser.</p>
     <h3>For builders</h3>
-    <p>Open data in, a tested dbt warehouse, one static file out. <a href="how-its-built.html">How it's built</a>, with the numbers and the limits.</p>
+    <p>Open data in, a tested dbt warehouse, one static file out. <a href="how-its-built.html">How it's built</a>, with the numbers and the limits, and the <a href="hub.html">project hub</a> with every doc.</p>
     <h3>Other languages</h3>
     <p>RacketConnect is written in English and has no translation of its own. Your browser can translate it: in Chrome or Edge use the address-bar Translate button (on a phone, the &#8942; menu, then Translate); in Safari, the <b>aA</b> menu, then Translate; in Firefox, the Translate button in the address bar. Pick Spanish, Portuguese, French, Italian, German or any other language it offers. Names of places, events and groups are left as written. Machine translation can be wrong, and venue notes come from English sources.</p>
     <p class="meta">A listing or label changes only with public evidence. It cannot be bought, and there is no paid or featured placement.</p>
@@ -2045,6 +2056,13 @@ function initControls() {
     const k = b.dataset.o; state.offers.has(k) ? state.offers.delete(k) : state.offers.add(k); syncControls(); reSearch(false);
     if (state.offers.has(k)) { trackD("filter", "offer-" + k); if (!state.text) trackEmpty(); }
   });
+  $("sheetHandle").addEventListener("click", () => {   // phones: pull the results sheet up over the map, or let it back down
+    const up = document.body.classList.toggle("sheet-up");
+    $("sheetHandle").setAttribute("aria-expanded", String(up));
+    $("sheetHandle").setAttribute("aria-label", up ? "Show more map" : "Show more results");
+    track(up ? "sheet-up" : "sheet-down");
+    setTimeout(() => map && map.resize(), 50);
+  });
   $("listtoggle").addEventListener("click", () => {
     const off = $("panel").classList.toggle("listoff");
     $("listtoggle").textContent = off ? "Show list" : "Hide list";
@@ -2079,7 +2097,7 @@ function initCoverage() {
   const order = {covered: 0, sparse: 1, possible_only: 2, tagged_none_found: 3, not_found: 4};
   [...sports].sort((a, b) => (order[a.s] - order[b.s]) || (b.v - a.v)).forEach(s =>
     body.append(el("tr", {}, el("td", {text: s.n}), el("td", {}, el("span", {class: "st " + s.s, text: s.s})), el("td", {class: "n", text: fmt(s.v)}))));
-  $("openCoverage").addEventListener("click", () => $("coverage").showModal());
+  $("openCoverage").addEventListener("click", () => { $("about").close(); $("coverage").showModal(); });   // the link now sits inside About
   $("closeCoverage").addEventListener("click", () => $("coverage").close());
   const mx = DATA.venues.filter(v => v.r === "MX");   // Mexican pins add the Mexico country pick; the home view frames them too
   hasMx = mx.length > 0;

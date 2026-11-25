@@ -23,7 +23,7 @@ How to turn the anonymous counts (ADR 0013) into decisions. Counts are direction
 | `event/ask-open`, `event/ask-kind/<reply kind>`, `event/ask-empty/<kind>`, `event/ask-sport/<sport>`, `event/ask-where/<city or area>` | the ask box (ADR 0033): opened, what kind of reply each question got (venues, events, clarify, refuse, ...), a search reply with no results, and the sport and place the question named. Sport and place are names from our own lists (`meta` in `app/ask.js`), never the typed text |
 | `event/email-interest` | a tap on "Would you want these by email?" under the What's new strip (removed 2026-11-11; no longer fires, history only). Counts a tap once per browser; no address is asked or stored |
 | `event/ask-feedback/<slug>` | the ONE event that carries typed text: a question the visitor chose to send with "Send this question to us" (shown only on an unanswered reply: refusal, no results, no gear data, "that's wrong"). The title holds the question, with emails, links and phone-like numbers removed. `usage_daily.py` counts it but keeps the text out of the committed `usage_events.csv`; `make ask-feedback` loads it into the local warehouse (below) |
-| `share`, `shortlist-add/open/copy`, `focus-on`, `welcome-back`, `this-week-open`, `map-key` | habit events: is the feature used at all |
+| `share`, `shortlist-add/open/copy`, `focus-on`, `welcome-back`, `this-week-open`, `map-key`, `sheet-up` (phone results sheet pulled up) | habit events: is the feature used at all |
 
 Never sent: search text, venue names, places, coordinates. Details are fixed vocabularies. The one exception is `ask-feedback`, only on a button press.
 
