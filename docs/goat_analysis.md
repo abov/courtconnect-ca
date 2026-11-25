@@ -39,7 +39,7 @@ Never sent: search text, venue names, places, coordinates. Details are fixed voc
 | Where do people look but find nothing? | `empty-*` plus `search-miss/place-no-venues` vs `mart_sport_gaps`: the report's last table. A sport with many picks and empty or sparse coverage is the next facility scan |
 | Is Watch / Social used? | `mode/watch` vs `mode/play`, `linkout-kind` event-page / tickets / signup |
 | Which communities send people who stay? | `ref/*` visits vs the link-out total (ask: do shared posts convert?) |
-| Do people get answers from the ask box? | `ask-kind` refuse/clarify/offtopic share and `ask-empty` on the dashboard; a high share is the next rules to write |
+| Do people get answers from the ask box? | `ask-kind` refuse/clarify/offtopic share and `ask-empty` on the dashboard; a high share is the next rules to write. The last 7 days of questions and misses (refuse, support, gear, no results) and the test set's pass count show on how-its-built.html (`ask` in `app/data/build_stats.json`) |
 | Does search demand match our coverage? | dashboard "Search interest against coverage": Google Trends interest per metro and sport (an outside signal, relative and sampled; the site's own events are sparse) next to venues and completeness; from `docs/search_interest_vs_coverage.csv` (`make interest`, `docs/search_interest_plan.md`) |
 | Are the popular sports and cities also the accurate ones? | dashboard "Accuracy against popularity": picks, link-outs, asks and venue opens next to how complete each sport's and city's venues are |
 | Which features can go? | habit events at zero after the beta are candidates to simplify |

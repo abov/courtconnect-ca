@@ -92,6 +92,11 @@ const Q = [
   ["Suggest a place to play padel in Las Vegas", "venues", "P1 Padel", true],
   ["What is padel?", "learn", "", true],
   ["Private lessons for tennis in Reno", "venues", "", true],
+  // kinder dead ends: nothing found still points somewhere (nearest place that has some, sports we hold there, a report link)
+  ["Padel in Bakersfield", "venues", "The nearest Padel place we have is in Los Angeles"],
+  ["Squash in Redding", "venues", "Report a missing place"],
+  ["Pickleball groups in Redding", "social", "The nearest Pickleball group we have is in"],
+  ["Padel tournaments near Reno", "events", "Tell us about an event"],
 ];
 
 let ask = Ask.create(data, store), fails = 0;
@@ -117,7 +122,7 @@ Q.forEach(([q, kind, must, useCtx], i) => {
 });
 // Unanswered replies are flagged so the widget can offer "Send this question to us"; answered ones are not. scrub() strips contact details.
 saved = {};
-[["Best restaurants near Reno", true], ["Where can I buy a pickleball paddle in San Diego?", true], ["Pickleball in Reno", false], ["What is pop tennis?", false]].forEach(([q, want]) => {
+[["Best restaurants near Reno", true], ["Where can I buy a pickleball paddle in San Diego?", true], ["Pickleball in Reno", false], ["What is pop tennis?", false], ["Padel in Bakersfield", true]].forEach(([q, want]) => {
   const m = ask.answer(q).meta, ok = m.miss === want;
   if (!ok) fails++;
   console.log(`${ok ? "PASS" : "FAIL"} miss flag: ${q} -> ${m.miss}`);
@@ -152,6 +157,6 @@ VISITS.forEach(visit => {
 });
 const scrubbed = Ask.scrub("call 415-555-0100 or mail a@b.co see https://x.io now");
 if (scrubbed !== "call [number] or mail [email] see [link] now") { fails++; console.log("FAIL scrub: " + scrubbed); } else console.log("PASS scrub");
-const total = Q.length + 4 + 1 + VISITS.flat().length;   // questions, miss flags, scrub, visit steps
+const total = Q.length + 5 + 1 + VISITS.flat().length;   // questions, miss flags, scrub, visit steps
 console.log(`\n${total - fails}/${total} passed`);
 process.exit(fails ? 1 : 0);
