@@ -1,0 +1,108 @@
+name: venue-recheck
+# Monthly re-check of hand-added venues (`make reconfirm`, ingestion/reconfirm_manual_venues.py): re-read the own page of every
+# row in transform/seeds/manual_venues.csv confirmed 28+ days ago and re-date only rows whose page still names the place and
+# its sport. GitHub's runners reach the city sites that cloud sessions cannot, so nobody runs it by hand.
+#   - schedule / by hand: opens a PR for a person to merge. Nothing here pushes to main or merges.
+#   - a PR that edits this file: self-test on 40 pages, nothing pushed.
+# Only manual_venues.csv is committed. The map's app/data/venues.json is never rebuilt here: on 2026-11-25 (PR 998) a rebuild
+# from stale local raw data dropped 104 Arizona venues. A guard fails the run if any row is added, removed, or changed beyond
+# confirmed_on and an appended evidence note.
+on:
+  schedule:
+    - cron: '0 14 3 * *'   # 3rd of each month, 14:00 UTC; clear of the 1st/15th refresh chain
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Read at most this many pages (0 = all due)"
+        default: "0"
+  pull_request:
+    paths: ['.github/workflows/venue-recheck.yml']
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+concurrency:
+  group: venue-recheck-${{ github.event_name }}
+  cancel-in-progress: false
+jobs:
+  recheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SEED: transform/seeds/manual_venues.csv
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: {python-version: "3.12"}
+      - run: pip install requests
+      - name: Re-read stale venues' pages
+        env:
+          LIMIT: ${{ github.event_name == 'pull_request' && '40' || inputs.limit || '0' }}
+        run: |
+          mkdir -p data/raw
+          cp "$SEED" "$RUNNER_TEMP/before.csv"
+          python ingestion/reconfirm_manual_venues.py --limit "$LIMIT" | tee "$RUNNER_TEMP/log.txt"
+      - name: Guard - only re-dates, no rows added, removed or otherwise changed
+        run: |
+          python - "$RUNNER_TEMP/before.csv" "$SEED" <<'PY'
+          import csv, sys
+          before, after = (list(csv.DictReader(open(p, encoding="utf-8", newline=""))) for p in sys.argv[1:3])
+          bad = []
+          if len(before) != len(after):
+              bad.append(f"row count changed: {len(before)} before, {len(after)} after")
+          changed = 0
+          for b, a in zip(before, after):                # the script rewrites re-dated lines in place, so rows keep their order
+              if b == a:
+                  continue
+              changed += 1
+              k = f"{b['venue_key']} ({b['sport']})"
+              other = [c for c in b if c not in ("confirmed_on", "evidence") and b[c] != a.get(c)]
+              if other or set(a) != set(b):
+                  bad.append(f"{k}: changed {other or 'columns'}")
+              if not a["evidence"].startswith(b["evidence"].rstrip()) or (a["confirmed_on"] or "") < (b["confirmed_on"] or ""):
+                  bad.append(f"{k}: evidence not appended or date moved back")
+          print(f"{changed} rows re-dated, {len(after)} rows in all")
+          if bad:
+              print("Guard failed:\n  " + "\n  ".join(bad[:20]))
+              sys.exit(1)
+          PY
+          git diff --quiet -- app/ || { echo "::error::app/ changed; this workflow must not touch the map data"; exit 1; }
+          python ci/check_seed_evidence.py
+      - name: Keep the queue for a person
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reconfirm-queue
+          path: data/raw/reconfirm_queue.csv
+          if-no-files-found: ignore
+      - name: Open the pull request
+        if: github.event_name != 'pull_request'
+        run: |
+          if git diff --quiet -- "$SEED"; then echo "No rows re-dated; no PR."; exit 0; fi
+          day=$(date -u +%Y-%m-%d)
+          branch="recheck/venues-$day-$GITHUB_RUN_ID"
+          summary=$(grep -E '^re-dated [0-9]+ rows' "$RUNNER_TEMP/log.txt" | head -1)
+          git config user.name "courtconnect-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add "$SEED"
+          git commit -m "Venues: monthly re-check $day ($summary)"
+          git push origin "$branch"
+          # An older re-check PR still open is superseded: its rows are still stale on main, so this run re-read them too.
+          for n in $(gh pr list --repo "$GITHUB_REPOSITORY" --state open --json number,headRefName \
+                       --jq '.[] | select(.headRefName | startswith("recheck/venues-")) | .number'); do
+            gh pr close "$n" --repo "$GITHUB_REPOSITORY" --delete-branch --comment "Superseded by the $day re-check."
+          done
+          {
+            echo "Monthly venue re-check ($day, run $GITHUB_RUN_ID): $summary."
+            echo
+            echo "- Re-dates only hand-added venues whose own page still names the place and its sport; each row's evidence says what was checked."
+            echo "- Only \`manual_venues.csv\` changes; the map data file is not rebuilt (the guard checked no row was added, removed or otherwise changed)."
+            echo "- Rows left for a person: the \`reconfirm-queue\` file on the run page, $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
+            echo
+            echo "dbt-build must pass; a person merges."
+          } > body.md
+          gh pr create --title "Venues: monthly re-check $day" --head "$branch" --base main --body-file body.md
+          # Pushes made with GITHUB_TOKEN do not start the ci workflow, so start it by hand so the required dbt-build check reports.
+          gh workflow run ci.yml --ref "$branch"

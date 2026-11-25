@@ -36,7 +36,7 @@ The long version is the owner's Google Sheet [RacketConnect tool dictionary](htt
 - NAIP aerial-imagery pilot (lead generator for OSM); imagery checks for padel court size.
 
 ## CI/CD
-- GitHub Actions: `ci.yml` (fixture data, gate scripts, `dbt build`), `issue-to-pr.yml`, `pages.yml`.
+- GitHub Actions: `ci.yml` (fixture data, gate scripts, `dbt build`), `issue-to-pr.yml`, `venue-recheck.yml` (monthly `make reconfirm`, opens a PR), `pages.yml`.
 - Uptime check (live since 2026-11-11, ADR 0037): UptimeRobot free, two monitors on the live page and `data/venues.json`, email alert to the owner; nothing in the repo or the page. Pipeline health stays with Elementary (`docs/data_observability.md`). Delivery speed, conflict commits and Claude token use: `make ops-metrics` (`docs/ops_metrics.md`; `gh` CLI plus local session logs, nothing sent anywhere). Live view of what Claude sessions are doing: `make agent-activity` (`docs/agent_activity.md`; local page from the same session logs, stdlib only).
 - Squash-merge after green checks; `venues.json` regenerated, never hand-merged.
 
