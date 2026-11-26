@@ -717,7 +717,7 @@ function setPicked(list) {
 }
 function matches(v, sm, tm, vf, sport = state.sport) {
   let mask;
-  if (sport < 0 && multiOn()) { mask = v.p.reduce((a, p) => state.multi.has(p[0]) ? a | p[2] : a, 0); if (!mask) return false; }
+  if (sport < 0 && multiOn()) { if (!v.p.some(p => state.multi.has(p[0]))) return false; mask = v.p.reduce((a, p) => state.multi.has(p[0]) ? a | p[2] : a, 0); }   // a sport with no surface data has mask 0: still a match (only the surface/setting chips need bits)
   else if (sport >= 0) { const e = v.p.find(p => p[0] === sport); if (!e) return false; mask = e[2]; }
   else if (tierNow()) { mask = v.p.reduce((a, p) => sports[p[0]].t === tierNow() && !(sports[p[0]].b || []).length ? a | p[2] : a, 0); if (!mask) return false; }   // all sports, narrowed to the inferred tier; sports played on another sport's courts (b) don't count, or every tennis court would be "casual"
   else mask = v.m;
