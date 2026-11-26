@@ -1,6 +1,6 @@
 # 0032. A hitting wall is a venue
 
-Date: 2026-11-02. Status: proposed; steps 1-4 done (owner asked for it in chat 2026-11-02: "a wall is considered a venue in my eyes").
+Date: 2026-11-02. Status: accepted (owner 2026-11-26); steps 1-4 done (owner asked for it in chat 2026-11-02: "a wall is considered a venue in my eyes").
 
 ## Context
 Hitting walls (1-wall, backboard, 3-wall) are a separate layer: `dim_wall` -> `int_wall_clusters` -> `mart_wall_pins`, exported as `walls` beside `venues`, drawn as orange pins, filtered by a "hitting alone" bar, and tied to sports through the `WALL_SPORT` table in `app/index.html`. `int_wall_venue_link` only points a wall at a venue; "walls never count as courts". Every feature has to special-case them: "Find by court" ignored 1-wall Paddleball because it has walls and no venues (fixed in #494), counts differ, and the popup, search, share link and changes feed each treat walls on their own. To a person a wall is a place to play, so the data should say so.
