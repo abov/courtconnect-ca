@@ -306,3 +306,8 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **Added to `social_events.csv` (1):** weekly club tournaments (Mon and Wed 6:30-9:30 PM, Sat 1-4 PM).
 - **Not added:** weekly group classes and youth classes (lessons, not get-togethers; no `kind` fits) and the all-day "Open" entries (open play and rentals; the club's rentals page was not read this run).
 - **Recheck next cycle:** the calendar past Dec 11, the club's Club Tournaments page, and whether the Season Finale and round robins allow spectators.
+
+## Idaho (2026-11-25)
+- **Searched:** Treasure Valley pickleball, racquetball and padel events and social groups. The 2026 events found (Boise PPA Challenger Jun 12-14 at The Flying Pickle, Pickleball People Premier Jun 27-28, World of Pickleball Aug 21-23) are all in the past, so none added to `watch_events.csv`. No racquetball or padel group found.
+- **Added to `player_groups.csv` (1, link only):** Boise Area Pickleball Association (bapa.wildapricot.org/Places-to-Play, from a search result; site root 404s to scripts). **Not added:** social series (nothing dated). Logged empty in `ci/parity_logged_empty.csv`.
+- **Recheck:** 2027-01, BAPA calendar and the Big Little Dill charity tournament (S2 Pickleball, date not found).
