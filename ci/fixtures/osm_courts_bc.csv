@@ -1,0 +1,4 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+way,910000001,49.2606,-123.1030,Sample Pickleball Courts (fixture),pickleball,paved,no,yes,,,,pitch,,,,,,,,,,2026-11-26T00:00:00+00:00,BC
+way,910000002,49.8880,-119.4960,Sample Tennis Courts (fixture),tennis,paved,yes,yes,,,,pitch,,,,,,,,,,2026-11-26T00:00:00+00:00,BC
+way,910000003,48.4280,-123.3660,Sample Badminton Hall (fixture),badminton,,,customers,,,,sports_centre,,,,,,,,,,2026-11-26T00:00:00+00:00,BC

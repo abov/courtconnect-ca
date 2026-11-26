@@ -1,4 +1,4 @@
-"""Extract Mexican municipality + locality boundaries from Overture divisions as a reference table (raw.census_boundaries, ADR 0034).
+"""Extract Mexican (or, with --country CA, British Columbia) municipality + locality boundaries from Overture divisions as a reference table (raw.census_boundaries, ADR 0034).
 
 Overture's `divisions` theme (CDLA-Permissive, same S3 bucket and release as the places) has a polygon per Mexican municipio
 (subtype `county`, 2,475 of them, so every pin falls in one) and per named locality (subtype `locality`, 1,602, sparse: Tijuana
@@ -8,6 +8,7 @@ kind `place` = locality, kind `county` = municipio (the "Municipio de " prefix i
 
     python ingestion/extract_overture_boundaries.py                  # newest release, all of Mexico
     python ingestion/extract_overture_boundaries.py --release 2026-10-21.0
+    python ingestion/extract_overture_boundaries.py --country CA     # British Columbia (ADR 0042): regional districts (county) + municipalities (locality), state_fips CA-BC
 
 Output: data/raw/census_boundaries_mx.csv (`make load` appends it to raw.census_boundaries, like the per-state extras of the other
 raw files). Needs DuckDB's spatial extension and network access (range reads of the public bucket; no API key).
@@ -25,15 +26,18 @@ from extract_overture_places import BUCKET, latest_release
 from rawdir import raw_path
 
 SIMPLIFY_DEG = 0.001   # about 100 m; the US files are 1:500k
-COUNTRY = "MX"
+COUNTRIES = {"MX": "", "CA": "and region = 'CA-BC'"}   # country -> extra filter: Canada is read for British Columbia only (the one Canadian region so far)
 
 
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--release", default=None)
-    ap.add_argument("--out", default=raw_path(f"census_boundaries_{COUNTRY.lower()}.csv"))
+    ap.add_argument("--country", default="MX", choices=sorted(COUNTRIES))
+    ap.add_argument("--out", default=None)
     args = ap.parse_args()
+    COUNTRY = args.country
+    args.out = args.out or raw_path(f"census_boundaries_{COUNTRY.lower()}.csv")
     release = args.release or latest_release()
     print(f"Overture release {release}")
 
@@ -56,7 +60,7 @@ def main() -> None:
                    st_astext(st_simplifypreservetopology(geometry, {SIMPLIFY_DEG})) as wkt,
                    '{source}' as source, '{date.today().isoformat()}' as extracted_at
             from read_parquet('{path}', hive_partitioning=1)
-            where country = '{COUNTRY}' and class = 'land' and subtype in ('locality', 'county')
+            where country = '{COUNTRY}' {COUNTRIES[COUNTRY]} and class = 'land' and subtype in ('locality', 'county')
               and names.primary is not null and region is not null
             order by kind, state_fips, geoid
         ) to '{out.as_posix()}' (header, delimiter ',')""")
