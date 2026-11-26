@@ -4,6 +4,7 @@
 -- word (6) is not enough: confirm the club on its own page (manual_venues.csv or a place_sport_overrides confirm), correct the court with
 -- osm_court_sport_overrides.csv, or reject it. Rows returned here are Padel venues with no such evidence.
 -- Mexico is exempt (owner 2026-11-05, ADR 0034: unverified automatic pins are shown there with their inferred labels; Monterrey 2026-11-12).
+-- British Columbia is exempt until the owner rules otherwise (ADR 0034 one-rule-for-every-region; ADR 0042): its first extract has 3 name/OSM-tag padel pins, shown labelled inferred; the research pass confirms or rejects them.
 select
     v.venue_name,
     v.city,
@@ -12,4 +13,4 @@ from {{ ref('mart_sport_evidence') }} e
 join {{ ref('dim_venue') }} v on v.venue_id = e.venue_id
 where e.sport_name = 'Padel'
   and e.best_rung > 2
-  and coalesce(v.region, '') <> 'MX'
+  and coalesce(v.region, '') not in ('MX', 'BC')

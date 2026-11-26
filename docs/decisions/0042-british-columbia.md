@@ -13,6 +13,13 @@ BC is the first Canadian region and the second country after Mexico (ADR 0034). 
 - Country plumbing built 2026-11-26 (no data yet): Canada option in the app Country dropdown (shown once BC pins exist; `home_shortcut: "country"`), `BC` in the region sentence everywhere, a Canada paragraph in About, `zipNote()` (postal-code search is out of scope; the app says to search the city), `extract_overture_boundaries.py --country CA` (`make extract-boundaries-ca`, regional districts + municipalities, state_fips `CA-BC`), `build_places_lookup.py --ca` (BC city search from those localities), `place_from_boundaries.py` labels BC regional districts without " County", a BC row in `ci/fixtures/osm_courts_bc.csv`, and a logged-empty `zip codes` row. Already generic, so unchanged: the address extractor (`--region BC` reads country `CA`; Canadian address order is number then street, as in the US), `reverse_geocode_blanks.py`, `int_venue_address.sql` (addresses are only kept within ~440 m of a pin, so none cross the border).
 - A default (no `--region`) address rewrite skips deferred regions: re-run `extract_overture_addresses.py --region BC` after it.
 
+## Built so far (2026-11-26, first extract)
+
+- BC OSM courts and parents, Overture places (162 rows) and Overture divisions are loaded; the build is green with 1,272 BC pins (81 confirmed, 3 padel, 234 pickleball). `defer` stays true.
+- Overture's Canadian address points are all `LicenseRef-Proprietary`, so the ADR 0034 licence filter keeps none; addresses come from OSM tags and cached reverse geocodes (100 per run, ~446 BC pins still blank).
+- Not done: BC (and ID/UT) OSM walls (Overpass too slow in one session), the research passes (Vancouver first), manual venues, watch events, links, ZIP/postal lookups, doc sections.
+- `assert_padel_has_supporting_signal` exempts BC like MX until the owner rules (3 name/OSM-tag padel pins, shown labelled inferred).
+
 ## Open work, in order (country list from `docs/new_region_checklist.md`, "Countries")
 1. Country plumbing (done except Statistics Canada boundaries, not needed; see above): Overture address filter `country = 'CA'` (`extract_overture_addresses.py`), Overture divisions for places and boundaries (Canada has no Census; Statistics Canada boundaries are a fallback), a Canada entry in the Country dropdown, `country` on the region sentence, a home-view shortcut (BC runs to 60 N, past the home view), postal-code search (Canadian codes like V6B 1A1 do not collide with ZIPs, so a later FSA lookup is possible), `reverse_geocode_blanks.py` address order, `region_parity.py` and the CI fixtures.
 2. Extract and load: OSM courts, parents and walls (`--area british_columbia`), Overture places and addresses, build, `make app-data`.
