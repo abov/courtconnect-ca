@@ -356,3 +356,4 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **BC pass 13 (2026-11-26, Dawson Creek):** no dated events searched. Seen only: Dawson Creek pickleball play schedule posted on a local Facebook group (per directories), Peace Country Pickleball Association (Fort St. John) listing.
 
 - **BC pass 17 (2026-11-26, Vancouver parks):** no events or groups searched. Recheck with the BC events pass.
+- **BC pass 15 (2026-11-26, cross-region leads):** no dated events searched. Groups seen for later: Westshore Table Tennis (Langford), Stage 18 and other Richmond badminton centres (lessons only), BCTTA clubs without addresses (Abbotsford, Coquitlam Seniors, Cumberland).
