@@ -62,3 +62,9 @@ Added as pins from the club's own or Playtomic page (Playtomic club pages carry 
 - **Boise Padel Club**, 425 E Watertower St, Meridian: its own site says 'Idaho's first padel club', 4 indoor courts, 'Opening early 2027', waitlist only. Pinned hollow ('Opening soon', `venue_opening_status.csv`). This replaces the earlier padelbrowser 'Opening soon' conflict note.
 - **Gozzer Ranch Club**, 5945 Buckrail Rd, Harrison: home, experiences and contact pages show NO padel courts; the earlier '2 outdoor padel, members only' claim is not confirmed, so no pin. Lifestyle, golf and wellness subpages not read.
 - Other Idaho padel: none found.
+
+## Utah (2026-11-25, pass 1)
+- **Pinned (courts open per the club's listing):** Utah City Racquet Club, Vineyard, 4 padel courts (`manual_venues` `ut-utah-city-racquet-club-padel`, access members, opened 2026-06-13 per the grand-opening recap). Padel Park Utah, Padel Den and Conquer Padel Lehi were already confirmed on main.
+- **Leads (not pinned):** The Hive Padel Club (SLC, 5 courts; PadelBrowser opening weekend 2026-09-26 vs "targeting summer 2026"); SLC Padel Club (Woods Cross; KSL says it opened Sept 2025; booking is PlayByPoint, off limits, so public club page only); Metro Padel Club (SLC; pre-opening, no address published).
+- **Pop Tennis:** searched Salt Lake City; found none (regular tennis and pickleball only). Logged empty; recheck with the USA Pop Tennis location finder.
+- **Beach Tennis:** searched Utah; no sand beach tennis courts found. Sports Mall (six sand courts) is volleyball. Logged empty.
