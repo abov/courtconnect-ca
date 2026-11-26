@@ -4,6 +4,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 002138860434742fd6f9ca5e189174de,19.364154,-99.163902,street_only,Calle San Felipe,Ciudad de México,,way/25355428,2026-11-10
 0043940eab32f748ecea62d4b0688589,36.06587,-115.312921,city_only,,,,,2026-10-17
 007dc54546f6bcad7e4e98a7e739d372,30.25208,-95.198301,street_only,FM 2090,Splendora,,way/653459773,2026-11-12
+00813a4dc1d2188ef254ee8aa7a59f13,43.609275,-116.692154,street_only,South 10th Avenue,,,way/955570203,2026-11-25
 008899715b71663d01ca912b53bf6b75,20.202901,-87.462553,street_only,Avenida Juanek,Tulum,,way/909881444,2026-11-10
 009c8bf0c54025f7e23bdabc13fe86ce,40.975783,-117.709395,city_only,,Winnemucca,,,2026-10-17
 00c8824fdc550db9ec12f6ba64c9dce8,36.190227,-115.124935,street_only,East Tonopah Avenue,North Las Vegas,,way/130208337,2026-10-17
@@ -15,6 +16,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 010ea73d899c1f6875e7182890ac1561,19.548009,-99.037862,street_only,Avenida Paseos de Santa Clara,Ecatepec de Morelos,,way/558927085,2026-11-10
 014feae1fa409012f661fcd4f5781fb1,19.216924,-103.804176,street_only,Boulevard José Delgado Farías,Coquimatlán,,way/1370351506,2026-11-10
 019a6501f8691bcfbc11856f94579582,39.931603,-122.183913,city_only,,Corning,,,2026-10-17
+01abf8bfca52816170ca99c182a99d26,43.468439,-111.995861,street_only,East Sunnyside Road,Idaho Falls,,way/1468615697,2026-11-25
 01c47fa84554a4c0133b2461bf74e8e8,19.179094,-99.416068,street_only,Calle Manuel González Coroy,Xalatlaco,,way/1124513209,2026-11-10
 01c51b72c7de9c2b6e9e70865abf9627,20.722543,-103.40751,street_only,Calle Santa Cecilia,Zapopan,,way/156573213,2026-11-10
 01e85b4655365f6674f17a9216d39ab7,32.686144,-117.236264,street_only,Ballast Point Road,San Diego,,way/1174539061,2026-10-16
@@ -112,6 +114,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 0af568f881c33821f86f95ff6222abfe,39.43558,-119.724244,city_only,,Reno,,,2026-10-17
 0b2b45994543bb121777d7fd95c4abf2,47.145539,-122.075872,street_only,Foothills Trail,,,way/270477364,2026-11-02
 0b521dd1b7fbde9fea4d49eba930e330,42.199904,-121.735021,street_only,A Canal Trail,Klamath Falls,,way/271675074,2026-11-18
+0b6c56d3d8444fcc03dd6eeec123bca8,44.152839,-115.98495,street_only,Holiday Drive,,,way/1528893059,2026-11-25
 0b9402c3a31477b9d8397996c49dd60e,20.707552,-103.412873,street_only,Avenida de la Patria,Zapopan,,way/764659211,2026-11-10
 0ba3cfbfb686c4c4153c6bf8497a06f7,38.937314,-119.976461,city_only,,South Lake Tahoe,,,2026-10-17
 0be77500fbfff790ea23c6e4fda4b5a4,43.183721,-124.202608,address,1040 North Myrtle Place,Coquille,40,way/1520476152,2026-11-18
@@ -130,10 +133,12 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 0cc5add7a823d0b7072dc65cd9be48af,36.624181,-121.839141,street_only,Cabrillo Highway,Seaside,,way/36006941,2026-10-16
 0ce13b4e1a2c352ac50bf3aedbbdca4e,38.722876,-119.79965,street_only,CA 89,Markleeville,,way/1420166846,2026-10-16
 0cfb8b9422334074cd26b8e30ebd818d,19.707887,-155.091403,street_only,Kaanini Place,Hilo,,way/461619016,2026-11-02
+0cfe246e6599d2914948461fe35dda03,43.675126,-116.676408,street_only,North Michigan Avenue,Caldwell,,way/1442951784,2026-11-25
 0d2a526ee25b017f23d1b39b1c64798b,39.483291,-119.817811,city_only,,Reno,,,2026-10-17
 0d67e3d19a4fd5798d3b206756aa933e,34.066234,-106.911059,street_only,Canyon Drive,Socorro,,way/583601539,2026-11-18
 0d7bd4d2cd5fab2f05473caacf4b6766,21.415483,-158.009174,street_only,Waipio Uka Street,Waipahu,,way/1302182047,2026-11-04
 0d7d875cbf8c2873b22abcb9624253ea,25.758197,-100.437661,street_only,Avenida Alejandro de Rodas,,,way/794182937,2026-11-10
+0da7ce23975f68532a4ba643eb4579f4,40.640297,-112.040264,street_only,Perimeter Trail,West Valley City,,node/10229660350,2026-11-25
 0dabee24e1558a56575fa5712912d7dc,40.198843,-122.209937,city_only,,,,,2026-10-17
 0db72b6d25d3057257985f90e2498bd1,32.560492,-94.768421,street_only,McCann Road,Longview,,way/664662747,2026-11-12
 0dde65af326f7568c527872aa8aaa2ff,33.6867,-117.8925,street_only,Bear Street,Costa Mesa,,way/188558394,2026-11-04
@@ -152,12 +157,14 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 0f4652390c79df987fe078db26b658f5,39.524442,-119.798079,street_only,Kirman Avenue,Reno,,way/498441356,2026-10-16
 0f553e4ba5e229cd8e365cf74294da33,34.530493,-117.441352,address,15620 Joshua Road,Adelanto,63,way/1133613847,2026-10-16
 0f6991c58bb0b20b89d01689f584ec0e,34.001938,-118.430454,street_only,Grand View Boulevard,Los Angeles,,way/1089916155,2026-11-11
+0f8fa68f9408d1c401cdcdbcaaf7cf99,42.981216,-111.050544,street_only,Weber Lane,,,way/347624049,2026-11-25
 0f920998c37caf7f01737fa0c933c91a,38.7285,-121.072642,city_only,,,,,2026-10-17
 0f9d1bfe40bc66893138514497582022,20.66466,-103.445732,street_only,Avenida Ecónomos,Zapopan,,way/481108440,2026-11-18
 0fa855a4cffe5bea3eb7ea5ea509a22a,33.017093,-117.142118,street_only,Christopher Ridge Terrace,San Diego,,way/964704644,2026-10-16
 0fb03b67ead8d55a8300fdd01a2ec682,19.426499,-99.1581,address,Calle Dinamarca 62,Ciudad de México,16,node/8412548917,2026-11-10
 0fcf96b96b8eff1f8a4e2f0eec4d3108,33.868631,-118.297482,address,1301 West 182nd Street,Gardena,123,way/879110675,2026-10-16
 0fe080f8057bd1936047c6e5631d10de,28.411257,-100.773193,street_only,Cuauhtémoc,Nava,,way/162446014,2026-11-18
+101043e00791d833089c7e62053e49ed,48.696657,-116.318361,street_only,Riverside Street,Bonners Ferry,,way/1454297920,2026-11-25
 1016bb174dd7575ca7429ce000ebca55,20.512409,-99.891792,street_only,Calle Paseo del Girasol,Tequisquiapan,,way/418741247,2026-11-18
 101bad0ab5c59744f4e9b9e9735c74a0,19.697993,-98.580647,street_only,Felipe Ángeles,Santa Clara,,way/704134926,2026-11-10
 102ee39bd928d4fd9a9bf968cf32d8fc,19.6845,-155.06984,address,2200 Kinoʻole Street,Hilo,29,way/752735664,2026-11-04
@@ -214,6 +221,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 1521f44d9b4df653291e5eeb3e3da481,20.735369,-103.426848,street_only,Prolongación Jesús,Zapopan,,way/466573792,2026-11-10
 153f5e50444cf9097dd69f983b6eda2e,33.87054,-117.81714,street_only,Lakeview Avenue,Yorba Linda,,way/1455088803,2026-10-22
 155637218437d4e3c1e9fe3eaa434cbe,39.241076,-119.950908,city_only,,Incline Village,,,2026-10-17
+155b4b8bffdb16fdffd33dbfb7db3a36,39.275024,-111.63861,street_only,200 West,Manti,,way/224427148,2026-11-25
 1571933c1b4601401a2e825dd98b1d5c,34.147593,-117.568389,street_only,Chaffey College Transit Center,Rancho Cucamonga,,way/844057257,2026-10-16
 1576af4509d766a3510a972aa904ee2f,36.991542,-122.064278,address,311 Rachel Carson College Quad,Santa Cruz,0,node/2364340669,2026-10-16
 159678ef5dd78bbcb99fd38ecf7d61a5,39.406203,-119.724763,city_only,,Reno,,,2026-10-17
@@ -231,12 +239,14 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 16f623d0fa05ccc688853bcc62d81cfd,19.038118,-98.805016,street_only,Privada Matamoros,Ozumba de Alzate,,way/776321027,2026-11-10
 170be5ed8be26157073fb7b4f71b47b7,20.664277,-103.33264,address,Calle Urano 1015,Guadalajara,35,node/7744644781,2026-11-10
 1716fce76ac3cef01ef78bb0ec6ebfb5,25.77938,-100.196774,street_only,Libramiento Poniente Estardo Guajardo,Apodaca,,way/867938586,2026-11-10
+172ae74e83f472d7f9adc2f7fbc44b22,48.147529,-116.176375,street_only,Main Street,Clark Fork,,way/1424529447,2026-11-25
 175bd5c9ded29062f9dd52426ae8c6a1,33.88262,-118.329956,street_only,West Redondo Beach Boulevard,Torrance,,way/1416779484,2026-10-16
 17a84c6e877ae8f3eb2eaa1551885726,39.485659,-119.842654,city_only,,Reno,,,2026-10-17
 17c3061b0d131d0ba303e5cae5479082,32.96457,-96.64811,address,5602 Naaman Forest Boulevard,Garland,0,way/317004545,2026-11-18
 17efb2865f7cd2fcd36aa00f9a9c73e1,32.75873,-97.10534,address,141 West Road to Six Flags Street,Arlington,1,way/641970518,2026-11-18
 1806c03a7c87c1b74f9ec67f57b6d634,38.910964,-120.016292,address,1735 Lake Tahoe Boulevard,South Lake Tahoe,62,way/234742172,2026-10-16
 180b97d7ae7c292a1142cab3e09b5aec,32.651598,-115.381428,street_only,Calle Mayor,Mexicali,,way/1309074792,2026-11-05
+18499e8c11d6fec687409f5f3d10aa2d,42.10938,-111.994347,street_only,West Side Highway,Dayton,,way/466719034,2026-11-25
 187bed93a053aecbbf54aa70a7c03202,19.318013,-99.222246,street_only,Calle Tihuatlán,Ciudad de México,,way/852545881,2026-11-10
 18825b95217d60256e05ac6d67ac1b94,36.819059,-119.769432,street_only,North Bond Avenue,Fresno,,way/1459132294,2026-10-16
 18855b88106aeb13d47e6e4321f40ab0,38.994291,-119.159706,city_only,,Yerington,,,2026-10-17
@@ -248,6 +258,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 190769fa2e6ac0f9f5d4da14b55d1f72,19.181543,-99.492054,street_only,Calle Jorge Jiménez Cantú,Atizapán Santa Cruz,,way/1081287881,2026-11-10
 192c18c0ddfedfb0f137252fb383c1de,19.373409,-99.113106,street_only,Calle Fiscales,Ciudad de México,,way/25438319,2026-11-18
 192cd4cd39eb81eefdb9ecb938aad996,21.314226,-157.808396,street_only,Kahaloa Drive,East Honolulu,,way/844513117,2026-11-05
+19501bd347f160d83e2eb336bb4c946e,43.620773,-116.68246,street_only,South Montana Avenue,Caldwell,,way/1028565085,2026-11-25
 1970ae8c054fd49544a0b837bdde2148,20.539562,-100.427284,street_only,Calle Paseo Fuente de Neptuno,El Pueblito,,way/704559415,2026-11-10
 19805fec82177e0a3a88ca0ffb8cefec,34.410721,-117.377424,street_only,Independence Avenue,Hesperia,,way/422118423,2026-11-11
 19990754e70c247e60cafc83206d32d0,36.232578,-115.189397,address,4025 Allen Lane,North Las Vegas,0,way/276152545,2026-10-17
@@ -260,6 +271,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 1acd29cb52221d9e401e0ae2dadfa15e,20.533831,-100.447197,street_only,Calle Troje de Campo Alegre,El Pueblito,,way/170681388,2026-11-18
 1adcb919cb7f4eb7244684b9cd2b24a4,27.581019,-97.792921,street_only,East 6th Street,Bishop,,way/1330785160,2026-11-12
 1b06f88fc67094a516c8ec7f646b7746,36.11175,-115.167013,city_only,,Paradise,,,2026-10-17
+1b3bbcf62f1893eb5a34f2b45798f685,47.671077,-116.778146,street_only,Museum Trail,Coeur d'Alene,,way/1528568860,2026-11-25
 1b8167124e23b4d664c09c215c1df684,46.687689,-123.724834,street_only,Ellis Street,Raymond,,way/142042729,2026-11-02
 1b9409603402db8ba36346ac6b646ff0,37.291003,-121.898812,address,2001 Cottle Avenue,San Jose,89,node/8895930299,2026-10-16
 1b9536d6f4187887e207ce15f79250d4,32.840336,-104.410264,city_only,,Artesia,,,2026-11-12
@@ -333,9 +345,11 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 23e5593a25d4f66c81fadb4e70d852bd,38.771761,-121.381798,street_only,Summerfaire Drive,Roseville,,node/9366155145,2026-11-10
 24132f787b62faf0467714c41c5df265,47.385621,-122.23822,street_only,4th Avenue North,Kent,,way/436179675,2026-11-05
 244d5d958e060c08511c79e64e3c959f,33.872863,-117.625378,street_only,Green River Road,Corona,,way/1425926225,2026-11-11
+24537bf636880a2c6cb9ce59bfc78117,40.56489,-111.943885,street_only,South Jordan Parkway,South Jordan,,way/113611072,2026-11-25
 245a703f2b1c600ff3030709d75e2020,19.34413,-99.163006,address,Avenida Miguel Ángel de Quevedo 687,Ciudad de México,0,way/382540129,2026-11-10
 247dceebff754dedff2eb49d3484165b,32.995122,-96.787899,street_only,Winding Rose Trail,Dallas,,way/1472133888,2026-11-12
 248da50150736a8bd6717450946bcc24,32.564385,-96.314387,too_far,,Kaufman,214,way/890016947,2026-11-12
+24ec03c728df3452467c1da0bcfc810c,43.716843,-116.652039,street_only,Emmett Road,Middleton,,way/1025083046,2026-11-25
 24efe0eb3b43c77325205017e9de705c,33.501711,-117.621926,too_far,,San Juan Capistrano,175,way/133950651,2026-10-16
 24f1beab0602400a3e0b7b64306f54d3,38.850144,-120.858497,city_only,,,,,2026-10-17
 24f21cca6266ac4b618e1683d7295b57,21.310702,-157.855005,address,263 South Vineyard Boulevard,Honolulu,6,way/685015842,2026-11-04
@@ -356,6 +370,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 25df09c69a93b8597d60a2e649782ba1,25.577232,-100.255233,street_only,Paseo San Gabriel,Monterrey,,way/155747651,2026-11-12
 25e096e871c431dc7004b1f623845a56,19.324816,-99.185914,street_only,Plaza del Estudiante,Ciudad de México,,way/272530234,2026-11-10
 25e37145eb19a8b41dc5c2a27132da65,29.736146,-95.603452,address,12543 Westheimer Road,Houston,79,way/849341708,2026-11-18
+25ebdfbfe0f11c1c1ff684e1d081533a,42.806127,-112.37263,street_only,Veterans Memorial Highway,Pocatello,,way/541454847,2026-11-25
 260da60d745f1d86e3516071409494c6,19.493373,-99.128569,street_only,Pista de Atletismo Deportivo Miguel Alemán,Ciudad de México,,way/397900552,2026-11-10
 26333fac25588dd634ec9961cfb4449d,34.695121,-118.056705,street_only,East Lancaster Boulevard,Lancaster,,way/1303168264,2026-10-16
 2656b9b67f42f79198222fd75139740e,36.11539,-115.162272,city_only,,Paradise,,,2026-10-17
@@ -367,6 +382,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 26b6e5f465b76a6e9da2e65439d6aeec,28.043707,-97.048843,street_only,Stadium Drive,Rockport,,way/1469330501,2026-11-12
 26e781e78b7189116e8f7e70a9241d7d,38.662979,-120.980438,city_only,,Cameron Park,,,2026-10-17
 2711aa909865425c55ab8843156abc56,21.094302,-89.54532,no_match,,San Diego Cutz,,way/180644349,2026-11-10
+27206a855887c420d344914a7a7fef2c,47.613954,-116.752416,street_only,South Old Barn Road,,,way/1312934174,2026-11-25
 27911e833b1b0153e20aa951a67ade9d,25.653132,-100.336768,street_only,Avenida Lázaro Cárdenas,,,way/138783824,2026-11-10
 27a19d1f122e06522409be7e4f59828d,35.04222,-120.472149,street_only,South Avocado Avenue,Nipomo,,way/378043208,2026-11-11
 27ad489b2cac518e45b9b612943ac4fb,25.68487,-100.247969,street_only,Calle 5 de Mayo,Guadalupe,,way/88982017,2026-11-10
@@ -384,6 +400,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 29246047d7da0c59fcb61c051631a756,23.169086,-102.870979,street_only,Calle Valentín Gómez Farías Poniente,Fresnillo,,way/547128436,2026-11-18
 2941c80ebafe74b9f666cbfc3a725dda,36.229235,-115.263838,street_only,Quadrel Street,Las Vegas,,way/410820584,2026-10-16
 294f99f69d46e911a3cba0ed3d43e546,30.718158,-96.402171,street_only,North Earl Rudder Freeway Frontage Road,Bryan,,way/1094350506,2026-11-18
+296ad4b08472ff2cc7917dd4e96aed9d,43.469895,-112.007953,street_only,Tipperary Lane,Idaho Falls,,way/1437034833,2026-11-25
 29719e6763caa33ee9e9788774dcb3ec,45.571394,-122.728777,street_only,North Bluff Street,Portland,,way/156411873,2026-11-02
 297b4eda1b0de16a3dbe064cca802797,34.575314,-118.091184,street_only,20th Street East,Palmdale,,way/216243280,2026-10-16
 298b53a1cf7d43f475535ca5e4ae23e7,38.689885,-121.099623,city_only,,,,,2026-10-17
@@ -392,6 +409,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 29b3cfc4ce7dc2c38755321eafa46aad,39.564152,-119.77029,address,3530 Sullivan Lane,Reno,72,way/1081564358,2026-10-16
 29b5cb353bf184d6c9166d2b9e3be1c6,34.125968,-117.73841,street_only,Webb Cross Country Course,Claremont,,way/1125276311,2026-10-16
 29c33c47da129522c693a4fde0a1ebcd,36.182814,-115.290109,street_only,Trophy Hills Drive,Las Vegas,,way/1307551080,2026-10-16
+29e5d7ee91f0c4bbd9992b849da28d2a,43.510897,-111.98865,street_only,East Lincoln Road,Idaho Falls,,way/1437034716,2026-11-25
 2a10250d0790b27bb664dfaf8d11fd36,32.909577,-117.142348,street_only,Marauder Way,San Diego,,way/1420912998,2026-10-16
 2a11549594ecf7ed7e7974846e3f6a21,20.689981,-87.033707,street_only,Carretera Reforma Agraria - Puerto Juárez,,,way/836947562,2026-11-18
 2a2faf064eb358df8fcd0bb9358b8ed0,21.928425,-159.522792,street_only,Puʻuwai Road,Kalaheo,,way/262314584,2026-11-04
@@ -407,6 +425,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 2b1f9627f92ece5c5c11b8996e0ccec7,33.10343,-96.767131,street_only,Enchanted Ridge Drive,Plano,,node/9180723453,2026-11-12
 2b27c583a5afc01a3e604fba2b1116c6,36.110157,-115.174092,address,3708 South Las Vegas Boulevard,Las Vegas,19,node/11934026143,2026-10-17
 2b2e28e662d0f3c2836071ca960994f5,33.233828,-117.374707,city_only,,,,,2026-10-17
+2b42f851042845a80e031904505dccfd,42.93024,-112.461167,street_only,Calloway Drive,Chubbuck,,way/1528913348,2026-11-25
 2b5e41b2c1713cc3f892311b7f4c73b3,38.088315,-122.161793,street_only,Benicia Community Park Loop,Benicia,,way/179780222,2026-10-16
 2b7105f7130c1648c5244b75d94d6fc3,32.756095,-97.420558,street_only,Westworth Boulevard,Westworth Village,,way/28320368,2026-11-12
 2bdb19575be427770c02e25d0f7c3664,36.331346,-115.307081,city_only,,Las Vegas,,,2026-10-17
@@ -419,11 +438,13 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 2c66a7a00b7177a9aeb6b1e2dacddad7,30.17377,-95.460412,address,9000 Six Pines Drive,Town Center,44,node/14316291501,2026-11-18
 2c8dfff634b95b46ccd84d5b1d2e9b96,34.06017,-117.130573,street_only,Walnut Street,Mentone,,way/566443762,2026-10-16
 2cac74cfda54a9ef46829e83ca0aa186,35.965566,-114.861194,street_only,Hazelwood Street,Boulder City,,way/1285631421,2026-10-16
+2cce1e90bf08f34793100e8864826995,43.705349,-116.60593,street_only,Cornell Street,Middleton,,way/842508240,2026-11-25
 2cd21548abce2ea3eb605d5e9fb50aa8,33.123516,-96.800242,street_only,Ohio Drive,Frisco,,way/550508444,2026-11-12
 2cdebd2d09402972aa6de14f8888820e,38.178756,-120.013857,street_only,Camp Blue Road,,,way/1105840372,2026-10-16
 2ce8ace1d45ad97bb74cb703242189f7,36.092827,-115.112101,city_only,,Paradise,,,2026-10-17
 2d054ec4a4d321b66a8685e8bd9e1e25,47.236769,-122.486455,street_only,South Washington Street,Tacoma,,way/357007394,2026-11-02
 2d0b01389238dfdd39e1902bb76869b6,32.82892,-96.801157,street_only,Gillon Avenue,Highland Park,,way/230885080,2026-11-12
+2d0d23f3a64f93c2252cafbb05970d17,42.567355,-114.605053,street_only,7th Street,Filer,,way/1171058783,2026-11-25
 2d3211cfd4dc2db16e5608e16659a706,36.345838,-119.256168,street_only,St John's River Trail,Visalia,,way/963761662,2026-10-16
 2d56d5656a6fad14f87f6e72af8ef6d0,38.316831,-122.241394,street_only,Hagen Road,,,node/11115318838,2026-10-16
 2d72f8b1df65dba53857a73fc75fbe90,25.575893,-103.410355,street_only,Calle Quinta del Rosario,Torreón,,way/439810329,2026-11-18
@@ -471,6 +492,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 31d6417cd67d456a254fa3efa7c1a3eb,36.112239,-115.19385,city_only,,Paradise,,,2026-10-17
 31dc566b06aad211e331e42df78edf4f,42.324468,-122.878782,address,522 West 6th Street,Medford,0,way/5158120,2026-11-05
 31eccb273e5edc2880ee9bb0fc55994a,35.327884,-120.831772,street_only,Santa Maria Avenue,Baywood Park,,way/380126688,2026-11-11
+31fddc6c05855a6b3c9b738ece6031e7,40.277733,-111.717744,street_only,Wetland Drive,Orem,,way/28376067,2026-11-25
 31fdde0d162ce5d5d5bc95951d1a714f,36.1458,-115.1371,street_only,South Maryland Parkway,Las Vegas,,way/1023288477,2026-10-16
 31fe43351315bff4d1a8d130d30bb948,33.461433,-118.523404,city_only,,,,,2026-10-17
 3257d44dd18720a642e26e4c05fc213e,36.300148,-109.224768,street_only,Navajo Route 64,Tsaile,,way/1567486248,2026-11-04
@@ -567,15 +589,19 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 3d0c8f5329cfe19491880bf7a3e68af2,34.252697,-118.533678,street_only,Septo Street,Los Angeles,,way/1423553107,2026-10-16
 3d4af85a9585d8c3117e29e439f24a5e,34.10989,-117.765071,street_only,D Street,La Verne,,way/1092856025,2026-10-16
 3d8d3ec425ecdcd27f633888da8f966e,36.156438,-115.31871,street_only,Indigo Drive,Summerlin South,,way/503177023,2026-10-16
+3d8f507a22775cc348e242ff3823e618,47.749582,-116.949594,street_only,Haddon Street,Post Falls,,way/1392025526,2026-11-25
 3d93565c9277cba9313548a12d2ea437,19.485538,-99.229582,street_only,Calle Vía Doctor Gustavo Baz Prada,Naucalpan de Juárez,,way/847238360,2026-11-10
 3dc7634e2a6c8a5bf5541acbfd5605e8,34.057993,-118.083641,street_only,Fern Avenue,Rosemead,,way/177675598,2026-11-11
+3dd6f2b4a7223d7b4ee9cb77abfc608b,47.667055,-116.739615,street_only,East Sky Harbor Drive,Coeur d'Alene,,way/1343637760,2026-11-25
 3ddae1d326fd90d2a50c332d8a8e48b5,21.026094,-89.597542,street_only,Calle 16,Mérida,,way/42946262,2026-11-10
 3df2dfd5c281b6f73950ac10f18ebb4f,26.198087,-98.280965,street_only,Victoria Drive,Mission,,way/1331465079,2026-11-18
 3e0717274f739ad8dafea60073d5b5e8,47.690395,-122.108123,street_only,Ashford Trail,Redmond,,way/154646355,2026-11-05
 3e11edad1e86fdb6b04041345ebc82d6,19.110302,-99.531012,street_only,Calle Vicente Guerrero,,,way/424129835,2026-11-10
+3e2f77cfabf4e57dd65fc6ee1b08707c,43.575197,-116.61533,street_only,Lone Star Road,Nampa,,way/231630794,2026-11-25
 3e396018fec4a8ccb553f7efedb11035,37.337458,-121.778442,street_only,Groesbeck Hill Drive,San Jose,,way/51133767,2026-10-16
 3e48bae2eaf315bfd2e0c30c7d85e6c4,20.719944,-103.490451,street_only,Carretera Guadalajara - Tepic,San Juan de Ocotán,,way/1528513661,2026-11-10
 3e48c72cd3745168075ae5923cc7ad83,44.038254,-123.152708,street_only,Bailey Hill Road,Eugene,,way/1354263318,2026-11-02
+3e7b94cd21736595746f3aa3db2efefa,42.588155,-114.484398,street_only,Cheney Drive West,Twin Falls,,way/1468618630,2026-11-25
 3e8873ea4a3b1f9473cf3b8a6611ce14,36.033707,-115.239012,street_only,West Wigwam Avenue,,,way/1037837999,2026-10-16
 3efa6147732ff09522aacbf0d3bbabe6,21.334725,-157.87169,street_only,Likelike Highway,Honolulu,,way/831040147,2026-11-02
 3f057a09a2840c2fcedac2997d6e8d79,25.629289,-100.362712,street_only,Monte Blanco,San Pedro Garza García,,way/633117310,2026-11-12
@@ -589,6 +615,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 3fdebfc52e3d408c6e45559b3c5e409d,36.103202,-115.142039,address,4505 South Maryland Parkway,Las Vegas,10,node/12752880919,2026-10-17
 3fe17d6f7afcdf9987139f787549c9b2,31.742465,-106.378501,address,7392 Alameda Avenue,El Paso,86,node/12292070990,2026-11-18
 3ff55fb0965eb57ae02bfca02c8441eb,36.125145,-115.150692,city_only,,Winchester,,,2026-10-17
+402b5a0e4548a4bd9bbc09a297df431c,47.524952,-116.068047,street_only,Big Creek Road,Big Creek,,way/271032790,2026-11-25
 4039cad669d2754be8145f96945965db,21.452981,-158.018617,street_only,Kaloapau Street,Mililani Town,,way/624670675,2026-11-02
 403fa22d73cfff2cc4c548b8a775f7d1,36.057929,-115.076131,street_only,Indigo Springs Street,Henderson,,way/1443438640,2026-10-16
 406186118d92ded423ece94deed783a6,31.630428,-97.291807,street_only,Curry Lane,Waco,,way/1350007857,2026-11-12
@@ -661,14 +688,17 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 4863b3d08ce258ec4eba672f04530599,33.158869,-96.645669,street_only,South Central Expressway,McKinney,,way/1356886345,2026-11-18
 4870750e6a6e6be301160e3b78c6728a,22.650093,-103.005799,street_only,Presa Chicomotoc,Jerez,,way/1553277687,2026-11-10
 488af3959ddc33145867f67d29ab0f7b,47.293379,-122.23827,address,1620 Perimeter Road,Auburn,83,node/13040448512,2026-11-05
+48af57a0b83db78b8041682407b4727c,41.069584,-112.001114,street_only,North Cold Creek Way,Layton,,way/62258423,2026-11-25
 48d4d33d823522c8b984ebd1f800eb38,19.51573,-155.92834,street_only,Nape Street,Kealakekua,,way/440984100,2026-11-04
 48ff91f518935ad31978cc07c6c7f947,36.147141,-115.114712,street_only,Atlantic Street,Las Vegas,,way/1560296813,2026-10-16
 49021d81aec8a8be91bffaeae74fd89b,31.778624,-116.613707,street_only,Pablo Orta,Ensenada,,way/291332260,2026-11-05
 494001a6b05d2836324e48437ae315de,25.623039,-100.273694,street_only,Avenida Eugenio Garza Sada,Monterrey,,way/800850173,2026-11-10
+496c1c9e2013a466f45bd12881821230,48.269538,-116.546205,street_only,Iberian Way,Sandpoint,,way/1353998581,2026-11-25
 4985063d8d899e43b8a429bd6869ec8f,19.399101,-99.279881,street_only,Calle Residencial la Cima,Huixquilucan de Degollado,,way/683013267,2026-11-10
 4988b36b6f23e6f1944a774fa4e9d981,25.676697,-100.394586,street_only,Colina Real,Monterrey,,way/537009551,2026-11-10
 4997ed62ceed8e5efa67834b708109fd,20.824731,-156.922181,street_only,8th Street,Lānaʻi City,,way/156569861,2026-11-10
 49ad1dae9a5d8bbce133e26e8d9f06cd,33.67255,-117.904399,too_far,,Costa Mesa,175,way/188648764,2026-10-16
+49c0635c639caf15d38d9d706590e499,40.249492,-111.718575,street_only,Lakeview Parkway,Provo,,way/1562615717,2026-11-25
 49ff16511d652799534fd2c03625029f,21.263784,-86.819103,no_match,,,,way/350955014,2026-11-10
 49ff3bf651bc9e1a233a0e61b9912230,19.682349,-98.576432,street_only,Avenida San Luis,San José Morelos,,way/704027612,2026-11-10
 4a3afa8ef8bf2361a1d5c795119c7f4c,32.64975,-115.441781,street_only,Calle Río Colorado,Mexicali,,node/3802698741,2026-11-05
@@ -676,6 +706,8 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 4a6bda2414fc04f1dc0d93b5d30bcdf0,26.005114,-97.515843,address,1000 Sports Park Boulevard,Brownsville,0,way/490987602,2026-11-18
 4a8ea9d7cb9396e2f58604316c7fc2c3,18.285828,-101.901516,street_only,Calle Adolfo López Mateos,Infiernillo,,way/422346325,2026-11-10
 4ab0b956943a2bbad35a6838dc9a2921,33.997401,-118.462039,street_only,California Avenue,Los Angeles,,way/1154414309,2026-11-11
+4ae0df61e6cff75aca2a1dead4e8bdd7,47.51426,-116.033293,no_match,,Osburn,,way/13909354,2026-11-25
+4ae693c4670c83f7b7f6312fe1738533,48.264858,-116.560266,street_only,Ontario Street,Sandpoint,,way/1454297918,2026-11-25
 4af4d4910b365fcf693841a6e52094b9,20.640279,-87.084617,street_only,Calle 34 Norte,Playa del Carmen,,node/14079527107,2026-11-10
 4af66ef48a35986a7700278d616530ae,25.617343,-100.294905,street_only,Avenida Paseo del Acueducto,Monterrey,,way/856449163,2026-11-12
 4b499e7c17a9d60408617b20190b3265,32.376686,-117.061627,no_match,,Rosarito,,way/559594791,2026-11-05
@@ -723,6 +755,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 4f3abee3e1401ea91cfbf6617075bb61,45.593758,-122.402066,street_only,Northeast Garfield Street,Camas,,way/1066597870,2026-11-11
 4f550d07f14366cea9f1fcce7af8dbc4,33.86671,-117.93761,address,705 West Valencia Drive,Fullerton,44,way/1022091776,2026-10-22
 4f6cc842ffea0038b9f6b5f7b35dca50,39.252909,-119.948846,address,929 Northwood Boulevard,Incline Village,12,way/1065701280,2026-10-16
+4f7d57ea828f3c66b52472854120b213,43.469962,-111.978739,street_only,Knight Way,Ammon,,way/956597661,2026-11-25
 4f8b648168d1e1e4b53b1324b237903f,19.298596,-99.139517,too_far,,Ciudad de México,164,way/54443745,2026-11-10
 4fc1c89beff3a9b30df927a63c222699,39.481907,-119.839643,city_only,,Reno,,,2026-10-17
 4fc9c67fe7df37b8e7138d87aacc059f,20.705164,-100.476761,street_only,Calle Lago Mecoacán,Juriquilla,,way/321700943,2026-11-18
@@ -758,6 +791,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 537161f6043c77918fefbc644e7e3e14,28.65244,-106.081678,street_only,Avenida Gómez Morín,Chihuahua,,way/1492286923,2026-11-10
 537cd1ef5a3c2df868f2f4636f2bacaa,40.031363,-122.113211,street_only,River Avenue,Los Molinos,,way/474738634,2026-10-16
 53af1455bd9123a6160ae74382afa5da,23.052473,-109.7232,no_match,,San José del Cabo,,way/680063028,2026-11-13
+53b20d2a5d9a637ea4339defdbed50b9,42.909199,-112.424162,street_only,Fairway Drive,Pocatello,,way/1342470264,2026-11-25
 53c7de92f69b19cc0725e04575b3577e,36.073703,-114.96594,street_only,Via Garofano Avenue,Henderson,,way/135966736,2026-10-16
 53db22623db8d54a2207a846f122ae4a,39.468339,-119.797441,city_only,,Reno,,,2026-10-17
 53fc1f899f6697e18065a93953d3e4e8,21.315025,-157.809633,street_only,Loomis Street,East Honolulu,,way/305799918,2026-11-04
@@ -814,6 +848,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 59e9bf4221bfeb7f2ea784b612ed0ec8,34.113534,-116.425753,address,7600 Sage Avenue,Yucca Valley,149,way/95963452,2026-10-16
 59fa8ff372e0eb92be2b9a80fb6648f3,19.558857,-99.216515,street_only,Calle Clarín,Atizapán de Zaragoza,,way/855590963,2026-11-18
 5a184c6ad4e3c43bbe52ffaa644f33f2,36.146601,-115.272256,city_only,,Las Vegas,,,2026-10-17
+5a2328d5767c63a0159f997f87feca66,42.778626,-112.854287,street_only,East Park Street,American Falls,,way/1468618053,2026-11-25
 5a3dba24a65552e4a89219d9e19df1b5,34.913992,-117.948021,city_only,,,,,2026-10-17
 5a64c2681d1da8ae42a2fd063bb1413b,36.146005,-115.25381,city_only,,Las Vegas,,,2026-10-17
 5a6acc82523a18040c3913e0402999e0,39.106142,-120.965198,too_far,,Colfax,152,way/654305208,2026-10-16
@@ -845,6 +880,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 5d0601a91d0dac6cdd126f9784210a4b,17.523033,-99.503372,street_only,Calle El Salvador,Chilpancingo,,way/396448546,2026-11-18
 5d67dcb61b5bcb78981d8dd37628316b,47.704729,-117.464627,street_only,West Queen Place,Spokane,,node/12398649853,2026-11-11
 5d7a257b1248de34962190533a39bc05,37.162271,-118.289017,city_only,,,,,2026-11-12
+5d8995db820589b5afa252cc7fe294bb,40.436004,-111.851451,street_only,Traverse Terrace Drive,Lehi,,way/1111610318,2026-11-25
 5da88f1be6a1a7c6aa7f692c8e481773,33.81452,-117.196466,street_only,East Orange Avenue,Perris,,way/672182936,2026-10-16
 5dbba4a8efe54c8c8485eff470aef366,36.297557,-115.201826,street_only,Camille Park Road,North Las Vegas,,way/1137071477,2026-10-16
 5ddc192f1a561def9d85ef72dc093a2c,19.543386,-99.24733,street_only,Avenida Granjas,Atizapán de Zaragoza,,way/781846709,2026-11-18
@@ -893,6 +929,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 62be67092f851decd6d5c6e7f6eefead,33.99656,-118.26861,address,369 East 51st Street,Los Angeles,8,way/13331682,2026-11-04
 62db2f3c8f82d5f4e16ebd7c370d4038,19.168776,-99.469809,street_only,Calle Ponciano Díaz,Atizapán Santa Cruz,,way/1059357332,2026-11-10
 6302c4859888d331638a2427d483ff6e,37.527059,-121.913616,street_only,Anza-Pine Road,Fremont,,way/862827003,2026-10-16
+630a2734ae04e939a949a210c1a58934,42.604511,-114.759039,street_only,7th Avenue North,Buhl,,way/1289127180,2026-11-25
 632a79e92ee78e6149ba887796789457,25.686575,-100.360953,street_only,Privada Manuel M. Ponce,Monterrey,,way/267743042,2026-11-10
 63389c353d811e66cdc0b17dbff81686,36.205595,-115.241304,city_only,,Las Vegas,,,2026-10-17
 6339e8d666bd51465c1583d5082199a7,47.66878,-117.16573,street_only,East Boone Avenue,Spokane Valley,,way/371608259,2026-11-18
@@ -910,6 +947,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 64da9133f59ab19eadfd6d6121bed6ee,21.319678,-157.860262,street_only,Kauluwela Place,East Honolulu,,way/822443788,2026-11-02
 652650fb2609c46b5ef2b478717f7ec6,35.1323,-114.618559,city_only,,Laughlin,,,2026-10-17
 6542c0b7af7dd1af6a9449ce79c00257,32.485169,-96.949898,street_only,FM 1387,Midlothian,,way/550955800,2026-11-12
+655f0a2f451817e1d66b26e7e89b4bdc,43.663077,-116.696085,street_only,South 6th Avenue,Caldwell,,way/248602027,2026-11-25
 657b485a74ef32eca47212530761d093,19.432811,-100.3506,street_only,Calle Nicolás Guillén,Zitácuaro,,way/257576108,2026-11-10
 6584f55b32b2878a793771e9a7f29a50,19.428709,-99.179964,street_only,Calzada General Mariano Escobedo,Ciudad de México,,way/1149007690,2026-11-10
 658dc002196884c2cb329d25035c8a2c,36.01491,-114.996006,city_only,,Henderson,,,2026-10-17
@@ -933,10 +971,12 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 6816dd8b9ae120ba2a2518c949596eb8,21.16255,-86.820073,address,Avenida Bonampak Plaza Oasis,Cancún,0,node/12547078312,2026-11-10
 681ac8abe2561b5f9ba4a861108160cf,19.121397,-104.377274,street_only,Calle Alberto Larios G.,Manzanillo,,way/335526180,2026-11-18
 681b985981601c687b04da5de1c6864a,19.098164,-99.576675,no_match,,Magisterial,,way/790196158,2026-11-18
+681cf2959fb5cb5bc8ace1a766ff5a32,47.805744,-116.899016,street_only,West 4th Street,Rathdrum,,way/1357698798,2026-11-25
 68495466120c0c062657899db26550ba,36.0035,-115.064767,city_only,,Henderson,,,2026-10-17
 6854a7568ec3b7e3301d2dda005acdd0,39.539976,-119.774663,city_only,,Sparks,,,2026-10-17
 6875e1951836fff68c986e52ffc64024,29.087593,-111.018472,no_match,,Hermosillo,,way/996965392,2026-11-05
 68a16a9b626b7dcb6ac18393e721173d,32.663992,-114.637819,street_only,West 34th Place,Yuma,,way/1333149479,2026-11-04
+68acc422da0f984f2e38103c9dd39048,44.070122,-116.936875,street_only,South 7th Street,Payette,,way/566479051,2026-11-25
 68fffabd4a2a29b37c5d98a45d556ef6,47.682769,-122.084523,street_only,Bear-Evans Creek Greenway Trail,Redmond,,way/483396051,2026-11-05
 69158649a582fb3e63e591a821630cf4,33.732088,-117.751769,address,4515 Portola Parkway,Irvine,75,way/731805100,2026-10-16
 6945d282ee06b5f8bfca04c54cb547b3,36.160946,-115.083302,city_only,,Las Vegas,,,2026-10-17
@@ -977,6 +1017,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 6d2cbabecf4c5001b2dd7fe48acae0dd,36.832417,-114.109925,street_only,Anthem Drive,Mesquite,,way/1377697632,2026-10-16
 6d2e30f5b72d2999f040aa8d3024605c,21.326468,-157.80027,street_only,Pawale Place,East Honolulu,,way/1446157094,2026-11-02
 6d32e939e3ac2231277211b7ea178683,30.131618,-95.224238,street_only,Texas 99 Frontage Road,,,node/368162455,2026-11-12
+6d45f2ce7b3c09702cc33e9455208bac,42.916402,-112.446615,street_only,Washburn Street,Chubbuck,,way/578658047,2026-11-25
 6db14ca30c04705e2de97a2845293ede,32.70784,-96.85282,street_only,Kiest Park Trail,Dallas,,way/1383798017,2026-11-18
 6dea7e9c2706fcde26144de8941da265,21.320345,-157.978779,street_only,Gannet Avenue,Ewa Beach,,way/650348378,2026-11-04
 6e02f0d35565d99e2dd7e0f5af30e338,21.39556,-157.73979,street_only,Kuulei Road,Kailua,,way/842251256,2026-11-02
@@ -1037,9 +1078,11 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 73361a95d8453fe7c21fa461cd20f85e,19.339767,-99.466385,street_only,Avenida Independencia,Colonia Cucuhapan (Atarasquillo),,way/1395865413,2026-11-10
 736ac703d9445f4384262e3348db433a,24.117141,-110.337199,street_only,Libramiento Daniel Roldán Zimbrón,La Paz,,way/887473301,2026-11-13
 73d82c15378d27b09897c44b9aecdaa0,27.706753,-97.400681,address,4301 Schanen Boulevard,Corpus Christi,44,way/203621088,2026-11-12
+73fe826145cf7b9fc17fa232878dca11,42.015863,-111.800448,street_only,East 1st South,Franklin,,way/1029875130,2026-11-25
 74677219f7a13b9bb41b04db79d8dc3d,21.965672,-159.390295,street_only,Nahema Street,Puhi,,way/370810831,2026-11-04
 747ee3eca0f2e1db5955b0c45d6bae49,32.34148,-96.646948,street_only,Park Street,Ennis,,way/1556921900,2026-11-12
 748c1c70787a1cbed5638e5c6458e2e4,25.616531,-100.304355,address,Camino al Mirador 580,Monterrey,65,way/158890883,2026-11-10
+74b140734d89bc868f3310f96b282c00,47.81457,-116.880928,street_only,West Christine Street,Rathdrum,,way/1454581192,2026-11-25
 74bd47abd6bd83902b44b1915603ed81,37.176891,-121.483627,street_only,Poverty Flat Road,,,way/28715850,2026-10-16
 7512548202cd2363c5dbbce47814492d,33.660453,-117.935718,address,2323 Placentia Avenue,Costa Mesa,120,way/190856987,2026-10-16
 7523366ce465440fd8bc72eadd221630,19.06897,-98.236481,street_only,Avenida Aquiles Serdán,Puebla,,way/771913994,2026-11-18
@@ -1067,6 +1110,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 772066cd35df26495a86df75caf27e0f,33.00394,-96.74095,street_only,President George Bush Turnpike,Plano,,way/916120424,2026-11-18
 7720ace1e8c1a157dcf2227a82d401a7,38.829409,-121.182735,street_only,Las Flores Road,Loomis,,way/28866829,2026-10-16
 772e62154ad95f1e729381b1e0a82776,19.709397,-98.915571,street_only,Calle Manuel Martínez,,,way/545379912,2026-11-10
+7737651f18cb6471c03eaa6de2625f51,37.269461,-112.876224,street_only,Twin Knolls Road,,,relation/14420265,2026-11-25
 775efded37c62905e5163136ad452730,33.974913,-118.03386,street_only,Richard M Nixon Drive,Whittier,,way/471523451,2026-10-22
 777a87b1eab5c60a9c7c9b8d6154629d,38.007071,-121.859396,street_only,East Leland Road,Pittsburg,,way/1413414542,2026-10-16
 778fd6081a43a57dc873cd13ab522eee,27.702191,-97.338488,street_only,Pharaoh Drive,Corpus Christi,,way/1513528926,2026-11-12
@@ -1087,10 +1131,12 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 78c236cac3b5f0bde1de0390d09dfd19,39.47892,-119.780935,street_only,Neil Road,Reno,,way/538115748,2026-10-16
 78caee6243e7c2e133eb57c9103ef98a,34.440233,-119.878816,too_far,,Goleta,203,way/319461249,2026-10-16
 791018d3528b9afc8ed592b52b9c8de7,32.57629,-117.12339,address,425 Imperial Beach Boulevard,Imperial Beach,1,relation/12920251,2026-10-17
+79414d5820bc0c28e30de10442a0479a,43.645498,-116.683853,street_only,South Montana Avenue,Caldwell,,way/1028566821,2026-11-25
 796608a36e8208aa19372b85de849f1b,35.928756,-115.090524,street_only,Christo Avenue,Henderson,,way/143931720,2026-10-16
 7977f02997975e26f68dfc4416269662,45.353087,-122.865512,address,23000 Southwest Pacific Highway,Sherwood,0,way/32490514,2026-11-04
 79782cdee2bd39fac40ad109095d99e3,20.708779,-103.388316,street_only,Calle Tucumán,Guadalajara,,way/987769487,2026-11-10
 7999ee763c7aff1e8d6eaacb519ed468,23.740089,-99.152035,street_only,Calle General Alberto Carrera Torres,Ciudad Victoria,,relation/15728334,2026-11-10
+79ad40afd98befeef5735f11186517d7,47.707524,-116.930282,street_only,East 3rd Avenue,Post Falls,,way/314309441,2026-11-25
 79bccda1196ea0cb25c1943eed1d3434,20.713897,-103.401476,street_only,Circuito Atlas Colomos Sur,Zapopan,,way/491617200,2026-11-10
 79c2086626cc59d2232c32e8e811ccd8,28.727542,-106.093569,street_only,Calle Herodoto,Chihuahua,,way/1491636129,2026-11-10
 79e9f4a5fabb08b9096061be75c2ecf5,20.632882,-87.094692,street_only,Poliforum,Playa del Carmen,,node/13374535132,2026-11-10
@@ -1110,6 +1156,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 7b719781b93dfd528c6106ad26c822d1,20.711082,-103.444085,street_only,Avenida 5 de Mayo,San Juan de Ocotán,,way/153852734,2026-11-10
 7b8ce3a96372ebc363ca53e1b8e51c8a,37.708166,-122.493099,street_only,Olympic Country Club Road,San Francisco,,way/404853336,2026-10-16
 7ba25795157667631de4ef8e4814531c,35.382918,-120.858209,street_only,Cabrillo Highway,Morro Bay,,way/164966487,2026-10-16
+7be2c0e8f42d089de631a008cb864321,43.473227,-112.037578,street_only,Softball Drive,Idaho Falls,,way/1429422058,2026-11-25
 7bfb53a61da3f4eebaa88a20cb3237a4,19.290874,-98.24205,street_only,Calle Insurgentes,Santa María Acuitlapilco,,way/31373830,2026-11-18
 7c2956c289b79d0230bb724c1fff1dc9,47.562118,-122.377849,address,4515 36th Avenue Southwest,Seattle,56,way/231266961,2026-11-05
 7c592c6f1296621ba13c5e0a243cab65,19.362047,-99.288788,street_only,Avenida José María Castorena,Ciudad de México,,node/12554546104,2026-11-18
@@ -1130,6 +1177,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 7d7efb3c4bb427b1d1442bc1440c28bc,42.151258,-121.694166,street_only,Klamath Falls-Malin Highway,Henley,,node/357303519,2026-11-18
 7d943177379fca8f1718fdc004369275,36.137524,-115.222311,city_only,,Spring Valley,,,2026-10-17
 7da7696aaa1fa22de8a9661b600b11f3,36.199623,-115.045349,address,2200 Rigney Lane,Sunrise Manor,48,way/14319091,2026-10-16
+7dbd1fc4f422c4badc4dc49ddceaeae4,37.712823,-113.065196,street_only,2075 North,Cedar City,,way/473058114,2026-11-25
 7dc40f10d70775056854d971954bebdd,33.922693,-117.433219,street_only,Mississippi Way,Riverside,,way/771763864,2026-10-16
 7de9c85765af08281018708dc2354e1f,38.646893,-121.157059,street_only,American Aggregate Road,Folsom,,way/218153431,2026-10-16
 7dfeb5a35e0c5df0460641ac87a62ba0,39.561246,-119.743481,street_only,Queen Way,Sparks,,way/1449938558,2026-10-16
@@ -1138,6 +1186,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 7e23e1c8117bb396af6c6b071594a599,47.809171,-119.972063,street_only,US 97,,,way/373993589,2026-11-02
 7e6ed4b800ad67744b172de8af986a72,45.489974,-123.051951,street_only,Southwest Golf Course Road,Blooming,,way/1196616909,2026-11-11
 7e7c77b1b52c8321337a841dbf29578d,20.703621,-103.407185,street_only,Privada San Javier,Zapopan,,node/1459341785,2026-11-10
+7e8530227a3c383953eb9e6a53f6a628,43.959079,-111.682197,street_only,West 8th South,St. Anthony,,way/1528914794,2026-11-25
 7e936312fdcaaa865934c9de7a0026b8,36.318991,-115.208055,street_only,North Decatur Boulevard,Las Vegas,,way/1558229655,2026-10-16
 7e9709be159b720e103f1515209f945b,21.151838,-86.832512,street_only,Avenida Yaxchilán,Cancún,,way/161046903,2026-11-18
 7eedd065a63fb6e2b34d5c4eeec28243,22.874993,-109.911657,street_only,Camino de Los Gatos,Cabo San Lucas,,relation/13840044,2026-11-13
@@ -1158,6 +1207,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 80548cf85e7352b1ebe57959617b0fd7,35.999112,-114.817526,city_only,,Boulder City,,,2026-10-17
 8067df96db40ba3688a8985f9c0214d8,25.754637,-100.415128,street_only,Avenida Cumbres Madeira,Monterrey,,way/591260563,2026-11-10
 808a7fe2420a92e44ff710bbc8cef6f8,33.758232,-117.793761,street_only,Woodlawn Avenue,,,way/188427818,2026-10-29
+80a7e078d934cc9045cdd4d61e94e873,42.53041,-113.805563,street_only,West 17th Street,Burley,,way/1468618238,2026-11-25
 80c9f4c690ef4d8998fd31df7c7c6290,19.395287,-99.275574,street_only,Fuente de la Asequia,Huixquilucan de Degollado,,way/130848181,2026-11-18
 80e1b8a59bf2c8c146ac25eb28577145,20.673239,-100.414563,street_only,Calle Anillo Vial Fray Junípero Serra,,,way/895006939,2026-11-10
 80e5c9138d6dc6cfd0f4408d74fbe6bd,40.736791,-114.058198,city_only,,West Wendover,,,2026-10-17
@@ -1182,6 +1232,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 8277be80aec856e533c87a13fdc5f45b,38.02955,-120.387066,address,11600 Columbia College Drive,Sonora,135,way/1154850236,2026-10-16
 828ff29054b00a50386655d318dafa95,19.307505,-98.208626,street_only,Calle Jabí,Santa Ana Chiautempan,,way/31545405,2026-11-18
 82aff42839711563fd486c4456086c42,30.193816,-95.505729,street_only,Bus Loop,The Woodlands,,way/1309149367,2026-11-12
+8301910b602f339e203ff523246edddd,43.139625,-115.695989,street_only,McKenna Drive,Mountain Home,,way/1468619129,2026-11-25
 8313621d9b59b518a2d856e03b4ee06b,16.767019,-99.774017,street_only,Boulevard Barra Vieja,Acapulco,,way/981355482,2026-11-18
 835d4586a8dfb300179556b371c977ab,38.183221,-120.007591,street_only,Pinecrest School Road,,,way/1106389568,2026-10-16
 836d009fe44205a17c80e39007534a8b,21.090256,-157.01647,street_only,Kolapa Place,Kaunakakai,,way/1569168317,2026-11-04
@@ -1257,6 +1308,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 8ae330a8bf0a200caef74aa60ac3797d,29.495949,-95.753982,too_far,,Richmond,263,way/989203346,2026-11-12
 8b09405c2e8b434746573c7d92cda987,20.634504,-100.464379,street_only,Avenida Tarahumaras,Santiago de Querétaro,,way/669436778,2026-11-10
 8b0fea07ee2aea7b745f0c343e5dbe21,21.097916,-86.766924,street_only,Retorno San Miguelito,Cancún,,way/251196265,2026-11-10
+8b18dfd2ff99c7d9f2dfbde10537ba99,42.564757,-114.463571,street_only,Shoup Avenue,Twin Falls,,way/1085933238,2026-11-25
 8b2a35fc93a0aa8cc6a6dd48ede2ee0f,33.694633,-101.98904,street_only,12th Street,Shallowater,,way/472471117,2026-11-12
 8b30dc5a8d76e0de078348682afb2fe8,18.998714,-98.198044,street_only,Sendero Jardín Botánico,Puebla,,way/418204195,2026-11-10
 8b4c2883a2d285482947c0e38305013b,19.47605,-99.072643,street_only,Avenida Francisco Morazán,Ciudad de México,,way/1329421479,2026-11-10
@@ -1264,6 +1316,8 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 8b97bc8d208857118e066956549d7d0a,36.174671,-115.203808,address,4601 West Bonanza Road,Las Vegas,53,way/80341613,2026-10-16
 8bd0257d1265b50ad45f98e87b750497,33.83582,-117.971471,street_only,North Gilbert Street,Anaheim,,way/195017630,2026-10-16
 8be78c173a1cfd69b4263eb8995b0538,24.063961,-109.998863,street_only,Calle Isla San Luis,El Sargento,,way/678688518,2026-11-18
+8c00502f90280dd7735eb5367a13c9c0,46.79797,-116.558235,street_only,1st Avenue,Deary,,node/5762380176,2026-11-25
+8c0931f3ae49593cafb9977bdece930b,41.503528,-112.030611,street_only,West 100 South,Brigham City,,way/260043627,2026-11-25
 8c1b3a431cc111d72174a2e89114cf71,19.304544,-99.145702,street_only,Calzada de Tlalpan,Ciudad de México,,node/4650638239,2026-11-10
 8c2877bae83352b9aebbd6a32b8cbae5,21.599145,-158.103304,street_only,Kamehameha Highway,Haleʻiwa,,way/445846528,2026-11-02
 8c489ab967a0a630228f1dcbcb1743b7,36.295275,-119.779045,street_only,South Lemoore Avenue,Lemoore,,way/1226558236,2026-10-16
@@ -1287,6 +1341,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 8d5e44bc87d19061984c42192c606491,19.358434,-99.156316,address,Calle Riff S/N,Ciudad de México,19,way/405515250,2026-11-10
 8d6e562ce5de989cfe73e015f8768284,19.490361,-99.12327,street_only,Calle Arequipa,Ciudad de México,,way/27783148,2026-11-10
 8d8107de44573eba7a273b70c90a14f1,35.984686,-115.15193,city_only,,Henderson,,,2026-10-17
+8da71ac907234df545b816e53a5f18fe,43.957869,-111.75691,street_only,East Cedar Street,Parker,,way/1089863766,2026-11-25
 8dc45d6c35e10ee2591324b1870f3585,19.324743,-99.0951,no_match,,Ciudad de México,,way/689250997,2026-11-18
 8e0b63da7ee7dfe7a9ac6691a3202dbb,19.649736,-99.093964,street_only,Calle Bugambilias,Coacalco de Berriozábal,,way/161112176,2026-11-18
 8e1082a95054a327fbc78726784960d3,19.52347,-99.217583,address,Calle Viveros de la Hacienda 109,Tlalnepantla,16,node/8004819399,2026-11-18
@@ -1304,6 +1359,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 902d8dddec713bf882314495a02d6837,32.670322,-97.202868,street_only,Little Road,Arlington,,way/406118301,2026-11-18
 903271318e0922ee2c0c9bc7b37ae68f,19.426605,-99.162893,address,Calle Niza 37,Ciudad de México,9,way/1219433712,2026-11-10
 90671c8bee4d6c213f89825afde1e35f,20.590372,-100.41221,street_only,Calle Entre Fac. Ingeniero y Fac. Quí,Santiago de Querétaro,,way/251222915,2026-11-10
+9070af301e600ec546b318b689b7945a,43.826677,-111.774567,street_only,North 3rd East,Rexburg,,way/1437034505,2026-11-25
 907394ffd3dedb4a1f76c5554c22a38f,20.647393,-103.406942,address,Calle Anáhuac 226,Zapopan,28,node/7773738375,2026-11-10
 9093b63a51a124390addac789a29d4ea,20.710063,-103.370606,street_only,Ciclovia Manuel Ávila Camacho,Guadalajara,,way/1342183780,2026-11-10
 909618b58e2f0295db3886cbef923d1f,20.876717,-156.473696,street_only,West Papa Avenue,Kahului,,way/475904265,2026-11-02
@@ -1326,6 +1382,7 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 92cccf9556b15c5560a1790c797cf3fc,25.536615,-100.220027,street_only,A Gas 8599,,,way/560127712,2026-11-12
 92cd459d87be256a550ae06a0f1f5753,22.148367,-101.019106,street_only,Calle Tenería,San Luis Potosí,,way/53442415,2026-11-10
 9314cc36eb36ffce9e8e51579f08ebe6,29.096936,-110.919242,street_only,Salamanca,Hermosillo,,way/28723357,2026-11-05
+934f0167e00b28d5ea902ea5c8c2c084,40.506375,-111.431301,street_only,West Midway Lane,Heber,,way/1536030046,2026-11-25
 93be54fbbe22f4c917399e802e746e58,19.259074,-99.467166,street_only,Calle Luis Camarena,Ocoyoacac,,way/940544612,2026-11-10
 93c287201cdbc82f7b1f9066cf351c1f,35.417832,-119.149733,street_only,Dromore Court,Bakersfield,,way/167227570,2026-10-16
 942bf73a2227a157a4048cdf08cc3ac3,19.385073,-99.147404,street_only,Avenida Lázaro Cárdenas,Ciudad de México,,way/1134177835,2026-11-10
@@ -1423,7 +1480,10 @@ venue_id,lat,lon,status,address_line,city,distance_m,osm_ref,queried_on
 9da401cd766ef22c94109a6407b3a7a2,30.204523,-97.718104,address,6320 East Stassney Lane,Austin,0,way/1202648248,2026-11-18
 9dc1f792efe9adcf5bf66b234340cdd7,32.855108,-104.409524,city_only,,Artesia,,,2026-11-12
 9dcf23ce3295f5ad325c74aa615922a8,21.311897,-157.840829,street_only,Auwaiolimu Street,East Honolulu,,node/14210994428,2026-11-02
+9dcf6822eec893e899c3bed456b7d147,44.909785,-116.14994,street_only,Smokey Morel Court,McCall,,way/1344402450,2026-11-25
+9de331ed16cb6fd3b4f1afd1faaeb2b1,41.174523,-111.975054,street_only,South 150 East,Washington Terrace,,way/41647529,2026-11-25
 9e1adec2487448f87046e06f2d515798,22.743944,-98.98307,street_only,Calle Guillermo Prieto,Ciudad Mante,,way/385863885,2026-11-18
+9e1f67431c6ea3cd3f49adaedefc2999,47.676935,-116.789653,street_only,West Mullan Road,Coeur d'Alene,,way/308992936,2026-11-25
 9e430e6b882579f279aca5ac22c6b5ea,21.305659,-157.845831,city_only,,Honolulu,,,2026-11-12
 9e84a7141270372de3f82beb31960328,21.314972,-158.006835,street_only,North Road,Ewa Beach,,way/589759124,2026-11-04
 9e8755799ac18490360b415f98d46ad5,36.107142,-115.168444,city_only,,Paradise,,,2026-10-17
@@ -1446,6 +1506,7 @@ a0280b9222158431478033de7b3384a2,36.062729,-115.10648,street_only,Monte Rosa Ave
 a04dcae05487ec83404c63cd8c96de65,33.74191,-118.35147,address,32202 Forrestal Drive,Rancho Palos Verdes,1,way/1408467824,2026-10-16
 a05cb4ce38139bc02bfab3d093523960,35.95837,-115.184415,city_only,,,,,2026-10-17
 a062523fcac782133114a9c2cbc2e302,33.04673,-96.82043,address,5801 West Parker Road,Plano,1,node/11023551505,2026-11-18
+a091f2c7814afed5b00147d0dfaa8217,43.82236,-111.791013,street_only,West 2nd South,Rexburg,,way/1528914564,2026-11-25
 a0dd3a0995dab9434ce67692e1d6bad6,37.779645,-122.24016,street_only,Dennison Street,Oakland,,way/414276716,2026-10-22
 a0f44ebd4cdab4760e9c4e1fbda95f3a,36.062354,-115.299454,address,9525 West Maule Avenue,Las Vegas,79,way/27750750,2026-10-16
 a10443b0d8771707f1cb75bcad90e434,39.236306,-119.937874,city_only,,Incline Village,,,2026-10-17
@@ -1469,6 +1530,7 @@ a272570e639edcb4158a6da98e254957,25.652148,-100.313415,street_only,Privada José
 a2ad37a74417f4002d2c64870af9083d,36.025834,-115.18698,city_only,,Enterprise,,,2026-10-17
 a2b49919886e6572d4550f2effdbddeb,36.044286,-115.112984,city_only,,Henderson,,,2026-10-17
 a2bb43e337eae8b4a2b9bd6944a14baa,36.290023,-115.279833,street_only,Oso Blanca Road,Las Vegas,,way/1558231694,2026-10-16
+a2cdbfb865d2e09d655b6e2159231ee7,44.509603,-114.224863,street_only,Wilson Lane,Challis,,way/1445815769,2026-11-25
 a2e275b18dc89e5448a5b0adf508aa43,37.159531,-122.200593,street_only,Heartwood Hill,,,way/67502245,2026-10-16
 a2ea06b93202dbdc7b57f3a7cbff3f39,47.680105,-117.226323,address,2421 North Discovery Place,Spokane Valley,0,way/75037412,2026-11-05
 a2f602f2d8d6c161f9d1898dae171221,36.116997,-115.086435,city_only,,Whitney,,,2026-10-17
@@ -1521,13 +1583,16 @@ a859a46eb942ddd1cbb97f83bf87ddbe,45.112457,-123.446874,street_only,Southwest Mor
 a88abae1ba19708ac4059d91e0827e5b,19.031195,-98.782854,street_only,Calle Veracruz,Atlautla,,way/683237676,2026-11-10
 a8b8da80784f56b9c45ca1dcd24e0258,19.328863,-99.146461,address,Calle Clavel 31,Ciudad de México,68,node/8104041329,2026-11-10
 a8d46cc81d16bb98543cd92e5b026944,38.713105,-121.083984,city_only,,,,,2026-10-17
+a906c4db71c36fa03f889cfc64904f1e,43.500084,-111.93557,street_only,East 9th North,Lincoln,,way/959946876,2026-11-25
 a90e5c0daf72cc727ab8d335f2e43493,16.855949,-99.858185,street_only,Coral,Acapulco,,way/38772351,2026-11-18
 a931bcb4dfd3fcf6791fe398f3ed096f,36.212953,-119.071575,too_far,,Lindsay,299,way/200689638,2026-10-16
 a93b443cfba9a9290c8f6871550d92b4,32.872599,-96.964202,street_only,North MacArthur Boulevard,Irving,,way/30264103,2026-11-12
 a943bac3872ffe32abaf4cb539dcaf18,36.224192,-121.132192,street_only,Boston Lane,King City,,way/1466953800,2026-10-16
+a94ad75150b21f6f4e0b3337d3d8f179,42.619515,-112.019116,street_only,Main Street,Lava Hot Springs,,way/1468614521,2026-11-25
 a94d46b6a67d3aeb6428753484342d3f,33.058675,-96.744531,street_only,West Spring Creek Parkway,Plano,,way/664734566,2026-11-12
 a958175fd48d923a61479c72642c8087,32.792217,-105.818044,city_only,,,,,2026-11-12
 a97ba9a6cf4da05610e774a5da9c8856,38.996073,-120.108152,city_only,,,,,2026-10-17
+a98f8116f30ee5634e7c85fa9516d15c,47.735541,-116.975464,street_only,North Distant Star Road,Post Falls,,way/1256661854,2026-11-25
 a9990d3ec084b05c577dc5c3b7f33f52,33.517748,-112.198251,street_only,West Missouri Avenue,Glendale,,way/152955606,2026-11-10
 a9b6b9560bc4286de26f7b5d5e270037,21.335672,-157.838506,street_only,Puiwa Road,East Honolulu,,way/1510451833,2026-11-02
 a9c58068f65e463bc8f2f8b44136f555,36.146283,-115.26925,city_only,,Las Vegas,,,2026-10-17
@@ -1565,6 +1630,7 @@ ae4f8e2e44437788c2a44c48037b96c5,33.408985,-111.604119,street_only,South 104th P
 aeb0163c6a246b013ca14f0cad5a7f5c,35.986449,-115.259284,street_only,Boyd Avenue,,,way/1380102955,2026-10-16
 af2f16a299265396131a73087053f9a6,21.1134,-89.60753,street_only,Avenida Country Club,Chablekal,,way/1359255118,2026-11-10
 af3870b6d81486d55b0b1fa65cbdc6de,36.152734,-115.020775,street_only,Access Road,Sunrise Manor,,way/150567906,2026-10-16
+af8744d871bc314493d2997426c417da,40.331761,-112.014731,street_only,Pony Express Trail,Eagle Mountain,,way/739820775,2026-11-25
 afa161a2687d8b0a6be323f020777cfa,21.313677,-157.850998,address,217 Prospect Street,East Honolulu,4,way/488185465,2026-11-02
 afd424c5498a90ad2d3171df68984643,36.2774,-115.106606,address,3050 East Centennial Parkway,North Las Vegas,0,way/545591372,2026-10-17
 afe565328e790d8fec315841389c35af,32.726001,-117.145078,address,34800 Bob Wilson Drive,San Diego,98,node/8349785397,2026-10-17
@@ -1583,11 +1649,13 @@ b1387e93231a91542280e0ba62ff9a54,20.693365,-100.469802,street_only,Calle Lago de
 b14edaaf4ca2cb55d7c05a0c3e99c38e,34.989206,-117.860235,city_only,,,,,2026-10-17
 b19e95c03ccc940e3c323df0fadedd0a,36.322597,-119.316933,too_far,,Visalia,218,way/44581269,2026-10-16
 b1bae086dc94cf37962a675cfaeaa565,36.2292,-115.247932,city_only,,Las Vegas,,,2026-10-17
+b1cf46d704768ca986032e568ef13417,42.554138,-114.454142,street_only,Harmon Park Avenue,Twin Falls,,way/1582193508,2026-11-25
 b1e98cbaf87a6537b5f9c0b72deccdc0,33.759582,-116.369624,street_only,Country Club Drive,Palm Desert,,way/1420885199,2026-10-16
 b1fe86bb21f1c64acd95886bc078f379,19.669848,-98.963631,street_only,Camino Al Cerro,Tecámac,,way/207140713,2026-11-10
 b2004f8f6013bc1d595a8f32e17353b4,37.034845,-119.454205,street_only,Lodge Road,,,way/161731049,2026-10-16
 b22c975d37ec44f5f676b09264b1f935,32.886428,-96.963952,address,5550 North MacArthur Boulevard,Irving,0,way/819406403,2026-11-18
 b2366c1fe9f8550b22f4bb68df7c4914,21.111615,-86.842721,street_only,Calle Monte Visión,Cancún,,node/5576966704,2026-11-10
+b24341daf91019058e9da877c4f3d15b,42.867701,-112.465087,street_only,North Grant Avenue,Pocatello,,way/1468617695,2026-11-25
 b266217f8ebdf50b48f20592c5ac495a,36.194055,-115.033923,city_only,,Sunrise Manor,,,2026-10-17
 b28f219394071f0c65b1535000e6a39c,36.200231,-115.335485,street_only,Lauren Drive,Las Vegas,,way/1432655841,2026-10-16
 b29276b898ee58a46e28466e65c0de3c,19.43421,-155.23008,address,19-4030 Wright Road,Volcano,1,node/5457818036,2026-11-04
@@ -1601,6 +1669,7 @@ b3a4fcfda884d89389a3afc4780cf7d2,33.570973,-112.190624,address,6000 West Olive A
 b3ab7a09a7dc4a4a85f7061e3c666db4,19.454248,-99.139159,street_only,Avenida 2 Norte,Ciudad de México,,way/1298839628,2026-11-10
 b3b54389da6212c5da7f004b35bd60cb,38.01108,-121.340483,street_only,Alexandria Place,Stockton,,way/469619571,2026-10-16
 b3b76348186de85be762dca463821bca,19.416771,-99.233872,address,Avenida Paseo de los Ahuehuetes Norte 327,Ciudad de México,73,node/7870103930,2026-11-10
+b3e105524f79c0f30bf216a2f796c3a3,43.58035,-116.633802,street_only,North Midway Road,,,way/934913119,2026-11-25
 b3ec9238028cfc859c4100eb07801e98,20.679268,-103.440465,street_only,Paseo Misión San Lorenzo,Zapopan,,way/473486064,2026-11-10
 b3f5f411d5f7ada74c48e2183438b6d1,20.185203,-87.470475,no_match,,Tulum,,way/1309896560,2026-11-10
 b4097dabf8ec52c38a669c329a065b69,30.545003,-97.627459,street_only,Harrell Parkway,Round Rock,,node/8484444613,2026-11-12
@@ -1656,6 +1725,7 @@ ba300191069f6ac10dc366930b883ee7,36.797548,-119.641627,city_only,,Clovis,,,2026-
 ba4039efda21be3164640bad3736f878,34.246977,-118.280934,street_only,West Shadygrove Street,Los Angeles,,relation/6439177,2026-10-17
 ba659f95b4bf7933dd8122daaff6994f,34.28137,-118.40645,street_only,Bromont Avenue,Los Angeles,,way/434899981,2026-11-04
 ba960f91bfbe62616afe6ee84ac7e2e9,34.678005,-118.18842,street_only,West Avenue K,Lancaster,,way/196814033,2026-10-16
+baa1a19cf1329c601897ab541b979ce2,43.86974,-111.757538,street_only,South 7th West,Sugar City,,way/1437034461,2026-11-25
 bac1b45619150ab742e5cb96864f3eb6,21.022446,-89.585479,street_only,Calle 17,Mérida,,relation/18706647,2026-11-10
 bad8d80c316e5baf5e4bcf00d5207f1e,36.241609,-115.30954,street_only,North Jensen Street,,,way/370192485,2026-10-16
 baebd37d83e9667e2a3a7de812dc950d,35.162081,-114.61301,street_only,Spirit Lane,Laughlin,,way/142522793,2026-10-16
@@ -1669,11 +1739,13 @@ bbec0c948d63facae58f0e488cea173f,33.955986,-117.996172,street_only,La Serna Driv
 bbf8d13939672afc517903dc77c8271e,36.00308,-114.964297,street_only,College Drive,Henderson,,way/550193995,2026-10-16
 bbfdb8175d3cee0a9a1e3c5d428c1dfb,36.115717,-115.145134,city_only,,Paradise,,,2026-10-17
 bc15bc1c8b1d0c9eb7b54e8131650f20,32.530323,-94.860284,street_only,Sandy Street,White Oak,,way/667561389,2026-11-12
+bc3886acd543b4ec0812bcf5f69b9d55,42.938413,-112.470824,street_only,Jacob Street,Chubbuck,,way/584965852,2026-11-25
 bc4d91e912b2b94d8270d4165557e0ec,29.72619,-95.690596,street_only,Challenger Road,Houston,,way/1279777220,2026-11-12
 bc6bb3784966592bcf7330c852468aca,36.19018,-116.00318,street_only,Mount Charleston Drive,Pahrump,,way/842520416,2026-10-16
 bc93c45ac947d3912b744da22e148757,21.003038,-156.657688,street_only,Ironwood Lane,Kapalua,,way/293261139,2026-11-02
 bc9b8533c8c2ea07522355626c92f5fe,20.686593,-103.394021,street_only,Ciclovía Juan Palomar Y Arias,Guadalajara,,way/1313111013,2026-11-10
 bcd1baa5a0c08b68b3c0bd515fce9c96,36.056791,-115.446932,city_only,,,,,2026-10-17
+bcf0541fd3ef360ec1e88b00baba580f,46.737094,-116.775486,street_only,Latah Trail,Troy,,way/1456300010,2026-11-25
 bd0770c8962a312ca2a996ac269f3321,19.728627,-101.189899,street_only,1901,Morelia,,way/1311573532,2026-11-10
 bd3478a9a9db03d820b78cd65f3901e7,36.24216,-115.152447,street_only,Twincrest Avenue,North Las Vegas,,way/1560300425,2026-10-16
 bd475246973f09e3a7a3d2b4779b6f2e,21.342374,-157.71639,street_only,Hihimanu Street,Waimanalo,,way/1484753387,2026-11-04
@@ -1686,6 +1758,7 @@ be06cd2355620da3862e32c10013c381,36.056922,-115.130504,city_only,,Paradise,,,202
 be09edbd7e1c1237a61ec9d95a878c85,19.449749,-99.19375,street_only,Cerrada Lago Gran Oso,Ciudad de México,,way/627520739,2026-11-10
 be1dbc1b67fd512c9e1b1b31be4603b1,30.325703,-97.820573,street_only,Pearce Road,Austin,,way/1265932201,2026-11-12
 be26386ee734cfb2c6c88ddc56dbd186,21.702413,-157.997606,street_only,Kuilima Drive,,,way/147997646,2026-11-04
+be78b775896ec5bedd1af56d9f65035d,43.374329,-112.166957,street_only,East 1250 North,,,way/1528913556,2026-11-25
 be7abf803f6a474e49a56499c4b4fc74,36.083188,-115.182471,city_only,,Paradise,,,2026-10-17
 be86b147c9d58a8ef9af2fccb1abaea1,35.047653,-120.487261,street_only,North Thompson Avenue,Nipomo,,way/160380849,2026-10-16
 bee0f6d067d950e0d67695068fccd287,20.076954,-155.466259,street_only,Akia Street,Honokaʻa,,way/197888865,2026-11-04
@@ -1713,6 +1786,7 @@ c219373e8bb7987f4e8920307b20ed2f,31.995744,-106.659404,street_only,NM 28,Chamber
 c26accea89b4d6445ea765b60c6836f1,39.256359,-119.952004,street_only,Donna Drive,Incline Village,,way/1465406821,2026-10-16
 c285e74de19ecb0cbc11b202a27214f3,29.296618,-98.584849,street_only,Verano Parkway,San Antonio,,way/1062191485,2026-11-12
 c2a76a8f745dbe336d1c89519b5d5e19,19.445791,-99.190464,address,Calle Lago Ladoga 202,Ciudad de México,60,node/12250823384,2026-11-10
+c2c9506a7b40632f8513fcfbd3a2ee42,43.552494,-116.568632,street_only,Constitution Way,Nampa,,way/1581946774,2026-11-25
 c2e558115590ee5ef1c226e6619947ea,36.021508,-115.06472,street_only,Desert Shadow Trail,Henderson,,node/9967115183,2026-10-16
 c2eb08621623d31ab05eefe6c8227a96,20.737008,-103.454925,street_only,Circuito Abetos,San Juan de Ocotán,,node/10048744022,2026-11-10
 c2edbf085ec773e4280ce6cafe7ca8ef,36.118999,-115.134083,city_only,,Winchester,,,2026-10-17
@@ -1758,6 +1832,7 @@ c7551c8c1c9f57445553583e0c5b75ce,29.980867,-95.16774,address,13600 Will Clayton 
 c799e2be817e01c0433f628d48a297be,36.068744,-114.965346,city_only,,Henderson,,,2026-10-17
 c7cdd0674aed171775a76f4cdb81a272,36.075733,-114.981343,street_only,Weston Ridge Street,Henderson,,way/1560287550,2026-10-16
 c7e3c3aec7a8e939738a41f58655f986,36.178965,-115.248435,street_only,Trading Post Lane,Las Vegas,,way/899908168,2026-10-16
+c7ee0cdc05da90b789489f4d1547691e,43.476892,-111.970935,street_only,Southwick Lane,Ammon,,way/1468615101,2026-11-25
 c80b75036cbba76314451bc52f185a2e,37.76873,-122.464928,street_only,Nancy Pelosi Drive,San Francisco,,way/66644377,2026-10-16
 c8188914294ef0c166e16cf395da7969,38.647927,-121.345891,address,4700 College Oak Drive,,114,way/577882685,2026-10-16
 c87bd39199e27aca259932a970db6d00,20.826008,-156.924621,street_only,5th Avenue,Lānaʻi City,,way/708607771,2026-11-04
@@ -1771,8 +1846,11 @@ c95272b23acd703dffebd811e835976b,39.086192,-119.785174,street_only,James Lee Par
 c965e027196450f996b84dc935f40ec1,33.734239,-116.739469,street_only,Tollgate Road,Idyllwild,,way/372654670,2026-10-16
 c98844d07e009cf141bfbdf0edf382fc,19.453943,-99.139236,street_only,Explanada del Puma,Ciudad de México,,node/12031649892,2026-11-18
 c998ae29b7efda00ddfc28b190480069,36.135826,-115.333734,street_only,Clemmons Court,Summerlin South,,way/555777622,2026-10-16
+c9c2573076d0a020182c06b3d456e114,43.573513,-111.11081,street_only,Hastings Drive,,,way/439474349,2026-11-25
+c9dde564f126fe77de5b520a4e26e48f,43.560521,-116.568249,street_only,South Locust Street,Nampa,,way/231674699,2026-11-25
 c9f0ef5fef30af0b103ebb58d537d89d,20.737444,-103.432034,address,Avenida del Servidor Público 1195,Zapopan,78,way/466573780,2026-11-10
 c9fe2f618644a9c7ed3e5c0cfb1f481d,19.917354,-155.884683,street_only,Kolea Kai Circle,Kapalaoa,,way/146693825,2026-11-02
+c9fe2fcbbe159ae3c3c8ee29f82bf535,47.954489,-116.862999,street_only,Tiger Way,Spirit Lake,,way/1346839977,2026-11-25
 ca0d38fa7c8ea627e525d951dbc810dc,34.127049,-117.235465,street_only,Arden Avenue,San Bernardino,,way/556639080,2026-10-16
 ca64f121b3fc2ee6ce46738f3df413e4,34.217061,-119.174557,street_only,Entrada Drive,Oxnard,,node/8777134701,2026-10-16
 ca7b95ca219cf03cf55b366a247e8c4f,38.93867,-120.006818,city_only,,South Lake Tahoe,,,2026-10-17
@@ -1785,6 +1863,7 @@ cb2e49b61c95aa72aa1e00949487ae25,25.656835,-100.284148,street_only,Calle Jesus C
 cb2f191b6335b092ac80c5fe06aaf947,19.426526,-99.179897,street_only,Calzada General Mariano Escobedo,Ciudad de México,,way/55213084,2026-11-10
 cb52a36d3f8d968f18043e7d683d7b8f,35.348799,-119.106609,street_only,Student Way,Bakersfield,,way/59588733,2026-10-16
 cb638743a88a49f927e69887b3256b0c,32.98514,-96.74979,address,800 West Campbell Road,Richardson,0,way/297587453,2026-11-18
+cb69d22cb4e3e18185593840b0e9717f,43.177516,-112.343186,street_only,York Circle,Blackfoot,,way/120480125,2026-11-25
 cb6a6c1cd8bc80b6a3ce41ada4642b7d,35.464848,-120.639343,street_only,Mocheulo Court,Atascadero,,way/1419147243,2026-10-16
 cb6c0cb370357870b93a8134002db5e2,36.332057,-119.65981,street_only,Greenfield Avenue,Hanford,,way/1428997508,2026-10-16
 cb6f9290f617bf2ae2c32b3dcb15d6ed,32.617014,-115.496737,address,Avenida Doroteo Arango 1392,Mexicali,30,node/7406358370,2026-11-05
@@ -1823,6 +1902,7 @@ cf60f57597d84bab3e299d296c669ff0,38.666255,-121.251328,street_only,Madison Avenu
 cf707c65010771fb5f77b220af4d411d,36.128316,-115.325797,city_only,,Summerlin South,,,2026-10-17
 cf740e20b1bfd64c1688d5db6017adc3,19.348287,-99.225619,street_only,Avenida de los Pinos,Ciudad de México,,way/145218098,2026-11-10
 cf8b62d16813bf87628d6d6f046d42b8,29.656866,-95.015921,street_only,East G Street,La Porte,,way/555301894,2026-11-12
+cfa4748f9d97c6175b758b7a7a43e1a5,45.164056,-113.868558,street_only,ID 28,Salmon,,way/1415693216,2026-11-25
 cfb22af228035015f5a6aa996ba0b6cd,36.033795,-115.127664,address,8625 East Ford Avenue,Las Vegas,118,way/131695836,2026-10-16
 cfee736977f695a5b36d53a2acd39005,39.617103,-119.740171,city_only,,Spanish Springs,,,2026-10-17
 d005234715eeb85deeea62cfc0c9412c,21.343117,-157.869903,street_only,Kamehameha IV Road,Honolulu,,way/800192127,2026-11-02
@@ -1838,6 +1918,7 @@ d0f8ace8f1d8246ac822857a34b8641e,34.206501,-118.45948,address,7477 Kester Avenue
 d1007ed83c5ee40aa8e64406adda69f3,36.797046,-114.07903,street_only,Roadrunner Trail,Mesquite,,way/483827787,2026-10-16
 d11fd8675e1d9e68cf21eb2fce45f5e5,25.674629,-100.44546,street_only,Avenida Licenciado Manuel Ordóñez,Santa Catarina,,way/349837082,2026-11-10
 d16feacf5ac9d9ef250774e29d28b9d2,32.836205,-106.089264,address,588 West Connecticut Avenue,Holloman,16,way/222811132,2026-11-18
+d17b4c23a8a80959fec15538a995e078,39.953146,-111.815021,street_only,Harvest View Drive,Santaquin,,way/1296754141,2026-11-25
 d1b997c5411f551883843da7a80c7fc8,19.684278,-101.203911,street_only,Calle Atenas,Morelia,,way/182229711,2026-11-18
 d1d3f8d066dc966220c722998bdfc214,32.830194,-117.173897,address,4833 Doliva Drive,San Diego,98,node/596837856,2026-10-16
 d2147a154cda2eea8b9ab76c8cfbe2f0,20.706424,-103.415873,street_only,Avenida Paseo Royal Country,Zapopan,,way/1152711144,2026-11-10
@@ -1845,6 +1926,7 @@ d23c6da2b1589cd92e6d2f83518a585c,20.69579,-103.333843,street_only,Calle Nevado d
 d261d3b39006ee61781a44cb65fca62c,39.515546,-119.939202,street_only,Mogul Mountain Drive,Mogul,,way/954022894,2026-10-16
 d2798a8e21860609c29c8941677f61e9,45.515792,-122.553414,address,740 Southeast 106th Avenue,Portland,0,way/368973202,2026-11-04
 d2806e6eb86fe31392e496320d3e0a8e,29.393724,-95.142921,street_only,Maple Street,Santa Fe,,way/944735345,2026-11-12
+d2c99dd26d0b88ecaa182d55af517671,47.740402,-116.836934,street_only,West Lotze Loop,Coeur d'Alene,,way/1528567322,2026-11-25
 d2d837992893d0482f5af9bb83731727,21.871774,-159.44619,street_only,Poipu Crater Driveway,Poʻipū,,way/1569167969,2026-11-02
 d2f26e7e547386f7c6302ec1f4e4b45f,21.303478,-157.826457,street_only,Piper's Pali,East Honolulu,,way/503156351,2026-11-02
 d34de71ceb24c626eb7600a9632633e6,37.655756,-122.059472,too_far,,Hayward,318,relation/4009469,2026-10-16
@@ -1886,6 +1968,7 @@ d67a89b6d99cffdc48e1563357074aeb,35.971074,-114.834358,street_only,Avenue G,Boul
 d67ed21e8bd9bd939e1dca33733f956b,25.657345,-100.40175,street_only,Calle General Ignacio Zaragoza,San Pedro Garza García,,way/194555181,2026-11-10
 d6892ce2b732625fd6e26dcf53deb579,32.76107,-97.414088,address,5875 Westworth Boulevard,Westworth Village,7,way/10045784,2026-11-18
 d6a4312a328188886ba12d588e581a0a,19.514235,-96.914696,street_only,Prolongación Adolfo Ruiz Cortines,Xalapa,,node/4492663575,2026-11-18
+d6a9cc3e86fae19336baa5203add96c6,44.522115,-111.321036,street_only,Grand View,,,node/3003764027,2026-11-25
 d6b881382ffe3ac5f6e53fba29ed4288,22.905991,-109.888967,street_only,av. Crispin Ceseña,El Tezal,,way/67318202,2026-11-13
 d6c0eaf8ec5d401f5b8cb2899d574214,38.902055,-120.995792,city_only,,,,,2026-10-17
 d6d0f5e018a3f8b7746d60cdb9c63a34,19.359777,-99.057968,street_only,Anillo Periférico,Ciudad de México,,way/458587402,2026-11-18
@@ -1894,6 +1977,7 @@ d71349b0d49f73a527b84da1748a602d,39.528103,-119.990015,city_only,,,,,2026-10-17
 d73c45f8550f4300632e01a281a9bde1,25.650119,-100.337427,street_only,Avenida Real San Agustín,San Pedro Garza García,,way/1537325483,2026-11-12
 d74526651ea09327ba2db32b95c3abcc,47.11513,-122.2883,address,10515 156th Street East,South Hill,3,way/563579920,2026-11-05
 d75114d61942ad4d1822ec8b23cd027a,19.454374,-99.143303,street_only,Frontón Tlatelolco,Ciudad de México,,way/1043293830,2026-11-10
+d764757afc5cf94fe45a05f98a6e9465,43.488832,-112.066955,street_only,Blue Sky Drive,Idaho Falls,,way/947059064,2026-11-25
 d76585525e4904322fa640bf23ce1e52,19.343582,-99.151927,no_match,,Ciudad de México,,way/944862184,2026-11-10
 d7a8dab3ebb69ec0b915762ae98a87fb,20.652756,-87.068517,street_only,Calle 68-A Norte,Playa del Carmen,,way/80560267,2026-11-10
 d7b490ff9cc45f86e1ea111f3c2698d9,33.920892,-118.175149,street_only,Los Angeles River Horse Path,Paramount,,way/895047931,2026-10-16
@@ -1921,11 +2005,13 @@ d9ce7f247f7cc1b981e7a3accb078d13,32.851387,-117.207512,street_only,Notre Dame Av
 d9cfaff1980e4f56140cf56479bd6c33,39.537358,-119.740702,city_only,,Sparks,,,2026-10-17
 d9d254a1d0bee196340b6558f972c1d0,29.097549,-110.950317,street_only,Abelardo L Rodriguez,Hermosillo,,way/28714814,2026-11-05
 d9ffd92145e67ca608c86dc26d0b3ad1,36.131853,-115.108754,street_only,McLeod Drive,Winchester,,way/1560296057,2026-10-16
+da093d9715f0f1fc8ccfa6782546c52e,47.51231,-116.870373,street_only,South Kimberlite Drive,Rockford Bay,,way/1047862787,2026-11-25
 da57f9858b03efc524934fb551e0bec1,33.91026,-117.478057,address,4145 La Sierra Avenue,Riverside,38,way/79473180,2026-10-16
 da5c35a294e547453c228a8245dba4a1,27.697615,-97.393507,street_only,Pinehurst Drive,Corpus Christi,,way/1514022952,2026-11-12
 da5c8a6bd3a441711156a0051e30bf58,33.499601,-117.121778,street_only,Rancho Vista Road,Temecula,,way/72491229,2026-10-22
 da5cc561b9d732e8036fb2b841671163,25.646123,-100.360988,street_only,Calle Magnolia,,,way/412823843,2026-11-10
 da6719690429982c6e4b34557c8a3cb2,33.858452,-117.548089,address,1820 Rimpau Avenue,Corona,63,way/44486341,2026-10-16
+da68fc34be09294a7af922f8dd52aac2,43.528032,-111.968285,street_only,Imperial Lane,Lincoln,,way/959955354,2026-11-25
 da8660701ed6c0cdba0ef7ec16612262,19.13468,-155.510652,street_only,Ninole Loop Road,,,way/478313479,2026-11-02
 da8691a2d7b6da2553b6233772b897e6,25.618563,-100.282084,street_only,Montecarlo,Monterrey,,way/155860883,2026-11-10
 da91a76502589ca06ff7944045b71400,36.030255,-115.151132,street_only,Hidden Palms Parkway,Enterprise,,way/1108097158,2026-10-16
@@ -1940,11 +2026,13 @@ daf6d14016d0981fb7ac947aa3e43f48,39.197512,-119.708756,city_only,,Carson City,,,
 dafaf7623823e06a9ffe1aa5bb30adbc,38.733864,-120.811461,city_only,,Placerville,,,2026-10-17
 db10dac0637393849d94391a6ca57aca,20.869081,-156.338464,street_only,Haliimaile Road,Haliimaile,,way/298458563,2026-11-02
 db66fd1ce778fab2a37adbb52660c445,32.98514,-96.74979,address,800 West Campbell Road,Richardson,0,way/297587453,2026-11-18
+db6e912c4aedb34c8bcd6b35bdb7b8c8,43.697122,-111.904866,street_only,North 4000 East,,,way/1437034544,2026-11-25
 db89b2d658cdbab4f0f0176469def44c,36.194631,-115.06458,street_only,Kell Lane,Sunrise Manor,,way/131120986,2026-10-16
 dbaad080c487e4291bd863b6bf5f3e82,19.337068,-99.220758,street_only,Calle Torres Ixtapantongo,Ciudad de México,,way/787815560,2026-11-10
 dc47806423d7ba15f5146a80421bd0b6,47.607625,-122.302246,address,2323 East Cherry Street,Seattle,0,way/228779140,2026-11-05
 dc4e6b4a89514336238600d5a0ad448d,19.237041,-103.729433,street_only,Calle Díaz Mirón,Colima,,way/1188737845,2026-11-10
 dc7cf7347ee3ea39df1010f0782a3741,19.269619,-99.139832,street_only,Calle Cuauhtémoc,Ciudad de México,,way/694399242,2026-11-10
+dcc9289b8a44f5efee40072fd872860d,44.728898,-116.075727,street_only,F.W. Gestrin Street,Donnelly,,way/374049900,2026-11-25
 dcf7d27023d10686396cb864217c5f82,36.068395,-114.973747,city_only,,Henderson,,,2026-10-17
 dcfbbf84ca0646c88f64051b376c5e4a,30.123753,-95.360919,street_only,Riley Fuzzel Road,,,way/1123144751,2026-11-12
 dcfda1eba219932437578d7292fceec5,32.230584,-111.015415,street_only,West Calle Placida,Tucson,,way/220420559,2026-11-04
@@ -1973,9 +2061,11 @@ df4f0c9330661fcd9b948c45fb6720d9,32.278579,-104.096394,city_only,,Loving,,,2026-
 dfa6cc2d2dc21489609f1e621d207dfc,19.291023,-99.134747,street_only,Calle Hacienda de San Nicolás Tolentino,Ciudad de México,,way/1547731087,2026-11-10
 dfcb872016012c9e16a7030d0c25ce45,19.328306,-99.18318,street_only,Circuito Escolar,Ciudad de México,,way/272531890,2026-11-10
 dffb1dadb6fc2812dd677428a0f3ad7d,19.376949,-99.185535,address,Calle Luis Caracci 16,Ciudad de México,0,node/12459866168,2026-11-10
+e0061829a19614c5e54bacdd8a8ea08b,43.674627,-111.916467,street_only,West 1st North,Rigby,,way/1437034547,2026-11-25
 e00d478e468f8121f9fd2b1694a2749e,25.567001,-100.232368,city_only,,Monterrey,,,2026-11-12
 e00e36a525d06893e2bfc54f468ec4de,20.539158,-100.446977,street_only,Sendero de la Ribera,El Pueblito,,way/650744354,2026-11-10
 e02ea098c5f2a76f10634e82de28f505,21.403647,-157.79633,street_only,Kaneohe Bay Drive,Kaneohe,,node/14210704720,2026-11-04
+e0578185112f0d1cdb56e3236493d8f1,43.832954,-111.801267,street_only,West 4th North,Rexburg,,way/1528914671,2026-11-25
 e0836d63fd5df41b4100b709487a6863,25.678852,-100.393728,street_only,Colina Alta,Monterrey,,way/537009566,2026-11-12
 e0c4271cb596796d3d157c235d3a6813,20.68335,-103.304529,street_only,Calle San Esteban,Guadalajara,,way/1380077837,2026-11-10
 e0fc6850caffe644d8e053abc99f9fb6,29.097608,-110.939623,address,Bulevard Eusebio Kino 712,Hermosillo,61,node/13998664329,2026-11-05
@@ -1985,8 +2075,10 @@ e15c2f04809eec4cf0b6aa875ebe1de8,47.215111,-121.0971,street_only,Yakima Road,,,w
 e15ca568d8664d580b80f35ea8ffa78c,39.051973,-120.114164,city_only,,,,,2026-10-17
 e1624788949b6a2f5175e4a0d9812aec,39.411031,-119.722673,city_only,,Reno,,,2026-10-17
 e17bbbd291112d2ca818c44d8b121fba,25.662694,-100.443773,street_only,Avenida Alfonso Reyes,Santa Catarina,,way/802721642,2026-11-10
+e18647c271da805d67f7c68db99336ed,44.022625,-116.913222,street_only,Northeast 12th Street,Fruitland,,way/1137494364,2026-11-25
 e1cbbbbc150c98d73b1f04432bfd34f1,39.187057,-119.777341,city_only,,Carson City,,,2026-10-17
 e20b9d8abb0aa1a4844eb546298630fd,32.695718,-95.881246,street_only,East Pine Street,Edgewood,,way/1530373023,2026-11-12
+e20c506ff404d6f49936eb8c45e8ee89,43.527792,-111.92761,street_only,Hansen Avenue,Iona,,way/1528914365,2026-11-25
 e23002cad90ab12952e54f5b5cb76c4f,19.273202,-99.681644,street_only,Calle Sor Juana Inés de la Cruz,Toluca,,way/224666232,2026-11-10
 e238d5c070786d11fb89753b4e6f19bd,29.595491,-95.085714,street_only,Bay Area Hike and Bike Trail,Pasadena,,way/86169229,2026-11-12
 e23fdbe32eedf52703d7c951945a9087,35.949349,-115.126055,street_only,Beltrada Avenue,Henderson,,way/730884594,2026-10-16
@@ -2004,6 +2096,7 @@ e33341f5b36927a6aa40822247a1f14d,45.491062,-122.601485,address,6036 Southeast Fo
 e3362e06a0421140724e25c320ec97cc,29.605269,-95.632561,street_only,Brooks Street,Sugar Land,,way/317867972,2026-11-18
 e3475bba1090722d3d7cbf9d181db5b0,32.746179,-97.79545,street_only,Roo Road Street,Weatherford,,way/277011385,2026-11-12
 e356d528f8a726bd45b3e5f729308365,36.147239,-115.202076,city_only,,Las Vegas,,,2026-10-17
+e35f828ebd9c70ce16fb9024bd6f2e1c,43.789767,-116.936312,street_only,East McConnell Avenue,Parma,,way/287301883,2026-11-25
 e36a67523bcf19f68dde92a7d8a87209,25.656557,-100.35592,street_only,Avenida Manuel Gómez Morín,,,way/582053432,2026-11-10
 e37d3922cbb2b29edbe968bdcf9b15af,33.030808,-96.813834,address,5600 Cradle Rock Circle,Plano,67,way/648594612,2026-11-12
 e39643f0dcf3ab048a7afa62a5b69688,47.666172,-117.425892,address,930 North Monroe Street,Spokane,0,way/471713310,2026-11-05
@@ -2023,6 +2116,7 @@ e551e0db9a0fd1ef568fc885d02b5d6f,33.671024,-117.382947,street_only,Ryan Court,La
 e556c0f61118e6f7f7963483ca31c8ec,33.727219,-117.953384,street_only,Brookhurst Street,Fountain Valley,,way/963507842,2026-10-16
 e558e8811e09bed993de8b92bca2cc8f,47.433681,-122.288299,address,3595 South 188th Street,SeaTac,0,way/647239368,2026-11-10
 e5752c2a5387144b09ee543b109af19b,46.574007,-120.402218,street_only,Mieras Road,,,way/1152277142,2026-11-02
+e57a6527bba893d0d862f89219d3035b,43.652018,-116.675396,street_only,East Oak Street,Caldwell,,node/5729141045,2026-11-25
 e57c1168da339a763eb6a486fe4f83e8,34.073863,-118.451382,street_only,Weyburn Avenue,Los Angeles,,relation/7493269,2026-10-16
 e5837d59cb92593d9ae303906215f0c8,36.138217,-115.329227,city_only,,Summerlin South,,,2026-10-17
 e58e3c00ef66d21bc72595da75885ac8,19.600058,-98.268121,street_only,Calle 5 de Febrero,San José Tepeyahualco,,way/1534403356,2026-11-10
@@ -2050,6 +2144,7 @@ e85787f058f83de19ef244622c8369e5,36.18502,-115.178523,street_only,Living Rock Av
 e85bb423a07361bd1ccc82d4732db84e,20.624019,-105.227571,street_only,Ecuador,Puerto Vallarta,,way/31420842,2026-11-10
 e86c5a02708fd5900a067392eba339d2,32.317022,-106.762018,address,1600 East Hadley Avenue,Las Cruces,0,way/171844640,2026-11-18
 e870f3a2a2d8135e41100ca7419911f1,21.298869,-157.796226,street_only,Palolo Avenue,East Honolulu,,way/842894763,2026-11-04
+e87949f3fa23dbbb332ba9154275e1cc,42.579671,-114.467778,too_far,,Twin Falls,518,way/122091015,2026-11-25
 e8a6f69e469d6ba24ab43a6b7659ec6b,33.248106,-111.755402,street_only,South Val Vista Drive,Gilbert,,way/1083541575,2026-11-04
 e8c8257208ea7b2ba326fc6eda0c4648,20.945461,-97.422462,no_match,,Tuxpan,,way/877774379,2026-11-18
 e8c89bd942ba9f4c145d878631dcdbb8,36.126632,-115.323649,street_only,Garden Park Drive,Summerlin South,,way/579336647,2026-10-16
@@ -2120,6 +2215,7 @@ ef90afca5dfb35eecbddc73844ba1d48,36.904372,-119.122702,city_only,,,,,2026-10-17
 ef99c8cbd50dce7bd8426b82ad865c66,29.583856,-98.621719,address,1 UTSA Circle,San Antonio,73,node/10290401213,2026-11-12
 efec6aadb396622978c5adfee6efa2d0,33.82242,-117.92176,address,851 West Bellevue Drive,Anaheim,34,way/1146748328,2026-10-22
 f0208d841d346cbe32503650b6089f16,20.633303,-103.302822,address,Avenida de las Américas 117,Tlaquepaque,7,node/7696181875,2026-11-10
+f0451af1077d10728cd44bffff3bf6c7,40.267499,-111.659195,too_far,,Provo,606,way/32802286,2026-11-25
 f09e9aa33d4dd62d1689c28bed7e665a,20.99445,-89.621954,street_only,Pista Aerobica,Mérida,,way/1341118000,2026-11-10
 f0c6a59bac896077ccc82b0d789cb871,35.824478,-101.451004,street_only,West 10th Street,Stinnett,,way/1417050441,2026-11-12
 f0db880da327311e26f257a89d40563f,36.058295,-114.975025,street_only,East Sunset Road,Henderson,,way/1447538190,2026-10-16
@@ -2182,6 +2278,7 @@ f73653250ee841dcadcf6c7154080301,19.614807,-155.031947,street_only,Kukula Street
 f73df1395edf06f665a927dbf0a95a1e,21.314636,-157.832222,city_only,,Honolulu,,,2026-11-12
 f7439b0817594b8efe78cacfc6f897c8,34.127278,-118.707977,street_only,Lost Hills Road,Calabasas,,way/229033134,2026-10-16
 f78fd83e494d87f340e1ff4733395dcd,36.20003,-115.292693,street_only,Hillpointe Road,Las Vegas,,way/1157996825,2026-10-16
+f7a0404355b38c0595faffdb330e6060,44.906415,-116.105539,street_only,North Mission Street,McCall,,node/11835303801,2026-11-25
 f7a48f9faeb1ae174071e6cb857736e2,21.884367,-159.484032,street_only,Trail,,,way/952767466,2026-11-02
 f7c534c9d501b51e72ab38d6e8497af8,36.039864,-115.149302,city_only,,Enterprise,,,2026-10-17
 f7d8cae03e7d82c90d58141ac1b11971,39.48749,-119.713784,street_only,Parkway Drive,,,way/1448416713,2026-10-16
@@ -2206,6 +2303,7 @@ fa798e6bc7a813d1d55d32f8028bfe6f,40.602678,-122.324302,street_only,Hemingway Str
 fa82c232918b99612c3ff89d07b29295,20.136507,-101.225366,street_only,Acceso a Corralón Municipal,Moroleón,,way/954308693,2026-11-10
 fab10f29f2a93e80a2965f3f8c37ef08,33.970625,-117.377992,street_only,Saunders Street,Riverside,,way/479615371,2026-10-16
 fafb5a4d3fc3cecf3819d8d97527175d,32.96457,-96.64811,address,5602 Naaman Forest Boulevard,Garland,0,way/317004545,2026-11-18
+fb055b8d701cebd07e5366574d9ed2e3,47.788882,-116.90443,street_only,West Lancaster Road,Rathdrum,,way/1123017169,2026-11-25
 fb1e01eee4179401394ab37d430cad5a,36.151895,-115.422999,city_only,,,,,2026-10-17
 fb5bfc9b86f123ce6515235dd82ed23c,36.16578,-115.10562,street_only,North Mojave Road,Las Vegas,,way/1453467601,2026-10-16
 fb63ada020c6cb93e4588f183e7c86ae,34.416173,-119.679975,street_only,South Calle Cesar Chavez,Santa Barbara,,way/1286732604,2026-10-16
@@ -2227,6 +2325,7 @@ fe027e2b3d94d7bb520ed7d185402b59,36.002338,-115.158416,city_only,,Enterprise,,,2
 fe04f52341831f02602d32b9b4433f5e,19.3388,-98.201149,street_only,Carretera Puebla - Belem,Tlatempan,,node/1472217030,2026-11-18
 fe0d51239fab13573de5a612cc2d7074,36.261259,-115.256232,street_only,Painted Mirage Road,Las Vegas,,way/136199990,2026-10-16
 fe122f93d6f15a66cd4d76769623c155,19.489537,-155.909766,street_only,Kinue Road,Captain Cook,,way/668676957,2026-11-02
+fe2183ceebe89abb3b0317253d169b79,47.540627,-116.227948,street_only,North Division Street,Pinehurst,,way/1468608459,2026-11-25
 fe26f1b67d846e2335e25c6c18eae6cd,40.173838,-118.475685,street_only,Franklin Avenue,Lovelock,,way/1381007871,2026-10-16
 fe33b6d99c516f167d41101b00ebec18,19.505841,-155.947404,street_only,Club Drive,,,way/1197827465,2026-11-02
 fe7521e538df74f07bf1e962d00dd795,35.055607,-106.557261,street_only,F Avenue Southeast,,,way/449403754,2026-11-18

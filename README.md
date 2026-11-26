@@ -1,6 +1,6 @@
 # RacketConnect
 
-**Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii and parts of Mexico** (scope: [ADR 0014](docs/decisions/0014-ca-nv-scope.md), growing in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
+**Find where to play, who to play with, and where to watch, for every racket sport in California, Nevada, Oregon, Washington, Idaho, Utah, Arizona, New Mexico, Texas, Hawaii and parts of Mexico** (scope: [ADR 0014](docs/decisions/0014-ca-nv-scope.md), growing in [ADR 0028](docs/decisions/0028-five-state-scope.md)).
 
 **[Open the live map](https://abov.github.io/courtconnect-ca/)** · [Project hub](https://abov.github.io/courtconnect-ca/hub.html) (every doc, page and tool starts there)
 
