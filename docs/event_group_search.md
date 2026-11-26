@@ -340,6 +340,7 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **BC pass 8 (2026-11-26, Whistler and Sea-to-Sky):** no dated events or groups searched.
 - **BC pass 12 (2026-11-26, Mission, Maple Ridge, Tri-Cities):** no dated events searched. Seen only: Mission Pickleball Club (pickleballcanada.org club page) and Port Coquitlam Tennis Club (Gates Park) as groups for later.
 - **BC pass 8 (2026-11-26, Duncan and the Cowichan Valley):** no dated events searched. Seen only: Cowichan Valley Pickleheads (pickleheads.com group), Cowichan Lake Pickleball Club (members), CCC adult pickleball drop-ins, SCLTC tournaments. Groups and events still to do.
+- **BC pass 12 (2026-11-26, Cranbrook Kin Club Park):** Cranbrook Pickleball Club runs drop-in club play ($10/day guests via its site, Love Our Club app); no dated events read.
 - **BC pass 11 (2026-11-26, Cranbrook and Revelstoke):** no dated events or groups searched.
 
 **BC pass 12 (Thompson-Nicola small towns, 2026-11-26):** no events searched; municipal pages only (see `docs/public_facility_scan.md`).
