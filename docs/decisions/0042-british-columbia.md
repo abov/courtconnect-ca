@@ -20,6 +20,8 @@ BC is the first Canadian region and the second country after Mexico (ADR 0034). 
 - Not done: BC (and ID/UT) OSM walls (Overpass too slow in one session), the research passes (Vancouver first), manual venues, watch events, links, ZIP/postal lookups, doc sections.
 - `assert_padel_has_supporting_signal` exempts BC like MX until the owner rules (3 name/OSM-tag padel pins, shown labelled inferred).
 
+- Research pass 1 (2026-11-26, Vancouver padel): Padel FVR Pitt Meadows confirmed, Padel Model re-pinned in Richmond (Overture's point was in Maple Ridge), Graybar Badminton pinned, 3 leads; log in `docs/public_facility_scan.md`.
+
 ## Open work, in order (country list from `docs/new_region_checklist.md`, "Countries")
 1. Country plumbing (done except Statistics Canada boundaries, not needed; see above): Overture address filter `country = 'CA'` (`extract_overture_addresses.py`), Overture divisions for places and boundaries (Canada has no Census; Statistics Canada boundaries are a fallback), a Canada entry in the Country dropdown, `country` on the region sentence, a home-view shortcut (BC runs to 60 N, past the home view), postal-code search (Canadian codes like V6B 1A1 do not collide with ZIPs, so a later FSA lookup is possible), `reverse_geocode_blanks.py` address order, `region_parity.py` and the CI fixtures.
 2. Extract and load: OSM courts, parents and walls (`--area british_columbia`), Overture places and addresses, build, `make app-data`.
