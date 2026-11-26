@@ -355,6 +355,7 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - 2026-11-26, BC pass 15 (Richmond parks): no events or groups searched; the pass read the City's court tables only. Recheck with the BC events pass.
 - **BC pass 13 (2026-11-26, Dawson Creek):** no dated events searched. Seen only: Dawson Creek pickleball play schedule posted on a local Facebook group (per directories), Peace Country Pickleball Association (Fort St. John) listing.
 
+- **BC pass 17 (2026-11-26, Vancouver parks):** no events or groups searched. Recheck with the BC events pass.
 - 2026-11-26, British Columbia pass 18 (Shuswap): Salmon Arm Pickleball Club (Pickleball Canada club page: Klahani Park outdoors Apr-Sep, Recreation Centre indoors Oct-Apr) noted as a group; no events or pins added.
 - 2026-11-26, BC pass 16 (South Okanagan and Shuswap): no events or groups searched. Seen only: Oliver Pickleball Club (membership, lessons; Town of Oliver parks page) and Penticton Pickleball (play schedule on its own site). Recheck with the BC events pass.
 - **BC pass 15 (2026-11-26, cross-region leads):** no dated events searched. Groups seen for later: Westshore Table Tennis (Langford), Stage 18 and other Richmond badminton centres (lessons only), BCTTA clubs without addresses (Abbotsford, Coquitlam Seniors, Cumberland).
