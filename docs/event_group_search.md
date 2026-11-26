@@ -351,3 +351,9 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 
 **BC pass 13 (Comox Valley and Campbell River, 2026-11-26):** no dated events searched. Group seen for later: Comox Valley Pickleball Association (pickleballcanada.org club page; indoor and outdoor play schedules).
 - **BC pass 13 (2026-11-26, Dawson Creek):** no dated events searched. Seen only: Dawson Creek pickleball play schedule posted on a local Facebook group (per directories), Peace Country Pickleball Association (Fort St. John) listing.
+
+## Mexico: wall sports pass 2 (2026-11-26, ADR 0034)
+
+- **Pinned (public page read):** 4 Zone Sports Xalapa squash (Playtomic lists Squash; same point as the padel pin), La Pelota Squash & Frontón Tláhuac (2 squash + 1 outdoor frontón, own site), Tenis de Mesa y Squash Lomas del Valle Morelia (own site updated 2026-11-22; Overture point).
+- **Leads:** Squash Center León (Fresha only, page no longer loads), CDBG Guadalajara (rules PDF only), Xalapa Wellness Club / Insurgentes 100 / Cristal (no pages; Wellness wix site dead), Club Britania Puebla (hosted 2026 frontenis nationals; no public Puebla frontenis court found), Sporting Squash and Squash Complex 711 Puebla (nothing found), Silver Squash Pachuca (domain expired), Lomas Racquet Club SLP (site 403, 2020 article only). La Raqueta Squash GDL: nothing found.
+- **Not done:** Chihuahua, Coahuila, Michoacán beyond Morelia, Querétaro suburbs (step 3).
