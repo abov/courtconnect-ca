@@ -311,3 +311,8 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **Searched:** Treasure Valley pickleball, racquetball and padel events and social groups. The 2026 events found (Boise PPA Challenger Jun 12-14 at The Flying Pickle, Pickleball People Premier Jun 27-28, World of Pickleball Aug 21-23) are all in the past, so none added to `watch_events.csv`. No racquetball or padel group found.
 - **Added to `player_groups.csv` (1, link only):** Boise Area Pickleball Association (bapa.wildapricot.org/Places-to-Play, from a search result; site root 404s to scripts). **Not added:** social series (nothing dated). Logged empty in `ci/parity_logged_empty.csv`.
 - **Recheck:** 2027-01, BAPA calendar and the Big Little Dill charity tournament (S2 Pickleball, date not found).
+
+## Utah (2026-11-25, pass 1)
+- **Watch events (none added):** the 2026 Utah pickleball events found are all past: Huntsman World Senior Games pickleball (St. George, Oct 12-17), Powerball Utah Amateur (Saratoga Springs, Aug 20-22), Fall Brawl (St. George, Oct 6-10). No dated future event with an organizer page was found. Logged empty in `ci/parity_logged_empty.csv`; recheck before the December season.
+- **Social series (none added):** no recurring padel, racquetball or social-play series with a dated public page found. Logged empty.
+- **Recheck:** Huntsman and Picklr listings, mypickleballconnect and pickleballtournaments Utah pages, the Utah City Racquet Club social programme (LIVEBALL sessions, no dates read).
