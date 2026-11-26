@@ -348,3 +348,5 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 **BC pass 12 (Thompson-Nicola small towns, 2026-11-26):** no events searched; municipal pages only (see `docs/public_facility_scan.md`).
 
 **BC pass 13 (Comox Valley and Campbell River, 2026-11-26):** no dated events searched. Group seen for later: Comox Valley Pickleball Association (pickleballcanada.org club page; indoor and outdoor play schedules).
+
+- 2026-11-26, BC pass 15 (Richmond parks): no events or groups searched; the pass read the City's court tables only. Recheck with the BC events pass.
