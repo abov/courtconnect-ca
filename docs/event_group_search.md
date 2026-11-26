@@ -354,3 +354,5 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 
 - 2026-11-26, BC pass 15 (Richmond parks): no events or groups searched; the pass read the City's court tables only. Recheck with the BC events pass.
 - **BC pass 13 (2026-11-26, Dawson Creek):** no dated events searched. Seen only: Dawson Creek pickleball play schedule posted on a local Facebook group (per directories), Peace Country Pickleball Association (Fort St. John) listing.
+
+- 2026-11-26, British Columbia pass 18 (Shuswap): Salmon Arm Pickleball Club (Pickleball Canada club page: Klahani Park outdoors Apr-Sep, Recreation Centre indoors Oct-Apr) noted as a group; no events or pins added.
