@@ -108,6 +108,11 @@
   @media (pointer: coarse) { .sug li { min-height: 44px; } }
   .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > div { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
   .locrow { display: flex; gap: 8px; } .locrow > div { flex: 1; min-width: 0; }
+  #courtLike { display: grid; gap: 2px; max-height: 38vh; overflow: auto; border: 1px solid var(--line, #8885); border-radius: 8px; padding: 4px; }
+  #courtLike label { display: flex; gap: 8px; align-items: flex-start; padding: 5px 6px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  #courtLike label:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  #courtLike input { margin-top: 3px; flex: none; }
+  #sportMulti { margin-top: 6px; display: grid; gap: 6px; } #sportMulti .chip[aria-pressed] { padding-right: 8px; }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
@@ -135,7 +140,7 @@
   body.trips .playonly, body.trips .legend.playlegend, body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  #sport option.nomap, #courtLike option.nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
+  #sport option.nomap, #sportAdd option.nomap, #courtLike .nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; }
   .suggest { margin-top: 8px; border-color: var(--accent); } .suggest p { margin: 0 0 6px; color: var(--text); } .suggest .fine { color: var(--muted); font-size: 11.5px; }
   .sportinfo { margin-top: 8px; } .sportinfo summary { font-size: 12.5px; }
@@ -337,6 +342,7 @@ window.CC_CORE = fetch("data/map.json", {cache: "no-cache"}).then(r => r.ok ? r.
     <div>
       <label class="l" for="sport">Sport</label>
       <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
+      <div id="sportMulti" hidden><div class="chips" id="sportChips" role="group" aria-label="Sports picked"></div><select id="sportAdd" aria-label="Add another sport"></select></div>
       <button class="chip callout" id="peopleBtn" type="button" aria-haspopup="dialog" hidden></button>
       <div id="suggest" class="note suggest" hidden></div>
       <p id="anywhere" class="note" hidden></p>
@@ -481,9 +487,10 @@ window.CC_CORE = fetch("data/map.json", {cache: "no-cache"}).then(r => r.ok ? r.
 <dialog id="court" aria-labelledby="courtTitle">
   <div class="dlg-h"><h2 id="courtTitle">Find by court</h2><button class="link" id="closeCourt" type="button">Close</button></div>
   <div class="dlg-b">
-    <p class="meta">Pick a court size and the map shows the venues with that court. Reopen this to see which other sports have a court the same size or bigger, with a similar net (or no net, if yours needs none), so you know where it can fit. If nothing matches closely, you get the nearest seconds and what you would change. Sizes and nets are each sport's standard from our sport sheet (inferred); no venue's court has been measured.</p>
-    <label class="l" for="courtLike">Court size (net height; sports with that court)</label>
-    <select id="courtLike"></select>
+    <p class="meta">Tick one or more court sizes and the map shows the venues with those courts. Reopen this to see which other sports have a court the same size or bigger, with a similar net (or no net, if yours needs none), so you know where it can fit. If nothing matches closely, you get the nearest seconds and what you would change. Sizes and nets are each sport's standard from our sport sheet (inferred); no venue's court has been measured.</p>
+    <span class="l" id="courtLikeL">Court sizes (net height; sports with that court). Tick as many as you like.</span>
+    <div id="courtLike" role="group" aria-labelledby="courtLikeL"></div>
+    <div class="seg quick" style="margin-top:10px"><button class="chip" id="courtShow" type="button" disabled>Show on map</button><button class="chip" id="courtClear" type="button" disabled>Clear sizes</button></div>
     <div class="seg quick" style="margin-top:10px"><button class="chip" id="courtWall" type="button">Just hitting alone? Show all hitting walls</button></div>
     <div id="courtOut" role="status" aria-live="polite"></div>
     <p class="meta" style="margin-top:12px">"Fits inside" means the court size you picked is no bigger than that sport's standard court; it does not mean a venue has your lines or net, or allows it. Playing your own game? Any court of that size works; bring your own net and lines.</p>
@@ -629,7 +636,7 @@ const PROVIDER = {la_rap: "LA Recreation & Parks", mbbc_site: "Manhattan Beach B
   ivgid: "Incline Village (IVGID)", washoetennis_site: "Washoe Tennis Club", vba_site: "Vegas Badminton Academy", reno_gov: "City of Reno", henderson_gov: "City of Henderson", washoe_county: "Washoe County Regional Parks", clark_county: "Clark County Parks & Recreation", suncity_summerlin: "Sun City Summerlin", lifetime_site: "Life Time", nlv_gov: "City of North Las Vegas"};
 
 let DATA, sports, venues, events = [], socials = [], socialPins = [], platforms = [], gear = [], trips = [];
-const state = {mode: "play", sport: -1, tier: 0, text: "", on: new Set(), offers: new Set(), solo: false, soloPub: false};   // solo = the hitting-alone filter: hitting-wall venues and court venues with walls on site, every wall type together   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
+const state = {mode: "play", sport: -1, multi: new Set(), tier: 0, text: "", on: new Set(), offers: new Set(), solo: false, soloPub: false};   // solo = the hitting-alone filter: hitting-wall venues and court venues with walls on site, every wall type together   // tier 0 = all; 1-3 = inferred competitive tier (sports[].t)
 const $ = id => document.getElementById(id);
 let sharedVenue = "";   // map id from a #venue= link, opened once the map is ready
 let userPos = null;   // {lat, lng} after a successful "Near me"
@@ -676,7 +683,7 @@ document.addEventListener("visibilitychange", () => {
 function hideResume() { $("resume").hidden = true; }
 function showResume() {
   const n = state.on.size + state.offers.size;
-  const bits = [state.mode === "watch" ? "Watch and meet" : state.mode === "trips" ? "Racket vacations" : "", state.sport >= 0 && sports[state.sport] ? sports[state.sport].n : "", state.text ? "“" + state.text + "”" : "", n ? n + (n === 1 ? " filter" : " filters") : ""].filter(Boolean);
+  const bits = [state.mode === "watch" ? "Watch and meet" : state.mode === "trips" ? "Racket vacations" : "", pickedSports().filter(i => sports[i]).map(i => sports[i].n).join(" + "), state.text ? "“" + state.text + "”" : "", n ? n + (n === 1 ? " filter" : " filters") : ""].filter(Boolean);
   if (!bits.length) return;
   const b = el("button", {class: "link", type: "button", text: "Start over"});
   b.addEventListener("click", () => {
@@ -695,9 +702,19 @@ function setMask() { let m = 0; for (const k of ["indoor", "outdoor"]) if (state
 // have no programs of their own (owner 2026-10-20): the venue's offers and join links belong to the host sport. The "What they offer" filters
 // then match nothing and the offers are not shown.
 const noPrograms = (sport = state.sport) => sport >= 0 && !!sports[sport] && !!(sports[sport].b && sports[sport].b.length);
+// Several sports at once (owner request 2026-11-26): state.sport stays -1 and state.multi holds the picked indices (2 or more); one sport is always plain state.sport.
+const multiOn = () => state.sport < 0 && state.multi.size > 1;
+const pickedSports = () => state.sport >= 0 ? [state.sport] : multiOn() ? [...state.multi] : [];
+const pickedNames = () => { const l = pickedSports().filter(i => sports[i]).map(i => sports[i].n); return l.length ? new Set(l) : null; };   // null = all sports
+function setPicked(list) {
+  list = [...new Set(list)].filter(i => i >= 0 && sports[i]);
+  state.multi.clear();
+  if (list.length > 1) { state.sport = -1; list.forEach(i => state.multi.add(i)); } else state.sport = list.length ? list[0] : -1;
+}
 function matches(v, sm, tm, vf, sport = state.sport) {
   let mask;
-  if (sport >= 0) { const e = v.p.find(p => p[0] === sport); if (!e) return false; mask = e[2]; }
+  if (sport < 0 && multiOn()) { mask = v.p.reduce((a, p) => state.multi.has(p[0]) ? a | p[2] : a, 0); if (!mask) return false; }
+  else if (sport >= 0) { const e = v.p.find(p => p[0] === sport); if (!e) return false; mask = e[2]; }
   else if (tierNow()) { mask = v.p.reduce((a, p) => sports[p[0]].t === tierNow() && !(sports[p[0]].b || []).length ? a | p[2] : a, 0); if (!mask) return false; }   // all sports, narrowed to the inferred tier; sports played on another sport's courts (b) don't count, or every tennis court would be "casual"
   else mask = v.m;
   if (sm && !(mask & sm)) return false;
@@ -728,8 +745,8 @@ function monthsSince(iso) { const m = /^(\d{4})-(\d{2})/.exec(iso || ""); if (!m
 const isUpcoming = ev => !ev.e || ev.e >= todayIso();                // recomputed in the browser, so a stale deploy still hides past events
 function upcomingEvents() { return events.filter(isUpcoming); }
 function eventsFiltered() {
-  const name = state.sport >= 0 ? sports[state.sport].n : null;
-  return upcomingEvents().filter(ev => (!name || ev.sp === name) && evTierOk(ev) && textHit(evText(ev))).sort((a, b) => nearCmp(a, b) || (a.s || "9999").localeCompare(b.s || "9999") || a.n.localeCompare(b.n));
+  const names = pickedNames();
+  return upcomingEvents().filter(ev => (!names || names.has(ev.sp)) && evTierOk(ev) && textHit(evText(ev))).sort((a, b) => nearCmp(a, b) || (a.s || "9999").localeCompare(b.s || "9999") || a.n.localeCompare(b.n));
 }
 function fmtDate(iso, o) { return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", Object.assign({timeZone: "UTC"}, o)); }
 function fmtRange(ev) {
@@ -791,8 +808,8 @@ const TRIP_KIND = {resort: "Resort", camp: "Camp", academy: "Academy", tour: "To
 const TRIP_WHO = {guests: "Hotel guests only", anyone: "Open to non-guests", booking: "Open by booking"};
 const TRIP_COUNTRY = {US: "United States", MX: "Mexico"};
 function tripsFiltered() {
-  const name = state.sport >= 0 ? sports[state.sport].n : null;
-  return trips.filter(t => (!name || t.sp.includes(name)) && textHit(evText(t))).sort((a, b) => nearCmp(a, b) || a.co.localeCompare(b.co) || a.d.localeCompare(b.d) || a.n.localeCompare(b.n));
+  const names = pickedNames();
+  return trips.filter(t => (!names || t.sp.some(x => names.has(x))) && textHit(evText(t))).sort((a, b) => nearCmp(a, b) || a.co.localeCompare(b.co) || a.d.localeCompare(b.d) || a.n.localeCompare(b.n));
 }
 function tripGeojson(list) {
   return {type: "FeatureCollection", features: list.map(t => ({type: "Feature", properties: {k: trips.indexOf(t), name: t.n}, geometry: {type: "Point", coordinates: [t.x, t.y]}}))};
@@ -842,8 +859,8 @@ const SOCIAL_SRC = {official_site: "the organizer's own site", instagram: "the o
                     whatsapp: "a public WhatsApp link", email: "an organizer email", owner_report: "a player report"};
 const isCurrentSocial = s => !s.ll || s.ll >= todayIso();                // recomputed in the browser, like watch events
 function socialFiltered() {
-  const name = state.sport >= 0 ? sports[state.sport].n : null;
-  return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name) && evTierOk(s) && textHit(evText(s))).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.v.localeCompare(b.v) || a.n.localeCompare(b.n));
+  const names = pickedNames();
+  return socials.filter(s => isCurrentSocial(s) && (!names || names.has(s.sp)) && evTierOk(s) && textHit(evText(s))).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.v.localeCompare(b.v) || a.n.localeCompare(b.n));
 }
 function socialGroups(list) {                                            // one pin per venue; every series there shares its popup
   const g = new Map();
@@ -907,7 +924,7 @@ function renderSocialList(ul) {
 // "Coming up next": the 3 earliest-starting dated events still on or ahead inside the map view, for the sport and search that are set (all sports when none), straight from the export (nothing inferred; recurring series have no dates, so they stay in the list below).
 // It always stays at the top of the Watch list (sticky, and an empty message instead of vanishing) and is rebuilt with the list when the map moves.
 function buildComingUp() {
-  const view = map.getBounds(), name = state.sport >= 0 ? sports[state.sport].n : "";
+  const view = map.getBounds(), name = [...(pickedNames() || [])].join(" + ");
   const next = eventsFiltered().filter(ev => ev.s && view.contains([ev.x, ev.y])).sort((a, b) => a.s.localeCompare(b.s) || a.n.localeCompare(b.n)).slice(0, 3);
   const li = el("li", {class: "thisweek"}, el("p", {class: "lh2", text: "Coming up next" + (name ? " · " + name : "")}));
   if (!next.length) li.append(el("p", {class: "meta none", text: "None in this map view. Zoom out to see more."}));
@@ -1458,6 +1475,7 @@ function suggest(raw) {
   for (const v of venues) {
     if (!v.n || !words.every(w => v.t.includes(w))) continue;
     if (state.sport >= 0 && !v.p.some(p => p[0] === state.sport)) continue;
+    if (multiOn() && !v.p.some(p => state.multi.has(p[0]))) continue;
     const key = v.n + "|" + v.c; if (seen.has(key)) continue; seen.add(key);
     const nm = v.n.toLowerCase();
     hits.push({v, rank: nm.startsWith(q) ? 0 : nm.split(/\W+/).some(w => w.startsWith(words[0])) ? 1 : 2});
@@ -1548,6 +1566,7 @@ function venueCourts(v) {
   const fam = {}; let solo = 0;   // variants of one game ("Basque Pelota: …") share a court: count the family once, by its largest count
   for (const p of v.p) {
     if (p[2] & 128) continue;   // hitting walls are not courts
+    if (multiOn() && !state.multi.has(p[0])) continue;
     if (tierNow() && (sports[p[0]].t !== tierNow() || (sports[p[0]].b || []).length)) continue;
     if ((sports[p[0]].b || []).some(b => have.has(b))) continue;
     const k = famOf(sports[p[0]].n);
@@ -1606,7 +1625,7 @@ function refresh() {
 function writeHash() {
   const p = new URLSearchParams();
   if (state.mode !== "play") p.set("mode", state.mode);
-  if (state.sport >= 0) p.set("sport", sports[state.sport].n);
+  if (state.sport >= 0) p.set("sport", sports[state.sport].n); else if (multiOn()) p.set("sport", [...state.multi].map(i => sports[i].n).join("|"));
   if (state.solo) { p.set("solo", "1"); if (state.soloPub) p.set("pub", "1"); }
   if (state.on.size) p.set("on", [...state.on].join(","));
   if (state.offers.size) p.set("offer", [...state.offers].join(""));
@@ -1619,8 +1638,8 @@ function readHash() {
   if (p.get("mode") === "trips" && trips.length) state.mode = "trips";
   if (["watch", "social"].includes(p.get("mode"))) state.mode = "watch";   // #mode=social links (before the two views were merged) land on Watch & Social
   // old #mode=walls links land on the wall sport
-  const s = p.get("sport") || (p.get("mode") === "walls" ? "1-wall Paddleball" : ""); if (s) { const i = sports.findIndex(x => x.n === s); if (i >= 0) state.sport = i; }
-  if (["1", "all", "one", "three"].includes(p.get("solo"))) { state.solo = true; state.soloPub = p.get("pub") === "1"; state.sport = -1; }   // old links split the wall types (one / three): hitting alone shows them all now
+  const s = p.get("sport") || (p.get("mode") === "walls" ? "1-wall Paddleball" : ""); if (s) setPicked(s.split("|").map(n => sports.findIndex(x => x.n === n)));   // "Tennis|Padel" = several sports
+  if (["1", "all", "one", "three"].includes(p.get("solo"))) { state.solo = true; state.soloPub = p.get("pub") === "1"; setPicked([]); }   // old links split the wall types (one / three): hitting alone shows them all now
   for (const k of (p.get("on") || "").split(",")) if (k && !["indoor", "outdoor", "lit"].includes(k)) state.on.add(k);  // those filters are hidden for now
   for (const c of (p.get("offer") || "")) if (OFFER[c]) state.offers.add(c);
   state.text = (p.get("q") || "").toLowerCase();
@@ -1641,7 +1660,7 @@ function syncSurface() {
 // What is picked already shows in place (the Sport menu, the search box, pressed chips, "Filters (N on)"), so there is no separate row of filter chips; one "Clear" link on the Filters line resets them.
 function renderActive() {
   syncSurface();
-  const any = state.mode === "play" && (state.sport >= 0 || state.solo || state.tier || state.text || state.on.size || state.offers.size);
+  const any = state.mode === "play" && (state.sport >= 0 || multiOn() || state.solo || state.tier || state.text || state.on.size || state.offers.size);
   $("clearFilters").hidden = !any;
   const nOn = filtersOn();
   $("moreLabel").textContent = nOn ? "Filters (" + nOn + " on)" : "Filters";
@@ -1683,10 +1702,27 @@ function populateSports() {
       sel.append(el("option", mapped ? {value: String(i), text: s.n} : {value: String(i), text: s.n + " (none yet)", class: "nomap"}));   // the suffix covers phones, which ignore option colours
     });
   }
-  if (![...sel.options].some(o => o.value === String(state.sport))) state.sport = -1;
-  sel.value = String(state.sport); updateSportIcon(); syncTiers();
-  showAnywhere(); greySportsOutOfView();
+  if (multiOn()) setPicked([...state.multi].filter(i => [...sel.options].some(o => o.value === String(i))));   // a mode or tier switch drops picks that no longer apply
+  if (multiOn()) sel.insertBefore(el("option", {value: "-2", text: state.multi.size + " sports picked (below)"}), sel.options[1] || null);
+  if (!multiOn() && ![...sel.options].some(o => o.value === String(state.sport))) state.sport = -1;
+  sel.value = multiOn() ? "-2" : String(state.sport); updateSportIcon(); syncTiers();
+  showAnywhere(); greySportsOutOfView(); renderMulti();
 }
+// "Pick more than one sport": chips for what is picked (tap to drop one) and a menu to add another; the main menu says "N sports picked".
+function renderMulti() {
+  const box = $("sportMulti"), chips = $("sportChips"), add = $("sportAdd"), list = pickedSports();
+  box.hidden = !list.length; chips.replaceChildren(); add.replaceChildren();
+  if (!list.length) return;
+  if (list.length > 1) for (const i of list) {
+    const b = el("button", {class: "chip", type: "button", "aria-pressed": "true", "aria-label": "Remove " + sports[i].n, title: "Remove " + sports[i].n, text: sports[i].n + " \u00d7"});
+    b.addEventListener("click", () => { setPicked(list.filter(x => x !== i)); populateSports(); applyPick(); });
+    chips.append(b);
+  }
+  add.append(el("option", {value: "", text: "+ Add another sport"}));
+  for (const o of $("sport").options) if (+o.value >= 0 && !list.includes(+o.value)) add.append(o.cloneNode(true));
+  add.hidden = add.options.length < 2;
+}
+function applyPick() { updateSportIcon(); renderActive(); showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } }
 // Zoomed to a place: racket sports with no venue in view stay listed but greyed ("none in view"), updated in place so an open list does not jump.
 function greySportsOutOfView() {
   if (state.mode !== "play") return;
@@ -1850,6 +1886,12 @@ function pickSport(i) {
   const sel = $("sport"); sel.value = String(i); sel.dispatchEvent(new Event("change"));
   trackD("court-pick", sports[i].n);
 }
+function pickSports(list, src) {
+  if (list.length === 1) return pickSport(list[0]);
+  $("court").close(); $("reset").click(); if (state.mode !== "play") setMode("play");
+  setPicked(list); populateSports(); applyPick();
+  trackD("court-pick", src + "-" + list.length);
+}
 function courtRow(g, o, label) {
   const [head, ...rest] = o.members, s = head.s;
   const net = s.nh ? " · net " + s.nh.map(fmtNet).join(" / ") : s.nn ? " · no net listed" : " · net height not listed";
@@ -1870,16 +1912,27 @@ function courtRow(g, o, label) {
 // The sports whose own standard court is the size picked and that have venues mapped, most venues first.
 // A wall sport's venues are hitting walls, and people hitting alone do not care about 1-wall vs 3-wall: when every sport with this court size is a wall sport, picking it opens hitting alone (all wall types).
 const courtOwn = g => g.members.filter(m => m.s.v > 0).sort((a, b) => b.s.v - a.s.v);
-// Picking a size goes straight to the map for the sport that plays on it; reopening "Find by court" shows the other sports it fits.
+// Tick sizes, read what fits, then "Show on map" puts every mapped sport on the ticked sizes on the map together.
+const courtKeys = () => [...document.querySelectorAll("#courtLike input:checked")].map(i => i.value);
 function courtPicked() {
-  const pick = $("courtLike").value, own = pick === "" ? [] : courtOwn(courtGroups.get(pick)), court = own.find(m => !m.s.ws);
-  if (court) pickSport(court.i); else if (own.length) enterSolo("court-pick"); else renderCourt();
+  const gs = courtKeys().map(k => courtGroups.get(k)).filter(Boolean), own = gs.flatMap(courtOwn);
+  $("courtShow").disabled = !own.length; $("courtClear").disabled = !gs.length;
+  $("courtShow").textContent = own.length ? "Show " + [...new Set(own.map(m => m.s.n))].length + (new Set(own.map(m => m.i)).size === 1 ? " sport" : " sports") + " on map" : "Show on map";
+  renderCourt();
+}
+function showCourtPicks() {
+  const own = courtKeys().map(k => courtGroups.get(k)).filter(Boolean).flatMap(courtOwn), court = [...new Set(own.filter(m => !m.s.ws).map(m => m.i))];
+  if (court.length) pickSports(court, "court-size"); else if (own.length) enterSolo("court-pick");
 }
 function renderCourt() {
-  const box = $("courtOut"), pick = $("courtLike").value;
+  const box = $("courtOut"), keys = courtKeys();
   box.replaceChildren();
-  if (pick === "") { box.append(el("p", {class: "meta", text: "Pick a court size to see where it fits."})); return; }
+  if (!keys.length) { box.append(el("p", {class: "meta", text: "Tick a court size to see where it fits."})); return; }
+  keys.forEach((pick, n) => renderCourtOne(box, pick, n));
+}
+function renderCourtOne(box, pick, n) {
   const g = courtGroups.get(pick);
+  if (n) box.append(el("hr"));
   let {out, unmapped} = courtMatches(g), roomy = false;
   if (!out.length) { ({out} = courtMatches(g, Infinity)); out = out.sort((a, b) => a.room - b.room).slice(0, 3); roomy = out.length > 0; }   // nothing near its size: the smallest roomier courts, said so
   const good = out.filter(o => o.tier < 3), second = out.filter(o => o.tier === 3), shownGood = good.slice(0, 8), shownSecond = second.slice(0, 5);
@@ -1919,21 +1972,19 @@ function openCourt(src) {
     });
     for (const o of courtGroups.values()) { o.members.sort((x, y) => x.s.n.localeCompare(y.s.n, undefined, {sensitivity: "base"})); o.ws = o.members.some(m => m.s.ws); }
   }
-  if (like.options.length) like.replaceChildren();   // rebuilt each time so the sizes can follow the zoomed view
+  like.replaceChildren();   // rebuilt each time so the sizes can follow the zoomed view
   {
-    like.append(el("option", {value: "", text: "Pick a court size…"}));
-    const inView = sportsInView();
-    // Smallest area first; each size shows its net and the first few sports that share it.
+    const inView = sportsInView(), have = new Set(pickedSports());
+    // Smallest area first; each size shows its net and the first few sports that share it. The sports already on the map start ticked.
     const r1 = v => Math.round(v * 10) / 10;
     [...courtGroups].sort((x, y) => x[1].cd[0] * x[1].cd[1] - y[1].cd[0] * y[1].cd[1] || x[1].cd[0] - y[1].cd[0]).forEach(([key, o]) => {
       const names = o.members.map(m => m.s.n), more = names.length > 3 ? " +" + (names.length - 3) + " more" : "";
       const none = inView && !o.members.some(m => m.s.w || inView.has(m.i));   // zoomed in and no sport on this size has a venue in view: greyed, still pickable
-      like.append(el("option", Object.assign({value: key, text: r1(o.cd[0]) + " x " + r1(o.cd[1]) + " ft" + (o.nh ? " (net " + o.nh.map(fmtNet).join(" / ") + ")" : o.nn ? " (no net)" : "") + " · " + names.slice(0, 3).join(", ") + more + (none ? " (none in view)" : "")}, none ? {class: "nomap"} : {})));
+      const cb = el("input", {type: "checkbox", value: key}); cb.checked = o.members.some(m => have.has(m.i)); cb.addEventListener("change", courtPicked);
+      like.append(el("label", none ? {class: "nomap"} : {}, cb, el("span", {text: r1(o.cd[0]) + " x " + r1(o.cd[1]) + " ft" + (o.nh ? " (net " + o.nh.map(fmtNet).join(" / ") + ")" : o.nn ? " (no net)" : "") + " · " + names.slice(0, 3).join(", ") + more + (none ? " (none in view)" : "")})));
     });
   }
-  const cur = state.sport >= 0 ? [...courtGroups].find(([, o]) => o.members.some(m => m.i === state.sport)) : null;
-  if (cur) like.value = cur[0];   // the sport already on the map: start from its court size
-  renderCourt(); $("court").showModal(); trackD("court-open", src);
+  courtPicked(); $("court").showModal(); trackD("court-open", src);
 }
 function openPlayers(idx, src) {
   const sel = $("playersSport"), counts = sports.map((s, i) => peopleCount(i));
@@ -2087,14 +2138,20 @@ function initControls() {
   $("modePlayers").addEventListener("click", () => openPlayers(state.sport, "header"));
   $("modeCourt").addEventListener("click", () => openCourt("header"));
   $("closeCourt").addEventListener("click", () => $("court").close());
-  $("courtLike").addEventListener("change", courtPicked);
+  $("courtShow").addEventListener("click", showCourtPicks);
+  $("courtClear").addEventListener("click", () => { for (const c of document.querySelectorAll("#courtLike input")) c.checked = false; courtPicked(); });
   $("courtWall").addEventListener("click", () => enterSolo("court"));
   $("peopleBtn").addEventListener("click", () => openPlayers(state.sport, "sport"));
   $("playersSport").addEventListener("change", renderPlayers);
   $("closePlayers").addEventListener("click", () => $("players").close());
   $("closeGuide").addEventListener("click", () => $("guide").close());
   $("playersTell").href = REPORT_FORM;
-  sel.addEventListener("change", () => { state.solo = false; state.soloPub = false; state.sport = +sel.value; updateSportIcon(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { bumpSportSeen(sports[state.sport].n); track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } });
+  $("sportAdd").addEventListener("change", e => {
+    const i = +e.target.value; if (!(i >= 0)) return;
+    state.solo = false; state.soloPub = false; setPicked([...pickedSports(), i]); populateSports(); applyPick();
+    trackD("sport-add", sports[i].n);
+  });
+  sel.addEventListener("change", () => { if (sel.value === "-2") return; state.solo = false; state.soloPub = false; state.multi.clear(); state.sport = +sel.value; updateSportIcon(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { bumpSportSeen(sports[state.sport].n); track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
   $("q").addEventListener("input", debounce(renderSug, 120));
@@ -2129,7 +2186,7 @@ function initControls() {
   });
   $("keytoggle").addEventListener("click", () => { const open = $("mapkey").hidden; setKey(open); if (open) track("map-key"); });
   $("clearFilters").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); $("reset").click(); });
-  $("reset").addEventListener("click", () => { state.solo = false; state.soloPub = false; state.sport = -1; state.tier = 0; populateSports(); state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
+  $("reset").addEventListener("click", () => { state.solo = false; state.soloPub = false; state.sport = -1; state.multi.clear(); state.tier = 0; populateSports(); state.text = ""; state.on.clear(); state.offers.clear(); syncControls(); refresh(); });
   $("offerBox").hidden = !venues.some(v => v.o);
   for (const ev of ["input", "change"]) document.querySelector(".controls").addEventListener(ev, hideResume);   // the "picked up where you left off" note goes once they change something
   $("nearMe").addEventListener("click", () => {
