@@ -346,5 +346,6 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **BC pass 11 (2026-11-26, Cranbrook and Revelstoke):** no dated events or groups searched.
 
 **BC pass 12 (Thompson-Nicola small towns, 2026-11-26):** no events searched; municipal pages only (see `docs/public_facility_scan.md`).
+- **BC pass 14 (2026-11-26, North Shore, Burnaby, New Westminster, Delta):** no dated events searched. Groups seen for later: North Shore Pickleball Club, North Shore Tennis Society, Burnaby Pickleball Association, New West Pickleball Club, Delta Pickleball Association.
 
 **BC pass 13 (Comox Valley and Campbell River, 2026-11-26):** no dated events searched. Group seen for later: Comox Valley Pickleball Association (pickleballcanada.org club page; indoor and outdoor play schedules).
