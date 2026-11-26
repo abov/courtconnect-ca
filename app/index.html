@@ -1057,11 +1057,11 @@ function initMap() {
                   paint: {"line-color": "#2f6f5e", "line-width": 0.5, "line-opacity": 0.35}});
     map.addSource("v", {type: "geojson", data: geojson(current), cluster: true, clusterRadius: 38, clusterMaxZoom: 13});
     map.addLayer({id: "clusters", type: "circle", source: "v", filter: ["has", "point_count"],
-      paint: {"circle-color": "#24292f", "circle-opacity": 0.85, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5,
+      paint: {"circle-color": "#cfe0f1", "circle-opacity": 0.78, "circle-stroke-color": "#6f95bd", "circle-stroke-width": 1.5, "circle-stroke-opacity": 0.9,
               "circle-radius": ["step", ["get", "point_count"], 14, 25, 18, 150, 23, 600, 29]}});
     map.addLayer({id: "cluster-count", type: "symbol", source: "v", filter: ["has", "point_count"],
       layout: {"text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Regular"], "text-size": 12},
-      paint: {"text-color": "#fff"}});
+      paint: {"text-color": "#1f3d5c", "text-halo-color": "rgba(255,255,255,0.7)", "text-halo-width": 1}});
     map.addLayer({id: "pts", type: "circle", source: "v", filter: ["!", ["has", "point_count"]],
       paint: {"circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 4, 14, 8, 16, 12],
               "circle-stroke-color": ["case", ["==", ["get", "up"], 1], ["match", ["get", "q"], "c", "#1a7f37", "p", "#0969da", "i", "#d4a72c", "#8c959f"], ["==", ["get", "up"], 2], "#57606a", "#fff"],
