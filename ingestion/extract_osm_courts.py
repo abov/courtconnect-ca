@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -80,6 +81,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--area", choices=[*overpass.BBOXES, *overpass.STATE_AREAS], default="la")
     ap.add_argument("--out", default=None, help="default: data/raw/osm_courts.csv for California, osm_courts_<code>.csv for another state")
+    ap.add_argument("--resume", action="store_true", help="continue from <out>.progress.jsonl (tiles already fetched are skipped)")
+    ap.add_argument("--finalize", action="store_true", help="write <out> from the progress file only, no fetching (partial extract; tiles not done are listed)")
     args = ap.parse_args()
     args.out = args.out or raw_path(overpass.out_name("osm_courts", args.area))
 
@@ -87,13 +90,36 @@ def main() -> None:
     ts = datetime.now(timezone.utc).isoformat(timespec="seconds")
     seen: dict[tuple, dict] = {}
     failed: list = []
+    # Checkpoint: one JSON line per finished tile, so a dropped connection or killed run loses nothing (2026-11-26, Mexico run died at tile 123/192).
+    prog = Path(args.out + ".progress.jsonl")
+    done: set[int] = set()
+    if (args.resume or args.finalize) and prog.exists():
+        for line in prog.read_text(encoding="utf-8").splitlines():
+            rec = json.loads(line)
+            done.add(rec["tile"])
+            for row in rec["rows"]:
+                seen[(row["osm_type"], row["osm_id"])] = row
+        print(f"resumed {len(done)}/{len(tiles)} tiles, {len(seen):,} unique rows from {prog}")
+    elif not args.finalize:
+        prog.parent.mkdir(parents=True, exist_ok=True)
+        prog.write_text("", encoding="utf-8")
     for i, bbox in enumerate(tiles, 1):
+        if args.finalize:
+            break
+        if i in done:
+            continue
+        nfail = len(failed)
+        tile_rows = []
         els = overpass.fetch_adaptive(build_query, bbox, f"tile {i}/{len(tiles)}", failed)
         for e in els:
             row = to_row(e, ts)
             if overpass.keep(row["lat"], row["lon"], args.area):   # drop other states / Mexico / ocean
                 row["region"] = overpass.region_at(row["lat"], row["lon"])   # CA / NV from the border polygon (ADR 0014)
                 seen[(e["type"], e["id"])] = row
+                tile_rows.append(row)
+        if len(failed) == nfail:   # only fully fetched tiles are checkpointed, so --resume retries failed ones
+            with prog.open("a", encoding="utf-8") as pf:
+                pf.write(json.dumps({"tile": i, "rows": tile_rows}) + "\n")
         print(f"tile {i}/{len(tiles)} {bbox}: {len(els):>6,} elements (running unique: {len(seen):,})", flush=True)
         time.sleep(2)  # be polite to the free public API
 
@@ -104,6 +130,9 @@ def main() -> None:
         w.writeheader()
         w.writerows(seen.values())
     print(f"Wrote {len(seen):,} rows to {out}")
+    if args.finalize:
+        print(f"PARTIAL: tiles not done: {[i for i in range(1, len(tiles) + 1) if i not in done]}")
+        return
     if failed:
         print(f"WARNING: {len(failed)} tile(s) failed and are MISSING from the output: {failed}")
         raise SystemExit(2)
