@@ -71,3 +71,8 @@ Added as pins from the club's own or Playtomic page (Playtomic club pages carry 
 - **Beach Tennis:** searched Utah; no sand beach tennis courts found. Sports Mall (six sand courts) is volleyball. Logged empty.
 ## Utah (2026-11-26, pass 2)
 - **The Hive Padel Club, SLC:** stays a lead. Own-site read 2026-11-26 is mixed: "COMING SOON" nav and Founding-package FAQ (pre-opening), against "Book Now", posted hours and league listings (dated Nov 2 and 10, past). Not pinned until a dated opening or a booking page with a current date confirms it.
+
+## Mexico padel pass (2026-11-26)
+- Added three clubs the 11-20 sweep missed, each from its public Playtomic page (read in the browser pane, no login): **Padium Sports** (Tula de Allende, 3 indoor), **Cumarú Padel Club** (Puerto Vallarta, 4 roofed outdoor), **The Hills by Carbono Padel** (Chantepec, 2 outdoor padel; 1 pickleball court on the page, not pinned). Access unknown.
+- Playtomic pages that 404 (even in a browser, so not a bot block): Comal Padel Club (Villahermosa), Match Point 360 Adidas and Padel Arenal (Tuxtla), Punta Padel and Padelismo (Irapuato), La Cueva, Sport Padel, Padel MX. Leads stay in `venue_leads.csv`.
+- Leads from search summaries only: Haciendas Family & Fitness Club (Villahermosa, 4 roofed), Club Olympia, Arena Sports, Nero Pádel, Vintage Pádel (Pachuca), Club Nexus (Tizayuca). Need their own pages. Not done: Puebla, Chihuahua, León and the other 11-20 metros were not re-searched.
