@@ -349,3 +349,4 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **BC pass 14 (2026-11-26, North Shore, Burnaby, New Westminster, Delta):** no dated events searched. Groups seen for later: North Shore Pickleball Club, North Shore Tennis Society, Burnaby Pickleball Association, New West Pickleball Club, Delta Pickleball Association.
 
 **BC pass 13 (Comox Valley and Campbell River, 2026-11-26):** no dated events searched. Group seen for later: Comox Valley Pickleball Association (pickleballcanada.org club page; indoor and outdoor play schedules).
+- **BC pass 13 (2026-11-26, Dawson Creek):** no dated events searched. Seen only: Dawson Creek pickleball play schedule posted on a local Facebook group (per directories), Peace Country Pickleball Association (Fort St. John) listing.
