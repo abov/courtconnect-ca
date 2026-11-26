@@ -30,6 +30,10 @@ Drafted 2026-11-05 from the owner's idea in chat: a separate top-level chip for 
 
 Beach tennis: no Mexican club found in two searches (Cancun, Playa del Carmen, Tulum, Los Cabos). Not searched in Spanish yet ("tenis de playa").
 
+## Day camps (added 2026-11-25, owner asked: junior/adult camps that are not overnight)
+
+Same seed, `kind = camp`; the camp's own page is the evidence. Verified: Nike junior tennis at Royal Lahaina (Maui, Jun 2027) and UH Manoa (Oahu, Dec 2026). Leads (no active sessions or guests-only or undated): Wailea and Kukui'ula adult pickleball, Barnes (San Diego) adult pickleball, Rafa Nadal Tennis Centre kids' camp (Costa Mujeres). Not yet searched: Arizona/Texas/Nevada junior camps (Padel Pals Mesa is a lead from a search snippet), Carlos Alcaraz Academy camps (LA/San Diego, 2026 dates passed), Nike adult camps in Carlsbad, San Juan Capistrano, SMU. Playtomic Experiences listings are inside its app (login), so they are not a source (ADR 0007); find the operators' own public pages instead. Operator is not venue: Nike is the operator, the pin is the host venue. Camps recur yearly: re-check dates each season.
+
 ## Out of scope for now: destinations off the map (from general knowledge, unchecked; revisit after the December beta)
 
 Beach tennis camps (Italy's Adriatic coast, Brazil, Spain, Portugal), padel camps (Spain, Algarve, Dubai), tennis resorts (Palm Springs, Scottsdale, Hilton Head), pelota and frontón (Basque Country).
