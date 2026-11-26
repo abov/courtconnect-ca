@@ -32,7 +32,14 @@ Beach tennis: no Mexican club found in two searches (Cancun, Playa del Carmen, T
 
 ## Day camps (added 2026-11-25, owner asked: junior/adult camps that are not overnight)
 
-Same seed, `kind = camp`; the camp's own page is the evidence. Verified: Nike junior tennis at Royal Lahaina (Maui, Jun 2027) and UH Manoa (Oahu, Dec 2026). Leads (no active sessions or guests-only or undated): Wailea and Kukui'ula adult pickleball, Barnes (San Diego) adult pickleball, Rafa Nadal Tennis Centre kids' camp (Costa Mujeres). Not yet searched: Arizona/Texas/Nevada junior camps (Padel Pals Mesa is a lead from a search snippet), Carlos Alcaraz Academy camps (LA/San Diego, 2026 dates passed), Nike adult camps in Carlsbad, San Juan Capistrano, SMU. Playtomic Experiences listings are inside its app (login), so they are not a source (ADR 0007); find the operators' own public pages instead. Operator is not venue: Nike is the operator, the pin is the host venue. Camps recur yearly: re-check dates each season.
+Same seed, `kind = camp`; the camp's own page, read as text, is the evidence. Operator is not venue: Nike or the academy is the operator, the pin is the host venue. Camps recur yearly: re-check dates each season.
+
+- Verified (pass 1): Nike junior tennis at Royal Lahaina (Maui, Jun 2027) and UH Manoa (Oahu, Dec 2026).
+- Verified (pass 2, same day): Carlos Alcaraz Academy junior and adult camps at Blackhawk CC, Danville (Jun 28-Jul 2, 2027; their own US page); Nike adult pickleball at Mission Viejo CC (Dec 19-20, 2026), TTC Palms (Palm Desert, 6 sessions Dec 2026-Apr 2027) and TTC Newporter (Newport Beach, 4 sessions Jan-Apr 2027).
+- Leads (no active sessions, undated or guests-only): Nike adult pickleball at Wailea, Kukui'ula (guests/members), Barnes (San Diego), Tennis Club of Vista, Pebble Beach, San Juan Hills HS and SMU; Alcaraz LA and San Diego 2027 (pre-registration only, no dates or venues); Padel Pals Mesa junior padel (a Fox 10 report only, no club page found); Rafa Nadal Tennis Centre Costa Mujeres kids' camps ($835 per week, ages 8-10 and 11-17, no dates; the brochure PDF did not read as text).
+- Searched, nothing: Spanish-language camp search for Los Cabos, Playa del Carmen and Puerto Vallarta found no dated tennis/padel/pickleball camps (a Vidanta kids' camp is not racket-specific). Texas has no dated Nike camps (SMU, Dill Dinkers, Pickleball Kingdom, Chicken N Pickle all "coming soon"). No Arizona or Nevada camp with its own dated page found beyond the Padel Pals report.
+- Playtomic Experiences listings are inside its app (login), so they are not a source (ADR 0007).
+- To re-check: ussportscamps.com California and Texas listings, carlosalcarazcamps.com/camps/usa, Padel Pals' own page once found.
 
 ## Out of scope for now: destinations off the map (from general knowledge, unchecked; revisit after the December beta)
 
