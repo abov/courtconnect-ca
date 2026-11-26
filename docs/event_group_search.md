@@ -340,6 +340,7 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 **BC pass 11 (Cariboo and Thompson-Nicola, 2026-11-26):** no events searched. Seen only: Williams Lake Pickleball Club, Quesnel Pickleball Club, Merritt Pickleball Club, 100 Mile pickleball association (counts from news, undated).
 - **BC pass 7 (2026-11-26, Lantzville, Parksville, Qualicum Beach):** no dated events searched. Seen only: Arrowsmith Tennis Club (Parksville/Qualicum), Qualicum Beach Pickleball Club (fundraising for courts), Oceanside Pickleball Tournament (pickleballbrackets listing, date not read), Oceanside Mixed Badminton Doubles (Coombs). Groups and events still to do.
 - **BC pass 8 (2026-11-26, Whistler and Sea-to-Sky):** no dated events or groups searched.
+- **BC pass 14 (2026-11-26, cross-region leads):** no dated events or groups searched. Seen only: Monterey Table Tennis Club drop-ins (Oak Bay Fall 2026 schedule).
 - **BC pass 12 (2026-11-26, Mission, Maple Ridge, Tri-Cities):** no dated events searched. Seen only: Mission Pickleball Club (pickleballcanada.org club page) and Port Coquitlam Tennis Club (Gates Park) as groups for later.
 - **BC pass 8 (2026-11-26, Duncan and the Cowichan Valley):** no dated events searched. Seen only: Cowichan Valley Pickleheads (pickleheads.com group), Cowichan Lake Pickleball Club (members), CCC adult pickleball drop-ins, SCLTC tournaments. Groups and events still to do.
 - **BC pass 12 (2026-11-26, Cranbrook Kin Club Park):** Cranbrook Pickleball Club runs drop-in club play ($10/day guests via its site, Love Our Club app); no dated events read.
@@ -349,3 +350,4 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **BC pass 14 (2026-11-26, North Shore, Burnaby, New Westminster, Delta):** no dated events searched. Groups seen for later: North Shore Pickleball Club, North Shore Tennis Society, Burnaby Pickleball Association, New West Pickleball Club, Delta Pickleball Association.
 
 **BC pass 13 (Comox Valley and Campbell River, 2026-11-26):** no dated events searched. Group seen for later: Comox Valley Pickleball Association (pickleballcanada.org club page; indoor and outdoor play schedules).
+- **BC pass 13 (2026-11-26, Dawson Creek):** no dated events searched. Seen only: Dawson Creek pickleball play schedule posted on a local Facebook group (per directories), Peace Country Pickleball Association (Fort St. John) listing.
