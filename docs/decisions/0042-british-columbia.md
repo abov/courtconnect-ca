@@ -1,6 +1,6 @@
 # 0042. British Columbia (Canada's first province)
 
-Date: 2026-11-26. Status: proposed; groundwork only. The owner asked for British Columbia "with everything the other regions got". This lifts, for BC only, the 2026-11-13 pause on new-state sessions. Nothing is extracted yet.
+Date: 2026-11-26. Status: accepted, in progress (owner 2026-11-26 asked for British Columbia "with everything the other regions got"; this lifts, for BC only, the 2026-11-13 pause on new-state sessions). Data layer and country plumbing are built and `defer: true` is still set; research passes 1 to 13 have merged (see "Where it stands"). Still open: BC walls, events and social series, the places lookup, doc sections and the owner questions below.
 
 ## Context
 BC is the first Canadian region and the second country after Mexico (ADR 0034). It borders WA and ID and shares the Salish Sea with Washington, so Vancouver and Victoria are close to the existing home view. About 5.6 million people; the metros are Metro Vancouver, Greater Victoria, the Okanagan (Kelowna), Kamloops, Nanaimo and the Fraser Valley. Pickleball, tennis, badminton, table tennis, squash and padel are all strong there.
@@ -22,10 +22,17 @@ BC is the first Canadian region and the second country after Mexico (ADR 0034). 
 
 - Research pass 1 (2026-11-26, Vancouver padel): Padel FVR Pitt Meadows confirmed, Padel Model re-pinned in Richmond (Overture's point was in Maple Ridge), Graybar Badminton pinned, 3 leads; log in `docs/public_facility_scan.md`.
 
+## Where it stands (2026-11-26, parity run on main 15d9126c)
+`python ci/region_parity.py --region BC` (not strict): 1,272 pins (81 confirmed, 88 with a street address), 139 manual venues, 8 hand-added walls, 21 hand-added link-outs, outline and home view ok. By sport: pickleball 234, table tennis 82, badminton 37, squash 17, racquetball 2, padel 3; pop tennis and beach tennis have none (log as searched or search).
+- Required items still at zero: OSM walls and every wall-type pin (one_wall, three_wall, backboard, handball), watch events, social series, places (the BC city search is not in `places.json` yet: run `build_places_lookup.py --ca`), doc sections. ZIP codes are logged empty on purpose (postal-code search is out of scope).
+- Research merged on main: Vancouver padel (pass 1), Vancouver squash, table tennis and walls (3), Greater Victoria (4), Okanagan (5), Peace River and Kootenays leads (10), Cariboo and Thompson-Nicola (11), Mission and Maple Ridge follow-ups (12), Comox Valley (13). Passes 2, 6 to 9 are not in the log; check `git log --grep "BC pass"` before repeating a region.
+- Street addresses: Overture's Canadian points are proprietary-licensed (kept none), so most BC pins rely on OSM tags and capped reverse geocoding (88 of 1,272 have one); rerun `reverse_geocode_blanks.py` until the blanks are filled.
+- Padel guard: BC is exempt from `assert_padel_has_supporting_signal` like MX until the owner rules.
+
 ## Open work, in order (country list from `docs/new_region_checklist.md`, "Countries")
-1. Country plumbing (done except Statistics Canada boundaries, not needed; see above): Overture address filter `country = 'CA'` (`extract_overture_addresses.py`), Overture divisions for places and boundaries (Canada has no Census; Statistics Canada boundaries are a fallback), a Canada entry in the Country dropdown, `country` on the region sentence, a home-view shortcut (BC runs to 60 N, past the home view), postal-code search (Canadian codes like V6B 1A1 do not collide with ZIPs, so a later FSA lookup is possible), `reverse_geocode_blanks.py` address order, `region_parity.py` and the CI fixtures.
-2. Extract and load: OSM courts, parents and walls (`--area british_columbia`), Overture places and addresses, build, `make app-data`.
-3. Research passes per metro: Vancouver first, then Victoria, Okanagan, Kamloops, Nanaimo. Public parks and rec (City of Vancouver, Burnaby, Richmond, Surrey), Pickleball Canada, Tennis BC, Badminton BC, Squash BC, Table Tennis BC, padel clubs, walls, courts coming soon, events, groups, link-outs.
+1. Country plumbing (DONE 2026-11-26; was: done except Statistics Canada boundaries, not needed; see above): Overture address filter `country = 'CA'` (`extract_overture_addresses.py`), Overture divisions for places and boundaries (Canada has no Census; Statistics Canada boundaries are a fallback), a Canada entry in the Country dropdown, `country` on the region sentence, a home-view shortcut (BC runs to 60 N, past the home view), postal-code search (Canadian codes like V6B 1A1 do not collide with ZIPs, so a later FSA lookup is possible), `reverse_geocode_blanks.py` address order, `region_parity.py` and the CI fixtures.
+2. Extract and load (DONE for OSM courts, parents, Overture places and divisions; OSM walls and the Overture address rerun with `--region BC` are open): OSM courts, parents and walls (`--area british_columbia`), Overture places and addresses, build, `make app-data`.
+3. Research passes per metro (in progress, see "Where it stands"; still to do: events and social series, walls, Nanaimo and Fraser Valley follow-ups): Vancouver first, then Victoria, Okanagan, Kamloops, Nanaimo. Public parks and rec (City of Vancouver, Burnaby, Richmond, Surrey), Pickleball Canada, Tennis BC, Badminton BC, Squash BC, Table Tennis BC, padel clubs, walls, courts coming soon, events, groups, link-outs.
 4. Routines, `docs/status.md` and `docs/monthly_refresh.md` rows.
 
 ## Owner questions
