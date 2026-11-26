@@ -347,3 +347,4 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 **BC pass 12 (Thompson-Nicola small towns, 2026-11-26):** no events searched; municipal pages only (see `docs/public_facility_scan.md`).
 
 **BC pass 13 (Comox Valley and Campbell River, 2026-11-26):** no dated events searched. Group seen for later: Comox Valley Pickleball Association (pickleballcanada.org club page; indoor and outdoor play schedules).
+- **BC pass 13 (2026-11-26, Dawson Creek):** no dated events searched. Seen only: Dawson Creek pickleball play schedule posted on a local Facebook group (per directories), Peace Country Pickleball Association (Fort St. John) listing.
