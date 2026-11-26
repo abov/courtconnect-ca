@@ -1,0 +1,2 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+way,900000002,40.7608,-111.8910,Salt Lake Fixture Pickleball Courts,pickleball,,,,,,,pitch,,,,,,,,,,2026-11-25T00:00:00+00:00,UT

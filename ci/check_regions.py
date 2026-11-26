@@ -27,15 +27,17 @@ POINTS = [
     (41.73, -122.63, "CA"),       # Yreka, just south of it
     (42.22, -121.78, "OR"),       # Klamath Falls
     (44.03, -116.96, "OR"),       # Ontario, on the Idaho line
-    (43.60, -116.20, None),       # Boise, Idaho
+    (43.60, -116.20, "ID"),       # Boise, Idaho
     (45.64, -122.66, "WA"),       # Vancouver, across the Columbia from Portland
     (47.61, -122.33, "WA"),       # Seattle
     (47.66, -117.43, "WA"),       # Spokane, near the Idaho line
     (46.28, -119.28, "WA"),       # Richland (Tri-Cities)
     (48.75, -122.48, "WA"),       # Bellingham, near the Canadian border
     (48.43, -123.37, None),       # Victoria, British Columbia
-    (47.67, -116.78, None),       # Coeur d'Alene, Idaho
-    (46.40, -116.99, None),       # Lewiston, Idaho (Clarkston WA is across the Snake)
+    (47.67, -116.78, "ID"),       # Coeur d'Alene, Idaho
+    (46.40, -116.99, "ID"),       # Lewiston, Idaho (Clarkston WA is across the Snake)
+    (42.87, -112.45, "ID"),       # Pocatello, Idaho
+    (40.76, -111.89, "UT"),       # Salt Lake City, Utah
     (21.31, -157.86, "HI"),       # Honolulu (Oahu)
     (19.72, -155.09, "HI"),       # Hilo (Hawaii island)
     (20.89, -156.47, "HI"),       # Kahului (Maui)
@@ -49,7 +51,7 @@ POINTS = [
     (34.48, -114.32, "AZ"),       # Lake Havasu City, on the Colorado River
     (32.68, -114.40, "AZ"),       # Yuma area, across the river from California
     (31.34, -110.94, "AZ"),       # Nogales, Arizona
-    (37.10, -113.58, None),       # St. George, Utah
+    (37.10, -113.58, "UT"),       # St. George, Utah
     (35.53, -108.74, "NM"),       # Gallup, New Mexico (was None before NM)
     (35.08, -106.65, "NM"),       # Albuquerque
     (35.69, -105.94, "NM"),       # Santa Fe

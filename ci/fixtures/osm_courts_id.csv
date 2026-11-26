@@ -1,0 +1,2 @@
+osm_type,osm_id,lat,lon,name,sport,surface,lit,access,fee,operator,courts,leisure,indoor,covered,building,website,phone,opening_hours,addr_housenumber,addr_street,addr_city,extracted_at,region
+way,900000001,43.6150,-116.2023,Boise Fixture Tennis Courts,tennis,,,,,,,pitch,,,,,,,,,,2026-11-25T00:00:00+00:00,ID
