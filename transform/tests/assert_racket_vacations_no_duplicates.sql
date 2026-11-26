@@ -2,7 +2,7 @@
 -- twice (an own page and a directory) cannot become two pins. Fix: merge the rows, keep the provider's own page.
 -- If they really are different offers at one place, add the pair to `reviewed`.
 with reviewed(a, b) as (
-    values ('none-yet', 'none-yet-either')
+    values ('alcaraz-sf-adult-tennis-camp', 'alcaraz-sf-junior-tennis-camp')  -- junior and adult camps, same club, different offers
 )
 select x.vacation_key as vacation_a, y.vacation_key as vacation_b, 'possible duplicate vacation (same place, shared sport)' as problem
 from {{ ref('stg_racket_vacations') }} x
