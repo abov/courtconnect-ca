@@ -33,7 +33,7 @@ POINTS = [
     (47.66, -117.43, "WA"),       # Spokane, near the Idaho line
     (46.28, -119.28, "WA"),       # Richland (Tri-Cities)
     (48.75, -122.48, "WA"),       # Bellingham, near the Canadian border
-    (48.43, -123.37, None),       # Victoria, British Columbia
+    (48.43, -123.37, "BC"),       # Victoria, British Columbia (was None before BC)
     (47.67, -116.78, "ID"),       # Coeur d'Alene, Idaho
     (46.40, -116.99, "ID"),       # Lewiston, Idaho (Clarkston WA is across the Snake)
     (42.87, -112.45, "ID"),       # Pocatello, Idaho
@@ -91,6 +91,16 @@ POINTS = [
     (21.1619, -86.8515, "MX"),    # Cancun
     (20.9674, -89.5926, "MX"),    # Merida
     (19.4326, -99.1332, "MX"),    # Mexico City
+    (49.28, -123.12, "BC"),       # Vancouver, British Columbia
+    (49.02, -122.80, "BC"),       # White Rock, just north of the Washington line
+    (48.99, -122.76, "WA"),       # Blaine, Washington, just south of it
+    (49.88, -119.50, "BC"),       # Kelowna
+    (50.67, -120.33, "BC"),       # Kamloops
+    (53.92, -122.75, "BC"),       # Prince George
+    (49.50, -117.29, "BC"),       # Castlegar, Kootenays
+    (51.18, -115.57, None),       # Banff, Alberta, east of the Continental Divide
+    (51.05, -114.07, None),       # Calgary, Alberta
+    (60.72, -135.06, None),       # Whitehorse, Yukon
 ]
 
 
