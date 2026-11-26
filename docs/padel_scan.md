@@ -1,5 +1,6 @@
 # Padel court check (plan, added 2026-10-17)
 
+
 ## Why
 Padel and pop tennis (also called paddle tennis, `Pop Tennis` in the sheet) are two separate sports on two different courts, but the names get mixed up:
 - **Padel**: enclosed court 20 x 10 m (65 x 32 ft) with glass and/or mesh walls that stay in play, turf surface, solid stringless racket, depressurised tennis ball. Sheet row `Padel`, FIP.
@@ -68,3 +69,5 @@ Added as pins from the club's own or Playtomic page (Playtomic club pages carry 
 - **Leads (not pinned):** The Hive Padel Club (SLC, 5 courts; PadelBrowser opening weekend 2026-09-26 vs "targeting summer 2026"); SLC Padel Club (Woods Cross; KSL says it opened Sept 2025; booking is PlayByPoint, off limits, so public club page only); Metro Padel Club (SLC; pre-opening, no address published).
 - **Pop Tennis:** searched Salt Lake City; found none (regular tennis and pickleball only). Logged empty; recheck with the USA Pop Tennis location finder.
 - **Beach Tennis:** searched Utah; no sand beach tennis courts found. Sports Mall (six sand courts) is volleyball. Logged empty.
+## Utah (2026-11-26, pass 2)
+- **The Hive Padel Club, SLC:** stays a lead. Own-site read 2026-11-26 is mixed: "COMING SOON" nav and Founding-package FAQ (pre-opening), against "Book Now", posted hours and league listings (dated Nov 2 and 10, past). Not pinned until a dated opening or a booking page with a current date confirms it.
