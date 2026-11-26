@@ -135,7 +135,7 @@
   body.trips .playonly, body.trips .legend.playlegend, body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  #sport option.nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
+  #sport option.nomap, #courtLike option.nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; }
   .suggest { margin-top: 8px; border-color: var(--accent); } .suggest p { margin: 0 0 6px; color: var(--text); } .suggest .fine { color: var(--muted); font-size: 11.5px; }
   .sportinfo { margin-top: 8px; } .sportinfo summary { font-size: 12.5px; }
@@ -1093,6 +1093,7 @@ function initMap() {
     map.on("click", "trip-pts", e => showTrip(trips[e.features[0].properties.k], false));
     map.on("mouseenter", "trip-pts", () => map.getCanvas().style.cursor = "pointer");
     map.on("mouseleave", "trip-pts", () => map.getCanvas().style.cursor = "");
+    map.on("moveend", debounce(() => { greySportsOutOfView(); showPeople(); }, 150));   // the sport list and the "find people" callout follow the zoomed view
     map.on("moveend", debounce(() => state.mode === "play" ? renderList() : state.mode === "trips" ? renderTripList() : renderWatchList(), 150));   // Watch: the lists, the count and "Coming up next" all follow the view
     mapReady = true;
     applyMode(state.mode === "trips");   // a shared #mode=trips link frames its pins; the other modes open on the home view
@@ -1684,7 +1685,19 @@ function populateSports() {
   }
   if (![...sel.options].some(o => o.value === String(state.sport))) state.sport = -1;
   sel.value = String(state.sport); updateSportIcon(); syncTiers();
-  showAnywhere();
+  showAnywhere(); greySportsOutOfView();
+}
+// Zoomed to a place: racket sports with no venue in view stay listed but greyed ("none in view"), updated in place so an open list does not jump.
+function greySportsOutOfView() {
+  if (state.mode !== "play") return;
+  const inView = sportsInView();
+  for (const o of $("sport").options) {
+    const i = +o.value; if (i < 0) continue;
+    const base = o.dataset.base ?? (o.dataset.base = o.textContent), s = sports[i];
+    const none = !!inView && !s.w && s.v > 0 && !inView.has(i);   // sports with no pins anywhere keep their own "(none yet)" look
+    o.classList.toggle("nomap", none || (s.v === 0 && !s.w));
+    o.textContent = none ? base + " (none in view)" : base;
+  }
 }
 // How organized the sport is (not a player's ability level): INFERRED from the sport sheet (world federation / named governing body / neither), never a claim about a venue or a player. Ability levels (beginner to advanced) are a separate, later feature.
 const TIER_NOTE = {1: "Established: sports with a world federation and organized competition.", 2: "Organized: competitive sports with a named governing body.", 3: "Casual: recreational sports with no governing body listed. Most are played on another sport's courts, so they have few pins of their own; pick one from the list to see where."};
@@ -1729,9 +1742,18 @@ function showSportInfo() {
 // "Find people to play with" (social phase A, ADR 0015): recurring groups and open plays (the social series) plus link-outs to player-matching apps, for one sport.
 // It is a dialog with three doors: the "Find players" button under the search, the callout under the sport picker, and a link in every venue popup.
 // RacketConnect stores no members and has not checked how many players each app has in California, Nevada, Oregon, Washington, Arizona, New Mexico, Texas, Hawaii or parts of Mexico, so the dialog says so.
+// Once the map is zoomed to a place (SCOPE_ZOOM), groups, court sizes and sports follow the view; zoomed out, they cover everything.
+const SCOPE_ZOOM = 7;
+const scopeBounds = () => typeof mapReady !== "undefined" && mapReady && map.getZoom() >= SCOPE_ZOOM ? map.getBounds() : null;
+function sportsInView() {   // Set of sport indexes with a venue in the zoomed view, or null when not zoomed in
+  const b = scopeBounds(); if (!b) return null;
+  const set = new Set();
+  for (const v of venues) if (b.contains([v.x, v.y])) for (const p of v.p) set.add(p[0]);
+  return set;
+}
 const playerGroups = idx => {
-  const name = idx >= 0 && sports[idx] ? sports[idx].n : null;
-  return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name)).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.n.localeCompare(b.n));
+  const name = idx >= 0 && sports[idx] ? sports[idx].n : null, b = scopeBounds();
+  return socials.filter(s => isCurrentSocial(s) && (!name || s.sp === name) && (!b || b.contains([s.x, s.y]))).sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.n.localeCompare(b.n));
 };
 const playerApps = idx => platforms.filter(p => idx < 0 || p.sp.includes(idx));
 const countWord = (n, one, many) => n + " " + (n === 1 ? one : many);
@@ -1760,7 +1782,9 @@ function renderPlayers() {
   const idx = +$("playersSport").value, groups = playerGroups(idx), apps = playerApps(idx), name = idx >= 0 ? sports[idx].n : "";
   $("playersTitle").textContent = "Find people to play " + (name || "with");
   const gb = $("playersGroups"), ab = $("playersApps"); gb.replaceChildren(); ab.replaceChildren();
-  if (!groups.length) gb.append(el("p", {class: "meta", text: "No recurring group or open play is listed" + (name ? " for " + name : "") + " yet."}));
+  const scoped = !!scopeBounds();
+  if (scoped) gb.append(el("p", {class: "meta", text: "Showing groups inside the map view you zoomed to. Zoom out to see them all."}));
+  if (!groups.length) gb.append(el("p", {class: "meta", text: "No recurring group or open play is listed" + (name ? " for " + name : "") + (scoped ? " in this map view" : "") + " yet."}));
   for (const s of groups) gb.append(playerCard(s));
   if (!apps.length) ab.append(el("p", {class: "meta", text: "No matching app is listed" + (name ? " for " + name : "") + " yet."}));
   for (const p of apps) {
@@ -1895,13 +1919,16 @@ function openCourt(src) {
     });
     for (const o of courtGroups.values()) { o.members.sort((x, y) => x.s.n.localeCompare(y.s.n, undefined, {sensitivity: "base"})); o.ws = o.members.some(m => m.s.ws); }
   }
-  if (!like.options.length) {
+  if (like.options.length) like.replaceChildren();   // rebuilt each time so the sizes can follow the zoomed view
+  {
     like.append(el("option", {value: "", text: "Pick a court size…"}));
+    const inView = sportsInView();
     // Smallest area first; each size shows its net and the first few sports that share it.
     const r1 = v => Math.round(v * 10) / 10;
     [...courtGroups].sort((x, y) => x[1].cd[0] * x[1].cd[1] - y[1].cd[0] * y[1].cd[1] || x[1].cd[0] - y[1].cd[0]).forEach(([key, o]) => {
       const names = o.members.map(m => m.s.n), more = names.length > 3 ? " +" + (names.length - 3) + " more" : "";
-      like.append(el("option", {value: key, text: r1(o.cd[0]) + " x " + r1(o.cd[1]) + " ft" + (o.nh ? " (net " + o.nh.map(fmtNet).join(" / ") + ")" : o.nn ? " (no net)" : "") + " · " + names.slice(0, 3).join(", ") + more}));
+      const none = inView && !o.members.some(m => m.s.w || inView.has(m.i));   // zoomed in and no sport on this size has a venue in view: greyed, still pickable
+      like.append(el("option", Object.assign({value: key, text: r1(o.cd[0]) + " x " + r1(o.cd[1]) + " ft" + (o.nh ? " (net " + o.nh.map(fmtNet).join(" / ") + ")" : o.nn ? " (no net)" : "") + " · " + names.slice(0, 3).join(", ") + more + (none ? " (none in view)" : "")}, none ? {class: "nomap"} : {})));
     });
   }
   const cur = state.sport >= 0 ? [...courtGroups].find(([, o]) => o.members.some(m => m.i === state.sport)) : null;
