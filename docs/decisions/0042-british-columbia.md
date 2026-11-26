@@ -20,6 +20,8 @@ BC is the first Canadian region and the second country after Mexico (ADR 0034). 
 - Not done: BC (and ID/UT) OSM walls (Overpass too slow in one session), the research passes (Vancouver first), manual venues, watch events, links, ZIP/postal lookups, doc sections.
 - `assert_padel_has_supporting_signal` exempts BC like MX until the owner rules (3 name/OSM-tag padel pins, shown labelled inferred).
 
+- 2026-11-26, places and walls: `places.json` has 359 BC rows (`build_places_lookup.py --ca`; Vancouver, Victoria, Kelowna, Kamloops, Nanaimo found). 13 BC `manual_walls` (5 Burnaby added from the City's court table). OSM walls still not extracted: Overpass was unreachable from the cloud session; metros vancouver, victoria, okanagan, kamloops and nanaimo are in `regions.json` for `extract_osm_walls.py --area <metro>`. The raw-data repo has no BC/ID/UT files, so no export was made.
+
 - Research pass 1 (2026-11-26, Vancouver padel): Padel FVR Pitt Meadows confirmed, Padel Model re-pinned in Richmond (Overture's point was in Maple Ridge), Graybar Badminton pinned, 3 leads; log in `docs/public_facility_scan.md`.
 
 ## Open work, in order (country list from `docs/new_region_checklist.md`, "Countries")
