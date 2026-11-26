@@ -806,7 +806,7 @@ function tripNode(t) {
   const row = el("div", {class: "btnrow"}), info = t.u ? safeUrl(t.u) : "";
   if (info) row.append(el("a", {class: "btn primary", href: info, "data-kind": "trip-page", target: "_blank", rel: "noopener noreferrer", text: "Official page"}));
   box.append(row);
-  box.append(el("p", {class: "meta", text: "The pin shows the resort, not the courts. Checked " + fmtDate(t.vo, {month: "short", day: "numeric", year: "numeric"})}));
+  box.append(el("p", {class: "meta", text: (t.k === "camp" ? "Day camp (no lodging unless the page says so); the pin is approximate. Checked " : "The pin shows the resort, not the courts. Checked ") + fmtDate(t.vo, {month: "short", day: "numeric", year: "numeric"})}));
   return box;
 }
 function showTrip(t, fly) {
