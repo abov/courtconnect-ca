@@ -323,7 +323,14 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **Watch events:** none added. Pass 2 searched venue openings, not events.
 - **BC pass 2 (2026-11-26):** no dated events or groups searched (scope spent on club pages and city pages); Pickleball Canada and Tennis BC event listings and Meetup groups still to do.
 - **BC pass 3 (2026-11-26):** squash, table tennis and walls only; no dated events or groups searched. Squash BC's calendar (clublocker) and BCTTA competitions page still to do.
+
+## Mexico: wall sports pass 1 (2026-11-26, ADR 0034)
+
+- **Step 1:** every named OSM frontón, frontenis, racquetball or squash pin is already hand-pinned; the 237 not hand-pinned are Overture places-only (automatic, labelled inferred), mostly CDMX/Edomex, no site to verify.
+- **Step 2 (Jalisco, Puebla, Veracruz, Guanajuato, 4 searches + 3 page reads):** Por Tres Padel Puebla squash (4 courts) already pinned. Boca del Río: no squash or racquetball page found (Las Palmas Racquet Club is members-only, no squash listed). León: Match Point (2 squash courts, 2024 article, no address) added as lead `mx-leon-match-point-squash`; Squash Center León appears only on a Fresha directory page (not read in full); Focus Sports Club Playtomic 404. Guadalajara: only a club rules PDF (CDBG, squash courts, members); no page with courts or address.
+- **Next:** read Squash Center León, CDBG and Xalapa squash clubs' own pages; Puebla frontenis.
 - **BC pass 4 (2026-11-26, Greater Victoria):** no dated events or groups searched. Seen only: Victoria Regional Pickleball Association (pickleballcanada.org club page, a group for later), Fowler Park reservable pickleball pilot to Oct 31 2026, Cedar Hill and Oak Bay reserved drop-ins (in venue rules). Meetup/VRPA events still to do.
 - **BC pass 6 (2026-11-26, Nanaimo and Kamloops):** no dated events searched. Seen only: Nanaimo Pickleball Club (runs Beban Park play), Kamloops Pickleball Club (2026 Kamloops Open held May 29-31, booking via Love Our Club), Badminton Nanaimo (CourtReserve drop-ins). Groups, Meetup and BCTTA/Squash BC calendars still to do.
 - **BC pass 7 (2026-11-26, Surrey and Fraser Valley):** no dated events searched. Seen only: Surrey Pickleball Club (surreypickleballclub.wildapricot.org, play at South Surrey Athletic Park, Crescent Park, Greenaway; a group for later), Abbotsford Table Tennis Club and Cloverdale Table Tennis Club (BCTTA list). Meetup/club calendars still to do.
+- **BC pass 7 (2026-11-26, Lantzville, Parksville, Qualicum Beach):** no dated events searched. Seen only: Arrowsmith Tennis Club (Parksville/Qualicum), Qualicum Beach Pickleball Club (fundraising for courts), Oceanside Pickleball Tournament (pickleballbrackets listing, date not read), Oceanside Mixed Badminton Doubles (Coombs). Groups and events still to do.
 - **BC pass 8 (2026-11-26, Whistler and Sea-to-Sky):** no dated events or groups searched.
