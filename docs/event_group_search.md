@@ -327,3 +327,4 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **BC pass 6 (2026-11-26, Nanaimo and Kamloops):** no dated events searched. Seen only: Nanaimo Pickleball Club (runs Beban Park play), Kamloops Pickleball Club (2026 Kamloops Open held May 29-31, booking via Love Our Club), Badminton Nanaimo (CourtReserve drop-ins). Groups, Meetup and BCTTA/Squash BC calendars still to do.
 
 **BC pass 11 (Cariboo and Thompson-Nicola, 2026-11-26):** no events searched. Seen only: Williams Lake Pickleball Club, Quesnel Pickleball Club, Merritt Pickleball Club, 100 Mile pickleball association (counts from news, undated).
+- **BC pass 8 (2026-11-26, Whistler and Sea-to-Sky):** no dated events or groups searched.
