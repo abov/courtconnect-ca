@@ -108,11 +108,13 @@
   @media (pointer: coarse) { .sug li { min-height: 44px; } }
   .searchrow { display: flex; align-items: flex-end; gap: 8px; } .searchrow > div { flex: 1; min-width: 0; } .searchrow .chip { flex: none; min-height: 39px; border-radius: var(--r-sm); }
   .locrow { display: flex; gap: 8px; } .locrow > div { flex: 1; min-width: 0; }
-  #courtLike { display: grid; gap: 2px; max-height: 38vh; overflow: auto; border: 1px solid var(--line, #8885); border-radius: 8px; padding: 4px; }
-  #courtLike label { display: flex; gap: 8px; align-items: flex-start; padding: 5px 6px; border-radius: 6px; cursor: pointer; font-size: 14px; }
-  #courtLike label:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
-  #courtLike input { margin-top: 3px; flex: none; }
-  #sportMulti { margin-top: 6px; display: grid; gap: 6px; } #sportMulti .chip[aria-pressed] { padding-right: 8px; }
+  .mlist { display: grid; gap: 2px; max-height: 38vh; overflow: auto; border: 1px solid var(--line, #8885); border-radius: 8px; padding: 4px; }
+  .mlist label { display: flex; gap: 8px; align-items: flex-start; padding: 5px 6px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  .mlist label:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .mlist input { margin-top: 3px; flex: none; }
+  .mlist .nomap { color: color-mix(in srgb, var(--muted) 60%, var(--panel)); font-style: italic; }
+  .msel { flex: 1; min-width: 0; } .msel > summary { cursor: pointer; padding: 8px 10px; border: 1px solid var(--line, #8885); border-radius: 8px; background: var(--panel); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .msel[open] > summary { margin-bottom: 6px; } .msel .link { margin-top: 4px; }
   .selrow { display: flex; align-items: center; gap: 8px; } .selrow select { flex: 1; min-width: 0; } .selrow .sico { margin: 0; }
   .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-right: 4px; white-space: nowrap; }
   .badge.c { color: var(--ok); border-color: var(--ok); } .badge.p { color: var(--accent); border-color: var(--accent); }
@@ -140,7 +142,7 @@
   body.trips .playonly, body.trips .legend.playlegend, body.watch .playonly, body.watch .legend.playlegend, body.social .playonly, body.social .legend.playlegend { display: none; }
   summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  #sport option.nomap, #sportAdd option.nomap, #courtLike .nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
+  #sport option.nomap { color: color-mix(in srgb, var(--muted) 45%, var(--panel)); font-style: italic; }
   .note { font-size: 12px; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; }
   .suggest { margin-top: 8px; border-color: var(--accent); } .suggest p { margin: 0 0 6px; color: var(--text); } .suggest .fine { color: var(--muted); font-size: 11.5px; }
   .sportinfo { margin-top: 8px; } .sportinfo summary { font-size: 12.5px; }
@@ -340,9 +342,9 @@ window.CC_CORE = fetch("data/map.json", {cache: "no-cache"}).then(r => r.ok ? r.
   <div class="controls">
     <p id="resume" class="note" role="status" hidden></p>
     <div>
-      <label class="l" for="sport">Sport</label>
-      <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport"></select></div>
-      <div id="sportMulti" hidden><div class="chips" id="sportChips" role="group" aria-label="Sports picked"></div><select id="sportAdd" aria-label="Add another sport"></select></div>
+      <span class="l" id="sportL">Sport (tick one or more)</span>
+      <div class="selrow"><span id="sporticon" class="sico" aria-hidden="true"></span><select id="sport" hidden aria-hidden="true" tabindex="-1"></select>
+        <details id="sportBox" class="msel"><summary id="sportSum"></summary><div id="sportList" class="mlist" role="group" aria-labelledby="sportL"></div><button class="link" id="sportClear" type="button" hidden>Clear (all sports)</button></details></div>
       <button class="chip callout" id="peopleBtn" type="button" aria-haspopup="dialog" hidden></button>
       <div id="suggest" class="note suggest" hidden></div>
       <p id="anywhere" class="note" hidden></p>
@@ -469,8 +471,8 @@ window.CC_CORE = fetch("data/map.json", {cache: "no-cache"}).then(r => r.ok ? r.
 <dialog id="players" aria-labelledby="playersTitle">
   <div class="dlg-h"><h2 id="playersTitle">Find people to play with</h2><button class="link" id="closePlayers" type="button">Close</button></div>
   <div class="dlg-b">
-    <label class="l" for="playersSport">Sport</label>
-    <select id="playersSport"></select>
+    <span class="l" id="playersSportL">Sports (tick one or more; none = all)</span>
+    <div id="playersSport" class="mlist" role="group" aria-labelledby="playersSportL"></div>
     <h3>Groups and open plays</h3>
     <div id="playersGroups"></div>
     <h3>Apps that match players</h3>
@@ -489,7 +491,7 @@ window.CC_CORE = fetch("data/map.json", {cache: "no-cache"}).then(r => r.ok ? r.
   <div class="dlg-b">
     <p class="meta">Tick one or more court sizes and the map shows the venues with those courts. Reopen this to see which other sports have a court the same size or bigger, with a similar net (or no net, if yours needs none), so you know where it can fit. If nothing matches closely, you get the nearest seconds and what you would change. Sizes and nets are each sport's standard from our sport sheet (inferred); no venue's court has been measured.</p>
     <span class="l" id="courtLikeL">Court sizes (net height; sports with that court). Tick as many as you like.</span>
-    <div id="courtLike" role="group" aria-labelledby="courtLikeL"></div>
+    <div id="courtLike" class="mlist" role="group" aria-labelledby="courtLikeL"></div>
     <div class="seg quick" style="margin-top:10px"><button class="chip" id="courtShow" type="button" disabled>Show on map</button><button class="chip" id="courtClear" type="button" disabled>Clear sizes</button></div>
     <div class="seg quick" style="margin-top:10px"><button class="chip" id="courtWall" type="button">Just hitting alone? Show all hitting walls</button></div>
     <div id="courtOut" role="status" aria-live="polite"></div>
@@ -1708,19 +1710,18 @@ function populateSports() {
   sel.value = multiOn() ? "-2" : String(state.sport); updateSportIcon(); syncTiers();
   showAnywhere(); greySportsOutOfView(); renderMulti();
 }
-// "Pick more than one sport": chips for what is picked (tap to drop one) and a menu to add another; the main menu says "N sports picked".
+// The sport picker is a tick list (the hidden select above still holds the option texts, greyed ones included): tick as many sports as you like, none = all.
 function renderMulti() {
-  const box = $("sportMulti"), chips = $("sportChips"), add = $("sportAdd"), list = pickedSports();
-  box.hidden = !list.length; chips.replaceChildren(); add.replaceChildren();
-  if (!list.length) return;
-  if (list.length > 1) for (const i of list) {
-    const b = el("button", {class: "chip", type: "button", "aria-pressed": "true", "aria-label": "Remove " + sports[i].n, title: "Remove " + sports[i].n, text: sports[i].n + " \u00d7"});
-    b.addEventListener("click", () => { setPicked(list.filter(x => x !== i)); populateSports(); applyPick(); });
-    chips.append(b);
+  const sel = $("sport"), list = $("sportList"), have = new Set(pickedSports()), names = pickedSports().map(i => sports[i].n);
+  list.replaceChildren();
+  for (const o of sel.options) {
+    const i = +o.value; if (i < 0) continue;
+    const cb = el("input", {type: "checkbox", value: o.value}); cb.checked = have.has(i);
+    cb.addEventListener("change", () => { state.solo = false; state.soloPub = false; const nxt = new Set(pickedSports()); cb.checked ? nxt.add(i) : nxt.delete(i); setPicked([...nxt]); if (cb.checked) { bumpSportSeen(sports[i].n); track("sport", sports[i].n); trackD("sport-pick", sports[i].n); } populateSports(); applyPick(); });
+    list.append(el("label", o.classList.contains("nomap") ? {class: "nomap"} : {}, cb, el("span", {text: o.textContent})));
   }
-  add.append(el("option", {value: "", text: "+ Add another sport"}));
-  for (const o of $("sport").options) if (+o.value >= 0 && !list.includes(+o.value)) add.append(o.cloneNode(true));
-  add.hidden = add.options.length < 2;
+  $("sportSum").textContent = names.length ? names.join(", ") : state.solo ? "Hitting walls (all types)" : sel.options[0] ? sel.options[0].textContent : "All sports";
+  $("sportClear").hidden = !names.length;
 }
 function applyPick() { updateSportIcon(); renderActive(); showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } }
 // Zoomed to a place: racket sports with no venue in view stay listed but greyed ("none in view"), updated in place so an open list does not jump.
@@ -1815,7 +1816,9 @@ function playerCard(s) {
   return card;
 }
 function renderPlayers() {
-  const idx = +$("playersSport").value, groups = playerGroups(idx), apps = playerApps(idx), name = idx >= 0 ? sports[idx].n : "";
+  const ids = [...document.querySelectorAll("#playersSport input:checked")].map(c => +c.value), all = ids.length ? ids : [-1];
+  const groups = [...new Set(all.flatMap(playerGroups))].sort((a, b) => nearCmp(a, b) || a.c.localeCompare(b.c) || a.n.localeCompare(b.n)), apps = [...new Set(all.flatMap(playerApps))];
+  const name = ids.length > 2 ? ids.length + " sports" : ids.map(i => sports[i].n).join(" or ");
   $("playersTitle").textContent = "Find people to play " + (name || "with");
   const gb = $("playersGroups"), ab = $("playersApps"); gb.replaceChildren(); ab.replaceChildren();
   const scoped = !!scopeBounds();
@@ -1986,11 +1989,14 @@ function openCourt(src) {
   }
   courtPicked(); $("court").showModal(); trackD("court-open", src);
 }
-function openPlayers(idx, src) {
-  const sel = $("playersSport"), counts = sports.map((s, i) => peopleCount(i));
-  sel.replaceChildren(el("option", {value: "-1", text: "All sports (" + peopleCount(-1) + ")"}));
-  sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => { if (counts[i]) sel.append(el("option", {value: String(i), text: s.n + " (" + counts[i] + ")"})); });
-  sel.value = String(idx >= 0 && counts[idx] ? idx : -1);
+function openPlayers(idx, src) {   // idx: one sport index, a list of them, or -1 for all
+  const sel = $("playersSport"), counts = sports.map((s, i) => peopleCount(i)), want = new Set([].concat(idx).filter(i => i >= 0 && counts[i]));
+  sel.replaceChildren();
+  sports.map((s, i) => [s, i]).sort((x, y) => x[0].n.localeCompare(y[0].n, undefined, {sensitivity: "base"})).forEach(([s, i]) => {
+    if (!counts[i]) return;
+    const cb = el("input", {type: "checkbox", value: String(i)}); cb.checked = want.has(i); cb.addEventListener("change", renderPlayers);
+    sel.append(el("label", {}, cb, el("span", {text: s.n + " (" + counts[i] + ")"})));
+  });
   renderPlayers();
   $("players").showModal();
   trackD("players-open", src);
@@ -2135,22 +2141,17 @@ function initControls() {
   $("modePlay").addEventListener("click", () => setMode("play"));
   $("modeTrips").addEventListener("click", () => setMode("trips"));   // stay-and-play trips (ADR 0036)
   $("modeWatch").addEventListener("click", () => setMode("watch"));   // one view: dated events to watch and recurring get-togethers to join
-  $("modePlayers").addEventListener("click", () => openPlayers(state.sport, "header"));
+  $("modePlayers").addEventListener("click", () => openPlayers(pickedSports(), "header"));
   $("modeCourt").addEventListener("click", () => openCourt("header"));
   $("closeCourt").addEventListener("click", () => $("court").close());
   $("courtShow").addEventListener("click", showCourtPicks);
   $("courtClear").addEventListener("click", () => { for (const c of document.querySelectorAll("#courtLike input")) c.checked = false; courtPicked(); });
   $("courtWall").addEventListener("click", () => enterSolo("court"));
   $("peopleBtn").addEventListener("click", () => openPlayers(state.sport, "sport"));
-  $("playersSport").addEventListener("change", renderPlayers);
   $("closePlayers").addEventListener("click", () => $("players").close());
   $("closeGuide").addEventListener("click", () => $("guide").close());
   $("playersTell").href = REPORT_FORM;
-  $("sportAdd").addEventListener("change", e => {
-    const i = +e.target.value; if (!(i >= 0)) return;
-    state.solo = false; state.soloPub = false; setPicked([...pickedSports(), i]); populateSports(); applyPick();
-    trackD("sport-add", sports[i].n);
-  });
+  $("sportClear").addEventListener("click", () => { setPicked([]); populateSports(); applyPick(); });
   sel.addEventListener("change", () => { if (sel.value === "-2") return; state.solo = false; state.soloPub = false; state.multi.clear(); state.sport = +sel.value; updateSportIcon(); renderActive(); if (state.sport >= 0 && sports[state.sport]) { bumpSportSeen(sports[state.sport].n); track("sport", sports[state.sport].n); trackD("sport-pick", sports[state.sport].n); } showAnywhere(); if (state.text) runSearch(true); else { refresh(); trackEmpty(); if (state.mode !== "play" || wallSportNow()) applyMode(true); } });
   const typed = debounce(e => { state.text = e.target.value.trim().toLowerCase(); renderActive(); reSearch(true); }, 350);
   $("q").addEventListener("input", typed);
