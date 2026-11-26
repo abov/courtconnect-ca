@@ -322,3 +322,4 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 ## Utah (2026-11-26, pass 2)
 - **Watch events:** none added. Pass 2 searched venue openings, not events.
 - **BC pass 2 (2026-11-26):** no dated events or groups searched (scope spent on club pages and city pages); Pickleball Canada and Tennis BC event listings and Meetup groups still to do.
+- **BC pass 3 (2026-11-26):** squash, table tennis and walls only; no dated events or groups searched. Squash BC's calendar (clublocker) and BCTTA competitions page still to do.
