@@ -8,6 +8,7 @@ https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2023_Gazetteer/2023_Ga
 The Gazetteer names carry a legal suffix ("Truckee town", "Fresno city", "Alpine CDP"); it is dropped. The point is the Census internal point (INTPTLAT/INTPTLONG), not a city hall.
 Mexico (ADR 0034): `python ingestion/build_places_lookup.py --mx` (offline) replaces the MX rows with the border-pilot cities below, each a city-centre point that must fall inside the Overture
 municipio or locality of the same name in census_boundaries_mx.csv in the shared raw folder (a municipio's own centroid is far from its city: Tijuana's is 20 km south). A plain run keeps the MX rows.
+British Columbia (ADR 0042): `--ca` (offline) replaces the BC rows with the Overture localities of census_boundaries_ca.csv (`extract_overture_boundaries.py --country CA`); a plain run keeps them.
 Output: app/data/places.json, a JSON list sorted by name (about 70 KB), lazy-loaded by app/index.html only when a typed city matches no venue. Needs network access; run it rarely (the Gazetteer changes once a year).
 """
 from __future__ import annotations
@@ -54,6 +55,22 @@ def mx_places() -> list:
     return out
 
 
+def bc_places() -> list:
+    """British Columbia (ADR 0042): every Overture locality in census_boundaries_ca.csv as [name, "BC", lat, lon], the point being inside the polygon (offline, spatial extension)."""
+    import duckdb
+    con = duckdb.connect()
+    try:
+        con.execute("load spatial")
+    except duckdb.Error:
+        con.execute("install spatial")
+        con.execute("load spatial")
+    rows = con.execute("""select name, round(st_y(st_pointonsurface(st_geomfromtext(wkt))), 3), round(st_x(st_pointonsurface(st_geomfromtext(wkt))), 3)
+                          from read_csv(?) where state_fips = 'CA-BC' and kind = 'place' order by name""", [str(rawdir.raw_dir() / "census_boundaries_ca.csv").replace("\\", "/")]).fetchall()
+    if not rows:
+        raise SystemExit("no BC localities in census_boundaries_ca.csv: run extract_overture_boundaries.py --country CA first")
+    return [[n, "BC", lat, lon] for n, lat, lon in dict(((r[0].lower(), r[0]), r) for r in rows).values()]
+
+
 def write(places: list) -> None:
     places = sorted(places, key=lambda p: (p[0].lower(), p[1]))
     OUT.write_text(json.dumps(places, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
@@ -64,6 +81,9 @@ def main() -> None:
     old = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else []
     if "--mx" in sys.argv:
         write([p for p in old if p[1] != "MX"] + mx_places())
+        return
+    if "--ca" in sys.argv:   # British Columbia (offline, from the Overture localities); a plain run keeps these rows
+        write([p for p in old if p[1] != "BC"] + bc_places())
         return
     r = requests.get(URL, headers=UA, timeout=120)
     r.raise_for_status()
@@ -80,7 +100,7 @@ def main() -> None:
         nm = SUFFIX.sub("", row[ix["NAME"]].strip())
         key = (nm.lower(), row[ix["USPS"]])
         out.setdefault(key, [nm, row[ix["USPS"]], round(float(row[ix["INTPTLAT"]]), 3), round(float(row[ix["INTPTLONG"]]), 3)])
-    write(list(out.values()) + [p for p in old if p[1] == "MX"])
+    write(list(out.values()) + [p for p in old if p[1] in ("MX", "BC")])
 
 
 if __name__ == "__main__":

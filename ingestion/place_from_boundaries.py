@@ -46,9 +46,9 @@ def main() -> None:
     con.execute("create temp table pin (venue_id varchar, lat double, lon double)")
     con.executemany("insert into pin values (?, ?, ?)", pins)
     con.execute("create temp table pin_geom as select *, st_point(lon, lat) as g from pin")
-    # county label: "<name> County" for a US county, the plain name for a Mexican municipio (state_fips like MX-BCN)
+    # county label: "<name> County" for a US county, the plain name for a Mexican municipio (state_fips like MX-BCN) or a BC regional district (CA-BC)
     con.execute("""create temp table shape as select kind, state_fips, source,
-                          case when kind = 'county' and state_fips not like 'MX-%' then name || ' County' else name end as label,
+                          case when kind = 'county' and state_fips not like 'MX-%' and state_fips not like 'CA-%' then name || ' County' else name end as label,
                           st_geomfromtext(wkt) as geom from raw.census_boundaries""")
     if not con.execute("select count(*) from shape").fetchone()[0]:
         raise SystemExit("raw.census_boundaries is empty: run extract_census_boundaries.py, then load_raw.py")
