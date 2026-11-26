@@ -1,5 +1,6 @@
 # Events, leagues and groups search ("find your people")
 
+
 Owner 2026-11-02: every state we add gets a pass that looks for events, leagues, get-togethers and groups, so players can find their people. ADR 0028 makes it part of each state's step. Public organizer pages only; no Pickleheads, Places2Play or other court-app data (CLAUDE.md); aggregator listings (Bounce, MyPickleballConnect, Active.com, padelbrowser) are leads until the organizer's own page confirms them.
 
 ## Recipe (per state)
@@ -318,4 +319,6 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **Recheck:** Huntsman and Picklr listings, mypickleballconnect and pickleballtournaments Utah pages, the Utah City Racquet Club social programme (LIVEBALL sessions, no dates read).
 - **Pass 3 (2026-11-25):** 2027 searches for Idaho pickleball and racquetball tournaments found no dated 2027 event (the one 2027 item was a Boise USTA tennis league with registration not open; not added). Social: Idaho Falls indoor open play and a 2025 Meridian city schedule found; no dated public series, so none added. Walls and YMCA courts logged in `docs/public_facility_scan.md`. Not used: an aggregator's Idaho Falls open-play listing.
 - **BC pass 1 (2026-11-26):** Vancouver padel only (Padel FVR, Padel Model club pages read); no dated events or groups searched yet. Events, Pickleball Canada and Tennis BC listings are still to do.
+## Utah (2026-11-26, pass 2)
+- **Watch events:** none added. Pass 2 searched venue openings, not events.
 - **BC pass 2 (2026-11-26):** no dated events or groups searched (scope spent on club pages and city pages); Pickleball Canada and Tennis BC event listings and Meetup groups still to do.
