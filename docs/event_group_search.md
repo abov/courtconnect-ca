@@ -355,6 +355,11 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - 2026-11-26, BC pass 15 (Richmond parks): no events or groups searched; the pass read the City's court tables only. Recheck with the BC events pass.
 - **BC pass 13 (2026-11-26, Dawson Creek):** no dated events searched. Seen only: Dawson Creek pickleball play schedule posted on a local Facebook group (per directories), Peace Country Pickleball Association (Fort St. John) listing.
 
+## Mexico: wall sports pass 2 (2026-11-26, ADR 0034)
+
+- **Pinned (public page read):** 4 Zone Sports Xalapa squash (Playtomic lists Squash; same point as the padel pin), La Pelota Squash & Frontón Tláhuac (2 squash + 1 outdoor frontón, own site), Tenis de Mesa y Squash Lomas del Valle Morelia (own site updated 2026-11-22; Overture point).
+- **Leads:** Squash Center León (Fresha only, page no longer loads), CDBG Guadalajara (rules PDF only), Xalapa Wellness Club / Insurgentes 100 / Cristal (no pages; Wellness wix site dead), Club Britania Puebla (hosted 2026 frontenis nationals; no public Puebla frontenis court found), Sporting Squash and Squash Complex 711 Puebla (nothing found), Silver Squash Pachuca (domain expired), Lomas Racquet Club SLP (site 403, 2020 article only). La Raqueta Squash GDL: nothing found.
+- **Not done:** Chihuahua, Coahuila, Michoacán beyond Morelia, Querétaro suburbs (step 3).
 - **BC pass 17 (2026-11-26, Vancouver parks):** no events or groups searched. Recheck with the BC events pass.
 - 2026-11-26, British Columbia pass 18 (Shuswap): Salmon Arm Pickleball Club (Pickleball Canada club page: Klahani Park outdoors Apr-Sep, Recreation Centre indoors Oct-Apr) noted as a group; no events or pins added.
 - 2026-11-26, BC pass 16 (South Okanagan and Shuswap): no events or groups searched. Seen only: Oliver Pickleball Club (membership, lessons; Town of Oliver parks page) and Penticton Pickleball (play schedule on its own site). Recheck with the BC events pass.
