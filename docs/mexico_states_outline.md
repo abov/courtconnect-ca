@@ -59,5 +59,5 @@ Run this per entity, only where demand or an owner request says so (ADR 0034; ha
 
 ## Open items
 
-- The Phase 4 nationwide extract (30-45 min) is what fills the "automatic layer only" rows; it needs the owner's go.
+- The Phase 4 nationwide extract is what fills the "automatic layer only" rows; it is approved (2026-11-26). The first run (2026-11-26) died at tile 123/192 when Overpass blocked this IP and wrote nothing; `extract_osm_courts.py` now checkpoints each tile to `<out>.progress.jsonl`, so rerun with `--resume` (or `--finalize` to write a partial file) once Overpass answers.
 - Demand threshold for starting a hand-built metro beyond the six core ones is not set (ADR 0034, "Still open").
