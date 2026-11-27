@@ -370,4 +370,5 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 ## British Columbia pass 20 (Northwest BC, 2026-11-27)
 
 - No events or groups searched; Terrace, Kitimat and Prince Rupert city pages listed no club schedules read.
+- 2026-11-27, BC pass 21 (Whistler and Sea-to-Sky): no events or groups searched; Squamish site blocked scripts.
 - 2026-11-27, British Columbia pass 19 (West Shore, Saanich Peninsula): no events or groups searched. Recheck with the BC events pass.
