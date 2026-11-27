@@ -366,3 +366,4 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - **BC pass 15 (2026-11-26, cross-region leads):** no dated events searched. Groups seen for later: Westshore Table Tennis (Langford), Stage 18 and other Richmond badminton centres (lessons only), BCTTA clubs without addresses (Abbotsford, Coquitlam Seniors, Cumberland).
 
 - 2026-11-26, BC pass 16 (White Rock): no events or groups searched; site blocked scripts.
+- 2026-11-27, British Columbia pass 19 (West Shore, Saanich Peninsula): no events or groups searched. Recheck with the BC events pass.
