@@ -13,3 +13,5 @@ New Mexico is one landmass bordering Arizona, Texas, Colorado, Utah and Mexico. 
 
 ## Open for the owner
 Resorts and bases were approved ("add em all", 2026-11-13) and added where an official page names courts (Angel Fire, Taos Ski Valley pickleball, Kirtland, Holloman); still open: Hyatt Tamaya, Bishop's Lodge and Buffalo Thunder (no readable page), Cannon and White Sands (no page names courts); research order against the remaining Hawaii and Arizona passes; Texas lands separately (ADR number to be taken by that branch).
+
+Pass 7 (2026-11-28): searched padel, courts-coming and Dec-Jan events; found no new padel (Forked Lightning only), no NM tournaments in the window. Added two Albuquerque pickleball leads (Vault Winrock, Swing-N-Pickle); Defined Pickleball (Rio Rancho) and Manzano Mesa already pinned. Parity unchanged: no required item at zero.
