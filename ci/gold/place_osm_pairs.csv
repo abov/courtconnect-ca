@@ -1,5 +1,4 @@
 place_id,osm_element,label,stratum,evidence,checked_on
-2154d09c-b50a-4540-8e1a-d03f6b395d87,way/1516161742,same,matched_75_100m,"OSM parent polygon is named Gerrish Swim and Tennis Club, identical to the place name",2026-10-17
 f6c3b74d-ae55-4161-bf11-8b679206db6f,relation/12187627,same,matched_75_100m,"OSM court is named Vermont Canyon Tennis Courts, identical to the place name",2026-10-17
 ca814484-5987-43a3-8fa7-e09094a76e2c,way/316236603,same,matched_75_100m,OSM parent is Bret Harte Middle School; the place name and address (7050 Bret Harte Dr) are that school's courts,2026-10-17
 4f60a1c8-39cf-4e0f-856a-f2c191512f3a,way/56645380,same,matched_75_100m,OSM parent is Mission Creek Park; the place name is the park's tennis court,2026-10-17
@@ -81,7 +80,6 @@ f6c64796-3d51-46b4-993c-6313f75a56af,way/1422461215,same,random_within_300m,"OSM
 9f97f247-8ec5-4080-8d09-d672f3f888d9,way/1423308842,same,random_within_300m,"OSM parent is Laguna Park, same name as the place",2026-10-17
 6da9041c-33e8-416b-bf2b-9c4bbb52e093,way/1418289212,same,random_within_300m,"OSM parent is Santa Cruz High School, same name as the place",2026-10-17
 3efc8258-446a-409a-8f1e-f6e0e0685470,way/1420898669,same,random_within_300m,"Place address 13100 Hubbard St equals the OSM parent El Cariso Park address, but the court is 258 m from the pin (outside every radius)",2026-10-17
-14410934-4da6-40b5-81b0-fab9b2633e4c,way/1106224576,different,different_near_courts,"USTA Northern California is an association office at 1920 N Loop Rd, not the Shoreline Park courts",2026-10-17
 37af97eb-980e-4991-9b4f-b5060f981f27,way/817001064,different,different_near_courts,Rally House Pickleball Club is an indoor club in a business-park suite (6131 Innovation Way #100); the OSM courts belong to the Staybridge Suites hotel,2026-10-17
 6ad79cff-3d59-425b-b0d4-e3064fdade28,way/937478813,different,different_near_courts,"Bryan Bros Tennis Fest is an event/promoter at 999 Crestview Ave, not a court facility",2026-10-17
 93ee526d-d0b6-41e6-a00b-6de3270c7355,way/1068362915,different,different_near_courts,"Cal Table Tennis meets in the UC Berkeley Recreational Sports Facility (2301 Bancroft Way), not at Hellman Tennis Center",2026-10-17

@@ -123,3 +123,5 @@ Two corrections found on the way:
 
 Next: the three remaining misses need either the resort/hotel parents (La Costa) or a place address-to-court-cluster link that does not exist yet; not worth a rule until the beta shows they matter. Re-run `make eval-match` after every extract: the footprint tier reads OSM parent boxes, which change with each OSM refresh.
 
+
+- 2026-11-28: re-run unchanged (0 wrong, 4 missed); retired 2 stale rows (Gerrish Swim and Tennis Club, USTA Northern California), file now 127 pairs.
