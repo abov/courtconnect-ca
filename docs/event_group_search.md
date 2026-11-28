@@ -376,3 +376,7 @@ Searched: the club site (southbaytt.com) and its activity calendar, which is an 
 - 2026-11-27, British Columbia pass 23 (West Kootenays: Trail, Rossland, Nelson, Castlegar): no events or groups searched (Nelson pickleball club exists per Castanet; schedule not read). Recheck with the BC events pass.
 
 - 2026-11-27, BC pass 22 (Delta): no events or groups searched; Delta Pickleball Association site not readable.
+
+## Utah (2026-11-28, pass 4)
+- **Watch events:** searched Utah pickleball for 2027 dates (PPA Red Rock Open, Southern Utah Shootout, Springville Art City Days): no dated 2027 event with an organizer page found; still logged empty. Recheck in January when 2027 calendars post.
+- **Arenas and convention centers:** not searched this pass.
