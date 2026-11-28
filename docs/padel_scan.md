@@ -76,3 +76,8 @@ Added as pins from the club's own or Playtomic page (Playtomic club pages carry 
 - Added three clubs the 11-20 sweep missed, each from its public Playtomic page (read in the browser pane, no login): **Padium Sports** (Tula de Allende, 3 indoor), **Cumarú Padel Club** (Puerto Vallarta, 4 roofed outdoor), **The Hills by Carbono Padel** (Chantepec, 2 outdoor padel; 1 pickleball court on the page, not pinned). Access unknown.
 - Playtomic pages that 404 (even in a browser, so not a bot block): Comal Padel Club (Villahermosa), Match Point 360 Adidas and Padel Arenal (Tuxtla), Punta Padel and Padelismo (Irapuato), La Cueva, Sport Padel, Padel MX. Leads stay in `venue_leads.csv`.
 - Leads from search summaries only: Haciendas Family & Fitness Club (Villahermosa, 4 roofed), Club Olympia, Arena Sports, Nero Pádel, Vintage Pádel (Pachuca), Club Nexus (Tizayuca). Need their own pages. Not done: Puebla, Chihuahua, León and the other 11-20 metros were not re-searched.
+
+## Utah (2026-11-28, pass 4)
+- **SLC Padel Club, Woods Cross:** pinned from its own site (4 indoor courts, pay and play $16-20 per person per hour, no membership needed). Booking system (PlayByPoint) not used. The OSM padel tag rejected earlier is probably the same place; the build merges by position.
+- **The Hive Padel Club (1915 S 4800 W, SLC):** still a lead. A PadelBrowser post says opening weekend was 2026-09-26, its club page still says 'Opening soon'; own site not re-read this pass.
+- **Courts coming:** no Utah padel project dated 2027 found (searched). Black Diamonds (South Jordan) stays a lead.
